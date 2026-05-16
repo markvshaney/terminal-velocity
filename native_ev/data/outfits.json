@@ -1,0 +1,45 @@
+{
+  "repair": {
+    "pricePerHullPoint": 8
+  },
+  "outfits": [
+    {
+      "id": "cargo_pod",
+      "name": "Cargo Pod",
+      "price": 1200,
+      "description": "External cargo pod. Adds 10 tons of cargo capacity.",
+      "effects": { "cargoSpace": 10 }
+    },
+    {
+      "id": "hull_plating",
+      "name": "Hull Plating",
+      "price": 1800,
+      "description": "Reinforced plating. Adds 25 maximum hull points and repairs that added structure.",
+      "effects": { "maxHull": 25 }
+    },
+    {
+      "id": "fuel_tank",
+      "name": "Auxiliary Fuel Tank",
+      "price": 1500,
+      "description": "Expanded fuel reserves. Adds 25 fuel capacity.",
+      "effects": { "maxFuel": 25 }
+    }
+  ],
+  "shipyard": [
+    {
+      "shipId": "shuttle",
+      "price": 8000,
+      "description": "Small courier shuttle. Cheap, nimble, limited cargo."
+    },
+    {
+      "shipId": "light_freighter",
+      "price": 24000,
+      "description": "Light freighter with much larger cargo hold and stronger hull."
+    },
+    {
+      "shipId": "lightning",
+      "price": 32000,
+      "description": "Fast fighter hull with light cargo space and quick handling."
+    }
+  ]
+}

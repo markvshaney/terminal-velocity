@@ -1,0 +1,28 @@
+# Dependencies / old browser prototype artifacts
+node_modules/
+archived-browser-prototype-2026-05-15/
+dist/
+.venv/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Runtime saves and local deployment artifacts
+savegame.json
+native_ev/savegame.json
+*.log
+
+# Original/proprietary local EV source files and intermediate extractions.
+# Keep these local; do not put original .rez/.nplay assets into git history.
+source-assets/
+
+# Large third-party extraction source snapshot not needed for the active game.
+tools/deark/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

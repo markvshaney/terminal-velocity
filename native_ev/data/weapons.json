@@ -1,0 +1,24 @@
+{
+  "weapons": [
+    {
+      "id": "laser_cannon",
+      "name": "Laser Cannon",
+      "speed": 9.0,
+      "lifetime": 72,
+      "damage": 18,
+      "cooldownTicks": 14,
+      "color": "OrangeRed",
+      "radius": 3
+    },
+    {
+      "id": "pulse_cannon",
+      "name": "Pulse Cannon",
+      "speed": 7.0,
+      "lifetime": 84,
+      "damage": 12,
+      "cooldownTicks": 22,
+      "color": "DeepSkyBlue",
+      "radius": 4
+    }
+  ]
+}

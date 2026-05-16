@@ -1,0 +1,128 @@
+{
+  "missions": [
+    {
+      "id": "intro_courier_earth_hera",
+      "title": "Urgent Dispatch to Hera",
+      "originSystem": "Sol",
+      "originBody": "Earth",
+      "destinationSystem": "Centauri",
+      "destinationBody": "Luna",
+      "cargoTons": 3,
+      "reward": 1800,
+      "description": "A diplomatic pouch needs fast passage to Luna. No questions, no scans, no delay.",
+      "requiresFlags": [],
+      "excludesFlags": [],
+      "setsFlags": [
+        "story_intro_started"
+      ],
+      "completionFlags": [
+        "story_intro_complete",
+        "federation_trusted_courier"
+      ],
+      "choiceGroup": null,
+      "next": "frontier_sample_hera_freeport"
+    },
+    {
+      "id": "frontier_sample_hera_freeport",
+      "title": "Frontier Sample Transfer",
+      "originSystem": "Centauri",
+      "originBody": "Luna",
+      "destinationSystem": "Sirius",
+      "destinationBody": "Sirius Station",
+      "cargoTons": 4,
+      "reward": 2400,
+      "description": "Luna researchers want sealed ore samples delivered to Sirius Station brokers before the convoy arrives.",
+      "requiresFlags": [
+        "story_intro_complete"
+      ],
+      "excludesFlags": [],
+      "setsFlags": [
+        "frontier_chain_started"
+      ],
+      "completionFlags": [
+        "frontier_samples_delivered",
+        "reputation_independent_positive"
+      ],
+      "choiceGroup": null,
+      "next": "freeport_return_earth"
+    },
+    {
+      "id": "freeport_return_earth",
+      "title": "Return Contract to Earth",
+      "originSystem": "Sirius",
+      "originBody": "Sirius Station",
+      "destinationSystem": "Sol",
+      "destinationBody": "Earth",
+      "cargoTons": 5,
+      "reward": 3200,
+      "description": "An independent captain is needed to bring contract tablets back to Earth without attracting pirate attention.",
+      "requiresFlags": [
+        "frontier_samples_delivered"
+      ],
+      "excludesFlags": [],
+      "setsFlags": [
+        "return_contract_started"
+      ],
+      "completionFlags": [
+        "chapter_one_complete",
+        "federation_independent_bridge"
+      ],
+      "choiceGroup": null,
+      "next": null
+    },
+    {
+      "id": "federation_report_freeport",
+      "title": "Report Sirius Contacts",
+      "originSystem": "Sirius",
+      "originBody": "Sirius Station",
+      "destinationSystem": "Sol",
+      "destinationBody": "Earth",
+      "cargoTons": 2,
+      "reward": 2800,
+      "description": "A Federation liaison wants a clean report on Sirius Station brokers. Accepting this closes the smuggler-friendly path.",
+      "requiresFlags": [
+        "frontier_samples_delivered"
+      ],
+      "excludesFlags": [
+        "alignment_freeport"
+      ],
+      "setsFlags": [
+        "chapter_one_choice_seen",
+        "alignment_federation"
+      ],
+      "completionFlags": [
+        "alignment_federation",
+        "federation_intel_asset"
+      ],
+      "choiceGroup": "chapter_one_alignment",
+      "next": null
+    },
+    {
+      "id": "freeport_pact_smugglers",
+      "title": "Sirius Quiet Pact",
+      "originSystem": "Sirius",
+      "originBody": "Sirius Station",
+      "destinationSystem": "Centauri",
+      "destinationBody": "Luna",
+      "cargoTons": 2,
+      "reward": 3000,
+      "description": "Sirius Station brokers offer a quiet supply pact outside Federation channels. Accepting this closes the Federation-report path.",
+      "requiresFlags": [
+        "frontier_samples_delivered"
+      ],
+      "excludesFlags": [
+        "alignment_federation"
+      ],
+      "setsFlags": [
+        "chapter_one_choice_seen",
+        "alignment_freeport"
+      ],
+      "completionFlags": [
+        "alignment_freeport",
+        "freeport_network_asset"
+      ],
+      "choiceGroup": "chapter_one_alignment",
+      "next": null
+    }
+  ]
+}

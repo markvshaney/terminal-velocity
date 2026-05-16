@@ -1,0 +1,188 @@
+{
+  "commodities": [
+    {
+      "id": "food",
+      "name": "Food",
+      "unit": "tons"
+    },
+    {
+      "id": "industrial_goods",
+      "name": "Industrial Goods",
+      "unit": "tons"
+    },
+    {
+      "id": "medical_supplies",
+      "name": "Medical Supplies",
+      "unit": "tons"
+    },
+    {
+      "id": "luxuries",
+      "name": "Luxury Goods",
+      "unit": "tons"
+    }
+  ],
+  "markets": {
+    "Sol": {
+      "food": {
+        "buy": 42,
+        "sell": 35
+      },
+      "industrial_goods": {
+        "buy": 80,
+        "sell": 68
+      },
+      "medical_supplies": {
+        "buy": 110,
+        "sell": 96
+      },
+      "luxuries": {
+        "buy": 180,
+        "sell": 150
+      }
+    },
+    "Centauri": {
+      "food": {
+        "buy": 58,
+        "sell": 49
+      },
+      "industrial_goods": {
+        "buy": 98,
+        "sell": 84
+      },
+      "medical_supplies": {
+        "buy": 96,
+        "sell": 82
+      },
+      "luxuries": {
+        "buy": 220,
+        "sell": 185
+      }
+    },
+    "Sirius": {
+      "food": {
+        "buy": 74,
+        "sell": 62
+      },
+      "industrial_goods": {
+        "buy": 138,
+        "sell": 125
+      },
+      "medical_supplies": {
+        "buy": 142,
+        "sell": 124
+      },
+      "luxuries": {
+        "buy": 160,
+        "sell": 132
+      }
+    },
+    "Tau Ceti": {
+      "food": {
+        "buy": 34,
+        "sell": 28
+      },
+      "industrial_goods": {
+        "buy": 90,
+        "sell": 76
+      },
+      "medical_supplies": {
+        "buy": 130,
+        "sell": 112
+      },
+      "luxuries": {
+        "buy": 205,
+        "sell": 170
+      }
+    },
+    "Enyo": {
+      "food": {
+        "buy": 66,
+        "sell": 55
+      },
+      "industrial_goods": {
+        "buy": 116,
+        "sell": 102
+      },
+      "medical_supplies": {
+        "buy": 82,
+        "sell": 70
+      },
+      "luxuries": {
+        "buy": 235,
+        "sell": 196
+      }
+    },
+    "Antares": {
+      "food": {
+        "buy": 70,
+        "sell": 60
+      },
+      "industrial_goods": {
+        "buy": 76,
+        "sell": 64
+      },
+      "medical_supplies": {
+        "buy": 132,
+        "sell": 114
+      },
+      "luxuries": {
+        "buy": 210,
+        "sell": 176
+      }
+    },
+    "Alkaid": {
+      "food": {
+        "buy": 84,
+        "sell": 72
+      },
+      "industrial_goods": {
+        "buy": 152,
+        "sell": 136
+      },
+      "medical_supplies": {
+        "buy": 170,
+        "sell": 150
+      },
+      "luxuries": {
+        "buy": 122,
+        "sell": 104
+      }
+    },
+    "Zaxted": {
+      "food": {
+        "buy": 78,
+        "sell": 66
+      },
+      "industrial_goods": {
+        "buy": 122,
+        "sell": 108
+      },
+      "medical_supplies": {
+        "buy": 138,
+        "sell": 118
+      },
+      "luxuries": {
+        "buy": 245,
+        "sell": 204
+      }
+    },
+    "Clotho": {
+      "food": {
+        "buy": 62,
+        "sell": 52
+      },
+      "industrial_goods": {
+        "buy": 132,
+        "sell": 116
+      },
+      "medical_supplies": {
+        "buy": 148,
+        "sell": 128
+      },
+      "luxuries": {
+        "buy": 155,
+        "sell": 130
+      }
+    }
+  }
+}

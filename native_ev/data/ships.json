@@ -1,0 +1,236 @@
+{
+  "ships": [
+    {
+      "id": "shuttle",
+      "name": "Shuttle",
+      "resourceId": 1000,
+      "assetDir": "assets/ships/shuttle",
+      "frameCount": 36,
+      "width": 48,
+      "height": 48,
+      "role": "player",
+      "cargoSpace": 20,
+      "hull": 100,
+      "weaponId": "laser_cannon"
+    },
+    {
+      "id": "light_freighter",
+      "name": "Light Freighter",
+      "resourceId": 1004,
+      "assetDir": "assets/ships/light_freighter",
+      "frameCount": 36,
+      "width": 72,
+      "height": 72,
+      "role": "npc-trader",
+      "cargoSpace": 60,
+      "hull": 160,
+      "weaponId": "pulse_cannon"
+    },
+    {
+      "id": "lightning",
+      "name": "Lightning",
+      "resourceId": 1006,
+      "assetDir": "assets/ships/lightning",
+      "frameCount": 36,
+      "width": 48,
+      "height": 48,
+      "role": "npc-fast",
+      "cargoSpace": 10,
+      "hull": 85,
+      "weaponId": "laser_cannon"
+    },
+    {
+      "id": "argosy",
+      "name": "Argosy",
+      "resourceId": 1010,
+      "assetDir": "assets/ships/argosy",
+      "frameCount": 36,
+      "width": 64,
+      "height": 64,
+      "role": "npc-trader",
+      "cargoSpace": 90,
+      "hull": 180,
+      "weaponId": "pulse_cannon"
+    },
+    {
+      "id": "frigate",
+      "name": "Frigate",
+      "resourceId": 1012,
+      "assetDir": "assets/ships/frigate",
+      "frameCount": 36,
+      "width": 64,
+      "height": 64,
+      "role": "npc-patrol",
+      "cargoSpace": 35,
+      "hull": 260,
+      "weaponId": "laser_cannon"
+    }
+  ],
+  "traffic": [
+    {
+      "shipId": "light_freighter",
+      "name": "Merchant One",
+      "system": "Sol",
+      "x": -360,
+      "y": -180,
+      "heading": 40,
+      "speed": 0.7,
+      "faction": "merchant",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "argosy",
+      "name": "Argosy Hauler",
+      "system": "Sol",
+      "x": 600,
+      "y": 260,
+      "heading": 250,
+      "speed": 0.45,
+      "faction": "merchant",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "frigate",
+      "name": "Confed Patrol",
+      "system": "Sol",
+      "x": -720,
+      "y": 520,
+      "heading": 95,
+      "speed": 0.65,
+      "faction": "confed",
+      "disposition": "friendly"
+    },
+    {
+      "shipId": "lightning",
+      "name": "Pirate Lightning",
+      "system": "Centauri",
+      "x": -260,
+      "y": 340,
+      "heading": 15,
+      "speed": 1.15,
+      "faction": "pirate",
+      "disposition": "hostile"
+    },
+    {
+      "shipId": "light_freighter",
+      "name": "Courier Two",
+      "system": "Centauri",
+      "x": 460,
+      "y": 220,
+      "heading": 220,
+      "speed": 0.55,
+      "faction": "merchant",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "shuttle",
+      "name": "Local Shuttle",
+      "system": "Sirius",
+      "x": -300,
+      "y": 260,
+      "heading": 110,
+      "speed": 0.8,
+      "faction": "civilian",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "frigate",
+      "name": "Sirius Station Guard",
+      "system": "Sirius",
+      "x": 420,
+      "y": -300,
+      "heading": 310,
+      "speed": 0.6,
+      "faction": "independent",
+      "disposition": "friendly"
+    },
+    {
+      "shipId": "argosy",
+      "name": "Tau Ceti Grain Convoy",
+      "system": "Tau Ceti",
+      "x": -480,
+      "y": 260,
+      "heading": 70,
+      "speed": 0.42,
+      "faction": "merchant",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "frigate",
+      "name": "Tau Ceti Customs",
+      "system": "Tau Ceti",
+      "x": 540,
+      "y": -220,
+      "heading": 200,
+      "speed": 0.62,
+      "faction": "confed",
+      "disposition": "friendly"
+    },
+    {
+      "shipId": "light_freighter",
+      "name": "Enyo Med Runner",
+      "system": "Enyo",
+      "x": 320,
+      "y": 120,
+      "heading": 145,
+      "speed": 0.72,
+      "faction": "merchant",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "frigate",
+      "name": "Cydonia Militia",
+      "system": "Antares",
+      "x": -500,
+      "y": 310,
+      "heading": 285,
+      "speed": 0.7,
+      "faction": "confed",
+      "disposition": "friendly"
+    },
+    {
+      "shipId": "lightning",
+      "name": "Alkaid Raider",
+      "system": "Alkaid",
+      "x": 180,
+      "y": -340,
+      "heading": 25,
+      "speed": 1.25,
+      "faction": "pirate",
+      "disposition": "hostile"
+    },
+    {
+      "shipId": "argosy",
+      "name": "Orion Longhaul",
+      "system": "Zaxted",
+      "x": 380,
+      "y": 240,
+      "heading": 330,
+      "speed": 0.46,
+      "faction": "merchant",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "light_freighter",
+      "name": "Kestrel Broker",
+      "system": "Clotho",
+      "x": -220,
+      "y": -280,
+      "heading": 165,
+      "speed": 0.64,
+      "faction": "independent",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "lightning",
+      "name": "Kestrel Knife",
+      "system": "Clotho",
+      "x": 520,
+      "y": 320,
+      "heading": 45,
+      "speed": 1.05,
+      "faction": "pirate",
+      "disposition": "hostile"
+    }
+  ]
+}

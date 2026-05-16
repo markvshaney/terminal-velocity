@@ -1,0 +1,79 @@
+{
+  "governments": {
+    "Federation": {
+      "scanRange": 520,
+      "finePerTon": 400,
+      "patrolFaction": "confed",
+      "description": "Core worlds enforce import restrictions and inspect suspicious cargo."
+    },
+    "Centauri Protectorate": {
+      "scanRange": 420,
+      "finePerTon": 300,
+      "patrolFaction": "confed",
+      "description": "Industrial worlds tolerate trade but restrict destabilizing luxury imports."
+    },
+    "Independent": {
+      "scanRange": 260,
+      "finePerTon": 150,
+      "patrolFaction": "independent",
+      "description": "Independent ports police violence first and paperwork second."
+    },
+    "Militia Compact": {
+      "scanRange": 480,
+      "finePerTon": 250,
+      "patrolFaction": "confed",
+      "description": "Border militia systems run heavy patrols and favor licensed haulers."
+    },
+    "Rim Freehold": {
+      "scanRange": 180,
+      "finePerTon": 100,
+      "patrolFaction": "independent",
+      "description": "Rim systems are thinly policed and commerce is mostly self-regulated."
+    }
+  },
+  "systems": {
+    "Sol": {
+      "government": "Federation"
+    },
+    "Centauri": {
+      "government": "Centauri Protectorate"
+    },
+    "Sirius": {
+      "government": "Independent"
+    },
+    "Tau Ceti": {
+      "government": "Federation"
+    },
+    "Enyo": {
+      "government": "Centauri Protectorate"
+    },
+    "Antares": {
+      "government": "Militia Compact"
+    },
+    "Alkaid": {
+      "government": "Rim Freehold"
+    },
+    "Zaxted": {
+      "government": "Militia Compact"
+    },
+    "Clotho": {
+      "government": "Independent"
+    }
+  },
+  "contraband": {
+    "Federation": [
+      "luxuries"
+    ],
+    "Centauri Protectorate": [
+      "luxuries"
+    ],
+    "Independent": [
+      "medical_supplies"
+    ],
+    "Militia Compact": [
+      "luxuries",
+      "medical_supplies"
+    ],
+    "Rim Freehold": []
+  }
+}

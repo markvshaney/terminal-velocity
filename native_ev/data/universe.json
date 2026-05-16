@@ -1,0 +1,284 @@
+{
+  "systems": [
+    {
+      "name": "Sol",
+      "x": 0,
+      "y": 0,
+      "links": [
+        "Centauri",
+        "Sirius",
+        "Tau Ceti"
+      ],
+      "bodies": [
+        {
+          "name": "Earth",
+          "x": 0,
+          "y": 0,
+          "r": 72,
+          "color": "SteelBlue",
+          "type": "planet",
+          "market": "Core world: cargo, missions, shipyard"
+        },
+        {
+          "name": "Stardock Alpha",
+          "x": 420,
+          "y": -260,
+          "r": 34,
+          "color": "Silver",
+          "type": "station",
+          "market": "Station: low-risk cargo contracts"
+        },
+        {
+          "name": "Mars",
+          "x": -760,
+          "y": 430,
+          "r": 54,
+          "color": "IndianRed",
+          "type": "planet",
+          "market": "Frontier exports and repairs"
+        }
+      ]
+    },
+    {
+      "name": "Centauri",
+      "x": 180,
+      "y": -90,
+      "links": [
+        "Sol",
+        "Sirius",
+        "Enyo",
+        "Antares"
+      ],
+      "bodies": [
+        {
+          "name": "Landfall",
+          "x": 120,
+          "y": 80,
+          "r": 62,
+          "color": "MediumPurple",
+          "type": "planet",
+          "market": "Industrial hub"
+        },
+        {
+          "name": "Luna",
+          "x": -520,
+          "y": -300,
+          "r": 30,
+          "color": "DarkSeaGreen",
+          "type": "station",
+          "market": "Outpost: urgent courier work"
+        }
+      ]
+    },
+    {
+      "name": "Sirius",
+      "x": -170,
+      "y": 160,
+      "links": [
+        "Sol",
+        "Centauri",
+        "Enyo",
+        "Clotho"
+      ],
+      "bodies": [
+        {
+          "name": "Sirius Station",
+          "x": -80,
+          "y": -40,
+          "r": 42,
+          "color": "DarkOrange",
+          "type": "station",
+          "market": "Independent freeport"
+        },
+        {
+          "name": "Sirius III",
+          "x": 680,
+          "y": 360,
+          "r": 60,
+          "color": "CadetBlue",
+          "type": "planet",
+          "market": "Outer colonies"
+        }
+      ]
+    },
+    {
+      "name": "Tau Ceti",
+      "x": 320,
+      "y": 70,
+      "links": [
+        "Sol",
+        "Antares",
+        "Zaxted"
+      ],
+      "bodies": [
+        {
+          "name": "Tau Ceti IV",
+          "x": -160,
+          "y": 120,
+          "r": 58,
+          "color": "Goldenrod",
+          "type": "planet",
+          "market": "Agricultural core supplier"
+        },
+        {
+          "name": "Merlin",
+          "x": 520,
+          "y": -180,
+          "r": 36,
+          "color": "SlateGray",
+          "type": "station",
+          "market": "Industrial shipyard annex"
+        }
+      ]
+    },
+    {
+      "name": "Enyo",
+      "x": -330,
+      "y": 20,
+      "links": [
+        "Centauri",
+        "Sirius",
+        "Alkaid"
+      ],
+      "bodies": [
+        {
+          "name": "Enyo Orbital Fuel Refinery",
+          "x": 220,
+          "y": -90,
+          "r": 36,
+          "color": "LightSeaGreen",
+          "type": "station",
+          "market": "Medical relay and border clinic"
+        },
+        {
+          "name": "Enyo’s World",
+          "x": -620,
+          "y": 280,
+          "r": 66,
+          "color": "DeepSkyBlue",
+          "type": "planet",
+          "market": "Water world exports"
+        }
+      ]
+    },
+    {
+      "name": "Antares",
+      "x": 430,
+      "y": -210,
+      "links": [
+        "Centauri",
+        "Tau Ceti",
+        "Zaxted"
+      ],
+      "bodies": [
+        {
+          "name": "Antares Outpost",
+          "x": 80,
+          "y": -120,
+          "r": 40,
+          "color": "Tomato",
+          "type": "station",
+          "market": "Militia yard and repairs"
+        },
+        {
+          "name": "New Providence",
+          "x": -520,
+          "y": 260,
+          "r": 52,
+          "color": "Firebrick",
+          "type": "planet",
+          "market": "Militia fortress world"
+        }
+      ]
+    },
+    {
+      "name": "Alkaid",
+      "x": -510,
+      "y": 260,
+      "links": [
+        "Enyo",
+        "Clotho"
+      ],
+      "bodies": [
+        {
+          "name": "Alkaidion",
+          "x": -240,
+          "y": -140,
+          "r": 38,
+          "color": "DarkViolet",
+          "type": "station",
+          "market": "Smuggler-tinged salvage port"
+        },
+        {
+          "name": "Regulus II",
+          "x": 560,
+          "y": 300,
+          "r": 50,
+          "color": "DarkSlateBlue",
+          "type": "planet",
+          "market": "Low-law mining colony"
+        }
+      ]
+    },
+    {
+      "name": "Zaxted",
+      "x": 610,
+      "y": 10,
+      "links": [
+        "Tau Ceti",
+        "Antares",
+        "Clotho"
+      ],
+      "bodies": [
+        {
+          "name": "Zaxted Starport",
+          "x": 260,
+          "y": 160,
+          "r": 34,
+          "color": "Khaki",
+          "type": "station",
+          "market": "Long-haul depot"
+        },
+        {
+          "name": "Zaxted",
+          "x": -640,
+          "y": -260,
+          "r": 56,
+          "color": "Peru",
+          "type": "planet",
+          "market": "Rim settlement"
+        }
+      ]
+    },
+    {
+      "name": "Clotho",
+      "x": -120,
+      "y": 390,
+      "links": [
+        "Sirius",
+        "Alkaid",
+        "Zaxted"
+      ],
+      "bodies": [
+        {
+          "name": "Clotho Prime",
+          "x": 120,
+          "y": -260,
+          "r": 35,
+          "color": "PaleGreen",
+          "type": "station",
+          "market": "Independent refuel and brokerage"
+        },
+        {
+          "name": "Clotho II",
+          "x": -460,
+          "y": 180,
+          "r": 48,
+          "color": "OliveDrab",
+          "type": "planet",
+          "market": "Sparse rim farms"
+        }
+      ]
+    }
+  ]
+}
