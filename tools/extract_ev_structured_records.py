@@ -20,7 +20,7 @@ from pathlib import Path
 
 DEFAULT_SOURCE = Path('source-assets/ev-classic/Nova Files/EV Data.rez')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_structures.json')
-METHOD = 'brgr-fixed-record-run-v1'
+METHOD = 'brgr-full-field-decode-v2'
 
 # Fixed-size runs observed in the local EV Classic Data.rez. Names are confidence-
 # labeled candidates until individual fields are verified against independent EV
@@ -88,11 +88,9 @@ RUN_LABELS = {
     },
 }
 
-# Commit all full int16 fields for the two record families that unblock the next
-# fidelity steps (systems + stellar objects). For large less-certain families, keep
-# a loss-limited prefix until we map exact schemas.
-FULL_WORD_SIZES = {88, 400}
-PREFIX_WORD_LIMIT = 96
+# Decode every 16-bit field in every structured record. Semantic field names are
+# candidate mappings; the authoritative layer is the offset-indexed word list.
+PREFIX_WORD_LIMIT = 0
 STRING_SLOT_LIMIT = 12
 MAX_STRING_LEN = 48
 
@@ -164,13 +162,20 @@ def decode_c_string_slots(raw: bytes) -> list[dict]:
 def decode_record(raw: bytes, size: int) -> dict:
     word_count = len(raw) // 2
     words_be = list(struct.unpack('>' + 'h' * word_count, raw[:word_count * 2]))
-
-    full_words = size in FULL_WORD_SIZES
-    limit = word_count if full_words else min(word_count, PREFIX_WORD_LIMIT)
+    fields = [
+        {
+            'name': f'word_{idx:03d}',
+            'wordIndex': idx,
+            'byteOffsetInRecord': idx * 2,
+            'value': value,
+        }
+        for idx, value in enumerate(words_be)
+    ]
     return {
-        'wordEncoding': 'big-endian signed 16-bit',
-        'wordsComplete': full_words,
-        'wordsBE': words_be[:limit],
+        'fieldEncoding': 'big-endian signed 16-bit words',
+        'fieldCount': word_count,
+        'fieldsComplete': True,
+        'fields': fields,
         'embeddedStrings': decode_c_string_slots(raw),
     }
 

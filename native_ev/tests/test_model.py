@@ -19,6 +19,7 @@ from native_ev.model import (
     serialize_save_data,
     repair_cost,
     ship_manifest,
+    sourced_ev_graphics_manifest,
     sourced_ev_names_manifest,
     sourced_ev_structures_manifest,
     shuttle_frame_paths,
@@ -80,7 +81,7 @@ class NativeEvModelTests(unittest.TestCase):
     def test_sourced_ev_structures_manifest_decodes_fixed_record_runs(self):
         data = sourced_ev_structures_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Data.rez')
-        self.assertEqual(data['method'], 'brgr-fixed-record-run-v1')
+        self.assertEqual(data['method'], 'brgr-full-field-decode-v2')
         self.assertEqual(data['chunkCount'], 1544)
         by_type = {run['candidateType']: run for run in data['runs']}
         self.assertEqual(by_type['syst-like']['recordSize'], 88)
@@ -90,12 +91,33 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(by_type['ship-like']['recordSize'], 1860)
         first_system = by_type['syst-like']['records'][0]
         first_spob = by_type['spob-like']['records'][0]
-        self.assertTrue(first_system['wordsComplete'])
-        self.assertTrue(first_spob['wordsComplete'])
-        self.assertGreaterEqual(len(first_system['wordsBE']), 44)
-        self.assertGreaterEqual(len(first_spob['wordsBE']), 200)
+        self.assertTrue(first_system['fieldsComplete'])
+        self.assertTrue(first_spob['fieldsComplete'])
+        self.assertGreaterEqual(len(first_system['fields']), 44)
+        self.assertGreaterEqual(len(first_spob['fields']), 200)
+        self.assertEqual(first_system['fields'][0]['byteOffsetInRecord'], 0)
+        self.assertEqual(first_spob['fields'][0]['byteOffsetInRecord'], 0)
         self.assertGreater(first_system['byteOffset'], 0)
         self.assertGreater(first_spob['byteOffset'], first_system['byteOffset'])
+
+    def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
+        data = sourced_ev_graphics_manifest()
+        self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Graphics.rez')
+        self.assertEqual(data['method'], 'brgr-graphics-rled-shan-full-field-v1')
+        self.assertEqual(data['resourceCount'], 303)
+        resources_by_type = {}
+        for resource in data['resources']:
+            resources_by_type.setdefault(resource['type'], 0)
+            resources_by_type[resource['type']] += 1
+        self.assertGreaterEqual(resources_by_type['rlëD'], 70)
+        self.assertGreaterEqual(resources_by_type['shän'], 25)
+        shuttle = next(sprite for sprite in data['shipSprites'] if sprite.get('shipName') == 'Shuttle')
+        self.assertEqual(shuttle['rledResourceId'], 1000)
+        self.assertEqual(shuttle['frames'], 36)
+        self.assertEqual(shuttle['width'], 48)
+        self.assertEqual(shuttle['height'], 48)
+        ok_sprites = [sprite for sprite in data['shipSprites'] if sprite.get('status') == 'ok']
+        self.assertGreaterEqual(len(ok_sprites), 20)
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()

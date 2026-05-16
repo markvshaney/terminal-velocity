@@ -12,6 +12,7 @@ ECONOMY_PATH = ROOT / 'data' / 'economy.json'
 GOVERNMENTS_PATH = ROOT / 'data' / 'governments.json'
 SOURCED_EV_NAMES_PATH = ROOT / 'data' / 'sourced_ev_names.json'
 SOURCED_EV_STRUCTURES_PATH = ROOT / 'data' / 'sourced_ev_structures.json'
+SOURCED_EV_GRAPHICS_PATH = ROOT / 'data' / 'sourced_ev_graphics.json'
 
 
 def shuttle_frame_paths():
@@ -110,7 +111,7 @@ def sourced_ev_structures_manifest(path=SOURCED_EV_STRUCTURES_PATH):
     data = json.loads(path.read_text())
     if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Data.rez':
         raise ValueError('sourced EV structures manifest has unexpected source file')
-    if data.get('method') != 'brgr-fixed-record-run-v1':
+    if data.get('method') != 'brgr-full-field-decode-v2':
         raise ValueError('sourced EV structures manifest has unexpected extraction method')
     if data.get('chunkCount', 0) < 1000:
         raise ValueError('sourced EV structures manifest has too few chunks')
@@ -136,11 +137,34 @@ def sourced_ev_structures_manifest(path=SOURCED_EV_STRUCTURES_PATH):
         if len(records) != run.get('count'):
             raise ValueError(f'sourced EV structures {candidate} count does not match records')
         for record in records[:3]:
-            for key in ['ordinal', 'chunkIndex', 'byteOffset', 'size', 'wordsBE', 'wordEncoding']:
+            for key in ['ordinal', 'chunkIndex', 'byteOffset', 'size', 'fields', 'fieldEncoding']:
                 if key not in record:
                     raise ValueError(f'sourced EV structures {candidate} record missing {key}')
-            if not record['wordsBE']:
-                raise ValueError(f'sourced EV structures {candidate} record has no decoded words')
+            if not record['fields']:
+                raise ValueError(f'sourced EV structures {candidate} record has no decoded fields')
+            if record.get('fieldsComplete') is not True:
+                raise ValueError(f'sourced EV structures {candidate} record is not fully decoded')
+    return data
+
+
+def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
+    data = json.loads(path.read_text())
+    if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Graphics.rez':
+        raise ValueError('sourced EV graphics manifest has unexpected source file')
+    if data.get('method') != 'brgr-graphics-rled-shan-full-field-v1':
+        raise ValueError('sourced EV graphics manifest has unexpected extraction method')
+    resources = data.get('resources', [])
+    if len(resources) < 300:
+        raise ValueError('sourced EV graphics manifest has too few resources')
+    ship_sprites = data.get('shipSprites', [])
+    ok_sprites = [sprite for sprite in ship_sprites if sprite.get('status') == 'ok']
+    if len(ok_sprites) < 20:
+        raise ValueError('sourced EV graphics manifest has too few extracted ship sprite sets')
+    for sprite in ok_sprites:
+        asset_dir = ROOT.parent / sprite['assetDir']
+        frames = list(asset_dir.glob('frame_*.png'))
+        if len(frames) != sprite['frames']:
+            raise ValueError(f"sourced EV sprite {sprite['shipName']} expected {sprite['frames']} frames, got {len(frames)}")
     return data
 
 
