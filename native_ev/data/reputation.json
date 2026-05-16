@@ -1,0 +1,121 @@
+{
+  "factions": {
+    "Federation": {
+      "description": "Core-world authorities, patrols, and licensed trade bureaus."
+    },
+    "Centauri Protectorate": {
+      "description": "Industrial protectorate officials and port security."
+    },
+    "Independent": {
+      "description": "Freeport brokers, neutral haulers, and independent stations."
+    },
+    "Militia Compact": {
+      "description": "Border militias and licensed escorts."
+    },
+    "Rim Freehold": {
+      "description": "Sparse rim settlements and self-regulated ports."
+    },
+    "Pirate": {
+      "description": "Raiders, smugglers, and hostile outlaw contacts."
+    }
+  },
+  "legalThresholds": [
+    {
+      "status": "Clean",
+      "minScore": 0
+    },
+    {
+      "status": "Suspicious",
+      "minScore": -20
+    },
+    {
+      "status": "Offender",
+      "minScore": -60
+    },
+    {
+      "status": "Fugitive",
+      "minScore": -1000
+    }
+  ],
+  "events": {
+    "mission_intro_courier": {
+      "reputation": {
+        "Federation": 4,
+        "Centauri Protectorate": 2
+      },
+      "legal": {}
+    },
+    "mission_frontier_sample": {
+      "reputation": {
+        "Independent": 6,
+        "Centauri Protectorate": 2
+      },
+      "legal": {}
+    },
+    "mission_federation_report": {
+      "reputation": {
+        "Federation": 10,
+        "Independent": -3,
+        "Pirate": -5
+      },
+      "legal": {
+        "Federation": 5
+      }
+    },
+    "mission_freeport_pact": {
+      "reputation": {
+        "Independent": 10,
+        "Pirate": 4,
+        "Federation": -8
+      },
+      "legal": {
+        "Federation": -8,
+        "Independent": 3
+      }
+    },
+    "destroy_pirate": {
+      "reputation": {
+        "Federation": 6,
+        "Independent": 4,
+        "Militia Compact": 4,
+        "Pirate": -10
+      },
+      "legal": {}
+    },
+    "destroy_civilian": {
+      "reputation": {
+        "Federation": -8,
+        "Independent": -8,
+        "Centauri Protectorate": -8,
+        "Militia Compact": -8
+      },
+      "legal": {
+        "Federation": -35,
+        "Independent": -35,
+        "Centauri Protectorate": -35,
+        "Militia Compact": -35,
+        "Rim Freehold": -20
+      }
+    },
+    "destroy_patrol": {
+      "reputation": {
+        "Federation": -15,
+        "Militia Compact": -12,
+        "Pirate": 5
+      },
+      "legal": {
+        "Federation": -70,
+        "Centauri Protectorate": -55,
+        "Militia Compact": -70
+      }
+    },
+    "contraband_fine": {
+      "reputation": {
+        "Pirate": 1
+      },
+      "legal": {
+        "*": -10
+      }
+    }
+  }
+}

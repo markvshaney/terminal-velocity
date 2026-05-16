@@ -14,7 +14,10 @@ from native_ev.model import (
     mission_manifest,
     mission_unlock_flags,
     normalize_save_data,
+    apply_reputation_event,
+    legal_status_for_score,
     outfit_manifest,
+    reputation_manifest,
     route_risk_score,
     serialize_save_data,
     repair_cost,
@@ -294,6 +297,30 @@ class NativeEvModelTests(unittest.TestCase):
     def test_contraband_fine_math(self):
         self.assertEqual(fine_for_contraband({'luxuries': 2, 'food': 5}, {'luxuries'}, 400), 800)
         self.assertEqual(fine_for_contraband({'food': 5}, {'luxuries'}, 400), 0)
+
+    def test_reputation_manifest_loads_factions_events_and_legal_thresholds(self):
+        data = reputation_manifest()
+        self.assertIn('Federation', data['factions'])
+        self.assertIn('Independent', data['factions'])
+        self.assertIn('mission_federation_report', data['events'])
+        self.assertIn('destroy_pirate', data['events'])
+        self.assertEqual(legal_status_for_score(data, 0), 'Clean')
+        self.assertEqual(legal_status_for_score(data, -30), 'Offender')
+        self.assertEqual(legal_status_for_score(data, -90), 'Fugitive')
+
+    def test_reputation_events_adjust_faction_and_legal_records(self):
+        data = reputation_manifest()
+        reputation = {'Federation': 0, 'Independent': 0, 'Pirate': 0}
+        legal = {'Federation': 0, 'Independent': 0}
+        reputation, legal = apply_reputation_event(data, reputation, legal, 'mission_federation_report')
+        self.assertGreater(reputation['Federation'], 0)
+        self.assertLess(reputation['Pirate'], 0)
+        reputation, legal = apply_reputation_event(data, reputation, legal, 'destroy_pirate')
+        self.assertGreater(reputation['Federation'], 10)
+        reputation, legal = apply_reputation_event(data, reputation, legal, 'contraband_fine', government='Federation')
+        self.assertLess(legal['Federation'], 0)
+        self.assertEqual(legal_status_for_score(data, legal['Federation']), 'Suspicious')
+
     def test_save_data_round_trips_progression_and_ship_state(self):
         save = serialize_save_data(
             credits=7425,
@@ -310,6 +337,8 @@ class NativeEvModelTests(unittest.TestCase):
             completed_mission_ids=['intro_courier_earth_hera'],
             story_flags=['story_intro_complete', 'frontier_chain_started'],
             legal_status='Clean',
+            reputation={'Federation': 12, 'Independent': 4, 'Pirate': -5},
+            legal_records={'Federation': -12, 'Independent': 0},
         )
         loaded = normalize_save_data(save)
         self.assertEqual(loaded['schemaVersion'], 1)
@@ -321,6 +350,8 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(loaded['activeMissionIds'], ['frontier_sample_hera_freeport'])
         self.assertEqual(loaded['completedMissionIds'], ['intro_courier_earth_hera'])
         self.assertIn('story_intro_complete', loaded['storyFlags'])
+        self.assertEqual(loaded['reputation']['Federation'], 12)
+        self.assertEqual(loaded['legalRecords']['Federation'], -12)
 
     def test_save_data_defaults_missing_optional_fields(self):
         loaded = normalize_save_data({'credits': 6000, 'currentSystem': 'Sol'})
@@ -333,6 +364,8 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(loaded['completedMissionIds'], [])
         self.assertEqual(loaded['storyFlags'], [])
         self.assertEqual(loaded['commodityHold'], {})
+        self.assertEqual(loaded['reputation'], {})
+        self.assertEqual(loaded['legalRecords'], {})
 
 
 if __name__ == '__main__':

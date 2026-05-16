@@ -10,6 +10,7 @@ MISSIONS_PATH = ROOT / 'data' / 'missions.json'
 OUTFITS_PATH = ROOT / 'data' / 'outfits.json'
 ECONOMY_PATH = ROOT / 'data' / 'economy.json'
 GOVERNMENTS_PATH = ROOT / 'data' / 'governments.json'
+REPUTATION_PATH = ROOT / 'data' / 'reputation.json'
 SOURCED_EV_NAMES_PATH = ROOT / 'data' / 'sourced_ev_names.json'
 SOURCED_EV_STRUCTURES_PATH = ROOT / 'data' / 'sourced_ev_structures.json'
 SOURCED_EV_GRAPHICS_PATH = ROOT / 'data' / 'sourced_ev_graphics.json'
@@ -393,6 +394,52 @@ def fine_for_contraband(hold, illegal_ids, fine_per_ton):
     return int(tons * fine_per_ton)
 
 
+def reputation_manifest(path=REPUTATION_PATH):
+    data = json.loads(path.read_text())
+    factions = data.get('factions', {})
+    events = data.get('events', {})
+    thresholds = data.get('legalThresholds', [])
+    if not factions:
+        raise ValueError('reputation manifest contains no factions')
+    if not events:
+        raise ValueError('reputation manifest contains no events')
+    if not thresholds:
+        raise ValueError('reputation manifest contains no legal thresholds')
+    for event_name, event in events.items():
+        for faction in event.get('reputation', {}).keys():
+            if faction not in factions:
+                raise ValueError(f'reputation event {event_name} references unknown faction {faction}')
+        for government in event.get('legal', {}).keys():
+            if government != '*' and government not in factions:
+                raise ValueError(f'reputation event {event_name} references unknown legal record {government}')
+    return data
+
+
+def legal_status_for_score(data, score):
+    ordered = sorted(data.get('legalThresholds', []), key=lambda item: int(item['minScore']), reverse=True)
+    score = int(score)
+    for threshold in ordered:
+        if score >= int(threshold['minScore']):
+            return threshold['status']
+    return ordered[-1]['status'] if ordered else 'Clean'
+
+
+def apply_reputation_event(data, reputation, legal_records, event_id, government=None):
+    if event_id not in data.get('events', {}):
+        raise ValueError(f'unknown reputation event {event_id}')
+    event = data['events'][event_id]
+    reputation = dict(reputation or {})
+    legal_records = dict(legal_records or {})
+    for faction, delta in event.get('reputation', {}).items():
+        reputation[faction] = int(reputation.get(faction, 0)) + int(delta)
+    for gov, delta in event.get('legal', {}).items():
+        target = government if gov == '*' else gov
+        if target is None:
+            continue
+        legal_records[target] = int(legal_records.get(target, 0)) + int(delta)
+    return reputation, legal_records
+
+
 def cargo_can_accept(current, add, capacity=20):
     return current + add <= capacity
 
@@ -413,6 +460,8 @@ def serialize_save_data(
     completed_mission_ids=None,
     story_flags=None,
     legal_status='Clean',
+    reputation=None,
+    legal_records=None,
 ):
     return {
         'schemaVersion': 1,
@@ -430,6 +479,8 @@ def serialize_save_data(
         'completedMissionIds': list(completed_mission_ids or []),
         'storyFlags': sorted(set(story_flags or [])),
         'legalStatus': legal_status,
+        'reputation': dict(reputation or {}),
+        'legalRecords': dict(legal_records or {}),
     }
 
 
@@ -451,4 +502,6 @@ def normalize_save_data(data):
         'completedMissionIds': list(data.get('completedMissionIds', [])),
         'storyFlags': sorted(set(data.get('storyFlags', []))),
         'legalStatus': data.get('legalStatus', 'Clean'),
+        'reputation': dict(data.get('reputation', {})),
+        'legalRecords': dict(data.get('legalRecords', {})),
     }

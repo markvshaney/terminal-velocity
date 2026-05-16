@@ -22,6 +22,7 @@ $missionsPath = Join-Path $gameRoot 'data\missions.json'
 $outfitsPath = Join-Path $gameRoot 'data\outfits.json'
 $economyPath = Join-Path $gameRoot 'data\economy.json'
 $governmentsPath = Join-Path $gameRoot 'data\governments.json'
+$reputationPath = Join-Path $gameRoot 'data\reputation.json'
 $savePath = Join-Path $gameRoot 'savegame.json'
 if ($SelfTest) {
     $savePath = Join-Path ([System.IO.Path]::GetTempPath()) 'terminal_velocity_selftest_save.json'
@@ -82,12 +83,14 @@ if (!(Test-Path $missionsPath)) { throw "Missing missions data file: $missionsPa
 if (!(Test-Path $outfitsPath)) { throw "Missing outfits data file: $outfitsPath" }
 if (!(Test-Path $economyPath)) { throw "Missing economy data file: $economyPath" }
 if (!(Test-Path $governmentsPath)) { throw "Missing governments data file: $governmentsPath" }
+if (!(Test-Path $reputationPath)) { throw "Missing reputation data file: $reputationPath" }
 $rawShips = Get-Content -Raw $shipsPath | ConvertFrom-Json
 $rawWeapons = Get-Content -Raw $weaponsPath | ConvertFrom-Json
 $rawMissions = Get-Content -Raw $missionsPath | ConvertFrom-Json
 $rawOutfits = Get-Content -Raw $outfitsPath | ConvertFrom-Json
 $rawEconomy = Get-Content -Raw $economyPath | ConvertFrom-Json
 $rawGovernments = Get-Content -Raw $governmentsPath | ConvertFrom-Json
+$rawReputation = Get-Content -Raw $reputationPath | ConvertFrom-Json
 $missionDefs = @{}
 foreach ($mission in $rawMissions.missions) { $missionDefs[[string]$mission.id] = $mission }
 $weaponDefs = @{}
@@ -101,6 +104,8 @@ $commodityList = @($rawEconomy.commodities)
 foreach ($commodity in $commodityList) { $commodityDefs[[string]$commodity.id] = $commodity }
 $governmentDefs = @{}
 foreach ($govProp in $rawGovernments.governments.PSObject.Properties) { $governmentDefs[[string]$govProp.Name] = $govProp.Value }
+$reputationDefs = @{}
+foreach ($factionProp in $rawReputation.factions.PSObject.Properties) { $reputationDefs[[string]$factionProp.Name] = $factionProp.Value }
 $shipDefs = @{}
 $shipFrameSets = @{}
 foreach ($ship in $rawShips.ships) {
@@ -252,6 +257,10 @@ $selectedCommodityIndex = 0
 $tradeProfit = 0
 $legalStatus = 'Clean'
 $totalFinesPaid = 0
+$reputation = @{}
+foreach ($faction in $reputationDefs.Keys) { $reputation[[string]$faction] = 0 }
+$legalRecords = @{}
+foreach ($govName in $governmentDefs.Keys) { $legalRecords[[string]$govName] = 0 }
 $scannedSystems = @{}
 $selectedShipyardIndex = 0
 $stationOutfitsForSale = @($rawOutfits.outfits)
@@ -316,6 +325,8 @@ function Save-Game {
         completedMissionIds = @(Sorted-Hash-Keys $completedMissionIds)
         storyFlags = @(Sorted-Hash-Keys $storyFlags)
         legalStatus = [string]$legalStatus
+        reputation = $reputation
+        legalRecords = $legalRecords
     }
     $save | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 $savePath
     $message.Text = ('Game saved: {0}' -f $savePath)
@@ -360,6 +371,17 @@ function Load-Game {
     $script:storyFlags = @{}
     if ($save.storyFlags -ne $null) { foreach ($flag in $save.storyFlags) { $script:storyFlags[[string]$flag] = $true } }
     if ($save.legalStatus -ne $null) { $script:legalStatus = [string]$save.legalStatus }
+    if ($save.reputation -ne $null) {
+        $script:reputation = @{}
+        foreach ($faction in $reputationDefs.Keys) { $script:reputation[[string]$faction] = 0 }
+        foreach ($prop in $save.reputation.PSObject.Properties) { $script:reputation[[string]$prop.Name] = [int]$prop.Value }
+    }
+    if ($save.legalRecords -ne $null) {
+        $script:legalRecords = @{}
+        foreach ($govName in $governmentDefs.Keys) { $script:legalRecords[[string]$govName] = 0 }
+        foreach ($prop in $save.legalRecords.PSObject.Properties) { $script:legalRecords[[string]$prop.Name] = [int]$prop.Value }
+        $script:legalStatus = Current-Legal-Status
+    }
     $message.Text = ('Loaded saved game: {0}' -f $savePath)
     return $true
 }
@@ -369,6 +391,57 @@ function Add-Story-Flags($flags) {
     foreach ($flag in $flags) {
         $storyFlags[[string]$flag] = $true
     }
+}
+
+function Reputation-Event($eventId) {
+    if ([string]::IsNullOrWhiteSpace([string]$eventId)) { return $null }
+    $prop = $rawReputation.events.PSObject.Properties[[string]$eventId]
+    if ($prop -eq $null) { return $null }
+    return $prop.Value
+}
+
+function Legal-Status-For-Score($score) {
+    $thresholds = @($rawReputation.legalThresholds | Sort-Object { [int]$_.minScore } -Descending)
+    foreach ($threshold in $thresholds) {
+        if ([int]$score -ge [int]$threshold.minScore) { return [string]$threshold.status }
+    }
+    return 'Clean'
+}
+
+function Current-Legal-Status {
+    $govName = Current-Government-Name
+    if (!$legalRecords.ContainsKey($govName)) { $legalRecords[$govName] = 0 }
+    return Legal-Status-For-Score ([int]$legalRecords[$govName])
+}
+
+function Reputation-Summary {
+    $parts = @()
+    foreach ($name in @('Federation','Independent','Pirate')) {
+        if ($reputation.ContainsKey($name)) { $parts += ('{0}:{1}' -f $name.Substring(0,3), [int]$reputation[$name]) }
+    }
+    return ($parts -join ' ')
+}
+
+function Apply-Reputation-Event($eventId, $government = $null) {
+    $event = Reputation-Event $eventId
+    if ($event -eq $null) { return }
+    if ($event.reputation -ne $null) {
+        foreach ($prop in $event.reputation.PSObject.Properties) {
+            $name = [string]$prop.Name
+            if (!$reputation.ContainsKey($name)) { $reputation[$name] = 0 }
+            $reputation[$name] = [int]$reputation[$name] + [int]$prop.Value
+        }
+    }
+    if ($event.legal -ne $null) {
+        foreach ($prop in $event.legal.PSObject.Properties) {
+            $name = [string]$prop.Name
+            if ($name -eq '*') { $name = [string]$government }
+            if ([string]::IsNullOrWhiteSpace($name)) { continue }
+            if (!$legalRecords.ContainsKey($name)) { $legalRecords[$name] = 0 }
+            $legalRecords[$name] = [int]$legalRecords[$name] + [int]$prop.Value
+        }
+    }
+    $script:legalStatus = Current-Legal-Status
 }
 
 function Has-Required-Flags($mission) {
@@ -583,6 +656,7 @@ function Scan-For-Contraband($scannerName) {
     $fine = [int]$gov.finePerTon * $tons
     $script:credits = [Math]::Max(0, $credits - $fine)
     $script:totalFinesPaid += $fine
+    Apply-Reputation-Event 'contraband_fine' (Current-Government-Name)
     foreach ($cid in $illegal) {
         if ($commodityHold.ContainsKey($cid)) {
             $script:cargoUsed -= [int]$commodityHold[$cid].Tons
@@ -681,6 +755,7 @@ function Complete-Missions {
             $script:cargoUsed -= [int]$m.cargoTons
             $completedMissionIds[[string]$m.id] = $true
             Add-Story-Flags $m.completionFlags
+            if ($m.reputationEvent -ne $null) { Apply-Reputation-Event ([string]$m.reputationEvent) (Current-Government-Name) }
             $completeText += ('Mission complete: {0}: +{1} credits' -f $m.title, $m.reward)
         } else { $remaining += $m }
     }
@@ -908,6 +983,9 @@ function Update-Projectiles {
                         $npc.Alive = $false
                         $npc.Image.Visibility = 'Hidden'; $npc.Label.Visibility = 'Hidden'
                         $script:credits += 250
+                        if ($npc.Faction -eq 'pirate') { Apply-Reputation-Event 'destroy_pirate' (Current-Government-Name) }
+                        elseif ($npc.Faction -eq 'confed') { Apply-Reputation-Event 'destroy_patrol' (Current-Government-Name) }
+                        else { Apply-Reputation-Event 'destroy_civilian' (Current-Government-Name) }
                         $message.Text = ('Destroyed {0}: +250 credits' -f $npc.Name)
                     }
                     break
@@ -1035,7 +1113,8 @@ function Update-Landing-Text {
     $lines += $dockedAt.Market
     $lines += ''
     $lines += ('Credits: {0}   Ship: {1}   Cargo: {2}/{3} tons   Hull: {4:n0}/{5:n0}   Fuel: {6:n0}/{7:n0}' -f $credits, $playerShipDef.name, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $player.Fuel, $playerMaxFuel)
-    $lines += ('Government: {0}   Legal: {1}   Fines Paid: {2}' -f (Current-Government-Name), $legalStatus, $totalFinesPaid)
+    $lines += ('Government: {0}   Legal: {1}   Fines Paid: {2}' -f (Current-Government-Name), (Current-Legal-Status), $totalFinesPaid)
+    $lines += ('Reputation: {0}' -f (Reputation-Summary))
     if ($dockedAt.inventory -ne $null) { $lines += ('Services: {0}' -f (@($dockedAt.inventory.services) -join ', ')) }
     $lines += ('Repair: {0} credits per hull point. Press 6 to repair all.' -f $repairPricePerHullPoint)
     $lines += ''
@@ -1159,7 +1238,7 @@ function Tick {
         $visible = @(Current-Targets | Where-Object { (Dist $player.X $player.Y $_.X $_.Y) -le $scannerRange }).Count
         $scanner.Text = ('SCANNER`nNo target`nContacts: {0}`nT: nearest`nY: cycle' -f $visible)
     }
-    $hud.Text = ('{0} ({1}) | Credits {2} | Cargo {3}/{4} | Hull {5:n0}/{6:n0} | Speed {7:n1} | Fuel {8:n0} | Legal {9}{10}' -f (Current-System).Name, (Current-Government-Name), $credits, $cargoUsed, $cargoSpace, [Math]::Max(0, $playerHull), $playerMaxHull, (Speed), $player.Fuel, $legalStatus, $dockHint)
+    $hud.Text = ('{0} ({1}) | Credits {2} | Cargo {3}/{4} | Hull {5:n0}/{6:n0} | Speed {7:n1} | Fuel {8:n0} | Legal {9} | Rep {10}{11}' -f (Current-System).Name, (Current-Government-Name), $credits, $cargoUsed, $cargoSpace, [Math]::Max(0, $playerHull), $playerMaxHull, (Speed), $player.Fuel, (Current-Legal-Status), (Reputation-Summary), $dockHint)
 }
 
 if (!$SelfTest) { [void](Load-Game) }
@@ -1281,6 +1360,7 @@ $timer.Add_Tick({
         if ($outfitDefs.Count -lt 1) { throw "SelfTest expected file-backed outfits" }
         if ($commodityList.Count -lt 1) { throw "SelfTest expected file-backed commodities" }
         if ($governmentDefs.Count -lt 1) { throw "SelfTest expected file-backed governments" }
+        if ($reputationDefs.Count -lt 1) { throw "SelfTest expected file-backed reputation factions" }
         if (!$storyFlags.ContainsKey('story_intro_started')) { throw "SelfTest expected mission accept story flag" }
         if (!$storyFlags.ContainsKey('story_intro_complete')) { throw "SelfTest expected mission completion story flag" }
         if (!$storyFlags.ContainsKey('frontier_samples_delivered')) { throw "SelfTest expected completed frontier story flag" }
@@ -1292,6 +1372,8 @@ $timer.Add_Tick({
         if (!$federationBranchActive) { throw "SelfTest expected active Federation branch mission" }
         foreach ($m in $availableMissions) { if ($m.id -eq 'freeport_pact_smugglers') { throw "SelfTest expected Sirius branch to be hidden after Federation choice" } }
         if ($totalFinesPaid -le 0) { throw "SelfTest expected contraband fine" }
+        if ([int]$legalRecords['Federation'] -ge 0) { throw "SelfTest expected Federation legal record penalty" }
+        if ([int]$reputation['Federation'] -le 0) { throw "SelfTest expected positive Federation reputation" }
         if ($tradeProfit -le 0) { throw "SelfTest expected profitable commodity trade" }
         if ($cargoSpace -le [int]$playerShipDef.cargoSpace) { throw "SelfTest expected installed outfit cargo bonus" }
         if ($playerWeaponId -ne 'pulse_cannon') { throw "SelfTest expected station weapon purchase" }
@@ -1306,9 +1388,11 @@ $timer.Add_Tick({
         if ($selfTestSave.completedMissionIds.Count -lt 1) { throw "SelfTest expected saved completed mission" }
         if (!($selfTestSave.storyFlags -contains 'story_intro_complete')) { throw "SelfTest expected saved story flag" }
         if ($selfTestSave.playerShipId -ne $playerShipId) { throw "SelfTest expected saved player ship id" }
+        if ($selfTestSave.reputation.Federation -le 0) { throw "SelfTest expected saved Federation reputation" }
+        if ($selfTestSave.legalRecords.Federation -ge 0) { throw "SelfTest expected saved Federation legal penalty" }
         $targetForLog = 'none'
         if ($currentTargetName -ne $null) { $targetForLog = $currentTargetName }
-        Write-Host ('SELFTEST OK frames={0} npcFrames={1} systems={2} links={3} current={4} selected={5} npcs={6} weapons={7} missions={8} outfits={9} activeMissions={10} completedMissions={11} storyFlags={12} projectiles={13} target={14} credits={15} cargo={16} cargoSpace={17} hull={18:n0}/{19:n0} commodities={20} tradeProfit={21} governments={22} fines={23} legal={24}' -f $shipFrames.Count, $shipFrameSets['light_freighter'].Count, $systems.Count, $systems[0].Links.Count, (Current-System).Name, $systems[$selectedSystemIndex].Name, $npcShips.Count, $weaponDefs.Count, $missionDefs.Count, $outfitDefs.Count, $activeMissions.Count, $completedMissionIds.Count, $storyFlags.Count, $projectiles.Count, $targetForLog, $credits, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $commodityList.Count, $tradeProfit, $governmentDefs.Count, $totalFinesPaid, $legalStatus)
+        Write-Host ('SELFTEST OK frames={0} npcFrames={1} systems={2} links={3} current={4} selected={5} npcs={6} weapons={7} missions={8} outfits={9} activeMissions={10} completedMissions={11} storyFlags={12} projectiles={13} target={14} credits={15} cargo={16} cargoSpace={17} hull={18:n0}/{19:n0} commodities={20} tradeProfit={21} governments={22} factions={23} fines={24} legal={25} fedRep={26} fedLegal={27}' -f $shipFrames.Count, $shipFrameSets['light_freighter'].Count, $systems.Count, $systems[0].Links.Count, (Current-System).Name, $systems[$selectedSystemIndex].Name, $npcShips.Count, $weaponDefs.Count, $missionDefs.Count, $outfitDefs.Count, $activeMissions.Count, $completedMissionIds.Count, $storyFlags.Count, $projectiles.Count, $targetForLog, $credits, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $commodityList.Count, $tradeProfit, $governmentDefs.Count, $reputationDefs.Count, $totalFinesPaid, (Current-Legal-Status), $reputation['Federation'], $legalRecords['Federation'])
         $window.Close()
     } elseif ($AutoCloseSeconds -gt 0 -and $tickCount -ge ($AutoCloseSeconds * 60)) {
         $window.Close()

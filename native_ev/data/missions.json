@@ -20,7 +20,8 @@
         "federation_trusted_courier"
       ],
       "choiceGroup": null,
-      "next": "frontier_sample_hera_freeport"
+      "next": "frontier_sample_hera_freeport",
+      "reputationEvent": "mission_intro_courier"
     },
     {
       "id": "frontier_sample_hera_freeport",
@@ -44,7 +45,8 @@
         "reputation_independent_positive"
       ],
       "choiceGroup": null,
-      "next": "freeport_return_earth"
+      "next": "freeport_return_earth",
+      "reputationEvent": "mission_frontier_sample"
     },
     {
       "id": "freeport_return_earth",
@@ -68,7 +70,8 @@
         "federation_independent_bridge"
       ],
       "choiceGroup": null,
-      "next": null
+      "next": null,
+      "reputationEvent": null
     },
     {
       "id": "federation_report_freeport",
@@ -95,7 +98,8 @@
         "federation_intel_asset"
       ],
       "choiceGroup": "chapter_one_alignment",
-      "next": null
+      "next": null,
+      "reputationEvent": "mission_federation_report"
     },
     {
       "id": "freeport_pact_smugglers",
@@ -122,7 +126,8 @@
         "freeport_network_asset"
       ],
       "choiceGroup": "chapter_one_alignment",
-      "next": null
+      "next": null,
+      "reputationEvent": "mission_freeport_pact"
     }
   ]
 }
