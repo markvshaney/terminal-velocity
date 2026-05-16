@@ -11,6 +11,7 @@ OUTFITS_PATH = ROOT / 'data' / 'outfits.json'
 ECONOMY_PATH = ROOT / 'data' / 'economy.json'
 GOVERNMENTS_PATH = ROOT / 'data' / 'governments.json'
 SOURCED_EV_NAMES_PATH = ROOT / 'data' / 'sourced_ev_names.json'
+SOURCED_EV_STRUCTURES_PATH = ROOT / 'data' / 'sourced_ev_structures.json'
 
 
 def shuttle_frame_paths():
@@ -102,6 +103,44 @@ def sourced_ev_names_manifest(path=SOURCED_EV_NAMES_PATH):
         for key in ['name', 'chunkIndex', 'byteOffset', 'evidence', 'confidence']:
             if key not in entry:
                 raise ValueError(f'sourced EV landing name missing {key}')
+    return data
+
+
+def sourced_ev_structures_manifest(path=SOURCED_EV_STRUCTURES_PATH):
+    data = json.loads(path.read_text())
+    if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Data.rez':
+        raise ValueError('sourced EV structures manifest has unexpected source file')
+    if data.get('method') != 'brgr-fixed-record-run-v1':
+        raise ValueError('sourced EV structures manifest has unexpected extraction method')
+    if data.get('chunkCount', 0) < 1000:
+        raise ValueError('sourced EV structures manifest has too few chunks')
+    runs = data.get('runs', [])
+    if not runs:
+        raise ValueError('sourced EV structures manifest contains no decoded runs')
+    by_type = {run.get('candidateType'): run for run in runs}
+    for candidate, expected_size, min_count in [
+        ('syst-like', 88, 60),
+        ('spob-like', 400, 200),
+        ('ship-like', 1860, 20),
+        ('weapon-like', 282, 30),
+        ('outfit-like', 1028, 40),
+    ]:
+        run = by_type.get(candidate)
+        if run is None:
+            raise ValueError(f'sourced EV structures missing {candidate} run')
+        if run.get('recordSize') != expected_size:
+            raise ValueError(f'sourced EV structures {candidate} has unexpected record size')
+        if run.get('count', 0) < min_count:
+            raise ValueError(f'sourced EV structures {candidate} has too few records')
+        records = run.get('records', [])
+        if len(records) != run.get('count'):
+            raise ValueError(f'sourced EV structures {candidate} count does not match records')
+        for record in records[:3]:
+            for key in ['ordinal', 'chunkIndex', 'byteOffset', 'size', 'wordsBE', 'wordEncoding']:
+                if key not in record:
+                    raise ValueError(f'sourced EV structures {candidate} record missing {key}')
+            if not record['wordsBE']:
+                raise ValueError(f'sourced EV structures {candidate} record has no decoded words')
     return data
 
 

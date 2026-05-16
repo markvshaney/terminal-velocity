@@ -20,6 +20,7 @@ from native_ev.model import (
     repair_cost,
     ship_manifest,
     sourced_ev_names_manifest,
+    sourced_ev_structures_manifest,
     shuttle_frame_paths,
     system_distance,
     trade_profit,
@@ -75,6 +76,26 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertGreater(entry['byteOffset'], 0)
             self.assertTrue(entry['evidence'])
             self.assertIn(entry['confidence'], {'high', 'medium'})
+
+    def test_sourced_ev_structures_manifest_decodes_fixed_record_runs(self):
+        data = sourced_ev_structures_manifest()
+        self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Data.rez')
+        self.assertEqual(data['method'], 'brgr-fixed-record-run-v1')
+        self.assertEqual(data['chunkCount'], 1544)
+        by_type = {run['candidateType']: run for run in data['runs']}
+        self.assertEqual(by_type['syst-like']['recordSize'], 88)
+        self.assertEqual(by_type['syst-like']['count'], 67)
+        self.assertEqual(by_type['spob-like']['recordSize'], 400)
+        self.assertGreaterEqual(by_type['spob-like']['count'], 200)
+        self.assertEqual(by_type['ship-like']['recordSize'], 1860)
+        first_system = by_type['syst-like']['records'][0]
+        first_spob = by_type['spob-like']['records'][0]
+        self.assertTrue(first_system['wordsComplete'])
+        self.assertTrue(first_spob['wordsComplete'])
+        self.assertGreaterEqual(len(first_system['wordsBE']), 44)
+        self.assertGreaterEqual(len(first_spob['wordsBE']), 200)
+        self.assertGreater(first_system['byteOffset'], 0)
+        self.assertGreater(first_spob['byteOffset'], first_system['byteOffset'])
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()

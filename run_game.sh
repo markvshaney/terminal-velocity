@@ -18,4 +18,5 @@ cp "$ROOT/native_ev/data/outfits.json" "$WIN_DIR/data/outfits.json"
 cp "$ROOT/native_ev/data/economy.json" "$WIN_DIR/data/economy.json"
 cp "$ROOT/native_ev/data/governments.json" "$WIN_DIR/data/governments.json"
 cp "$ROOT/native_ev/data/sourced_ev_names.json" "$WIN_DIR/data/sourced_ev_names.json"
+cp "$ROOT/native_ev/data/sourced_ev_structures.json" "$WIN_DIR/data/sourced_ev_structures.json"
 powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File 'C:\Users\bh\Games\TerminalVelocity\TerminalVelocity.ps1'

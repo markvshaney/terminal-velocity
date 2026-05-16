@@ -76,7 +76,8 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 
 - Native Windows desktop window, no browser.
 - File-backed universe data loaded from `native_ev/data/universe.json`: 9 systems with connected jump routes, mapped coordinates, and multiple ports.
-- First original-name fidelity slice: `tools/extract_ev_data_names.py` reads local `source-assets/ev-classic/Nova Files/EV Data.rez` BRGR chunks and writes provenance-preserving seeds to `native_ev/data/sourced_ev_names.json`; the active 9-system map now uses a seed set of sourced EV Classic system/landing names while topology/coordinates remain local remake scaffolding until full resource decoding lands.
+- First original-name fidelity slice: `tools/extract_ev_data_names.py` reads local `source-assets/ev-classic/Nova Files/EV Data.rez` BRGR chunks and writes provenance-preserving seeds to `native_ev/data/sourced_ev_names.json`; the active 9-system map now uses a seed set of sourced EV Classic system/landing names while topology/coordinates remain local remake scaffolding.
+- First structured-resource fidelity slice: `tools/extract_ev_structured_records.py` decodes fixed-size BRGR record runs from local `EV Data.rez` into `native_ev/data/sourced_ev_structures.json`, including candidate `syst-like` 88-byte records, `spob-like` 400-byte records, ship-like, weapon-like, outfit-like, commodity-like, and mission-like runs with byte offsets and provisional confidence labels. Field semantics are not overclaimed yet; this is the source-backed base for replacing local topology/port scaffolding next.
 - File-backed ship/NPC traffic data loaded from `native_ev/data/ships.json`.
 - File-backed weapons data loaded from `native_ev/data/weapons.json`.
 - File-backed outfit/shipyard/repair data loaded from `native_ev/data/outfits.json`.
@@ -100,4 +101,4 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 - Self-test/autopilot mode for no-human launch verification.
 - Source assets and extraction tooling retained under `source-assets/` and `tools/`.
 
-Next fidelity step: decode the actual EV `sÿst`/`spöb`-style structured records (not just text chunks) so topology, coordinates, governments, and port metadata can be source-backed too.
+Next fidelity step: map the decoded `syst-like` and `spob-like` word offsets to concrete fields — coordinates, links, governments, landing flags, and port metadata — with per-field provenance before replacing the local universe scaffold.
