@@ -14,5 +14,9 @@ if [ -d "$ROOT/native_ev/assets/ships/ev_classic" ]; then
   mkdir -p "$WIN_DIR/assets/ships/ev_classic"
   cp -R "$ROOT/native_ev/assets/ships/ev_classic"/* "$WIN_DIR/assets/ships/ev_classic/"
 fi
+if [ -d "$ROOT/native_ev/assets/graphics" ]; then
+  mkdir -p "$WIN_DIR/assets/graphics"
+  cp -R "$ROOT/native_ev/assets/graphics"/* "$WIN_DIR/assets/graphics/"
+fi
 cp "$ROOT/native_ev/data"/*.json "$WIN_DIR/data/"
 powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File 'C:\Users\bh\Games\TerminalVelocity\TerminalVelocity.ps1'

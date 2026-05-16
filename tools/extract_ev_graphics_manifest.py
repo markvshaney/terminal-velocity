@@ -20,6 +20,7 @@ from extract_ev_rled import decode_rled, iter_chunks, iter_resources, write_png
 DEFAULT_SOURCE = Path('source-assets/ev-classic/Nova Files/EV Graphics.rez')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_graphics.json')
 DEFAULT_SHIP_OUT = Path('native_ev/assets/ships/ev_classic')
+DEFAULT_RLED_OUT = Path('native_ev/assets/graphics/rled')
 METHOD = 'brgr-graphics-rled-shan-full-field-v1'
 
 
@@ -87,6 +88,59 @@ def decode_shan(resource: dict, raw: bytes) -> dict:
     }
 
 
+def relative_asset_dir(path: Path) -> str:
+    try:
+        return str(path.relative_to(Path('native_ev')))
+    except ValueError:
+        return str(path)
+
+
+def extract_rled_assets(rez: bytes, chunks: list[tuple[int, int, int]], resources: list[dict], out_root: Path) -> list[dict]:
+    if out_root.exists():
+        shutil.rmtree(out_root)
+    out_root.mkdir(parents=True, exist_ok=True)
+    extracted = []
+    used_slugs: set[str] = set()
+    for resource in [r for r in resources if r['type'] == 'rlëD']:
+        _, off, size = chunks[resource['chunk_index']]
+        raw = rez[off:off + size]
+        slug = slugify(resource['name'] or f"rled_{resource['res_id']}")
+        slug = f"{resource['res_id']}_{slug}"
+        if slug in used_slugs:
+            slug = f"{slug}_{resource['chunk_index']}"
+        used_slugs.add(slug)
+        outdir = out_root / slug
+        try:
+            width, height, frames_rgba = decode_rled(raw, None)
+            outdir.mkdir(parents=True, exist_ok=True)
+            for i, img in enumerate(frames_rgba):
+                write_png(outdir / f'frame_{i:02d}.png', width, height, img)
+            extracted.append({
+                'type': resource['type'],
+                'resourceId': resource['res_id'],
+                'name': resource['name'],
+                'chunkIndex': resource['chunk_index'],
+                'byteOffset': off,
+                'size': size,
+                'width': width,
+                'height': height,
+                'frames': len(frames_rgba),
+                'assetDir': relative_asset_dir(outdir),
+                'status': 'ok',
+            })
+        except Exception as exc:
+            extracted.append({
+                'type': resource['type'],
+                'resourceId': resource['res_id'],
+                'name': resource['name'],
+                'chunkIndex': resource['chunk_index'],
+                'byteOffset': off,
+                'size': size,
+                'status': f'decode-error: {exc}',
+            })
+    return extracted
+
+
 def extract_ship_frames(rez: bytes, chunks: list[tuple[int, int, int]], resources: list[dict], shan_entries: list[dict], out_root: Path) -> list[dict]:
     by_type_id = {(r['type'], r['res_id']): r for r in resources}
     if out_root.exists():
@@ -118,6 +172,7 @@ def extract_ship_frames(rez: bytes, chunks: list[tuple[int, int, int]], resource
             rel = outdir / f'frame_{i:02d}.png'
             write_png(rel, width, height, img)
             frame_paths.append(str(rel))
+        asset_dir = relative_asset_dir(outdir)
         extracted.append({
             'shipResourceId': shan['resourceId'],
             'shipName': shan['name'],
@@ -129,13 +184,13 @@ def extract_ship_frames(rez: bytes, chunks: list[tuple[int, int, int]], resource
             'width': width,
             'height': height,
             'frames': len(frames_rgba),
-            'assetDir': str(outdir),
+            'assetDir': asset_dir,
             'status': 'ok',
         })
     return extracted
 
 
-def build_manifest(source: Path, extract_sprites: bool, ship_out: Path) -> dict:
+def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_rled: bool, rled_out: Path) -> dict:
     rez = source.read_bytes()
     chunks = iter_chunks(rez)
     resources = iter_resources(rez, chunks)
@@ -159,14 +214,16 @@ def build_manifest(source: Path, extract_sprites: bool, ship_out: Path) -> dict:
             shan_entries.append(entry['shan'])
         decoded_resources.append(entry)
     ship_sprites = extract_ship_frames(rez, chunks, resources, shan_entries, ship_out) if extract_sprites else []
+    rled_assets = extract_rled_assets(rez, chunks, resources, rled_out) if extract_rled else []
     return {
         'sourceFile': str(source),
         'sourceSha256': hashlib.sha256(rez).hexdigest(),
         'method': METHOD,
-        'note': 'Full resource-map manifest plus rlëD headers and shän word-field decode. Extracted ship PNGs are local personal-use assets.',
+        'note': 'Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.',
         'chunkCount': len(chunks),
         'resourceCount': len(resources),
         'resources': decoded_resources,
+        'rledAssets': rled_assets,
         'shipSprites': ship_sprites,
     }
 
@@ -176,13 +233,16 @@ def main() -> None:
     ap.add_argument('source', nargs='?', type=Path, default=DEFAULT_SOURCE)
     ap.add_argument('--out', type=Path, default=DEFAULT_OUT)
     ap.add_argument('--ship-out', type=Path, default=DEFAULT_SHIP_OUT)
+    ap.add_argument('--rled-out', type=Path, default=DEFAULT_RLED_OUT)
     ap.add_argument('--extract-ship-sprites', action='store_true')
+    ap.add_argument('--extract-rled-assets', action='store_true')
     args = ap.parse_args()
-    manifest = build_manifest(args.source, args.extract_ship_sprites, args.ship_out)
+    manifest = build_manifest(args.source, args.extract_ship_sprites, args.ship_out, args.extract_rled_assets, args.rled_out)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
     ok = sum(1 for s in manifest['shipSprites'] if s.get('status') == 'ok')
-    print(f"wrote {args.out} resources={manifest['resourceCount']} shipSprites={ok}")
+    rled_ok = sum(1 for s in manifest['rledAssets'] if s.get('status') == 'ok')
+    print(f"wrote {args.out} resources={manifest['resourceCount']} shipSprites={ok} rledAssets={rled_ok}")
 
 
 if __name__ == '__main__':

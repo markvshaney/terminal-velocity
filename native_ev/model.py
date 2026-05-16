@@ -160,8 +160,17 @@ def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
     ok_sprites = [sprite for sprite in ship_sprites if sprite.get('status') == 'ok']
     if len(ok_sprites) < 20:
         raise ValueError('sourced EV graphics manifest has too few extracted ship sprite sets')
+    rled_assets = data.get('rledAssets', [])
+    ok_rled_assets = [asset for asset in rled_assets if asset.get('status') == 'ok']
+    if len(ok_rled_assets) < 70:
+        raise ValueError('sourced EV graphics manifest has too few decoded rlëD graphic assets')
+    for asset in ok_rled_assets[:5]:
+        asset_dir = ROOT / asset['assetDir']
+        frames = list(asset_dir.glob('frame_*.png'))
+        if len(frames) != asset['frames']:
+            raise ValueError(f"sourced EV rlëD asset {asset['resourceId']} expected {asset['frames']} frames, got {len(frames)}")
     for sprite in ok_sprites:
-        asset_dir = ROOT.parent / sprite['assetDir']
+        asset_dir = ROOT / sprite['assetDir']
         frames = list(asset_dir.glob('frame_*.png'))
         if len(frames) != sprite['frames']:
             raise ValueError(f"sourced EV sprite {sprite['shipName']} expected {sprite['frames']} frames, got {len(frames)}")

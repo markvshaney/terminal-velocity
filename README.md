@@ -78,13 +78,13 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 - File-backed universe data loaded from `native_ev/data/universe.json`: 9 systems with connected jump routes, mapped coordinates, and multiple ports.
 - First original-name fidelity slice: `tools/extract_ev_data_names.py` reads local `source-assets/ev-classic/Nova Files/EV Data.rez` BRGR chunks and writes provenance-preserving seeds to `native_ev/data/sourced_ev_names.json`; the active 9-system map now uses a seed set of sourced EV Classic system/landing names while topology/coordinates remain local remake scaffolding.
 - Full primitive structured-resource fidelity slice: `tools/extract_ev_structured_records.py` decodes every 16-bit word field for fixed-size BRGR record runs from local `EV Data.rez` into `native_ev/data/sourced_ev_structures.json`, including candidate `syst-like`, `spob-like`, ship-like, weapon-like, outfit-like, commodity-like, and mission-like runs with byte offsets and provisional confidence labels. Semantic meanings are still candidate mappings; the manifest preserves complete offset-indexed fields for later integration.
-- File-backed ship/NPC traffic data loaded from `native_ev/data/ships.json`.
+- File-backed ship/NPC traffic data loaded from `native_ev/data/ships.json`; all 26 extracted EV Classic ship sprite sets are now active ship definitions, NPC contacts, and shipyard listings.
 - File-backed weapons data loaded from `native_ev/data/weapons.json`.
 - File-backed outfit/shipyard/repair data loaded from `native_ev/data/outfits.json`.
 - File-backed commodity markets loaded from `native_ev/data/economy.json`.
 - File-backed governments, contraband, scan ranges, and fines loaded from `native_ev/data/governments.json`.
 - Original 36-frame shuttle and light-freighter facings extracted from local EV resources.
-- Full local graphics manifest: `tools/extract_ev_graphics_manifest.py` decodes every `EV Graphics.rez` resource-map entry, rlëD sprite headers, shän ship fields, and extracts 26 local personal-use EV Classic ship sprite sets under `native_ev/assets/ships/ev_classic/`.
+- Full local graphics manifest: `tools/extract_ev_graphics_manifest.py` decodes every `EV Graphics.rez` resource-map entry, rlëD sprite headers, shän ship fields, extracts 26 local personal-use EV Classic ship sprite sets under `native_ev/assets/ships/ev_classic/`, and extracts 77 decodable rlëD graphics sets under `native_ev/assets/graphics/rled/`.
 - Inertial flight.
 - EV-style ports, landing screen, jobs board, credits, deliveries.
 - Cargo jobs now use route distance and destination risk to calculate payouts; far or hostile/low-law routes pay more.

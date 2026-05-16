@@ -118,6 +118,11 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(shuttle['height'], 48)
         ok_sprites = [sprite for sprite in data['shipSprites'] if sprite.get('status') == 'ok']
         self.assertGreaterEqual(len(ok_sprites), 20)
+        decoded_rled = [asset for asset in data['rledAssets'] if asset.get('status') == 'ok']
+        self.assertGreaterEqual(len(decoded_rled), 70)
+        weaponry = next(asset for asset in decoded_rled if asset.get('resourceId') == 200)
+        self.assertGreaterEqual(weaponry['frames'], 1)
+        self.assertTrue(weaponry['assetDir'].startswith('assets/graphics/rled/'))
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()
@@ -132,6 +137,21 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('shuttle', ids)
         self.assertIn('light_freighter', ids)
         self.assertGreaterEqual(len(data['traffic']), 1)
+
+    def test_all_extracted_ev_classic_ship_graphics_are_in_game_manifest(self):
+        graphics = sourced_ev_graphics_manifest()
+        ships = ship_manifest()
+        manifest_asset_dirs = {ship['assetDir'] for ship in ships['ships']}
+        ok_sprites = [sprite for sprite in graphics['shipSprites'] if sprite.get('status') == 'ok']
+        self.assertGreaterEqual(len(ok_sprites), 26)
+        missing = [sprite['shipName'] for sprite in ok_sprites if sprite['assetDir'] not in manifest_asset_dirs]
+        self.assertEqual(missing, [])
+        traffic_ids = {traffic['shipId'] for traffic in ships['traffic']}
+        manifest_ids = {ship['id'] for ship in ships['ships']}
+        self.assertTrue(traffic_ids.issubset(manifest_ids))
+        self.assertGreaterEqual(len(traffic_ids), 20)
+        shipyard_ids = {entry['shipId'] for entry in outfit_manifest()['shipyard']}
+        self.assertTrue(manifest_ids.issubset(shipyard_ids))
 
     def test_weapon_manifest_loads_combat_data(self):
         data = weapon_manifest()
