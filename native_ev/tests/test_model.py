@@ -6,6 +6,8 @@ from native_ev.model import (
     cargo_can_accept,
     cargo_job_pay,
     can_buy,
+    can_dock_with_government,
+    effective_npc_disposition,
     economy_manifest,
     fine_for_contraband,
     facing_index,
@@ -320,6 +322,27 @@ class NativeEvModelTests(unittest.TestCase):
         reputation, legal = apply_reputation_event(data, reputation, legal, 'contraband_fine', government='Federation')
         self.assertLess(legal['Federation'], 0)
         self.assertEqual(legal_status_for_score(data, legal['Federation']), 'Suspicious')
+
+    def test_reputation_changes_effective_npc_disposition(self):
+        data = reputation_manifest()
+        self.assertEqual(
+            effective_npc_disposition(data, 'neutral', 'confed', {'Federation': 10}, {'Federation': -90}, 'Federation'),
+            'hostile',
+        )
+        self.assertEqual(
+            effective_npc_disposition(data, 'hostile', 'pirate', {'Pirate': 8}, {}, 'Rim Freehold'),
+            'neutral',
+        )
+        self.assertEqual(
+            effective_npc_disposition(data, 'neutral', 'pirate', {'Pirate': -6}, {}, 'Rim Freehold'),
+            'hostile',
+        )
+
+    def test_bad_legal_records_block_docking_at_strict_governments(self):
+        data = reputation_manifest()
+        self.assertTrue(can_dock_with_government(data, {'Federation': -20}, 'Federation'))
+        self.assertFalse(can_dock_with_government(data, {'Federation': -65}, 'Federation'))
+        self.assertTrue(can_dock_with_government(data, {'Rim Freehold': -65}, 'Rim Freehold'))
 
     def test_save_data_round_trips_progression_and_ship_state(self):
         save = serialize_save_data(

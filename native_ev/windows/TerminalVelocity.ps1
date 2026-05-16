@@ -213,7 +213,7 @@ foreach ($traffic in $rawShips.traffic) {
     $label = New-Text ([string]$traffic.name) 0 0 10 'LightGray'
     $canvas.Children.Add($label) | Out-Null
     $rad = (([double]$traffic.heading) - 90.0) * [Math]::PI / 180.0
-    $npcShips += @{ ShipId=$sid; Name=[string]$traffic.name; System=[string]$traffic.system; X=[double]$traffic.x; Y=[double]$traffic.y; Heading=[double]$traffic.heading; Speed=[double]$traffic.speed; VX=([Math]::Cos($rad) * [double]$traffic.speed); VY=([Math]::Sin($rad) * [double]$traffic.speed); Image=$img; Label=$label; Width=[double]$def.width; Height=[double]$def.height; Hull=[double]$def.hull; MaxHull=[double]$def.hull; WeaponId=[string]$def.weaponId; Cooldown=0; Faction=[string]$traffic.faction; Disposition=[string]$traffic.disposition; Alive=$true }
+    $npcShips += @{ ShipId=$sid; Name=[string]$traffic.name; System=[string]$traffic.system; X=[double]$traffic.x; Y=[double]$traffic.y; Heading=[double]$traffic.heading; Speed=[double]$traffic.speed; VX=([Math]::Cos($rad) * [double]$traffic.speed); VY=([Math]::Sin($rad) * [double]$traffic.speed); Image=$img; Label=$label; Width=[double]$def.width; Height=[double]$def.height; Hull=[double]$def.hull; MaxHull=[double]$def.hull; WeaponId=[string]$def.weaponId; Cooldown=0; Faction=[string]$traffic.faction; BaseDisposition=[string]$traffic.disposition; Disposition=[string]$traffic.disposition; Alive=$true }
 }
 
 # Universe is file-backed so autonomous iterations can improve the game by editing data, not code.
@@ -381,6 +381,7 @@ function Load-Game {
         foreach ($govName in $governmentDefs.Keys) { $script:legalRecords[[string]$govName] = 0 }
         foreach ($prop in $save.legalRecords.PSObject.Properties) { $script:legalRecords[[string]$prop.Name] = [int]$prop.Value }
         $script:legalStatus = Current-Legal-Status
+        Update-Npc-Dispositions
     }
     $message.Text = ('Loaded saved game: {0}' -f $savePath)
     return $true
@@ -414,6 +415,45 @@ function Current-Legal-Status {
     return Legal-Status-For-Score ([int]$legalRecords[$govName])
 }
 
+function Dock-Min-Legal-Score($govName) {
+    $mechanics = $rawReputation.mechanics
+    $default = -60
+    if ($mechanics.defaultDockMinLegalScore -ne $null) { $default = [int]$mechanics.defaultDockMinLegalScore }
+    if ($mechanics.dockMinLegalScoreByGovernment -ne $null) {
+        $prop = $mechanics.dockMinLegalScoreByGovernment.PSObject.Properties[[string]$govName]
+        if ($prop -ne $null) { return [int]$prop.Value }
+    }
+    return $default
+}
+
+function Can-Dock-With-Government($govName) {
+    if (!$legalRecords.ContainsKey($govName)) { $legalRecords[$govName] = 0 }
+    return ([int]$legalRecords[$govName] -ge (Dock-Min-Legal-Score $govName))
+}
+
+function Effective-Npc-Disposition($npc) {
+    $base = [string]$npc.BaseDisposition
+    $faction = [string]$npc.Faction
+    $govName = Current-Government-Name
+    $pirateRep = 0
+    if ($reputation.ContainsKey('Pirate')) { $pirateRep = [int]$reputation['Pirate'] }
+    $legalScore = 0
+    if ($legalRecords.ContainsKey($govName)) { $legalScore = [int]$legalRecords[$govName] }
+    $mechanics = $rawReputation.mechanics
+    if ($faction -eq 'pirate') {
+        if ($pirateRep -ge [int]$mechanics.pirateFriendlyReputation) { return 'neutral' }
+        if ($pirateRep -le [int]$mechanics.pirateHostileReputation) { return 'hostile' }
+    }
+    if (($faction -eq 'confed' -or $faction -eq 'independent') -and $legalScore -le [int]$mechanics.patrolHostileLegalScore) { return 'hostile' }
+    return $base
+}
+
+function Update-Npc-Dispositions {
+    foreach ($npc in $npcShips) {
+        $npc.Disposition = Effective-Npc-Disposition $npc
+    }
+}
+
 function Reputation-Summary {
     $parts = @()
     foreach ($name in @('Federation','Independent','Pirate')) {
@@ -442,6 +482,7 @@ function Apply-Reputation-Event($eventId, $government = $null) {
         }
     }
     $script:legalStatus = Current-Legal-Status
+    Update-Npc-Dispositions
 }
 
 function Has-Required-Flags($mission) {
@@ -587,6 +628,11 @@ function Cycle-Target {
 function Dock-If-Possible {
     $n = Nearest-Port
     if ($n.Body -ne $null -and $n.Distance -lt ($n.Body.R + 58) -and (Speed) -lt 45) {
+        $govName = Current-Government-Name
+        if (!(Can-Dock-With-Government $govName)) {
+            $message.Text = ('Docking clearance denied by {0}: legal status {1}.' -f $govName, (Current-Legal-Status))
+            return
+        }
         $script:state = 'landed'
         $script:dockedAt = $n.Body
         $player.VX = 0.0; $player.VY = 0.0
@@ -983,9 +1029,10 @@ function Update-Projectiles {
                         $npc.Alive = $false
                         $npc.Image.Visibility = 'Hidden'; $npc.Label.Visibility = 'Hidden'
                         $script:credits += 250
-                        if ($npc.Faction -eq 'pirate') { Apply-Reputation-Event 'destroy_pirate' (Current-Government-Name) }
+        if ($npc.Faction -eq 'pirate') { Apply-Reputation-Event 'destroy_pirate' (Current-Government-Name) }
                         elseif ($npc.Faction -eq 'confed') { Apply-Reputation-Event 'destroy_patrol' (Current-Government-Name) }
                         else { Apply-Reputation-Event 'destroy_civilian' (Current-Government-Name) }
+                        Update-Npc-Dispositions
                         $message.Text = ('Destroyed {0}: +250 credits' -f $npc.Name)
                     }
                     break
@@ -1374,6 +1421,18 @@ $timer.Add_Tick({
         if ($totalFinesPaid -le 0) { throw "SelfTest expected contraband fine" }
         if ([int]$legalRecords['Federation'] -ge 0) { throw "SelfTest expected Federation legal record penalty" }
         if ([int]$reputation['Federation'] -le 0) { throw "SelfTest expected positive Federation reputation" }
+        $savedFedLegalForSelfTest = [int]$legalRecords['Federation']
+        $legalRecords['Federation'] = -65
+        if (Can-Dock-With-Government 'Federation') { throw "SelfTest expected bad Federation legal record to block docking" }
+        $legalRecords['Federation'] = $savedFedLegalForSelfTest
+        $savedPirateRepForSelfTest = [int]$reputation['Pirate']
+        $reputation['Pirate'] = 8
+        Update-Npc-Dispositions
+        $friendlyPirate = $false
+        foreach ($npc in $npcShips) { if ($npc.Faction -eq 'pirate' -and $npc.Disposition -eq 'neutral') { $friendlyPirate = $true } }
+        if (!$friendlyPirate) { throw "SelfTest expected high pirate reputation to neutralize pirate traffic" }
+        $reputation['Pirate'] = $savedPirateRepForSelfTest
+        Update-Npc-Dispositions
         if ($tradeProfit -le 0) { throw "SelfTest expected profitable commodity trade" }
         if ($cargoSpace -le [int]$playerShipDef.cargoSpace) { throw "SelfTest expected installed outfit cargo bonus" }
         if ($playerWeaponId -ne 'pulse_cannon') { throw "SelfTest expected station weapon purchase" }

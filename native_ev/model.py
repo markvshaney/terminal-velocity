@@ -412,6 +412,9 @@ def reputation_manifest(path=REPUTATION_PATH):
         for government in event.get('legal', {}).keys():
             if government != '*' and government not in factions:
                 raise ValueError(f'reputation event {event_name} references unknown legal record {government}')
+    for raw_faction, faction in data.get('npcFactionMap', {}).items():
+        if faction not in factions:
+            raise ValueError(f'npc faction map {raw_faction} references unknown faction {faction}')
     return data
 
 
@@ -438,6 +441,33 @@ def apply_reputation_event(data, reputation, legal_records, event_id, government
             continue
         legal_records[target] = int(legal_records.get(target, 0)) + int(delta)
     return reputation, legal_records
+
+
+def _mapped_npc_faction(data, npc_faction):
+    return data.get('npcFactionMap', {}).get(npc_faction, npc_faction)
+
+
+def can_dock_with_government(data, legal_records, government):
+    mechanics = data.get('mechanics', {})
+    min_by_gov = mechanics.get('dockMinLegalScoreByGovernment', {})
+    minimum = int(min_by_gov.get(government, mechanics.get('defaultDockMinLegalScore', -60)))
+    return int((legal_records or {}).get(government, 0)) >= minimum
+
+
+def effective_npc_disposition(data, base_disposition, npc_faction, reputation, legal_records, government):
+    mechanics = data.get('mechanics', {})
+    mapped = _mapped_npc_faction(data, npc_faction)
+    rep = int((reputation or {}).get(mapped, 0))
+    legal_score = int((legal_records or {}).get(government, 0))
+    if npc_faction == 'pirate':
+        if rep >= int(mechanics.get('pirateFriendlyReputation', 5)):
+            return 'neutral'
+        if rep <= int(mechanics.get('pirateHostileReputation', -5)):
+            return 'hostile'
+    patrol_score = int(mechanics.get('patrolHostileLegalScore', -60))
+    if npc_faction in {'confed', 'independent'} and legal_score <= patrol_score:
+        return 'hostile'
+    return base_disposition
 
 
 def cargo_can_accept(current, add, capacity=20):

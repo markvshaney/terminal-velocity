@@ -117,5 +117,20 @@
         "*": -10
       }
     }
+  },
+  "npcFactionMap": {
+    "confed": "Federation",
+    "independent": "Independent",
+    "pirate": "Pirate"
+  },
+  "mechanics": {
+    "patrolHostileLegalScore": -60,
+    "pirateFriendlyReputation": 5,
+    "pirateHostileReputation": -5,
+    "defaultDockMinLegalScore": -60,
+    "dockMinLegalScoreByGovernment": {
+      "Rim Freehold": -1000,
+      "Independent": -90
+    }
   }
 }
