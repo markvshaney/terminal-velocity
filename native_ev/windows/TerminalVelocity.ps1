@@ -201,19 +201,23 @@ for ($i = 0; $i -lt 8; $i++) {
 }
 
 $npcShips = @()
-foreach ($traffic in $rawShips.traffic) {
-    $sid = [string]$traffic.shipId
-    if (!$shipDefs.ContainsKey($sid)) { continue }
+function Add-NpcShip($sid, $name, $systemName, $x, $y, $heading, $speed, $faction, $disposition) {
+    $sid = [string]$sid
+    if (!$shipDefs.ContainsKey($sid)) { return $false }
     $def = $shipDefs[$sid]
     $img = New-Object Windows.Controls.Image
     $img.Width = [double]$def.width
     $img.Height = [double]$def.height
     $img.Source = $shipFrameSets[$sid][0]
     $canvas.Children.Add($img) | Out-Null
-    $label = New-Text ([string]$traffic.name) 0 0 10 'LightGray'
+    $label = New-Text ([string]$name) 0 0 10 'LightGray'
     $canvas.Children.Add($label) | Out-Null
-    $rad = (([double]$traffic.heading) - 90.0) * [Math]::PI / 180.0
-    $npcShips += @{ ShipId=$sid; Name=[string]$traffic.name; System=[string]$traffic.system; X=[double]$traffic.x; Y=[double]$traffic.y; Heading=[double]$traffic.heading; Speed=[double]$traffic.speed; VX=([Math]::Cos($rad) * [double]$traffic.speed); VY=([Math]::Sin($rad) * [double]$traffic.speed); Image=$img; Label=$label; Width=[double]$def.width; Height=[double]$def.height; Hull=[double]$def.hull; MaxHull=[double]$def.hull; WeaponId=[string]$def.weaponId; Cooldown=0; Faction=[string]$traffic.faction; BaseDisposition=[string]$traffic.disposition; Disposition=[string]$traffic.disposition; Alive=$true }
+    $rad = (([double]$heading) - 90.0) * [Math]::PI / 180.0
+    $script:npcShips += @{ ShipId=$sid; Name=[string]$name; System=[string]$systemName; X=[double]$x; Y=[double]$y; Heading=[double]$heading; Speed=[double]$speed; VX=([Math]::Cos($rad) * [double]$speed); VY=([Math]::Sin($rad) * [double]$speed); Image=$img; Label=$label; Width=[double]$def.width; Height=[double]$def.height; Hull=[double]$def.hull; MaxHull=[double]$def.hull; WeaponId=[string]$def.weaponId; Cooldown=0; Faction=[string]$faction; BaseDisposition=[string]$disposition; Disposition=[string]$disposition; Alive=$true }
+    return $true
+}
+foreach ($traffic in $rawShips.traffic) {
+    [void](Add-NpcShip ([string]$traffic.shipId) ([string]$traffic.name) ([string]$traffic.system) ([double]$traffic.x) ([double]$traffic.y) ([double]$traffic.heading) ([double]$traffic.speed) ([string]$traffic.faction) ([string]$traffic.disposition))
 }
 
 # Universe is file-backed so autonomous iterations can improve the game by editing data, not code.
@@ -230,6 +234,27 @@ foreach ($sys in $rawUniverse.systems) {
     $systems += @{ Name=[string]$sys.name; X=[double]$sys.x; Y=[double]$sys.y; Links=$links; Bodies=$bodies }
 }
 if ($systems.Count -eq 0) { throw "Universe data has no systems: $dataPath" }
+
+$patrolSpawnCount = 0
+$patrolShipIds = @($rawShips.ships | Where-Object { ([string]$_.role).ToLower().Contains('patrol') } | ForEach-Object { [string]$_.id })
+if ($patrolShipIds.Count -eq 0) { $patrolShipIds = @('frigate') }
+foreach ($system in $systems) {
+    $govName = 'Unclaimed'
+    $systemGovProp = $rawGovernments.systems.PSObject.Properties[[string]$system.Name]
+    if ($systemGovProp -ne $null) { $govName = [string]$systemGovProp.Value.government }
+    if (!$governmentDefs.ContainsKey($govName)) { continue }
+    $gov = $governmentDefs[$govName]
+    $seed = 0
+    foreach ($ch in ([string]$system.Name).ToCharArray()) { $seed += [int][char]$ch }
+    $sid = $patrolShipIds[$seed % $patrolShipIds.Count]
+    $px = [double](($seed % 900) - 450)
+    $py = [double]((($seed * 7) % 700) - 350)
+    $heading = [double]($seed % 360)
+    $speed = [double](0.55 + (($seed % 5) * 0.08))
+    if (Add-NpcShip $sid ('{0} Patrol' -f $govName) ([string]$system.Name) $px $py $heading $speed ([string]$gov.patrolFaction) 'friendly') {
+        $patrolSpawnCount += 1
+    }
+}
 
 $jobs = @()
 $acceptedJobs = @()
@@ -260,6 +285,8 @@ $totalFinesPaid = 0
 $totalBribesPaid = 0
 $contrabandConfiscations = 0
 $clemencyGrants = 0
+$fugitiveDockDenials = 0
+$patrolAlertCount = 0
 $reputation = @{}
 foreach ($faction in $reputationDefs.Keys) { $reputation[[string]$faction] = 0 }
 $legalRecords = @{}
@@ -453,6 +480,20 @@ function Dock-Min-Legal-Score($govName) {
 function Can-Dock-With-Government($govName) {
     if (!$legalRecords.ContainsKey($govName)) { $legalRecords[$govName] = 0 }
     return ([int]$legalRecords[$govName] -ge (Dock-Min-Legal-Score $govName))
+}
+
+function Docking-Consequence($govName) {
+    $posture = Patrol-Posture $govName
+    if ($posture -eq 'hostile') {
+        return @{ Action='deny_and_attack'; PatrolsHostile=$true; Message=('{0} patrols are hostile: docking denied.' -f $govName) }
+    }
+    if ($posture -eq 'warning') {
+        return @{ Action='deny'; PatrolsHostile=$false; Message=('{0} port authority denies docking until your legal record improves.' -f $govName) }
+    }
+    if (!(Can-Dock-With-Government $govName)) {
+        return @{ Action='deny'; PatrolsHostile=$false; Message=('Docking clearance denied by {0}: legal status {1}.' -f $govName, (Current-Legal-Status)) }
+    }
+    return @{ Action='allow'; PatrolsHostile=$false; Message=('{0} port authority clears you to land.' -f $govName) }
 }
 
 function Object-Prop($obj, $name) {
@@ -710,8 +751,11 @@ function Dock-If-Possible {
     $n = Nearest-Port
     if ($n.Body -ne $null -and $n.Distance -lt ($n.Body.R + 58) -and (Speed) -lt 45) {
         $govName = Current-Government-Name
-        if (!(Can-Dock-With-Government $govName)) {
-            $message.Text = ('Docking clearance denied by {0}: legal status {1}.' -f $govName, (Current-Legal-Status))
+        $consequence = Docking-Consequence $govName
+        if ($consequence.Action -ne 'allow') {
+            $script:fugitiveDockDenials += 1
+            if ($consequence.PatrolsHostile) { $script:patrolAlertCount += 1; Update-Npc-Dispositions }
+            $message.Text = [string]$consequence.Message
             return
         }
         $script:state = 'landed'
@@ -1542,6 +1586,10 @@ $timer.Add_Tick({
         if ($outfitDefs.Count -lt 1) { throw "SelfTest expected file-backed outfits" }
         if ($commodityList.Count -lt 1) { throw "SelfTest expected file-backed commodities" }
         if ($governmentDefs.Count -lt 1) { throw "SelfTest expected file-backed governments" }
+        if ($patrolSpawnCount -lt $systems.Count) { throw "SelfTest expected one generated patrol per mapped system" }
+        $independentPatrolVisible = $false
+        foreach ($npc in $npcShips) { if ($npc.Faction -eq 'independent' -and $npc.Name -like '*Patrol*') { $independentPatrolVisible = $true } }
+        if (!$independentPatrolVisible) { throw "SelfTest expected visible Independent patrol traffic" }
         if ($reputationDefs.Count -lt 1) { throw "SelfTest expected file-backed reputation factions" }
         if (!$storyFlags.ContainsKey('story_intro_started')) { throw "SelfTest expected mission accept story flag" }
         if (!$storyFlags.ContainsKey('story_intro_complete')) { throw "SelfTest expected mission completion story flag" }
@@ -1557,8 +1605,29 @@ $timer.Add_Tick({
         if ([int]$legalRecords['Federation'] -ge 0) { throw "SelfTest expected Federation legal record penalty" }
         if ([int]$reputation['Federation'] -le 0) { throw "SelfTest expected positive Federation reputation" }
         $savedFedLegalForSelfTest = [int]$legalRecords['Federation']
+        $savedSystemForDockDenial = $currentSystemIndex
+        $savedSelectedForDockDenial = $selectedSystemIndex
+        $savedStateForDockDenial = $state
+        $savedDockedAtForDockDenial = $dockedAt
+        $denialsBefore = $fugitiveDockDenials
+        $alertsBefore = $patrolAlertCount
         $legalRecords['Federation'] = -65
         if (Can-Dock-With-Government 'Federation') { throw "SelfTest expected bad Federation legal record to block docking" }
+        $fugitiveConsequence = Docking-Consequence 'Federation'
+        if ($fugitiveConsequence.Action -ne 'deny_and_attack') { throw "SelfTest expected fugitive docking consequence to alert patrols" }
+        $script:currentSystemIndex = 0
+        $script:selectedSystemIndex = 0
+        $script:state = 'space'
+        $script:dockedAt = $null
+        $player.X = [double](Current-System).Bodies[0].X; $player.Y = [double](Current-System).Bodies[0].Y; $player.VX = 0.0; $player.VY = 0.0
+        Dock-If-Possible
+        if ($state -ne 'space') { throw "SelfTest expected fugitive docking to remain in space" }
+        if ($fugitiveDockDenials -le $denialsBefore) { throw "SelfTest expected fugitive docking denial counter" }
+        if ($patrolAlertCount -le $alertsBefore) { throw "SelfTest expected hostile patrol alert counter" }
+        $script:currentSystemIndex = $savedSystemForDockDenial
+        $script:selectedSystemIndex = $savedSelectedForDockDenial
+        $script:state = $savedStateForDockDenial
+        $script:dockedAt = $savedDockedAtForDockDenial
         $savedLocalGovernmentForSelfTest = Current-Government-Name
         $savedLocalLegalForSelfTest = 0
         if ($legalRecords.ContainsKey($savedLocalGovernmentForSelfTest)) { $savedLocalLegalForSelfTest = [int]$legalRecords[$savedLocalGovernmentForSelfTest] }
@@ -1631,10 +1700,12 @@ $timer.Add_Tick({
         $commodityHold['medical_supplies'] = @{ Tons=1; Basis=110 }
         $script:cargoUsed = $savedCargoUsedForPolice + 2
         $confiscationsBefore = $contrabandConfiscations
+        $savedMilitiaLegalForPolice = [int]$legalRecords['Militia Compact']
         $legalRecords['Militia Compact'] = -40
         Scan-For-Contraband 'SelfTest Militia Patrol'
         if ($contrabandConfiscations -le $confiscationsBefore) { throw "SelfTest expected unpaid fine confiscation" }
         if ((Patrol-Posture 'Militia Compact') -ne 'hostile') { throw "SelfTest expected patrol escalation to hostile" }
+        $legalRecords['Militia Compact'] = $savedMilitiaLegalForPolice
         $script:currentSystemIndex = $savedCurrentSystemIndexForPolice
         $script:selectedSystemIndex = $savedSelectedSystemIndexForPolice
         $script:credits = $savedCreditsForPolice
@@ -1654,7 +1725,7 @@ $timer.Add_Tick({
         $script:credits = $savedCreditsForPolice
         $targetForLog = 'none'
         if ($currentTargetName -ne $null) { $targetForLog = $currentTargetName }
-        Write-Host ('SELFTEST OK frames={0} npcFrames={1} systems={2} links={3} current={4} selected={5} npcs={6} weapons={7} missions={8} outfits={9} activeMissions={10} completedMissions={11} storyFlags={12} projectiles={13} target={14} credits={15} cargo={16} cargoSpace={17} hull={18:n0}/{19:n0} commodities={20} tradeProfit={21} governments={22} factions={23} fines={24} bribes={25} confiscations={26} clemency={27} legal={28} patrol={29} fedRep={30} fedLegal={31}' -f $shipFrames.Count, $shipFrameSets['light_freighter'].Count, $systems.Count, $systems[0].Links.Count, (Current-System).Name, $systems[$selectedSystemIndex].Name, $npcShips.Count, $weaponDefs.Count, $missionDefs.Count, $outfitDefs.Count, $activeMissions.Count, $completedMissionIds.Count, $storyFlags.Count, $projectiles.Count, $targetForLog, $credits, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $commodityList.Count, $tradeProfit, $governmentDefs.Count, $reputationDefs.Count, $totalFinesPaid, $totalBribesPaid, $contrabandConfiscations, $clemencyGrants, (Current-Legal-Status), (Patrol-Posture), $reputation['Federation'], $legalRecords['Federation'])
+        Write-Host ('SELFTEST OK frames={0} npcFrames={1} systems={2} links={3} current={4} selected={5} npcs={6} patrolSpawns={7} weapons={8} missions={9} outfits={10} activeMissions={11} completedMissions={12} storyFlags={13} projectiles={14} target={15} credits={16} cargo={17} cargoSpace={18} hull={19:n0}/{20:n0} commodities={21} tradeProfit={22} governments={23} factions={24} fines={25} bribes={26} confiscations={27} clemency={28} dockDenials={29} patrolAlerts={30} legal={31} patrol={32} fedRep={33} fedLegal={34}' -f $shipFrames.Count, $shipFrameSets['light_freighter'].Count, $systems.Count, $systems[0].Links.Count, (Current-System).Name, $systems[$selectedSystemIndex].Name, $npcShips.Count, $patrolSpawnCount, $weaponDefs.Count, $missionDefs.Count, $outfitDefs.Count, $activeMissions.Count, $completedMissionIds.Count, $storyFlags.Count, $projectiles.Count, $targetForLog, $credits, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $commodityList.Count, $tradeProfit, $governmentDefs.Count, $reputationDefs.Count, $totalFinesPaid, $totalBribesPaid, $contrabandConfiscations, $clemencyGrants, $fugitiveDockDenials, $patrolAlertCount, (Current-Legal-Status), (Patrol-Posture), $reputation['Federation'], $legalRecords['Federation'])
         $window.Close()
     } elseif ($AutoCloseSeconds -gt 0 -and $tickCount -ge ($AutoCloseSeconds * 60)) {
         $window.Close()

@@ -14,6 +14,8 @@ from native_ev.model import (
     government_patrol_posture,
     enforcement_outcome,
     clemency_offer,
+    patrol_spawn_specs,
+    fugitive_docking_consequence,
     facing_index,
     government_manifest,
     load_universe,
@@ -440,6 +442,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(offer['cost'], 1000)
         denied = clemency_offer(reputation, reputation_scores={'Federation': -5}, legal_records={'Federation': -45}, government='Federation')
         self.assertFalse(denied['available'])
+
+    def test_government_patrol_specs_cover_every_mapped_system(self):
+        universe = load_universe()
+        governments = government_manifest()
+        ships = ship_manifest()
+        specs = patrol_spawn_specs(governments, ships, universe)
+        systems = {system['name'] for system in universe['systems']}
+        self.assertEqual({spec['system'] for spec in specs}, systems)
+        self.assertTrue(all(spec['shipId'] in {ship['id'] for ship in ships['ships']} for spec in specs))
+        self.assertTrue(all(spec['faction'] == governments['governments'][governments['systems'][spec['system']]['government']]['patrolFaction'] for spec in specs))
+        self.assertGreaterEqual(min(spec['scanRange'] for spec in specs), 180)
+
+    def test_fugitive_docking_consequence_names_patrol_attack(self):
+        reputation = reputation_manifest()
+        warning = fugitive_docking_consequence(reputation, {'Federation': -25}, 'Federation')
+        self.assertEqual(warning['action'], 'deny')
+        self.assertFalse(warning['patrolsHostile'])
+        hostile = fugitive_docking_consequence(reputation, {'Federation': -70}, 'Federation')
+        self.assertEqual(hostile['action'], 'deny_and_attack')
+        self.assertTrue(hostile['patrolsHostile'])
+        self.assertIn('hostile', hostile['message'].lower())
 
     def test_reputation_manifest_loads_factions_events_and_legal_thresholds(self):
         data = reputation_manifest()

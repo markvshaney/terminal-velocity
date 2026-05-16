@@ -499,6 +499,76 @@ def clemency_offer(reputation_data, *, reputation_scores, legal_records, governm
     }
 
 
+def patrol_spawn_specs(governments, ships, universe):
+    """Return deterministic patrol spawns for every mapped system.
+
+    This keeps patrol visibility data-backed: governments select factions,
+    systems select governments, and the ship manifest supplies patrol hulls.
+    """
+    ship_defs = {ship['id']: ship for ship in ships.get('ships', [])}
+    traffic = ships.get('traffic', [])
+    patrol_role_ids = [ship['id'] for ship in ships.get('ships', []) if 'patrol' in str(ship.get('role', '')).lower()]
+    if not patrol_role_ids:
+        raise ValueError('ships manifest contains no patrol-capable ships')
+    specs = []
+    system_defs = {system['name']: system for system in universe.get('systems', [])}
+    for system_name, mapping in sorted(governments.get('systems', {}).items()):
+        if system_name not in system_defs:
+            raise ValueError(f'government mapping references unknown system {system_name}')
+        government_name = mapping.get('government')
+        government = governments.get('governments', {}).get(government_name)
+        if government is None:
+            raise ValueError(f'system {system_name} references unknown government {government_name}')
+        faction = government['patrolFaction']
+        candidates = [entry['shipId'] for entry in traffic if entry.get('faction') == faction and entry.get('shipId') in ship_defs]
+        if not candidates:
+            candidates = patrol_role_ids
+        system = system_defs[system_name]
+        seed = sum(ord(ch) for ch in system_name)
+        specs.append({
+            'system': system_name,
+            'government': government_name,
+            'faction': faction,
+            'shipId': candidates[seed % len(candidates)],
+            'name': f'{government_name} Patrol',
+            'x': int((seed % 900) - 450),
+            'y': int(((seed * 7) % 700) - 350),
+            'heading': int(seed % 360),
+            'speed': 0.55 + ((seed % 5) * 0.08),
+            'scanRange': int(government['scanRange']),
+            'disposition': 'friendly',
+        })
+    return specs
+
+
+def fugitive_docking_consequence(reputation_data, legal_records, government):
+    posture = government_patrol_posture(reputation_data, legal_records, government)
+    legal = int((legal_records or {}).get(government, 0))
+    if posture == 'hostile':
+        return {
+            'action': 'deny_and_attack',
+            'patrolsHostile': True,
+            'legal': legal,
+            'posture': posture,
+            'message': f'{government} patrols are hostile: docking denied and patrols will attack.',
+        }
+    if posture == 'warning':
+        return {
+            'action': 'deny',
+            'patrolsHostile': False,
+            'legal': legal,
+            'posture': posture,
+            'message': f'{government} port authority denies docking until your legal record improves.',
+        }
+    return {
+        'action': 'allow',
+        'patrolsHostile': False,
+        'legal': legal,
+        'posture': posture,
+        'message': f'{government} port authority clears you to land.',
+    }
+
+
 def reputation_manifest(path=REPUTATION_PATH):
     data = json.loads(path.read_text())
     factions = data.get('factions', {})
