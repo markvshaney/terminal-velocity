@@ -218,7 +218,7 @@ $systems = @()
 foreach ($sys in $rawUniverse.systems) {
     $bodies = @()
     foreach ($body in $sys.bodies) {
-        $bodies += @{ Name=[string]$body.name; X=[double]$body.x; Y=[double]$body.y; R=[double]$body.r; Color=[string]$body.color; Type=[string]$body.type; Market=[string]$body.market }
+        $bodies += @{ Name=[string]$body.name; X=[double]$body.x; Y=[double]$body.y; R=[double]$body.r; Color=[string]$body.color; Type=[string]$body.type; Market=[string]$body.market; inventory=$body.inventory }
     }
     $links = @()
     if ($sys.links -ne $null) { foreach ($link in $sys.links) { $links += [string]$link } }
@@ -254,6 +254,10 @@ $legalStatus = 'Clean'
 $totalFinesPaid = 0
 $scannedSystems = @{}
 $selectedShipyardIndex = 0
+$stationOutfitsForSale = @($rawOutfits.outfits)
+$stationShipyardListings = @($rawOutfits.shipyard)
+$stationWeaponsForSale = @($rawWeapons.weapons)
+$selectedWeaponIndex = 0
 $playerCooldown = 0
 $projectiles = @()
 $currentTargetName = $null
@@ -301,6 +305,7 @@ function Save-Game {
         currentSystem = [string](Current-System).Name
         selectedSystem = [string]$systems[$selectedSystemIndex].Name
         playerShipId = [string]$playerShipId
+        playerWeaponId = [string]$playerWeaponId
         playerHull = [double]$playerHull
         playerFuel = [double]$player.Fuel
         cargoUsed = [int]$cargoUsed
@@ -331,6 +336,7 @@ function Load-Game {
         $shipImage.Source = $shipFrames[0]
     }
     if ($save.credits -ne $null) { $script:credits = [int]$save.credits }
+    if ($save.playerWeaponId -ne $null -and $weaponDefs.ContainsKey([string]$save.playerWeaponId)) { $script:playerWeaponId = [string]$save.playerWeaponId }
     if ($save.ownedOutfits -ne $null) {
         $script:ownedOutfits = @{}
         foreach ($prop in $save.ownedOutfits.PSObject.Properties) { $script:ownedOutfits[[string]$prop.Name] = [int]$prop.Value }
@@ -402,6 +408,28 @@ function Route-Risk-Score($destSystemName) {
 
 function Cargo-Job-Pay($tons, $distance, $risk) {
     return [int](350 + ([int]$tons * 120) + ([int]$distance * 2) + ([int]$risk * 250))
+}
+
+function Has-Service($serviceName) {
+    if ($dockedAt -eq $null -or $dockedAt.inventory -eq $null -or $dockedAt.inventory.services -eq $null) { return $true }
+    return @($dockedAt.inventory.services) -contains $serviceName
+}
+
+function Refresh-Station-Inventory {
+    if ($dockedAt -eq $null -or $dockedAt.inventory -eq $null) {
+        $script:stationOutfitsForSale = @($rawOutfits.outfits)
+        $script:stationShipyardListings = @($rawOutfits.shipyard)
+        $script:stationWeaponsForSale = @($rawWeapons.weapons)
+        return
+    }
+    $outfitIds = @($dockedAt.inventory.outfitsForSale | ForEach-Object { [string]$_ })
+    $shipIds = @($dockedAt.inventory.shipsForSale | ForEach-Object { [string]$_ })
+    $weaponIds = @($dockedAt.inventory.weaponsForSale | ForEach-Object { [string]$_ })
+    $script:stationOutfitsForSale = @($rawOutfits.outfits | Where-Object { $outfitIds -contains [string]$_.id })
+    $script:stationShipyardListings = @($rawOutfits.shipyard | Where-Object { $shipIds -contains [string]$_.shipId })
+    $script:stationWeaponsForSale = @($rawWeapons.weapons | Where-Object { $weaponIds -contains [string]$_.id })
+    $script:selectedShipyardIndex = 0
+    $script:selectedWeaponIndex = 0
 }
 
 function Generate-Jobs($portName) {
@@ -491,6 +519,7 @@ function Dock-If-Possible {
         $player.VX = 0.0; $player.VY = 0.0
         Complete-Deliveries
         Complete-Missions
+        Refresh-Station-Inventory
         Generate-Jobs $dockedAt.Name
     } else {
         $message.Text = 'Get close to a port/planet and slow below 45 before pressing E.'
@@ -716,6 +745,7 @@ function Reset-Ship {
 
 function Repair-Ship {
     if ($state -ne 'landed') { return }
+    if (!(Has-Service 'repairs')) { $message.Text = 'No repair service at this port.'; return }
     $missing = [Math]::Max(0.0, $playerMaxHull - $playerHull)
     if ($missing -le 0) { $message.Text = 'No repairs needed.'; return }
     $cost = [int][Math]::Ceiling($missing * $repairPricePerHullPoint)
@@ -727,7 +757,8 @@ function Repair-Ship {
 
 function Buy-Outfit($idx) {
     if ($state -ne 'landed') { return }
-    $outfits = @($rawOutfits.outfits)
+    if (!(Has-Service 'outfitter')) { $message.Text = 'No outfitter at this port.'; return }
+    $outfits = @($stationOutfitsForSale)
     if ($idx -lt 0 -or $idx -ge $outfits.Count) { return }
     $o = $outfits[$idx]
     $price = [int]$o.price
@@ -741,15 +772,17 @@ function Buy-Outfit($idx) {
 }
 
 function Cycle-Shipyard($delta) {
-    if ($shipyardListings.Count -eq 0) { return }
-    $script:selectedShipyardIndex = ($selectedShipyardIndex + $delta + $shipyardListings.Count) % $shipyardListings.Count
-    $listing = $shipyardListings[$selectedShipyardIndex]
+    if (!(Has-Service 'shipyard')) { $message.Text = 'No shipyard at this port.'; return }
+    if ($stationShipyardListings.Count -eq 0) { return }
+    $script:selectedShipyardIndex = ($selectedShipyardIndex + $delta + $stationShipyardListings.Count) % $stationShipyardListings.Count
+    $listing = $stationShipyardListings[$selectedShipyardIndex]
     $message.Text = ('Shipyard selected: {0}' -f $shipDefs[[string]$listing.shipId].name)
 }
 
 function Buy-Selected-Ship {
-    if ($state -ne 'landed' -or $shipyardListings.Count -eq 0) { return }
-    $listing = $shipyardListings[$selectedShipyardIndex]
+    if ($state -ne 'landed' -or $stationShipyardListings.Count -eq 0) { return }
+    if (!(Has-Service 'shipyard')) { $message.Text = 'No shipyard at this port.'; return }
+    $listing = $stationShipyardListings[$selectedShipyardIndex]
     $newShipId = [string]$listing.shipId
     $price = [int]$listing.price
     if ($newShipId -eq $playerShipId) { $message.Text = 'You already own this ship.'; return }
@@ -767,6 +800,29 @@ function Buy-Selected-Ship {
     Recalculate-Player-Stats
     $player.Fuel = $playerMaxFuel
     $message.Text = ('Purchased {0}.' -f $playerShipDef.name)
+}
+
+function Cycle-Weapon($delta) {
+    $weaponsForSale = @($stationWeaponsForSale)
+    if ($weaponsForSale.Count -eq 0) { $message.Text = 'No weapons dealer at this port.'; return }
+    if (!(Has-Service 'weapons')) { $message.Text = 'No weapons dealer at this port.'; return }
+    $script:selectedWeaponIndex = ($selectedWeaponIndex + $delta + $weaponsForSale.Count) % $weaponsForSale.Count
+    $w = $weaponsForSale[$selectedWeaponIndex]
+    $message.Text = ('Weapon selected: {0}' -f $w.name)
+}
+
+function Buy-Selected-Weapon {
+    $weaponsForSale = @($stationWeaponsForSale)
+    if ($state -ne 'landed' -or $weaponsForSale.Count -eq 0) { return }
+    if (!(Has-Service 'weapons')) { $message.Text = 'No weapons dealer at this port.'; return }
+    $w = $weaponsForSale[$selectedWeaponIndex]
+    $wid = [string]$w.id
+    $price = [int]$w.price
+    if ($wid -eq $playerWeaponId) { $message.Text = ('{0} already installed.' -f $w.name); return }
+    if ($credits -lt $price) { $message.Text = ('{0} costs {1}; not enough credits.' -f $w.name, $price); return }
+    $script:credits -= $price
+    $script:playerWeaponId = $wid
+    $message.Text = ('Installed weapon: {0}.' -f $w.name)
 }
 
 function Spawn-Projectile($owner, $x, $y, $heading, $weaponId) {
@@ -980,10 +1036,12 @@ function Update-Landing-Text {
     $lines += ''
     $lines += ('Credits: {0}   Ship: {1}   Cargo: {2}/{3} tons   Hull: {4:n0}/{5:n0}   Fuel: {6:n0}/{7:n0}' -f $credits, $playerShipDef.name, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $player.Fuel, $playerMaxFuel)
     $lines += ('Government: {0}   Legal: {1}   Fines Paid: {2}' -f (Current-Government-Name), $legalStatus, $totalFinesPaid)
+    if ($dockedAt.inventory -ne $null) { $lines += ('Services: {0}' -f (@($dockedAt.inventory.services) -join ', ')) }
     $lines += ('Repair: {0} credits per hull point. Press 6 to repair all.' -f $repairPricePerHullPoint)
     $lines += ''
     $lines += 'Outfitter:'
-    $outfitsForSale = @($rawOutfits.outfits)
+    $outfitsForSale = @($stationOutfitsForSale)
+    if ($outfitsForSale.Count -eq 0) { $lines += '  No outfit sales at this port.' }
     for ($oi = 0; $oi -lt $outfitsForSale.Count; $oi++) {
         $o = $outfitsForSale[$oi]
         $owned = 0
@@ -993,8 +1051,9 @@ function Update-Landing-Text {
     }
     $lines += ''
     $lines += 'Shipyard:'
-    for ($si = 0; $si -lt $shipyardListings.Count; $si++) {
-        $listing = $shipyardListings[$si]
+    if ($stationShipyardListings.Count -eq 0) { $lines += '  No shipyard at this port.' }
+    for ($si = 0; $si -lt $stationShipyardListings.Count; $si++) {
+        $listing = $stationShipyardListings[$si]
         $def = $shipDefs[[string]$listing.shipId]
         $mark = ' '
         if ($si -eq $selectedShipyardIndex) { $mark = '>' }
@@ -1002,6 +1061,17 @@ function Update-Landing-Text {
         $lines += ('  {0} {1}: {2} credits, cargo {3}, hull {4}' -f $mark, $def.name, $listing.price, $def.cargoSpace, $def.hull)
     }
     $lines += '  G: cycle shipyard selection   B: buy selected ship'
+    $lines += ''
+    $lines += 'Weapons:'
+    if ($stationWeaponsForSale.Count -eq 0) { $lines += '  No weapons dealer at this port.' }
+    for ($wi = 0; $wi -lt $stationWeaponsForSale.Count; $wi++) {
+        $w = $stationWeaponsForSale[$wi]
+        $mark = ' '
+        if ($wi -eq $selectedWeaponIndex) { $mark = '>' }
+        if ([string]$w.id -eq $playerWeaponId) { $mark = '*' }
+        $lines += ('  {0} {1}: {2} credits, damage {3}, cooldown {4}' -f $mark, $w.name, $w.price, $w.damage, $w.cooldownTicks)
+    }
+    $lines += '  U: cycle weapon selection   O: buy selected weapon'
     $lines += ''
     $lines += 'Commodity Exchange:'
     $market = Current-Market
@@ -1044,7 +1114,7 @@ function Update-Landing-Text {
     if ($activeMissions.Count -eq 0) { $lines += '  None.' }
     foreach ($m in $activeMissions) { $lines += ('  {0}: {1} tons -> {2}/{3} for {4}' -f $m.title, $m.cargoTons, $m.destinationSystem, $m.destinationBody, $m.reward) }
     $lines += ''
-    $lines += 'Press 1-5 cargo jobs, F1-F5 missions, 6 repairs, 7-9 outfits, G/B shipyard, L launch.'
+    $lines += 'Press 1-5 cargo jobs, F1-F5 missions, 6 repairs, 7-9 outfits, G/B shipyard, U/O weapons, L launch.'
     $landingText.Text = ($lines -join "`n")
 }
 
@@ -1121,6 +1191,8 @@ $window.Add_KeyDown({
         'D9' { Buy-Outfit 2 }
         'G' { Cycle-Shipyard 1 }
         'B' { Buy-Selected-Ship }
+        'U' { Cycle-Weapon 1 }
+        'O' { Buy-Selected-Weapon }
         'C' { Cycle-Commodity 1 }
         'V' { Cycle-Commodity -1 }
         'X' { Buy-Commodity }
@@ -1186,6 +1258,7 @@ $timer.Add_Tick({
             $player.X = -80.0; $player.Y = -40.0; $player.VX = 0.0; $player.VY = 0.0
             Dock-If-Possible
         } elseif ($state -eq 'landed' -and $tickCount -eq 185) {
+            Buy-Selected-Weapon
             Accept-Mission 1
             Save-Game
         } elseif ($state -eq 'landed' -and $tickCount -eq 195) {
@@ -1221,6 +1294,9 @@ $timer.Add_Tick({
         if ($totalFinesPaid -le 0) { throw "SelfTest expected contraband fine" }
         if ($tradeProfit -le 0) { throw "SelfTest expected profitable commodity trade" }
         if ($cargoSpace -le [int]$playerShipDef.cargoSpace) { throw "SelfTest expected installed outfit cargo bonus" }
+        if ($playerWeaponId -ne 'pulse_cannon') { throw "SelfTest expected station weapon purchase" }
+        if (@($stationWeaponsForSale).Count -ne 1) { throw "SelfTest expected selected station weapons inventory" }
+        if (@($stationShipyardListings).Count -eq @($shipyardListings).Count) { throw "SelfTest expected station-specific shipyard inventory" }
         if ($jobs.Count -lt 1) { throw "SelfTest expected generated cargo jobs" }
         if ($jobs[0].Distance -eq $null -or $jobs[0].Risk -eq $null) { throw "SelfTest expected route-scored cargo jobs" }
         if ([int]$jobs[0].Pay -le ([int]$jobs[0].Tons * 120)) { throw "SelfTest expected distance/risk-adjusted cargo pay" }

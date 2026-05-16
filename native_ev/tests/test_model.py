@@ -23,6 +23,7 @@ from native_ev.model import (
     sourced_ev_names_manifest,
     sourced_ev_structures_manifest,
     shuttle_frame_paths,
+    station_inventory,
     system_distance,
     trade_profit,
     weapon_manifest,
@@ -227,6 +228,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('shuttle', ship_ids)
         self.assertIn('light_freighter', ship_ids)
         self.assertTrue(all(outfit['price'] > 0 for outfit in data['outfits']))
+
+    def test_station_inventories_are_selective_and_reference_valid_products(self):
+        universe = load_universe()
+        outfits = outfit_manifest()
+        weapons = weapon_manifest()
+        ship_ids = {listing['shipId'] for listing in outfits['shipyard']}
+        outfit_ids = {outfit['id'] for outfit in outfits['outfits']}
+        weapon_ids = {weapon['id'] for weapon in weapons['weapons']}
+        earth = station_inventory(universe, 'Sol', 'Earth')
+        luna = station_inventory(universe, 'Centauri', 'Luna')
+        freeport = station_inventory(universe, 'Sirius', 'Sirius Station')
+        self.assertIn('shipyard', earth['services'])
+        self.assertIn('outfitter', earth['services'])
+        self.assertIn('laser_cannon', earth['weaponsForSale'])
+        self.assertIn('fuel_tank', luna['outfitsForSale'])
+        self.assertNotIn('shipyard', luna['services'])
+        self.assertIn('pulse_cannon', freeport['weaponsForSale'])
+        self.assertNotEqual(set(earth['shipsForSale']), set(freeport['shipsForSale']))
+        for system in universe['systems']:
+            for body in system['bodies']:
+                inventory = station_inventory(universe, system['name'], body['name'])
+                self.assertTrue(set(inventory['outfitsForSale']).issubset(outfit_ids))
+                self.assertTrue(set(inventory['shipsForSale']).issubset(ship_ids))
+                self.assertTrue(set(inventory['weaponsForSale']).issubset(weapon_ids))
 
     def test_repair_and_purchase_rules(self):
         self.assertEqual(repair_cost(current_hull=75, max_hull=100, per_point=8), 200)

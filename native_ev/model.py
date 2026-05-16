@@ -64,10 +64,35 @@ def weapon_manifest(path=WEAPONS_PATH):
     if not weapons:
         raise ValueError('weapons manifest contains no weapons')
     for weapon in weapons:
-        for key in ['id', 'speed', 'lifetime', 'damage', 'cooldownTicks']:
+        for key in ['id', 'speed', 'lifetime', 'damage', 'cooldownTicks', 'price']:
             if key not in weapon:
                 raise ValueError(f'weapon missing {key}')
+        if weapon['price'] <= 0:
+            raise ValueError(f"weapon {weapon['id']} must have positive price")
     return data
+
+
+def station_inventory(universe, system_name, body_name):
+    for system in universe.get('systems', []):
+        if system.get('name') != system_name:
+            continue
+        for body in system.get('bodies', []):
+            if body.get('name') == body_name:
+                inventory = body.get('inventory')
+                if inventory is None:
+                    return {
+                        'services': ['repairs', 'commodities', 'jobs'],
+                        'outfitsForSale': [],
+                        'shipsForSale': [],
+                        'weaponsForSale': [],
+                    }
+                return {
+                    'services': list(inventory.get('services', [])),
+                    'outfitsForSale': list(inventory.get('outfitsForSale', [])),
+                    'shipsForSale': list(inventory.get('shipsForSale', [])),
+                    'weaponsForSale': list(inventory.get('weaponsForSale', [])),
+                }
+    raise ValueError(f'unknown station {system_name}/{body_name}')
 
 
 def mission_manifest(path=MISSIONS_PATH):

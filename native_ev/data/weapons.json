@@ -7,6 +7,7 @@
       "lifetime": 72,
       "damage": 18,
       "cooldownTicks": 14,
+      "price": 950,
       "color": "OrangeRed",
       "radius": 3
     },
@@ -17,6 +18,7 @@
       "lifetime": 84,
       "damage": 12,
       "cooldownTicks": 22,
+      "price": 1400,
       "color": "DeepSkyBlue",
       "radius": 4
     }

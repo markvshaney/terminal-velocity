@@ -17,7 +17,34 @@
           "r": 72,
           "color": "SteelBlue",
           "type": "planet",
-          "market": "Core world: cargo, missions, shipyard"
+          "market": "Core world: cargo, missions, shipyard",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "shipyard",
+              "weapons",
+              "commodities",
+              "jobs",
+              "missions"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "hull_plating",
+              "fuel_tank"
+            ],
+            "shipsForSale": [
+              "shuttle",
+              "light_freighter",
+              "courier",
+              "clipper",
+              "patrol_ship",
+              "corvette"
+            ],
+            "weaponsForSale": [
+              "laser_cannon"
+            ]
+          }
         },
         {
           "name": "Stardock Alpha",
@@ -26,7 +53,24 @@
           "r": 34,
           "color": "Silver",
           "type": "station",
-          "market": "Station: low-risk cargo contracts"
+          "market": "Station: low-risk cargo contracts",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "weapons",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "fuel_tank"
+            ],
+            "shipsForSale": [],
+            "weaponsForSale": [
+              "laser_cannon"
+            ]
+          }
         },
         {
           "name": "Mars",
@@ -35,7 +79,21 @@
           "r": 54,
           "color": "IndianRed",
           "type": "planet",
-          "market": "Frontier exports and repairs"
+          "market": "Frontier exports and repairs",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "hull_plating"
+            ],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         }
       ]
     },
@@ -57,7 +115,32 @@
           "r": 62,
           "color": "MediumPurple",
           "type": "planet",
-          "market": "Industrial hub"
+          "market": "Industrial hub",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "shipyard",
+              "commodities",
+              "jobs",
+              "missions"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "hull_plating",
+              "fuel_tank"
+            ],
+            "shipsForSale": [
+              "shuttle",
+              "argosy",
+              "bulk_freighter",
+              "liner",
+              "executive_transport"
+            ],
+            "weaponsForSale": [
+              "laser_cannon"
+            ]
+          }
         },
         {
           "name": "Luna",
@@ -66,7 +149,21 @@
           "r": 30,
           "color": "DarkSeaGreen",
           "type": "station",
-          "market": "Outpost: urgent courier work"
+          "market": "Outpost: urgent courier work",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "commodities",
+              "jobs",
+              "missions"
+            ],
+            "outfitsForSale": [
+              "fuel_tank"
+            ],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         }
       ]
     },
@@ -88,7 +185,33 @@
           "r": 42,
           "color": "DarkOrange",
           "type": "station",
-          "market": "Independent freeport"
+          "market": "Independent freeport",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "shipyard",
+              "weapons",
+              "commodities",
+              "jobs",
+              "missions"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "fuel_tank"
+            ],
+            "shipsForSale": [
+              "shuttle",
+              "lightning",
+              "kestrel",
+              "rapier",
+              "gunboat",
+              "manta"
+            ],
+            "weaponsForSale": [
+              "pulse_cannon"
+            ]
+          }
         },
         {
           "name": "Sirius III",
@@ -97,7 +220,17 @@
           "r": 60,
           "color": "CadetBlue",
           "type": "planet",
-          "market": "Outer colonies"
+          "market": "Outer colonies",
+          "inventory": {
+            "services": [
+              "repairs",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         }
       ]
     },
@@ -118,7 +251,17 @@
           "r": 58,
           "color": "Goldenrod",
           "type": "planet",
-          "market": "Agricultural core supplier"
+          "market": "Agricultural core supplier",
+          "inventory": {
+            "services": [
+              "repairs",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         },
         {
           "name": "Merlin",
@@ -127,7 +270,31 @@
           "r": 36,
           "color": "SlateGray",
           "type": "station",
-          "market": "Industrial shipyard annex"
+          "market": "Industrial shipyard annex",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "shipyard",
+              "weapons",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "hull_plating"
+            ],
+            "shipsForSale": [
+              "shuttle",
+              "light_freighter",
+              "bulk_freighter",
+              "clipper",
+              "courier"
+            ],
+            "weaponsForSale": [
+              "laser_cannon"
+            ]
+          }
         }
       ]
     },
@@ -148,7 +315,20 @@
           "r": 36,
           "color": "LightSeaGreen",
           "type": "station",
-          "market": "Medical relay and border clinic"
+          "market": "Medical relay and border clinic",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "fuel_tank"
+            ],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         },
         {
           "name": "Enyo’s World",
@@ -157,7 +337,17 @@
           "r": 66,
           "color": "DeepSkyBlue",
           "type": "planet",
-          "market": "Water world exports"
+          "market": "Water world exports",
+          "inventory": {
+            "services": [
+              "repairs",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         }
       ]
     },
@@ -178,7 +368,33 @@
           "r": 40,
           "color": "Tomato",
           "type": "station",
-          "market": "Militia yard and repairs"
+          "market": "Militia yard and repairs",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "shipyard",
+              "weapons",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "hull_plating",
+              "fuel_tank"
+            ],
+            "shipsForSale": [
+              "shuttle",
+              "defender",
+              "patrol_ship",
+              "corvette",
+              "cruiser",
+              "frigate"
+            ],
+            "weaponsForSale": [
+              "laser_cannon",
+              "pulse_cannon"
+            ]
+          }
         },
         {
           "name": "New Providence",
@@ -187,7 +403,23 @@
           "r": 52,
           "color": "Firebrick",
           "type": "planet",
-          "market": "Militia fortress world"
+          "market": "Militia fortress world",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "weapons",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "hull_plating"
+            ],
+            "shipsForSale": [],
+            "weaponsForSale": [
+              "laser_cannon"
+            ]
+          }
         }
       ]
     },
@@ -207,7 +439,32 @@
           "r": 38,
           "color": "DarkViolet",
           "type": "station",
-          "market": "Smuggler-tinged salvage port"
+          "market": "Smuggler-tinged salvage port",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "shipyard",
+              "weapons",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "fuel_tank"
+            ],
+            "shipsForSale": [
+              "shuttle",
+              "hawk",
+              "alien_fighter",
+              "alien_cruiser",
+              "rebel_cruiser",
+              "rebel_destroyer"
+            ],
+            "weaponsForSale": [
+              "pulse_cannon"
+            ]
+          }
         },
         {
           "name": "Regulus II",
@@ -216,7 +473,17 @@
           "r": 50,
           "color": "DarkSlateBlue",
           "type": "planet",
-          "market": "Low-law mining colony"
+          "market": "Low-law mining colony",
+          "inventory": {
+            "services": [
+              "repairs",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         }
       ]
     },
@@ -237,7 +504,27 @@
           "r": 34,
           "color": "Khaki",
           "type": "station",
-          "market": "Long-haul depot"
+          "market": "Long-haul depot",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "shipyard",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "fuel_tank"
+            ],
+            "shipsForSale": [
+              "shuttle",
+              "scoutship",
+              "courier",
+              "kestrel"
+            ],
+            "weaponsForSale": []
+          }
         },
         {
           "name": "Zaxted",
@@ -246,7 +533,17 @@
           "r": 56,
           "color": "Peru",
           "type": "planet",
-          "market": "Rim settlement"
+          "market": "Rim settlement",
+          "inventory": {
+            "services": [
+              "repairs",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         }
       ]
     },
@@ -267,7 +564,24 @@
           "r": 35,
           "color": "PaleGreen",
           "type": "station",
-          "market": "Independent refuel and brokerage"
+          "market": "Independent refuel and brokerage",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "weapons",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "fuel_tank"
+            ],
+            "shipsForSale": [],
+            "weaponsForSale": [
+              "pulse_cannon"
+            ]
+          }
         },
         {
           "name": "Clotho II",
@@ -276,7 +590,17 @@
           "r": 48,
           "color": "OliveDrab",
           "type": "planet",
-          "market": "Sparse rim farms"
+          "market": "Sparse rim farms",
+          "inventory": {
+            "services": [
+              "repairs",
+              "commodities",
+              "jobs"
+            ],
+            "outfitsForSale": [],
+            "shipsForSale": [],
+            "weaponsForSale": []
+          }
         }
       ]
     }
