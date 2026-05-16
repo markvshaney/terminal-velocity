@@ -90,6 +90,7 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 - Cargo jobs now use route distance and destination risk to calculate payouts; far or hostile/low-law routes pay more.
 - File-backed mission computer with accepted story missions, cargo reservation, completion, and rewards.
 - Story flags gate mission-chain progression: accepting/completing missions can set flags, follow-up missions unlock only when prerequisites are met, and `excludesFlags` / `choiceGroup` support mutually exclusive branch choices.
+- Reputation and legal records now gate mission offers and station services: bad legal status can lock shipyards/outfitters, while trusted local reputation can unlock sensitive services like Freeport weapons.
 - Current story branch: after the Luna → Sirius Station sample transfer, the captain can choose a Federation report path or a Sirius quiet-pact path; accepting one hides the other.
 - Persistent save/load stores credits, system, ship, hull/fuel, cargo, outfits, commodities, active/completed missions, story flags, and legal status in local `savegame.json`.
 - Outfitter upgrades, repair shop, and shipyard purchase loop while landed.

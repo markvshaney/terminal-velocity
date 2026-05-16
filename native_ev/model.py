@@ -114,6 +114,10 @@ def mission_manifest(path=MISSIONS_PATH):
         nxt = mission.get('next')
         if nxt is not None and nxt not in ids:
             raise ValueError(f"mission {mission['id']} points to unknown next mission {nxt}")
+        requirements = mission.get('requirements', {})
+        for requirement_key in ['reputationMin', 'legalMin', 'legalMax']:
+            if requirement_key in requirements and not isinstance(requirements[requirement_key], dict):
+                raise ValueError(f"mission {mission['id']} {requirement_key} must be a mapping")
     return data
 
 
@@ -215,6 +219,29 @@ def _has_excluded_flag(excluded, flags):
     return any(flag in flags for flag in excluded)
 
 
+def _meets_score_requirements(requirements, scores, default=0):
+    for key, minimum in (requirements or {}).items():
+        if int((scores or {}).get(key, default)) < int(minimum):
+            return False
+    return True
+
+
+def _meets_score_maximums(requirements, scores, default=0):
+    for key, maximum in (requirements or {}).items():
+        if int((scores or {}).get(key, default)) > int(maximum):
+            return False
+    return True
+
+
+def mission_requirements_met(mission, reputation=None, legal_records=None):
+    requirements = mission.get('requirements') or {}
+    return (
+        _meets_score_requirements(requirements.get('reputationMin', {}), reputation)
+        and _meets_score_requirements(requirements.get('legalMin', {}), legal_records)
+        and _meets_score_maximums(requirements.get('legalMax', {}), legal_records)
+    )
+
+
 def branch_choice_groups(data):
     groups = {}
     for mission in data.get('missions', []):
@@ -225,7 +252,7 @@ def branch_choice_groups(data):
     return groups
 
 
-def available_mission_ids(data, system, body, completed_ids=None, active_ids=None, flags=None):
+def available_mission_ids(data, system, body, completed_ids=None, active_ids=None, flags=None, reputation=None, legal_records=None):
     completed_ids = set(completed_ids or set())
     active_ids = set(active_ids or set())
     flags = set(flags or set())
@@ -239,6 +266,8 @@ def available_mission_ids(data, system, body, completed_ids=None, active_ids=Non
         if not _has_flags(mission.get('requiresFlags', []), flags):
             continue
         if _has_excluded_flag(mission.get('excludesFlags', []), flags):
+            continue
+        if not mission_requirements_met(mission, reputation, legal_records):
             continue
         available.append(mid)
     return available
@@ -452,6 +481,37 @@ def can_dock_with_government(data, legal_records, government):
     min_by_gov = mechanics.get('dockMinLegalScoreByGovernment', {})
     minimum = int(min_by_gov.get(government, mechanics.get('defaultDockMinLegalScore', -60)))
     return int((legal_records or {}).get(government, 0)) >= minimum
+
+
+def _score_map_requirement_met(requirements, scores, government=None):
+    for key, minimum in (requirements or {}).items():
+        target_key = government if key == '*' else key
+        if target_key is None:
+            continue
+        if int((scores or {}).get(target_key, 0)) < int(minimum):
+            return False
+    return True
+
+
+def _service_requirement_met(requirement, reputation, legal_records, government):
+    if not _score_map_requirement_met((requirement or {}).get('legalMin', {}), legal_records, government):
+        return False
+    if not _score_map_requirement_met((requirement or {}).get('reputationMin', {}), reputation, government):
+        return False
+    by_government = (requirement or {}).get('reputationMinByGovernment', {})
+    if government in by_government:
+        return _score_map_requirement_met(by_government[government], reputation, government)
+    return True
+
+
+def available_station_services(inventory, reputation_data, reputation=None, legal_records=None, government=None):
+    services = list((inventory or {}).get('services', []))
+    service_requirements = reputation_data.get('mechanics', {}).get('serviceRequirements', {})
+    return [
+        service
+        for service in services
+        if _service_requirement_met(service_requirements.get(service, {}), reputation, legal_records, government)
+    ]
 
 
 def effective_npc_disposition(data, base_disposition, npc_faction, reputation, legal_records, government):

@@ -431,6 +431,62 @@ function Can-Dock-With-Government($govName) {
     return ([int]$legalRecords[$govName] -ge (Dock-Min-Legal-Score $govName))
 }
 
+function Object-Prop($obj, $name) {
+    if ($obj -eq $null) { return $null }
+    return $obj.PSObject.Properties[[string]$name]
+}
+
+function Score-Map-Meets-Min($requirements, $scores, $government = $null) {
+    if ($requirements -eq $null) { return $true }
+    foreach ($prop in $requirements.PSObject.Properties) {
+        $key = [string]$prop.Name
+        if ($key -eq '*') { $key = [string]$government }
+        if ([string]::IsNullOrWhiteSpace($key)) { continue }
+        $score = 0
+        if ($scores.ContainsKey($key)) { $score = [int]$scores[$key] }
+        if ($score -lt [int]$prop.Value) { return $false }
+    }
+    return $true
+}
+
+function Score-Map-Meets-Max($requirements, $scores, $government = $null) {
+    if ($requirements -eq $null) { return $true }
+    foreach ($prop in $requirements.PSObject.Properties) {
+        $key = [string]$prop.Name
+        if ($key -eq '*') { $key = [string]$government }
+        if ([string]::IsNullOrWhiteSpace($key)) { continue }
+        $score = 0
+        if ($scores.ContainsKey($key)) { $score = [int]$scores[$key] }
+        if ($score -gt [int]$prop.Value) { return $false }
+    }
+    return $true
+}
+
+function Mission-Requirements-Met($mission) {
+    $req = $mission.requirements
+    if ($req -eq $null) { return $true }
+    if (!(Score-Map-Meets-Min $req.reputationMin $reputation)) { return $false }
+    if (!(Score-Map-Meets-Min $req.legalMin $legalRecords)) { return $false }
+    if (!(Score-Map-Meets-Max $req.legalMax $legalRecords)) { return $false }
+    return $true
+}
+
+function Service-Available-By-Reputation($serviceName) {
+    $mechanics = $rawReputation.mechanics
+    if ($mechanics -eq $null -or $mechanics.serviceRequirements -eq $null) { return $true }
+    $prop = Object-Prop $mechanics.serviceRequirements $serviceName
+    if ($prop -eq $null) { return $true }
+    $req = $prop.Value
+    $govName = Current-Government-Name
+    if (!(Score-Map-Meets-Min $req.legalMin $legalRecords $govName)) { return $false }
+    if (!(Score-Map-Meets-Min $req.reputationMin $reputation $govName)) { return $false }
+    if ($req.reputationMinByGovernment -ne $null) {
+        $govReq = Object-Prop $req.reputationMinByGovernment $govName
+        if ($govReq -ne $null -and !(Score-Map-Meets-Min $govReq.Value $reputation $govName)) { return $false }
+    }
+    return $true
+}
+
 function Effective-Npc-Disposition($npc) {
     $base = [string]$npc.BaseDisposition
     $faction = [string]$npc.Faction
@@ -496,6 +552,7 @@ function Has-Required-Flags($mission) {
             if ($storyFlags.ContainsKey([string]$flag)) { return $false }
         }
     }
+    if (!(Mission-Requirements-Met $mission)) { return $false }
     return $true
 }
 
@@ -526,7 +583,7 @@ function Cargo-Job-Pay($tons, $distance, $risk) {
 
 function Has-Service($serviceName) {
     if ($dockedAt -eq $null -or $dockedAt.inventory -eq $null -or $dockedAt.inventory.services -eq $null) { return $true }
-    return @($dockedAt.inventory.services) -contains $serviceName
+    return ((@($dockedAt.inventory.services) -contains $serviceName) -and (Service-Available-By-Reputation $serviceName))
 }
 
 function Refresh-Station-Inventory {
@@ -539,9 +596,9 @@ function Refresh-Station-Inventory {
     $outfitIds = @($dockedAt.inventory.outfitsForSale | ForEach-Object { [string]$_ })
     $shipIds = @($dockedAt.inventory.shipsForSale | ForEach-Object { [string]$_ })
     $weaponIds = @($dockedAt.inventory.weaponsForSale | ForEach-Object { [string]$_ })
-    $script:stationOutfitsForSale = @($rawOutfits.outfits | Where-Object { $outfitIds -contains [string]$_.id })
-    $script:stationShipyardListings = @($rawOutfits.shipyard | Where-Object { $shipIds -contains [string]$_.shipId })
-    $script:stationWeaponsForSale = @($rawWeapons.weapons | Where-Object { $weaponIds -contains [string]$_.id })
+    $script:stationOutfitsForSale = @($rawOutfits.outfits | Where-Object { (Has-Service 'outfitter') -and ($outfitIds -contains [string]$_.id) })
+    $script:stationShipyardListings = @($rawOutfits.shipyard | Where-Object { (Has-Service 'shipyard') -and ($shipIds -contains [string]$_.shipId) })
+    $script:stationWeaponsForSale = @($rawWeapons.weapons | Where-Object { (Has-Service 'weapons') -and ($weaponIds -contains [string]$_.id) })
     $script:selectedShipyardIndex = 0
     $script:selectedWeaponIndex = 0
 }
@@ -1424,7 +1481,32 @@ $timer.Add_Tick({
         $savedFedLegalForSelfTest = [int]$legalRecords['Federation']
         $legalRecords['Federation'] = -65
         if (Can-Dock-With-Government 'Federation') { throw "SelfTest expected bad Federation legal record to block docking" }
+        $savedLocalGovernmentForSelfTest = Current-Government-Name
+        $savedLocalLegalForSelfTest = 0
+        if ($legalRecords.ContainsKey($savedLocalGovernmentForSelfTest)) { $savedLocalLegalForSelfTest = [int]$legalRecords[$savedLocalGovernmentForSelfTest] }
+        $legalRecords[$savedLocalGovernmentForSelfTest] = -65
+        if (Service-Available-By-Reputation 'shipyard') { throw "SelfTest expected bad local legal record to block shipyard service" }
+        $legalRecords[$savedLocalGovernmentForSelfTest] = $savedLocalLegalForSelfTest
         $legalRecords['Federation'] = $savedFedLegalForSelfTest
+        $savedIndependentRepForSelfTest = [int]$reputation['Independent']
+        $savedDockedAtForServiceTest = $dockedAt
+        $script:dockedAt = (Current-System).Bodies[0]
+        $reputation['Independent'] = 0
+        Refresh-Station-Inventory
+        if (@($stationWeaponsForSale).Count -ne 0) { throw "SelfTest expected low Independent reputation to block freeport weapons" }
+        $reputation['Independent'] = 6
+        Refresh-Station-Inventory
+        if (@($stationWeaponsForSale).Count -ne 1) { throw "SelfTest expected trusted Independent reputation to unlock freeport weapons" }
+        $reputation['Independent'] = $savedIndependentRepForSelfTest
+        Refresh-Station-Inventory
+        $script:dockedAt = $savedDockedAtForServiceTest
+        $freeportMission = $missionDefs['freeport_pact_smugglers']
+        $savedIndependentRepForMissionTest = [int]$reputation['Independent']
+        $reputation['Independent'] = 0
+        if (Mission-Requirements-Met $freeportMission) { throw "SelfTest expected low Independent reputation to hide Freeport mission" }
+        $reputation['Independent'] = 6
+        if (!(Mission-Requirements-Met $freeportMission)) { throw "SelfTest expected Independent reputation to unlock Freeport mission" }
+        $reputation['Independent'] = $savedIndependentRepForMissionTest
         $savedPirateRepForSelfTest = [int]$reputation['Pirate']
         $reputation['Pirate'] = 8
         Update-Npc-Dispositions

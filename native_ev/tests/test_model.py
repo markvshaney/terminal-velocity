@@ -2,6 +2,7 @@ import unittest
 
 from native_ev.model import (
     available_mission_ids,
+    available_station_services,
     branch_choice_groups,
     cargo_can_accept,
     cargo_job_pay,
@@ -208,8 +209,43 @@ class NativeEvModelTests(unittest.TestCase):
         )
         choice_flags = {'story_intro_complete', 'frontier_samples_delivered'}
         self.assertEqual(
-            set(available_mission_ids(data, 'Sirius', 'Sirius Station', completed_ids={'frontier_sample_hera_freeport'}, active_ids=set(), flags=choice_flags)),
+            set(available_mission_ids(
+                data,
+                'Sirius',
+                'Sirius Station',
+                completed_ids={'frontier_sample_hera_freeport'},
+                active_ids=set(),
+                flags=choice_flags,
+                reputation={'Federation': 4, 'Independent': 6, 'Pirate': 0},
+                legal_records={'Federation': 0, 'Independent': 0},
+            )),
             {'freeport_return_earth', 'federation_report_freeport', 'freeport_pact_smugglers'},
+        )
+        self.assertEqual(
+            set(available_mission_ids(
+                data,
+                'Sirius',
+                'Sirius Station',
+                completed_ids={'frontier_sample_hera_freeport'},
+                active_ids=set(),
+                flags=choice_flags,
+                reputation={'Federation': 4, 'Independent': 6, 'Pirate': 0},
+                legal_records={'Federation': -65, 'Independent': 0},
+            )),
+            {'freeport_return_earth', 'freeport_pact_smugglers'},
+        )
+        self.assertEqual(
+            set(available_mission_ids(
+                data,
+                'Sirius',
+                'Sirius Station',
+                completed_ids={'frontier_sample_hera_freeport'},
+                active_ids=set(),
+                flags=choice_flags,
+                reputation={'Federation': 4, 'Independent': 0, 'Pirate': 0},
+                legal_records={'Federation': 0, 'Independent': 0},
+            )),
+            {'freeport_return_earth', 'federation_report_freeport'},
         )
         fed_flags = mission_unlock_flags(data, 'federation_report_freeport', choice_flags)
         self.assertIn('alignment_federation', fed_flags)
@@ -257,6 +293,48 @@ class NativeEvModelTests(unittest.TestCase):
                 self.assertTrue(set(inventory['outfitsForSale']).issubset(outfit_ids))
                 self.assertTrue(set(inventory['shipsForSale']).issubset(ship_ids))
                 self.assertTrue(set(inventory['weaponsForSale']).issubset(weapon_ids))
+
+    def test_reputation_and_legal_status_gate_station_services(self):
+        universe = load_universe()
+        reputation_rules = reputation_manifest()
+        earth = station_inventory(universe, 'Sol', 'Earth')
+        clean_services = available_station_services(
+            earth,
+            reputation_rules,
+            reputation={'Federation': 4, 'Independent': 0},
+            legal_records={'Federation': 0},
+            government='Federation',
+        )
+        fugitive_services = available_station_services(
+            earth,
+            reputation_rules,
+            reputation={'Federation': 4, 'Independent': 0},
+            legal_records={'Federation': -65},
+            government='Federation',
+        )
+        self.assertIn('shipyard', clean_services)
+        self.assertIn('outfitter', clean_services)
+        self.assertNotIn('shipyard', fugitive_services)
+        self.assertNotIn('outfitter', fugitive_services)
+        self.assertIn('repairs', fugitive_services)
+
+        freeport = station_inventory(universe, 'Sirius', 'Sirius Station')
+        low_rep_services = available_station_services(
+            freeport,
+            reputation_rules,
+            reputation={'Independent': 0},
+            legal_records={'Independent': 0},
+            government='Independent',
+        )
+        trusted_services = available_station_services(
+            freeport,
+            reputation_rules,
+            reputation={'Independent': 6},
+            legal_records={'Independent': 0},
+            government='Independent',
+        )
+        self.assertNotIn('weapons', low_rep_services)
+        self.assertIn('weapons', trusted_services)
 
     def test_repair_and_purchase_rules(self):
         self.assertEqual(repair_cost(current_hull=75, max_hull=100, per_point=8), 200)

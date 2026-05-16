@@ -131,6 +131,28 @@
     "dockMinLegalScoreByGovernment": {
       "Rim Freehold": -1000,
       "Independent": -90
+    },
+    "serviceRequirements": {
+      "shipyard": {
+        "legalMin": {
+          "*": -60
+        }
+      },
+      "outfitter": {
+        "legalMin": {
+          "*": -60
+        }
+      },
+      "weapons": {
+        "legalMin": {
+          "*": -60
+        },
+        "reputationMinByGovernment": {
+          "Independent": {
+            "Independent": 6
+          }
+        }
+      }
     }
   }
 }
