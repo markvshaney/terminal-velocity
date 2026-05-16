@@ -10,11 +10,14 @@ This project no longer targets Chrome/browser/Vite. The browser prototype was ar
 archived-browser-prototype-2026-05-15/
 ```
 
-The active game is a native Windows PowerShell/WPF desktop app:
+The active game now has two native launch paths:
 
 ```text
-native_ev/windows/TerminalVelocity.ps1
+native_ev/windows/TerminalVelocity.ps1     # WPF fallback/self-test harness
+godot_ev/project.godot                    # primary EV-style Godot front end
 ```
+
+The Godot front end loads the existing local manifests and extracted sprites directly from `native_ev/`.
 
 It uses locally extracted, authorized EV sprite frames from:
 
@@ -26,21 +29,34 @@ Do not redistribute original or extracted EV assets outside the permitted local 
 
 ## Run
 
-From WSL:
+From WSL, primary Godot front end:
+
+```bash
+./run_godot.sh
+```
+
+From WSL, WPF fallback:
 
 ```bash
 ./run_game.sh
 ```
 
-From Windows PowerShell:
+From Windows PowerShell, primary Godot front end:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\bh\Games\TerminalVelocity\godot_ev\windows\RunGodot.ps1
+```
+
+From Windows PowerShell, WPF fallback:
 
 ```powershell
 powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\TerminalVelocity\TerminalVelocity.ps1
 ```
 
-No-human smoke test:
+No-human smoke tests:
 
 ```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\bh\Games\TerminalVelocity\godot_ev\windows\RunGodot.ps1 -SelfTest
 powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\TerminalVelocity\TerminalVelocity.ps1 -SelfTest
 ```
 
@@ -75,6 +91,7 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 
 ## Current slice
 
+- Primary Godot front end: starfield, EV-style HUD/scanner frame, landing panel, hyperspace destination selection, original 36-frame ship facings, and local JSON/sprite loading from `native_ev/`.
 - Native Windows desktop window, no browser.
 - File-backed universe data loaded from `native_ev/data/universe.json`: 9 systems with connected jump routes, mapped coordinates, and multiple ports.
 - First original-name fidelity slice: `tools/extract_ev_data_names.py` reads local `source-assets/ev-classic/Nova Files/EV Data.rez` BRGR chunks and writes provenance-preserving seeds to `native_ev/data/sourced_ev_names.json`; the active 9-system map now uses a seed set of sourced EV Classic system/landing names while topology/coordinates remain local remake scaffolding.

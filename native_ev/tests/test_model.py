@@ -1,3 +1,4 @@
+from pathlib import Path
 import unittest
 
 from native_ev.model import (
@@ -553,6 +554,71 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(loaded['commodityHold'], {})
         self.assertEqual(loaded['reputation'], {})
         self.assertEqual(loaded['legalRecords'], {})
+
+    def test_godot_frontend_project_loads_existing_data_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        project = root / 'godot_ev'
+        self.assertTrue((project / 'project.godot').exists())
+        self.assertTrue((project / 'scenes' / 'Main.tscn').exists())
+        self.assertTrue((project / 'scripts' / 'main.gd').exists())
+        self.assertTrue((project / 'scripts' / 'self_test.gd').exists())
+        main_script = (project / 'scripts' / 'main.gd').read_text()
+        self.assertIn('native_ev/data/universe.json', main_script)
+        self.assertIn('native_ev/data/ships.json', main_script)
+        self.assertIn('frame_%02d.png', main_script)
+        self.assertIn('EV-style', main_script)
+
+    def test_godot_landing_ui_exposes_core_ev_panels_from_file_backed_manifests(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for data_file in [
+            'native_ev/data/missions.json',
+            'native_ev/data/economy.json',
+            'native_ev/data/outfits.json',
+            'native_ev/data/weapons.json',
+        ]:
+            self.assertIn(data_file, main_script)
+        for panel in ['Mission Computer', 'Commodity Exchange', 'Outfitter', 'Shipyard']:
+            self.assertIn(panel, main_script)
+        for tab_key in ['KEY_F1', 'KEY_F2', 'KEY_F3', 'KEY_F4']:
+            self.assertIn(tab_key, main_script)
+        self.assertIn('available_missions', main_script)
+        self.assertIn('market_prices', main_script)
+        self.assertIn('outfits_for_sale', main_script)
+        self.assertIn('ships_for_sale', main_script)
+        self.assertIn('weapons_for_sale', main_script)
+
+    def test_godot_landing_panels_are_actionable(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for function_name in [
+            '_accept_selected_mission',
+            '_buy_selected_commodity',
+            '_sell_selected_commodity',
+            '_buy_selected_outfit_or_weapon',
+            '_buy_selected_ship',
+        ]:
+            self.assertIn(f'func {function_name}', main_script)
+        for state_name in [
+            'active_missions',
+            'completed_missions',
+            'story_flags',
+            'commodity_hold',
+            'owned_outfits',
+            'owned_weapons',
+            'player_ship_id',
+        ]:
+            self.assertIn(state_name, main_script)
+        for key_name in ['KEY_ENTER', 'KEY_B', 'KEY_S']:
+            self.assertIn(key_name, main_script)
+        for prompt in [
+            'Enter accepts mission',
+            'B buys one ton',
+            'S sells one ton',
+            'B buys selected upgrade',
+            'B buys selected ship',
+        ]:
+            self.assertIn(prompt, main_script)
 
 
 if __name__ == '__main__':
