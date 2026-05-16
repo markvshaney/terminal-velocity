@@ -3,7 +3,7 @@ param(
 )
 
 $Godot = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe\Godot_v4.6.2-stable_win64_console.exe"
-$Project = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$Project = (Resolve-Path (Join-Path $PSScriptRoot "..")).ProviderPath
 
 if (!(Test-Path $Godot)) {
     throw "Godot executable not found: $Godot"

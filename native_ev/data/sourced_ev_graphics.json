@@ -1,7 +1,7 @@
 {
   "sourceFile": "source-assets/ev-classic/Nova Files/EV Graphics.rez",
   "sourceSha256": "640f7698dcedc5faab86220284802b07a2a6fe719b3f988f5c4a4bcd4c3f89ad",
-  "method": "brgr-graphics-rled-shan-full-field-v1",
+  "method": "evnew-opcode-rled-shan-full-field-v2",
   "note": "Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.",
   "chunkCount": 304,
   "resourceCount": 303,

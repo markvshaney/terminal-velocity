@@ -1,5 +1,7 @@
 from pathlib import Path
+import struct
 import unittest
+import zlib
 
 from native_ev.model import (
     available_mission_ids,
@@ -40,6 +42,67 @@ from native_ev.model import (
     trade_profit,
     weapon_manifest,
 )
+
+
+
+def _png_alpha_pixel_count(path: Path) -> int:
+    data = path.read_bytes()
+    assert data[:8] == b'\x89PNG\r\n\x1a\n'
+    pos = 8
+    raw = b''
+    width = height = color_type = None
+    while pos < len(data):
+        size = struct.unpack('>I', data[pos:pos + 4])[0]
+        kind = data[pos + 4:pos + 8]
+        chunk = data[pos + 8:pos + 8 + size]
+        pos += 12 + size
+        if kind == b'IHDR':
+            width, height, _depth, color_type, _compression, _filter, _interlace = struct.unpack('>IIBBBBB', chunk)
+        elif kind == b'IDAT':
+            raw += chunk
+        elif kind == b'IEND':
+            break
+    assert width is not None and height is not None
+    bytes_per_pixel = 4 if color_type == 6 else 3
+    decoded = zlib.decompress(raw)
+    previous = [0] * (width * bytes_per_pixel)
+    index = 0
+    count = 0
+
+    def paeth(left: int, above: int, upper_left: int) -> int:
+        p = left + above - upper_left
+        pa = abs(p - left)
+        pb = abs(p - above)
+        pc = abs(p - upper_left)
+        if pa <= pb and pa <= pc:
+            return left
+        if pb <= pc:
+            return above
+        return upper_left
+
+    for _y in range(height):
+        filter_type = decoded[index]
+        index += 1
+        row = list(decoded[index:index + width * bytes_per_pixel])
+        index += width * bytes_per_pixel
+        for i in range(len(row)):
+            left = row[i - bytes_per_pixel] if i >= bytes_per_pixel else 0
+            above = previous[i]
+            upper_left = previous[i - bytes_per_pixel] if i >= bytes_per_pixel else 0
+            if filter_type == 1:
+                row[i] = (row[i] + left) & 0xFF
+            elif filter_type == 2:
+                row[i] = (row[i] + above) & 0xFF
+            elif filter_type == 3:
+                row[i] = (row[i] + ((left + above) // 2)) & 0xFF
+            elif filter_type == 4:
+                row[i] = (row[i] + paeth(left, above, upper_left)) & 0xFF
+        if color_type == 6:
+            count += sum(1 for x in range(width) if row[x * bytes_per_pixel + 3] > 0)
+        else:
+            count += width
+        previous = row
+    return count
 
 
 class NativeEvModelTests(unittest.TestCase):
@@ -116,7 +179,7 @@ class NativeEvModelTests(unittest.TestCase):
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Graphics.rez')
-        self.assertEqual(data['method'], 'brgr-graphics-rled-shan-full-field-v1')
+        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-full-field-v2')
         self.assertEqual(data['resourceCount'], 303)
         resources_by_type = {}
         for resource in data['resources']:
@@ -619,6 +682,36 @@ class NativeEvModelTests(unittest.TestCase):
             'B buys selected ship',
         ]:
             self.assertIn(prompt, main_script)
+
+    def test_godot_ship_sprites_use_center_registered_fixed_cells(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'cell-center registration',
+            'player_facing_index',
+            'turn_cell_progress',
+            '_visible_facing_index(player_facing_index)',
+            '_draw_center_registered_ship_cell',
+            'center - size * 0.5',
+            'never rotates a texture or sprite sheet',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertNotIn('_draw_front_registered_ship_cell', main_script)
+        self.assertNotIn('_front_cell_registration_point', main_script)
+        self.assertNotIn('_draw_rotated_ship_texture', main_script)
+        self.assertNotIn('draw_set_transform(center, deg_to_rad(angle_deg), Vector2.ONE)', main_script)
+
+    def test_extracted_shuttle_rotation_frames_are_all_decoded(self):
+        root = Path(__file__).resolve().parents[2]
+        shuttle_dirs = [
+            root / 'native_ev' / 'assets' / 'ships' / 'shuttle',
+            root / 'native_ev' / 'assets' / 'ships' / 'ev_classic' / 'shuttle',
+        ]
+        for shuttle_dir in shuttle_dirs:
+            frames = sorted(shuttle_dir.glob('frame_*.png'))
+            self.assertEqual(len(frames), 36)
+            alpha_counts = [_png_alpha_pixel_count(frame) for frame in frames]
+            self.assertTrue(all(count > 0 for count in alpha_counts), alpha_counts)
 
 
 if __name__ == '__main__':

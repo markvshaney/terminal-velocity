@@ -78,51 +78,97 @@ def write_png(path: Path, width: int, height: int, rgba: bytes | bytearray) -> N
 
 
 def decode_rled(data: bytes, max_frames: int | None = None) -> tuple[int, int, list[bytearray]]:
+    """Decode EV/Nova rlëD resources into RGBA frames.
+
+    rlëD is a flat 32-bit opcode stream after the 16-byte header. The opcode is
+    the high byte and the byte count is the low 24 bits. This mirrors EVNEW's
+    CRLEResource::CompileImage implementation; it is not a per-row length format.
+    """
     width = int.from_bytes(data[0:2], 'big')
     height = int.from_bytes(data[2:4], 'big')
     depth = int.from_bytes(data[4:6], 'big')
     frame_count = int.from_bytes(data[8:10], 'big')
-    if not (0 < width <= 256 and 0 < height <= 256 and depth in (8, 16, 32) and 0 < frame_count <= 256):
+    if not (0 < width <= 512 and 0 < height <= 512 and depth in (8, 16) and 0 < frame_count <= 256):
         raise ValueError(f'unsupported rleD header width={width} height={height} depth={depth} frames={frame_count}')
 
-    frames: list[bytearray] = []
-    pos = 16
     wanted = min(frame_count, max_frames or frame_count)
-    for _frame in range(wanted):
-        img = make_blank(width, height)
-        for y in range(height):
-            if pos + 4 > len(data):
-                break
-            marker = data[pos]
-            row_len = int.from_bytes(data[pos + 2:pos + 4], 'big')
-            if marker == 0x00 and row_len == 0:
-                pos += 4
-                continue
-            if marker != 0x01 or row_len < 0 or pos + 4 + row_len > len(data):
-                return width, height, frames
-            row = data[pos + 4:pos + 4 + row_len]
-            pos += 4 + row_len
+    frames: list[bytearray] = [make_blank(width, height) for _ in range(wanted)]
+    pos = 16
+    frame = 0
+    line = -1
+    x = 0
+    row_start: int | None = None
+
+    while frame < wanted:
+        if row_start is not None and ((pos - row_start) & 0x03):
+            pos += 4 - ((pos - row_start) & 0x03)
+        if pos + 4 > len(data):
+            raise ValueError('early end-of-resource in rlëD stream')
+        opcode_word = int.from_bytes(data[pos:pos + 4], 'big')
+        pos += 4
+        opcode = (opcode_word >> 24) & 0xFF
+        count = opcode_word & 0x00FFFFFF
+
+        if opcode == 0x00:  # end of frame
+            frame += 1
+            line = -1
             x = 0
-            rp = 0
-            while rp + 4 <= len(row):
-                cmd = row[rp]
-                count = int.from_bytes(row[rp + 2:rp + 4], 'big')
-                rp += 4
-                if cmd in (0x01, 0x03):
-                    # Counts in rlëD drawing commands are byte counts; 16-bit sprites use 2 bytes/pixel.
-                    x += count // 2
-                elif cmd == 0x02:
-                    for _ in range(count // 2):
-                        if rp + 2 > len(row):
-                            break
-                        word = int.from_bytes(row[rp:rp + 2], 'big')
-                        rp += 2
-                        if 0 <= x < width and word != 0:
-                            set_px(img, width, x, y, rgb555_to_rgba(word))
-                        x += 1
-                else:
-                    break
-        frames.append(img)
+            row_start = None
+        elif opcode == 0x01:  # line start
+            line += 1
+            x = 0
+            row_start = pos
+        elif opcode == 0x02:  # literal pixel data; count is bytes
+            if line < 0 or line >= height:
+                pos += count
+            elif depth == 8:
+                for _ in range(count):
+                    if pos >= len(data):
+                        raise ValueError('early end in 8-bit pixel data')
+                    v = data[pos]
+                    pos += 1
+                    if 0 <= x < width and v != 0:
+                        set_px(frames[frame], width, x, line, (v, v, v, 255))
+                    x += 1
+            else:
+                for _ in range(count // 2):
+                    if pos + 2 > len(data):
+                        raise ValueError('early end in 16-bit pixel data')
+                    word = int.from_bytes(data[pos:pos + 2], 'big')
+                    pos += 2
+                    if 0 <= x < width and word != 0:
+                        set_px(frames[frame], width, x, line, rgb555_to_rgba(word))
+                    x += 1
+                if count & 1:
+                    pos += 1
+            if count & 0x03:
+                pos += 4 - (count & 0x03)
+        elif opcode == 0x03:  # transparent run; count is bytes
+            x += count if depth == 8 else count // 2
+        elif opcode == 0x04:  # pixel run; data is a 32-bit packed run value
+            if pos + 4 > len(data):
+                raise ValueError('early end in pixel run')
+            run_value = int.from_bytes(data[pos:pos + 4], 'big')
+            pos += 4
+            if line < 0 or line >= height:
+                continue
+            if depth == 8:
+                for i in range(count):
+                    shift = (3 - (i % 4)) * 8
+                    v = (run_value >> shift) & 0xFF
+                    if 0 <= x < width and v != 0:
+                        set_px(frames[frame], width, x, line, (v, v, v, 255))
+                    x += 1
+            else:
+                words = [(run_value >> 16) & 0xFFFF, run_value & 0xFFFF]
+                for i in range(count // 2):
+                    word = words[i % 2]
+                    if 0 <= x < width and word != 0:
+                        set_px(frames[frame], width, x, line, rgb555_to_rgba(word))
+                    x += 1
+        else:
+            raise ValueError(f'unknown rlëD opcode 0x{opcode:02x} at byte {pos - 4}')
+
     return width, height, frames
 
 

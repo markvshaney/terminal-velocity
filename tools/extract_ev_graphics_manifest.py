@@ -21,7 +21,7 @@ DEFAULT_SOURCE = Path('source-assets/ev-classic/Nova Files/EV Graphics.rez')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_graphics.json')
 DEFAULT_SHIP_OUT = Path('native_ev/assets/ships/ev_classic')
 DEFAULT_RLED_OUT = Path('native_ev/assets/graphics/rled')
-METHOD = 'brgr-graphics-rled-shan-full-field-v1'
+METHOD = 'evnew-opcode-rled-shan-full-field-v2'
 
 
 def slugify(text: str) -> str:

@@ -22,10 +22,15 @@ var current_system_index := 0
 var current_system := {}
 var player_ship := {}
 var player_frames: Array[Texture2D] = []
+var player_frame_offsets: Array[Vector2] = []
+var player_frame_alpha_counts: Array[int] = []
 var npc_frames: Array[Texture2D] = []
+var npc_frame_offsets: Array[Vector2] = []
 var pos := PLAYER_START
 var vel := Vector2.ZERO
 var angle_deg := 0.0
+var player_facing_index := 0
+var turn_cell_progress := 0.0
 var landed := false
 var selected_link_index := 0
 var stars: Array[Vector2] = []
@@ -44,7 +49,8 @@ var player_ship_id := "shuttle"
 var cargo_space := 20
 
 func _ready() -> void:
-	get_window().title = "Terminal Velocity — Godot EV Frontend"
+	get_window().title = "Terminal Velocity — Godot EV Frontend — cell-center registration"
+	RenderingServer.set_default_clear_color(Color(0.005, 0.006, 0.012))
 	repo_root = _repo_root()
 	_load_data()
 	_make_stars()
@@ -82,27 +88,57 @@ func _load_data() -> void:
 		player_ship = ships["ships"][0]
 	player_ship_id = str(player_ship.get("id", "shuttle"))
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
-	player_frames = _load_ship_frames(player_ship)
+	var player_frame_set := _load_ship_frame_set(player_ship)
+	player_frames = player_frame_set["frames"]
+	player_frame_offsets = player_frame_set["offsets"]
+	player_frame_alpha_counts = player_frame_set["alpha_counts"]
 	var npc_ship := player_ship
 	for ship in ships.get("ships", []):
 		if ship.get("id", "") != player_ship.get("id", ""):
 			npc_ship = ship
 			break
-	npc_frames = _load_ship_frames(npc_ship)
+	var npc_frame_set := _load_ship_frame_set(npc_ship)
+	npc_frames = npc_frame_set["frames"]
+	npc_frame_offsets = npc_frame_set["offsets"]
 	status_line = "Loaded %d systems, %d ships, %d shuttle frames" % [universe.get("systems", []).size(), ships.get("ships", []).size(), player_frames.size()]
 
 func _load_ship_frames(ship: Dictionary) -> Array[Texture2D]:
+	return _load_ship_frame_set(ship)["frames"]
+
+func _load_ship_frame_set(ship: Dictionary) -> Dictionary:
 	var frames: Array[Texture2D] = []
+	var offsets: Array[Vector2] = []
+	var alpha_counts: Array[int] = []
 	var asset_dir: String = repo_root + "/native_ev/" + str(ship.get("assetDir", ""))
 	for i in range(ship.get("frameCount", FRAME_COUNT)):
 		var image := Image.new()
 		var frame_path: String = asset_dir + "/frame_%02d.png" % i
 		var err := image.load(frame_path)
 		if err == OK:
+			offsets.append(_frame_draw_offset(image))
+			alpha_counts.append(_frame_alpha_count(image))
 			frames.append(ImageTexture.create_from_image(image))
 		else:
 			push_warning("missing frame " + frame_path)
-	return frames
+	return {"frames": frames, "offsets": offsets, "alpha_counts": alpha_counts}
+
+func _frame_draw_offset(image: Image) -> Vector2:
+	var used := image.get_used_rect()
+	var image_center := Vector2(float(image.get_width()) * 0.5, float(image.get_height()) * 0.5)
+	if used.size.x <= 0 or used.size.y <= 0:
+		return image_center
+	return Vector2(used.position) + Vector2(used.size) * 0.5
+
+func _frame_alpha_count(image: Image) -> int:
+	var used := image.get_used_rect()
+	if used.size.x <= 0 or used.size.y <= 0:
+		return 0
+	var count := 0
+	for y in range(used.position.y, used.position.y + used.size.y):
+		for x in range(used.position.x, used.position.x + used.size.x):
+			if image.get_pixel(x, y).a > 0.0:
+				count += 1
+	return count
 
 func _make_stars() -> void:
 	stars.clear()
@@ -124,10 +160,22 @@ func _process(delta: float) -> void:
 func _handle_input(delta: float) -> void:
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
+	var turn_dir := 0
 	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
-		angle_deg -= 180.0 * delta
+		turn_dir -= 1
 	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
-		angle_deg += 180.0 * delta
+		turn_dir += 1
+	if turn_dir != 0 and not player_frames.is_empty():
+		turn_cell_progress += float(turn_dir) * 18.0 * delta
+		while turn_cell_progress >= 1.0:
+			player_facing_index = (player_facing_index + 1) % player_frames.size()
+			turn_cell_progress -= 1.0
+		while turn_cell_progress <= -1.0:
+			player_facing_index = (player_facing_index - 1 + player_frames.size()) % player_frames.size()
+			turn_cell_progress += 1.0
+	elif turn_dir == 0:
+		turn_cell_progress = 0.0
+	angle_deg = _facing_degrees(player_facing_index, max(player_frames.size(), FRAME_COUNT))
 	var nose := Vector2.UP.rotated(deg_to_rad(angle_deg))
 	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
 		vel += nose * 250.0 * delta
@@ -185,6 +233,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_R:
 				pos = PLAYER_START
 				vel = Vector2.ZERO
+				player_facing_index = 0
+				angle_deg = 0.0
+				turn_cell_progress = 0.0
 				landed = false
 				status_line = "Reset in " + current_system.get("name", "system")
 
@@ -236,6 +287,8 @@ func _nearest_body() -> Dictionary:
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, VIEW_SIZE), Color(0.005, 0.006, 0.012), true)
 	var center := VIEW_SIZE * 0.5
+	var font := ThemeDB.fallback_font
+	draw_string(font, Vector2(18, 24), "TV GODOT RENDER ACTIVE — cell-center build", HORIZONTAL_ALIGNMENT_LEFT, 620, 18, Color(1.0, 0.85, 0.25))
 	for star in stars:
 		var screen := center + (star - pos * 0.18) * 0.45
 		if Rect2(Vector2.ZERO, VIEW_SIZE).has_point(screen):
@@ -263,19 +316,55 @@ func _draw_npcs(center: Vector2) -> void:
 	var offsets: Array[Vector2] = [Vector2(260, -180), Vector2(-340, 220), Vector2(520, 160), Vector2(-640, -260)]
 	for i in range(offsets.size()):
 		var screen: Vector2 = center + (offsets[i] - pos) * WORLD_SCALE
-		var tex := npc_frames[(i * 7) % npc_frames.size()]
-		draw_texture_rect(tex, Rect2(screen - Vector2(tex.get_width(), tex.get_height()) * 0.5, Vector2(tex.get_width(), tex.get_height())), false)
+		var frame_index := (i * 7) % npc_frames.size()
+		var tex := npc_frames[frame_index]
+		var draw_offset := Vector2(tex.get_width(), tex.get_height()) * 0.5
+		if frame_index < npc_frame_offsets.size():
+			draw_offset = npc_frame_offsets[frame_index]
+		draw_texture_rect(tex, Rect2(screen - draw_offset, Vector2(tex.get_width(), tex.get_height())), false)
 		draw_arc(screen, 28, 0, TAU, 20, Color(0.35, 0.55, 0.80, 0.7), 1.0)
 
 func _draw_player(center: Vector2) -> void:
 	if player_frames.is_empty():
 		draw_circle(center, 14, Color.CORNFLOWER_BLUE)
 		return
-	var frame_index := int(round(fposmod(angle_deg, 360.0) / 10.0)) % player_frames.size()
+	# EV-style fixed-cell registration: A/D advances to the neighboring original
+	# 36-facing cell; the ship entity stays fixed and the selected whole cell is
+	# drawn centered. This path never rotates a texture or sprite sheet.
+	var frame_index := _visible_facing_index(player_facing_index)
 	var tex := player_frames[frame_index]
 	var size := Vector2(tex.get_width(), tex.get_height())
-	draw_texture_rect(tex, Rect2(center - size * 0.5, size), false)
+	_draw_center_registered_ship_cell(center, tex, size)
 	draw_arc(center, max(size.x, size.y) * 0.65, 0, TAU, 36, Color(0.2, 0.75, 1.0, 0.8), 1.2)
+
+func _facing_frame_index(degrees: float, frame_count: int) -> int:
+	if frame_count <= 0:
+		return 0
+	return int(round(fposmod(degrees, 360.0) / (360.0 / float(frame_count)))) % frame_count
+
+func _facing_degrees(frame_index: int, frame_count: int) -> float:
+	if frame_count <= 0:
+		return 0.0
+	return float(frame_index % frame_count) * (360.0 / float(frame_count))
+
+func _visible_facing_index(frame_index: int) -> int:
+	if player_frames.is_empty():
+		return 0
+	var count := player_frames.size()
+	var idx := frame_index % count
+	if idx < player_frame_alpha_counts.size() and player_frame_alpha_counts[idx] > 0:
+		return idx
+	for step in range(1, count):
+		var forward := (idx + step) % count
+		if forward < player_frame_alpha_counts.size() and player_frame_alpha_counts[forward] > 0:
+			return forward
+		var backward := (idx - step + count) % count
+		if backward < player_frame_alpha_counts.size() and player_frame_alpha_counts[backward] > 0:
+			return backward
+	return idx
+
+func _draw_center_registered_ship_cell(center: Vector2, tex: Texture2D, size: Vector2) -> void:
+	draw_texture_rect(tex, Rect2(center - size * 0.5, size), false)
 
 func _draw_hud() -> void:
 	var font := ThemeDB.fallback_font
@@ -285,7 +374,7 @@ func _draw_hud() -> void:
 		destination = str(links[selected_link_index % links.size()])
 	draw_rect(Rect2(0, 0, 1280, 78), Color(0.02, 0.035, 0.06, 0.92), true)
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
-	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Cargo: %d/%d    Ship: %s" % [current_system.get("name", "?"), destination, credits, cargo, cargo_space, player_ship_id], HORIZONTAL_ALIGNMENT_LEFT, 980, 16, Color(0.70, 0.86, 1.0))
+	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Cargo: %d/%d    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, cargo, cargo_space, player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
 	draw_rect(Rect2(1010, 96, 250, 190), Color(0.02, 0.04, 0.06, 0.88), true)
 	draw_arc(Vector2(1135, 190), 78, 0, TAU, 64, Color(0.30, 0.75, 0.95), 1.0)
 	draw_line(Vector2(1135, 112), Vector2(1135, 268), Color(0.12, 0.35, 0.50), 1.0)
@@ -585,7 +674,9 @@ func _buy_selected_ship() -> void:
 	credits -= price
 	player_ship = new_ship
 	player_ship_id = ship_id
-	player_frames = _load_ship_frames(player_ship)
+	var player_frame_set := _load_ship_frame_set(player_ship)
+	player_frames = player_frame_set["frames"]
+	player_frame_offsets = player_frame_set["offsets"]
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
 	cargo = min(cargo, cargo_space)
 	status_line = "Bought ship: " + ship_id
