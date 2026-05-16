@@ -4,30 +4,40 @@
       "scanRange": 520,
       "finePerTon": 400,
       "patrolFaction": "confed",
+      "bribeAllowed": false,
+      "bribePerTon": 0,
       "description": "Core worlds enforce import restrictions and inspect suspicious cargo."
     },
     "Centauri Protectorate": {
       "scanRange": 420,
       "finePerTon": 300,
       "patrolFaction": "confed",
+      "bribeAllowed": false,
+      "bribePerTon": 0,
       "description": "Industrial worlds tolerate trade but restrict destabilizing luxury imports."
     },
     "Independent": {
       "scanRange": 260,
       "finePerTon": 150,
       "patrolFaction": "independent",
+      "bribeAllowed": true,
+      "bribePerTon": 75,
       "description": "Independent ports police violence first and paperwork second."
     },
     "Militia Compact": {
       "scanRange": 480,
       "finePerTon": 250,
       "patrolFaction": "confed",
+      "bribeAllowed": false,
+      "bribePerTon": 0,
       "description": "Border militia systems run heavy patrols and favor licensed haulers."
     },
     "Rim Freehold": {
       "scanRange": 180,
       "finePerTon": 100,
       "patrolFaction": "independent",
+      "bribeAllowed": true,
+      "bribePerTon": 50,
       "description": "Rim systems are thinly policed and commerce is mostly self-regulated."
     }
   },

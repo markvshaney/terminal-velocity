@@ -257,6 +257,9 @@ $selectedCommodityIndex = 0
 $tradeProfit = 0
 $legalStatus = 'Clean'
 $totalFinesPaid = 0
+$totalBribesPaid = 0
+$contrabandConfiscations = 0
+$clemencyGrants = 0
 $reputation = @{}
 foreach ($faction in $reputationDefs.Keys) { $reputation[[string]$faction] = 0 }
 $legalRecords = @{}
@@ -413,6 +416,27 @@ function Current-Legal-Status {
     $govName = Current-Government-Name
     if (!$legalRecords.ContainsKey($govName)) { $legalRecords[$govName] = 0 }
     return Legal-Status-For-Score ([int]$legalRecords[$govName])
+}
+
+function Patrol-Posture($govName = $null) {
+    if ($govName -eq $null) { $govName = Current-Government-Name }
+    if (!$legalRecords.ContainsKey($govName)) { $legalRecords[$govName] = 0 }
+    $score = [int]$legalRecords[$govName]
+    $hostile = -60
+    $warning = -20
+    if ($rawReputation.mechanics.patrolHostileLegalScore -ne $null) { $hostile = [int]$rawReputation.mechanics.patrolHostileLegalScore }
+    if ($rawReputation.mechanics.patrolWarningLegalScore -ne $null) { $warning = [int]$rawReputation.mechanics.patrolWarningLegalScore }
+    if ($score -le $hostile) { return 'hostile' }
+    if ($score -le $warning) { return 'warning' }
+    return 'normal'
+}
+
+function Add-Legal-Delta($govName, $delta) {
+    if ([string]::IsNullOrWhiteSpace([string]$govName)) { return }
+    if (!$legalRecords.ContainsKey($govName)) { $legalRecords[$govName] = 0 }
+    $legalRecords[$govName] = [int]$legalRecords[$govName] + [int]$delta
+    $script:legalStatus = Current-Legal-Status
+    Update-Npc-Dispositions
 }
 
 function Dock-Min-Legal-Score($govName) {
@@ -751,24 +775,76 @@ function Illegal-Cargo-Ids {
 function Scan-For-Contraband($scannerName) {
     $gov = Current-Government
     if ($gov -eq $null) { return }
+    $govName = Current-Government-Name
     $illegal = @(Illegal-Cargo-Ids)
     if ($illegal.Count -eq 0) { return }
     $tons = 0
     foreach ($cid in $illegal) { $tons += Commodity-Tons $cid }
-    if ($tons -le 0) { $script:legalStatus = 'Clean'; return }
+    if ($tons -le 0) { $script:legalStatus = Current-Legal-Status; return }
+
+    $bribe = [int]$gov.bribePerTon * $tons
+    if ([bool]$gov.bribeAllowed -and $bribe -gt 0 -and $credits -ge $bribe) {
+        $script:credits -= $bribe
+        $script:totalBribesPaid += $bribe
+        $message.Text = ('{0} scan: paid {1} credits to avoid paperwork.' -f $scannerName, $bribe)
+        return
+    }
+
     $fine = [int]$gov.finePerTon * $tons
-    $script:credits = [Math]::Max(0, $credits - $fine)
-    $script:totalFinesPaid += $fine
-    Apply-Reputation-Event 'contraband_fine' (Current-Government-Name)
+    if ($credits -ge $fine) {
+        $script:credits -= $fine
+        $script:totalFinesPaid += $fine
+        Apply-Reputation-Event 'contraband_fine' $govName
+        foreach ($cid in $illegal) {
+            if ($commodityHold.ContainsKey($cid)) {
+                $script:cargoUsed -= [int]$commodityHold[$cid].Tons
+                $commodityHold[$cid].Tons = 0
+                $commodityHold[$cid].Basis = 0
+            }
+        }
+        $script:legalStatus = ('Fined {0} by {1}' -f $fine, $scannerName)
+        $message.Text = ('{0} scan: contraband seized, fine {1} credits.' -f $scannerName, $fine)
+        return
+    }
+
     foreach ($cid in $illegal) {
         if ($commodityHold.ContainsKey($cid)) {
+            $script:contrabandConfiscations += [int]$commodityHold[$cid].Tons
             $script:cargoUsed -= [int]$commodityHold[$cid].Tons
             $commodityHold[$cid].Tons = 0
             $commodityHold[$cid].Basis = 0
         }
     }
-    $script:legalStatus = ('Fined {0} by {1}' -f $fine, $scannerName)
-    $message.Text = ('{0} scan: contraband seized, fine {1} credits.' -f $scannerName, $fine)
+    $penalty = -25
+    if ($rawReputation.mechanics.unpaidFineLegalPenalty -ne $null) { $penalty = [int]$rawReputation.mechanics.unpaidFineLegalPenalty }
+    Add-Legal-Delta $govName $penalty
+    $message.Text = ('{0} scan: unable to pay {1}; cargo confiscated and patrols escalated to {2}.' -f $scannerName, $fine, (Patrol-Posture $govName))
+}
+
+function Clemency-Offer-Available($govName = $null) {
+    if ($govName -eq $null) { $govName = Current-Government-Name }
+    if (!$reputation.ContainsKey($govName)) { $reputation[$govName] = 0 }
+    if (!$legalRecords.ContainsKey($govName)) { $legalRecords[$govName] = 0 }
+    $minRep = 10
+    $maxLegal = -20
+    if ($rawReputation.mechanics.clemencyMinReputation -ne $null) { $minRep = [int]$rawReputation.mechanics.clemencyMinReputation }
+    if ($rawReputation.mechanics.clemencyMaxLegalScore -ne $null) { $maxLegal = [int]$rawReputation.mechanics.clemencyMaxLegalScore }
+    return (([int]$reputation[$govName] -ge $minRep) -and ([int]$legalRecords[$govName] -le $maxLegal))
+}
+
+function Apply-Clemency($govName = $null) {
+    if ($govName -eq $null) { $govName = Current-Government-Name }
+    if (!(Clemency-Offer-Available $govName)) { $message.Text = ('No clemency offer from {0}.' -f $govName); return $false }
+    $cost = 1000
+    $delta = 25
+    if ($rawReputation.mechanics.clemencyCost -ne $null) { $cost = [int]$rawReputation.mechanics.clemencyCost }
+    if ($rawReputation.mechanics.clemencyLegalDelta -ne $null) { $delta = [int]$rawReputation.mechanics.clemencyLegalDelta }
+    if ($credits -lt $cost) { $message.Text = ('Clemency from {0} costs {1}; not enough credits.' -f $govName, $cost); return $false }
+    $script:credits -= $cost
+    $script:clemencyGrants += 1
+    Add-Legal-Delta $govName $delta
+    $message.Text = ('Accepted {0} clemency: paid {1}, legal record improved.' -f $govName, $cost)
+    return $true
 }
 
 function Selected-Commodity {
@@ -1217,8 +1293,9 @@ function Update-Landing-Text {
     $lines += $dockedAt.Market
     $lines += ''
     $lines += ('Credits: {0}   Ship: {1}   Cargo: {2}/{3} tons   Hull: {4:n0}/{5:n0}   Fuel: {6:n0}/{7:n0}' -f $credits, $playerShipDef.name, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $player.Fuel, $playerMaxFuel)
-    $lines += ('Government: {0}   Legal: {1}   Fines Paid: {2}' -f (Current-Government-Name), (Current-Legal-Status), $totalFinesPaid)
+    $lines += ('Government: {0}   Legal: {1}   Patrol: {2}   Fines: {3}   Bribes: {4}' -f (Current-Government-Name), (Current-Legal-Status), (Patrol-Posture), $totalFinesPaid, $totalBribesPaid)
     $lines += ('Reputation: {0}' -f (Reputation-Summary))
+    if (Clemency-Offer-Available) { $lines += 'Clemency offer available: press J to pay and improve your legal record.' }
     if ($dockedAt.inventory -ne $null) { $lines += ('Services: {0}' -f (@($dockedAt.inventory.services) -join ', ')) }
     $lines += ('Repair: {0} credits per hull point. Press 6 to repair all.' -f $repairPricePerHullPoint)
     $lines += ''
@@ -1342,7 +1419,7 @@ function Tick {
         $visible = @(Current-Targets | Where-Object { (Dist $player.X $player.Y $_.X $_.Y) -le $scannerRange }).Count
         $scanner.Text = ('SCANNER`nNo target`nContacts: {0}`nT: nearest`nY: cycle' -f $visible)
     }
-    $hud.Text = ('{0} ({1}) | Credits {2} | Cargo {3}/{4} | Hull {5:n0}/{6:n0} | Speed {7:n1} | Fuel {8:n0} | Legal {9} | Rep {10}{11}' -f (Current-System).Name, (Current-Government-Name), $credits, $cargoUsed, $cargoSpace, [Math]::Max(0, $playerHull), $playerMaxHull, (Speed), $player.Fuel, (Current-Legal-Status), (Reputation-Summary), $dockHint)
+    $hud.Text = ('{0} ({1}) | Credits {2} | Cargo {3}/{4} | Hull {5:n0}/{6:n0} | Speed {7:n1} | Fuel {8:n0} | Legal {9} | Patrol {10} | Rep {11}{12}' -f (Current-System).Name, (Current-Government-Name), $credits, $cargoUsed, $cargoSpace, [Math]::Max(0, $playerHull), $playerMaxHull, (Speed), $player.Fuel, (Current-Legal-Status), (Patrol-Posture), (Reputation-Summary), $dockHint)
 }
 
 if (!$SelfTest) { [void](Load-Game) }
@@ -1376,6 +1453,7 @@ $window.Add_KeyDown({
         'B' { Buy-Selected-Ship }
         'U' { Cycle-Weapon 1 }
         'O' { Buy-Selected-Weapon }
+        'J' { [void](Apply-Clemency) }
         'C' { Cycle-Commodity 1 }
         'V' { Cycle-Commodity -1 }
         'X' { Buy-Commodity }
@@ -1531,9 +1609,52 @@ $timer.Add_Tick({
         if ($selfTestSave.playerShipId -ne $playerShipId) { throw "SelfTest expected saved player ship id" }
         if ($selfTestSave.reputation.Federation -le 0) { throw "SelfTest expected saved Federation reputation" }
         if ($selfTestSave.legalRecords.Federation -ge 0) { throw "SelfTest expected saved Federation legal penalty" }
+        $savedCreditsForPolice = $credits
+        $savedCargoUsedForPolice = $cargoUsed
+        $savedCurrentSystemIndexForPolice = $currentSystemIndex
+        $savedSelectedSystemIndexForPolice = $selectedSystemIndex
+        $savedMedicalHold = $null
+        if ($commodityHold.ContainsKey('medical_supplies')) { $savedMedicalHold = @{ Tons=[int]$commodityHold['medical_supplies'].Tons; Basis=[int]$commodityHold['medical_supplies'].Basis } }
+        $script:currentSystemIndex = 2
+        $script:selectedSystemIndex = 2
+        $script:credits = 5000
+        $commodityHold['medical_supplies'] = @{ Tons=1; Basis=110 }
+        $script:cargoUsed = $savedCargoUsedForPolice + 1
+        $bribesBefore = $totalBribesPaid
+        Scan-For-Contraband 'SelfTest Freeport Patrol'
+        if ($totalBribesPaid -le $bribesBefore) { throw "SelfTest expected Independent contraband bribe" }
+        if ([int]$commodityHold['medical_supplies'].Tons -ne 1) { throw "SelfTest expected bribe to avoid confiscation" }
+        $script:currentSystemIndex = 5
+        $script:selectedSystemIndex = 5
+        $script:credits = 0
+        $commodityHold['luxuries'] = @{ Tons=1; Basis=180 }
+        $commodityHold['medical_supplies'] = @{ Tons=1; Basis=110 }
+        $script:cargoUsed = $savedCargoUsedForPolice + 2
+        $confiscationsBefore = $contrabandConfiscations
+        $legalRecords['Militia Compact'] = -40
+        Scan-For-Contraband 'SelfTest Militia Patrol'
+        if ($contrabandConfiscations -le $confiscationsBefore) { throw "SelfTest expected unpaid fine confiscation" }
+        if ((Patrol-Posture 'Militia Compact') -ne 'hostile') { throw "SelfTest expected patrol escalation to hostile" }
+        $script:currentSystemIndex = $savedCurrentSystemIndexForPolice
+        $script:selectedSystemIndex = $savedSelectedSystemIndexForPolice
+        $script:credits = $savedCreditsForPolice
+        $script:cargoUsed = $savedCargoUsedForPolice
+        if ($savedMedicalHold -eq $null) { if ($commodityHold.ContainsKey('medical_supplies')) { $commodityHold.Remove('medical_supplies') } } else { $commodityHold['medical_supplies'] = $savedMedicalHold }
+        if ($commodityHold.ContainsKey('luxuries')) { $commodityHold.Remove('luxuries') }
+        $savedFedRepForClemency = [int]$reputation['Federation']
+        $savedFedLegalForClemency = [int]$legalRecords['Federation']
+        $script:credits = 5000
+        $reputation['Federation'] = 15
+        $legalRecords['Federation'] = -45
+        if (!(Apply-Clemency 'Federation')) { throw "SelfTest expected clemency offer" }
+        if ($clemencyGrants -lt 1) { throw "SelfTest expected clemency grant counter" }
+        if ([int]$legalRecords['Federation'] -ne -20) { throw "SelfTest expected clemency legal delta" }
+        $reputation['Federation'] = $savedFedRepForClemency
+        $legalRecords['Federation'] = $savedFedLegalForClemency
+        $script:credits = $savedCreditsForPolice
         $targetForLog = 'none'
         if ($currentTargetName -ne $null) { $targetForLog = $currentTargetName }
-        Write-Host ('SELFTEST OK frames={0} npcFrames={1} systems={2} links={3} current={4} selected={5} npcs={6} weapons={7} missions={8} outfits={9} activeMissions={10} completedMissions={11} storyFlags={12} projectiles={13} target={14} credits={15} cargo={16} cargoSpace={17} hull={18:n0}/{19:n0} commodities={20} tradeProfit={21} governments={22} factions={23} fines={24} legal={25} fedRep={26} fedLegal={27}' -f $shipFrames.Count, $shipFrameSets['light_freighter'].Count, $systems.Count, $systems[0].Links.Count, (Current-System).Name, $systems[$selectedSystemIndex].Name, $npcShips.Count, $weaponDefs.Count, $missionDefs.Count, $outfitDefs.Count, $activeMissions.Count, $completedMissionIds.Count, $storyFlags.Count, $projectiles.Count, $targetForLog, $credits, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $commodityList.Count, $tradeProfit, $governmentDefs.Count, $reputationDefs.Count, $totalFinesPaid, (Current-Legal-Status), $reputation['Federation'], $legalRecords['Federation'])
+        Write-Host ('SELFTEST OK frames={0} npcFrames={1} systems={2} links={3} current={4} selected={5} npcs={6} weapons={7} missions={8} outfits={9} activeMissions={10} completedMissions={11} storyFlags={12} projectiles={13} target={14} credits={15} cargo={16} cargoSpace={17} hull={18:n0}/{19:n0} commodities={20} tradeProfit={21} governments={22} factions={23} fines={24} bribes={25} confiscations={26} clemency={27} legal={28} patrol={29} fedRep={30} fedLegal={31}' -f $shipFrames.Count, $shipFrameSets['light_freighter'].Count, $systems.Count, $systems[0].Links.Count, (Current-System).Name, $systems[$selectedSystemIndex].Name, $npcShips.Count, $weaponDefs.Count, $missionDefs.Count, $outfitDefs.Count, $activeMissions.Count, $completedMissionIds.Count, $storyFlags.Count, $projectiles.Count, $targetForLog, $credits, $cargoUsed, $cargoSpace, $playerHull, $playerMaxHull, $commodityList.Count, $tradeProfit, $governmentDefs.Count, $reputationDefs.Count, $totalFinesPaid, $totalBribesPaid, $contrabandConfiscations, $clemencyGrants, (Current-Legal-Status), (Patrol-Posture), $reputation['Federation'], $legalRecords['Federation'])
         $window.Close()
     } elseif ($AutoCloseSeconds -gt 0 -and $tickCount -ge ($AutoCloseSeconds * 60)) {
         $window.Close()

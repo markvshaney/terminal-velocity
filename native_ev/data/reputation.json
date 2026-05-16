@@ -125,9 +125,15 @@
   },
   "mechanics": {
     "patrolHostileLegalScore": -60,
+    "patrolWarningLegalScore": -20,
     "pirateFriendlyReputation": 5,
     "pirateHostileReputation": -5,
     "defaultDockMinLegalScore": -60,
+    "unpaidFineLegalPenalty": -25,
+    "clemencyMinReputation": 10,
+    "clemencyMaxLegalScore": -20,
+    "clemencyLegalDelta": 25,
+    "clemencyCost": 1000,
     "dockMinLegalScoreByGovernment": {
       "Rim Freehold": -1000,
       "Independent": -90

@@ -401,11 +401,13 @@ def government_manifest(path=GOVERNMENTS_PATH):
     if not systems:
         raise ValueError('government manifest contains no system mappings')
     for name, government in governments.items():
-        for key in ['scanRange', 'finePerTon', 'patrolFaction']:
+        for key in ['scanRange', 'finePerTon', 'patrolFaction', 'bribeAllowed', 'bribePerTon']:
             if key not in government:
                 raise ValueError(f'government {name} missing {key}')
         if government['finePerTon'] <= 0:
-            raise ValueError(f'government {name} finePerTon must be positive')
+            raise ValueError(f"government {name} finePerTon must be positive")
+        if government['bribePerTon'] < 0:
+            raise ValueError(f"government {name} bribePerTon cannot be negative")
     for system, mapping in systems.items():
         gov = mapping.get('government')
         if gov not in governments:
@@ -421,6 +423,80 @@ def fine_for_contraband(hold, illegal_ids, fine_per_ton):
     for cid in illegal_ids:
         tons += int(hold.get(cid, 0))
     return int(tons * fine_per_ton)
+
+
+def _illegal_hold(hold, illegal_ids):
+    return {cid: int((hold or {}).get(cid, 0)) for cid in illegal_ids if int((hold or {}).get(cid, 0)) > 0}
+
+
+def government_patrol_posture(reputation_data, legal_records, government):
+    mechanics = reputation_data.get('mechanics', {})
+    score = int((legal_records or {}).get(government, 0))
+    if score <= int(mechanics.get('patrolHostileLegalScore', -60)):
+        return 'hostile'
+    if score <= int(mechanics.get('patrolWarningLegalScore', -20)):
+        return 'warning'
+    return 'normal'
+
+
+def enforcement_outcome(governments, reputation_data, *, government, hold, credits, legal_records=None, accept_bribe=False):
+    gov = governments.get('governments', {}).get(government)
+    if gov is None:
+        raise ValueError(f'unknown government {government}')
+    illegal_ids = set(governments.get('contraband', {}).get(government, []))
+    illegal_hold = _illegal_hold(hold, illegal_ids)
+    tons = sum(illegal_hold.values())
+    if tons <= 0:
+        return {
+            'action': 'none',
+            'creditsDelta': 0,
+            'legalDelta': 0,
+            'confiscated': {},
+            'posture': government_patrol_posture(reputation_data, legal_records, government),
+        }
+    if accept_bribe and bool(gov.get('bribeAllowed', False)):
+        bribe = int(tons * int(gov.get('bribePerTon', 0)))
+        if bribe > 0 and int(credits) >= bribe:
+            return {
+                'action': 'bribe',
+                'creditsDelta': -bribe,
+                'legalDelta': 0,
+                'confiscated': {cid: 0 for cid in illegal_hold},
+                'posture': government_patrol_posture(reputation_data, legal_records, government),
+            }
+    fine = fine_for_contraband(hold, illegal_ids, int(gov.get('finePerTon', 0)))
+    if int(credits) >= fine:
+        event = reputation_data.get('events', {}).get('contraband_fine', {})
+        legal_delta = int(event.get('legal', {}).get('*', 0))
+        return {
+            'action': 'fine',
+            'creditsDelta': -fine,
+            'legalDelta': legal_delta,
+            'confiscated': illegal_hold,
+            'posture': government_patrol_posture(reputation_data, legal_records, government),
+        }
+    penalty = int(reputation_data.get('mechanics', {}).get('unpaidFineLegalPenalty', -25))
+    return {
+        'action': 'confiscate',
+        'creditsDelta': 0,
+        'legalDelta': penalty,
+        'confiscated': illegal_hold,
+        'posture': government_patrol_posture(reputation_data, legal_records, government),
+    }
+
+
+def clemency_offer(reputation_data, *, reputation_scores, legal_records, government):
+    mechanics = reputation_data.get('mechanics', {})
+    rep = int((reputation_scores or {}).get(government, 0))
+    legal = int((legal_records or {}).get(government, 0))
+    min_rep = int(mechanics.get('clemencyMinReputation', 10))
+    max_legal = int(mechanics.get('clemencyMaxLegalScore', -20))
+    available = rep >= min_rep and legal <= max_legal
+    return {
+        'available': available,
+        'cost': int(mechanics.get('clemencyCost', 1000)) if available else 0,
+        'legalDelta': int(mechanics.get('clemencyLegalDelta', 25)) if available else 0,
+    }
 
 
 def reputation_manifest(path=REPUTATION_PATH):

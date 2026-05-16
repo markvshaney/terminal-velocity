@@ -59,6 +59,7 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 - `F1`-`F5`: accept listed mission while landed
 - `F6`: save game to `savegame.json`
 - `F7`: load game from `savegame.json`
+- `J`: accept available government clemency while landed
 - `6`: repair hull while landed
 - `7`-`9`: buy listed outfitter upgrades while landed
 - `C` / `V`: select commodity while landed
@@ -82,7 +83,7 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 - File-backed weapons data loaded from `native_ev/data/weapons.json`.
 - File-backed outfit/shipyard/repair data loaded from `native_ev/data/outfits.json`.
 - File-backed commodity markets loaded from `native_ev/data/economy.json`.
-- File-backed governments, contraband, scan ranges, and fines loaded from `native_ev/data/governments.json`.
+- File-backed governments, contraband, scan ranges, fines, bribe rules, and clemency thresholds loaded from `native_ev/data/governments.json` and `native_ev/data/reputation.json`.
 - Original 36-frame shuttle and light-freighter facings extracted from local EV resources.
 - Full local graphics manifest: `tools/extract_ev_graphics_manifest.py` decodes every `EV Graphics.rez` resource-map entry, rlëD sprite headers, shän ship fields, extracts 26 local personal-use EV Classic ship sprite sets under `native_ev/assets/ships/ev_classic/`, and extracts 77 decodable rlëD graphics sets under `native_ev/assets/graphics/rled/`.
 - Inertial flight.
@@ -95,7 +96,7 @@ powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\T
 - Persistent save/load stores credits, system, ship, hull/fuel, cargo, outfits, commodities, active/completed missions, story flags, and legal status in local `savegame.json`.
 - Outfitter upgrades, repair shop, and shipyard purchase loop while landed.
 - Commodity exchange with per-system buy/sell prices and realized profit tracking.
-- Government/law system with patrol scans, contraband seizure, fines, and legal-status HUD/landing readout.
+- Government/law system with patrol scans, bribes where allowed, contraband seizure, fines, unpaid-fine confiscation/escalation, clemency offers, and legal-status HUD/landing readout.
 - Laser/pulse projectile combat, hull damage, hostile NPC fire, and bounties.
 - EV-style scanner target lock, target reticle, target cycling, and target hull/range readout.
 - Ambient NPC traffic using file-backed ship definitions across core, border, and rim systems.

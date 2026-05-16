@@ -11,6 +11,9 @@ from native_ev.model import (
     effective_npc_disposition,
     economy_manifest,
     fine_for_contraband,
+    government_patrol_posture,
+    enforcement_outcome,
+    clemency_offer,
     facing_index,
     government_manifest,
     load_universe,
@@ -377,6 +380,66 @@ class NativeEvModelTests(unittest.TestCase):
     def test_contraband_fine_math(self):
         self.assertEqual(fine_for_contraband({'luxuries': 2, 'food': 5}, {'luxuries'}, 400), 800)
         self.assertEqual(fine_for_contraband({'food': 5}, {'luxuries'}, 400), 0)
+
+    def test_police_outcome_bribes_low_level_contraband_when_config_allows(self):
+        governments = government_manifest()
+        reputation = reputation_manifest()
+        outcome = enforcement_outcome(
+            governments,
+            reputation,
+            government='Independent',
+            hold={'medical_supplies': 1, 'food': 2},
+            credits=2000,
+            legal_records={'Independent': 0},
+            accept_bribe=True,
+        )
+        self.assertEqual(outcome['action'], 'bribe')
+        self.assertGreater(outcome['creditsDelta'], -1000)
+        self.assertEqual(outcome['confiscated'], {'medical_supplies': 0})
+        self.assertEqual(outcome['legalDelta'], 0)
+
+    def test_police_outcome_fines_and_confiscates_contraband(self):
+        governments = government_manifest()
+        reputation = reputation_manifest()
+        outcome = enforcement_outcome(
+            governments,
+            reputation,
+            government='Federation',
+            hold={'luxuries': 2, 'food': 3},
+            credits=5000,
+            legal_records={'Federation': 0},
+            accept_bribe=False,
+        )
+        self.assertEqual(outcome['action'], 'fine')
+        self.assertEqual(outcome['creditsDelta'], -800)
+        self.assertEqual(outcome['confiscated'], {'luxuries': 2})
+        self.assertEqual(outcome['legalDelta'], -10)
+
+    def test_police_outcome_escalates_when_player_cannot_pay_fine(self):
+        governments = government_manifest()
+        reputation = reputation_manifest()
+        outcome = enforcement_outcome(
+            governments,
+            reputation,
+            government='Militia Compact',
+            hold={'luxuries': 1, 'medical_supplies': 1},
+            credits=100,
+            legal_records={'Militia Compact': -40},
+            accept_bribe=False,
+        )
+        self.assertEqual(outcome['action'], 'confiscate')
+        self.assertEqual(outcome['confiscated'], {'luxuries': 1, 'medical_supplies': 1})
+        self.assertLessEqual(outcome['legalDelta'], -25)
+        self.assertEqual(government_patrol_posture(reputation, {'Militia Compact': -70}, 'Militia Compact'), 'hostile')
+
+    def test_clemency_offer_reduces_legal_record_for_clean_faction_reputation(self):
+        reputation = reputation_manifest()
+        offer = clemency_offer(reputation, reputation_scores={'Federation': 15}, legal_records={'Federation': -45}, government='Federation')
+        self.assertTrue(offer['available'])
+        self.assertEqual(offer['legalDelta'], 25)
+        self.assertEqual(offer['cost'], 1000)
+        denied = clemency_offer(reputation, reputation_scores={'Federation': -5}, legal_records={'Federation': -45}, government='Federation')
+        self.assertFalse(denied['available'])
 
     def test_reputation_manifest_loads_factions_events_and_legal_thresholds(self):
         data = reputation_manifest()
