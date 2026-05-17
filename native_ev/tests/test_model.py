@@ -182,12 +182,18 @@ class NativeEvModelTests(unittest.TestCase):
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Graphics.rez')
-        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-full-field-v2')
+        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-v3')
         self.assertEqual(data['resourceCount'], 303)
         resources_by_type = {}
         for resource in data['resources']:
             resources_by_type.setdefault(resource['type'], 0)
             resources_by_type[resource['type']] += 1
+        catalog = {entry['type']: entry for entry in data['resourceTypeCatalog']}
+        self.assertEqual(catalog['PICT']['decodeStatus'], 'decoded-to-png')
+        self.assertEqual(catalog['rlëD']['decodeStatus'], 'decoded-to-png')
+        self.assertEqual(catalog['cicn']['decodeStatus'], 'catalog-only-unsupported-raster')
+        self.assertEqual(catalog['ppat']['decodeStatus'], 'catalog-only-unsupported-raster')
+        self.assertEqual(catalog['spïn']['count'], 58)
         self.assertGreaterEqual(resources_by_type['rlëD'], 70)
         self.assertGreaterEqual(resources_by_type['shän'], 25)
         shuttle = next(sprite for sprite in data['shipSprites'] if sprite.get('shipName') == 'Shuttle')
@@ -202,6 +208,12 @@ class NativeEvModelTests(unittest.TestCase):
         weaponry = next(asset for asset in decoded_rled if asset.get('resourceId') == 200)
         self.assertGreaterEqual(weaponry['frames'], 1)
         self.assertTrue(weaponry['assetDir'].startswith('assets/graphics/rled/'))
+        decoded_pict = [asset for asset in data['pictAssets'] if asset.get('status') == 'ok']
+        self.assertGreaterEqual(len(decoded_pict), 90)
+        shipyard_pic = next(asset for asset in decoded_pict if asset.get('resourceId') == 5000)
+        self.assertEqual(shipyard_pic['width'], 100)
+        self.assertEqual(shipyard_pic['height'], 100)
+        self.assertTrue(shipyard_pic['assetFile'].startswith('assets/graphics/pict/'))
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()

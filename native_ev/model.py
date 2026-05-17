@@ -182,7 +182,7 @@ def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
     data = json.loads(path.read_text())
     if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Graphics.rez':
         raise ValueError('sourced EV graphics manifest has unexpected source file')
-    if data.get('method') != 'evnew-opcode-rled-shan-full-field-v2':
+    if data.get('method') != 'evnew-opcode-rled-shan-pict-v3':
         raise ValueError('sourced EV graphics manifest has unexpected extraction method')
     resources = data.get('resources', [])
     if len(resources) < 300:

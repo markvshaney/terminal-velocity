@@ -1,10 +1,60 @@
 {
   "sourceFile": "source-assets/ev-classic/Nova Files/EV Graphics.rez",
   "sourceSha256": "640f7698dcedc5faab86220284802b07a2a6fe719b3f988f5c4a4bcd4c3f89ad",
-  "method": "evnew-opcode-rled-shan-full-field-v2",
-  "note": "Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.",
+  "method": "evnew-opcode-rled-shan-pict-v3",
+  "note": "Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.",
   "chunkCount": 304,
   "resourceCount": 303,
+  "resourceTypeCatalog": [
+    {
+      "type": "PICT",
+      "count": 94,
+      "decodeStatus": "decoded-to-png",
+      "note": "direct-color PackBits PICT raster resources; includes target, shipyard, outfit, and large backdrop images where supported"
+    },
+    {
+      "type": "bööm",
+      "count": 5,
+      "decodeStatus": "catalog-only",
+      "note": "explosion behavior metadata cataloged; referenced visual frames are in rlëD sprite resources"
+    },
+    {
+      "type": "cicn",
+      "count": 29,
+      "decodeStatus": "catalog-only-unsupported-raster",
+      "note": "classic Mac color icon resources cataloged; PNG decoder not implemented yet"
+    },
+    {
+      "type": "ppat",
+      "count": 10,
+      "decodeStatus": "catalog-only-unsupported-raster",
+      "note": "classic Mac pixel-pattern resources cataloged; PNG decoder not implemented yet"
+    },
+    {
+      "type": "rlëD",
+      "count": 78,
+      "decodeStatus": "decoded-to-png",
+      "note": "EV/Nova opcode RLE sprite resources; includes weapons, explosions, cargo boxes, stars, asteroids, ships, planets, stations, and main-screen orbs"
+    },
+    {
+      "type": "röid",
+      "count": 2,
+      "decodeStatus": "catalog-only",
+      "note": "asteroid behavior metadata cataloged; referenced visual frames are in rlëD sprite resources"
+    },
+    {
+      "type": "shän",
+      "count": 27,
+      "decodeStatus": "decoded-metadata-and-ship-pngs",
+      "note": "ship animation metadata decoded into word fields and joined to rlëD ship sprites"
+    },
+    {
+      "type": "spïn",
+      "count": 58,
+      "decodeStatus": "catalog-only",
+      "note": "spin metadata records cataloged; referenced visual frames are in rlëD sprite resources"
+    }
+  ],
   "resources": [
     {
       "type": "bööm",
@@ -21021,6 +21071,4388 @@
       "byteOffset": 2316505,
       "size": 40,
       "status": "decode-error: unsupported rleD header width=32767 height=40 depth=65535 frames=0"
+    }
+  ],
+  "pictAssets": [
+    {
+      "type": "PICT",
+      "resourceId": 3000,
+      "name": "Target Pics",
+      "chunkIndex": 35,
+      "byteOffset": 14703,
+      "size": 2560,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3000_target_pics/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3001,
+      "name": "",
+      "chunkIndex": 36,
+      "byteOffset": 17263,
+      "size": 2530,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3001_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3002,
+      "name": "",
+      "chunkIndex": 37,
+      "byteOffset": 19793,
+      "size": 2870,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3002_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3003,
+      "name": "",
+      "chunkIndex": 38,
+      "byteOffset": 22663,
+      "size": 2544,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3003_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3004,
+      "name": "",
+      "chunkIndex": 39,
+      "byteOffset": 25207,
+      "size": 2790,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3004_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3005,
+      "name": "",
+      "chunkIndex": 40,
+      "byteOffset": 27997,
+      "size": 2758,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3005_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3006,
+      "name": "",
+      "chunkIndex": 41,
+      "byteOffset": 30755,
+      "size": 2536,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3006_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3007,
+      "name": "",
+      "chunkIndex": 42,
+      "byteOffset": 33291,
+      "size": 2120,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3007_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3008,
+      "name": "",
+      "chunkIndex": 43,
+      "byteOffset": 35411,
+      "size": 2430,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3008_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3009,
+      "name": "",
+      "chunkIndex": 44,
+      "byteOffset": 37841,
+      "size": 2196,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3009_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3010,
+      "name": "",
+      "chunkIndex": 45,
+      "byteOffset": 40037,
+      "size": 2366,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3010_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3011,
+      "name": "",
+      "chunkIndex": 46,
+      "byteOffset": 42403,
+      "size": 2968,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3011_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3012,
+      "name": "",
+      "chunkIndex": 47,
+      "byteOffset": 45371,
+      "size": 2608,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3012_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3013,
+      "name": "",
+      "chunkIndex": 48,
+      "byteOffset": 47979,
+      "size": 3076,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3013_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3014,
+      "name": "",
+      "chunkIndex": 49,
+      "byteOffset": 51055,
+      "size": 2416,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3014_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3015,
+      "name": "",
+      "chunkIndex": 50,
+      "byteOffset": 53471,
+      "size": 2758,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3015_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3016,
+      "name": "",
+      "chunkIndex": 51,
+      "byteOffset": 56229,
+      "size": 2366,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3016_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3017,
+      "name": "",
+      "chunkIndex": 52,
+      "byteOffset": 58595,
+      "size": 2512,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3017_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3018,
+      "name": "",
+      "chunkIndex": 53,
+      "byteOffset": 61107,
+      "size": 2176,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3018_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3019,
+      "name": "",
+      "chunkIndex": 54,
+      "byteOffset": 63283,
+      "size": 2738,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3019_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3020,
+      "name": "",
+      "chunkIndex": 55,
+      "byteOffset": 66021,
+      "size": 2728,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3020_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3021,
+      "name": "",
+      "chunkIndex": 56,
+      "byteOffset": 68749,
+      "size": 3126,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3021_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3022,
+      "name": "",
+      "chunkIndex": 57,
+      "byteOffset": 71875,
+      "size": 2652,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3022_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3023,
+      "name": "",
+      "chunkIndex": 58,
+      "byteOffset": 74527,
+      "size": 2804,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3023_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3025,
+      "name": "",
+      "chunkIndex": 59,
+      "byteOffset": 77331,
+      "size": 3680,
+      "width": 128,
+      "height": 64,
+      "assetFile": "assets/graphics/pict/3025_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 512,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 64,
+          "right": 128
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 3767,
+      "name": "",
+      "chunkIndex": 60,
+      "byteOffset": 81011,
+      "size": 7114,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/3767_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5000,
+      "name": "Shipyard",
+      "chunkIndex": 61,
+      "byteOffset": 88125,
+      "size": 4612,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5000_shipyard/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5001,
+      "name": "",
+      "chunkIndex": 62,
+      "byteOffset": 92737,
+      "size": 5590,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5001_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5002,
+      "name": "",
+      "chunkIndex": 63,
+      "byteOffset": 98327,
+      "size": 5630,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5002_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5003,
+      "name": "",
+      "chunkIndex": 64,
+      "byteOffset": 103957,
+      "size": 4754,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5003_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5004,
+      "name": "",
+      "chunkIndex": 65,
+      "byteOffset": 108711,
+      "size": 5330,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5004_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5005,
+      "name": "",
+      "chunkIndex": 66,
+      "byteOffset": 114041,
+      "size": 6332,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5005_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5006,
+      "name": "",
+      "chunkIndex": 67,
+      "byteOffset": 120373,
+      "size": 4790,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5006_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5007,
+      "name": "",
+      "chunkIndex": 68,
+      "byteOffset": 125163,
+      "size": 5180,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5007_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5008,
+      "name": "",
+      "chunkIndex": 69,
+      "byteOffset": 130343,
+      "size": 5452,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5008_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5009,
+      "name": "",
+      "chunkIndex": 70,
+      "byteOffset": 135795,
+      "size": 3930,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5009_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5010,
+      "name": "",
+      "chunkIndex": 71,
+      "byteOffset": 139725,
+      "size": 3594,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5010_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5011,
+      "name": "",
+      "chunkIndex": 72,
+      "byteOffset": 143319,
+      "size": 7582,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5011_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5012,
+      "name": "",
+      "chunkIndex": 73,
+      "byteOffset": 150901,
+      "size": 5294,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5012_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5013,
+      "name": "",
+      "chunkIndex": 74,
+      "byteOffset": 156195,
+      "size": 6706,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5013_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5014,
+      "name": "",
+      "chunkIndex": 75,
+      "byteOffset": 162901,
+      "size": 4124,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5014_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5015,
+      "name": "",
+      "chunkIndex": 76,
+      "byteOffset": 167025,
+      "size": 5498,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5015_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5016,
+      "name": "",
+      "chunkIndex": 77,
+      "byteOffset": 172523,
+      "size": 4572,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5016_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5017,
+      "name": "",
+      "chunkIndex": 78,
+      "byteOffset": 177095,
+      "size": 6358,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5017_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5018,
+      "name": "",
+      "chunkIndex": 79,
+      "byteOffset": 183453,
+      "size": 5182,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5018_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5019,
+      "name": "",
+      "chunkIndex": 80,
+      "byteOffset": 188635,
+      "size": 5934,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5019_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5020,
+      "name": "",
+      "chunkIndex": 81,
+      "byteOffset": 194569,
+      "size": 4094,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5020_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 5023,
+      "name": "",
+      "chunkIndex": 82,
+      "byteOffset": 198663,
+      "size": 4568,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/5023_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6000,
+      "name": "Outfit",
+      "chunkIndex": 83,
+      "byteOffset": 203231,
+      "size": 5778,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6000_outfit/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6001,
+      "name": "",
+      "chunkIndex": 84,
+      "byteOffset": 209009,
+      "size": 5702,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6001_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6002,
+      "name": "",
+      "chunkIndex": 85,
+      "byteOffset": 214711,
+      "size": 3772,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6002_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6003,
+      "name": "",
+      "chunkIndex": 86,
+      "byteOffset": 218483,
+      "size": 5412,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6003_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6004,
+      "name": "",
+      "chunkIndex": 87,
+      "byteOffset": 223895,
+      "size": 6014,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6004_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6005,
+      "name": "",
+      "chunkIndex": 88,
+      "byteOffset": 229909,
+      "size": 4206,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6005_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6006,
+      "name": "",
+      "chunkIndex": 89,
+      "byteOffset": 234115,
+      "size": 8146,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6006_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6007,
+      "name": "",
+      "chunkIndex": 90,
+      "byteOffset": 242261,
+      "size": 10958,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6007_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6008,
+      "name": "",
+      "chunkIndex": 91,
+      "byteOffset": 253219,
+      "size": 11136,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6008_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6009,
+      "name": "",
+      "chunkIndex": 92,
+      "byteOffset": 264355,
+      "size": 16640,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6009_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6010,
+      "name": "",
+      "chunkIndex": 93,
+      "byteOffset": 280995,
+      "size": 5934,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6010_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6011,
+      "name": "",
+      "chunkIndex": 94,
+      "byteOffset": 286929,
+      "size": 3942,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6011_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6012,
+      "name": "",
+      "chunkIndex": 95,
+      "byteOffset": 290871,
+      "size": 4790,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6012_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6013,
+      "name": "",
+      "chunkIndex": 96,
+      "byteOffset": 295661,
+      "size": 5498,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6013_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6014,
+      "name": "",
+      "chunkIndex": 97,
+      "byteOffset": 301159,
+      "size": 4012,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6014_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6015,
+      "name": "",
+      "chunkIndex": 98,
+      "byteOffset": 305171,
+      "size": 5122,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6015_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6016,
+      "name": "",
+      "chunkIndex": 99,
+      "byteOffset": 310293,
+      "size": 9408,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6016_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6017,
+      "name": "",
+      "chunkIndex": 100,
+      "byteOffset": 319701,
+      "size": 5044,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6017_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6018,
+      "name": "",
+      "chunkIndex": 101,
+      "byteOffset": 324745,
+      "size": 7212,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6018_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6019,
+      "name": "",
+      "chunkIndex": 102,
+      "byteOffset": 331957,
+      "size": 11048,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6019_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6020,
+      "name": "",
+      "chunkIndex": 103,
+      "byteOffset": 343005,
+      "size": 11224,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6020_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6021,
+      "name": "",
+      "chunkIndex": 104,
+      "byteOffset": 354229,
+      "size": 3942,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6021_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6022,
+      "name": "",
+      "chunkIndex": 105,
+      "byteOffset": 358171,
+      "size": 3942,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6022_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6023,
+      "name": "",
+      "chunkIndex": 106,
+      "byteOffset": 362113,
+      "size": 3942,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6023_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6024,
+      "name": "",
+      "chunkIndex": 107,
+      "byteOffset": 366055,
+      "size": 5554,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6024_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6025,
+      "name": "",
+      "chunkIndex": 108,
+      "byteOffset": 371609,
+      "size": 6876,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6025_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6026,
+      "name": "",
+      "chunkIndex": 109,
+      "byteOffset": 378485,
+      "size": 9892,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6026_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6027,
+      "name": "",
+      "chunkIndex": 110,
+      "byteOffset": 388377,
+      "size": 8932,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6027_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6028,
+      "name": "",
+      "chunkIndex": 111,
+      "byteOffset": 397309,
+      "size": 6818,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6028_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6029,
+      "name": "",
+      "chunkIndex": 112,
+      "byteOffset": 404127,
+      "size": 10296,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6029_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6030,
+      "name": "",
+      "chunkIndex": 113,
+      "byteOffset": 414423,
+      "size": 7844,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6030_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6031,
+      "name": "",
+      "chunkIndex": 114,
+      "byteOffset": 422267,
+      "size": 4818,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6031_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6032,
+      "name": "",
+      "chunkIndex": 115,
+      "byteOffset": 427085,
+      "size": 8052,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6032_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6033,
+      "name": "",
+      "chunkIndex": 116,
+      "byteOffset": 435137,
+      "size": 7384,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6033_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6034,
+      "name": "",
+      "chunkIndex": 117,
+      "byteOffset": 442521,
+      "size": 5492,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6034_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6035,
+      "name": "",
+      "chunkIndex": 118,
+      "byteOffset": 448013,
+      "size": 3520,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6035_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6036,
+      "name": "",
+      "chunkIndex": 119,
+      "byteOffset": 451533,
+      "size": 5030,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6036_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6037,
+      "name": "",
+      "chunkIndex": 120,
+      "byteOffset": 456563,
+      "size": 16334,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6037_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6040,
+      "name": "",
+      "chunkIndex": 121,
+      "byteOffset": 472897,
+      "size": 9182,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6040_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6041,
+      "name": "",
+      "chunkIndex": 122,
+      "byteOffset": 482079,
+      "size": 8220,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6041_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6046,
+      "name": "",
+      "chunkIndex": 123,
+      "byteOffset": 490299,
+      "size": 2086,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6046_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6047,
+      "name": "",
+      "chunkIndex": 124,
+      "byteOffset": 492385,
+      "size": 4462,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6047_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6052,
+      "name": "",
+      "chunkIndex": 125,
+      "byteOffset": 496847,
+      "size": 6908,
+      "width": 100,
+      "height": 100,
+      "assetFile": "assets/graphics/pict/6052_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 200,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "pmVersion": 0,
+        "packType": 3,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 16,
+        "cmpCount": 3,
+        "cmpSize": 5,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 100,
+          "right": 100
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 6053,
+      "name": "",
+      "chunkIndex": 126,
+      "byteOffset": 503755,
+      "size": 75990,
+      "width": 256,
+      "height": 256,
+      "assetFile": "assets/graphics/pict/6053_pict/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 1024,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 256,
+          "right": 256
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 256,
+          "right": 256
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 256,
+          "right": 256
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 9500,
+      "name": "Serpens Nebula",
+      "chunkIndex": 127,
+      "byteOffset": 579745,
+      "size": 47728,
+      "width": 174,
+      "height": 172,
+      "assetFile": "assets/graphics/pict/9500_serpens_nebula/image.png",
+      "pict": {
+        "opcode": "0x009a",
+        "rowBytes": 696,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 172,
+          "right": 174
+        },
+        "pmVersion": 0,
+        "packType": 4,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 16,
+        "pixelSize": 32,
+        "cmpCount": 3,
+        "cmpSize": 8,
+        "planeBytes": 0,
+        "pmTable": 0,
+        "pmReserved": 0,
+        "srcRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 172,
+          "right": 174
+        },
+        "dstRect": {
+          "top": 0,
+          "left": 0,
+          "bottom": 172,
+          "right": 174
+        },
+        "mode": 0
+      },
+      "status": "ok"
+    },
+    {
+      "type": "PICT",
+      "resourceId": 9507,
+      "name": "Trugati Asteroid Belt",
+      "chunkIndex": 128,
+      "byteOffset": 627473,
+      "size": 686,
+      "status": "decode-error: no supported PackBits PICT opcode found"
     }
   ],
   "shipSprites": [
