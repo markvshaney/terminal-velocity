@@ -182,7 +182,7 @@ class NativeEvModelTests(unittest.TestCase):
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Graphics.rez')
-        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-v3')
+        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-v4')
         self.assertEqual(data['resourceCount'], 303)
         resources_by_type = {}
         for resource in data['resources']:
@@ -218,6 +218,14 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(shipyard_pic['width'], 100)
         self.assertEqual(shipyard_pic['height'], 100)
         self.assertTrue(shipyard_pic['assetFile'].startswith('assets/graphics/pict/'))
+        asteroid_belt_pic = next(asset for asset in decoded_pict if asset.get('resourceId') == 9507)
+        self.assertEqual(asteroid_belt_pic['name'], 'Trugati Asteroid Belt')
+        self.assertEqual(asteroid_belt_pic['width'], 32)
+        self.assertEqual(asteroid_belt_pic['height'], 32)
+        self.assertEqual(asteroid_belt_pic['pict']['format'], 'uncompressed-indexed-pixmap-with-color-table')
+        self.assertEqual(asteroid_belt_pic['pict']['pixmapOffset'], 32)
+        self.assertEqual(asteroid_belt_pic['pict']['pixelSize'], 4)
+        self.assertEqual(asteroid_belt_pic['pict']['colorTable']['ctSize'], 10)
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()

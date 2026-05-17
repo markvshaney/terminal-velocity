@@ -9,11 +9,10 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
   - Finding: the resource-map entry is typed `rlëD`, but the 40-byte payload has sentinel-like non-image words beginning `[32767, 40, -1]`, not a normal rlëD sprite header/stream. It closely resembles nearby fixed-field metadata records rather than drawable sprite data.
   - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts this classification and raw-word prefix.
 
-- [ ] Investigate `PICT` resource `9507` / `Trugati Asteroid Belt`.
-  - Current status: `decode-error: no supported PackBits PICT opcode found`.
-  - Why it remains open: the new PICT decoder supports the direct-color PackBits subset used by the other 93 decoded PICT resources, but this one did not expose a supported opcode in the searched range.
-  - Next local step: inspect its PICT opcode stream and add only source-backed support for the observed format.
-  - Verification target: either decode it to PNG with a test, or record its unsupported format explicitly in the manifest.
+- [x] Investigate `PICT` resource `9507` / `Trugati Asteroid Belt`.
+  - Current status: decoded to PNG in `native_ev/assets/graphics/pict/9507_trugati_asteroid_belt/image.png`.
+  - Finding: unlike the other decoded PICT resources, this 686-byte record does not contain the supported PackBits opcodes; it contains a compact uncompressed indexed PixMap at byte offset 32 (`rowBytes=16`, `bounds=32x32`, `pixelSize=4`) followed by a color table at byte offset 590 (`ctSize=10`).
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts the decoded dimensions, PixMap offset, pixel size, and color-table size.
 
 - [ ] Decode or explicitly defer `cicn` resources.
   - Current status: `catalog-only-unsupported-raster` for 29 classic Mac color icon resources.

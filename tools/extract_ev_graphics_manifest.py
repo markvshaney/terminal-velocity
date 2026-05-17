@@ -22,7 +22,7 @@ DEFAULT_OUT = Path('native_ev/data/sourced_ev_graphics.json')
 DEFAULT_SHIP_OUT = Path('native_ev/assets/ships/ev_classic')
 DEFAULT_RLED_OUT = Path('native_ev/assets/graphics/rled')
 DEFAULT_PICT_OUT = Path('native_ev/assets/graphics/pict')
-METHOD = 'evnew-opcode-rled-shan-pict-v3'
+METHOD = 'evnew-opcode-rled-shan-pict-v4'
 
 
 def slugify(text: str) -> str:
@@ -95,6 +95,99 @@ def _packbits_decode(raw: bytes, expected: int) -> tuple[bytes, int]:
     return bytes(out[:expected]), pos
 
 
+def _decode_color_table(raw: bytes, pos: int) -> tuple[list[tuple[int, int, int]], int, dict]:
+    seed, pos = _unpack_long(raw, pos)
+    flags, pos = _unpack_word(raw, pos)
+    ct_size, pos = _unpack_word(raw, pos)
+    colors: dict[int, tuple[int, int, int]] = {}
+    for _ in range(ct_size + 1):
+        value, pos = _unpack_word(raw, pos)
+        red, pos = _unpack_word(raw, pos)
+        green, pos = _unpack_word(raw, pos)
+        blue, pos = _unpack_word(raw, pos)
+        colors[value] = (red >> 8, green >> 8, blue >> 8)
+    palette = [colors.get(i, (0, 0, 0)) for i in range(max(colors.keys(), default=-1) + 1)]
+    return palette, pos, {'seed': seed, 'flags': flags, 'ctSize': ct_size}
+
+
+def _decode_indexed_pixmap_pict(raw: bytes) -> tuple[int, int, bytearray, dict] | None:
+    # PICT 9507 / Trugati Asteroid Belt is stored as a compact uncompressed
+    # indexed PixMap plus color table, without the PackBits PICT opcode used by
+    # the other decoded EV Classic PICT resources.
+    for pixmap_pos in range(0, min(128, len(raw) - 64), 2):
+        row_word = int.from_bytes(raw[pixmap_pos:pixmap_pos + 2], 'big')
+        if not (row_word & 0x8000):
+            continue
+        row_bytes = row_word & 0x3fff
+        if row_bytes <= 0:
+            continue
+        try:
+            bounds, pos = _unpack_rect(raw, pixmap_pos + 2)
+            top, left, bottom, right = bounds
+            width = right - left
+            height = bottom - top
+            if width <= 0 or height <= 0:
+                continue
+            pm_version, pos = _unpack_word(raw, pos)
+            pack_type, pos = _unpack_word(raw, pos)
+            pack_size, pos = _unpack_long(raw, pos)
+            h_res, pos = _unpack_long(raw, pos)
+            v_res, pos = _unpack_long(raw, pos)
+            pixel_type, pos = _unpack_word(raw, pos)
+            pixel_size, pos = _unpack_word(raw, pos)
+            cmp_count, pos = _unpack_word(raw, pos)
+            cmp_size, pos = _unpack_word(raw, pos)
+            plane_bytes, pos = _unpack_long(raw, pos)
+            pm_table, pos = _unpack_long(raw, pos)
+            pm_reserved, pos = _unpack_long(raw, pos)
+        except struct.error:
+            continue
+        if pixel_size not in (1, 2, 4, 8) or cmp_count != 1 or cmp_size != pixel_size:
+            continue
+        data_bytes = row_bytes * height
+        table_pos = pos + data_bytes
+        if table_pos + 8 > len(raw):
+            continue
+        try:
+            palette, end_pos, color_table = _decode_color_table(raw, table_pos)
+        except (struct.error, ValueError):
+            continue
+        if not palette or end_pos > len(raw):
+            continue
+        rgba = bytearray(width * height * 4)
+        pixels_per_byte = 8 // pixel_size
+        mask = (1 << pixel_size) - 1
+        for y in range(height):
+            row = raw[pos + y * row_bytes:pos + (y + 1) * row_bytes]
+            for x in range(width):
+                packed = row[x // pixels_per_byte]
+                shift = (pixels_per_byte - 1 - (x % pixels_per_byte)) * pixel_size
+                index = (packed >> shift) & mask
+                red, green, blue = palette[index] if index < len(palette) else (0, 0, 0)
+                out_pos = (y * width + x) * 4
+                rgba[out_pos:out_pos + 4] = bytes((red, green, blue, 255))
+        return width, height, rgba, {
+            'format': 'uncompressed-indexed-pixmap-with-color-table',
+            'pixmapOffset': pixmap_pos,
+            'rowBytes': row_bytes,
+            'bounds': {'top': top, 'left': left, 'bottom': bottom, 'right': right},
+            'pmVersion': pm_version,
+            'packType': pack_type,
+            'packSize': pack_size,
+            'hRes': h_res,
+            'vRes': v_res,
+            'pixelType': pixel_type,
+            'pixelSize': pixel_size,
+            'cmpCount': cmp_count,
+            'cmpSize': cmp_size,
+            'planeBytes': plane_bytes,
+            'pmTable': pm_table,
+            'pmReserved': pm_reserved,
+            'colorTable': color_table,
+        }
+    return None
+
+
 def decode_pict(raw: bytes) -> tuple[int, int, bytearray, dict]:
     pos = None
     opcode = None
@@ -105,7 +198,10 @@ def decode_pict(raw: bytes) -> tuple[int, int, bytearray, dict]:
             pos = candidate + 2
             break
     if pos is None or opcode is None:
-        raise ValueError('no supported PackBits PICT opcode found')
+        indexed = _decode_indexed_pixmap_pict(raw)
+        if indexed is not None:
+            return indexed
+        raise ValueError('no supported PackBits PICT opcode or indexed PixMap found')
     _base_addr, pos = _unpack_long(raw, pos)
     row_word, pos = _unpack_word(raw, pos)
     row_bytes = row_word & 0x3fff
