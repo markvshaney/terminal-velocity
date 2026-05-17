@@ -4,11 +4,10 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
 
 ## Decode gaps left open
 
-- [ ] Investigate `rlëD` resource `4004` / `Large Explosion`.
-  - Current status: `decode-error: unsupported rleD header width=32767 height=40 depth=65535 frames=0`.
-  - Why it remains open: it does not match the normal rlëD sprite header decoder used for the other 77 decoded rlëD resources.
-  - Next local step: inspect raw bytes and determine whether this is a special-case sprite, metadata-like resource, or unsupported header variant.
-  - Verification target: either decode it to PNG with a test, or document why it is not a normal drawable asset.
+- [x] Investigate `rlëD` resource `4004` / `Large Explosion`.
+  - Current status: `non-sprite-record` in `native_ev/data/sourced_ev_graphics.json`.
+  - Finding: the resource-map entry is typed `rlëD`, but the 40-byte payload has sentinel-like non-image words beginning `[32767, 40, -1]`, not a normal rlëD sprite header/stream. It closely resembles nearby fixed-field metadata records rather than drawable sprite data.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts this classification and raw-word prefix.
 
 - [ ] Investigate `PICT` resource `9507` / `Trugati Asteroid Belt`.
   - Current status: `decode-error: no supported PackBits PICT opcode found`.

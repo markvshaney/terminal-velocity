@@ -51,6 +51,7 @@ def rled_header(raw: bytes) -> dict:
     reserved = int.from_bytes(raw[6:8], 'big')
     frames = int.from_bytes(raw[8:10], 'big')
     valid = 0 < width <= 512 and 0 < height <= 512 and depth in (8, 16, 32) and 0 < frames <= 256
+    sentinel_record = width == 0x7fff and depth == 0xffff and frames == 0
     return {
         'width': width,
         'height': height,
@@ -58,7 +59,7 @@ def rled_header(raw: bytes) -> dict:
         'reservedWord3': reserved,
         'frameCount': frames,
         'headerBytes': list(raw[:16]),
-        'decodeStatus': 'header-ok' if valid else 'unsupported-header',
+        'decodeStatus': 'header-ok' if valid else ('non-sprite-record' if sentinel_record else 'unsupported-header'),
     }
 
 
@@ -246,15 +247,27 @@ def extract_rled_assets(rez: bytes, chunks: list[tuple[int, int, int]], resource
                 'status': 'ok',
             })
         except Exception as exc:
-            extracted.append({
+            header = rled_header(raw)
+            if header.get('decodeStatus') == 'non-sprite-record':
+                status = 'non-sprite-record'
+                note = 'rlëD resource-map entry contains sentinel-like non-image record bytes, not a normal sprite stream'
+            else:
+                status = f'decode-error: {exc}'
+                note = None
+            entry = {
                 'type': resource['type'],
                 'resourceId': resource['res_id'],
                 'name': resource['name'],
                 'chunkIndex': resource['chunk_index'],
                 'byteOffset': off,
                 'size': size,
-                'status': f'decode-error: {exc}',
-            })
+                'rled': header,
+                'rawWords': words(raw),
+                'status': status,
+            }
+            if note:
+                entry['note'] = note
+            extracted.append(entry)
     return extracted
 
 

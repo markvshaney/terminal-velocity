@@ -208,6 +208,10 @@ class NativeEvModelTests(unittest.TestCase):
         weaponry = next(asset for asset in decoded_rled if asset.get('resourceId') == 200)
         self.assertGreaterEqual(weaponry['frames'], 1)
         self.assertTrue(weaponry['assetDir'].startswith('assets/graphics/rled/'))
+        non_sprite_rled = next(asset for asset in data['rledAssets'] if asset.get('resourceId') == 4004)
+        self.assertEqual(non_sprite_rled['status'], 'non-sprite-record')
+        self.assertEqual(non_sprite_rled['rled']['decodeStatus'], 'non-sprite-record')
+        self.assertEqual(non_sprite_rled['rawWords'][:3], [32767, 40, -1])
         decoded_pict = [asset for asset in data['pictAssets'] if asset.get('status') == 'ok']
         self.assertGreaterEqual(len(decoded_pict), 90)
         shipyard_pic = next(asset for asset in decoded_pict if asset.get('resourceId') == 5000)

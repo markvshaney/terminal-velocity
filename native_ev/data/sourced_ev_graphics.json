@@ -3809,7 +3809,7 @@
           255,
           255
         ],
-        "decodeStatus": "unsupported-header"
+        "decodeStatus": "non-sprite-record"
       }
     },
     {
@@ -21070,7 +21070,56 @@
       "chunkIndex": 216,
       "byteOffset": 2316505,
       "size": 40,
-      "status": "decode-error: unsupported rleD header width=32767 height=40 depth=65535 frames=0"
+      "rled": {
+        "width": 32767,
+        "height": 40,
+        "depth": 65535,
+        "reservedWord3": 0,
+        "frameCount": 0,
+        "headerBytes": [
+          127,
+          255,
+          0,
+          40,
+          255,
+          255,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          255,
+          255
+        ],
+        "decodeStatus": "non-sprite-record"
+      },
+      "rawWords": [
+        32767,
+        40,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        -1,
+        -1,
+        0,
+        -1,
+        32767,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "status": "non-sprite-record",
+      "note": "rlëD resource-map entry contains sentinel-like non-image record bytes, not a normal sprite stream"
     }
   ],
   "pictAssets": [
