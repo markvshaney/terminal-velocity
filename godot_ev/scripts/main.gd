@@ -81,13 +81,14 @@ func _load_data() -> void:
 	outfits = _json(repo_root + "/native_ev/data/outfits.json")
 	weapons = _json(repo_root + "/native_ev/data/weapons.json")
 	current_system = universe.get("systems", [])[current_system_index]
+	var initial_player_ship_id := "argosy"
 	for ship in ships.get("ships", []):
-		if ship.get("id", "") == "shuttle":
+		if ship.get("id", "") == initial_player_ship_id:
 			player_ship = ship
 			break
 	if player_ship.is_empty() and ships.get("ships", []).size() > 0:
 		player_ship = ships["ships"][0]
-	player_ship_id = str(player_ship.get("id", "shuttle"))
+	player_ship_id = str(player_ship.get("id", initial_player_ship_id))
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
 	var player_frame_set := _load_ship_frame_set(player_ship)
 	player_frames = player_frame_set["frames"]
@@ -101,7 +102,7 @@ func _load_data() -> void:
 	var npc_frame_set := _load_ship_frame_set(npc_ship)
 	npc_frames = npc_frame_set["frames"]
 	npc_frame_offsets = npc_frame_set["offsets"]
-	status_line = "Loaded %d systems, %d ships, %d shuttle frames" % [universe.get("systems", []).size(), ships.get("ships", []).size(), player_frames.size()]
+	status_line = "Loaded %d systems, %d ships, %d %s frames" % [universe.get("systems", []).size(), ships.get("ships", []).size(), player_frames.size(), player_ship_id]
 
 func _load_ship_frames(ship: Dictionary) -> Array[Texture2D]:
 	return _load_ship_frame_set(ship)["frames"]
@@ -349,7 +350,6 @@ func _draw_player(center: Vector2) -> void:
 	var tex := player_frames[frame_index]
 	var size := Vector2(tex.get_width(), tex.get_height())
 	_draw_center_registered_ship_cell(center, tex, size)
-	draw_arc(center, max(size.x, size.y) * 0.65, 0, TAU, 36, Color(0.2, 0.75, 1.0, 0.8), 1.2)
 
 func _facing_frame_index(degrees: float, frame_count: int) -> int:
 	if frame_count <= 0:

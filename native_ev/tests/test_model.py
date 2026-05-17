@@ -712,6 +712,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('_front_cell_registration_point', main_script)
         self.assertNotIn('_draw_rotated_ship_texture', main_script)
         self.assertNotIn('draw_set_transform(center, deg_to_rad(angle_deg), Vector2.ONE)', main_script)
+        self.assertNotIn('draw_arc(center,', main_script)
 
     def test_extracted_shuttle_rotation_frames_are_all_decoded(self):
         root = Path(__file__).resolve().parents[2]

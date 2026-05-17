@@ -16,26 +16,27 @@ func _initialize() -> void:
 		printerr("GODOT SELFTEST FAIL no ships")
 		quit(1)
 		return
-	var shuttle := {}
+	var player_check_id := "argosy"
+	var player_ship := {}
 	for ship in ship_defs:
-		if ship.get("id", "") == "shuttle":
-			shuttle = ship
+		if ship.get("id", "") == player_check_id:
+			player_ship = ship
 			break
-	if shuttle.is_empty():
-		printerr("GODOT SELFTEST FAIL no shuttle")
+	if player_ship.is_empty():
+		printerr("GODOT SELFTEST FAIL no " + player_check_id)
 		quit(1)
 		return
-	var asset_dir: String = root + "/native_ev/" + str(shuttle.get("assetDir", ""))
+	var asset_dir: String = root + "/native_ev/" + str(player_ship.get("assetDir", ""))
 	var frame_ok := 0
 	for i in range(FRAME_COUNT):
 		var frame_path: String = asset_dir + "/frame_%02d.png" % i
 		if FileAccess.file_exists(frame_path):
 			frame_ok += 1
 	if frame_ok != FRAME_COUNT:
-		printerr("GODOT SELFTEST FAIL shuttle frames=%d" % frame_ok)
+		printerr("GODOT SELFTEST FAIL %s frames=%d" % [player_check_id, frame_ok])
 		quit(1)
 		return
-	print("GODOT SELFTEST OK systems=%d ships=%d shuttleFrames=%d data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), frame_ok])
+	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok])
 	quit(0)
 
 func _repo_root() -> String:
