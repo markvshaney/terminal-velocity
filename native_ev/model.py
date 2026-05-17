@@ -207,6 +207,61 @@ def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
     return data
 
 
+def _first_embedded_string(record, fallback):
+    strings = record.get('embeddedStrings') or []
+    if strings:
+        return strings[0].get('text') or fallback
+    return fallback
+
+
+def _fields_by_index(record):
+    return {field['wordIndex']: field['value'] for field in record.get('fields', [])}
+
+
+def ship_graphics_crosswalk(structures_path=SOURCED_EV_STRUCTURES_PATH, graphics_path=SOURCED_EV_GRAPHICS_PATH):
+    """Return a diagnostic Data.rez ship-record to Graphics.rez shän crosswalk.
+
+    This is intentionally not the final ship manifest generator. It preserves the
+    authoritative ship-like Data.rez record identity, then lists every candidate
+    field whose value points at a decoded Graphics.rez shän resource. The report
+    makes graphics-name mismatches visible instead of silently promoting shän
+    names to ship identities.
+    """
+    structures = sourced_ev_structures_manifest(structures_path)
+    graphics = sourced_ev_graphics_manifest(graphics_path)
+    ship_run = next(run for run in structures['runs'] if run.get('candidateType') == 'ship-like')
+    shan_by_id = {
+        resource['resourceId']: resource['shan']
+        for resource in graphics['resources']
+        if resource.get('type') == 'shän' and 'shan' in resource
+    }
+    crosswalk = []
+    for record in ship_run.get('records', []):
+        fields = _fields_by_index(record)
+        candidate_refs = []
+        for word_index, value in sorted(fields.items()):
+            shan = shan_by_id.get(value)
+            if shan is None:
+                continue
+            sem = shan.get('semanticFields', {})
+            candidate_refs.append({
+                'wordIndex': word_index,
+                'shanResourceId': value,
+                'shanName': shan.get('name'),
+                'inferredRledResourceId': sem.get('inferredRledResourceId'),
+                'displayWidth': sem.get('displayWidth'),
+                'displayHeight': sem.get('displayHeight'),
+                'facings': sem.get('facings'),
+            })
+        crosswalk.append({
+            'dataOrdinal': record['ordinal'],
+            'dataChunkIndex': record['chunkIndex'],
+            'dataShipName': _first_embedded_string(record, f"ship_{record['ordinal']}"),
+            'candidateShanRefs': candidate_refs,
+        })
+    return crosswalk
+
+
 def _mission_ids(collection):
     return {item['id'] if isinstance(item, dict) else item for item in collection}
 

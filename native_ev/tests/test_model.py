@@ -36,6 +36,7 @@ from native_ev.model import (
     sourced_ev_graphics_manifest,
     sourced_ev_names_manifest,
     sourced_ev_structures_manifest,
+    ship_graphics_crosswalk,
     shuttle_frame_paths,
     station_inventory,
     system_distance,
@@ -228,6 +229,17 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertGreaterEqual(len(traffic_ids), 20)
         shipyard_ids = {entry['shipId'] for entry in outfit_manifest()['shipyard']}
         self.assertTrue(manifest_ids.issubset(shipyard_ids))
+
+    def test_ship_graphics_crosswalk_preserves_data_ship_identity_before_sprite_mapping(self):
+        crosswalk = ship_graphics_crosswalk()
+        kestrels = [entry for entry in crosswalk if entry['dataShipName'] == 'Kestrel']
+        self.assertGreaterEqual(len(kestrels), 2)
+        kestrel = next(entry for entry in kestrels if entry['dataOrdinal'] == 15)
+        self.assertEqual(kestrel['candidateShanRefs'][0]['wordIndex'], 9)
+        self.assertEqual(kestrel['candidateShanRefs'][0]['shanResourceId'], 131)
+        self.assertEqual(kestrel['candidateShanRefs'][0]['shanName'], 'Courier')
+        self.assertNotEqual(kestrel['dataShipName'], kestrel['candidateShanRefs'][0]['shanName'])
+        self.assertGreaterEqual(len(kestrel['candidateShanRefs']), 4)
 
     def test_weapon_manifest_loads_combat_data(self):
         data = weapon_manifest()
