@@ -683,6 +683,18 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(prompt, main_script)
 
+    def test_godot_scanner_has_target_lock_feedback(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'selected_target_index',
+            '_cycle_target',
+            '_draw_scanner_blips',
+            'KEY_T',
+            'Target:',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_ship_sprites_use_center_registered_fixed_cells(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

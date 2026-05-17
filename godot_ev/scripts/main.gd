@@ -33,6 +33,7 @@ var player_facing_index := 0
 var turn_cell_progress := 0.0
 var landed := false
 var selected_link_index := 0
+var selected_target_index := 0
 var stars: Array[Vector2] = []
 var status_line := ""
 var credits := 5000
@@ -196,6 +197,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				_cycle_link(-1)
 			KEY_H:
 				_jump()
+			KEY_T:
+				_cycle_target(1)
 			KEY_F1:
 				landing_tab = 0
 				selected_landing_item = 0
@@ -245,6 +248,18 @@ func _cycle_link(dir: int) -> void:
 		return
 	selected_link_index = (selected_link_index + dir + links.size()) % links.size()
 	status_line = "Destination: " + str(links[selected_link_index])
+
+func _npc_world_offsets() -> Array[Vector2]:
+	return [Vector2(260, -180), Vector2(-340, 220), Vector2(520, 160), Vector2(-640, -260)]
+
+func _cycle_target(dir: int) -> void:
+	var targets := _npc_world_offsets()
+	if targets.is_empty():
+		selected_target_index = 0
+		status_line = "No scanner targets"
+		return
+	selected_target_index = (selected_target_index + dir + targets.size()) % targets.size()
+	status_line = "Target: Contact %d at %.0f range" % [selected_target_index + 1, pos.distance_to(targets[selected_target_index])]
 
 func _jump() -> void:
 	var systems: Array = universe.get("systems", [])
@@ -304,7 +319,7 @@ func _draw_bodies(center: Vector2) -> void:
 	for body in current_system.get("bodies", []):
 		var world := Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
 		var screen := center + (world - pos) * WORLD_SCALE
-		var radius := float(body.get("r", 40)) * WORLD_SCALE
+		var radius: float = float(body.get("r", 40)) * WORLD_SCALE
 		var color := _named_color(str(body.get("color", "SteelBlue")))
 		draw_circle(screen, radius, color)
 		draw_arc(screen, radius + 4, 0, TAU, 40, Color(0.75, 0.80, 0.90), 1.0)
@@ -313,16 +328,15 @@ func _draw_bodies(center: Vector2) -> void:
 func _draw_npcs(center: Vector2) -> void:
 	if npc_frames.is_empty():
 		return
-	var offsets: Array[Vector2] = [Vector2(260, -180), Vector2(-340, 220), Vector2(520, 160), Vector2(-640, -260)]
+	var offsets := _npc_world_offsets()
 	for i in range(offsets.size()):
 		var screen: Vector2 = center + (offsets[i] - pos) * WORLD_SCALE
 		var frame_index := (i * 7) % npc_frames.size()
 		var tex := npc_frames[frame_index]
 		var draw_offset := Vector2(tex.get_width(), tex.get_height()) * 0.5
-		if frame_index < npc_frame_offsets.size():
-			draw_offset = npc_frame_offsets[frame_index]
 		draw_texture_rect(tex, Rect2(screen - draw_offset, Vector2(tex.get_width(), tex.get_height())), false)
-		draw_arc(screen, 28, 0, TAU, 20, Color(0.35, 0.55, 0.80, 0.7), 1.0)
+		var ring_color := Color(1.0, 0.80, 0.20, 0.95) if i == selected_target_index else Color(0.35, 0.55, 0.80, 0.7)
+		draw_arc(screen, 28, 0, TAU, 20, ring_color, 1.0)
 
 func _draw_player(center: Vector2) -> void:
 	if player_frames.is_empty():
@@ -380,7 +394,23 @@ func _draw_hud() -> void:
 	draw_line(Vector2(1135, 112), Vector2(1135, 268), Color(0.12, 0.35, 0.50), 1.0)
 	draw_line(Vector2(1057, 190), Vector2(1213, 190), Color(0.12, 0.35, 0.50), 1.0)
 	draw_string(font, Vector2(1030, 122), "Scanner", HORIZONTAL_ALIGNMENT_LEFT, 200, 16, Color(0.75, 0.95, 1.0))
-	draw_string(font, Vector2(20, 785), "W/A/D thrust+turn  E land  L launch  N/P select jump  H hyperspace  R reset  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+	_draw_scanner_blips(Vector2(1135, 190), 78.0)
+	var target_range := 0.0
+	var targets := _npc_world_offsets()
+	if not targets.is_empty():
+		target_range = pos.distance_to(targets[selected_target_index % targets.size()])
+	draw_string(font, Vector2(1024, 280), "Target: Contact %d  %.0f" % [selected_target_index + 1, target_range], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(1.0, 0.82, 0.35))
+	draw_string(font, Vector2(20, 785), "W/A/D thrust+turn  E land  L launch  T target  N/P select jump  H hyperspace  R reset  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+
+func _draw_scanner_blips(scanner_center: Vector2, scanner_radius: float) -> void:
+	var targets := _npc_world_offsets()
+	for i in range(targets.size()):
+		var relative: Vector2 = (targets[i] - pos) / 8.0
+		if relative.length() > scanner_radius - 8.0:
+			relative = relative.normalized() * (scanner_radius - 8.0)
+		var blip := scanner_center + relative
+		var color := Color(1.0, 0.78, 0.20) if i == selected_target_index else Color(0.30, 0.85, 1.0)
+		draw_circle(blip, 4.0 if i == selected_target_index else 2.5, color)
 
 func _draw_landing_panel() -> void:
 	var nearest := _nearest_body()
