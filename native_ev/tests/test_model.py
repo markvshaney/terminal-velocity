@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import struct
 import unittest
 import zlib
@@ -212,7 +213,7 @@ class NativeEvModelTests(unittest.TestCase):
     def test_ship_manifest_loads_player_and_npc_assets(self):
         data = ship_manifest()
         ids = {ship['id'] for ship in data['ships']}
-        self.assertIn('shuttle', ids)
+        self.assertIn('shuttlecraft', ids)
         self.assertIn('light_freighter', ids)
         self.assertGreaterEqual(len(data['traffic']), 1)
 
@@ -245,18 +246,56 @@ class NativeEvModelTests(unittest.TestCase):
     def test_ev_classic_ship_manifest_is_joined_from_data_identity_to_graphics_assets(self):
         generated = ev_classic_data_ship_manifest()
         by_ordinal = {ship['sourceDataOrdinal']: ship for ship in generated['ships']}
+        self.assertEqual(by_ordinal[0]['id'], 'shuttlecraft')
+        self.assertEqual(by_ordinal[5]['id'], 'confed_frigate')
         self.assertEqual(by_ordinal[5]['name'], 'Confed Frigate')
         self.assertEqual(by_ordinal[5]['shipResourceId'], 133)
         self.assertEqual(by_ordinal[5]['assetDir'], 'assets/ships/ev_classic/frigate')
+        self.assertEqual(by_ordinal[6]['id'], 'confed_cruiser')
         self.assertEqual(by_ordinal[6]['name'], 'Confed Cruiser')
+        self.assertEqual(by_ordinal[14]['role'], 'npc-hostile')
+        self.assertEqual(by_ordinal[22]['role'], 'npc-hostile')
+        self.assertEqual(by_ordinal[11]['id'], 'exec_transport')
+        self.assertEqual(by_ordinal[12]['id'], 'luxury_liner')
         self.assertEqual(by_ordinal[15]['name'], 'Kestrel')
+        self.assertEqual(by_ordinal[15]['id'], 'kestrel')
         self.assertEqual(by_ordinal[15]['shipResourceId'], 143)
         self.assertEqual(by_ordinal[15]['resourceId'], 1030)
+        self.assertEqual(by_ordinal[24]['id'], 'kestrel_24')
         self.assertEqual(by_ordinal[24]['shipResourceId'], 152)
         self.assertEqual(by_ordinal[24]['resourceId'], 1002)
         self.assertEqual(by_ordinal[15]['graphicsName'], 'Kestrel')
         self.assertNotIn(26, by_ordinal)
         self.assertEqual(ship_manifest()['ships'], generated['ships'])
+
+    def test_ship_runtime_consumers_reference_data_identity_ship_ids(self):
+        ships = ship_manifest()
+        outfits = outfit_manifest()
+        universe = load_universe()
+        ids = {ship['id'] for ship in ships['ships']}
+        expected_ids = set()
+        seen = set()
+        for ship in ships['ships']:
+            base_id = re.sub(r'[^a-z0-9]+', '_', ship['name'].lower().replace('ö', 'o').replace('ë', 'e').replace('ï', 'i')).strip('_') or 'unnamed'
+            expected_id = base_id if base_id not in seen else f"{base_id}_{ship['sourceDataOrdinal']}"
+            seen.add(base_id)
+            expected_ids.add(expected_id)
+            self.assertEqual(ship['id'], expected_id)
+        traffic_ids = {entry['shipId'] for entry in ships['traffic']}
+        shipyard_ids = {entry['shipId'] for entry in outfits['shipyard']}
+        inventory_ids = {
+            ship_id
+            for system in universe['systems']
+            for body in system.get('bodies', [])
+            for ship_id in body.get('inventory', {}).get('shipsForSale', [])
+        }
+        self.assertTrue(traffic_ids.issubset(ids))
+        self.assertEqual(shipyard_ids, expected_ids)
+        self.assertTrue(inventory_ids.issubset(ids))
+        self.assertNotIn('frigate', ids)
+        self.assertNotIn('cruiser', ids)
+        self.assertNotIn('gunboat', ids)
+        self.assertNotIn('kestrel_152', ids)
 
     def test_weapon_manifest_loads_combat_data(self):
         data = weapon_manifest()
@@ -364,7 +403,7 @@ class NativeEvModelTests(unittest.TestCase):
         ship_ids = {ship['shipId'] for ship in data['shipyard']}
         self.assertIn('cargo_pod', outfit_ids)
         self.assertIn('hull_plating', outfit_ids)
-        self.assertIn('shuttle', ship_ids)
+        self.assertIn('shuttlecraft', ship_ids)
         self.assertIn('light_freighter', ship_ids)
         self.assertTrue(all(outfit['price'] > 0 for outfit in data['outfits']))
 
@@ -639,7 +678,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(loaded['credits'], 6000)
         self.assertEqual(loaded['currentSystem'], 'Sol')
         self.assertEqual(loaded['selectedSystem'], 'Sol')
-        self.assertEqual(loaded['playerShipId'], 'shuttle')
+        self.assertEqual(loaded['playerShipId'], 'shuttlecraft')
         self.assertEqual(loaded['activeMissionIds'], [])
         self.assertEqual(loaded['completedMissionIds'], [])
         self.assertEqual(loaded['storyFlags'], [])

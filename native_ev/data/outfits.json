@@ -33,9 +33,9 @@
   ],
   "shipyard": [
     {
-      "shipId": "shuttle",
+      "shipId": "shuttlecraft",
       "price": 8000,
-      "description": "Shuttle hull using local EV Classic sprite resource 1000; role player, cargo 20 tons, hull 100."
+      "description": "Shuttlecraft hull using local EV Classic sprite resource 1000; role player, cargo 20 tons, hull 100."
     },
     {
       "shipId": "alien_cruiser",
@@ -50,17 +50,17 @@
     {
       "shipId": "argosy",
       "price": 26227,
-      "description": "Argosy hull using local EV Classic sprite resource 1008; role npc-civilian, cargo 26 tons, hull 165."
+      "description": "Argosy hull using local EV Classic sprite resource 1008; role npc-fast, cargo 26 tons, hull 165."
     },
     {
       "shipId": "bulk_freighter",
       "price": 21722,
-      "description": "Bulk Freighter hull using local EV Classic sprite resource 1020; role npc-trader, cargo 45 tons, hull 130."
+      "description": "Bulk Freighter hull using local EV Classic sprite resource 1020; role npc-trader, cargo 11 tons, hull 85."
     },
     {
       "shipId": "clipper",
       "price": 28887,
-      "description": "Clipper hull using local EV Classic sprite resource 1028; role npc-trader, cargo 45 tons, hull 165."
+      "description": "Clipper hull using local EV Classic sprite resource 1028; role npc-trader, cargo 26 tons, hull 165."
     },
     {
       "shipId": "corvette",
@@ -73,9 +73,9 @@
       "description": "Courier hull using local EV Classic sprite resource 1026; role npc-fast, cargo 26 tons, hull 165."
     },
     {
-      "shipId": "cruiser",
+      "shipId": "confed_cruiser",
       "price": 23672,
-      "description": "Cruiser hull using local EV Classic sprite resource 1012; role npc-patrol, cargo 25 tons, hull 180."
+      "description": "Confed Cruiser hull using local EV Classic sprite resource 1012; role npc-patrol, cargo 25 tons, hull 180."
     },
     {
       "shipId": "defender",
@@ -85,22 +85,22 @@
     {
       "shipId": "escort_carrier",
       "price": 8538,
-      "description": "Escort Carrier hull using local EV Classic sprite resource 1036; role npc-civilian, cargo 8 tons, hull 70."
+      "description": "Escort Carrier hull using local EV Classic sprite resource 1036; role npc-fast, cargo 11 tons, hull 85."
     },
     {
-      "shipId": "executive_transport",
+      "shipId": "exec_transport",
       "price": 28887,
-      "description": "Executive Transport hull using local EV Classic sprite resource 1016; role npc-trader, cargo 45 tons, hull 165."
+      "description": "Exec. Transport hull using local EV Classic sprite resource 1016; role npc-trader, cargo 26 tons, hull 165."
     },
     {
-      "shipId": "frigate",
+      "shipId": "confed_frigate",
       "price": 58822,
-      "description": "Frigate hull using local EV Classic sprite resource 1010; role npc-patrol, cargo 58 tons, hull 370."
+      "description": "Confed Frigate hull using local EV Classic sprite resource 1010; role npc-patrol, cargo 58 tons, hull 370."
     },
     {
-      "shipId": "gunboat",
+      "shipId": "confed_gunboat",
       "price": 16012,
-      "description": "Gunboat hull using local EV Classic sprite resource 1040; role npc-hostile, cargo 11 tons, hull 120."
+      "description": "Confed Gunboat hull using local EV Classic sprite resource 1040; role npc-patrol, cargo 25 tons, hull 180."
     },
     {
       "shipId": "hawk",
@@ -113,7 +113,7 @@
       "description": "Kestrel hull using local EV Classic sprite resource 1030; role npc-fast, cargo 11 tons, hull 85."
     },
     {
-      "shipId": "kestrel_152",
+      "shipId": "kestrel_24",
       "price": 58822,
       "description": "Kestrel hull using local EV Classic sprite resource 1002; role npc-fast, cargo 58 tons, hull 370."
     },
@@ -128,9 +128,9 @@
       "description": "Lightning hull using local EV Classic sprite resource 1004; role npc-fast, cargo 11 tons, hull 85."
     },
     {
-      "shipId": "liner",
+      "shipId": "luxury_liner",
       "price": 28887,
-      "description": "Liner hull using local EV Classic sprite resource 1022; role npc-trader, cargo 45 tons, hull 165."
+      "description": "Luxury Liner hull using local EV Classic sprite resource 1022; role npc-trader, cargo 26 tons, hull 165."
     },
     {
       "shipId": "manta",

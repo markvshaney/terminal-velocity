@@ -281,10 +281,10 @@ def _role_for_ship_name(name):
         return 'player'
     if any(token in lowered for token in ['freighter', 'liner', 'transport', 'clipper']):
         return 'npc-trader'
-    if any(token in lowered for token in ['frigate', 'cruiser', 'patrol', 'defender', 'corvette', 'gunboat']):
-        return 'npc-patrol'
     if any(token in lowered for token in ['alien', 'rebel', 'manta', 'rapier', 'hawk']):
         return 'npc-hostile'
+    if any(token in lowered for token in ['frigate', 'cruiser', 'patrol', 'defender', 'corvette', 'gunboat']):
+        return 'npc-patrol'
     return 'npc-fast'
 
 
@@ -321,9 +321,9 @@ def ev_classic_data_ship_manifest(structures_path=SOURCED_EV_STRUCTURES_PATH, gr
         sprite = sprites_by_shan_id.get(shan_id)
         if sprite is None:
             continue
-        ship_id = _slugify_identifier(sprite['shipName'])
+        ship_id = _slugify_identifier(name)
         if ship_id in used_ids:
-            ship_id = f"{ship_id}_{shan_id}"
+            ship_id = f"{ship_id}_{record['ordinal']}"
         used_ids.add(ship_id)
         stats = _ship_combat_stats(name, sprite['width'], sprite['height'])
         ships.append({
@@ -864,7 +864,7 @@ def normalize_save_data(data):
         'credits': int(data.get('credits', 5000)),
         'currentSystem': current_system,
         'selectedSystem': data.get('selectedSystem', current_system),
-        'playerShipId': data.get('playerShipId', 'shuttle'),
+        'playerShipId': data.get('playerShipId', 'shuttlecraft'),
         'playerHull': float(data.get('playerHull', 100.0)),
         'playerFuel': float(data.get('playerFuel', 100.0)),
         'cargoUsed': int(data.get('cargoUsed', 0)),

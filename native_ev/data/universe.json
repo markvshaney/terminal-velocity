@@ -34,7 +34,7 @@
               "fuel_tank"
             ],
             "shipsForSale": [
-              "shuttle",
+              "shuttlecraft",
               "light_freighter",
               "courier",
               "clipper",
@@ -131,11 +131,11 @@
               "fuel_tank"
             ],
             "shipsForSale": [
-              "shuttle",
+              "shuttlecraft",
               "argosy",
               "bulk_freighter",
-              "liner",
-              "executive_transport"
+              "luxury_liner",
+              "exec_transport"
             ],
             "weaponsForSale": [
               "laser_cannon"
@@ -201,11 +201,11 @@
               "fuel_tank"
             ],
             "shipsForSale": [
-              "shuttle",
+              "shuttlecraft",
               "lightning",
               "kestrel",
               "rapier",
-              "gunboat",
+              "confed_gunboat",
               "manta"
             ],
             "weaponsForSale": [
@@ -285,7 +285,7 @@
               "hull_plating"
             ],
             "shipsForSale": [
-              "shuttle",
+              "shuttlecraft",
               "light_freighter",
               "bulk_freighter",
               "clipper",
@@ -383,12 +383,12 @@
               "fuel_tank"
             ],
             "shipsForSale": [
-              "shuttle",
+              "shuttlecraft",
               "defender",
               "patrol_ship",
               "corvette",
-              "cruiser",
-              "frigate"
+              "confed_cruiser",
+              "confed_frigate"
             ],
             "weaponsForSale": [
               "laser_cannon",
@@ -454,7 +454,7 @@
               "fuel_tank"
             ],
             "shipsForSale": [
-              "shuttle",
+              "shuttlecraft",
               "hawk",
               "alien_fighter",
               "alien_cruiser",
@@ -518,7 +518,7 @@
               "fuel_tank"
             ],
             "shipsForSale": [
-              "shuttle",
+              "shuttlecraft",
               "scoutship",
               "courier",
               "kestrel"

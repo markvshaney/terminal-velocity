@@ -46,7 +46,7 @@ var story_flags: Array = []
 var commodity_hold: Dictionary = {}
 var owned_outfits: Dictionary = {}
 var owned_weapons: Dictionary = {}
-var player_ship_id := "shuttle"
+var player_ship_id := "shuttlecraft"
 var cargo_space := 20
 
 func _ready() -> void:
