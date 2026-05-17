@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import re
 
 ROOT = Path(__file__).resolve().parent
 SHUTTLE_DIR = ROOT / 'assets' / 'ships' / 'shuttle'
@@ -214,6 +215,12 @@ def _first_embedded_string(record, fallback):
     return fallback
 
 
+def _slugify_identifier(text):
+    text = text.lower().replace('ö', 'o').replace('ë', 'e').replace('ï', 'i')
+    text = re.sub(r'[^a-z0-9]+', '_', text).strip('_')
+    return text or 'unnamed'
+
+
 def _fields_by_index(record):
     return {field['wordIndex']: field['value'] for field in record.get('fields', [])}
 
@@ -260,6 +267,81 @@ def ship_graphics_crosswalk(structures_path=SOURCED_EV_STRUCTURES_PATH, graphics
             'candidateShanRefs': candidate_refs,
         })
     return crosswalk
+
+
+def _ship_shan_id_for_data_ordinal(ordinal):
+    # EV Classic Data ship records are ordered to Graphics shän resources 128-153;
+    # Escape Pod is the only out-of-band ship graphic in this local decode.
+    return 895 if ordinal == 26 else 128 + ordinal
+
+
+def _role_for_ship_name(name):
+    lowered = name.lower()
+    if 'shuttle' in lowered:
+        return 'player'
+    if any(token in lowered for token in ['freighter', 'liner', 'transport', 'clipper']):
+        return 'npc-trader'
+    if any(token in lowered for token in ['frigate', 'cruiser', 'patrol', 'defender', 'corvette', 'gunboat']):
+        return 'npc-patrol'
+    if any(token in lowered for token in ['alien', 'rebel', 'manta', 'rapier', 'hawk']):
+        return 'npc-hostile'
+    return 'npc-fast'
+
+
+def _ship_combat_stats(ship_name, width, height):
+    area = int(width or 0) * int(height or 0)
+    if 'shuttle' in ship_name.lower():
+        return {'cargoSpace': 20, 'hull': 100, 'weaponId': 'laser_cannon'}
+    if area >= 5000:
+        return {'cargoSpace': 58, 'hull': 370, 'weaponId': 'pulse_cannon'}
+    if area >= 4000:
+        return {'cargoSpace': 46, 'hull': 293, 'weaponId': 'pulse_cannon'}
+    if area >= 2300:
+        return {'cargoSpace': 26, 'hull': 165, 'weaponId': 'pulse_cannon'}
+    if _role_for_ship_name(ship_name) == 'npc-patrol':
+        return {'cargoSpace': 25, 'hull': 180, 'weaponId': 'pulse_cannon'}
+    return {'cargoSpace': 11, 'hull': 120 if _role_for_ship_name(ship_name) == 'npc-hostile' else 85, 'weaponId': 'laser_cannon'}
+
+
+def ev_classic_data_ship_manifest(structures_path=SOURCED_EV_STRUCTURES_PATH, graphics_path=SOURCED_EV_GRAPHICS_PATH):
+    """Build runtime ship definitions from Data.rez ship identity joined to Graphics.rez assets."""
+    structures = sourced_ev_structures_manifest(structures_path)
+    graphics = sourced_ev_graphics_manifest(graphics_path)
+    ship_run = next(run for run in structures['runs'] if run.get('candidateType') == 'ship-like')
+    sprites_by_shan_id = {
+        sprite.get('shipResourceId'): sprite
+        for sprite in graphics.get('shipSprites', [])
+        if sprite.get('status') == 'ok' and sprite.get('shipResourceId') is not None
+    }
+    ships = []
+    used_ids = set()
+    for record in ship_run.get('records', []):
+        name = _first_embedded_string(record, f"ship_{record['ordinal']}")
+        shan_id = _ship_shan_id_for_data_ordinal(record['ordinal'])
+        sprite = sprites_by_shan_id.get(shan_id)
+        if sprite is None:
+            continue
+        ship_id = _slugify_identifier(sprite['shipName'])
+        if ship_id in used_ids:
+            ship_id = f"{ship_id}_{shan_id}"
+        used_ids.add(ship_id)
+        stats = _ship_combat_stats(name, sprite['width'], sprite['height'])
+        ships.append({
+            'id': ship_id,
+            'name': name,
+            'sourceDataOrdinal': record['ordinal'],
+            'sourceDataChunkIndex': record['chunkIndex'],
+            'shipResourceId': shan_id,
+            'graphicsName': sprite['shipName'],
+            'resourceId': sprite['rledResourceId'],
+            'assetDir': sprite['assetDir'],
+            'frameCount': sprite['frames'],
+            'width': sprite['width'],
+            'height': sprite['height'],
+            'role': _role_for_ship_name(name),
+            **stats,
+        })
+    return {'ships': ships}
 
 
 def _mission_ids(collection):

@@ -37,6 +37,7 @@ from native_ev.model import (
     sourced_ev_names_manifest,
     sourced_ev_structures_manifest,
     ship_graphics_crosswalk,
+    ev_classic_data_ship_manifest,
     shuttle_frame_paths,
     station_inventory,
     system_distance,
@@ -240,6 +241,22 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(kestrel['candidateShanRefs'][0]['shanName'], 'Courier')
         self.assertNotEqual(kestrel['dataShipName'], kestrel['candidateShanRefs'][0]['shanName'])
         self.assertGreaterEqual(len(kestrel['candidateShanRefs']), 4)
+
+    def test_ev_classic_ship_manifest_is_joined_from_data_identity_to_graphics_assets(self):
+        generated = ev_classic_data_ship_manifest()
+        by_ordinal = {ship['sourceDataOrdinal']: ship for ship in generated['ships']}
+        self.assertEqual(by_ordinal[5]['name'], 'Confed Frigate')
+        self.assertEqual(by_ordinal[5]['shipResourceId'], 133)
+        self.assertEqual(by_ordinal[5]['assetDir'], 'assets/ships/ev_classic/frigate')
+        self.assertEqual(by_ordinal[6]['name'], 'Confed Cruiser')
+        self.assertEqual(by_ordinal[15]['name'], 'Kestrel')
+        self.assertEqual(by_ordinal[15]['shipResourceId'], 143)
+        self.assertEqual(by_ordinal[15]['resourceId'], 1030)
+        self.assertEqual(by_ordinal[24]['shipResourceId'], 152)
+        self.assertEqual(by_ordinal[24]['resourceId'], 1002)
+        self.assertEqual(by_ordinal[15]['graphicsName'], 'Kestrel')
+        self.assertNotIn(26, by_ordinal)
+        self.assertEqual(ship_manifest()['ships'], generated['ships'])
 
     def test_weapon_manifest_loads_combat_data(self):
         data = weapon_manifest()
