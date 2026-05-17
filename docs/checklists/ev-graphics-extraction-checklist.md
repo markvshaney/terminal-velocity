@@ -14,11 +14,10 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
   - Finding: unlike the other decoded PICT resources, this 686-byte record does not contain the supported PackBits opcodes; it contains a compact uncompressed indexed PixMap at byte offset 32 (`rowBytes=16`, `bounds=32x32`, `pixelSize=4`) followed by a color table at byte offset 590 (`ctSize=10`).
   - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts the decoded dimensions, PixMap offset, pixel size, and color-table size.
 
-- [ ] Decode or explicitly defer `cicn` resources.
-  - Current status: `catalog-only-unsupported-raster` for 29 classic Mac color icon resources.
-  - Why it remains open: they are raster/icon resources, but no `cicn` PNG decoder was implemented in the pass.
-  - Next local step: inspect representative `cicn` raw records and identify the icon/pixmap layout.
-  - Verification target: decoded PNGs under a stable asset directory, plus manifest/test coverage; or a documented defer decision.
+- [x] Decode or explicitly defer `cicn` resources.
+  - Current status: 28 classic Mac color icon resources decoded to PNG under `native_ev/assets/graphics/cicn/`; resource `20000` remains an explicit `decode-error: unsupported cicn PixMap header` with raw header bytes preserved in the manifest.
+  - Finding: the supported records use a classic `cicn` layout: PixMap header, mask BitMap, icon BitMap, mask/bitmap payloads, 4-byte pad, ColorTable, then indexed pixel data. Decoded cases cover 1-, 2-, 4-, and 8-bit indexed PixMaps with mask-derived alpha.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts decoded `cicn` count, representative 1-bit/8-bit dimensions and metadata, and the explicit unsupported `20000` status.
 
 - [ ] Decode or explicitly defer `ppat` resources.
   - Current status: `catalog-only-unsupported-raster` for 10 classic Mac pixel-pattern resources.
@@ -66,7 +65,7 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
 ## Verification commands for the next pass
 
 ```bash
-python3 tools/extract_ev_graphics_manifest.py --extract-ship-sprites --extract-rled-assets --extract-pict-assets
+python3 tools/extract_ev_graphics_manifest.py --extract-ship-sprites --extract-rled-assets --extract-pict-assets --extract-cicn-assets
 python3 -m unittest native_ev.tests.test_model
 rsync -a --delete native_ev/data/ /mnt/c/Users/bh/Games/TerminalVelocity/native_ev/data/
 rsync -a godot_ev/scripts/ /mnt/c/Users/bh/Games/TerminalVelocity/godot_ev/scripts/

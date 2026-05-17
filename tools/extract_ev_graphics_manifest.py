@@ -22,7 +22,8 @@ DEFAULT_OUT = Path('native_ev/data/sourced_ev_graphics.json')
 DEFAULT_SHIP_OUT = Path('native_ev/assets/ships/ev_classic')
 DEFAULT_RLED_OUT = Path('native_ev/assets/graphics/rled')
 DEFAULT_PICT_OUT = Path('native_ev/assets/graphics/pict')
-METHOD = 'evnew-opcode-rled-shan-pict-v4'
+DEFAULT_CICN_OUT = Path('native_ev/assets/graphics/cicn')
+METHOD = 'evnew-opcode-rled-shan-pict-cicn-v5'
 
 
 def slugify(text: str) -> str:
@@ -110,6 +111,100 @@ def _decode_color_table(raw: bytes, pos: int) -> tuple[list[tuple[int, int, int]
     return palette, pos, {'seed': seed, 'flags': flags, 'ctSize': ct_size}
 
 
+def _indexed_rgba(pixel_data: bytes, width: int, height: int, row_bytes: int, pixel_size: int, palette: list[tuple[int, int, int]], mask_data: bytes | None = None, mask_row_bytes: int = 0) -> bytearray:
+    rgba = bytearray(width * height * 4)
+    pixels_per_byte = 8 // pixel_size
+    mask = (1 << pixel_size) - 1
+    for y in range(height):
+        row = pixel_data[y * row_bytes:(y + 1) * row_bytes]
+        mask_row = mask_data[y * mask_row_bytes:(y + 1) * mask_row_bytes] if mask_data is not None else None
+        for x in range(width):
+            packed = row[x // pixels_per_byte]
+            shift = (pixels_per_byte - 1 - (x % pixels_per_byte)) * pixel_size
+            index = (packed >> shift) & mask
+            red, green, blue = palette[index] if index < len(palette) else (0, 0, 0)
+            alpha = 255
+            if mask_row is not None:
+                alpha = 255 if ((mask_row[x // 8] >> (7 - (x % 8))) & 1) else 0
+            out_pos = (y * width + x) * 4
+            rgba[out_pos:out_pos + 4] = bytes((red, green, blue, alpha))
+    return rgba
+
+
+def decode_cicn(raw: bytes) -> tuple[int, int, bytearray, dict]:
+    if len(raw) < 82:
+        raise ValueError('too short for classic cicn header')
+    base_addr = int.from_bytes(raw[0:4], 'big')
+    row_word = int.from_bytes(raw[4:6], 'big')
+    if base_addr != 0 or not (row_word & 0x8000):
+        raise ValueError('unsupported cicn PixMap header')
+    row_bytes = row_word & 0x3fff
+    bounds, pos = _unpack_rect(raw, 6)
+    top, left, bottom, right = bounds
+    width = right - left
+    height = bottom - top
+    if width <= 0 or height <= 0 or row_bytes <= 0:
+        raise ValueError(f'invalid cicn bounds={bounds} rowBytes={row_bytes}')
+    pm_version, pos = _unpack_word(raw, pos)
+    pack_type, pos = _unpack_word(raw, pos)
+    pack_size, pos = _unpack_long(raw, pos)
+    h_res, pos = _unpack_long(raw, pos)
+    v_res, pos = _unpack_long(raw, pos)
+    pixel_type, pos = _unpack_word(raw, pos)
+    pixel_size, pos = _unpack_word(raw, pos)
+    cmp_count, pos = _unpack_word(raw, pos)
+    cmp_size, pos = _unpack_word(raw, pos)
+    plane_bytes, pos = _unpack_long(raw, pos)
+    pm_table, pos = _unpack_long(raw, pos)
+    pm_reserved, pos = _unpack_long(raw, pos)
+    if pos != 50:
+        raise ValueError(f'unexpected cicn PixMap length {pos}')
+    mask_base, pos = _unpack_long(raw, pos)
+    mask_row_bytes, pos = _unpack_word(raw, pos)
+    mask_rect, pos = _unpack_rect(raw, pos)
+    bitmap_base, pos = _unpack_long(raw, pos)
+    bitmap_row_bytes, pos = _unpack_word(raw, pos)
+    bitmap_rect, pos = _unpack_rect(raw, pos)
+    if pixel_size not in (1, 2, 4, 8) or cmp_count != 1 or cmp_size != pixel_size:
+        raise ValueError(f'unsupported cicn pixel layout pixelSize={pixel_size} cmpCount={cmp_count} cmpSize={cmp_size}')
+    if mask_base != 0 or bitmap_base != 0 or mask_rect != bounds or bitmap_rect != bounds:
+        raise ValueError('unsupported cicn mask/bitmap bounds')
+    mask_bytes = mask_row_bytes * height
+    bitmap_bytes = bitmap_row_bytes * height
+    color_table_pos = pos + mask_bytes + bitmap_bytes + 4
+    if color_table_pos + 8 > len(raw):
+        raise ValueError('cicn color table offset exceeds resource size')
+    palette, pixel_pos, color_table = _decode_color_table(raw, color_table_pos)
+    pixel_bytes = row_bytes * height
+    if pixel_pos + pixel_bytes != len(raw):
+        raise ValueError(f'cicn pixel data has unexpected length expectedEnd={pixel_pos + pixel_bytes} size={len(raw)}')
+    mask_data = raw[pos:pos + mask_bytes]
+    pixel_data = raw[pixel_pos:pixel_pos + pixel_bytes]
+    rgba = _indexed_rgba(pixel_data, width, height, row_bytes, pixel_size, palette, mask_data, mask_row_bytes)
+    return width, height, rgba, {
+        'format': 'classic-cicn-indexed-pixmap-with-mask-and-color-table',
+        'rowBytes': row_bytes,
+        'bounds': {'top': top, 'left': left, 'bottom': bottom, 'right': right},
+        'pmVersion': pm_version,
+        'packType': pack_type,
+        'packSize': pack_size,
+        'hRes': h_res,
+        'vRes': v_res,
+        'pixelType': pixel_type,
+        'pixelSize': pixel_size,
+        'cmpCount': cmp_count,
+        'cmpSize': cmp_size,
+        'planeBytes': plane_bytes,
+        'pmTable': pm_table,
+        'pmReserved': pm_reserved,
+        'maskRowBytes': mask_row_bytes,
+        'bitmapRowBytes': bitmap_row_bytes,
+        'colorTableOffset': color_table_pos,
+        'pixelDataOffset': pixel_pos,
+        'colorTable': color_table,
+    }
+
+
 def _decode_indexed_pixmap_pict(raw: bytes) -> tuple[int, int, bytearray, dict] | None:
     # PICT 9507 / Trugati Asteroid Belt is stored as a compact uncompressed
     # indexed PixMap plus color table, without the PackBits PICT opcode used by
@@ -154,18 +249,8 @@ def _decode_indexed_pixmap_pict(raw: bytes) -> tuple[int, int, bytearray, dict] 
             continue
         if not palette or end_pos > len(raw):
             continue
-        rgba = bytearray(width * height * 4)
-        pixels_per_byte = 8 // pixel_size
-        mask = (1 << pixel_size) - 1
-        for y in range(height):
-            row = raw[pos + y * row_bytes:pos + (y + 1) * row_bytes]
-            for x in range(width):
-                packed = row[x // pixels_per_byte]
-                shift = (pixels_per_byte - 1 - (x % pixels_per_byte)) * pixel_size
-                index = (packed >> shift) & mask
-                red, green, blue = palette[index] if index < len(palette) else (0, 0, 0)
-                out_pos = (y * width + x) * 4
-                rgba[out_pos:out_pos + 4] = bytes((red, green, blue, 255))
+        pixel_data = raw[pos:pos + data_bytes]
+        rgba = _indexed_rgba(pixel_data, width, height, row_bytes, pixel_size, palette)
         return width, height, rgba, {
             'format': 'uncompressed-indexed-pixmap-with-color-table',
             'pixmapOffset': pixmap_pos,
@@ -412,6 +497,52 @@ def extract_pict_assets(rez: bytes, chunks: list[tuple[int, int, int]], resource
     return extracted
 
 
+def extract_cicn_assets(rez: bytes, chunks: list[tuple[int, int, int]], resources: list[dict], out_root: Path) -> list[dict]:
+    if out_root.exists():
+        shutil.rmtree(out_root)
+    out_root.mkdir(parents=True, exist_ok=True)
+    extracted = []
+    used_slugs: set[str] = set()
+    for resource in [r for r in resources if r['type'] == 'cicn']:
+        _, off, size = chunks[resource['chunk_index']]
+        raw = rez[off:off + size]
+        slug = f"{resource['res_id']}_{slugify(resource['name'] or 'cicn')}"
+        if slug in used_slugs:
+            slug = f"{slug}_{resource['chunk_index']}"
+        used_slugs.add(slug)
+        outdir = out_root / slug
+        try:
+            width, height, rgba, cicn = decode_cicn(raw)
+            outdir.mkdir(parents=True, exist_ok=True)
+            png_path = outdir / 'image.png'
+            write_png(png_path, width, height, rgba)
+            extracted.append({
+                'type': resource['type'],
+                'resourceId': resource['res_id'],
+                'name': resource['name'],
+                'chunkIndex': resource['chunk_index'],
+                'byteOffset': off,
+                'size': size,
+                'width': width,
+                'height': height,
+                'assetFile': relative_asset_dir(png_path),
+                'cicn': cicn,
+                'status': 'ok',
+            })
+        except Exception as exc:
+            extracted.append({
+                'type': resource['type'],
+                'resourceId': resource['res_id'],
+                'name': resource['name'],
+                'chunkIndex': resource['chunk_index'],
+                'byteOffset': off,
+                'size': size,
+                'rawHeaderBytes': list(raw[:32]),
+                'status': f'decode-error: {exc}',
+            })
+    return extracted
+
+
 def extract_ship_frames(rez: bytes, chunks: list[tuple[int, int, int]], resources: list[dict], shan_entries: list[dict], out_root: Path) -> list[dict]:
     by_type_id = {(r['type'], r['res_id']): r for r in resources}
     if out_root.exists():
@@ -461,7 +592,7 @@ def extract_ship_frames(rez: bytes, chunks: list[tuple[int, int, int]], resource
     return extracted
 
 
-def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pict: bool, extract_sprites: bool) -> list[dict]:
+def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pict: bool, extract_cicn: bool, extract_sprites: bool) -> list[dict]:
     counts: dict[str, int] = {}
     for resource in resources:
         counts[resource['type']] = counts.get(resource['type'], 0) + 1
@@ -470,7 +601,7 @@ def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pic
         'rlëD': 'EV/Nova opcode RLE sprite resources; includes weapons, explosions, cargo boxes, stars, asteroids, ships, planets, stations, and main-screen orbs',
         'shän': 'ship animation metadata decoded into word fields and joined to rlëD ship sprites',
         'spïn': 'spin metadata records cataloged; referenced visual frames are in rlëD sprite resources',
-        'cicn': 'classic Mac color icon resources cataloged; PNG decoder not implemented yet',
+        'cicn': 'classic Mac color icon resources; supported indexed PixMap records decode to PNG, unsupported nonstandard entries remain explicit decode errors',
         'ppat': 'classic Mac pixel-pattern resources cataloged; PNG decoder not implemented yet',
         'bööm': 'explosion behavior metadata cataloged; referenced visual frames are in rlëD sprite resources',
         'röid': 'asteroid behavior metadata cataloged; referenced visual frames are in rlëD sprite resources',
@@ -480,7 +611,7 @@ def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pic
         'rlëD': 'decoded-to-png' if extract_rled else 'catalog-only',
         'shän': 'decoded-metadata-and-ship-pngs' if extract_sprites else 'decoded-metadata-only',
         'spïn': 'catalog-only',
-        'cicn': 'catalog-only-unsupported-raster',
+        'cicn': 'decoded-to-png-with-explicit-errors' if extract_cicn else 'catalog-only-unsupported-raster',
         'ppat': 'catalog-only-unsupported-raster',
         'bööm': 'catalog-only',
         'röid': 'catalog-only',
@@ -491,7 +622,7 @@ def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pic
     ]
 
 
-def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_rled: bool, rled_out: Path, extract_pict: bool, pict_out: Path) -> dict:
+def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_rled: bool, rled_out: Path, extract_pict: bool, pict_out: Path, extract_cicn: bool, cicn_out: Path) -> dict:
     rez = source.read_bytes()
     chunks = iter_chunks(rez)
     resources = iter_resources(rez, chunks)
@@ -517,17 +648,19 @@ def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_
     ship_sprites = extract_ship_frames(rez, chunks, resources, shan_entries, ship_out) if extract_sprites else []
     rled_assets = extract_rled_assets(rez, chunks, resources, rled_out) if extract_rled else []
     pict_assets = extract_pict_assets(rez, chunks, resources, pict_out) if extract_pict else []
+    cicn_assets = extract_cicn_assets(rez, chunks, resources, cicn_out) if extract_cicn else []
     return {
         'sourceFile': str(source),
         'sourceSha256': hashlib.sha256(rez).hexdigest(),
         'method': METHOD,
-        'note': 'Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.',
+        'note': 'Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT/cicn PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.',
         'chunkCount': len(chunks),
         'resourceCount': len(resources),
-        'resourceTypeCatalog': resource_type_catalog(resources, extract_rled, extract_pict, extract_sprites),
+        'resourceTypeCatalog': resource_type_catalog(resources, extract_rled, extract_pict, extract_cicn, extract_sprites),
         'resources': decoded_resources,
         'rledAssets': rled_assets,
         'pictAssets': pict_assets,
+        'cicnAssets': cicn_assets,
         'shipSprites': ship_sprites,
     }
 
@@ -539,17 +672,20 @@ def main() -> None:
     ap.add_argument('--ship-out', type=Path, default=DEFAULT_SHIP_OUT)
     ap.add_argument('--rled-out', type=Path, default=DEFAULT_RLED_OUT)
     ap.add_argument('--pict-out', type=Path, default=DEFAULT_PICT_OUT)
+    ap.add_argument('--cicn-out', type=Path, default=DEFAULT_CICN_OUT)
     ap.add_argument('--extract-ship-sprites', action='store_true')
     ap.add_argument('--extract-rled-assets', action='store_true')
     ap.add_argument('--extract-pict-assets', action='store_true')
+    ap.add_argument('--extract-cicn-assets', action='store_true')
     args = ap.parse_args()
-    manifest = build_manifest(args.source, args.extract_ship_sprites, args.ship_out, args.extract_rled_assets, args.rled_out, args.extract_pict_assets, args.pict_out)
+    manifest = build_manifest(args.source, args.extract_ship_sprites, args.ship_out, args.extract_rled_assets, args.rled_out, args.extract_pict_assets, args.pict_out, args.extract_cicn_assets, args.cicn_out)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
     ok = sum(1 for s in manifest['shipSprites'] if s.get('status') == 'ok')
     rled_ok = sum(1 for s in manifest['rledAssets'] if s.get('status') == 'ok')
     pict_ok = sum(1 for s in manifest['pictAssets'] if s.get('status') == 'ok')
-    print(f"wrote {args.out} resources={manifest['resourceCount']} shipSprites={ok} rledAssets={rled_ok} pictAssets={pict_ok}")
+    cicn_ok = sum(1 for s in manifest['cicnAssets'] if s.get('status') == 'ok')
+    print(f"wrote {args.out} resources={manifest['resourceCount']} shipSprites={ok} rledAssets={rled_ok} pictAssets={pict_ok} cicnAssets={cicn_ok}")
 
 
 if __name__ == '__main__':

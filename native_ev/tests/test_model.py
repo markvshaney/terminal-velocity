@@ -182,7 +182,7 @@ class NativeEvModelTests(unittest.TestCase):
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Graphics.rez')
-        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-v4')
+        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-cicn-v5')
         self.assertEqual(data['resourceCount'], 303)
         resources_by_type = {}
         for resource in data['resources']:
@@ -191,7 +191,7 @@ class NativeEvModelTests(unittest.TestCase):
         catalog = {entry['type']: entry for entry in data['resourceTypeCatalog']}
         self.assertEqual(catalog['PICT']['decodeStatus'], 'decoded-to-png')
         self.assertEqual(catalog['rlëD']['decodeStatus'], 'decoded-to-png')
-        self.assertEqual(catalog['cicn']['decodeStatus'], 'catalog-only-unsupported-raster')
+        self.assertEqual(catalog['cicn']['decodeStatus'], 'decoded-to-png-with-explicit-errors')
         self.assertEqual(catalog['ppat']['decodeStatus'], 'catalog-only-unsupported-raster')
         self.assertEqual(catalog['spïn']['count'], 58)
         self.assertGreaterEqual(resources_by_type['rlëD'], 70)
@@ -226,6 +226,21 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(asteroid_belt_pic['pict']['pixmapOffset'], 32)
         self.assertEqual(asteroid_belt_pic['pict']['pixelSize'], 4)
         self.assertEqual(asteroid_belt_pic['pict']['colorTable']['ctSize'], 10)
+        decoded_cicn = [asset for asset in data['cicnAssets'] if asset.get('status') == 'ok']
+        self.assertEqual(len(decoded_cicn), 28)
+        cicn_1bit = next(asset for asset in decoded_cicn if asset.get('resourceId') == 10000)
+        self.assertEqual(cicn_1bit['width'], 16)
+        self.assertEqual(cicn_1bit['height'], 16)
+        self.assertEqual(cicn_1bit['cicn']['pixelSize'], 1)
+        self.assertEqual(cicn_1bit['cicn']['colorTableOffset'], 146)
+        cicn_8bit = next(asset for asset in decoded_cicn if asset.get('resourceId') == 18000)
+        self.assertEqual(cicn_8bit['width'], 32)
+        self.assertEqual(cicn_8bit['height'], 32)
+        self.assertEqual(cicn_8bit['cicn']['pixelSize'], 8)
+        self.assertEqual(cicn_8bit['cicn']['colorTable']['ctSize'], 19)
+        unsupported_cicn = next(asset for asset in data['cicnAssets'] if asset.get('resourceId') == 20000)
+        self.assertEqual(unsupported_cicn['status'], 'decode-error: unsupported cicn PixMap header')
+        self.assertEqual(unsupported_cicn['rawHeaderBytes'][:6], [0, 0, 0, 0, 0, 0])
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()

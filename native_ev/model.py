@@ -182,7 +182,7 @@ def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
     data = json.loads(path.read_text())
     if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Graphics.rez':
         raise ValueError('sourced EV graphics manifest has unexpected source file')
-    if data.get('method') != 'evnew-opcode-rled-shan-pict-v4':
+    if data.get('method') != 'evnew-opcode-rled-shan-pict-cicn-v5':
         raise ValueError('sourced EV graphics manifest has unexpected extraction method')
     resources = data.get('resources', [])
     if len(resources) < 300:
@@ -205,6 +205,14 @@ def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
         frames = list(asset_dir.glob('frame_*.png'))
         if len(frames) != sprite['frames']:
             raise ValueError(f"sourced EV sprite {sprite['shipName']} expected {sprite['frames']} frames, got {len(frames)}")
+    cicn_assets = data.get('cicnAssets', [])
+    ok_cicn_assets = [asset for asset in cicn_assets if asset.get('status') == 'ok']
+    if len(ok_cicn_assets) < 28:
+        raise ValueError('sourced EV graphics manifest has too few decoded cicn icon assets')
+    for asset in ok_cicn_assets[:5]:
+        asset_file = ROOT / asset['assetFile']
+        if not asset_file.exists():
+            raise ValueError(f"sourced EV cicn asset {asset['resourceId']} missing PNG {asset_file}")
     return data
 
 
