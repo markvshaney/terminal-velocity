@@ -19,11 +19,10 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
   - Finding: the supported records use a classic `cicn` layout: PixMap header, mask BitMap, icon BitMap, mask/bitmap payloads, 4-byte pad, ColorTable, then indexed pixel data. Decoded cases cover 1-, 2-, 4-, and 8-bit indexed PixMaps with mask-derived alpha.
   - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts decoded `cicn` count, representative 1-bit/8-bit dimensions and metadata, and the explicit unsupported `20000` status.
 
-- [ ] Decode or explicitly defer `ppat` resources.
-  - Current status: `catalog-only-unsupported-raster` for 10 classic Mac pixel-pattern resources.
-  - Why it remains open: they are raster/pattern resources, but no `ppat` PNG decoder was implemented in the pass.
-  - Next local step: inspect representative `ppat` raw records and identify the pattern/pixmap layout.
-  - Verification target: decoded PNGs under a stable asset directory, plus manifest/test coverage; or a documented defer decision.
+- [x] Decode or explicitly defer `ppat` resources.
+  - Current status: 9 classic Mac pixel-pattern resources decoded to PNG under `native_ev/assets/graphics/ppat/`; resource `137` remains an explicit `decode-error: unsupported ppat PixPat/PixMap layout` with raw header bytes preserved in the manifest.
+  - Finding: resources `128`–`136` use a compact indexed PixPat/PixMap layout matching the uncompressed indexed PixMap+ColorTable form already observed in PICT `9507`: PixMap at byte offset 32, `32x32`, `rowBytes=16`, `pixelSize=4`, with a color table. Resource `133` uses `ctSize=9`; the others use `ctSize=10`.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts decoded `ppat` count, representative metadata, and explicit unsupported `137` status.
 
 ## Metadata families not yet semantically integrated
 
@@ -65,7 +64,7 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
 ## Verification commands for the next pass
 
 ```bash
-python3 tools/extract_ev_graphics_manifest.py --extract-ship-sprites --extract-rled-assets --extract-pict-assets --extract-cicn-assets
+python3 tools/extract_ev_graphics_manifest.py --extract-ship-sprites --extract-rled-assets --extract-pict-assets --extract-cicn-assets --extract-ppat-assets
 python3 -m unittest native_ev.tests.test_model
 rsync -a --delete native_ev/data/ /mnt/c/Users/bh/Games/TerminalVelocity/native_ev/data/
 rsync -a godot_ev/scripts/ /mnt/c/Users/bh/Games/TerminalVelocity/godot_ev/scripts/

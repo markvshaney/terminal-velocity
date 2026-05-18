@@ -1,8 +1,8 @@
 {
   "sourceFile": "source-assets/ev-classic/Nova Files/EV Graphics.rez",
   "sourceSha256": "640f7698dcedc5faab86220284802b07a2a6fe719b3f988f5c4a4bcd4c3f89ad",
-  "method": "evnew-opcode-rled-shan-pict-cicn-v5",
-  "note": "Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT/cicn PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.",
+  "method": "evnew-opcode-rled-shan-pict-cicn-ppat-v6",
+  "note": "Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT/cicn/ppat PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.",
   "chunkCount": 304,
   "resourceCount": 303,
   "resourceTypeCatalog": [
@@ -27,8 +27,8 @@
     {
       "type": "ppat",
       "count": 10,
-      "decodeStatus": "catalog-only-unsupported-raster",
-      "note": "classic Mac pixel-pattern resources cataloged; PNG decoder not implemented yet"
+      "decodeStatus": "decoded-to-png-with-explicit-errors",
+      "note": "classic Mac pixel-pattern resources; supported indexed PixPat records decode to PNG, unsupported nonstandard entries remain explicit decode errors"
     },
     {
       "type": "rlëD",
@@ -26782,6 +26782,411 @@
         0
       ],
       "status": "decode-error: unsupported cicn PixMap header"
+    }
+  ],
+  "ppatAssets": [
+    {
+      "type": "ppat",
+      "resourceId": 128,
+      "name": "",
+      "chunkIndex": 129,
+      "byteOffset": 628159,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/128_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 129,
+      "name": "",
+      "chunkIndex": 130,
+      "byteOffset": 628845,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/129_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 130,
+      "name": "",
+      "chunkIndex": 131,
+      "byteOffset": 629531,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/130_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 131,
+      "name": "",
+      "chunkIndex": 132,
+      "byteOffset": 630217,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/131_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 132,
+      "name": "",
+      "chunkIndex": 133,
+      "byteOffset": 630903,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/132_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 133,
+      "name": "",
+      "chunkIndex": 134,
+      "byteOffset": 631589,
+      "size": 678,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/133_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 9
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 134,
+      "name": "",
+      "chunkIndex": 135,
+      "byteOffset": 632267,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/134_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 135,
+      "name": "",
+      "chunkIndex": 136,
+      "byteOffset": 632953,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/135_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 136,
+      "name": "",
+      "chunkIndex": 137,
+      "byteOffset": 633639,
+      "size": 686,
+      "width": 32,
+      "height": 32,
+      "assetFile": "assets/graphics/ppat/136_ppat/image.png",
+      "ppat": {
+        "format": "classic-ppat-indexed-pixpat-with-color-table",
+        "pixmapOffset": 32,
+        "rowBytes": 16,
+        "bounds": {
+          "top": 0,
+          "left": 0,
+          "bottom": 32,
+          "right": 32
+        },
+        "pmVersion": 0,
+        "packType": 0,
+        "packSize": 0,
+        "hRes": 4718592,
+        "vRes": 4718592,
+        "pixelType": 0,
+        "pixelSize": 4,
+        "cmpCount": 1,
+        "cmpSize": 4,
+        "planeBytes": 0,
+        "pmTable": 590,
+        "pmReserved": 0,
+        "colorTable": {
+          "seed": 0,
+          "flags": 0,
+          "ctSize": 10
+        }
+      },
+      "status": "ok"
+    },
+    {
+      "type": "ppat",
+      "resourceId": 137,
+      "name": "",
+      "chunkIndex": 138,
+      "byteOffset": 634325,
+      "size": 5360,
+      "rawHeaderBytes": [
+        0,
+        8,
+        0,
+        8,
+        0,
+        16,
+        0,
+        0,
+        0,
+        36,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        16,
+        3,
+        0,
+        0,
+        4,
+        2,
+        0,
+        0,
+        8,
+        8,
+        0,
+        84,
+        0
+      ],
+      "status": "decode-error: unsupported ppat PixPat/PixMap layout"
     }
   ],
   "shipSprites": [

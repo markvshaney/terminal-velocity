@@ -182,7 +182,7 @@ def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
     data = json.loads(path.read_text())
     if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Graphics.rez':
         raise ValueError('sourced EV graphics manifest has unexpected source file')
-    if data.get('method') != 'evnew-opcode-rled-shan-pict-cicn-v5':
+    if data.get('method') != 'evnew-opcode-rled-shan-pict-cicn-ppat-v6':
         raise ValueError('sourced EV graphics manifest has unexpected extraction method')
     resources = data.get('resources', [])
     if len(resources) < 300:
@@ -213,6 +213,14 @@ def sourced_ev_graphics_manifest(path=SOURCED_EV_GRAPHICS_PATH):
         asset_file = ROOT / asset['assetFile']
         if not asset_file.exists():
             raise ValueError(f"sourced EV cicn asset {asset['resourceId']} missing PNG {asset_file}")
+    ppat_assets = data.get('ppatAssets', [])
+    ok_ppat_assets = [asset for asset in ppat_assets if asset.get('status') == 'ok']
+    if len(ok_ppat_assets) < 9:
+        raise ValueError('sourced EV graphics manifest has too few decoded ppat pattern assets')
+    for asset in ok_ppat_assets[:5]:
+        asset_file = ROOT / asset['assetFile']
+        if not asset_file.exists():
+            raise ValueError(f"sourced EV ppat asset {asset['resourceId']} missing PNG {asset_file}")
     return data
 
 

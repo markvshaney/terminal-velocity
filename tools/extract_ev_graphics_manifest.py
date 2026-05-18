@@ -23,7 +23,8 @@ DEFAULT_SHIP_OUT = Path('native_ev/assets/ships/ev_classic')
 DEFAULT_RLED_OUT = Path('native_ev/assets/graphics/rled')
 DEFAULT_PICT_OUT = Path('native_ev/assets/graphics/pict')
 DEFAULT_CICN_OUT = Path('native_ev/assets/graphics/cicn')
-METHOD = 'evnew-opcode-rled-shan-pict-cicn-v5'
+DEFAULT_PPAT_OUT = Path('native_ev/assets/graphics/ppat')
+METHOD = 'evnew-opcode-rled-shan-pict-cicn-ppat-v6'
 
 
 def slugify(text: str) -> str:
@@ -543,6 +544,56 @@ def extract_cicn_assets(rez: bytes, chunks: list[tuple[int, int, int]], resource
     return extracted
 
 
+def extract_ppat_assets(rez: bytes, chunks: list[tuple[int, int, int]], resources: list[dict], out_root: Path) -> list[dict]:
+    if out_root.exists():
+        shutil.rmtree(out_root)
+    out_root.mkdir(parents=True, exist_ok=True)
+    extracted = []
+    used_slugs: set[str] = set()
+    for resource in [r for r in resources if r['type'] == 'ppat']:
+        _, off, size = chunks[resource['chunk_index']]
+        raw = rez[off:off + size]
+        slug = f"{resource['res_id']}_{slugify(resource['name'] or 'ppat')}"
+        if slug in used_slugs:
+            slug = f"{slug}_{resource['chunk_index']}"
+        used_slugs.add(slug)
+        outdir = out_root / slug
+        try:
+            decoded = _decode_indexed_pixmap_pict(raw)
+            if decoded is None:
+                raise ValueError('unsupported ppat PixPat/PixMap layout')
+            width, height, rgba, ppat = decoded
+            ppat['format'] = 'classic-ppat-indexed-pixpat-with-color-table'
+            outdir.mkdir(parents=True, exist_ok=True)
+            png_path = outdir / 'image.png'
+            write_png(png_path, width, height, rgba)
+            extracted.append({
+                'type': resource['type'],
+                'resourceId': resource['res_id'],
+                'name': resource['name'],
+                'chunkIndex': resource['chunk_index'],
+                'byteOffset': off,
+                'size': size,
+                'width': width,
+                'height': height,
+                'assetFile': relative_asset_dir(png_path),
+                'ppat': ppat,
+                'status': 'ok',
+            })
+        except Exception as exc:
+            extracted.append({
+                'type': resource['type'],
+                'resourceId': resource['res_id'],
+                'name': resource['name'],
+                'chunkIndex': resource['chunk_index'],
+                'byteOffset': off,
+                'size': size,
+                'rawHeaderBytes': list(raw[:32]),
+                'status': f'decode-error: {exc}',
+            })
+    return extracted
+
+
 def extract_ship_frames(rez: bytes, chunks: list[tuple[int, int, int]], resources: list[dict], shan_entries: list[dict], out_root: Path) -> list[dict]:
     by_type_id = {(r['type'], r['res_id']): r for r in resources}
     if out_root.exists():
@@ -592,7 +643,7 @@ def extract_ship_frames(rez: bytes, chunks: list[tuple[int, int, int]], resource
     return extracted
 
 
-def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pict: bool, extract_cicn: bool, extract_sprites: bool) -> list[dict]:
+def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pict: bool, extract_cicn: bool, extract_ppat: bool, extract_sprites: bool) -> list[dict]:
     counts: dict[str, int] = {}
     for resource in resources:
         counts[resource['type']] = counts.get(resource['type'], 0) + 1
@@ -602,7 +653,7 @@ def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pic
         'shän': 'ship animation metadata decoded into word fields and joined to rlëD ship sprites',
         'spïn': 'spin metadata records cataloged; referenced visual frames are in rlëD sprite resources',
         'cicn': 'classic Mac color icon resources; supported indexed PixMap records decode to PNG, unsupported nonstandard entries remain explicit decode errors',
-        'ppat': 'classic Mac pixel-pattern resources cataloged; PNG decoder not implemented yet',
+        'ppat': 'classic Mac pixel-pattern resources; supported indexed PixPat records decode to PNG, unsupported nonstandard entries remain explicit decode errors',
         'bööm': 'explosion behavior metadata cataloged; referenced visual frames are in rlëD sprite resources',
         'röid': 'asteroid behavior metadata cataloged; referenced visual frames are in rlëD sprite resources',
     }
@@ -612,7 +663,7 @@ def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pic
         'shän': 'decoded-metadata-and-ship-pngs' if extract_sprites else 'decoded-metadata-only',
         'spïn': 'catalog-only',
         'cicn': 'decoded-to-png-with-explicit-errors' if extract_cicn else 'catalog-only-unsupported-raster',
-        'ppat': 'catalog-only-unsupported-raster',
+        'ppat': 'decoded-to-png-with-explicit-errors' if extract_ppat else 'catalog-only-unsupported-raster',
         'bööm': 'catalog-only',
         'röid': 'catalog-only',
     }
@@ -622,7 +673,7 @@ def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pic
     ]
 
 
-def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_rled: bool, rled_out: Path, extract_pict: bool, pict_out: Path, extract_cicn: bool, cicn_out: Path) -> dict:
+def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_rled: bool, rled_out: Path, extract_pict: bool, pict_out: Path, extract_cicn: bool, cicn_out: Path, extract_ppat: bool, ppat_out: Path) -> dict:
     rez = source.read_bytes()
     chunks = iter_chunks(rez)
     resources = iter_resources(rez, chunks)
@@ -649,18 +700,20 @@ def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_
     rled_assets = extract_rled_assets(rez, chunks, resources, rled_out) if extract_rled else []
     pict_assets = extract_pict_assets(rez, chunks, resources, pict_out) if extract_pict else []
     cicn_assets = extract_cicn_assets(rez, chunks, resources, cicn_out) if extract_cicn else []
+    ppat_assets = extract_ppat_assets(rez, chunks, resources, ppat_out) if extract_ppat else []
     return {
         'sourceFile': str(source),
         'sourceSha256': hashlib.sha256(rez).hexdigest(),
         'method': METHOD,
-        'note': 'Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT/cicn PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.',
+        'note': 'Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT/cicn/ppat PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.',
         'chunkCount': len(chunks),
         'resourceCount': len(resources),
-        'resourceTypeCatalog': resource_type_catalog(resources, extract_rled, extract_pict, extract_cicn, extract_sprites),
+        'resourceTypeCatalog': resource_type_catalog(resources, extract_rled, extract_pict, extract_cicn, extract_ppat, extract_sprites),
         'resources': decoded_resources,
         'rledAssets': rled_assets,
         'pictAssets': pict_assets,
         'cicnAssets': cicn_assets,
+        'ppatAssets': ppat_assets,
         'shipSprites': ship_sprites,
     }
 
@@ -673,19 +726,22 @@ def main() -> None:
     ap.add_argument('--rled-out', type=Path, default=DEFAULT_RLED_OUT)
     ap.add_argument('--pict-out', type=Path, default=DEFAULT_PICT_OUT)
     ap.add_argument('--cicn-out', type=Path, default=DEFAULT_CICN_OUT)
+    ap.add_argument('--ppat-out', type=Path, default=DEFAULT_PPAT_OUT)
     ap.add_argument('--extract-ship-sprites', action='store_true')
     ap.add_argument('--extract-rled-assets', action='store_true')
     ap.add_argument('--extract-pict-assets', action='store_true')
     ap.add_argument('--extract-cicn-assets', action='store_true')
+    ap.add_argument('--extract-ppat-assets', action='store_true')
     args = ap.parse_args()
-    manifest = build_manifest(args.source, args.extract_ship_sprites, args.ship_out, args.extract_rled_assets, args.rled_out, args.extract_pict_assets, args.pict_out, args.extract_cicn_assets, args.cicn_out)
+    manifest = build_manifest(args.source, args.extract_ship_sprites, args.ship_out, args.extract_rled_assets, args.rled_out, args.extract_pict_assets, args.pict_out, args.extract_cicn_assets, args.cicn_out, args.extract_ppat_assets, args.ppat_out)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n')
     ok = sum(1 for s in manifest['shipSprites'] if s.get('status') == 'ok')
     rled_ok = sum(1 for s in manifest['rledAssets'] if s.get('status') == 'ok')
     pict_ok = sum(1 for s in manifest['pictAssets'] if s.get('status') == 'ok')
     cicn_ok = sum(1 for s in manifest['cicnAssets'] if s.get('status') == 'ok')
-    print(f"wrote {args.out} resources={manifest['resourceCount']} shipSprites={ok} rledAssets={rled_ok} pictAssets={pict_ok} cicnAssets={cicn_ok}")
+    ppat_ok = sum(1 for s in manifest['ppatAssets'] if s.get('status') == 'ok')
+    print(f"wrote {args.out} resources={manifest['resourceCount']} shipSprites={ok} rledAssets={rled_ok} pictAssets={pict_ok} cicnAssets={cicn_ok} ppatAssets={ppat_ok}")
 
 
 if __name__ == '__main__':

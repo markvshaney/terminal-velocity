@@ -182,7 +182,7 @@ class NativeEvModelTests(unittest.TestCase):
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Graphics.rez')
-        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-cicn-v5')
+        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-cicn-ppat-v6')
         self.assertEqual(data['resourceCount'], 303)
         resources_by_type = {}
         for resource in data['resources']:
@@ -192,7 +192,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(catalog['PICT']['decodeStatus'], 'decoded-to-png')
         self.assertEqual(catalog['rlëD']['decodeStatus'], 'decoded-to-png')
         self.assertEqual(catalog['cicn']['decodeStatus'], 'decoded-to-png-with-explicit-errors')
-        self.assertEqual(catalog['ppat']['decodeStatus'], 'catalog-only-unsupported-raster')
+        self.assertEqual(catalog['ppat']['decodeStatus'], 'decoded-to-png-with-explicit-errors')
         self.assertEqual(catalog['spïn']['count'], 58)
         self.assertGreaterEqual(resources_by_type['rlëD'], 70)
         self.assertGreaterEqual(resources_by_type['shän'], 25)
@@ -241,6 +241,20 @@ class NativeEvModelTests(unittest.TestCase):
         unsupported_cicn = next(asset for asset in data['cicnAssets'] if asset.get('resourceId') == 20000)
         self.assertEqual(unsupported_cicn['status'], 'decode-error: unsupported cicn PixMap header')
         self.assertEqual(unsupported_cicn['rawHeaderBytes'][:6], [0, 0, 0, 0, 0, 0])
+        decoded_ppat = [asset for asset in data['ppatAssets'] if asset.get('status') == 'ok']
+        self.assertEqual(len(decoded_ppat), 9)
+        ppat_128 = next(asset for asset in decoded_ppat if asset.get('resourceId') == 128)
+        self.assertEqual(ppat_128['width'], 32)
+        self.assertEqual(ppat_128['height'], 32)
+        self.assertEqual(ppat_128['ppat']['format'], 'classic-ppat-indexed-pixpat-with-color-table')
+        self.assertEqual(ppat_128['ppat']['pixmapOffset'], 32)
+        self.assertEqual(ppat_128['ppat']['pixelSize'], 4)
+        self.assertEqual(ppat_128['ppat']['colorTable']['ctSize'], 10)
+        ppat_133 = next(asset for asset in decoded_ppat if asset.get('resourceId') == 133)
+        self.assertEqual(ppat_133['ppat']['colorTable']['ctSize'], 9)
+        unsupported_ppat = next(asset for asset in data['ppatAssets'] if asset.get('resourceId') == 137)
+        self.assertEqual(unsupported_ppat['status'], 'decode-error: unsupported ppat PixPat/PixMap layout')
+        self.assertEqual(unsupported_ppat['rawHeaderBytes'][:4], [0, 8, 0, 8])
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()
