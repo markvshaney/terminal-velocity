@@ -24,12 +24,13 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
   - Finding: resources `128`–`136` use a compact indexed PixPat/PixMap layout matching the uncompressed indexed PixMap+ColorTable form already observed in PICT `9507`: PixMap at byte offset 32, `32x32`, `rowBytes=16`, `pixelSize=4`, with a color table. Resource `133` uses `ctSize=9`; the others use `ctSize=10`.
   - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts decoded `ppat` count, representative metadata, and explicit unsupported `137` status.
 
-## Metadata families not yet semantically integrated
+## Deferred metadata semantics to decode later
 
-- [ ] Interpret `spïn` records beyond cataloging.
+- [ ] Interpret `spïn` spin metadata records beyond cataloging.
   - Current status: 58 `spïn` records cataloged only.
-  - Why it remains open: the visual frames are largely in `rlëD`, but `spïn` likely controls spin/animation metadata and has not been semantically decoded.
-  - Next local step: decode all 16-bit fields and correlate with `rlëD` IDs for planets, stations, asteroids, stars, and main-screen orbs.
+  - Deferred/later rationale: this likely controls spin/animation metadata, but it is less immediately runtime-visible than wiring already-decoded PICT assets into Godot.
+  - Why it remains open: the visual frames are largely in `rlëD`, but `spïn` has not been semantically decoded.
+  - Later local step: decode all 16-bit fields and correlate with `rlëD` IDs for planets, stations, asteroids, stars, and main-screen orbs.
 
 - [ ] Interpret `bööm` records beyond cataloging.
   - Current status: 5 `bööm` records cataloged only.
