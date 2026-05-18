@@ -15,7 +15,11 @@
       "role": "player",
       "cargoSpace": 20,
       "hull": 100,
-      "weaponId": "laser_cannon"
+      "weaponId": "laser_cannon",
+      "shipyardPictResourceId": 5000,
+      "shipyardPictAssetFile": "assets/graphics/pict/5000_shipyard/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "light_freighter",
@@ -32,7 +36,11 @@
       "role": "npc-trader",
       "cargoSpace": 58,
       "hull": 370,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5001,
+      "shipyardPictAssetFile": "assets/graphics/pict/5001_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "bulk_freighter",
@@ -49,7 +57,11 @@
       "role": "npc-trader",
       "cargoSpace": 11,
       "hull": 85,
-      "weaponId": "laser_cannon"
+      "weaponId": "laser_cannon",
+      "shipyardPictResourceId": 5002,
+      "shipyardPictAssetFile": "assets/graphics/pict/5002_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "courier",
@@ -66,7 +78,11 @@
       "role": "npc-fast",
       "cargoSpace": 26,
       "hull": 165,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5003,
+      "shipyardPictAssetFile": "assets/graphics/pict/5003_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "argosy",
@@ -83,7 +99,11 @@
       "role": "npc-fast",
       "cargoSpace": 26,
       "hull": 165,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5004,
+      "shipyardPictAssetFile": "assets/graphics/pict/5004_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "confed_frigate",
@@ -100,7 +120,11 @@
       "role": "npc-patrol",
       "cargoSpace": 58,
       "hull": 370,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5005,
+      "shipyardPictAssetFile": "assets/graphics/pict/5005_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "confed_cruiser",
@@ -117,7 +141,11 @@
       "role": "npc-patrol",
       "cargoSpace": 25,
       "hull": 180,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5006,
+      "shipyardPictAssetFile": "assets/graphics/pict/5006_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "patrol_ship",
@@ -134,7 +162,11 @@
       "role": "npc-patrol",
       "cargoSpace": 25,
       "hull": 180,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5007,
+      "shipyardPictAssetFile": "assets/graphics/pict/5007_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "rapier",
@@ -151,7 +183,11 @@
       "role": "npc-hostile",
       "cargoSpace": 11,
       "hull": 120,
-      "weaponId": "laser_cannon"
+      "weaponId": "laser_cannon",
+      "shipyardPictResourceId": 5008,
+      "shipyardPictAssetFile": "assets/graphics/pict/5008_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "lightning",
@@ -168,7 +204,11 @@
       "role": "npc-fast",
       "cargoSpace": 11,
       "hull": 85,
-      "weaponId": "laser_cannon"
+      "weaponId": "laser_cannon",
+      "shipyardPictResourceId": 5009,
+      "shipyardPictAssetFile": "assets/graphics/pict/5009_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "defender",
@@ -185,7 +225,11 @@
       "role": "npc-patrol",
       "cargoSpace": 25,
       "hull": 180,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5010,
+      "shipyardPictAssetFile": "assets/graphics/pict/5010_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "exec_transport",
@@ -202,7 +246,11 @@
       "role": "npc-trader",
       "cargoSpace": 26,
       "hull": 165,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5011,
+      "shipyardPictAssetFile": "assets/graphics/pict/5011_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "luxury_liner",
@@ -219,7 +267,11 @@
       "role": "npc-trader",
       "cargoSpace": 26,
       "hull": 165,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5012,
+      "shipyardPictAssetFile": "assets/graphics/pict/5012_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "rebel_destroyer",
@@ -236,7 +288,11 @@
       "role": "npc-hostile",
       "cargoSpace": 46,
       "hull": 293,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5013,
+      "shipyardPictAssetFile": "assets/graphics/pict/5013_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "rebel_cruiser",
@@ -253,7 +309,11 @@
       "role": "npc-hostile",
       "cargoSpace": 26,
       "hull": 165,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5014,
+      "shipyardPictAssetFile": "assets/graphics/pict/5014_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "kestrel",
@@ -270,7 +330,11 @@
       "role": "npc-fast",
       "cargoSpace": 11,
       "hull": 85,
-      "weaponId": "laser_cannon"
+      "weaponId": "laser_cannon",
+      "shipyardPictResourceId": 5015,
+      "shipyardPictAssetFile": "assets/graphics/pict/5015_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "manta",
@@ -287,7 +351,11 @@
       "role": "npc-hostile",
       "cargoSpace": 11,
       "hull": 120,
-      "weaponId": "laser_cannon"
+      "weaponId": "laser_cannon",
+      "shipyardPictResourceId": 5016,
+      "shipyardPictAssetFile": "assets/graphics/pict/5016_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "scoutship",
@@ -304,7 +372,11 @@
       "role": "npc-fast",
       "cargoSpace": 26,
       "hull": 165,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5017,
+      "shipyardPictAssetFile": "assets/graphics/pict/5017_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "corvette",
@@ -321,7 +393,11 @@
       "role": "npc-patrol",
       "cargoSpace": 25,
       "hull": 180,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5018,
+      "shipyardPictAssetFile": "assets/graphics/pict/5018_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "confed_gunboat",
@@ -338,7 +414,11 @@
       "role": "npc-patrol",
       "cargoSpace": 25,
       "hull": 180,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5019,
+      "shipyardPictAssetFile": "assets/graphics/pict/5019_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "hawk",
@@ -355,7 +435,11 @@
       "role": "npc-hostile",
       "cargoSpace": 11,
       "hull": 120,
-      "weaponId": "laser_cannon"
+      "weaponId": "laser_cannon",
+      "shipyardPictResourceId": 5020,
+      "shipyardPictAssetFile": "assets/graphics/pict/5020_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "alien_fighter",
@@ -406,7 +490,11 @@
       "role": "npc-trader",
       "cargoSpace": 26,
       "hull": 165,
-      "weaponId": "pulse_cannon"
+      "weaponId": "pulse_cannon",
+      "shipyardPictResourceId": 5023,
+      "shipyardPictAssetFile": "assets/graphics/pict/5023_pict/image.png",
+      "shipyardPictWidth": 100,
+      "shipyardPictHeight": 100
     },
     {
       "id": "kestrel_24",

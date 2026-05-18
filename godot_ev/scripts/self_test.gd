@@ -18,6 +18,7 @@ func _initialize() -> void:
 		quit(1)
 		return
 	var loaded_sounds := _verify_sound_assets(root, sounds)
+	var loaded_picts := _verify_shipyard_picts(root, ship_defs)
 	var player_check_id := "argosy"
 	var player_ship := {}
 	for ship in ship_defs:
@@ -38,8 +39,30 @@ func _initialize() -> void:
 		printerr("GODOT SELFTEST FAIL %s frames=%d" % [player_check_id, frame_ok])
 		quit(1)
 		return
-	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds])
+	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d pictsLoaded=%d data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, loaded_picts])
 	quit(0)
+
+func _verify_shipyard_picts(root: String, ship_defs: Array) -> int:
+	var loaded := 0
+	for ship in ship_defs:
+		var asset_file := str(ship.get("shipyardPictAssetFile", ""))
+		if asset_file == "":
+			continue
+		var image := Image.new()
+		var err := image.load(root + "/native_ev/" + asset_file)
+		if err != OK:
+			printerr("GODOT SELFTEST FAIL pict missing " + asset_file)
+			quit(1)
+			return loaded
+		if image.get_width() <= 0 or image.get_height() <= 0:
+			printerr("GODOT SELFTEST FAIL pict invalid dimensions " + asset_file)
+			quit(1)
+			return loaded
+		loaded += 1
+	if loaded <= 0:
+		printerr("GODOT SELFTEST FAIL pict no shipyardPictAssetFile loaded")
+		quit(1)
+	return loaded
 
 func _verify_sound_assets(root: String, sounds: Dictionary) -> int:
 	var sounds_by_id := {}

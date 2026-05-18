@@ -44,23 +44,21 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
 
 ## Runtime integration not yet done
 
-- [ ] Choose the first Godot consumer for decoded PICT assets.
-  - Candidate: shipyard artwork from `native_ev/assets/graphics/pict/5000_shipyard/` and related `500x` resources.
-  - Candidate: outfit artwork from `native_ev/assets/graphics/pict/6000_outfit/` and related `600x` resources.
-  - Candidate: target pictures from `native_ev/assets/graphics/pict/3000_target_pics/` and related `300x` resources.
-  - Candidate: backdrop/nebula image from `native_ev/assets/graphics/pict/9500_serpens_nebula/`.
+- [x] Choose the first Godot consumer for decoded PICT assets.
+  - Current choice: shipyard artwork from `native_ev/assets/graphics/pict/5000_shipyard/` and related `500x` resources, because it is visible in the existing Shipyard landing tab and maps naturally to Data-backed ship identities.
+  - Deferred alternatives: outfit artwork from `600x`, target pictures from `300x`, and backdrop/nebula images remain candidates for later runtime consumers.
 
-- [ ] Add runtime manifest fields or lookup tables for chosen PICT consumers.
-  - Why it remains open: extraction is present, but the game runtime does not yet consume these new PICT PNGs.
-  - Next local step: design the smallest manifest shape that maps Data identities to extracted PICT asset paths.
+- [x] Add runtime manifest fields or lookup tables for chosen PICT consumers.
+  - Current status: `native_ev/data/ships.json` now carries optional `shipyardPictResourceId`, `shipyardPictAssetFile`, `shipyardPictWidth`, and `shipyardPictHeight` fields for ships whose Data ordinal has a decoded `500x` PICT asset.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_ev_classic_ship_manifest_is_joined_from_data_identity_to_graphics_assets` asserts the Data ordinal to PICT path mapping and keeps unmapped ships explicit by omitting the fields.
 
-- [ ] Add Godot-side loading and smoke assertions for any newly consumed PICT assets.
-  - Why it remains open: Godot self-test still verifies systems/ships/Argosy frames, not the new PICT asset families.
-  - Next local step: extend `godot_ev/scripts/self_test.gd` after adding runtime asset references.
+- [x] Add Godot-side loading and smoke assertions for any newly consumed PICT assets.
+  - Current status: Godot loads source-backed shipyard PICT PNGs from the ship manifest, displays the selected listing's art in the Shipyard tab when available, and self-test validates the loadable PICT set.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_godot_shipyard_loads_source_backed_pict_art` asserts the runtime contract; Windows Godot self-test passed with `pictsLoaded=22`.
 
-- [ ] Sync integrated graphics asset directories to the Windows runtime copy.
-  - Why it remains open: the previous sync covered data/scripts for self-test; broad asset-directory runtime sync should happen once a Godot consumer exists.
+- [x] Sync integrated graphics asset directories to the Windows runtime copy.
   - Target: `C:\Users\bh\Games\TerminalVelocity`.
+  - Current status: synced `native_ev/data/`, `native_ev/assets/graphics/pict/`, and `godot_ev/scripts/` to the Windows runtime copy after shipyard PICT loading was added.
 
 ## Verification commands for the next pass
 

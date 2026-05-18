@@ -11,6 +11,7 @@ const WORLD_SCALE := 0.55
 const PLAYER_START := Vector2(0, 0)
 const FRAME_COUNT := 36
 const DEFAULT_CLICK_SOUND_ASSET := "assets/sounds/ev_classic/601_click/sound.wav"
+const DEFAULT_SHIPYARD_PICT_ASSET := "assets/graphics/pict/5000_shipyard/image.png"
 
 var repo_root := ""
 var universe := {}
@@ -21,6 +22,7 @@ var outfits := {}
 var weapons := {}
 var sounds := {}
 var sound_players: Dictionary = {}
+var shipyard_pict_textures: Dictionary = {}
 var current_system_index := 0
 var current_system := {}
 var player_ship := {}
@@ -58,6 +60,7 @@ func _ready() -> void:
 	repo_root = _repo_root()
 	_load_data()
 	_load_runtime_sounds()
+	_load_shipyard_pict_textures()
 	_make_stars()
 	set_process(true)
 	queue_redraw()
@@ -111,6 +114,24 @@ func _load_data() -> void:
 
 func _load_ship_frames(ship: Dictionary) -> Array[Texture2D]:
 	return _load_ship_frame_set(ship)["frames"]
+
+func _load_shipyard_pict_textures() -> void:
+	shipyard_pict_textures.clear()
+	for ship in ships.get("ships", []):
+		var ship_id := str(ship.get("id", ""))
+		var asset_file := str(ship.get("shipyardPictAssetFile", ""))
+		if ship_id == "" or asset_file == "":
+			continue
+		var image := Image.new()
+		var err := image.load(repo_root + "/native_ev/" + asset_file)
+		if err != OK:
+			push_warning("missing shipyard PICT " + asset_file)
+			continue
+		shipyard_pict_textures[ship_id] = ImageTexture.create_from_image(image)
+
+func _shipyard_texture_for_listing(listing: Dictionary) -> Texture2D:
+	var ship_id := str(listing.get("shipId", ""))
+	return shipyard_pict_textures.get(ship_id, null)
 
 func _load_runtime_sounds() -> void:
 	sound_players.clear()
@@ -579,6 +600,13 @@ func _draw_shipyard(rect: Rect2, body: Dictionary) -> void:
 	draw_string(font, rect.position + Vector2(30, 192), "B buys selected ship", HORIZONTAL_ALIGNMENT_LEFT, 820, 14, Color(0.95, 0.86, 0.58))
 	var y := 204.0
 	var listings := _shipyard_listings(body)
+	if not listings.is_empty():
+		var selected_listing: Dictionary = listings[selected_landing_item % listings.size()]
+		var tex := _shipyard_texture_for_listing(selected_listing)
+		if tex != null:
+			draw_texture_rect(tex, Rect2(rect.position + Vector2(690, 188), Vector2(150, 150)), false)
+			draw_rect(Rect2(rect.position + Vector2(690, 188), Vector2(150, 150)), Color(0.55, 0.70, 0.90, 1.0), false, 1.0)
+			draw_string(font, rect.position + Vector2(690, 358), "Source PICT shipyard art", HORIZONTAL_ALIGNMENT_LEFT, 170, 13, Color(0.72, 0.82, 0.92))
 	for i in range(min(7, listings.size())):
 		var listing: Dictionary = listings[i]
 		var marker := "▶" if i == selected_landing_item else "•"

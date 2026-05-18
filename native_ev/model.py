@@ -59,6 +59,9 @@ def ship_manifest(path=SHIPS_PATH):
         frames = list(asset_dir.glob('frame_*.png'))
         if len(frames) != ship['frameCount']:
             raise ValueError(f"ship {ship['id']} expected {ship['frameCount']} frames, got {len(frames)}")
+        pict_asset = ship.get('shipyardPictAssetFile')
+        if pict_asset and not (ROOT / pict_asset).exists():
+            raise ValueError(f"ship {ship['id']} missing shipyard PICT {pict_asset}")
     return data
 
 
@@ -406,6 +409,14 @@ def ev_classic_data_ship_manifest(structures_path=SOURCED_EV_STRUCTURES_PATH, gr
         for sprite in graphics.get('shipSprites', [])
         if sprite.get('status') == 'ok' and sprite.get('shipResourceId') is not None
     }
+    shipyard_picts_by_ordinal = {
+        pict.get('resourceId') - 5000: pict
+        for pict in graphics.get('pictAssets', [])
+        if pict.get('status') == 'ok'
+        and isinstance(pict.get('resourceId'), int)
+        and 5000 <= pict.get('resourceId') < 6000
+        and pict.get('assetFile')
+    }
     ships = []
     used_ids = set()
     for record in ship_run.get('records', []):
@@ -419,7 +430,7 @@ def ev_classic_data_ship_manifest(structures_path=SOURCED_EV_STRUCTURES_PATH, gr
             ship_id = f"{ship_id}_{record['ordinal']}"
         used_ids.add(ship_id)
         stats = _ship_combat_stats(name, sprite['width'], sprite['height'])
-        ships.append({
+        ship = {
             'id': ship_id,
             'name': name,
             'sourceDataOrdinal': record['ordinal'],
@@ -433,7 +444,16 @@ def ev_classic_data_ship_manifest(structures_path=SOURCED_EV_STRUCTURES_PATH, gr
             'height': sprite['height'],
             'role': _role_for_ship_name(name),
             **stats,
-        })
+        }
+        shipyard_pict = shipyard_picts_by_ordinal.get(record['ordinal'])
+        if shipyard_pict is not None:
+            ship.update({
+                'shipyardPictResourceId': shipyard_pict['resourceId'],
+                'shipyardPictAssetFile': shipyard_pict['assetFile'],
+                'shipyardPictWidth': shipyard_pict['width'],
+                'shipyardPictHeight': shipyard_pict['height'],
+            })
+        ships.append(ship)
     return {'ships': ships}
 
 

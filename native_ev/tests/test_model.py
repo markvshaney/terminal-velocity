@@ -364,6 +364,11 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(by_ordinal[5]['name'], 'Confed Frigate')
         self.assertEqual(by_ordinal[5]['shipResourceId'], 133)
         self.assertEqual(by_ordinal[5]['assetDir'], 'assets/ships/ev_classic/frigate')
+        self.assertEqual(by_ordinal[0]['shipyardPictResourceId'], 5000)
+        self.assertEqual(by_ordinal[0]['shipyardPictAssetFile'], 'assets/graphics/pict/5000_shipyard/image.png')
+        self.assertTrue((Path('native_ev') / by_ordinal[0]['shipyardPictAssetFile']).exists())
+        self.assertEqual(by_ordinal[15]['shipyardPictResourceId'], 5015)
+        self.assertNotIn('shipyardPictResourceId', by_ordinal[24])
         self.assertEqual(by_ordinal[6]['id'], 'confed_cruiser')
         self.assertEqual(by_ordinal[6]['name'], 'Confed Cruiser')
         self.assertEqual(by_ordinal[14]['role'], 'npc-hostile')
@@ -895,6 +900,25 @@ class NativeEvModelTests(unittest.TestCase):
             'AudioStreamWAV',
             'GODOT SELFTEST FAIL sound',
             'soundsLoaded=%d',
+        ]:
+            self.assertIn(symbol, self_test_script)
+
+    def test_godot_shipyard_loads_source_backed_pict_art(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
+        for symbol in [
+            'shipyardPictAssetFile',
+            '_load_shipyard_pict_textures',
+            '_shipyard_texture_for_listing',
+            'draw_texture_rect',
+            'assets/graphics/pict/5000_shipyard/image.png',
+        ]:
+            self.assertIn(symbol, main_script)
+        for symbol in [
+            'shipyardPictAssetFile',
+            'GODOT SELFTEST FAIL pict',
+            'pictsLoaded=%d',
         ]:
             self.assertIn(symbol, self_test_script)
 
