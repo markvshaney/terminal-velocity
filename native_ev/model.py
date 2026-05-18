@@ -7,6 +7,7 @@ SHUTTLE_DIR = ROOT / 'assets' / 'ships' / 'shuttle'
 UNIVERSE_PATH = ROOT / 'data' / 'universe.json'
 SHIPS_PATH = ROOT / 'data' / 'ships.json'
 WEAPONS_PATH = ROOT / 'data' / 'weapons.json'
+SOUNDS_PATH = ROOT / 'data' / 'sounds.json'
 MISSIONS_PATH = ROOT / 'data' / 'missions.json'
 OUTFITS_PATH = ROOT / 'data' / 'outfits.json'
 ECONOMY_PATH = ROOT / 'data' / 'economy.json'
@@ -72,6 +73,46 @@ def weapon_manifest(path=WEAPONS_PATH):
                 raise ValueError(f'weapon missing {key}')
         if weapon['price'] <= 0:
             raise ValueError(f"weapon {weapon['id']} must have positive price")
+    return data
+
+
+def sound_manifest(path=SOUNDS_PATH):
+    data = json.loads(path.read_text())
+    if data.get('schemaVersion') != 1:
+        raise ValueError('sounds manifest has unexpected schema version')
+    if data.get('source') != 'native_ev/data/sourced_ev_sounds.json':
+        raise ValueError('sounds manifest has unexpected source')
+    if data.get('method') != 'ev-classic-runtime-sound-bindings-v1':
+        raise ValueError('sounds manifest has unexpected method')
+    sounds = data.get('sounds', [])
+    if not sounds:
+        raise ValueError('sounds manifest contains no sounds')
+    ids = set()
+    source_ids = set()
+    for sound in sounds:
+        for key in ['id', 'name', 'sourceResourceId', 'assetFile', 'sampleRateHz', 'sampleCount', 'channels', 'sampleWidthBytes', 'tags']:
+            if key not in sound:
+                raise ValueError(f'sound missing {key}')
+        if sound['id'] in ids:
+            raise ValueError(f"duplicate sound id {sound['id']}")
+        ids.add(sound['id'])
+        source_ids.add(sound['sourceResourceId'])
+        asset_file = ROOT / sound['assetFile']
+        if not asset_file.exists():
+            raise ValueError(f"sound {sound['id']} missing WAV {asset_file}")
+        if sound['channels'] != 1 or sound['sampleWidthBytes'] != 1:
+            raise ValueError(f"sound {sound['id']} has unexpected PCM layout")
+        if sound['sampleRateHz'] <= 0 or sound['sampleCount'] <= 0:
+            raise ValueError(f"sound {sound['id']} has invalid sample metadata")
+    bindings = data.get('bindings', {})
+    for group_name, group in bindings.items():
+        if not isinstance(group, dict):
+            raise ValueError(f'sound binding group {group_name} must be a mapping')
+        for binding_name, sound_id in group.items():
+            if sound_id not in ids:
+                raise ValueError(f'sound binding {group_name}.{binding_name} references unknown sound {sound_id}')
+    if not {200, 205, 601}.issubset(source_ids):
+        raise ValueError('sounds manifest missing representative runtime sounds')
     return data
 
 

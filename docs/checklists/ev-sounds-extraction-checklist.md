@@ -19,8 +19,10 @@ Purpose: track source-backed extraction and runtime integration of EV Classic so
 
 ## Runtime integration not yet done
 
-- [ ] Add a sound manifest consumed by runtime systems.
-  - Candidate mappings: `Laser`, `Torp`, `Missile`, `Cannon`, `Engine`, `Warp Up`, `Warp Out`, `HeavyExplosion`, `MedExplosion`, `ShipExplodes`, UI `Beep*`, and `Click`.
+- [x] Add a sound manifest consumed by runtime systems.
+  - Current status: `native_ev/data/sounds.json` exposes a runtime-facing subset of source-backed EV Classic decoded sounds with local aliases, source resource IDs, asset paths, PCM metadata, and bindings for UI, flight, weapons, and combat.
+  - Included mappings: `Laser`, `Torp`, `Missile`, `Cannon`, `Engine`, `Warp Up`, `Warp Out`, `HeavyExplosion`, `MedExplosion`, `ShipExplodes`, UI `Beep1`/`Beep2`, and `Click`.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_runtime_sound_manifest_maps_source_backed_sounds_to_game_events` validates representative source IDs, WAV asset existence, PCM layout, and weapon bindings; Godot `main.gd` loads `native_ev/data/sounds.json` as part of the file-backed data contract.
 
 - [ ] Wire Godot playback for the smallest useful sound surface.
   - Recommended first runtime consumer: UI/shipyard/mission `Click` or weapon `Laser`, because they are easy to trigger and verify.

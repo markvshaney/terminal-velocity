@@ -3,8 +3,8 @@ extends Node2D
 # EV-style native Godot front end. This intentionally loads the existing
 # Terminal Velocity backend contract instead of inventing a second data source:
 # native_ev/data/universe.json, native_ev/data/ships.json, native_ev/data/missions.json,
-# native_ev/data/economy.json, native_ev/data/outfits.json, native_ev/data/weapons.json, and 36-frame
-# frame_%02d.png ship sprite folders.
+# native_ev/data/economy.json, native_ev/data/outfits.json, native_ev/data/weapons.json,
+# native_ev/data/sounds.json, and 36-frame frame_%02d.png ship sprite folders.
 
 const VIEW_SIZE := Vector2(1280, 800)
 const WORLD_SCALE := 0.55
@@ -18,6 +18,7 @@ var missions := {}
 var economy := {}
 var outfits := {}
 var weapons := {}
+var sounds := {}
 var current_system_index := 0
 var current_system := {}
 var player_ship := {}
@@ -80,6 +81,7 @@ func _load_data() -> void:
 	economy = _json(repo_root + "/native_ev/data/economy.json")
 	outfits = _json(repo_root + "/native_ev/data/outfits.json")
 	weapons = _json(repo_root + "/native_ev/data/weapons.json")
+	sounds = _json(repo_root + "/native_ev/data/sounds.json")
 	current_system = universe.get("systems", [])[current_system_index]
 	var initial_player_ship_id := "argosy"
 	for ship in ships.get("ships", []):

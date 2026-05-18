@@ -35,6 +35,7 @@ from native_ev.model import (
     serialize_save_data,
     repair_cost,
     ship_manifest,
+    sound_manifest,
     sourced_ev_graphics_manifest,
     sourced_ev_names_manifest,
     sourced_ev_sounds_manifest,
@@ -295,6 +296,25 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertEqual(wav.getframerate(), 11127)
             self.assertEqual(wav.getnframes(), by_id[200]['sound']['sampleCount'])
         self.assertTrue(all(sound['type'] == 'snd ' for sound in sounds))
+
+    def test_runtime_sound_manifest_maps_source_backed_sounds_to_game_events(self):
+        data = sound_manifest()
+        sounds = {sound['id']: sound for sound in data['sounds']}
+        self.assertEqual(data['source'], 'native_ev/data/sourced_ev_sounds.json')
+        self.assertEqual(data['method'], 'ev-classic-runtime-sound-bindings-v1')
+        self.assertGreaterEqual(len(sounds), 10)
+        self.assertEqual(sounds['weapon_laser']['sourceResourceId'], 200)
+        self.assertEqual(sounds['weapon_laser']['name'], 'Laser')
+        self.assertEqual(sounds['weapon_laser']['assetFile'], 'assets/sounds/ev_classic/200_laser/sound.wav')
+        self.assertEqual(sounds['weapon_cannon']['sourceResourceId'], 205)
+        self.assertEqual(sounds['ui_click']['sourceResourceId'], 601)
+        self.assertEqual(sounds['engine_loop']['sourceResourceId'], 223)
+        self.assertEqual(data['bindings']['weapons']['laser_cannon'], 'weapon_laser')
+        self.assertEqual(data['bindings']['weapons']['pulse_cannon'], 'weapon_cannon')
+        for sound in sounds.values():
+            self.assertTrue((Path('native_ev') / sound['assetFile']).exists())
+            self.assertEqual(sound['channels'], 1)
+            self.assertEqual(sound['sampleWidthBytes'], 1)
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):
         universe = load_universe()
@@ -789,6 +809,7 @@ class NativeEvModelTests(unittest.TestCase):
         main_script = (project / 'scripts' / 'main.gd').read_text()
         self.assertIn('native_ev/data/universe.json', main_script)
         self.assertIn('native_ev/data/ships.json', main_script)
+        self.assertIn('native_ev/data/sounds.json', main_script)
         self.assertIn('frame_%02d.png', main_script)
         self.assertIn('EV-style', main_script)
 

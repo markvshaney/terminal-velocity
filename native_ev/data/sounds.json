@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "source": "native_ev/data/sourced_ev_sounds.json",
+  "method": "ev-classic-runtime-sound-bindings-v1",
+  "note": "Runtime-facing subset of source-backed EV Classic decoded sounds. IDs are local aliases; sourceResourceId/name/assetFile preserve EV Sounds.rez identity.",
+  "sounds": [
+    {
+      "id": "ui_click",
+      "name": "Click",
+      "sourceResourceId": 601,
+      "assetFile": "assets/sounds/ev_classic/601_click/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 17792,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "ui",
+        "landing",
+        "shipyard"
+      ]
+    },
+    {
+      "id": "ui_beep_1",
+      "name": "Beep1",
+      "sourceResourceId": 150,
+      "assetFile": "assets/sounds/ev_classic/150_beep1/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 1136,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "id": "ui_beep_2",
+      "name": "Beep2",
+      "sourceResourceId": 151,
+      "assetFile": "assets/sounds/ev_classic/151_beep2/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 494,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "ui"
+      ]
+    },
+    {
+      "id": "hyperspace_warmup",
+      "name": "Warp Up",
+      "sourceResourceId": 128,
+      "assetFile": "assets/sounds/ev_classic/128_warp_up/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 45472,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "flight",
+        "hyperspace"
+      ]
+    },
+    {
+      "id": "hyperspace_exit",
+      "name": "Warp Out",
+      "sourceResourceId": 130,
+      "assetFile": "assets/sounds/ev_classic/130_warp_out/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 872,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "flight",
+        "hyperspace"
+      ]
+    },
+    {
+      "id": "engine_loop",
+      "name": "Engine",
+      "sourceResourceId": 223,
+      "assetFile": "assets/sounds/ev_classic/223_engine/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 11360,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "flight",
+        "engine"
+      ]
+    },
+    {
+      "id": "weapon_laser",
+      "name": "Laser",
+      "sourceResourceId": 200,
+      "assetFile": "assets/sounds/ev_classic/200_laser/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 2151,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "weapon"
+      ]
+    },
+    {
+      "id": "weapon_torpedo",
+      "name": "Torp",
+      "sourceResourceId": 203,
+      "assetFile": "assets/sounds/ev_classic/203_torp/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 15500,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "weapon"
+      ]
+    },
+    {
+      "id": "weapon_missile",
+      "name": "Missile",
+      "sourceResourceId": 204,
+      "assetFile": "assets/sounds/ev_classic/204_missile/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 2784,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "weapon"
+      ]
+    },
+    {
+      "id": "weapon_cannon",
+      "name": "Cannon",
+      "sourceResourceId": 205,
+      "assetFile": "assets/sounds/ev_classic/205_cannon/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 23230,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "weapon"
+      ]
+    },
+    {
+      "id": "explosion_heavy",
+      "name": "HeavyExplosion",
+      "sourceResourceId": 300,
+      "assetFile": "assets/sounds/ev_classic/300_heavyexplosion/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 7748,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "combat",
+        "explosion"
+      ]
+    },
+    {
+      "id": "explosion_medium",
+      "name": "MedExplosion",
+      "sourceResourceId": 301,
+      "assetFile": "assets/sounds/ev_classic/301_medexplosion/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 7748,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "combat",
+        "explosion"
+      ]
+    },
+    {
+      "id": "ship_explodes",
+      "name": "ShipExplodes",
+      "sourceResourceId": 303,
+      "assetFile": "assets/sounds/ev_classic/303_shipexplodes/sound.wav",
+      "sampleRateHz": 11127,
+      "sampleCount": 11072,
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "tags": [
+        "combat",
+        "explosion"
+      ]
+    }
+  ],
+  "bindings": {
+    "ui": {
+      "click": "ui_click",
+      "beep": "ui_beep_1"
+    },
+    "flight": {
+      "engineLoop": "engine_loop",
+      "hyperspaceWarmup": "hyperspace_warmup",
+      "hyperspaceExit": "hyperspace_exit"
+    },
+    "weapons": {
+      "laser_cannon": "weapon_laser",
+      "pulse_cannon": "weapon_cannon"
+    },
+    "combat": {
+      "heavyExplosion": "explosion_heavy",
+      "mediumExplosion": "explosion_medium",
+      "shipExplodes": "ship_explodes"
+    }
+  }
+}
