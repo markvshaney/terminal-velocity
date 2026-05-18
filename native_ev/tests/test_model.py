@@ -865,6 +865,27 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(prompt, main_script)
 
+    def test_godot_click_sound_is_wired_to_landing_actions(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'AudioStreamPlayer',
+            '_load_sound_stream',
+            '_play_sound("ui_click")',
+            '_sound_by_id("ui_click")',
+            'assets/sounds/ev_classic/601_click/sound.wav',
+        ]:
+            self.assertIn(symbol, main_script)
+        for function_name in [
+            '_accept_selected_mission',
+            '_buy_selected_commodity',
+            '_sell_selected_commodity',
+            '_buy_selected_outfit_or_weapon',
+            '_buy_selected_ship',
+        ]:
+            function_body = main_script.split(f'func {function_name}', 1)[1].split('\nfunc ', 1)[0]
+            self.assertIn('_play_sound("ui_click")', function_body)
+
     def test_godot_scanner_has_target_lock_feedback(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

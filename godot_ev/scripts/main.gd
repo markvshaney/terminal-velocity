@@ -10,6 +10,7 @@ const VIEW_SIZE := Vector2(1280, 800)
 const WORLD_SCALE := 0.55
 const PLAYER_START := Vector2(0, 0)
 const FRAME_COUNT := 36
+const DEFAULT_CLICK_SOUND_ASSET := "assets/sounds/ev_classic/601_click/sound.wav"
 
 var repo_root := ""
 var universe := {}
@@ -19,6 +20,7 @@ var economy := {}
 var outfits := {}
 var weapons := {}
 var sounds := {}
+var sound_players: Dictionary = {}
 var current_system_index := 0
 var current_system := {}
 var player_ship := {}
@@ -55,6 +57,7 @@ func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.005, 0.006, 0.012))
 	repo_root = _repo_root()
 	_load_data()
+	_load_runtime_sounds()
 	_make_stars()
 	set_process(true)
 	queue_redraw()
@@ -108,6 +111,73 @@ func _load_data() -> void:
 
 func _load_ship_frames(ship: Dictionary) -> Array[Texture2D]:
 	return _load_ship_frame_set(ship)["frames"]
+
+func _load_runtime_sounds() -> void:
+	sound_players.clear()
+	var click_sound := _sound_by_id("ui_click")
+	if click_sound.is_empty():
+		push_warning("sound manifest missing ui_click")
+	for sound in sounds.get("sounds", []):
+		var sound_id := str(sound.get("id", ""))
+		var stream := _load_sound_stream(sound)
+		if sound_id == "" or stream == null:
+			continue
+		var player := AudioStreamPlayer.new()
+		player.name = "sound_" + sound_id
+		player.stream = stream
+		add_child(player)
+		sound_players[sound_id] = player
+
+func _sound_by_id(sound_id: String) -> Dictionary:
+	for sound in sounds.get("sounds", []):
+		if sound.get("id", "") == sound_id:
+			return sound
+	return {}
+
+func _play_sound(sound_id: String) -> void:
+	if _sound_by_id(sound_id).is_empty():
+		return
+	var player: AudioStreamPlayer = sound_players.get(sound_id, null)
+	if player == null:
+		return
+	player.stop()
+	player.play()
+
+func _load_sound_stream(sound: Dictionary) -> AudioStreamWAV:
+	var asset_file := str(sound.get("assetFile", DEFAULT_CLICK_SOUND_ASSET))
+	var file := FileAccess.open(repo_root + "/native_ev/" + asset_file, FileAccess.READ)
+	if file == null:
+		push_warning("missing sound " + asset_file)
+		return null
+	var bytes := file.get_buffer(file.get_length())
+	if bytes.size() < 44 or bytes.slice(0, 4).get_string_from_ascii() != "RIFF" or bytes.slice(8, 12).get_string_from_ascii() != "WAVE":
+		push_warning("unsupported WAV header " + asset_file)
+		return null
+	var cursor := 12
+	var channels := 1
+	var sample_rate := int(sound.get("sampleRateHz", 11127))
+	var bits_per_sample := 8
+	var pcm := PackedByteArray()
+	while cursor + 8 <= bytes.size():
+		var chunk_id := bytes.slice(cursor, cursor + 4).get_string_from_ascii()
+		var chunk_size := bytes.decode_u32(cursor + 4)
+		var chunk_data := cursor + 8
+		if chunk_id == "fmt " and chunk_data + 16 <= bytes.size():
+			channels = bytes.decode_u16(chunk_data + 2)
+			sample_rate = bytes.decode_u32(chunk_data + 4)
+			bits_per_sample = bytes.decode_u16(chunk_data + 14)
+		elif chunk_id == "data" and chunk_data + chunk_size <= bytes.size():
+			pcm = bytes.slice(chunk_data, chunk_data + chunk_size)
+		cursor = chunk_data + chunk_size + (chunk_size % 2)
+	if pcm.is_empty() or channels != 1 or bits_per_sample != 8:
+		push_warning("unsupported WAV PCM layout " + asset_file)
+		return null
+	var stream := AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_8_BITS
+	stream.mix_rate = sample_rate
+	stream.stereo = false
+	stream.data = pcm
+	return stream
 
 func _load_ship_frame_set(ship: Dictionary) -> Dictionary:
 	var frames: Array[Texture2D] = []
@@ -610,6 +680,7 @@ func _accept_selected_mission() -> void:
 		if not story_flags.has(flag):
 			story_flags.append(flag)
 	status_line = "Accepted mission: " + str(mission.get("title", mission_id))
+	_play_sound("ui_click")
 	selected_landing_item = 0
 
 func _buy_selected_commodity() -> void:
@@ -633,6 +704,7 @@ func _buy_selected_commodity() -> void:
 	cargo += 1
 	commodity_hold[commodity_id] = int(commodity_hold.get(commodity_id, 0)) + 1
 	status_line = "Bought 1 ton of " + str(commodity.get("name", commodity_id))
+	_play_sound("ui_click")
 
 func _sell_selected_commodity() -> void:
 	var commodities: Array = economy.get("commodities", [])
@@ -650,6 +722,7 @@ func _sell_selected_commodity() -> void:
 	cargo = max(0, cargo - 1)
 	commodity_hold[commodity_id] = held - 1
 	status_line = "Sold 1 ton of " + str(commodity.get("name", commodity_id))
+	_play_sound("ui_click")
 
 func _outfitter_sale_items(body: Dictionary) -> Array:
 	var inventory := _station_inventory(body)
@@ -683,6 +756,7 @@ func _buy_selected_outfit_or_weapon() -> void:
 		var effects: Dictionary = item.get("effects", {})
 		cargo_space += int(effects.get("cargoSpace", 0))
 	status_line = "Bought " + str(item.get("name", item_id))
+	_play_sound("ui_click")
 
 func _shipyard_listings(body: Dictionary) -> Array:
 	var inventory := _station_inventory(body)
@@ -712,6 +786,7 @@ func _buy_selected_ship() -> void:
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
 	cargo = min(cargo, cargo_space)
 	status_line = "Bought ship: " + ship_id
+	_play_sound("ui_click")
 
 func _ship_by_id(ship_id: String) -> Dictionary:
 	for ship in ships.get("ships", []):

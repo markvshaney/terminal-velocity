@@ -24,8 +24,9 @@ Purpose: track source-backed extraction and runtime integration of EV Classic so
   - Included mappings: `Laser`, `Torp`, `Missile`, `Cannon`, `Engine`, `Warp Up`, `Warp Out`, `HeavyExplosion`, `MedExplosion`, `ShipExplodes`, UI `Beep1`/`Beep2`, and `Click`.
   - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_runtime_sound_manifest_maps_source_backed_sounds_to_game_events` validates representative source IDs, WAV asset existence, PCM layout, and weapon bindings; Godot `main.gd` loads `native_ev/data/sounds.json` as part of the file-backed data contract.
 
-- [ ] Wire Godot playback for the smallest useful sound surface.
-  - Recommended first runtime consumer: UI/shipyard/mission `Click` or weapon `Laser`, because they are easy to trigger and verify.
+- [x] Wire Godot playback for the smallest useful sound surface.
+  - Current status: Godot loads decoded WAV assets from `native_ev/data/sounds.json` into `AudioStreamPlayer` nodes and plays the source-backed `ui_click` sound on successful landing-panel actions: mission accept, commodity buy/sell, outfitter purchase, and shipyard purchase.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_godot_click_sound_is_wired_to_landing_actions` asserts the click sound loader, runtime binding, source asset path, and landing action calls; model tests and Godot headless checks pass.
 
 - [ ] Extend Godot self-test for sound asset loading.
   - Done condition: self-test loads the committed sound manifest and at least one decoded audio stream once decoding exists.
