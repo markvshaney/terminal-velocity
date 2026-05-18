@@ -22,14 +22,14 @@ Use **artifact + checklist**:
   - Next action: identify current hard-coded manifest/data paths in Python and Godot.
   - Done when: there is a documented minimal descriptor with profile ID, display name, source family, manifest paths, asset roots, and rule flags.
 
-- [ ] Inventory current hard-coded Classic assumptions.
-  - Status: pending
-  - Next action: search `native_ev/`, `godot_ev/`, and `tools/` for direct paths to Classic manifests/assets and EV Classic-specific naming.
-  - Done when: assumptions are listed with owner file and migration choice: keep, parameterize, or profile-specific.
+- [x] Inventory current hard-coded Classic assumptions.
+  - Status: completed 2026-05-18
+  - Evidence: searched Python, Godot, and JSON surfaces under `native_ev/`, `godot_ev/`, and `tools/` for direct data paths, Classic resource names, `ev_classic` asset roots, and sourced manifest assumptions.
+  - Result: see "Hard-coded Classic assumptions inventory" below.
 
 - [ ] Introduce profile-aware manifest loading without a broad rewrite.
   - Status: pending
-  - Next action: add the smallest loader indirection so the current Classic data loads through `classic` profile selection.
+  - Next action: define a minimal `classic` profile descriptor, then route Python and Godot runtime manifest paths through that descriptor while keeping the current `native_ev/data/*.json` contract intact initially.
   - Done when: existing Classic self-tests still pass through the profile path.
 
 - [ ] Keep Classic as the first fidelity vertical slice.
@@ -79,6 +79,67 @@ Use **artifact + checklist**:
     - legal/asset-boundary review recommends hard separation;
     - one track becomes creative-remake while another stays fidelity-preservation.
   - Done when: decision artifact is updated if any trigger fires.
+
+## Hard-coded Classic assumptions inventory
+
+Completed: 2026-05-18
+
+Scope searched:
+
+- Python: `tools/*.py`, `native_ev/*.py`, `native_ev/tests/*.py`
+- Godot: `godot_ev/scripts/*.gd`
+- Runtime JSON: `native_ev/data/*.json`
+
+Findings:
+
+- `native_ev/model.py` top-level manifest constants point directly at `native_ev/data/*.json`, including sourced EV manifests.
+  - Owner files: `native_ev/model.py`, `native_ev/tests/test_model.py`
+  - Migration choice: **parameterize** behind a profile descriptor, but keep these default paths as the Classic compatibility contract during the first loader slice.
+
+- `native_ev/model.py` validates source provenance against exact EV Classic source paths and extraction methods:
+  - `source-assets/ev-classic/Nova Files/EV Data.rez`
+  - `source-assets/ev-classic/Nova Files/EV Graphics.rez`
+  - `source-assets/ev-classic/Nova Files/EV Sounds.rez`
+  - Owner files: `native_ev/model.py`, `native_ev/tests/test_model.py`
+  - Migration choice: **profile-specific**. These should move into `classic` descriptor/source manifest metadata or profile-specific validators.
+
+- Python runtime sound validation assumes the Classic sound runtime binding source and method.
+  - Owner file: `native_ev/model.py`
+  - Current assumptions: `source == native_ev/data/sourced_ev_sounds.json`, `method == ev-classic-runtime-sound-bindings-v1`, representative resource IDs `{200, 205, 601}`.
+  - Migration choice: **profile-specific rule flags / validation expectations**.
+
+- Python ship generation is explicitly EV Classic Data/Graphics join logic.
+  - Owner file: `native_ev/model.py`
+  - Current assumptions: `ev_classic_data_ship_manifest`, Data ship ordinals map to Graphics `shän` resources `128 + ordinal`, Escape Pod special case `895`, 36-facing centered sprite assets.
+  - Migration choice: **profile-specific generator/adapter**. Do not generalize to Nova until Nova source semantics are mapped.
+
+- Tool defaults point directly at local EV Classic source files and output paths.
+  - Owner files: `tools/extract_ev_data_names.py`, `tools/extract_ev_structured_records.py`, `tools/extract_ev_graphics_manifest.py`, `tools/extract_ev_sounds_manifest.py`, `tools/extract_ev_rled.py`
+  - Migration choice: **parameterize by profile**, with current defaults retained for Classic CLI compatibility.
+
+- Extracted runtime asset roots encode `ev_classic` in path names.
+  - Owner files/data: `native_ev/data/ships.json`, `native_ev/data/sounds.json`, `native_ev/data/sourced_ev_graphics.json`, `native_ev/data/sourced_ev_sounds.json`, extracted assets under `native_ev/assets/ships/ev_classic/` and `native_ev/assets/sounds/ev_classic/`.
+  - Migration choice: **keep** for existing extracted assets; profile descriptor should define asset roots so future Nova assets use their own roots without renaming Classic assets now.
+
+- Godot frontend loads fixed runtime manifests from `repo_root + "/native_ev/data/*.json"`.
+  - Owner files: `godot_ev/scripts/main.gd`, `godot_ev/scripts/self_test.gd`
+  - Migration choice: **parameterize** through a selected profile while preserving the same runtime file contract for `classic` initially.
+
+- Godot frontend has a Classic-specific default click sound asset path.
+  - Owner file: `godot_ev/scripts/main.gd`
+  - Current assumption: `assets/sounds/ev_classic/601_click/sound.wav`
+  - Migration choice: **profile-specific fallback** or remove once sound manifest/profile descriptor supplies the binding.
+
+- Godot self-test output hard-codes the data path and does not report selected profile.
+  - Owner file: `godot_ev/scripts/self_test.gd`
+  - Migration choice: **parameterize** and update self-test to print `profile=classic` once descriptor loading exists.
+
+Immediate next implementation target:
+
+1. Add a minimal Classic profile descriptor file that names current manifest paths and asset roots.
+2. Add a small Python profile loader/validator that resolves those paths.
+3. Route existing Python manifest-load tests through `profile=classic` without moving assets or broad-renaming directories.
+4. Then mirror the same selected-profile reporting in Godot self-test.
 
 ## Guardrails
 
