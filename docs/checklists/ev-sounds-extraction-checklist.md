@@ -28,11 +28,13 @@ Purpose: track source-backed extraction and runtime integration of EV Classic so
   - Current status: Godot loads decoded WAV assets from `native_ev/data/sounds.json` into `AudioStreamPlayer` nodes and plays the source-backed `ui_click` sound on successful landing-panel actions: mission accept, commodity buy/sell, outfitter purchase, and shipyard purchase.
   - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_godot_click_sound_is_wired_to_landing_actions` asserts the click sound loader, runtime binding, source asset path, and landing action calls; model tests and Godot headless checks pass.
 
-- [ ] Extend Godot self-test for sound asset loading.
-  - Done condition: self-test loads the committed sound manifest and at least one decoded audio stream once decoding exists.
+- [x] Extend Godot self-test for sound asset loading.
+  - Current status: `godot_ev/scripts/self_test.gd` loads `native_ev/data/sounds.json`, validates `ui_click`, parses its decoded WAV into `AudioStreamWAV`, and prints `soundsLoaded=1` on success.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_loads_source_backed_sound_assets` asserts the contract; Windows Godot self-test passed with `soundsLoaded=1`.
 
-- [ ] Sync integrated sound asset directories to the Windows runtime copy.
+- [x] Sync integrated sound asset directories to the Windows runtime copy.
   - Target: `C:\Users\bh\Games\TerminalVelocity`.
+  - Current status: synced `native_ev/data/`, `native_ev/assets/sounds/`, and `godot_ev/scripts/` to the Windows runtime copy after self-test sound loading was added.
 
 ## Verification commands for the next pass
 

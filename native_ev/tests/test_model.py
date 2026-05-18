@@ -886,6 +886,18 @@ class NativeEvModelTests(unittest.TestCase):
             function_body = main_script.split(f'func {function_name}', 1)[1].split('\nfunc ', 1)[0]
             self.assertIn('_play_sound("ui_click")', function_body)
 
+    def test_godot_self_test_loads_source_backed_sound_assets(self):
+        root = Path(__file__).resolve().parents[2]
+        self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
+        for symbol in [
+            'native_ev/data/sounds.json',
+            'ui_click',
+            'AudioStreamWAV',
+            'GODOT SELFTEST FAIL sound',
+            'soundsLoaded=%d',
+        ]:
+            self.assertIn(symbol, self_test_script)
+
     def test_godot_scanner_has_target_lock_feedback(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
