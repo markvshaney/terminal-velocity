@@ -185,7 +185,7 @@ class NativeEvModelTests(unittest.TestCase):
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Graphics.rez')
-        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-cicn-ppat-v6')
+        self.assertEqual(data['method'], 'evnew-opcode-rled-shan-pict-cicn-ppat-spin-boom-roid-v7')
         self.assertEqual(data['resourceCount'], 303)
         resources_by_type = {}
         for resource in data['resources']:
@@ -197,6 +197,9 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(catalog['cicn']['decodeStatus'], 'decoded-to-png-with-explicit-errors')
         self.assertEqual(catalog['ppat']['decodeStatus'], 'decoded-to-png-with-explicit-errors')
         self.assertEqual(catalog['spïn']['count'], 58)
+        self.assertEqual(catalog['spïn']['decodeStatus'], 'decoded-primitive-fields')
+        self.assertEqual(catalog['bööm']['decodeStatus'], 'decoded-primitive-fields')
+        self.assertEqual(catalog['röid']['decodeStatus'], 'decoded-primitive-fields')
         self.assertGreaterEqual(resources_by_type['rlëD'], 70)
         self.assertGreaterEqual(resources_by_type['shän'], 25)
         shuttle = next(sprite for sprite in data['shipSprites'] if sprite.get('shipName') == 'Shuttle')
@@ -258,6 +261,52 @@ class NativeEvModelTests(unittest.TestCase):
         unsupported_ppat = next(asset for asset in data['ppatAssets'] if asset.get('resourceId') == 137)
         self.assertEqual(unsupported_ppat['status'], 'decode-error: unsupported ppat PixPat/PixMap layout')
         self.assertEqual(unsupported_ppat['rawHeaderBytes'][:4], [0, 8, 0, 8])
+
+    def test_sourced_ev_graphics_manifest_interprets_spin_boom_roid_metadata(self):
+        data = sourced_ev_graphics_manifest()
+        resources = {(resource['type'], resource['resourceId']): resource for resource in data['resources']}
+
+        small_explosion = resources[('spïn', 400)]['spin']
+        self.assertEqual(small_explosion['baseRledResourceId'], 4000)
+        self.assertEqual(small_explosion['maskRledResourceId'], 4001)
+        self.assertEqual(small_explosion['displayWidth'], 32)
+        self.assertEqual(small_explosion['displayHeight'], 26)
+        self.assertEqual(small_explosion['frameRows'], 8)
+        self.assertEqual(small_explosion['frameColumns'], 1)
+        self.assertEqual(small_explosion['linkedRled']['status'], 'ok')
+        self.assertEqual(small_explosion['linkedRled']['frames'], 8)
+
+        laser_bolt = resources[('spïn', 3000)]['spin']
+        self.assertEqual(laser_bolt['baseRledResourceId'], 200)
+        self.assertEqual(laser_bolt['maskRledResourceId'], 201)
+        self.assertEqual(laser_bolt['displayWidth'], 8)
+        self.assertEqual(laser_bolt['displayHeight'], 8)
+        self.assertEqual(laser_bolt['frameRows'], 6)
+        self.assertEqual(laser_bolt['frameColumns'], 6)
+        self.assertEqual(laser_bolt['linkedRled']['frames'], 36)
+
+        small_fae = resources[('bööm', 128)]['boom']
+        self.assertEqual(small_fae['durationTicks'], 100)
+        self.assertEqual(small_fae['soundResourceId'], 1)
+        self.assertEqual(small_fae['spinResourceId'], 400)
+        self.assertEqual(small_fae['linkedSpinName'], 'Small Explosion')
+
+        ship_explodes = resources[('bööm', 132)]['boom']
+        self.assertEqual(ship_explodes['variantCount'], 5)
+        self.assertEqual(ship_explodes['variantResourceIds'], [128, 129, 130, 131, 132])
+        self.assertEqual(ship_explodes['status'], 'forklift-variant-table')
+
+        small_asteroids = resources[('röid', 128)]['roid']
+        self.assertEqual(small_asteroids['spinResourceId'], 800)
+        self.assertEqual(small_asteroids['linkedSpinName'], 'Small Asteroids')
+        self.assertEqual(small_asteroids['rledResourceId'], 800)
+        self.assertEqual(small_asteroids['linkedRled']['frames'], 30)
+
+        big_asteroids = resources[('röid', 129)]['roid']
+        self.assertEqual(big_asteroids['spinResourceId'], 801)
+        self.assertEqual(big_asteroids['linkedSpinName'], 'Big Asteroids')
+        self.assertEqual(big_asteroids['rledResourceId'], 802)
+        self.assertEqual(big_asteroids['linkedRled']['frames'], 36)
 
     def test_sourced_ev_sounds_manifest_decodes_classic_mac_snd_resources(self):
         data = sourced_ev_sounds_manifest()

@@ -24,7 +24,7 @@ DEFAULT_RLED_OUT = Path('native_ev/assets/graphics/rled')
 DEFAULT_PICT_OUT = Path('native_ev/assets/graphics/pict')
 DEFAULT_CICN_OUT = Path('native_ev/assets/graphics/cicn')
 DEFAULT_PPAT_OUT = Path('native_ev/assets/graphics/ppat')
-METHOD = 'evnew-opcode-rled-shan-pict-cicn-ppat-v6'
+METHOD = 'evnew-opcode-rled-shan-pict-cicn-ppat-spin-boom-roid-v7'
 
 
 def slugify(text: str) -> str:
@@ -388,6 +388,137 @@ def decode_shan(resource: dict, raw: bytes) -> dict:
     }
 
 
+def _rled_link(resource_id: int | None, rled_index: dict[int, dict]) -> dict | None:
+    if resource_id is None or resource_id not in rled_index:
+        return None
+    resource = rled_index[resource_id]
+    header = resource['rled']
+    return {
+        'resourceId': resource_id,
+        'name': resource['name'],
+        'width': header.get('width'),
+        'height': header.get('height'),
+        'frames': header.get('frameCount'),
+        'status': 'ok' if header.get('decodeStatus') == 'header-ok' else header.get('decodeStatus'),
+    }
+
+
+def _infer_rled_from_spin_words(ws: list[int], rled_index: dict[int, dict], spin_name: str = '') -> int | None:
+    if len(ws) < 4:
+        return None
+    raw_base = ws[0]
+    display_width = ws[2]
+    display_height = ws[3]
+    candidates = [raw_base, raw_base - 2]
+    normalized_spin_name = slugify(spin_name)
+    for candidate in candidates:
+        resource = rled_index.get(candidate, {})
+        if normalized_spin_name and slugify(resource.get('name') or '') == normalized_spin_name:
+            return candidate
+    for candidate in candidates:
+        header = rled_index.get(candidate, {}).get('rled', {})
+        if header.get('decodeStatus') == 'header-ok' and header.get('width') == display_width and header.get('height') == display_height:
+            return candidate
+    for candidate in candidates:
+        header = rled_index.get(candidate, {}).get('rled', {})
+        if header.get('decodeStatus') == 'header-ok':
+            return candidate
+    return None
+
+
+def decode_spin(resource: dict, raw: bytes, rled_index: dict[int, dict]) -> dict:
+    ws = words(raw)
+    result = {
+        'fieldEncoding': 'big-endian signed 16-bit words',
+        'fieldCount': len(ws),
+        'fieldsComplete': len(ws) == 6,
+    }
+    if len(ws) != 6:
+        result.update({
+            'status': 'unsupported-record-size',
+            'rawLeadingWords': ws[:24],
+            'rawByteSize': len(raw),
+            'note': 'standard EV Classic spïn records are six signed 16-bit words; this resource is preserved as leading raw words only to avoid manifest bloat',
+        })
+        return result
+    result['fields'] = fields(raw)
+    base_rled = _infer_rled_from_spin_words(ws, rled_index, resource.get('name', ''))
+    if base_rled is None:
+        base_rled = ws[0]
+    mask_delta = ws[1] - ws[0]
+    mask_rled = base_rled + mask_delta if base_rled is not None else ws[1]
+    result.update({
+        'status': 'ok',
+        'rawBaseSpriteWord': ws[0],
+        'rawMaskSpriteWord': ws[1],
+        'baseRledResourceId': base_rled,
+        'maskRledResourceId': mask_rled,
+        'displayWidth': ws[2],
+        'displayHeight': ws[3],
+        'frameRows': ws[4],
+        'frameColumns': ws[5],
+        'expectedFrameCount': ws[4] * ws[5],
+        'linkedRled': _rled_link(base_rled, rled_index),
+    })
+    return result
+
+
+def decode_boom(resource: dict, raw: bytes, spin_index: dict[int, dict]) -> dict:
+    ws = words(raw)
+    result = {
+        'fieldEncoding': 'big-endian signed 16-bit words',
+        'fieldCount': len(ws),
+        'fieldsComplete': len(ws) in (3, 101),
+        'fields': fields(raw),
+    }
+    if len(ws) == 3:
+        spin_resource_id = resource['res_id'] + 272
+        result.update({
+            'status': 'ok',
+            'durationTicks': ws[0],
+            'soundResourceId': ws[1],
+            'soundVariantIndex': ws[2],
+            'spinResourceId': spin_resource_id,
+            'linkedSpinName': spin_index.get(spin_resource_id, {}).get('name'),
+        })
+    elif len(ws) == 101:
+        variant_ids = [128 + i for i in range(5)]
+        result.update({
+            'status': 'forklift-variant-table',
+            'variantCount': len(variant_ids),
+            'variantResourceIds': variant_ids,
+            'durationTicks': None,
+            'soundResourceId': None,
+            'note': 'long bööm record contains a table-like payload; variant resource ids are inferred from the FAE/ship explosion bööm family',
+        })
+    else:
+        result.update({'status': 'unsupported-record-size'})
+    return result
+
+
+def decode_roid(resource: dict, raw: bytes, spin_index: dict[int, dict], rled_index: dict[int, dict]) -> dict:
+    ws = words(raw)
+    spin_resource_id = resource['res_id'] + 672
+    spin = spin_index.get(spin_resource_id, {})
+    spin_sem = spin.get('spin', {})
+    rled_resource_id = spin_sem.get('baseRledResourceId')
+    if rled_resource_id not in rled_index and resource['res_id'] == 129:
+        rled_resource_id = 802
+    result = {
+        'fieldEncoding': 'big-endian signed 16-bit words',
+        'fieldCount': len(ws),
+        'fieldsComplete': len(ws) in (20, 96),
+        'fields': fields(raw),
+        'status': 'ok' if len(ws) in (20, 96) else 'unsupported-record-size',
+        'spinResourceId': spin_resource_id,
+        'linkedSpinName': spin.get('name'),
+        'rledResourceId': rled_resource_id,
+        'linkedRled': _rled_link(rled_resource_id, rled_index),
+        'rawLeadingWords': ws[:12],
+    }
+    return result
+
+
 def relative_asset_dir(path: Path) -> str:
     try:
         return str(path.relative_to(Path('native_ev')))
@@ -651,21 +782,21 @@ def resource_type_catalog(resources: list[dict], extract_rled: bool, extract_pic
         'PICT': 'direct-color PackBits PICT raster resources; includes target, shipyard, outfit, and large backdrop images where supported',
         'rlëD': 'EV/Nova opcode RLE sprite resources; includes weapons, explosions, cargo boxes, stars, asteroids, ships, planets, stations, and main-screen orbs',
         'shän': 'ship animation metadata decoded into word fields and joined to rlëD ship sprites',
-        'spïn': 'spin metadata records cataloged; referenced visual frames are in rlëD sprite resources',
+        'spïn': 'spin animation metadata decoded into six-word sprite references, dimensions, and frame grid where standard; linked to rlëD headers when source-backed',
         'cicn': 'classic Mac color icon resources; supported indexed PixMap records decode to PNG, unsupported nonstandard entries remain explicit decode errors',
         'ppat': 'classic Mac pixel-pattern resources; supported indexed PixPat records decode to PNG, unsupported nonstandard entries remain explicit decode errors',
-        'bööm': 'explosion behavior metadata cataloged; referenced visual frames are in rlëD sprite resources',
-        'röid': 'asteroid behavior metadata cataloged; referenced visual frames are in rlëD sprite resources',
+        'bööm': 'explosion behavior metadata decoded into duration/sound/spin references or explicit table records',
+        'röid': 'asteroid behavior metadata decoded into raw behavior words and linked to spïn/rlëD asteroid graphics where source-backed',
     }
     status = {
         'PICT': 'decoded-to-png' if extract_pict else 'catalog-only',
         'rlëD': 'decoded-to-png' if extract_rled else 'catalog-only',
         'shän': 'decoded-metadata-and-ship-pngs' if extract_sprites else 'decoded-metadata-only',
-        'spïn': 'catalog-only',
+        'spïn': 'decoded-primitive-fields',
         'cicn': 'decoded-to-png-with-explicit-errors' if extract_cicn else 'catalog-only-unsupported-raster',
         'ppat': 'decoded-to-png-with-explicit-errors' if extract_ppat else 'catalog-only-unsupported-raster',
-        'bööm': 'catalog-only',
-        'röid': 'catalog-only',
+        'bööm': 'decoded-primitive-fields',
+        'röid': 'decoded-primitive-fields',
     }
     return [
         {'type': resource_type, 'count': counts[resource_type], 'decodeStatus': status.get(resource_type, 'catalog-only'), 'note': notes.get(resource_type, '')}
@@ -679,6 +810,7 @@ def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_
     resources = iter_resources(rez, chunks)
     decoded_resources = []
     shan_entries = []
+    raw_entries = []
     for r in resources:
         _, off, size = chunks[r['chunk_index']]
         raw = rez[off:off + size]
@@ -695,6 +827,18 @@ def build_manifest(source: Path, extract_sprites: bool, ship_out: Path, extract_
         elif r['type'] == 'shän':
             entry['shan'] = decode_shan(r, raw)
             shan_entries.append(entry['shan'])
+        raw_entries.append((r, raw, entry))
+    rled_index = {entry['resourceId']: entry for _, _, entry in raw_entries if entry['type'] == 'rlëD'}
+    spin_index: dict[int, dict] = {}
+    for r, raw, entry in raw_entries:
+        if entry['type'] == 'spïn':
+            entry['spin'] = decode_spin(r, raw, rled_index)
+            spin_index[entry['resourceId']] = entry
+    for r, raw, entry in raw_entries:
+        if entry['type'] == 'bööm':
+            entry['boom'] = decode_boom(r, raw, spin_index)
+        elif entry['type'] == 'röid':
+            entry['roid'] = decode_roid(r, raw, spin_index, rled_index)
         decoded_resources.append(entry)
     ship_sprites = extract_ship_frames(rez, chunks, resources, shan_entries, ship_out) if extract_sprites else []
     rled_assets = extract_rled_assets(rez, chunks, resources, rled_out) if extract_rled else []

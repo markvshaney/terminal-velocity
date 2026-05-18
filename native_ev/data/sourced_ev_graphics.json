@@ -1,7 +1,7 @@
 {
   "sourceFile": "source-assets/ev-classic/Nova Files/EV Graphics.rez",
   "sourceSha256": "640f7698dcedc5faab86220284802b07a2a6fe719b3f988f5c4a4bcd4c3f89ad",
-  "method": "evnew-opcode-rled-shan-pict-cicn-ppat-v6",
+  "method": "evnew-opcode-rled-shan-pict-cicn-ppat-spin-boom-roid-v7",
   "note": "Full resource-map manifest plus rlëD headers, decoded rlëD PNG assets, decoded supported PICT/cicn/ppat PNG assets, and shän word-field decode. Extracted PNGs are local personal-use assets.",
   "chunkCount": 304,
   "resourceCount": 303,
@@ -15,8 +15,8 @@
     {
       "type": "bööm",
       "count": 5,
-      "decodeStatus": "catalog-only",
-      "note": "explosion behavior metadata cataloged; referenced visual frames are in rlëD sprite resources"
+      "decodeStatus": "decoded-primitive-fields",
+      "note": "explosion behavior metadata decoded into duration/sound/spin references or explicit table records"
     },
     {
       "type": "cicn",
@@ -39,8 +39,8 @@
     {
       "type": "röid",
       "count": 2,
-      "decodeStatus": "catalog-only",
-      "note": "asteroid behavior metadata cataloged; referenced visual frames are in rlëD sprite resources"
+      "decodeStatus": "decoded-primitive-fields",
+      "note": "asteroid behavior metadata decoded into raw behavior words and linked to spïn/rlëD asteroid graphics where source-backed"
     },
     {
       "type": "shän",
@@ -51,8 +51,8 @@
     {
       "type": "spïn",
       "count": 58,
-      "decodeStatus": "catalog-only",
-      "note": "spin metadata records cataloged; referenced visual frames are in rlëD sprite resources"
+      "decodeStatus": "decoded-primitive-fields",
+      "note": "spin animation metadata decoded into six-word sprite references, dimensions, and frame grid where standard; linked to rlëD headers when source-backed"
     }
   ],
   "resources": [
@@ -62,7 +62,38 @@
       "name": "FAE Small",
       "chunkIndex": 1,
       "byteOffset": 3691,
-      "size": 6
+      "size": 6,
+      "boom": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 3,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 100
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 1
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "durationTicks": 100,
+        "soundResourceId": 1,
+        "soundVariantIndex": 1,
+        "spinResourceId": 400,
+        "linkedSpinName": "Small Explosion"
+      }
     },
     {
       "type": "bööm",
@@ -70,7 +101,38 @@
       "name": "FAE Medium",
       "chunkIndex": 2,
       "byteOffset": 3697,
-      "size": 6
+      "size": 6,
+      "boom": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 3,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 50
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 0
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 2
+          }
+        ],
+        "status": "ok",
+        "durationTicks": 50,
+        "soundResourceId": 0,
+        "soundVariantIndex": 2,
+        "spinResourceId": 401,
+        "linkedSpinName": "Med Explosion"
+      }
     },
     {
       "type": "bööm",
@@ -78,7 +140,38 @@
       "name": "FAE Large",
       "chunkIndex": 3,
       "byteOffset": 3703,
-      "size": 6
+      "size": 6,
+      "boom": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 3,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 200
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 0
+          }
+        ],
+        "status": "ok",
+        "durationTicks": 200,
+        "soundResourceId": 2,
+        "soundVariantIndex": 0,
+        "spinResourceId": 402,
+        "linkedSpinName": "Large Explosion"
+      }
     },
     {
       "type": "bööm",
@@ -86,7 +179,38 @@
       "name": "Ship Breaks Up",
       "chunkIndex": 4,
       "byteOffset": 3709,
-      "size": 6
+      "size": 6,
+      "boom": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 3,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 50
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 3
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 2
+          }
+        ],
+        "status": "ok",
+        "durationTicks": 50,
+        "soundResourceId": 3,
+        "soundVariantIndex": 2,
+        "spinResourceId": 403,
+        "linkedSpinName": null
+      }
     },
     {
       "type": "bööm",
@@ -94,7 +218,632 @@
       "name": "Ship Explodes",
       "chunkIndex": 5,
       "byteOffset": 3715,
-      "size": 202
+      "size": 202,
+      "boom": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 101,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 0
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 0
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": -32766
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 0
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 0
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 16
+          },
+          {
+            "name": "word_006",
+            "wordIndex": 6,
+            "byteOffsetInRecord": 12,
+            "value": 16
+          },
+          {
+            "name": "word_007",
+            "wordIndex": 7,
+            "byteOffsetInRecord": 14,
+            "value": 0
+          },
+          {
+            "name": "word_008",
+            "wordIndex": 8,
+            "byteOffsetInRecord": 16,
+            "value": 0
+          },
+          {
+            "name": "word_009",
+            "wordIndex": 9,
+            "byteOffsetInRecord": 18,
+            "value": 0
+          },
+          {
+            "name": "word_010",
+            "wordIndex": 10,
+            "byteOffsetInRecord": 20,
+            "value": 0
+          },
+          {
+            "name": "word_011",
+            "wordIndex": 11,
+            "byteOffsetInRecord": 22,
+            "value": 72
+          },
+          {
+            "name": "word_012",
+            "wordIndex": 12,
+            "byteOffsetInRecord": 24,
+            "value": 0
+          },
+          {
+            "name": "word_013",
+            "wordIndex": 13,
+            "byteOffsetInRecord": 26,
+            "value": 72
+          },
+          {
+            "name": "word_014",
+            "wordIndex": 14,
+            "byteOffsetInRecord": 28,
+            "value": 0
+          },
+          {
+            "name": "word_015",
+            "wordIndex": 15,
+            "byteOffsetInRecord": 30,
+            "value": 0
+          },
+          {
+            "name": "word_016",
+            "wordIndex": 16,
+            "byteOffsetInRecord": 32,
+            "value": 1
+          },
+          {
+            "name": "word_017",
+            "wordIndex": 17,
+            "byteOffsetInRecord": 34,
+            "value": 1
+          },
+          {
+            "name": "word_018",
+            "wordIndex": 18,
+            "byteOffsetInRecord": 36,
+            "value": 1
+          },
+          {
+            "name": "word_019",
+            "wordIndex": 19,
+            "byteOffsetInRecord": 38,
+            "value": 0
+          },
+          {
+            "name": "word_020",
+            "wordIndex": 20,
+            "byteOffsetInRecord": 40,
+            "value": 0
+          },
+          {
+            "name": "word_021",
+            "wordIndex": 21,
+            "byteOffsetInRecord": 42,
+            "value": 0
+          },
+          {
+            "name": "word_022",
+            "wordIndex": 22,
+            "byteOffsetInRecord": 44,
+            "value": 0
+          },
+          {
+            "name": "word_023",
+            "wordIndex": 23,
+            "byteOffsetInRecord": 46,
+            "value": 0
+          },
+          {
+            "name": "word_024",
+            "wordIndex": 24,
+            "byteOffsetInRecord": 48,
+            "value": 0
+          },
+          {
+            "name": "word_025",
+            "wordIndex": 25,
+            "byteOffsetInRecord": 50,
+            "value": 0
+          },
+          {
+            "name": "word_026",
+            "wordIndex": 26,
+            "byteOffsetInRecord": 52,
+            "value": 0
+          },
+          {
+            "name": "word_027",
+            "wordIndex": 27,
+            "byteOffsetInRecord": 54,
+            "value": 2
+          },
+          {
+            "name": "word_028",
+            "wordIndex": 28,
+            "byteOffsetInRecord": 56,
+            "value": 0
+          },
+          {
+            "name": "word_029",
+            "wordIndex": 29,
+            "byteOffsetInRecord": 58,
+            "value": 0
+          },
+          {
+            "name": "word_030",
+            "wordIndex": 30,
+            "byteOffsetInRecord": 60,
+            "value": 16
+          },
+          {
+            "name": "word_031",
+            "wordIndex": 31,
+            "byteOffsetInRecord": 62,
+            "value": 16
+          },
+          {
+            "name": "word_032",
+            "wordIndex": 32,
+            "byteOffsetInRecord": 64,
+            "value": 0
+          },
+          {
+            "name": "word_033",
+            "wordIndex": 33,
+            "byteOffsetInRecord": 66,
+            "value": 0
+          },
+          {
+            "name": "word_034",
+            "wordIndex": 34,
+            "byteOffsetInRecord": 68,
+            "value": 2
+          },
+          {
+            "name": "word_035",
+            "wordIndex": 35,
+            "byteOffsetInRecord": 70,
+            "value": 0
+          },
+          {
+            "name": "word_036",
+            "wordIndex": 36,
+            "byteOffsetInRecord": 72,
+            "value": 0
+          },
+          {
+            "name": "word_037",
+            "wordIndex": 37,
+            "byteOffsetInRecord": 74,
+            "value": 16
+          },
+          {
+            "name": "word_038",
+            "wordIndex": 38,
+            "byteOffsetInRecord": 76,
+            "value": 16
+          },
+          {
+            "name": "word_039",
+            "wordIndex": 39,
+            "byteOffsetInRecord": 78,
+            "value": 0
+          },
+          {
+            "name": "word_040",
+            "wordIndex": 40,
+            "byteOffsetInRecord": 80,
+            "value": 0
+          },
+          {
+            "name": "word_041",
+            "wordIndex": 41,
+            "byteOffsetInRecord": 82,
+            "value": 0
+          },
+          {
+            "name": "word_042",
+            "wordIndex": 42,
+            "byteOffsetInRecord": 84,
+            "value": 0
+          },
+          {
+            "name": "word_043",
+            "wordIndex": 43,
+            "byteOffsetInRecord": 86,
+            "value": 0
+          },
+          {
+            "name": "word_044",
+            "wordIndex": 44,
+            "byteOffsetInRecord": 88,
+            "value": 0
+          },
+          {
+            "name": "word_045",
+            "wordIndex": 45,
+            "byteOffsetInRecord": 90,
+            "value": 4095
+          },
+          {
+            "name": "word_046",
+            "wordIndex": 46,
+            "byteOffsetInRecord": 92,
+            "value": 2048
+          },
+          {
+            "name": "word_047",
+            "wordIndex": 47,
+            "byteOffsetInRecord": 94,
+            "value": 2048
+          },
+          {
+            "name": "word_048",
+            "wordIndex": 48,
+            "byteOffsetInRecord": 96,
+            "value": 2048
+          },
+          {
+            "name": "word_049",
+            "wordIndex": 49,
+            "byteOffsetInRecord": 98,
+            "value": 2048
+          },
+          {
+            "name": "word_050",
+            "wordIndex": 50,
+            "byteOffsetInRecord": 100,
+            "value": 2048
+          },
+          {
+            "name": "word_051",
+            "wordIndex": 51,
+            "byteOffsetInRecord": 102,
+            "value": 2048
+          },
+          {
+            "name": "word_052",
+            "wordIndex": 52,
+            "byteOffsetInRecord": 104,
+            "value": 2048
+          },
+          {
+            "name": "word_053",
+            "wordIndex": 53,
+            "byteOffsetInRecord": 106,
+            "value": 2048
+          },
+          {
+            "name": "word_054",
+            "wordIndex": 54,
+            "byteOffsetInRecord": 108,
+            "value": 2048
+          },
+          {
+            "name": "word_055",
+            "wordIndex": 55,
+            "byteOffsetInRecord": 110,
+            "value": 2048
+          },
+          {
+            "name": "word_056",
+            "wordIndex": 56,
+            "byteOffsetInRecord": 112,
+            "value": 2048
+          },
+          {
+            "name": "word_057",
+            "wordIndex": 57,
+            "byteOffsetInRecord": 114,
+            "value": 0
+          },
+          {
+            "name": "word_058",
+            "wordIndex": 58,
+            "byteOffsetInRecord": 116,
+            "value": 0
+          },
+          {
+            "name": "word_059",
+            "wordIndex": 59,
+            "byteOffsetInRecord": 118,
+            "value": 0
+          },
+          {
+            "name": "word_060",
+            "wordIndex": 60,
+            "byteOffsetInRecord": 120,
+            "value": 0
+          },
+          {
+            "name": "word_061",
+            "wordIndex": 61,
+            "byteOffsetInRecord": 122,
+            "value": 0
+          },
+          {
+            "name": "word_062",
+            "wordIndex": 62,
+            "byteOffsetInRecord": 124,
+            "value": 0
+          },
+          {
+            "name": "word_063",
+            "wordIndex": 63,
+            "byteOffsetInRecord": 126,
+            "value": 0
+          },
+          {
+            "name": "word_064",
+            "wordIndex": 64,
+            "byteOffsetInRecord": 128,
+            "value": 0
+          },
+          {
+            "name": "word_065",
+            "wordIndex": 65,
+            "byteOffsetInRecord": 130,
+            "value": 0
+          },
+          {
+            "name": "word_066",
+            "wordIndex": 66,
+            "byteOffsetInRecord": 132,
+            "value": 0
+          },
+          {
+            "name": "word_067",
+            "wordIndex": 67,
+            "byteOffsetInRecord": 134,
+            "value": 0
+          },
+          {
+            "name": "word_068",
+            "wordIndex": 68,
+            "byteOffsetInRecord": 136,
+            "value": 0
+          },
+          {
+            "name": "word_069",
+            "wordIndex": 69,
+            "byteOffsetInRecord": 138,
+            "value": 0
+          },
+          {
+            "name": "word_070",
+            "wordIndex": 70,
+            "byteOffsetInRecord": 140,
+            "value": 0
+          },
+          {
+            "name": "word_071",
+            "wordIndex": 71,
+            "byteOffsetInRecord": 142,
+            "value": 0
+          },
+          {
+            "name": "word_072",
+            "wordIndex": 72,
+            "byteOffsetInRecord": 144,
+            "value": 0
+          },
+          {
+            "name": "word_073",
+            "wordIndex": 73,
+            "byteOffsetInRecord": 146,
+            "value": 0
+          },
+          {
+            "name": "word_074",
+            "wordIndex": 74,
+            "byteOffsetInRecord": 148,
+            "value": 0
+          },
+          {
+            "name": "word_075",
+            "wordIndex": 75,
+            "byteOffsetInRecord": 150,
+            "value": 0
+          },
+          {
+            "name": "word_076",
+            "wordIndex": 76,
+            "byteOffsetInRecord": 152,
+            "value": 1
+          },
+          {
+            "name": "word_077",
+            "wordIndex": 77,
+            "byteOffsetInRecord": 154,
+            "value": 0
+          },
+          {
+            "name": "word_078",
+            "wordIndex": 78,
+            "byteOffsetInRecord": 156,
+            "value": -1
+          },
+          {
+            "name": "word_079",
+            "wordIndex": 79,
+            "byteOffsetInRecord": 158,
+            "value": -1
+          },
+          {
+            "name": "word_080",
+            "wordIndex": 80,
+            "byteOffsetInRecord": 160,
+            "value": -1
+          },
+          {
+            "name": "word_081",
+            "wordIndex": 81,
+            "byteOffsetInRecord": 162,
+            "value": 1
+          },
+          {
+            "name": "word_082",
+            "wordIndex": 82,
+            "byteOffsetInRecord": 164,
+            "value": 0
+          },
+          {
+            "name": "word_083",
+            "wordIndex": 83,
+            "byteOffsetInRecord": 166,
+            "value": -26215
+          },
+          {
+            "name": "word_084",
+            "wordIndex": 84,
+            "byteOffsetInRecord": 168,
+            "value": -1
+          },
+          {
+            "name": "word_085",
+            "wordIndex": 85,
+            "byteOffsetInRecord": 170,
+            "value": 0
+          },
+          {
+            "name": "word_086",
+            "wordIndex": 86,
+            "byteOffsetInRecord": 172,
+            "value": 0
+          },
+          {
+            "name": "word_087",
+            "wordIndex": 87,
+            "byteOffsetInRecord": 174,
+            "value": 0
+          },
+          {
+            "name": "word_088",
+            "wordIndex": 88,
+            "byteOffsetInRecord": 176,
+            "value": 0
+          },
+          {
+            "name": "word_089",
+            "wordIndex": 89,
+            "byteOffsetInRecord": 178,
+            "value": 4095
+          },
+          {
+            "name": "word_090",
+            "wordIndex": 90,
+            "byteOffsetInRecord": 180,
+            "value": 2048
+          },
+          {
+            "name": "word_091",
+            "wordIndex": 91,
+            "byteOffsetInRecord": 182,
+            "value": 2048
+          },
+          {
+            "name": "word_092",
+            "wordIndex": 92,
+            "byteOffsetInRecord": 184,
+            "value": 2048
+          },
+          {
+            "name": "word_093",
+            "wordIndex": 93,
+            "byteOffsetInRecord": 186,
+            "value": 2048
+          },
+          {
+            "name": "word_094",
+            "wordIndex": 94,
+            "byteOffsetInRecord": 188,
+            "value": 2048
+          },
+          {
+            "name": "word_095",
+            "wordIndex": 95,
+            "byteOffsetInRecord": 190,
+            "value": 2048
+          },
+          {
+            "name": "word_096",
+            "wordIndex": 96,
+            "byteOffsetInRecord": 192,
+            "value": 2048
+          },
+          {
+            "name": "word_097",
+            "wordIndex": 97,
+            "byteOffsetInRecord": 194,
+            "value": 2048
+          },
+          {
+            "name": "word_098",
+            "wordIndex": 98,
+            "byteOffsetInRecord": 196,
+            "value": 2048
+          },
+          {
+            "name": "word_099",
+            "wordIndex": 99,
+            "byteOffsetInRecord": 198,
+            "value": 2048
+          },
+          {
+            "name": "word_100",
+            "wordIndex": 100,
+            "byteOffsetInRecord": 200,
+            "value": 2048
+          }
+        ],
+        "status": "forklift-variant-table",
+        "variantCount": 5,
+        "variantResourceIds": [
+          128,
+          129,
+          130,
+          131,
+          132
+        ],
+        "durationTicks": null,
+        "soundResourceId": null,
+        "note": "long bööm record contains a table-like payload; variant resource ids are inferred from the FAE/ship explosion bööm family"
+      }
     },
     {
       "type": "cicn",
@@ -3818,7 +4567,160 @@
       "name": "Small Asteroids",
       "chunkIndex": 217,
       "byteOffset": 2316545,
-      "size": 40
+      "size": 40,
+      "roid": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 20,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 32767
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 20
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": -1
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 0
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 0
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 0
+          },
+          {
+            "name": "word_006",
+            "wordIndex": 6,
+            "byteOffsetInRecord": 12,
+            "value": 0
+          },
+          {
+            "name": "word_007",
+            "wordIndex": 7,
+            "byteOffsetInRecord": 14,
+            "value": -1
+          },
+          {
+            "name": "word_008",
+            "wordIndex": 8,
+            "byteOffsetInRecord": 16,
+            "value": -1
+          },
+          {
+            "name": "word_009",
+            "wordIndex": 9,
+            "byteOffsetInRecord": 18,
+            "value": 0
+          },
+          {
+            "name": "word_010",
+            "wordIndex": 10,
+            "byteOffsetInRecord": 20,
+            "value": -1
+          },
+          {
+            "name": "word_011",
+            "wordIndex": 11,
+            "byteOffsetInRecord": 22,
+            "value": 32767
+          },
+          {
+            "name": "word_012",
+            "wordIndex": 12,
+            "byteOffsetInRecord": 24,
+            "value": 0
+          },
+          {
+            "name": "word_013",
+            "wordIndex": 13,
+            "byteOffsetInRecord": 26,
+            "value": 0
+          },
+          {
+            "name": "word_014",
+            "wordIndex": 14,
+            "byteOffsetInRecord": 28,
+            "value": 0
+          },
+          {
+            "name": "word_015",
+            "wordIndex": 15,
+            "byteOffsetInRecord": 30,
+            "value": 0
+          },
+          {
+            "name": "word_016",
+            "wordIndex": 16,
+            "byteOffsetInRecord": 32,
+            "value": 0
+          },
+          {
+            "name": "word_017",
+            "wordIndex": 17,
+            "byteOffsetInRecord": 34,
+            "value": 0
+          },
+          {
+            "name": "word_018",
+            "wordIndex": 18,
+            "byteOffsetInRecord": 36,
+            "value": 0
+          },
+          {
+            "name": "word_019",
+            "wordIndex": 19,
+            "byteOffsetInRecord": 38,
+            "value": 0
+          }
+        ],
+        "status": "ok",
+        "spinResourceId": 800,
+        "linkedSpinName": "Small Asteroids",
+        "rledResourceId": 800,
+        "linkedRled": {
+          "resourceId": 800,
+          "name": "Small Asteroids",
+          "width": 48,
+          "height": 48,
+          "frames": 30,
+          "status": "ok"
+        },
+        "rawLeadingWords": [
+          32767,
+          20,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          -1,
+          32767
+        ]
+      }
     },
     {
       "type": "röid",
@@ -3826,7 +4728,616 @@
       "name": "Big Asteroids",
       "chunkIndex": 218,
       "byteOffset": 2316585,
-      "size": 192
+      "size": 192,
+      "roid": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 96,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 1000
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 1001
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 1
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 24
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 0
+          },
+          {
+            "name": "word_006",
+            "wordIndex": 6,
+            "byteOffsetInRecord": 12,
+            "value": -1
+          },
+          {
+            "name": "word_007",
+            "wordIndex": 7,
+            "byteOffsetInRecord": 14,
+            "value": -1
+          },
+          {
+            "name": "word_008",
+            "wordIndex": 8,
+            "byteOffsetInRecord": 16,
+            "value": 0
+          },
+          {
+            "name": "word_009",
+            "wordIndex": 9,
+            "byteOffsetInRecord": 18,
+            "value": 0
+          },
+          {
+            "name": "word_010",
+            "wordIndex": 10,
+            "byteOffsetInRecord": 20,
+            "value": 0
+          },
+          {
+            "name": "word_011",
+            "wordIndex": 11,
+            "byteOffsetInRecord": 22,
+            "value": -1
+          },
+          {
+            "name": "word_012",
+            "wordIndex": 12,
+            "byteOffsetInRecord": 24,
+            "value": -1
+          },
+          {
+            "name": "word_013",
+            "wordIndex": 13,
+            "byteOffsetInRecord": 26,
+            "value": 0
+          },
+          {
+            "name": "word_014",
+            "wordIndex": 14,
+            "byteOffsetInRecord": 28,
+            "value": 0
+          },
+          {
+            "name": "word_015",
+            "wordIndex": 15,
+            "byteOffsetInRecord": 30,
+            "value": -1
+          },
+          {
+            "name": "word_016",
+            "wordIndex": 16,
+            "byteOffsetInRecord": 32,
+            "value": -1
+          },
+          {
+            "name": "word_017",
+            "wordIndex": 17,
+            "byteOffsetInRecord": 34,
+            "value": 0
+          },
+          {
+            "name": "word_018",
+            "wordIndex": 18,
+            "byteOffsetInRecord": 36,
+            "value": 0
+          },
+          {
+            "name": "word_019",
+            "wordIndex": 19,
+            "byteOffsetInRecord": 38,
+            "value": -1
+          },
+          {
+            "name": "word_020",
+            "wordIndex": 20,
+            "byteOffsetInRecord": 40,
+            "value": -1
+          },
+          {
+            "name": "word_021",
+            "wordIndex": 21,
+            "byteOffsetInRecord": 42,
+            "value": 0
+          },
+          {
+            "name": "word_022",
+            "wordIndex": 22,
+            "byteOffsetInRecord": 44,
+            "value": 0
+          },
+          {
+            "name": "word_023",
+            "wordIndex": 23,
+            "byteOffsetInRecord": 46,
+            "value": 0
+          },
+          {
+            "name": "word_024",
+            "wordIndex": 24,
+            "byteOffsetInRecord": 48,
+            "value": 0
+          },
+          {
+            "name": "word_025",
+            "wordIndex": 25,
+            "byteOffsetInRecord": 50,
+            "value": 0
+          },
+          {
+            "name": "word_026",
+            "wordIndex": 26,
+            "byteOffsetInRecord": 52,
+            "value": 36
+          },
+          {
+            "name": "word_027",
+            "wordIndex": 27,
+            "byteOffsetInRecord": 54,
+            "value": 0
+          },
+          {
+            "name": "word_028",
+            "wordIndex": 28,
+            "byteOffsetInRecord": 56,
+            "value": 0
+          },
+          {
+            "name": "word_029",
+            "wordIndex": 29,
+            "byteOffsetInRecord": 58,
+            "value": 0
+          },
+          {
+            "name": "word_030",
+            "wordIndex": 30,
+            "byteOffsetInRecord": 60,
+            "value": 0
+          },
+          {
+            "name": "word_031",
+            "wordIndex": 31,
+            "byteOffsetInRecord": 62,
+            "value": 0
+          },
+          {
+            "name": "word_032",
+            "wordIndex": 32,
+            "byteOffsetInRecord": 64,
+            "value": -1
+          },
+          {
+            "name": "word_033",
+            "wordIndex": 33,
+            "byteOffsetInRecord": 66,
+            "value": -1
+          },
+          {
+            "name": "word_034",
+            "wordIndex": 34,
+            "byteOffsetInRecord": 68,
+            "value": 0
+          },
+          {
+            "name": "word_035",
+            "wordIndex": 35,
+            "byteOffsetInRecord": 70,
+            "value": 0
+          },
+          {
+            "name": "word_036",
+            "wordIndex": 36,
+            "byteOffsetInRecord": 72,
+            "value": 0
+          },
+          {
+            "name": "word_037",
+            "wordIndex": 37,
+            "byteOffsetInRecord": 74,
+            "value": 0
+          },
+          {
+            "name": "word_038",
+            "wordIndex": 38,
+            "byteOffsetInRecord": 76,
+            "value": 0
+          },
+          {
+            "name": "word_039",
+            "wordIndex": 39,
+            "byteOffsetInRecord": 78,
+            "value": 0
+          },
+          {
+            "name": "word_040",
+            "wordIndex": 40,
+            "byteOffsetInRecord": 80,
+            "value": 12
+          },
+          {
+            "name": "word_041",
+            "wordIndex": 41,
+            "byteOffsetInRecord": 82,
+            "value": 12
+          },
+          {
+            "name": "word_042",
+            "wordIndex": 42,
+            "byteOffsetInRecord": 84,
+            "value": 12
+          },
+          {
+            "name": "word_043",
+            "wordIndex": 43,
+            "byteOffsetInRecord": 86,
+            "value": 12
+          },
+          {
+            "name": "word_044",
+            "wordIndex": 44,
+            "byteOffsetInRecord": 88,
+            "value": 0
+          },
+          {
+            "name": "word_045",
+            "wordIndex": 45,
+            "byteOffsetInRecord": 90,
+            "value": 0
+          },
+          {
+            "name": "word_046",
+            "wordIndex": 46,
+            "byteOffsetInRecord": 92,
+            "value": 0
+          },
+          {
+            "name": "word_047",
+            "wordIndex": 47,
+            "byteOffsetInRecord": 94,
+            "value": 0
+          },
+          {
+            "name": "word_048",
+            "wordIndex": 48,
+            "byteOffsetInRecord": 96,
+            "value": 0
+          },
+          {
+            "name": "word_049",
+            "wordIndex": 49,
+            "byteOffsetInRecord": 98,
+            "value": 0
+          },
+          {
+            "name": "word_050",
+            "wordIndex": 50,
+            "byteOffsetInRecord": 100,
+            "value": 0
+          },
+          {
+            "name": "word_051",
+            "wordIndex": 51,
+            "byteOffsetInRecord": 102,
+            "value": 0
+          },
+          {
+            "name": "word_052",
+            "wordIndex": 52,
+            "byteOffsetInRecord": 104,
+            "value": 0
+          },
+          {
+            "name": "word_053",
+            "wordIndex": 53,
+            "byteOffsetInRecord": 106,
+            "value": 0
+          },
+          {
+            "name": "word_054",
+            "wordIndex": 54,
+            "byteOffsetInRecord": 108,
+            "value": 0
+          },
+          {
+            "name": "word_055",
+            "wordIndex": 55,
+            "byteOffsetInRecord": 110,
+            "value": 0
+          },
+          {
+            "name": "word_056",
+            "wordIndex": 56,
+            "byteOffsetInRecord": 112,
+            "value": 12
+          },
+          {
+            "name": "word_057",
+            "wordIndex": 57,
+            "byteOffsetInRecord": 114,
+            "value": 12
+          },
+          {
+            "name": "word_058",
+            "wordIndex": 58,
+            "byteOffsetInRecord": 116,
+            "value": 12
+          },
+          {
+            "name": "word_059",
+            "wordIndex": 59,
+            "byteOffsetInRecord": 118,
+            "value": 12
+          },
+          {
+            "name": "word_060",
+            "wordIndex": 60,
+            "byteOffsetInRecord": 120,
+            "value": 0
+          },
+          {
+            "name": "word_061",
+            "wordIndex": 61,
+            "byteOffsetInRecord": 122,
+            "value": 0
+          },
+          {
+            "name": "word_062",
+            "wordIndex": 62,
+            "byteOffsetInRecord": 124,
+            "value": 0
+          },
+          {
+            "name": "word_063",
+            "wordIndex": 63,
+            "byteOffsetInRecord": 126,
+            "value": 0
+          },
+          {
+            "name": "word_064",
+            "wordIndex": 64,
+            "byteOffsetInRecord": 128,
+            "value": 12
+          },
+          {
+            "name": "word_065",
+            "wordIndex": 65,
+            "byteOffsetInRecord": 130,
+            "value": 12
+          },
+          {
+            "name": "word_066",
+            "wordIndex": 66,
+            "byteOffsetInRecord": 132,
+            "value": 12
+          },
+          {
+            "name": "word_067",
+            "wordIndex": 67,
+            "byteOffsetInRecord": 134,
+            "value": 12
+          },
+          {
+            "name": "word_068",
+            "wordIndex": 68,
+            "byteOffsetInRecord": 136,
+            "value": 0
+          },
+          {
+            "name": "word_069",
+            "wordIndex": 69,
+            "byteOffsetInRecord": 138,
+            "value": 0
+          },
+          {
+            "name": "word_070",
+            "wordIndex": 70,
+            "byteOffsetInRecord": 140,
+            "value": 0
+          },
+          {
+            "name": "word_071",
+            "wordIndex": 71,
+            "byteOffsetInRecord": 142,
+            "value": 0
+          },
+          {
+            "name": "word_072",
+            "wordIndex": 72,
+            "byteOffsetInRecord": 144,
+            "value": 0
+          },
+          {
+            "name": "word_073",
+            "wordIndex": 73,
+            "byteOffsetInRecord": 146,
+            "value": 0
+          },
+          {
+            "name": "word_074",
+            "wordIndex": 74,
+            "byteOffsetInRecord": 148,
+            "value": 0
+          },
+          {
+            "name": "word_075",
+            "wordIndex": 75,
+            "byteOffsetInRecord": 150,
+            "value": 0
+          },
+          {
+            "name": "word_076",
+            "wordIndex": 76,
+            "byteOffsetInRecord": 152,
+            "value": 0
+          },
+          {
+            "name": "word_077",
+            "wordIndex": 77,
+            "byteOffsetInRecord": 154,
+            "value": 0
+          },
+          {
+            "name": "word_078",
+            "wordIndex": 78,
+            "byteOffsetInRecord": 156,
+            "value": 0
+          },
+          {
+            "name": "word_079",
+            "wordIndex": 79,
+            "byteOffsetInRecord": 158,
+            "value": 0
+          },
+          {
+            "name": "word_080",
+            "wordIndex": 80,
+            "byteOffsetInRecord": 160,
+            "value": 0
+          },
+          {
+            "name": "word_081",
+            "wordIndex": 81,
+            "byteOffsetInRecord": 162,
+            "value": 0
+          },
+          {
+            "name": "word_082",
+            "wordIndex": 82,
+            "byteOffsetInRecord": 164,
+            "value": 0
+          },
+          {
+            "name": "word_083",
+            "wordIndex": 83,
+            "byteOffsetInRecord": 166,
+            "value": 0
+          },
+          {
+            "name": "word_084",
+            "wordIndex": 84,
+            "byteOffsetInRecord": 168,
+            "value": 0
+          },
+          {
+            "name": "word_085",
+            "wordIndex": 85,
+            "byteOffsetInRecord": 170,
+            "value": 0
+          },
+          {
+            "name": "word_086",
+            "wordIndex": 86,
+            "byteOffsetInRecord": 172,
+            "value": 0
+          },
+          {
+            "name": "word_087",
+            "wordIndex": 87,
+            "byteOffsetInRecord": 174,
+            "value": 0
+          },
+          {
+            "name": "word_088",
+            "wordIndex": 88,
+            "byteOffsetInRecord": 176,
+            "value": 0
+          },
+          {
+            "name": "word_089",
+            "wordIndex": 89,
+            "byteOffsetInRecord": 178,
+            "value": 0
+          },
+          {
+            "name": "word_090",
+            "wordIndex": 90,
+            "byteOffsetInRecord": 180,
+            "value": 0
+          },
+          {
+            "name": "word_091",
+            "wordIndex": 91,
+            "byteOffsetInRecord": 182,
+            "value": 0
+          },
+          {
+            "name": "word_092",
+            "wordIndex": 92,
+            "byteOffsetInRecord": 184,
+            "value": 0
+          },
+          {
+            "name": "word_093",
+            "wordIndex": 93,
+            "byteOffsetInRecord": 186,
+            "value": 0
+          },
+          {
+            "name": "word_094",
+            "wordIndex": 94,
+            "byteOffsetInRecord": 188,
+            "value": 0
+          },
+          {
+            "name": "word_095",
+            "wordIndex": 95,
+            "byteOffsetInRecord": 190,
+            "value": 0
+          }
+        ],
+        "status": "ok",
+        "spinResourceId": 801,
+        "linkedSpinName": "Big Asteroids",
+        "rledResourceId": 802,
+        "linkedRled": {
+          "resourceId": 802,
+          "name": "Large Asteroids",
+          "width": 24,
+          "height": 24,
+          "frames": 36,
+          "status": "ok"
+        },
+        "rawLeadingWords": [
+          1000,
+          1001,
+          1,
+          24,
+          24,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          0,
+          -1
+        ]
+      }
     },
     {
       "type": "shän",
@@ -19602,7 +21113,68 @@
       "name": "Small Explosion",
       "chunkIndex": 246,
       "byteOffset": 2321781,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 4002
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 4003
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 32
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 26
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 8
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 4002,
+        "rawMaskSpriteWord": 4003,
+        "baseRledResourceId": 4000,
+        "maskRledResourceId": 4001,
+        "displayWidth": 32,
+        "displayHeight": 26,
+        "frameRows": 8,
+        "frameColumns": 1,
+        "expectedFrameCount": 8,
+        "linkedRled": {
+          "resourceId": 4000,
+          "name": "Small Explosion",
+          "width": 32,
+          "height": 26,
+          "frames": 8,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19610,7 +21182,68 @@
       "name": "Med Explosion",
       "chunkIndex": 247,
       "byteOffset": 2321793,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 4004
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 4005
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 32
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 32
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 8
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 4004,
+        "rawMaskSpriteWord": 4005,
+        "baseRledResourceId": 4002,
+        "maskRledResourceId": 4003,
+        "displayWidth": 32,
+        "displayHeight": 32,
+        "frameRows": 8,
+        "frameColumns": 1,
+        "expectedFrameCount": 8,
+        "linkedRled": {
+          "resourceId": 4002,
+          "name": "Med Explosion",
+          "width": 32,
+          "height": 32,
+          "frames": 8,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19618,7 +21251,68 @@
       "name": "Large Explosion",
       "chunkIndex": 248,
       "byteOffset": 2321805,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 500
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 501
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 500,
+        "rawMaskSpriteWord": 501,
+        "baseRledResourceId": 500,
+        "maskRledResourceId": 501,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 500,
+          "name": "Boxes",
+          "width": 8,
+          "height": 1,
+          "frames": 2,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19626,7 +21320,68 @@
       "name": "Boxes",
       "chunkIndex": 249,
       "byteOffset": 2321817,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 500
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 501
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 500,
+        "rawMaskSpriteWord": 501,
+        "baseRledResourceId": 500,
+        "maskRledResourceId": 501,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 500,
+          "name": "Boxes",
+          "width": 8,
+          "height": 1,
+          "frames": 2,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19634,7 +21389,68 @@
       "name": "Micro Metal",
       "chunkIndex": 250,
       "byteOffset": 2321829,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 500
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 501
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 500,
+        "rawMaskSpriteWord": 501,
+        "baseRledResourceId": 500,
+        "maskRledResourceId": 501,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 500,
+          "name": "Boxes",
+          "width": 8,
+          "height": 1,
+          "frames": 2,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19642,7 +21458,68 @@
       "name": "Micro Ice",
       "chunkIndex": 251,
       "byteOffset": 2321841,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 500
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 501
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 500,
+        "rawMaskSpriteWord": 501,
+        "baseRledResourceId": 500,
+        "maskRledResourceId": 501,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 500,
+          "name": "Boxes",
+          "width": 8,
+          "height": 1,
+          "frames": 2,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19650,7 +21527,68 @@
       "name": "Micro Silicates",
       "chunkIndex": 252,
       "byteOffset": 2321853,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 500
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 501
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 500,
+        "rawMaskSpriteWord": 501,
+        "baseRledResourceId": 500,
+        "maskRledResourceId": 501,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 500,
+          "name": "Boxes",
+          "width": 8,
+          "height": 1,
+          "frames": 2,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19658,7 +21596,68 @@
       "name": "Micro Metal [rich]",
       "chunkIndex": 253,
       "byteOffset": 2321865,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 700
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 701
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 1
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 2
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 700,
+        "rawMaskSpriteWord": 701,
+        "baseRledResourceId": 700,
+        "maskRledResourceId": 701,
+        "displayWidth": 8,
+        "displayHeight": 1,
+        "frameRows": 2,
+        "frameColumns": 1,
+        "expectedFrameCount": 2,
+        "linkedRled": {
+          "resourceId": 700,
+          "name": "Stars",
+          "width": 48,
+          "height": 48,
+          "frames": 20,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19666,7 +21665,68 @@
       "name": "Stars",
       "chunkIndex": 254,
       "byteOffset": 2321877,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 800
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 801
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 5
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 4
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 800,
+        "rawMaskSpriteWord": 801,
+        "baseRledResourceId": 800,
+        "maskRledResourceId": 801,
+        "displayWidth": 24,
+        "displayHeight": 24,
+        "frameRows": 5,
+        "frameColumns": 4,
+        "expectedFrameCount": 20,
+        "linkedRled": {
+          "resourceId": 800,
+          "name": "Small Asteroids",
+          "width": 48,
+          "height": 48,
+          "frames": 30,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19674,7 +21734,68 @@
       "name": "Small Asteroids",
       "chunkIndex": 255,
       "byteOffset": 2321889,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 802
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 803
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 32
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 32
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 5
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 802,
+        "rawMaskSpriteWord": 803,
+        "baseRledResourceId": 800,
+        "maskRledResourceId": 801,
+        "displayWidth": 32,
+        "displayHeight": 32,
+        "frameRows": 5,
+        "frameColumns": 6,
+        "expectedFrameCount": 30,
+        "linkedRled": {
+          "resourceId": 800,
+          "name": "Small Asteroids",
+          "width": 48,
+          "height": 48,
+          "frames": 30,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19682,7 +21803,61 @@
       "name": "Big Asteroids",
       "chunkIndex": 256,
       "byteOffset": 2321901,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 8005
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 8006
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 32
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 32
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 4
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 8005,
+        "rawMaskSpriteWord": 8006,
+        "baseRledResourceId": 8005,
+        "maskRledResourceId": 8006,
+        "displayWidth": 32,
+        "displayHeight": 32,
+        "frameRows": 4,
+        "frameColumns": 1,
+        "expectedFrameCount": 4,
+        "linkedRled": null
+      }
     },
     {
       "type": "spïn",
@@ -19690,7 +21865,68 @@
       "name": "Main screen orbs",
       "chunkIndex": 257,
       "byteOffset": 2321913,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2000
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2041
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2000,
+        "rawMaskSpriteWord": 2041,
+        "baseRledResourceId": 2000,
+        "maskRledResourceId": 2041,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2000,
+          "name": "Planets",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19698,7 +21934,68 @@
       "name": "Planets",
       "chunkIndex": 258,
       "byteOffset": 2321925,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2001
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2042
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2001,
+        "rawMaskSpriteWord": 2042,
+        "baseRledResourceId": 2001,
+        "maskRledResourceId": 2042,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2001,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19706,7 +22003,68 @@
       "name": "",
       "chunkIndex": 259,
       "byteOffset": 2321937,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2002
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2043
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2002,
+        "rawMaskSpriteWord": 2043,
+        "baseRledResourceId": 2002,
+        "maskRledResourceId": 2043,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2002,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19714,7 +22072,68 @@
       "name": "",
       "chunkIndex": 260,
       "byteOffset": 2321949,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2003
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2044
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2003,
+        "rawMaskSpriteWord": 2044,
+        "baseRledResourceId": 2003,
+        "maskRledResourceId": 2044,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2003,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19722,7 +22141,68 @@
       "name": "",
       "chunkIndex": 261,
       "byteOffset": 2321961,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2004
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2045
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2004,
+        "rawMaskSpriteWord": 2045,
+        "baseRledResourceId": 2004,
+        "maskRledResourceId": 2045,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2004,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19730,7 +22210,68 @@
       "name": "",
       "chunkIndex": 262,
       "byteOffset": 2321973,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2005
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2046
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2005,
+        "rawMaskSpriteWord": 2046,
+        "baseRledResourceId": 2005,
+        "maskRledResourceId": 2046,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2005,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19738,7 +22279,68 @@
       "name": "",
       "chunkIndex": 263,
       "byteOffset": 2321985,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2006
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2047
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2006,
+        "rawMaskSpriteWord": 2047,
+        "baseRledResourceId": 2006,
+        "maskRledResourceId": 2047,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2006,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19746,7 +22348,68 @@
       "name": "",
       "chunkIndex": 264,
       "byteOffset": 2321997,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2007
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2048
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2007,
+        "rawMaskSpriteWord": 2048,
+        "baseRledResourceId": 2007,
+        "maskRledResourceId": 2048,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2007,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19754,7 +22417,68 @@
       "name": "",
       "chunkIndex": 265,
       "byteOffset": 2322009,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2008
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2049
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2008,
+        "rawMaskSpriteWord": 2049,
+        "baseRledResourceId": 2008,
+        "maskRledResourceId": 2049,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2008,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19762,7 +22486,68 @@
       "name": "",
       "chunkIndex": 266,
       "byteOffset": 2322021,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2009
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2050
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2009,
+        "rawMaskSpriteWord": 2050,
+        "baseRledResourceId": 2009,
+        "maskRledResourceId": 2050,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2009,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19770,7 +22555,68 @@
       "name": "",
       "chunkIndex": 267,
       "byteOffset": 2322033,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2010
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2051
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2010,
+        "rawMaskSpriteWord": 2051,
+        "baseRledResourceId": 2010,
+        "maskRledResourceId": 2051,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2010,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19778,7 +22624,68 @@
       "name": "",
       "chunkIndex": 268,
       "byteOffset": 2322045,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2011
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2052
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2011,
+        "rawMaskSpriteWord": 2052,
+        "baseRledResourceId": 2011,
+        "maskRledResourceId": 2052,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2011,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19786,7 +22693,68 @@
       "name": "",
       "chunkIndex": 269,
       "byteOffset": 2322057,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2012
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2053
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2012,
+        "rawMaskSpriteWord": 2053,
+        "baseRledResourceId": 2012,
+        "maskRledResourceId": 2053,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2012,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19794,7 +22762,68 @@
       "name": "",
       "chunkIndex": 270,
       "byteOffset": 2322069,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2013
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2054
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2013,
+        "rawMaskSpriteWord": 2054,
+        "baseRledResourceId": 2013,
+        "maskRledResourceId": 2054,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2013,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19802,7 +22831,68 @@
       "name": "",
       "chunkIndex": 271,
       "byteOffset": 2322081,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2014
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2055
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2014,
+        "rawMaskSpriteWord": 2055,
+        "baseRledResourceId": 2014,
+        "maskRledResourceId": 2055,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2014,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19810,7 +22900,68 @@
       "name": "",
       "chunkIndex": 272,
       "byteOffset": 2322093,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2015
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2056
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2015,
+        "rawMaskSpriteWord": 2056,
+        "baseRledResourceId": 2015,
+        "maskRledResourceId": 2056,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2015,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19818,7 +22969,68 @@
       "name": "",
       "chunkIndex": 273,
       "byteOffset": 2322105,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2016
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2057
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2016,
+        "rawMaskSpriteWord": 2057,
+        "baseRledResourceId": 2016,
+        "maskRledResourceId": 2057,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2016,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19826,7 +23038,68 @@
       "name": "",
       "chunkIndex": 274,
       "byteOffset": 2322117,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2017
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2058
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2017,
+        "rawMaskSpriteWord": 2058,
+        "baseRledResourceId": 2017,
+        "maskRledResourceId": 2058,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2017,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19834,7 +23107,68 @@
       "name": "",
       "chunkIndex": 275,
       "byteOffset": 2322129,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2018
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2059
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2018,
+        "rawMaskSpriteWord": 2059,
+        "baseRledResourceId": 2018,
+        "maskRledResourceId": 2059,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2018,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19842,7 +23176,68 @@
       "name": "",
       "chunkIndex": 276,
       "byteOffset": 2322141,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2019
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2060
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2019,
+        "rawMaskSpriteWord": 2060,
+        "baseRledResourceId": 2019,
+        "maskRledResourceId": 2060,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2019,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19850,7 +23245,68 @@
       "name": "",
       "chunkIndex": 277,
       "byteOffset": 2322153,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2020
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2061
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2020,
+        "rawMaskSpriteWord": 2061,
+        "baseRledResourceId": 2020,
+        "maskRledResourceId": 2061,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2020,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19858,7 +23314,68 @@
       "name": "",
       "chunkIndex": 278,
       "byteOffset": 2322165,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2021
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2062
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2021,
+        "rawMaskSpriteWord": 2062,
+        "baseRledResourceId": 2021,
+        "maskRledResourceId": 2062,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2021,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19866,7 +23383,68 @@
       "name": "",
       "chunkIndex": 279,
       "byteOffset": 2322177,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2022
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2063
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2022,
+        "rawMaskSpriteWord": 2063,
+        "baseRledResourceId": 2022,
+        "maskRledResourceId": 2063,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2022,
+          "name": "",
+          "width": 80,
+          "height": 75,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19874,7 +23452,68 @@
       "name": "",
       "chunkIndex": 280,
       "byteOffset": 2322189,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2023
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2064
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 80
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 75
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2023,
+        "rawMaskSpriteWord": 2064,
+        "baseRledResourceId": 2023,
+        "maskRledResourceId": 2064,
+        "displayWidth": 80,
+        "displayHeight": 75,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2023,
+          "name": "",
+          "width": 48,
+          "height": 48,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19882,7 +23521,61 @@
       "name": "",
       "chunkIndex": 281,
       "byteOffset": 2322201,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2026
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2027
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 48
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 48
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2026,
+        "rawMaskSpriteWord": 2027,
+        "baseRledResourceId": 2024,
+        "maskRledResourceId": 2025,
+        "displayWidth": 48,
+        "displayHeight": 48,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": null
+      }
     },
     {
       "type": "spïn",
@@ -19890,7 +23583,68 @@
       "name": "Stations",
       "chunkIndex": 282,
       "byteOffset": 2322213,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2028
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2029
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 48
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 48
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2028,
+        "rawMaskSpriteWord": 2029,
+        "baseRledResourceId": 2026,
+        "maskRledResourceId": 2027,
+        "displayWidth": 48,
+        "displayHeight": 48,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2026,
+          "name": "Stations",
+          "width": 48,
+          "height": 48,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19898,7 +23652,68 @@
       "name": "",
       "chunkIndex": 283,
       "byteOffset": 2322225,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2030
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2031
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 48
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 48
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2030,
+        "rawMaskSpriteWord": 2031,
+        "baseRledResourceId": 2030,
+        "maskRledResourceId": 2031,
+        "displayWidth": 48,
+        "displayHeight": 48,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2030,
+          "name": "",
+          "width": 48,
+          "height": 48,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19906,7 +23721,68 @@
       "name": "",
       "chunkIndex": 284,
       "byteOffset": 2322237,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2032
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2033
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 48
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 48
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2032,
+        "rawMaskSpriteWord": 2033,
+        "baseRledResourceId": 2032,
+        "maskRledResourceId": 2033,
+        "displayWidth": 48,
+        "displayHeight": 48,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2032,
+          "name": "",
+          "width": 24,
+          "height": 24,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19914,7 +23790,68 @@
       "name": "",
       "chunkIndex": 285,
       "byteOffset": 2322249,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2034
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2040
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2034,
+        "rawMaskSpriteWord": 2040,
+        "baseRledResourceId": 2032,
+        "maskRledResourceId": 2038,
+        "displayWidth": 24,
+        "displayHeight": 24,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2032,
+          "name": "",
+          "width": 24,
+          "height": 24,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19922,7 +23859,68 @@
       "name": "Moons",
       "chunkIndex": 286,
       "byteOffset": 2322261,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2035
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2040
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2035,
+        "rawMaskSpriteWord": 2040,
+        "baseRledResourceId": 2035,
+        "maskRledResourceId": 2040,
+        "displayWidth": 24,
+        "displayHeight": 24,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2035,
+          "name": "",
+          "width": 24,
+          "height": 24,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19930,7 +23928,68 @@
       "name": "",
       "chunkIndex": 287,
       "byteOffset": 2322273,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2036
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2040
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2036,
+        "rawMaskSpriteWord": 2040,
+        "baseRledResourceId": 2036,
+        "maskRledResourceId": 2040,
+        "displayWidth": 24,
+        "displayHeight": 24,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2036,
+          "name": "",
+          "width": 24,
+          "height": 24,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19938,7 +23997,68 @@
       "name": "",
       "chunkIndex": 288,
       "byteOffset": 2322285,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2037
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2040
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2037,
+        "rawMaskSpriteWord": 2040,
+        "baseRledResourceId": 2037,
+        "maskRledResourceId": 2040,
+        "displayWidth": 24,
+        "displayHeight": 24,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2037,
+          "name": "",
+          "width": 24,
+          "height": 24,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19946,7 +24066,68 @@
       "name": "",
       "chunkIndex": 289,
       "byteOffset": 2322297,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2038
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2040
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2038,
+        "rawMaskSpriteWord": 2040,
+        "baseRledResourceId": 2038,
+        "maskRledResourceId": 2040,
+        "displayWidth": 24,
+        "displayHeight": 24,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2038,
+          "name": "",
+          "width": 24,
+          "height": 24,
+          "frames": 1,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19954,7 +24135,68 @@
       "name": "",
       "chunkIndex": 290,
       "byteOffset": 2322309,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 2039
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 2040
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 24
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 1
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 1
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 2039,
+        "rawMaskSpriteWord": 2040,
+        "baseRledResourceId": 2039,
+        "maskRledResourceId": 2040,
+        "displayWidth": 24,
+        "displayHeight": 24,
+        "frameRows": 1,
+        "frameColumns": 1,
+        "expectedFrameCount": 1,
+        "linkedRled": {
+          "resourceId": 2039,
+          "name": "",
+          "width": 16,
+          "height": 12,
+          "frames": 8,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19962,7 +24204,68 @@
       "name": "",
       "chunkIndex": 291,
       "byteOffset": 2322321,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 210
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 211
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 210,
+        "rawMaskSpriteWord": 211,
+        "baseRledResourceId": 210,
+        "maskRledResourceId": 211,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 210,
+          "name": "",
+          "width": 32,
+          "height": 28,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19970,7 +24273,68 @@
       "name": "Laser Bolt",
       "chunkIndex": 292,
       "byteOffset": 2322333,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 200
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 201
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 200,
+        "rawMaskSpriteWord": 201,
+        "baseRledResourceId": 200,
+        "maskRledResourceId": 201,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 200,
+          "name": "Weaponry",
+          "width": 8,
+          "height": 8,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19978,7 +24342,68 @@
       "name": "Neutron Blast",
       "chunkIndex": 293,
       "byteOffset": 2322345,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 202
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 203
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 202,
+        "rawMaskSpriteWord": 203,
+        "baseRledResourceId": 200,
+        "maskRledResourceId": 201,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 200,
+          "name": "Weaponry",
+          "width": 8,
+          "height": 8,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19986,7 +24411,68 @@
       "name": "Proton Bolt",
       "chunkIndex": 294,
       "byteOffset": 2322357,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 204
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 205
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 16
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 16
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 204,
+        "rawMaskSpriteWord": 205,
+        "baseRledResourceId": 202,
+        "maskRledResourceId": 203,
+        "displayWidth": 16,
+        "displayHeight": 16,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 202,
+          "name": "",
+          "width": 16,
+          "height": 16,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -19994,7 +24480,68 @@
       "name": "Torpedo",
       "chunkIndex": 295,
       "byteOffset": 2322369,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 206
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 207
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 24
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 20
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 206,
+        "rawMaskSpriteWord": 207,
+        "baseRledResourceId": 204,
+        "maskRledResourceId": 205,
+        "displayWidth": 24,
+        "displayHeight": 20,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 204,
+          "name": "",
+          "width": 24,
+          "height": 20,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20002,7 +24549,68 @@
       "name": "Missile",
       "chunkIndex": 296,
       "byteOffset": 2322381,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 208
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 209
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 208,
+        "rawMaskSpriteWord": 209,
+        "baseRledResourceId": 208,
+        "maskRledResourceId": 209,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 208,
+          "name": "",
+          "width": 8,
+          "height": 8,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20010,7 +24618,68 @@
       "name": "Mass Dart",
       "chunkIndex": 297,
       "byteOffset": 2322393,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 212
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 213
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 32
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 28
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 212,
+        "rawMaskSpriteWord": 213,
+        "baseRledResourceId": 210,
+        "maskRledResourceId": 211,
+        "displayWidth": 32,
+        "displayHeight": 28,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 210,
+          "name": "",
+          "width": 32,
+          "height": 28,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20018,7 +24687,68 @@
       "name": "Rocket",
       "chunkIndex": 298,
       "byteOffset": 2322405,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 214
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 215
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 16
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 16
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 214,
+        "rawMaskSpriteWord": 215,
+        "baseRledResourceId": 214,
+        "maskRledResourceId": 215,
+        "displayWidth": 16,
+        "displayHeight": 16,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 214,
+          "name": "",
+          "width": 16,
+          "height": 16,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20026,7 +24756,68 @@
       "name": "Space Bomb",
       "chunkIndex": 299,
       "byteOffset": 2322417,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 216
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 217
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 16
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 16
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 216,
+        "rawMaskSpriteWord": 217,
+        "baseRledResourceId": 214,
+        "maskRledResourceId": 215,
+        "displayWidth": 16,
+        "displayHeight": 16,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 214,
+          "name": "",
+          "width": 16,
+          "height": 16,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20034,7 +24825,68 @@
       "name": "Javelin",
       "chunkIndex": 300,
       "byteOffset": 2322429,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 218
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 219
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 8
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 8
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 218,
+        "rawMaskSpriteWord": 219,
+        "baseRledResourceId": 216,
+        "maskRledResourceId": 217,
+        "displayWidth": 8,
+        "displayHeight": 8,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 216,
+          "name": "",
+          "width": 8,
+          "height": 8,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20042,7 +24894,68 @@
       "name": "Flare",
       "chunkIndex": 301,
       "byteOffset": 2322441,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 220
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 221
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 16
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 16
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 220,
+        "rawMaskSpriteWord": 221,
+        "baseRledResourceId": 220,
+        "maskRledResourceId": 221,
+        "displayWidth": 16,
+        "displayHeight": 16,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 220,
+          "name": "",
+          "width": 16,
+          "height": 16,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20050,7 +24963,68 @@
       "name": "Seeker Drone",
       "chunkIndex": 302,
       "byteOffset": 2322453,
-      "size": 12
+      "size": 12,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 6,
+        "fieldsComplete": true,
+        "fields": [
+          {
+            "name": "word_000",
+            "wordIndex": 0,
+            "byteOffsetInRecord": 0,
+            "value": 230
+          },
+          {
+            "name": "word_001",
+            "wordIndex": 1,
+            "byteOffsetInRecord": 2,
+            "value": 231
+          },
+          {
+            "name": "word_002",
+            "wordIndex": 2,
+            "byteOffsetInRecord": 4,
+            "value": 16
+          },
+          {
+            "name": "word_003",
+            "wordIndex": 3,
+            "byteOffsetInRecord": 6,
+            "value": 16
+          },
+          {
+            "name": "word_004",
+            "wordIndex": 4,
+            "byteOffsetInRecord": 8,
+            "value": 6
+          },
+          {
+            "name": "word_005",
+            "wordIndex": 5,
+            "byteOffsetInRecord": 10,
+            "value": 6
+          }
+        ],
+        "status": "ok",
+        "rawBaseSpriteWord": 230,
+        "rawMaskSpriteWord": 231,
+        "baseRledResourceId": 230,
+        "maskRledResourceId": 231,
+        "displayWidth": 16,
+        "displayHeight": 16,
+        "frameRows": 6,
+        "frameColumns": 6,
+        "expectedFrameCount": 36,
+        "linkedRled": {
+          "resourceId": 230,
+          "name": "",
+          "width": 8,
+          "height": 8,
+          "frames": 36,
+          "status": "ok"
+        }
+      }
     },
     {
       "type": "spïn",
@@ -20058,7 +25032,41 @@
       "name": "Forklift",
       "chunkIndex": 303,
       "byteOffset": 2322465,
-      "size": 80702
+      "size": 80702,
+      "spin": {
+        "fieldEncoding": "big-endian signed 16-bit words",
+        "fieldCount": 40351,
+        "fieldsComplete": false,
+        "status": "unsupported-record-size",
+        "rawLeadingWords": [
+          0,
+          8,
+          0,
+          8,
+          25242,
+          -26003,
+          0,
+          104,
+          0,
+          5,
+          25449,
+          25454,
+          0,
+          1434,
+          0,
+          29,
+          20553,
+          17236,
+          0,
+          9148,
+          0,
+          94,
+          28784,
+          24948
+        ],
+        "rawByteSize": 80702,
+        "note": "standard EV Classic spïn records are six signed 16-bit words; this resource is preserved as leading raw words only to avoid manifest bloat"
+      }
     }
   ],
   "rledAssets": [

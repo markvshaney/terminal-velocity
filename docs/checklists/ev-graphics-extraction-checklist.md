@@ -24,23 +24,20 @@ Purpose: track the things I was **not yet able to finish** in the last graphics 
   - Finding: resources `128`–`136` use a compact indexed PixPat/PixMap layout matching the uncompressed indexed PixMap+ColorTable form already observed in PICT `9507`: PixMap at byte offset 32, `32x32`, `rowBytes=16`, `pixelSize=4`, with a color table. Resource `133` uses `ctSize=9`; the others use `ctSize=10`.
   - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites` asserts decoded `ppat` count, representative metadata, and explicit unsupported `137` status.
 
-## Deferred metadata semantics to decode later
+## Metadata semantics decoded
 
-- [ ] Interpret `spïn` spin metadata records beyond cataloging.
-  - Current status: 58 `spïn` records cataloged only.
-  - Deferred/later rationale: this likely controls spin/animation metadata, but it is less immediately runtime-visible than wiring already-decoded PICT assets into Godot.
-  - Why it remains open: the visual frames are largely in `rlëD`, but `spïn` has not been semantically decoded.
-  - Later local step: decode all 16-bit fields and correlate with `rlëD` IDs for planets, stations, asteroids, stars, and main-screen orbs.
+- [x] Interpret `spïn` spin metadata records beyond cataloging.
+  - Current status: standard six-word `spïn` records now decode into base/mask `rlëD` references, display width/height, frame-row/frame-column grids, expected frame counts, and linked `rlëD` header metadata where source-backed.
+  - Finding: many source references are direct `rlëD` ids, while some EV Classic records use the same +2 offset pattern already seen in `shän`; the decoder keeps raw words and records inferred links for auditability.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_interprets_spin_boom_roid_metadata` asserts representative explosion and weapon spin crosswalks.
 
-- [ ] Interpret `bööm` records beyond cataloging.
-  - Current status: 5 `bööm` records cataloged only.
-  - Why it remains open: explosion visual frames are mostly `rlëD`, but behavior/animation semantics were not decoded.
-  - Next local step: decode primitive fields and crosswalk to explosion `rlëD` resources.
+- [x] Interpret `bööm` records beyond cataloging.
+  - Current status: compact three-word `bööm` records now decode duration/sound/variant primitives and crosswalk to the matching explosion `spïn` resources. The long `Ship Explodes` record is explicitly classified as a table-like/forklift variant record with inferred family ids preserved.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_interprets_spin_boom_roid_metadata` asserts `FAE Small` and `Ship Explodes` decoded metadata.
 
-- [ ] Interpret `röid` records beyond cataloging.
-  - Current status: 2 `röid` records cataloged only.
-  - Why it remains open: asteroid visual frames are in `rlëD`, but asteroid behavior/variant metadata was not decoded.
-  - Next local step: decode primitive fields and crosswalk to asteroid `rlëD` resources.
+- [x] Interpret `röid` records beyond cataloging.
+  - Current status: asteroid `röid` records now preserve raw behavior words and crosswalk to asteroid `spïn`/`rlëD` visual resources where source-backed.
+  - Verification: `native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_graphics_manifest_interprets_spin_boom_roid_metadata` asserts small/big asteroid links and `rlëD` frame counts.
 
 ## Runtime integration not yet done
 
