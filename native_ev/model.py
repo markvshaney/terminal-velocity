@@ -183,11 +183,14 @@ def sourced_ev_sounds_manifest(path=SOURCED_EV_SOUNDS_PATH):
     data = json.loads(path.read_text())
     if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Sounds.rez':
         raise ValueError('sourced EV sounds manifest has unexpected source file')
-    if data.get('method') != 'classic-mac-snd-catalog-v1':
+    if data.get('method') != 'classic-mac-snd-wav-v2':
         raise ValueError('sourced EV sounds manifest has unexpected extraction method')
     sounds = data.get('soundAssets', [])
     if len(sounds) != 57:
         raise ValueError('sourced EV sounds manifest has unexpected sound count')
+    decoded = [sound for sound in sounds if sound.get('status') == 'ok']
+    if len(decoded) != 56:
+        raise ValueError('sourced EV sounds manifest has unexpected decoded sound count')
     ids = {sound.get('resourceId') for sound in sounds}
     for expected in [128, 200, 223, 30003]:
         if expected not in ids:
@@ -198,8 +201,14 @@ def sourced_ev_sounds_manifest(path=SOURCED_EV_SOUNDS_PATH):
                 raise ValueError(f'sourced EV sound resource missing {key}')
         if sound['type'] != 'snd ':
             raise ValueError('sourced EV sounds manifest contains non-snd resource')
-        if sound['status'] != 'catalog-only':
-            raise ValueError('sourced EV sound resource should remain catalog-only before decoding')
+        if sound['status'] == 'ok':
+            if 'assetFile' not in sound or 'sound' not in sound:
+                raise ValueError(f"sourced EV sound resource {sound['resourceId']} missing decoded metadata")
+            asset_file = ROOT / sound['assetFile']
+            if not asset_file.exists():
+                raise ValueError(f"sourced EV sound resource {sound['resourceId']} missing WAV {asset_file}")
+        elif not sound['status'].startswith('decode-error:'):
+            raise ValueError('sourced EV sound resource should be decoded or explicit decode-error')
         if sound['size'] <= 0 or not sound['rawHeaderBytes']:
             raise ValueError(f"sourced EV sound resource {sound['resourceId']} has invalid byte metadata")
     return data

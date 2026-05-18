@@ -2,6 +2,7 @@ from pathlib import Path
 import re
 import struct
 import unittest
+import wave
 import zlib
 
 from native_ev.model import (
@@ -257,30 +258,42 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(unsupported_ppat['status'], 'decode-error: unsupported ppat PixPat/PixMap layout')
         self.assertEqual(unsupported_ppat['rawHeaderBytes'][:4], [0, 8, 0, 8])
 
-    def test_sourced_ev_sounds_manifest_catalogs_classic_mac_snd_resources(self):
+    def test_sourced_ev_sounds_manifest_decodes_classic_mac_snd_resources(self):
         data = sourced_ev_sounds_manifest()
         self.assertEqual(data['sourceFile'], 'source-assets/ev-classic/Nova Files/EV Sounds.rez')
         self.assertEqual(data['sourceSha256'], '36fc306b41bb384e07ea78fe78ede115d02695f9eb01e6b8189b3a1280261f0e')
-        self.assertEqual(data['method'], 'classic-mac-snd-catalog-v1')
+        self.assertEqual(data['method'], 'classic-mac-snd-wav-v2')
         self.assertEqual(data['chunkCount'], 58)
         self.assertEqual(data['resourceCount'], 57)
         self.assertEqual(data['resourceTypeCatalog'], [{
             'type': 'snd ',
             'count': 57,
-            'decodeStatus': 'catalog-only',
-            'note': 'classic Mac sound resources cataloged; audio decoding not yet implemented',
+            'decodeStatus': 'decoded-to-wav-with-explicit-errors',
+            'note': 'classic Mac sound resources cataloged; 56 decoded to 8-bit mono WAV',
         }])
         sounds = data['soundAssets']
+        decoded = [sound for sound in sounds if sound['status'] == 'ok']
         self.assertEqual(len(sounds), 57)
+        self.assertEqual(len(decoded), 56)
         by_id = {sound['resourceId']: sound for sound in sounds}
         self.assertEqual(by_id[128]['name'], 'Warp Up')
         self.assertEqual(by_id[128]['chunkIndex'], 1)
         self.assertEqual(by_id[128]['size'], 45508)
-        self.assertEqual(by_id[128]['status'], 'catalog-only')
+        self.assertEqual(by_id[128]['status'], 'ok')
         self.assertEqual(by_id[128]['rawHeaderBytes'][:8], [0, 2, 0, 0, 0, 1, 128, 81])
+        self.assertEqual(by_id[128]['sound']['sampleCount'], 45472)
+        self.assertEqual(by_id[128]['sound']['sampleRateHz'], 11127)
+        self.assertEqual(by_id[128]['sound']['encoding'], 0)
         self.assertEqual(by_id[200]['name'], 'Laser')
         self.assertEqual(by_id[223]['name'], 'Engine')
         self.assertEqual(by_id[30003]['name'], 'Transition')
+        self.assertEqual(by_id[30003]['status'], 'decode-error: unsupported snd format 0')
+        laser_path = Path('native_ev') / by_id[200]['assetFile']
+        with wave.open(str(laser_path), 'rb') as wav:
+            self.assertEqual(wav.getnchannels(), 1)
+            self.assertEqual(wav.getsampwidth(), 1)
+            self.assertEqual(wav.getframerate(), 11127)
+            self.assertEqual(wav.getnframes(), by_id[200]['sound']['sampleCount'])
         self.assertTrue(all(sound['type'] == 'snd ' for sound in sounds))
 
     def test_universe_uses_a_seed_set_of_sourced_ev_names(self):

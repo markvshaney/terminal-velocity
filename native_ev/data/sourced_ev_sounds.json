@@ -1,16 +1,16 @@
 {
   "sourceFile": "source-assets/ev-classic/Nova Files/EV Sounds.rez",
   "sourceSha256": "36fc306b41bb384e07ea78fe78ede115d02695f9eb01e6b8189b3a1280261f0e",
-  "method": "classic-mac-snd-catalog-v1",
-  "note": "Provenance-first catalog of classic Mac `snd ` resources from local EV Sounds.rez; audio decoding is intentionally deferred.",
+  "method": "classic-mac-snd-wav-v2",
+  "note": "Provenance-first catalog of classic Mac `snd ` resources from local EV Sounds.rez; supported uncompressed sampled-sound records decode to WAV.",
   "chunkCount": 58,
   "resourceCount": 57,
   "resourceTypeCatalog": [
     {
       "type": "snd ",
       "count": 57,
-      "decodeStatus": "catalog-only",
-      "note": "classic Mac sound resources cataloged; audio decoding not yet implemented"
+      "decodeStatus": "decoded-to-wav-with-explicit-errors",
+      "note": "classic Mac sound resources cataloged; 56 decoded to 8-bit mono WAV"
     }
   ],
   "soundAssets": [
@@ -21,7 +21,6 @@
       "chunkIndex": 1,
       "byteOffset": 93464,
       "size": 45508,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -55,7 +54,32 @@
         0,
         0,
         1
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/128_warp_up/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 45472,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 92694,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -64,7 +88,6 @@
       "chunkIndex": 2,
       "byteOffset": 138972,
       "size": 22684,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -98,7 +121,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/129_warp_up_x2/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 22648,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -107,7 +155,6 @@
       "chunkIndex": 3,
       "byteOffset": 161656,
       "size": 908,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -141,7 +188,32 @@
         206,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/130_warp_out/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 872,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 1742,
+        "loopEnd": 1743,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -150,7 +222,6 @@
       "chunkIndex": 4,
       "byteOffset": 162564,
       "size": 1172,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -184,7 +255,32 @@
         222,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/150_beep1/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 1136,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 2270,
+        "loopEnd": 2271,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -193,7 +289,6 @@
       "chunkIndex": 5,
       "byteOffset": 163736,
       "size": 530,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -227,7 +322,32 @@
         32,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/151_beep2/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 494,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 3872,
+        "loopEnd": 3873,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -236,7 +356,6 @@
       "chunkIndex": 6,
       "byteOffset": 164266,
       "size": 1573,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -270,7 +389,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/152_beep3/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 1537,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 3072,
+        "loopEnd": 3073,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -279,7 +423,6 @@
       "chunkIndex": 7,
       "byteOffset": 165839,
       "size": 2385,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -313,7 +456,32 @@
         119,
         69,
         208
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/153_beep4/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 2343,
+        "sampleRateFixed": 729236944,
+        "sampleRate": 11127.272705078125,
+        "sampleRateHz": 11127,
+        "loopStart": 2341,
+        "loopEnd": 2342,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -322,7 +490,6 @@
       "chunkIndex": 8,
       "byteOffset": 168224,
       "size": 1070,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -356,7 +523,32 @@
         35,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/154_beep5/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 1034,
+        "sampleRateFixed": 729236944,
+        "sampleRate": 11127.272705078125,
+        "sampleRateHz": 11127,
+        "loopStart": 3107,
+        "loopEnd": 3108,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -365,7 +557,6 @@
       "chunkIndex": 9,
       "byteOffset": 169294,
       "size": 2187,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -399,7 +590,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/200_laser/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 2151,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -408,7 +624,6 @@
       "chunkIndex": 10,
       "byteOffset": 171481,
       "size": 2193,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -442,7 +657,32 @@
         119,
         69,
         208
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/201_neutron/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 2151,
+        "sampleRateFixed": 729236944,
+        "sampleRate": 11127.272705078125,
+        "sampleRateHz": 11127,
+        "loopStart": 2149,
+        "loopEnd": 2150,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -451,7 +691,6 @@
       "chunkIndex": 11,
       "byteOffset": 173674,
       "size": 6427,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -485,7 +724,32 @@
         119,
         69,
         209
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/202_proton/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 6385,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 6383,
+        "loopEnd": 6384,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -494,7 +758,6 @@
       "chunkIndex": 12,
       "byteOffset": 180101,
       "size": 15536,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -528,7 +791,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/203_torp/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 15500,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -537,7 +825,6 @@
       "chunkIndex": 13,
       "byteOffset": 195637,
       "size": 2826,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -571,7 +858,32 @@
         119,
         69,
         208
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/204_missile/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 2784,
+        "sampleRateFixed": 729236944,
+        "sampleRate": 11127.272705078125,
+        "sampleRateHz": 11127,
+        "loopStart": 2782,
+        "loopEnd": 2783,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -580,7 +892,6 @@
       "chunkIndex": 14,
       "byteOffset": 198463,
       "size": 23266,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -614,7 +925,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/205_cannon/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 23230,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -623,7 +959,6 @@
       "chunkIndex": 15,
       "byteOffset": 221729,
       "size": 25761,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -657,7 +992,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/206_ftrlaunch1/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 25725,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -666,7 +1026,6 @@
       "chunkIndex": 16,
       "byteOffset": 247490,
       "size": 1536,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -700,7 +1059,32 @@
         182,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/207_ftrlaunch2/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 1500,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 2998,
+        "loopEnd": 2999,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -709,7 +1093,6 @@
       "chunkIndex": 17,
       "byteOffset": 249026,
       "size": 10954,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -743,7 +1126,32 @@
         119,
         69,
         209
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/208_ftrlaunch3/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 10912,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 10910,
+        "loopEnd": 10911,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -752,7 +1160,6 @@
       "chunkIndex": 18,
       "byteOffset": 259980,
       "size": 1987,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -786,7 +1193,32 @@
         119,
         69,
         210
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/209_rocket/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 1945,
+        "sampleRateFixed": 729236946,
+        "sampleRate": 11127.272735595703,
+        "sampleRateHz": 11127,
+        "loopStart": 1944,
+        "loopEnd": 1944,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -795,7 +1227,6 @@
       "chunkIndex": 19,
       "byteOffset": 261967,
       "size": 3822,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -829,7 +1260,32 @@
         128,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/210_bomb_release/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 3786,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 12416,
+        "loopEnd": 12416,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -838,7 +1294,6 @@
       "chunkIndex": 20,
       "byteOffset": 265789,
       "size": 2774,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -872,7 +1327,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/211_javelin/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 2738,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -881,7 +1361,6 @@
       "chunkIndex": 21,
       "byteOffset": 268563,
       "size": 10660,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -915,7 +1394,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/212_particle_beam/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 10624,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -924,7 +1428,6 @@
       "chunkIndex": 22,
       "byteOffset": 279223,
       "size": 3620,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -958,7 +1461,32 @@
         254,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/213_tractor_beam/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 3584,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 7166,
+        "loopEnd": 7167,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -967,7 +1495,6 @@
       "chunkIndex": 23,
       "byteOffset": 282843,
       "size": 6680,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1001,7 +1528,32 @@
         174,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/214_flare_drop/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 6644,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 13486,
+        "loopEnd": 13487,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1010,7 +1562,6 @@
       "chunkIndex": 24,
       "byteOffset": 289523,
       "size": 1495,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1044,7 +1595,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/215_drone_release/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 1459,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1053,7 +1629,6 @@
       "chunkIndex": 25,
       "byteOffset": 291018,
       "size": 35318,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1087,7 +1662,32 @@
         157,
         0,
         1
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/216_fusion_beam/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 35282,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 76445,
+        "loopEnd": 76445,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1096,7 +1696,6 @@
       "chunkIndex": 26,
       "byteOffset": 326336,
       "size": 11396,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1130,7 +1729,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/223_engine/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 11360,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1139,7 +1763,6 @@
       "chunkIndex": 27,
       "byteOffset": 337732,
       "size": 7784,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1173,7 +1796,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/300_heavyexplosion/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 7748,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1182,7 +1830,6 @@
       "chunkIndex": 28,
       "byteOffset": 345516,
       "size": 7784,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1216,7 +1863,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/301_medexplosion/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 7748,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1225,7 +1897,6 @@
       "chunkIndex": 29,
       "byteOffset": 353300,
       "size": 35876,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1259,7 +1930,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/302_shipbreaksup/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 35840,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1268,7 +1964,6 @@
       "chunkIndex": 30,
       "byteOffset": 389176,
       "size": 11114,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -1302,7 +1997,32 @@
         119,
         69,
         208
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/303_shipexplodes/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 11072,
+        "sampleRateFixed": 729236944,
+        "sampleRate": 11127.272705078125,
+        "sampleRateHz": 11127,
+        "loopStart": 11070,
+        "loopEnd": 11071,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -1311,7 +2031,6 @@
       "chunkIndex": 31,
       "byteOffset": 400290,
       "size": 5150,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1345,7 +2064,32 @@
         62,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/370_red_alert/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 5114,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 11070,
+        "loopEnd": 11071,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1354,7 +2098,6 @@
       "chunkIndex": 32,
       "byteOffset": 405440,
       "size": 22299,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         1,
@@ -1388,7 +2131,32 @@
         119,
         69,
         209
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/371_klaxxon/sound.wav",
+      "sound": {
+        "soundFormat": 1,
+        "modifierCount": 1,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 20
+          }
+        ],
+        "soundHeaderOffset": 20,
+        "samplePointer": 0,
+        "sampleCount": 22257,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 22255,
+        "loopEnd": 22256,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 42
+      }
     },
     {
       "type": "snd ",
@@ -1397,7 +2165,6 @@
       "chunkIndex": 33,
       "byteOffset": 427739,
       "size": 13954,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1431,7 +2198,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/372_eject/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 13918,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1440,7 +2232,6 @@
       "chunkIndex": 34,
       "byteOffset": 441693,
       "size": 13954,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1474,7 +2265,32 @@
         186,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/380_cloak_off/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 13918,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 27834,
+        "loopEnd": 27835,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1483,7 +2299,6 @@
       "chunkIndex": 35,
       "byteOffset": 455647,
       "size": 53379,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1517,7 +2332,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/381_cloak_on/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 53343,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1526,7 +2366,6 @@
       "chunkIndex": 36,
       "byteOffset": 509026,
       "size": 739,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1560,7 +2399,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/390_airlock/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 703,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1569,7 +2433,6 @@
       "chunkIndex": 37,
       "byteOffset": 509765,
       "size": 17828,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1603,7 +2466,32 @@
         254,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/601_click/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 17792,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 35582,
+        "loopEnd": 35583,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1612,7 +2500,6 @@
       "chunkIndex": 38,
       "byteOffset": 527593,
       "size": 31281,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1646,7 +2533,32 @@
         11,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/602_machinehum/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 31245,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 31243,
+        "loopEnd": 31244,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1655,7 +2567,6 @@
       "chunkIndex": 39,
       "byteOffset": 558874,
       "size": 11063,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1689,7 +2600,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/603_slam/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 11027,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1698,7 +2634,6 @@
       "chunkIndex": 40,
       "byteOffset": 569937,
       "size": 12308,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1732,7 +2667,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1000_voice_ack/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 12272,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1741,7 +2701,6 @@
       "chunkIndex": 41,
       "byteOffset": 582245,
       "size": 13102,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1775,7 +2734,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1001_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 13066,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1784,7 +2768,6 @@
       "chunkIndex": 42,
       "byteOffset": 595347,
       "size": 13730,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1818,7 +2801,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1002_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 13694,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1827,7 +2835,6 @@
       "chunkIndex": 43,
       "byteOffset": 609077,
       "size": 15116,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1861,7 +2868,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1003_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 15080,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1870,7 +2902,6 @@
       "chunkIndex": 44,
       "byteOffset": 624193,
       "size": 14607,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1904,7 +2935,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1010_voice_targ/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 14571,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1913,7 +2969,6 @@
       "chunkIndex": 45,
       "byteOffset": 638800,
       "size": 12810,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1947,7 +3002,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1011_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 12774,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1956,7 +3036,6 @@
       "chunkIndex": 46,
       "byteOffset": 651610,
       "size": 13561,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -1990,7 +3069,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1012_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 13525,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -1999,7 +3103,6 @@
       "chunkIndex": 47,
       "byteOffset": 665171,
       "size": 13156,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2033,7 +3136,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1013_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 13120,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2042,7 +3170,6 @@
       "chunkIndex": 48,
       "byteOffset": 678327,
       "size": 17728,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2076,7 +3203,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1014_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 17692,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2085,7 +3237,6 @@
       "chunkIndex": 49,
       "byteOffset": 696055,
       "size": 18111,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2119,7 +3270,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1015_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 18075,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2128,7 +3304,6 @@
       "chunkIndex": 50,
       "byteOffset": 714166,
       "size": 13416,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2162,7 +3337,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1020_voice_victory/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 13380,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2171,7 +3371,6 @@
       "chunkIndex": 51,
       "byteOffset": 727582,
       "size": 17891,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2205,7 +3404,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1021_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 17855,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2214,7 +3438,6 @@
       "chunkIndex": 52,
       "byteOffset": 745473,
       "size": 16185,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2248,7 +3471,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1022_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 16149,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2257,7 +3505,6 @@
       "chunkIndex": 53,
       "byteOffset": 761658,
       "size": 41962,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2291,7 +3538,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/1023_snd/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 41926,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2300,7 +3572,6 @@
       "chunkIndex": 54,
       "byteOffset": 803620,
       "size": 41294,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2334,7 +3605,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/10000_thunder/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 41258,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2343,7 +3639,6 @@
       "chunkIndex": 55,
       "byteOffset": 844914,
       "size": 40630,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2377,7 +3672,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/10001_seagull/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 40594,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 0,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2386,7 +3706,6 @@
       "chunkIndex": 56,
       "byteOffset": 885544,
       "size": 114288,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         2,
@@ -2420,7 +3739,32 @@
         0,
         0,
         0
-      ]
+      ],
+      "status": "ok",
+      "assetFile": "assets/sounds/ev_classic/10002_sandpiper/sound.wav",
+      "sound": {
+        "soundFormat": 2,
+        "modifierCount": null,
+        "commandCount": 1,
+        "commands": [
+          {
+            "command": 32849,
+            "param1": 0,
+            "param2": 14
+          }
+        ],
+        "soundHeaderOffset": 14,
+        "samplePointer": 0,
+        "sampleCount": 114252,
+        "sampleRateFixed": 729236945,
+        "sampleRate": 11127.272720336914,
+        "sampleRateHz": 11127,
+        "loopStart": 0,
+        "loopEnd": 0,
+        "encoding": 0,
+        "baseFrequency": 60,
+        "sampleDataOffset": 36
+      }
     },
     {
       "type": "snd ",
@@ -2429,7 +3773,6 @@
       "chunkIndex": 57,
       "byteOffset": 999832,
       "size": 15182,
-      "status": "catalog-only",
       "rawHeaderBytes": [
         0,
         0,
@@ -2463,7 +3806,8 @@
         128,
         87,
         97
-      ]
+      ],
+      "status": "decode-error: unsupported snd format 0"
     }
   ]
 }
