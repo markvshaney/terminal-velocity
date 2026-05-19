@@ -10,6 +10,10 @@ Related behavior baseline checklist: `docs/checklists/ev-classic-behavior-baseli
 
 Related emulator route recommendation: `docs/research/2026-05-18-ev-classic-emulator-route-recommendation.md`
 
+Related Mac OS requirements artifact: `docs/research/2026-05-18-classic-mac-os-requirements-for-basilisk-ev.md`
+
+Related ROM acquisition options artifact: `docs/research/2026-05-18-basilisk-compatible-rom-acquisition-options.md`
+
 ## Source hierarchy for this checklist
 
 1. Original EV Classic running under an authorized Classic Mac emulator environment: primary runtime truth.
@@ -68,12 +72,23 @@ Related emulator route recommendation: `docs/research/2026-05-18-ev-classic-emul
 - [ ] Classic Mac ROM located.
   - Status: blocked/pending user-provided authorized material
   - Search result: no obvious `Basilisk`, `SheepShaver`, or `Mac*ROM*` file found under `/mnt/c/Users/bh` during the 2026-05-18 search.
-  - Next action: user points Loki at likely folders or provides authorized ROM material outside the repo.
+  - User update 2026-05-18: no Mac OS media is currently available from the user; ROM availability is also unresolved.
+  - Research update 2026-05-18: source-backed clean route is to dump from an owned/borrowed compatible physical 68k Mac; strong target families are LC 475 / Performa 475 / Quadra 605 / Quadra 650 / Centris 650 class. Scruss reports LC475 and Classic II worked for Basilisk II ROM extraction/use and IIvx did not.
+  - Source artifact: `docs/research/2026-05-18-basilisk-compatible-rom-acquisition-options.md`
+  - Next action: acquire/borrow/buy access to a compatible color-capable 68k Mac and dump its ROM, then stage it outside the repo under `/home/bh/workspaces/loki/ev-classic-emulator/roms/` for hashing/provenance capture.
+  - Last-resort technical option: Internet ROM archive candidates exist, but they are provenance/legal-risky; do not use as project truth without explicit user authorization and a `technical-bootstrap-only` label.
 
 - [ ] Compatible Classic Mac OS install/media located.
-  - Status: blocked/pending user-provided authorized material
+  - Status: completed/staged locally 2026-05-18
   - Search result: no compatible Mac OS media was identified during the 2026-05-18 search.
-  - Next action: user points Loki at likely folders or provides authorized OS material outside the repo.
+  - User update 2026-05-18: user does not have any Mac OS media.
+  - Found 2026-05-18: Apple-hosted System 7.5.3 installer parts are directly reachable from `download.info.apple.com`; all 19 expected parts responded `200 OK` to HEAD checks.
+  - Source artifact: `docs/research/2026-05-18-classic-mac-os-requirements-for-basilisk-ev.md`
+  - Local staging path: `/home/bh/workspaces/loki/ev-classic-emulator/os-images/apple-system-7.5.3/`
+  - Local-only manifest: `/home/bh/workspaces/loki/ev-classic-emulator/reference-archive/manifests/2026-05-18-apple-system-7.5.3-download.md`
+  - Verification: 19 installer parts downloaded; total size 22,763,648 bytes; per-file SHA256 and source URLs recorded in the local-only manifest; emulator workspace is not a git repository.
+  - Remaining OS workflow issue: validate a clean Basilisk II bootstrap/install workflow for the 19-part System 7.5.3 installer set without relying on provenance-weak prebuilt abandonware images.
+  - Hardware trigger: buy/borrow a USB CD/DVD drive only if we abandon the Apple-hosted installer route and choose a physical retail OS source that cannot otherwise be imaged.
 
 - [x] Emulator located or installed.
   - Status: completed 2026-05-18 on Think laptop
@@ -95,7 +110,7 @@ Related emulator route recommendation: `docs/research/2026-05-18-ev-classic-emul
   - Verification: workspace exists and `git -C /home/bh/workspaces/loki/ev-classic-emulator rev-parse --show-toplevel` reports it is not a git repository.
 
 - [ ] Stage authorized ROM/OS/game inputs outside the repo.
-  - Status: blocked until ROM and OS media are found/provided
+  - Status: partially complete; OS and EV installer staged, blocked on ROM
   - Done when: local-only notes record paths, sizes, hashes, and source/provenance labels for ROM, OS media, and EV installer/app.
 
 - [ ] Configure emulator using local-only paths.
@@ -129,4 +144,4 @@ Related emulator route recommendation: `docs/research/2026-05-18-ev-classic-emul
 
 ## Current next action
 
-Create the local-only emulator workspace, then locate/provide authorized Classic Mac ROM and compatible Mac OS install/media. Basilisk II Windows GUI is installed on Think at `C:\Games\BasiliskII\`; do not buy a CD-ROM drive unless the only authorized Mac OS media is a physical CD that cannot otherwise be imaged.
+Acquire/provide a compatible 68k Mac ROM, preferably by dumping an owned/borrowed LC 475 / Performa 475 / Quadra 605 / Quadra 650 / Centris 650-class machine. Apple-hosted System 7.5.3 installer files were staged locally on 2026-05-18 with hashes/provenance recorded in a local-only manifest. Basilisk II Windows GUI and the local-only workspace are already installed/created on Think; do not buy a CD-ROM drive unless we abandon the Apple-hosted installer route and select physical optical media that cannot otherwise be imaged. After ROM acquisition, validate the clean bootstrap/install workflow for the 19-part System 7.5.3 set, then configure Basilisk II.

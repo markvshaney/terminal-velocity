@@ -72,20 +72,28 @@ Purchase trigger:
 
 - Authorized 68k Macintosh ROM compatible with Basilisk II / Mac II-class emulation.
 - Authorized Classic Mac OS install media/image, preferably System 7.5.x through Mac OS 8.1-era.
-- Basilisk II Windows build/app.
+
+User update 2026-05-18: the user does not have Mac OS media. Follow-up research found the Apple-hosted System 7.5.3 installer parts still directly reachable from `download.info.apple.com`; see `docs/research/2026-05-18-classic-mac-os-requirements-for-basilisk-ev.md`. Treat Classic Mac OS staging as approval-gated local acquisition/provenance work, not a search-only blocker. Avoid using random abandonware images as project truth.
+
+No longer missing:
+
+- Basilisk II Windows GUI app is installed on Think at `C:\Games\BasiliskII\`; install details and verification are tracked in the live checklist and local-only install manifest.
 
 ## Proposed next steps
 
 1. Keep the EV installer in the local reference archive:
    - `/home/bh/workspaces/loki/ev-classic-emulator/reference-archive/downloads/EV_Installer_1.0.5.bin`
-2. Locate/provide authorized Mac ROM and Mac OS install media/image.
-3. Install or unpack Basilisk II on Windows host, not inside the Terminal Velocity repo.
-4. Create a Basilisk II hardfile/disk under:
+2. Acquire/provide an authorized compatible 68k Mac ROM.
+3. With approval, download/stage Apple-hosted System 7.5.3 installer parts under `/home/bh/workspaces/loki/ev-classic-emulator/os-images/apple-system-7.5.3/` and record per-file hashes/provenance.
+   - Hardware trigger: buy/borrow a USB CD/DVD drive only if we abandon the Apple-hosted System 7.5.3 route and select a physical retail OS source that cannot otherwise be imaged.
+4. Validate the cleanest bootstrap workflow for installing the 19-part System 7.5.3 set into a Basilisk II hardfile without relying on provenance-weak prebuilt abandonware images.
+5. Stage ROM/OS inputs outside the repo and record paths, sizes, hashes, and provenance in local-only notes.
+6. Create a Basilisk II hardfile/disk under:
    - `/home/bh/workspaces/loki/ev-classic-emulator/disks/`
-5. Configure Basilisk II host-directory sharing to expose:
+7. Configure Basilisk II host-directory sharing to expose:
    - `/home/bh/workspaces/loki/ev-classic-emulator/shared/`
-6. Import the MacBinary EV installer through the shared folder or disk-image workflow.
-7. Only after EV launches, create `docs/research/original-ev-classic-runtime-observations.md` and start the evidence protocol.
+8. Import the MacBinary EV installer through the shared folder or disk-image workflow.
+9. Only after EV launches, create `docs/research/original-ev-classic-runtime-observations.md` and start the evidence protocol.
 
 ## Sources inspected
 

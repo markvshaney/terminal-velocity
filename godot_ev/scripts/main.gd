@@ -12,6 +12,8 @@ const PLAYER_START := Vector2(0, 0)
 const FRAME_COUNT := 36
 const DEFAULT_CLICK_SOUND_ASSET := "assets/sounds/ev_classic/601_click/sound.wav"
 const DEFAULT_SHIPYARD_PICT_ASSET := "assets/graphics/pict/5000_shipyard/image.png"
+const STATE_TITLE := "title"
+const STATE_SPACE := "space"
 
 var repo_root := ""
 var universe := {}
@@ -37,10 +39,20 @@ var angle_deg := 0.0
 var player_facing_index := 0
 var turn_cell_progress := 0.0
 var landed := false
+var game_state := STATE_TITLE
 var selected_link_index := 0
 var selected_target_index := 0
 var stars: Array[Vector2] = []
 var status_line := ""
+var title_status_line := "No pilot loaded."
+var title_modal := ""
+var pilot_name_input := ""
+var ship_name_input := "Starseeker"
+var loaded_pilot_name := ""
+var loaded_ship_name := ""
+var loaded_pilot_file := ""
+var available_pilots: Array[Dictionary] = []
+var selected_pilot_index := 0
 var credits := 5000
 var cargo := 0
 var landing_tab := 0
@@ -255,6 +267,8 @@ func _process(delta: float) -> void:
 func _handle_input(delta: float) -> void:
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
+	if game_state == STATE_TITLE:
+		return
 	var turn_dir := 0
 	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
 		turn_dir -= 1
@@ -278,6 +292,9 @@ func _handle_input(delta: float) -> void:
 		vel *= pow(0.90, delta * 60.0)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if game_state == STATE_TITLE:
+		_handle_title_input(event)
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
 			KEY_E:
@@ -335,6 +352,336 @@ func _unhandled_input(event: InputEvent) -> void:
 				turn_cell_progress = 0.0
 				landed = false
 				status_line = "Reset in " + current_system.get("name", "system")
+
+func _handle_title_input(event: InputEvent) -> void:
+	if title_modal != "":
+		_handle_title_modal_input(event)
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.keycode:
+			KEY_ENTER:
+				_activate_title_button("Enter Ship")
+			KEY_N:
+				_activate_title_button("New Pilot")
+			KEY_O:
+				_activate_title_button("Open Pilot")
+			KEY_Q:
+				_activate_title_button("Quit TV")
+			KEY_S:
+				_activate_title_button("Set Prefs")
+			KEY_A:
+				_activate_title_button("About TV")
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		for button in _title_buttons():
+			var rect: Rect2 = button["rect"]
+			if rect.has_point(event.position):
+				_activate_title_button(str(button["label"]))
+				return
+
+func _activate_title_button(label: String) -> void:
+	_play_sound("ui_click")
+	match label:
+		"Enter Ship":
+			_enter_ship_from_title()
+		"New Pilot":
+			title_modal = "new_pilot_name"
+			pilot_name_input = ""
+			ship_name_input = "Starseeker"
+			title_status_line = "Creating new pilot."
+		"Open Pilot":
+			_open_pilot_modal()
+		"Set Prefs":
+			title_status_line = "Preferences are not implemented yet."
+		"About TV":
+			title_status_line = "Terminal Velocity — personal-use EV-style Godot front end."
+		"Quit TV":
+			get_tree().quit()
+
+func _title_buttons() -> Array:
+	return [
+		{"label": "New Pilot", "rect": Rect2(285, 520, 220, 38)},
+		{"label": "Open Pilot", "rect": Rect2(285, 572, 220, 38)},
+		{"label": "Quit TV", "rect": Rect2(285, 624, 220, 38)},
+		{"label": "Enter Ship", "rect": Rect2(775, 520, 220, 38)},
+		{"label": "Set Prefs", "rect": Rect2(775, 572, 220, 38)},
+		{"label": "About TV", "rect": Rect2(775, 624, 220, 38)},
+	]
+
+func _handle_title_modal_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.keycode:
+			KEY_ESCAPE:
+				_cancel_title_modal()
+			KEY_ENTER:
+				_accept_title_modal_step()
+			KEY_UP:
+				_cycle_open_pilot_selection(-1)
+			KEY_DOWN:
+				_cycle_open_pilot_selection(1)
+			KEY_BACKSPACE:
+				_backspace_title_modal_text()
+			_:
+				if title_modal != "open_pilot" and event.unicode >= 32 and event.unicode <= 126:
+					_append_title_modal_text(char(event.unicode))
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if title_modal == "open_pilot":
+			var row := _open_pilot_row_at(event.position)
+			if row >= 0:
+				selected_pilot_index = row
+				return
+		var action := _title_modal_action_at(event.position)
+		if action == "cancel":
+			_cancel_title_modal()
+		elif action == "ok":
+			_accept_title_modal_step()
+
+func _append_title_modal_text(text: String) -> void:
+	if title_modal == "new_pilot_name" and pilot_name_input.length() < 24:
+		pilot_name_input += text
+	elif title_modal == "new_ship_name" and ship_name_input.length() < 24:
+		ship_name_input += text
+
+func _backspace_title_modal_text() -> void:
+	if title_modal == "new_pilot_name" and pilot_name_input.length() > 0:
+		pilot_name_input = pilot_name_input.substr(0, pilot_name_input.length() - 1)
+	elif title_modal == "new_ship_name" and ship_name_input.length() > 0:
+		ship_name_input = ship_name_input.substr(0, ship_name_input.length() - 1)
+
+func _accept_title_modal_step() -> void:
+	_play_sound("ui_click")
+	if title_modal == "open_pilot":
+		_load_selected_pilot_file()
+		return
+	if title_modal == "new_pilot_name":
+		if pilot_name_input.strip_edges() == "":
+			title_status_line = "Pilot name required."
+			return
+		title_modal = "new_ship_name"
+		title_status_line = "Now, please christen your brand-new Shuttlecraft."
+		return
+	if title_modal == "new_ship_name":
+		if ship_name_input.strip_edges() == "":
+			title_status_line = "Ship name required."
+			return
+		loaded_pilot_name = pilot_name_input.strip_edges()
+		loaded_ship_name = ship_name_input.strip_edges()
+		loaded_pilot_file = _save_new_pilot_file(loaded_pilot_name, loaded_ship_name)
+		title_modal = ""
+		title_status_line = "Pilot File Loaded: %s — %s" % [loaded_pilot_name, loaded_ship_name]
+
+func _save_new_pilot_file(pilot_name: String, ship_name: String) -> String:
+	var pilots_dir := "user://pilots"
+	DirAccess.make_dir_recursive_absolute(pilots_dir)
+	var path := _pilot_save_path(pilot_name)
+	var pilot_data := _pilot_save_data(pilot_name, ship_name)
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		push_error("Unable to save pilot file: %s" % path)
+		return ""
+	file.store_string(JSON.stringify(pilot_data, "\t"))
+	file.close()
+	return path
+
+func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
+	return {
+		"format": "terminal_velocity_pilot_v1",
+		"pilot_name": pilot_name,
+		"ship_name": ship_name,
+		"ship_id": player_ship_id,
+		"ship_type": str(player_ship.get("name", "Shuttlecraft")),
+		"credits": credits,
+		"cargo": cargo,
+		"cargo_space": cargo_space,
+		"system": current_system.get("name", ""),
+		"system_index": current_system_index,
+		"position": {"x": pos.x, "y": pos.y},
+		"velocity": {"x": vel.x, "y": vel.y},
+		"angle_deg": angle_deg,
+		"facing_index": player_facing_index,
+		"active_missions": active_missions,
+		"completed_missions": completed_missions,
+		"story_flags": story_flags,
+		"commodity_hold": commodity_hold,
+		"owned_outfits": owned_outfits,
+		"owned_weapons": owned_weapons,
+	}
+
+func _pilot_save_path(pilot_name: String) -> String:
+	return "user://pilots/%s.tvpilot.json" % _pilot_file_stem(pilot_name)
+
+func _pilot_file_stem(pilot_name: String) -> String:
+	var stem := ""
+	for i in pilot_name.length():
+		var ch := pilot_name[i]
+		if ch.is_valid_identifier() or ch.is_valid_int() or ch == "-":
+			stem += ch
+		elif ch == " " or ch == "_":
+			stem += "_"
+	if stem.strip_edges() == "":
+		stem = "Pilot"
+	return stem
+
+func _open_pilot_modal() -> void:
+	available_pilots = _list_pilot_files()
+	selected_pilot_index = 0
+	title_modal = "open_pilot"
+	if available_pilots.is_empty():
+		title_status_line = "No pilot files found."
+	else:
+		title_status_line = "Select a pilot file."
+
+func _list_pilot_files() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var pilots_dir := "user://pilots"
+	DirAccess.make_dir_recursive_absolute(pilots_dir)
+	var dir := DirAccess.open(pilots_dir)
+	if dir == null:
+		return result
+	dir.list_dir_begin()
+	var file_name := dir.get_next()
+	while file_name != "":
+		if not dir.current_is_dir() and file_name.ends_with(".tvpilot.json"):
+			var path := pilots_dir + "/" + file_name
+			var data := _read_pilot_file(path)
+			if not data.is_empty():
+				result.append({
+					"path": path,
+					"pilot_name": str(data.get("pilot_name", file_name)),
+					"ship_name": str(data.get("ship_name", "")),
+					"ship_type": str(data.get("ship_type", "Shuttlecraft")),
+				})
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.get("pilot_name", "")) < str(b.get("pilot_name", "")))
+	return result
+
+func _read_pilot_file(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	var text := FileAccess.get_file_as_string(path)
+	var parsed = JSON.parse_string(text)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return {}
+	return parsed
+
+func _load_selected_pilot_file() -> void:
+	if available_pilots.is_empty():
+		title_status_line = "No pilot files found."
+		return
+	selected_pilot_index = clampi(selected_pilot_index, 0, available_pilots.size() - 1)
+	var entry := available_pilots[selected_pilot_index]
+	var path := str(entry.get("path", ""))
+	var data := _read_pilot_file(path)
+	if data.is_empty():
+		title_status_line = "Unable to open pilot file."
+		return
+	loaded_pilot_name = str(data.get("pilot_name", ""))
+	loaded_ship_name = str(data.get("ship_name", ""))
+	loaded_pilot_file = path
+	_apply_pilot_data(data)
+	title_modal = ""
+	title_status_line = "Pilot File Loaded: %s — %s" % [loaded_pilot_name, loaded_ship_name]
+
+func _apply_pilot_data(data: Dictionary) -> void:
+	loaded_pilot_name = str(data.get("pilot_name", loaded_pilot_name))
+	loaded_ship_name = str(data.get("ship_name", loaded_ship_name))
+	credits = int(data.get("credits", credits))
+	cargo = int(data.get("cargo", cargo))
+	current_system_index = _system_index_from_pilot(data)
+	var systems: Array = universe.get("systems", [])
+	if not systems.is_empty():
+		current_system = systems[current_system_index]
+	selected_link_index = 0
+	var saved_pos: Dictionary = data.get("position", {})
+	var saved_vel: Dictionary = data.get("velocity", {})
+	pos = Vector2(float(saved_pos.get("x", pos.x)), float(saved_pos.get("y", pos.y)))
+	vel = Vector2(float(saved_vel.get("x", vel.x)), float(saved_vel.get("y", vel.y)))
+	angle_deg = float(data.get("angle_deg", angle_deg))
+	var desired_ship_id := str(data.get("ship_id", ""))
+	if desired_ship_id == "":
+		desired_ship_id = _ship_id_from_legacy_type(str(data.get("ship_type", "")))
+	if desired_ship_id != "":
+		_set_player_ship_by_id(desired_ship_id)
+	if player_frames.is_empty():
+		player_facing_index = int(data.get("facing_index", 0))
+	else:
+		player_facing_index = int(data.get("facing_index", _facing_frame_index(angle_deg, player_frames.size()))) % player_frames.size()
+	cargo_space = int(data.get("cargo_space", cargo_space))
+	cargo = mini(cargo, cargo_space)
+	active_missions = data.get("active_missions", active_missions)
+	completed_missions = data.get("completed_missions", completed_missions)
+	story_flags = data.get("story_flags", story_flags)
+	commodity_hold = data.get("commodity_hold", commodity_hold)
+	owned_outfits = data.get("owned_outfits", owned_outfits)
+	owned_weapons = data.get("owned_weapons", owned_weapons)
+	turn_cell_progress = 0.0
+
+func _enter_ship_from_title() -> void:
+	if loaded_pilot_name.strip_edges() == "":
+		title_status_line = "No Pilot File Loaded"
+		return
+	game_state = STATE_SPACE
+	landed = false
+	status_line = "Entered ship: %s — %s in %s" % [loaded_pilot_name, loaded_ship_name, current_system.get("name", "system")]
+
+func _system_index_from_pilot(data: Dictionary) -> int:
+	var systems: Array = universe.get("systems", [])
+	if systems.is_empty():
+		return 0
+	var saved_system := str(data.get("system", ""))
+	if saved_system != "":
+		for i in range(systems.size()):
+			if str(systems[i].get("name", "")) == saved_system:
+				return i
+	return clampi(int(data.get("system_index", current_system_index)), 0, systems.size() - 1)
+
+func _ship_id_from_legacy_type(ship_type: String) -> String:
+	var normalized := ship_type.strip_edges().to_lower().replace(" ", "_")
+	for ship in ships.get("ships", []):
+		if str(ship.get("id", "")) == normalized or str(ship.get("name", "")).to_lower() == ship_type.strip_edges().to_lower():
+			return str(ship.get("id", ""))
+	return ""
+
+func _set_player_ship_by_id(ship_id: String) -> void:
+	var next_ship := _ship_by_id(ship_id)
+	if next_ship.is_empty():
+		return
+	player_ship = next_ship
+	player_ship_id = ship_id
+	var player_frame_set := _load_ship_frame_set(player_ship)
+	player_frames = player_frame_set["frames"]
+	player_frame_offsets = player_frame_set["offsets"]
+	player_frame_alpha_counts = player_frame_set["alpha_counts"]
+	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
+
+func _cycle_open_pilot_selection(dir: int) -> void:
+	if title_modal != "open_pilot" or available_pilots.is_empty():
+		return
+	selected_pilot_index = (selected_pilot_index + dir + available_pilots.size()) % available_pilots.size()
+
+func _open_pilot_row_at(position: Vector2) -> int:
+	var list_rect := Rect2(360, 365, 560, 90)
+	if not list_rect.has_point(position):
+		return -1
+	var row := int((position.y - list_rect.position.y) / 30.0)
+	if row >= 0 and row < min(available_pilots.size(), 3):
+		return row
+	return -1
+
+func _cancel_title_modal() -> void:
+	title_modal = ""
+	title_status_line = "No Pilot File Loaded"
+
+func _title_modal_action_at(position: Vector2) -> String:
+	if title_modal == "":
+		return ""
+	var ok_rect := Rect2(700, 492, 116, 34)
+	var cancel_rect := Rect2(836, 492, 116, 34)
+	if ok_rect.has_point(position):
+		return "ok"
+	if cancel_rect.has_point(position):
+		return "cancel"
+	return ""
 
 func _cycle_link(dir: int) -> void:
 	var links: Array = current_system.get("links", [])
@@ -397,6 +744,9 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, VIEW_SIZE), Color(0.005, 0.006, 0.012), true)
 	var center := VIEW_SIZE * 0.5
 	var font := ThemeDB.fallback_font
+	if game_state == STATE_TITLE:
+		_draw_title_screen(center, font)
+		return
 	draw_string(font, Vector2(18, 24), "TV GODOT RENDER ACTIVE — cell-center build", HORIZONTAL_ALIGNMENT_LEFT, 620, 18, Color(1.0, 0.85, 0.25))
 	for star in stars:
 		var screen := center + (star - pos * 0.18) * 0.45
@@ -408,6 +758,109 @@ func _draw() -> void:
 	_draw_hud()
 	if landed:
 		_draw_landing_panel()
+
+func _draw_title_screen(center: Vector2, font: Font) -> void:
+	for star in stars:
+		var screen := center + star * 0.18
+		if Rect2(Vector2.ZERO, VIEW_SIZE).has_point(screen):
+			draw_circle(screen, 1.0, Color(0.55, 0.62, 0.72))
+	var green := Color(0.38, 0.95, 0.34)
+	var dim_green := Color(0.10, 0.36, 0.12)
+	var line_green := Color(0.22, 0.78, 0.22)
+	_draw_title_side_decoration(Vector2(120, 230), false)
+	_draw_title_side_decoration(Vector2(1160, 230), true)
+	draw_string(font, Vector2(296, 130), "TERMINAL", HORIZONTAL_ALIGNMENT_CENTER, 690, 76, green)
+	draw_string(font, Vector2(298, 205), "VELOCITY", HORIZONTAL_ALIGNMENT_CENTER, 685, 86, green)
+	draw_line(Vector2(325, 294), Vector2(955, 294), dim_green, 2.0)
+	draw_line(Vector2(360, 308), Vector2(920, 308), dim_green, 1.0)
+	var status_rect := Rect2(405, 360, 470, 78)
+	draw_rect(status_rect, Color(0.0, 0.0, 0.0, 0.82), true)
+	draw_rect(status_rect, line_green, false, 2.0)
+	draw_string(font, status_rect.position + Vector2(0, 48), title_status_line, HORIZONTAL_ALIGNMENT_CENTER, status_rect.size.x, 18, Color(0.70, 1.0, 0.66))
+	for button in _title_buttons():
+		_draw_title_button(button, font)
+	if title_modal != "":
+		_draw_title_modal(font)
+	draw_string(font, Vector2(300, 716), "Personal-use Godot reconstruction. Title substituted: Terminal Velocity.", HORIZONTAL_ALIGNMENT_CENTER, 680, 15, Color(0.52, 0.82, 0.52))
+	draw_string(font, Vector2(300, 742), "Enter/click Enter Ship to start. N/O/S/A/Q shortcuts mirror the title menu.", HORIZONTAL_ALIGNMENT_CENTER, 680, 15, Color(0.42, 0.68, 0.44))
+
+func _draw_title_button(button: Dictionary, font: Font) -> void:
+	var rect: Rect2 = button["rect"]
+	var mouse_pos := get_viewport().get_mouse_position()
+	var hovered := rect.has_point(mouse_pos)
+	var fill := Color(0.04, 0.23, 0.055, 0.96) if hovered else Color(0.015, 0.13, 0.035, 0.94)
+	var border := Color(0.55, 1.0, 0.42) if hovered else Color(0.20, 0.75, 0.19)
+	draw_rect(rect, fill, true)
+	draw_rect(rect, border, false, 2.0)
+	draw_line(rect.position + Vector2(3, 3), rect.position + Vector2(rect.size.x - 4, 3), Color(0.72, 1.0, 0.58), 1.0)
+	draw_line(rect.position + Vector2(3, rect.size.y - 4), rect.position + Vector2(rect.size.x - 4, rect.size.y - 4), Color(0.04, 0.32, 0.06), 1.0)
+	draw_string(font, rect.position + Vector2(0, 26), str(button["label"]), HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 19, Color(0.82, 1.0, 0.74))
+
+func _draw_title_side_decoration(anchor: Vector2, flip: bool) -> void:
+	var dir := -1.0 if flip else 1.0
+	var metal := Color(0.18, 0.25, 0.22, 0.92)
+	var green := Color(0.14, 0.70, 0.18, 0.85)
+	draw_arc(anchor, 76, -1.2 if not flip else PI - 1.9, 1.2 if not flip else PI + 1.9, 36, green, 3.0)
+	draw_line(anchor + Vector2(18 * dir, -70), anchor + Vector2(118 * dir, -34), metal, 5.0)
+	draw_line(anchor + Vector2(28 * dir, 0), anchor + Vector2(142 * dir, 0), metal, 5.0)
+	draw_line(anchor + Vector2(18 * dir, 70), anchor + Vector2(118 * dir, 34), metal, 5.0)
+	draw_circle(anchor + Vector2(150 * dir, 0), 16, Color(0.04, 0.19, 0.06))
+	draw_arc(anchor + Vector2(150 * dir, 0), 24, 0, TAU, 28, green, 2.0)
+
+func _draw_title_modal(font: Font) -> void:
+	var rect := Rect2(300, 285, 680, 270)
+	draw_rect(rect, Color(0.82, 0.82, 0.78, 0.98), true)
+	draw_rect(rect, Color(0.08, 0.08, 0.08), false, 2.0)
+	draw_rect(Rect2(rect.position + Vector2(8, 8), Vector2(rect.size.x - 16, 24)), Color(0.18, 0.18, 0.18), true)
+	if title_modal == "open_pilot":
+		_draw_open_pilot_modal(rect, font)
+		return
+	var title := "Create New Pilot"
+	var prompt := "Pilot Name:"
+	var value := pilot_name_input
+	if title_modal == "new_ship_name":
+		title = "New Pilot"
+		prompt = "Now, please christen your brand-new Shuttlecraft."
+		value = ship_name_input
+	draw_string(font, rect.position + Vector2(0, 28), title, HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
+	draw_string(font, rect.position + Vector2(42, 82), prompt, HORIZONTAL_ALIGNMENT_LEFT, 590, 20, Color(0.02, 0.02, 0.02))
+	if title_modal == "new_ship_name":
+		draw_string(font, rect.position + Vector2(42, 116), "Ship Name:", HORIZONTAL_ALIGNMENT_LEFT, 590, 18, Color(0.02, 0.02, 0.02))
+	_draw_text_entry(Rect2(rect.position + Vector2(185, 102), Vector2(360, 34)), value, font)
+	_draw_modal_button(Rect2(700, 492, 116, 34), "OK", font)
+	_draw_modal_button(Rect2(836, 492, 116, 34), "Cancel", font)
+	draw_string(font, rect.position + Vector2(42, 232), "Return accepts. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+
+func _draw_open_pilot_modal(rect: Rect2, font: Font) -> void:
+	draw_string(font, rect.position + Vector2(0, 28), "Open Pilot", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
+	draw_string(font, rect.position + Vector2(42, 74), "Select pilot file:", HORIZONTAL_ALIGNMENT_LEFT, 590, 18, Color(0.02, 0.02, 0.02))
+	var list_rect := Rect2(360, 365, 560, 90)
+	draw_rect(list_rect, Color(0.98, 0.98, 0.94), true)
+	draw_rect(list_rect, Color(0.10, 0.10, 0.10), false, 1.0)
+	if available_pilots.is_empty():
+		draw_string(font, list_rect.position + Vector2(10, 28), "No pilot files found.", HORIZONTAL_ALIGNMENT_LEFT, list_rect.size.x - 20, 16, Color(0.1, 0.1, 0.1))
+	else:
+		for i in range(min(available_pilots.size(), 3)):
+			var row_rect := Rect2(list_rect.position + Vector2(0, i * 30), Vector2(list_rect.size.x, 30))
+			if i == selected_pilot_index:
+				draw_rect(row_rect.grow(-2), Color(0.22, 0.40, 0.85, 0.95), true)
+			var entry := available_pilots[i]
+			var row_text := "%s — %s" % [str(entry.get("pilot_name", "")), str(entry.get("ship_name", ""))]
+			var color := Color(1, 1, 1) if i == selected_pilot_index else Color(0.05, 0.05, 0.05)
+			draw_string(font, row_rect.position + Vector2(10, 22), row_text, HORIZONTAL_ALIGNMENT_LEFT, row_rect.size.x - 20, 16, color)
+	_draw_modal_button(Rect2(700, 492, 116, 34), "Open", font)
+	_draw_modal_button(Rect2(836, 492, 116, 34), "Cancel", font)
+	draw_string(font, rect.position + Vector2(42, 232), "Return opens. Up/Down selects. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+
+func _draw_text_entry(rect: Rect2, value: String, font: Font) -> void:
+	draw_rect(rect, Color(1.0, 1.0, 1.0), true)
+	draw_rect(rect, Color(0.10, 0.10, 0.10), false, 1.0)
+	draw_string(font, rect.position + Vector2(8, 23), value + "_", HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 16, 18, Color(0.0, 0.0, 0.0))
+
+func _draw_modal_button(rect: Rect2, label: String, font: Font) -> void:
+	draw_rect(rect, Color(0.88, 0.88, 0.84), true)
+	draw_rect(rect, Color(0.04, 0.04, 0.04), false, 1.0)
+	draw_string(font, rect.position + Vector2(0, 23), label, HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 16, Color(0.0, 0.0, 0.0))
 
 func _draw_bodies(center: Vector2) -> void:
 	for body in current_system.get("bodies", []):
