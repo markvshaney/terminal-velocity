@@ -1045,6 +1045,25 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_universe_map_screen_is_actionable(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'map_visible',
+            'KEY_M',
+            'func _toggle_universe_map',
+            'func _draw_universe_map',
+            'GALAXY MAP',
+            'Current:',
+            'Selected:',
+            'linked',
+            'system.get("x"',
+            'system.get("y"',
+            'draw_line(map_point',
+            'draw_circle(map_point',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_ship_sprites_use_center_registered_fixed_cells(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

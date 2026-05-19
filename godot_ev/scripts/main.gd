@@ -46,6 +46,7 @@ var landed := false
 var game_state := STATE_TITLE
 var selected_link_index := 0
 var selected_target_index := 0
+var map_visible := false
 var stars: Array[Vector2] = []
 var status_line := ""
 var title_status_line := "No pilot loaded."
@@ -397,6 +398,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				_cycle_link(-1)
 			KEY_H:
 				_jump()
+			KEY_M:
+				_toggle_universe_map()
 			KEY_T:
 				_cycle_target(1)
 			KEY_F1:
@@ -925,6 +928,10 @@ func _cycle_link(dir: int) -> void:
 	selected_link_index = (selected_link_index + dir + links.size()) % links.size()
 	status_line = "Destination: " + str(links[selected_link_index])
 
+func _toggle_universe_map() -> void:
+	map_visible = not map_visible
+	status_line = "Galaxy map open" if map_visible else "Galaxy map closed"
+
 func _npc_world_offsets() -> Array[Vector2]:
 	return [Vector2(260, -180), Vector2(-340, 220), Vector2(520, 160), Vector2(-640, -260)]
 
@@ -991,6 +998,8 @@ func _draw() -> void:
 	_draw_npcs(center)
 	_draw_player(center)
 	_draw_hud()
+	if map_visible:
+		_draw_universe_map()
 	if landed:
 		_draw_landing_panel()
 
@@ -1250,6 +1259,94 @@ func _draw_scanner_blips(scanner_center: Vector2, scanner_radius: float) -> void
 		var blip := scanner_center + relative
 		var color := Color(1.0, 0.78, 0.20) if i == selected_target_index else Color(0.30, 0.85, 1.0)
 		draw_circle(blip, 4.0 if i == selected_target_index else 2.5, color)
+
+func _draw_universe_map() -> void:
+	var systems: Array = universe.get("systems", [])
+	if systems.is_empty():
+		return
+	var font := ThemeDB.fallback_font
+	var rect := Rect2(160, 92, 960, 616)
+	var plot_rect := Rect2(rect.position + Vector2(42, 74), Vector2(610, 456))
+	draw_rect(rect, Color(0.018, 0.026, 0.042, 0.96), true)
+	draw_rect(rect, Color(0.24, 0.54, 0.78, 1.0), false, 2.0)
+	draw_string(font, rect.position + Vector2(0, 40), "GALAXY MAP", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 24, Color(0.86, 0.96, 1.0))
+	var links: Array = current_system.get("links", [])
+	var selected_name := "None"
+	if not links.is_empty():
+		selected_name = str(links[selected_link_index % links.size()])
+	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
+	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
+	draw_string(font, rect.position + Vector2(690, 154), "N/P selects linked destinations", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 178), "H jumps   M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	var bounds := _system_coordinate_bounds(systems)
+	var point_by_name: Dictionary = {}
+	for system in systems:
+		var map_point := _system_map_point(system, bounds, plot_rect)
+		point_by_name[str(system.get("name", ""))] = map_point
+	for system in systems:
+		var map_point: Vector2 = point_by_name.get(str(system.get("name", "")), plot_rect.position)
+		for linked_name in system.get("links", []):
+			if not point_by_name.has(str(linked_name)):
+				continue
+			var linked_point: Vector2 = point_by_name[str(linked_name)]
+			draw_line(map_point, linked_point, Color(0.12, 0.32, 0.52, 0.72), 1.0)
+	for system in systems:
+		var system_name := str(system.get("name", "?"))
+		var map_point: Vector2 = point_by_name.get(system_name, plot_rect.position)
+		var linked := links.has(system_name)
+		var is_current := system_name == str(current_system.get("name", ""))
+		var is_selected := system_name == selected_name
+		var color := Color(0.46, 0.72, 1.0)
+		var radius := 4.0
+		if linked:
+			color = Color(0.66, 0.95, 1.0)
+			radius = 5.0
+		if is_selected:
+			color = Color(0.30, 1.0, 0.55)
+			radius = 7.0
+		if is_current:
+			color = Color(1.0, 0.85, 0.25)
+			radius = 8.0
+		draw_circle(map_point, radius, color)
+		draw_arc(map_point, radius + 4.0, 0, TAU, 24, color, 1.0)
+		draw_string(font, map_point + Vector2(8, -7), system_name, HORIZONTAL_ALIGNMENT_LEFT, 140, 13, color)
+	var y := rect.position.y + 240.0
+	for system in systems:
+		var system_name := str(system.get("name", "?"))
+		var mark := " "
+		if system_name == str(current_system.get("name", "")):
+			mark = "*"
+		elif system_name == selected_name:
+			mark = ">"
+		var link_label := " linked" if links.has(system_name) else ""
+		draw_string(font, Vector2(rect.position.x + 690, y), "%s %s (%d,%d)%s" % [mark, system_name, int(system.get("x", 0)), int(system.get("y", 0)), link_label], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.80, 0.90, 1.0))
+		y += 22.0
+	draw_rect(plot_rect, Color(0.0, 0.0, 0.0, 0.0), false, 1.0)
+
+func _system_coordinate_bounds(systems: Array) -> Dictionary:
+	var min_x := INF
+	var max_x := -INF
+	var min_y := INF
+	var max_y := -INF
+	for system in systems:
+		var x := float(system.get("x", 0))
+		var y := float(system.get("y", 0))
+		min_x = min(min_x, x)
+		max_x = max(max_x, x)
+		min_y = min(min_y, y)
+		max_y = max(max_y, y)
+	if is_equal_approx(min_x, max_x):
+		max_x += 1.0
+	if is_equal_approx(min_y, max_y):
+		max_y += 1.0
+	return {"min_x": min_x, "max_x": max_x, "min_y": min_y, "max_y": max_y}
+
+func _system_map_point(system: Dictionary, bounds: Dictionary, plot_rect: Rect2) -> Vector2:
+	var x := float(system.get("x", 0))
+	var y := float(system.get("y", 0))
+	var t_x := inverse_lerp(float(bounds.get("min_x", 0.0)), float(bounds.get("max_x", 1.0)), x)
+	var t_y := inverse_lerp(float(bounds.get("min_y", 0.0)), float(bounds.get("max_y", 1.0)), y)
+	return plot_rect.position + Vector2(t_x * plot_rect.size.x, (1.0 - t_y) * plot_rect.size.y)
 
 func _draw_landing_panel() -> void:
 	var nearest := _nearest_body()
