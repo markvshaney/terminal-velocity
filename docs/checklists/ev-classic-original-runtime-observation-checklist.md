@@ -8,6 +8,8 @@ Related plan artifact: `docs/plans/2026-05-18-original-ev-classic-emulator-obser
 
 Related behavior baseline checklist: `docs/checklists/ev-classic-behavior-baseline-checklist.md`
 
+Related emulator route recommendation: `docs/research/2026-05-18-ev-classic-emulator-route-recommendation.md`
+
 ## Source hierarchy for this checklist
 
 1. Original EV Classic running under an authorized Classic Mac emulator environment: primary runtime truth.
@@ -73,19 +75,24 @@ Related behavior baseline checklist: `docs/checklists/ev-classic-behavior-baseli
   - Search result: no compatible Mac OS media was identified during the 2026-05-18 search.
   - Next action: user points Loki at likely folders or provides authorized OS material outside the repo.
 
-- [ ] Emulator located or installed.
-  - Status: pending
-  - Search result: no obvious Basilisk II or SheepShaver install found under `/mnt/c/Users/bh` during the 2026-05-18 search.
-  - Next action: prefer Windows GUI Basilisk II after ROM/OS availability is confirmed, unless WSL GUI forwarding is intentionally used.
-  - Approval gate: installing emulator software or changing Windows host state requires user approval.
+- [x] Emulator located or installed.
+  - Status: completed 2026-05-18 on Think laptop
+  - Recommendation: use Basilisk II first, preferably native Windows GUI on Think/main gear.
+  - Source: `docs/research/2026-05-18-ev-classic-emulator-route-recommendation.md`
+  - Installed Windows path: `C:\Games\BasiliskII\`
+  - GUI executable: `C:\Games\BasiliskII\BasiliskIIGUI.exe`
+  - Desktop shortcut: `C:\Users\bh\Desktop\Basilisk II GUI.lnk`
+  - Local-only install manifest: `/home/bh/workspaces/loki/ev-classic-emulator/reference-archive/manifests/2026-05-18-basiliskii-windows-install.md`
+  - Verification: Windows Defender scan found no threats; GUI launch smoke stayed alive for 5 seconds; executables are unsigned.
+  - Remaining blocker: ROM/OS material is still needed before useful emulator configuration.
 
 ## Execution checklist
 
-- [ ] Create local-only emulator workspace.
-  - Status: pending
+- [x] Create local-only emulator workspace.
+  - Status: completed 2026-05-18
   - Path: `/home/bh/workspaces/loki/ev-classic-emulator/`
-  - Suggested subdirs: `roms/`, `os-images/`, `disks/`, `captures/raw/`, `captures/notes/`, `shared/`
-  - Done when: workspace exists, contains `README.local.md`, and `git -C /home/bh/workspaces/loki/ev-classic-emulator rev-parse --show-toplevel` confirms it is not inside the Terminal Velocity repo.
+  - Subdirs: `roms/`, `os-images/`, `disks/`, `captures/raw/`, `captures/notes/`, `shared/`, `tools/`, `reference-archive/`
+  - Verification: workspace exists and `git -C /home/bh/workspaces/loki/ev-classic-emulator rev-parse --show-toplevel` reports it is not a git repository.
 
 - [ ] Stage authorized ROM/OS/game inputs outside the repo.
   - Status: blocked until ROM and OS media are found/provided
@@ -122,4 +129,4 @@ Related behavior baseline checklist: `docs/checklists/ev-classic-behavior-baseli
 
 ## Current next action
 
-Create the local-only emulator workspace, then locate/provide authorized Classic Mac ROM and compatible Mac OS install/media. Do not install emulator software or mutate Windows host state without explicit approval.
+Create the local-only emulator workspace, then locate/provide authorized Classic Mac ROM and compatible Mac OS install/media. Basilisk II Windows GUI is installed on Think at `C:\Games\BasiliskII\`; do not buy a CD-ROM drive unless the only authorized Mac OS media is a physical CD that cannot otherwise be imaged.
