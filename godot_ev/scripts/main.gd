@@ -16,6 +16,8 @@ const STATE_TITLE := "title"
 const STATE_SPACE := "space"
 const PREFS_SAVE_PATH := "user://terminal_velocity_prefs.json"
 const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
+const MOVEMENT_LOG_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=right_turn ticks=12 ship="
+const MOVEMENT_LOG_THRUST_PREFIX := "TV_MOVEMENT_LOG scenario=thrust ticks=30 ship="
 
 var repo_root := ""
 var universe := {}
@@ -91,6 +93,8 @@ func _ready() -> void:
 		title_modal = "prefs"
 		selected_pref_index = 0
 		call_deferred("_capture_prefs_screenshot_and_quit")
+	if OS.get_cmdline_args().has("--tv-movement-log") or OS.get_cmdline_user_args().has("--tv-movement-log"):
+		call_deferred("_run_deterministic_movement_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -327,6 +331,9 @@ func _handle_input(delta: float) -> void:
 		turn_dir -= 1
 	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		turn_dir += 1
+	_apply_movement_controls(delta, turn_dir, Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP), Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN))
+
+func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, braking: bool) -> void:
 	if turn_dir != 0 and not player_frames.is_empty():
 		turn_cell_progress += float(turn_dir) * 18.0 * delta
 		while turn_cell_progress >= 1.0:
@@ -339,10 +346,39 @@ func _handle_input(delta: float) -> void:
 		turn_cell_progress = 0.0
 	angle_deg = _facing_degrees(player_facing_index, max(player_frames.size(), FRAME_COUNT))
 	var nose := Vector2.UP.rotated(deg_to_rad(angle_deg))
-	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+	if thrusting:
 		vel += nose * 250.0 * delta
-	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+	if braking:
 		vel *= pow(0.90, delta * 60.0)
+
+func _advance_motion_step(delta: float, turn_dir: int, thrusting: bool, braking: bool) -> void:
+	_apply_movement_controls(delta, turn_dir, thrusting, braking)
+	if not landed:
+		pos += vel * delta
+		vel *= pow(0.995, delta * 60.0)
+
+func _reset_deterministic_motion_state() -> void:
+	game_state = STATE_SPACE
+	landed = false
+	pos = PLAYER_START
+	vel = Vector2.ZERO
+	player_facing_index = 0
+	angle_deg = 0.0
+	turn_cell_progress = 0.0
+
+func _run_deterministic_movement_log() -> void:
+	_reset_deterministic_motion_state()
+	for _i in range(12):
+		_advance_motion_step(1.0 / 60.0, 1, false, false)
+	_print_movement_log(MOVEMENT_LOG_RIGHT_TURN_PREFIX, 12)
+	_reset_deterministic_motion_state()
+	for _i in range(30):
+		_advance_motion_step(1.0 / 60.0, 0, true, false)
+	_print_movement_log(MOVEMENT_LOG_THRUST_PREFIX, 30)
+	get_tree().quit(0)
+
+func _print_movement_log(prefix: String, ticks: int) -> void:
+	print(prefix + "%s tickCount=%d facingIndex=%d angle=%.3f velocity=(%.3f,%.3f) position=(%.3f,%.3f)" % [player_ship_id, ticks, player_facing_index, angle_deg, vel.x, vel.y, pos.x, pos.y])
 
 func _unhandled_input(event: InputEvent) -> void:
 	if game_state == STATE_TITLE:

@@ -175,7 +175,8 @@ For every behavior row, record:
 
 ## Instrumentation needed in Terminal Velocity
 
-- [ ] Deterministic Godot movement log: selected ship, tick count, facing index, angle, velocity, and position.
+- [x] Deterministic Godot movement log: selected ship, tick count, facing index, angle, velocity, and position.
+  - Status: `terminal-velocity-observed` 2026-05-19 via `--tv-movement-log` in `godot_ev/scripts/main.gd`; emits right-turn and thrust scenarios for remote/headless comparison work.
 - [ ] Deterministic turn/thrust scenarios: after N ticks of left/right/thrust/no-input.
 - [ ] Event log for landing/takeoff/hyperspace transitions.
 - [ ] Event log for target acquisition, weapon firing, projectile spawn, hit, and explosion.

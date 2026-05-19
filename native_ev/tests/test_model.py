@@ -134,6 +134,25 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('user://selftest/title_prefs.png', text)
         self.assertIn('_write_prefs_screenshot_artifact', text)
 
+    def test_godot_deterministic_movement_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
+        checklist = (root / 'docs' / 'checklists' / 'ev-classic-behavior-baseline-checklist.md').read_text()
+        for symbol in [
+            '--tv-movement-log',
+            'func _run_deterministic_movement_log',
+            'TV_MOVEMENT_LOG scenario=right_turn ticks=12 ship=',
+            'TV_MOVEMENT_LOG scenario=thrust ticks=30 ship=',
+            'facingIndex=',
+            'velocity=',
+            'position=',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('movementLog=deterministic', self_test_script)
+        self.assertIn('Deterministic Godot movement log', checklist)
+        self.assertIn('Status: `terminal-velocity-observed`', checklist)
+
     def test_all_36_shuttle_frames_exist(self):
         paths = shuttle_frame_paths()
         self.assertEqual(len(paths), 36)

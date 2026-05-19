@@ -41,7 +41,7 @@ func _initialize() -> void:
 		printerr("GODOT SELFTEST FAIL %s frames=%d" % [player_check_id, frame_ok])
 		quit(1)
 		return
-	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d pictsLoaded=%d prefScreen=ev-classic-visual-scaffold prefsScreenshot=%s data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, loaded_picts, prefs_screenshot])
+	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d pictsLoaded=%d prefScreen=ev-classic-visual-scaffold prefsScreenshot=%s movementLog=deterministic data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, loaded_picts, prefs_screenshot])
 	quit(0)
 
 func _write_prefs_screenshot_artifact() -> String:
