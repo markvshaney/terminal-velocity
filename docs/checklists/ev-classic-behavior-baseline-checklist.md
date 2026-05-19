@@ -8,6 +8,8 @@ Related decision: `docs/decisions/2026-05-18-ev-family-profile-architecture.md`
 
 Related profile checklist: `docs/checklists/ev-family-profile-architecture-checklist.md`
 
+Related runtime setup checklist: `docs/checklists/ev-classic-original-runtime-observation-checklist.md`
+
 ## Source hierarchy
 
 1. **Primary truth sources**
@@ -187,8 +189,10 @@ Primary-source verification needed: <what would confirm/refute it>
 
 ## Immediate next actions
 
-1. Finish profile descriptor work first so behavior logs are profile-addressed.
-2. Add `profile=classic` to Godot self-test output.
-3. Add deterministic movement/facing logs for Terminal Velocity.
-4. Identify an authorized path for original EV Classic runtime observation.
-5. Populate this checklist only with evidence-labeled claims; avoid using adaptation observations as truth.
+1. Use `docs/checklists/ev-classic-original-runtime-observation-checklist.md` to finish original-runtime setup prerequisites.
+2. Create the local-only emulator workspace outside the repo.
+3. Locate/provide authorized Classic Mac ROM and compatible Mac OS install/media.
+4. Finish profile descriptor work so future behavior logs are profile-addressed.
+5. Add `profile=classic` to Godot self-test output.
+6. Add deterministic movement/facing logs for Terminal Velocity.
+7. Populate this checklist only with evidence-labeled behavior claims; avoid using adaptation observations as truth.

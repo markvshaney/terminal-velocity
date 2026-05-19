@@ -13,6 +13,7 @@
 ## Current local facts
 
 - Repo: `/home/bh/workspaces/loki/terminal-velocity`
+- Live setup checklist: `docs/checklists/ev-classic-original-runtime-observation-checklist.md`
 - Existing local EV Classic resource files found under `source-assets/ev-classic/Nova Files/`:
   - `EV Data.rez`
   - `EV Fixes.rez`
@@ -22,7 +23,20 @@
 - Existing plug-ins found under `source-assets/ev-classic/Plug-Ins/`:
   - `EV AI Rocket Hack.rez`
   - `EV Manual Flares.rez`
-- No local disk image/application/installer was found in `source-assets/ev-classic/` during planning; only `.rez` resource files and extracted assets were found.
+- Original EV Classic Mac installer found on Think laptop:
+  - `/mnt/c/Users/bh/Downloads/EV_Installer_1.0.5.bin`
+  - Type: MacBinary II application, title `Escape Velocity Installer`
+  - Size: 5,401,984 bytes
+  - SHA256: `5c6b8ed5ee1efb67f3f7cbe62b051f36d26753337f18a238febbdc023ef0a5a2`
+- EV Nova + EV Classic-for-Nova runnable/adaptation setup found on Think laptop:
+  - `/mnt/c/Games/EV Nova/EV Nova.exe`
+  - `/mnt/c/Games/EV Nova/Nova Plugins/Play Escape Velocity.nplay`
+  - `.nplay` declares `EV Classic for Nova` version `1.1.6`.
+  - Use as adaptation/workflow reference only, not original-runtime truth.
+- Not yet found during the 2026-05-18 search:
+  - Basilisk II or SheepShaver install
+  - Classic Mac ROM
+  - compatible Classic Mac OS install/media
 
 ## Non-goals and legal/safety guardrails
 
@@ -61,8 +75,9 @@ Keep emulator assets outside the repo, for example:
 Repo-side durable artifacts:
 
 ```text
-docs/checklists/ev-classic-behavior-baseline-checklist.md
-docs/research/original-ev-classic-runtime-observations.md   # create after first observation pass
+docs/checklists/ev-classic-original-runtime-observation-checklist.md  # live setup/execution surface
+docs/checklists/ev-classic-behavior-baseline-checklist.md             # behavior comparison surface
+docs/research/original-ev-classic-runtime-observations.md             # create after first observation pass
 ```
 
 ## Task 1: Confirm authorized runtime materials
@@ -306,4 +321,6 @@ Notes:
 
 ## Immediate next step
 
-Run Task 1 only: inventory authorized runnable/install media and confirm whether runtime observation is possible with current local materials. If blocked, ask the user where the authorized EV Classic app/installer, compatible Mac OS media, and ROM are located.
+Use `docs/checklists/ev-classic-original-runtime-observation-checklist.md` as the live setup surface.
+
+Current next action: create the local-only emulator workspace, then locate/provide authorized Classic Mac ROM and compatible Mac OS install/media. Do not install emulator software or mutate Windows host state without explicit approval.
