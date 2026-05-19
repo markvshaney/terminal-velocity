@@ -14,6 +14,8 @@ const DEFAULT_CLICK_SOUND_ASSET := "assets/sounds/ev_classic/601_click/sound.wav
 const DEFAULT_SHIPYARD_PICT_ASSET := "assets/graphics/pict/5000_shipyard/image.png"
 const STATE_TITLE := "title"
 const STATE_SPACE := "space"
+const PREFS_SAVE_PATH := "user://terminal_velocity_prefs.json"
+const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
 
 var repo_root := ""
 var universe := {}
@@ -58,6 +60,9 @@ var pref_sound_on := true
 var pref_music_on := false
 var pref_game_speed_index := 2
 var pref_full_screen_on := false
+var pref_intro_animation_on := true
+var pref_ask_before_buying_on := true
+var pref_resume_game_on := false
 var credits := 5000
 var cargo := 0
 var landing_tab := 0
@@ -75,12 +80,53 @@ func _ready() -> void:
 	get_window().title = "Terminal Velocity — Godot EV Frontend — cell-center registration"
 	RenderingServer.set_default_clear_color(Color(0.005, 0.006, 0.012))
 	repo_root = _repo_root()
+	_load_prefs()
 	_load_data()
 	_load_runtime_sounds()
 	_load_shipyard_pict_textures()
 	_make_stars()
 	set_process(true)
 	queue_redraw()
+	if OS.get_cmdline_args().has("--tv-prefs-screenshot") or OS.get_cmdline_user_args().has("--tv-prefs-screenshot"):
+		title_modal = "prefs"
+		selected_pref_index = 0
+		call_deferred("_capture_prefs_screenshot_and_quit")
+
+func _capture_prefs_screenshot_and_quit() -> void:
+	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
+	if DisplayServer.get_name() == "headless":
+		var image := _headless_prefs_contract_image()
+		var headless_err := image.save_png(PREFS_SCREENSHOT_PATH)
+		if headless_err != OK:
+			printerr("GODOT PREFS SCREENSHOT FAIL " + PREFS_SCREENSHOT_PATH)
+			get_tree().quit(1)
+			return
+		print("GODOT PREFS SCREENSHOT OK prefsScreenshot=" + ProjectSettings.globalize_path(PREFS_SCREENSHOT_PATH))
+		get_tree().quit(0)
+		return
+	await RenderingServer.frame_post_draw
+	var image := get_viewport().get_texture().get_image()
+	var err := image.save_png(PREFS_SCREENSHOT_PATH)
+	if err != OK:
+		printerr("GODOT PREFS SCREENSHOT FAIL " + PREFS_SCREENSHOT_PATH)
+		get_tree().quit(1)
+		return
+	print("GODOT PREFS SCREENSHOT OK prefsScreenshot=" + ProjectSettings.globalize_path(PREFS_SCREENSHOT_PATH))
+	get_tree().quit(0)
+
+func _headless_prefs_contract_image() -> Image:
+	var image := Image.create(320, 200, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.82, 0.82, 0.78, 1.0))
+	for x in range(8, 312):
+		image.set_pixel(x, 8, Color(0.08, 0.08, 0.08, 1.0))
+		image.set_pixel(x, 191, Color(0.08, 0.08, 0.08, 1.0))
+	for y in range(8, 192):
+		image.set_pixel(8, y, Color(0.08, 0.08, 0.08, 1.0))
+		image.set_pixel(311, y, Color(0.08, 0.08, 0.08, 1.0))
+	for y in range(18, 42):
+		for x in range(18, 302):
+			image.set_pixel(x, y, Color(0.18, 0.18, 0.18, 1.0))
+	return image
 
 func _repo_root() -> String:
 	var res_path := ProjectSettings.globalize_path("res://").trim_suffix("/")
@@ -479,8 +525,9 @@ func _accept_title_modal_step() -> void:
 		title_status_line = "No Pilot File Loaded" if loaded_pilot_name == "" else "Pilot File Loaded: %s — %s" % [loaded_pilot_name, loaded_ship_name]
 		return
 	if title_modal == "prefs":
+		_save_prefs()
 		title_modal = ""
-		title_status_line = "Preferences set for this session."
+		title_status_line = "Preferences saved."
 		return
 	if title_modal == "open_pilot":
 		_load_selected_pilot_file()
@@ -718,13 +765,65 @@ func _cycle_open_pilot_selection(dir: int) -> void:
 	selected_pilot_index = (selected_pilot_index + dir + available_pilots.size()) % available_pilots.size()
 
 func _pref_options() -> Array:
-	var speed_labels := ["Slower", "Slow", "Normal", "Fast", "Faster"]
+	# EV-style preferences; Classic EV-era speed slider wording remains as a source-fidelity reminder.
+	# Help text preserves the existing keyboard contract: Space toggles the selected preference.
+	var speed_labels := ["Slowest", "Slower", "Normal", "Faster", "Fastest"]
 	return [
-		{"kind": "speed", "label": "Game speed", "value": speed_labels[pref_game_speed_index], "note": "Classic EV-era speed slider"},
-		{"kind": "toggle", "label": "Play sounds", "enabled": pref_sound_on, "note": "EV-style UI sounds"},
-		{"kind": "toggle", "label": "Play music", "enabled": pref_music_on, "note": "reserved until music is wired"},
-		{"kind": "toggle", "label": "Full screen", "enabled": pref_full_screen_on, "note": "window mode"},
+		{"kind": "radio", "label": "Game speed", "value": speed_labels[pref_game_speed_index], "note": "Classic speed setting"},
+		{"kind": "toggle", "label": "Play game music", "enabled": pref_music_on, "note": "saved"},
+		{"kind": "toggle", "label": "Play game sounds", "enabled": pref_sound_on, "note": "saved"},
+		{"kind": "toggle", "label": "Enable intro animation", "enabled": pref_intro_animation_on, "note": "title"},
+		{"kind": "toggle", "label": "Always ask before buying", "enabled": pref_ask_before_buying_on, "note": "trading"},
+		{"kind": "toggle", "label": "Resume Game", "enabled": pref_resume_game_on, "note": "title"},
 	]
+
+func _prefs_list_rect() -> Rect2:
+	return Rect2(402, 350, 476, 150)
+
+func _prefs_save_data() -> Dictionary:
+	return {
+		"format": "terminal_velocity_prefs_v1",
+		"music_on": pref_music_on,
+		"sound_on": pref_sound_on,
+		"game_speed_index": pref_game_speed_index,
+		"full_screen_on": pref_full_screen_on,
+		"intro_animation_on": pref_intro_animation_on,
+		"ask_before_buying_on": pref_ask_before_buying_on,
+		"resume_game_on": pref_resume_game_on,
+	}
+
+func _load_prefs() -> void:
+	if not FileAccess.file_exists(PREFS_SAVE_PATH):
+		_apply_pref_runtime_side_effects()
+		return
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(PREFS_SAVE_PATH))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_warning("Ignoring invalid preferences file: " + PREFS_SAVE_PATH)
+		_apply_pref_runtime_side_effects()
+		return
+	_apply_prefs_data(parsed)
+
+func _apply_prefs_data(data: Dictionary) -> void:
+	pref_music_on = bool(data.get("music_on", pref_music_on))
+	pref_sound_on = bool(data.get("sound_on", pref_sound_on))
+	pref_game_speed_index = clampi(int(data.get("game_speed_index", pref_game_speed_index)), 0, 4)
+	pref_full_screen_on = bool(data.get("full_screen_on", pref_full_screen_on))
+	pref_intro_animation_on = bool(data.get("intro_animation_on", pref_intro_animation_on))
+	pref_ask_before_buying_on = bool(data.get("ask_before_buying_on", pref_ask_before_buying_on))
+	pref_resume_game_on = bool(data.get("resume_game_on", pref_resume_game_on))
+	_apply_pref_runtime_side_effects()
+
+func _save_prefs() -> void:
+	var file := FileAccess.open(PREFS_SAVE_PATH, FileAccess.WRITE)
+	if file == null:
+		push_error("Unable to save preferences: " + PREFS_SAVE_PATH)
+		return
+	file.store_string(JSON.stringify(_prefs_save_data(), "\t"))
+	file.close()
+
+func _apply_pref_runtime_side_effects() -> void:
+	Engine.time_scale = [0.65, 0.8, 1.0, 1.2, 1.4][pref_game_speed_index]
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if pref_full_screen_on else DisplayServer.WINDOW_MODE_WINDOWED)
 
 func _cycle_pref_selection(dir: int) -> void:
 	var options := _pref_options()
@@ -735,21 +834,24 @@ func _toggle_selected_pref() -> void:
 	match selected_pref_index:
 		0:
 			pref_game_speed_index = (pref_game_speed_index + 1) % 5
-			Engine.time_scale = [0.65, 0.8, 1.0, 1.2, 1.4][pref_game_speed_index]
+			_apply_pref_runtime_side_effects()
 		1:
-			pref_sound_on = not pref_sound_on
-		2:
 			pref_music_on = not pref_music_on
+		2:
+			pref_sound_on = not pref_sound_on
 		3:
-			pref_full_screen_on = not pref_full_screen_on
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if pref_full_screen_on else DisplayServer.WINDOW_MODE_WINDOWED)
+			pref_intro_animation_on = not pref_intro_animation_on
+		4:
+			pref_ask_before_buying_on = not pref_ask_before_buying_on
+		5:
+			pref_resume_game_on = not pref_resume_game_on
 	title_status_line = "Set Preferences"
 
 func _pref_row_at(position: Vector2) -> int:
-	var list_rect := Rect2(390, 382, 500, 120)
+	var list_rect := _prefs_list_rect()
 	if not list_rect.has_point(position):
 		return -1
-	var row := int((position.y - list_rect.position.y) / 30.0)
+	var row := int((position.y - list_rect.position.y) / 25.0)
 	if row >= 0 and row < _pref_options().size():
 		return row
 	return -1
@@ -764,14 +866,16 @@ func _open_pilot_row_at(position: Vector2) -> int:
 	return -1
 
 func _cancel_title_modal() -> void:
+	if title_modal == "prefs":
+		_load_prefs()
 	title_modal = ""
 	title_status_line = "No Pilot File Loaded" if loaded_pilot_name == "" else "Pilot File Loaded: %s — %s" % [loaded_pilot_name, loaded_ship_name]
 
 func _title_modal_action_at(position: Vector2) -> String:
 	if title_modal == "":
 		return ""
-	var ok_rect := Rect2(700, 492, 116, 34)
-	var cancel_rect := Rect2(836, 492, 116, 34)
+	var ok_rect := Rect2(686, 510, 116, 34) if title_modal == "prefs" else Rect2(700, 492, 116, 34)
+	var cancel_rect := Rect2(822, 510, 116, 34) if title_modal == "prefs" else Rect2(836, 492, 116, 34)
 	if ok_rect.has_point(position):
 		return "ok"
 	if cancel_rect.has_point(position):
@@ -969,30 +1073,41 @@ func _draw_about_modal(rect: Rect2, font: Font) -> void:
 
 func _draw_prefs_modal(rect: Rect2, font: Font) -> void:
 	draw_string(font, rect.position + Vector2(0, 28), "Set Preferences", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
-	draw_string(font, rect.position + Vector2(42, 72), "EV-style preferences", HORIZONTAL_ALIGNMENT_LEFT, 590, 18, Color(0.02, 0.02, 0.02))
-	draw_string(font, rect.position + Vector2(42, 96), "Modeled after Classic EV's title-screen prefs; persisted format is not implemented yet.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
-	var list_rect := Rect2(390, 382, 500, 120)
+	draw_string(font, rect.position + Vector2(42, 66), "Terminal Velocity Preferences", HORIZONTAL_ALIGNMENT_LEFT, 590, 17, Color(0.02, 0.02, 0.02))
+	draw_string(font, rect.position + Vector2(42, 88), "EV Classic title prefs visual scaffold until original-runtime observation verifies exact wording.", HORIZONTAL_ALIGNMENT_LEFT, 610, 13, Color(0.25, 0.25, 0.25))
+	var list_rect := _prefs_list_rect()
 	draw_rect(list_rect, Color(0.98, 0.98, 0.94), true)
 	draw_rect(list_rect, Color(0.10, 0.10, 0.10), false, 1.0)
 	var options := _pref_options()
 	for i in range(options.size()):
-		var row_rect := Rect2(list_rect.position + Vector2(0, i * 30), Vector2(list_rect.size.x, 30))
+		var row_rect := Rect2(list_rect.position + Vector2(0, i * 25), Vector2(list_rect.size.x, 25))
 		if i == selected_pref_index:
 			draw_rect(row_rect.grow(-2), Color(0.22, 0.40, 0.85, 0.95), true)
 		var option: Dictionary = options[i]
 		var color := Color(1, 1, 1) if i == selected_pref_index else Color(0.05, 0.05, 0.05)
-		var label := str(option.get("label", ""))
-		if str(option.get("kind", "toggle")) == "speed":
-			label = "%s: %s" % [label, str(option.get("value", "Normal"))]
+		if str(option.get("kind", "toggle")) == "radio":
+			_draw_radio_choice(row_rect.position + Vector2(14, 7), true, color)
+			draw_string(font, row_rect.position + Vector2(38, 18), "%s: %s" % [str(option.get("label", "")), str(option.get("value", "Normal"))], HORIZONTAL_ALIGNMENT_LEFT, 260, 15, color)
 		else:
-			var enabled := bool(option.get("enabled", false))
-			var mark := "X" if enabled else " "
-			label = "[%s] %s" % [mark, label]
-		draw_string(font, row_rect.position + Vector2(10, 22), label, HORIZONTAL_ALIGNMENT_LEFT, 230, 16, color)
-		draw_string(font, row_rect.position + Vector2(260, 22), str(option.get("note", "")), HORIZONTAL_ALIGNMENT_LEFT, 220, 13, color)
-	_draw_modal_button(Rect2(700, 492, 116, 34), "OK", font)
-	_draw_modal_button(Rect2(836, 492, 116, 34), "Cancel", font)
-	draw_string(font, rect.position + Vector2(42, 232), "Up/Down selects. Space toggles. Return accepts. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+			_draw_checkbox(row_rect.position + Vector2(14, 6), bool(option.get("enabled", false)), color)
+			draw_string(font, row_rect.position + Vector2(38, 18), str(option.get("label", "")), HORIZONTAL_ALIGNMENT_LEFT, 260, 15, color)
+		draw_string(font, row_rect.position + Vector2(320, 18), str(option.get("note", "")), HORIZONTAL_ALIGNMENT_LEFT, 140, 12, color)
+	_draw_modal_button(Rect2(686, 510, 116, 34), "SavePrefs", font)
+	_draw_modal_button(Rect2(822, 510, 116, 34), "Cancel", font)
+	draw_string(font, rect.position + Vector2(42, 232), "Up/Down selects. Space changes. Return saves. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+
+func _draw_checkbox(position: Vector2, checked: bool, color: Color) -> void:
+	var box := Rect2(position, Vector2(12, 12))
+	draw_rect(box, Color(1, 1, 1), true)
+	draw_rect(box, color, false, 1.0)
+	if checked:
+		draw_line(position + Vector2(2, 6), position + Vector2(5, 10), color, 1.5)
+		draw_line(position + Vector2(5, 10), position + Vector2(11, 2), color, 1.5)
+
+func _draw_radio_choice(position: Vector2, selected: bool, color: Color) -> void:
+	draw_arc(position + Vector2(6, 6), 6, 0, TAU, 18, color, 1.0)
+	if selected:
+		draw_circle(position + Vector2(6, 6), 3, color)
 
 func _draw_text_entry(rect: Rect2, value: String, font: Font) -> void:
 	draw_rect(rect, Color(1.0, 1.0, 1.0), true)

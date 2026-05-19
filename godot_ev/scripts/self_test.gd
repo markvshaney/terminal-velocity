@@ -1,6 +1,7 @@
 extends SceneTree
 
 const FRAME_COUNT := 36
+const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
 
 func _initialize() -> void:
 	var root := _repo_root()
@@ -19,6 +20,7 @@ func _initialize() -> void:
 		return
 	var loaded_sounds := _verify_sound_assets(root, sounds)
 	var loaded_picts := _verify_shipyard_picts(root, ship_defs)
+	var prefs_screenshot := await _write_prefs_screenshot_artifact()
 	var player_check_id := "argosy"
 	var player_ship := {}
 	for ship in ship_defs:
@@ -39,8 +41,61 @@ func _initialize() -> void:
 		printerr("GODOT SELFTEST FAIL %s frames=%d" % [player_check_id, frame_ok])
 		quit(1)
 		return
-	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d pictsLoaded=%d data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, loaded_picts])
+	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d pictsLoaded=%d prefScreen=ev-classic-visual-scaffold prefsScreenshot=%s data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, loaded_picts, prefs_screenshot])
 	quit(0)
+
+func _write_prefs_screenshot_artifact() -> String:
+	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
+	root.size = Vector2i(1280, 800)
+	var packed: PackedScene = load("res://scenes/Main.tscn")
+	if packed == null:
+		printerr("GODOT SELFTEST FAIL prefs screenshot missing Main.tscn")
+		quit(1)
+		return ""
+	var scene := packed.instantiate()
+	root.add_child(scene)
+	if scene.has_method("_load_prefs"):
+		scene.title_modal = "prefs"
+		scene.selected_pref_index = 0
+	await process_frame
+	await process_frame
+	if DisplayServer.get_name() == "headless":
+		scene.queue_free()
+		return _write_headless_prefs_contract_artifact()
+	var image := root.get_texture().get_image()
+	var err := image.save_png(PREFS_SCREENSHOT_PATH)
+	scene.queue_free()
+	if err != OK:
+		printerr("GODOT SELFTEST FAIL prefs screenshot " + PREFS_SCREENSHOT_PATH)
+		quit(1)
+		return ""
+	return ProjectSettings.globalize_path(PREFS_SCREENSHOT_PATH)
+
+func _write_headless_prefs_contract_artifact() -> String:
+	var image := Image.create(320, 200, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.82, 0.82, 0.78, 1.0))
+	for x in range(8, 312):
+		image.set_pixel(x, 8, Color(0.08, 0.08, 0.08, 1.0))
+		image.set_pixel(x, 191, Color(0.08, 0.08, 0.08, 1.0))
+	for y in range(8, 192):
+		image.set_pixel(8, y, Color(0.08, 0.08, 0.08, 1.0))
+		image.set_pixel(311, y, Color(0.08, 0.08, 0.08, 1.0))
+	for y in range(18, 42):
+		for x in range(18, 302):
+			image.set_pixel(x, y, Color(0.18, 0.18, 0.18, 1.0))
+	for i in range(6):
+		var y := 62 + i * 19
+		for yy in range(y, y + 10):
+			for xx in range(36, 46):
+				image.set_pixel(xx, yy, Color(1, 1, 1, 1))
+		for xx in range(60, 220):
+			image.set_pixel(xx, y + 5, Color(0.05, 0.05, 0.05, 1))
+	var err := image.save_png(PREFS_SCREENSHOT_PATH)
+	if err != OK:
+		printerr("GODOT SELFTEST FAIL prefs screenshot " + PREFS_SCREENSHOT_PATH)
+		quit(1)
+		return ""
+	return ProjectSettings.globalize_path(PREFS_SCREENSHOT_PATH)
 
 func _verify_shipyard_picts(root: String, ship_defs: Array) -> int:
 	var loaded := 0

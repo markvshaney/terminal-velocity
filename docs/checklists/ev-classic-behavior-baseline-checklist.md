@@ -57,6 +57,13 @@ For every behavior row, record:
 
 ### Start state / new pilot flow
 
+- [ ] Title preferences screen visual/wording pass
+  - Evidence label: `inferred-scaffold`
+  - Primary evidence needed: user visual inspection against original EV Classic prefs screen in Basilisk II/original runtime.
+  - Terminal Velocity current behavior: 2026-05-19 implementation has persisted EV Classic-style prefs scaffold in `godot_ev/scripts/main.gd` plus generated prefs artifact at `user://selftest/title_prefs.png`.
+  - Status: `scaffold`
+  - Remote-only note: user cannot do visual original-runtime comparison right now; keep this item for later local/visual work.
+
 - [ ] Starting ship
   - Evidence label: `unknown`
   - Primary evidence needed: original EV Classic new-pilot observation or decoded/default pilot/resource data.
