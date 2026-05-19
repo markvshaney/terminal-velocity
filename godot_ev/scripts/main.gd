@@ -101,7 +101,7 @@ func _load_data() -> void:
 	weapons = _json(repo_root + "/native_ev/data/weapons.json")
 	sounds = _json(repo_root + "/native_ev/data/sounds.json")
 	current_system = universe.get("systems", [])[current_system_index]
-	var initial_player_ship_id := "argosy"
+	var initial_player_ship_id := "shuttlecraft"
 	for ship in ships.get("ships", []):
 		if ship.get("id", "") == initial_player_ship_id:
 			player_ship = ship
@@ -487,7 +487,8 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"format": "terminal_velocity_pilot_v1",
 		"pilot_name": pilot_name,
 		"ship_name": ship_name,
-		"ship_id": player_ship_id,
+		"ship_class": _pilot_ship_class(),
+		"ship_resource_id": int(player_ship.get("shipResourceId", 128)),
 		"ship_type": str(player_ship.get("name", "Shuttlecraft")),
 		"credits": credits,
 		"cargo": cargo,
@@ -505,6 +506,12 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"owned_outfits": owned_outfits,
 		"owned_weapons": owned_weapons,
 	}
+
+func _pilot_ship_class() -> int:
+	# EV Classic pilot resource 128 stores `shipClass` as a small numeric class,
+	# not a remake-local slug. Our decoded ship manifest preserves that as
+	# `sourceDataOrdinal`; `shipResourceId` is retained separately as provenance.
+	return int(player_ship.get("sourceDataOrdinal", 0))
 
 func _pilot_save_path(pilot_name: String) -> String:
 	return "user://pilots/%s.tvpilot.json" % _pilot_file_stem(pilot_name)
@@ -597,7 +604,13 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	pos = Vector2(float(saved_pos.get("x", pos.x)), float(saved_pos.get("y", pos.y)))
 	vel = Vector2(float(saved_vel.get("x", vel.x)), float(saved_vel.get("y", vel.y)))
 	angle_deg = float(data.get("angle_deg", angle_deg))
-	var desired_ship_id := str(data.get("ship_id", ""))
+	var desired_ship_id := ""
+	if data.has("ship_class"):
+		desired_ship_id = _ship_id_from_class(int(data.get("ship_class", 0)))
+	if desired_ship_id == "" and data.has("ship_resource_id"):
+		desired_ship_id = _ship_id_from_resource_id(int(data.get("ship_resource_id", 128)))
+	if desired_ship_id == "" and data.has("ship_id"):
+		desired_ship_id = str(data.get("ship_id", ""))
 	if desired_ship_id == "":
 		desired_ship_id = _ship_id_from_legacy_type(str(data.get("ship_type", "")))
 	if desired_ship_id != "":
@@ -639,6 +652,18 @@ func _ship_id_from_legacy_type(ship_type: String) -> String:
 	var normalized := ship_type.strip_edges().to_lower().replace(" ", "_")
 	for ship in ships.get("ships", []):
 		if str(ship.get("id", "")) == normalized or str(ship.get("name", "")).to_lower() == ship_type.strip_edges().to_lower():
+			return str(ship.get("id", ""))
+	return ""
+
+func _ship_id_from_class(ship_class: int) -> String:
+	for ship in ships.get("ships", []):
+		if int(ship.get("sourceDataOrdinal", -1)) == ship_class:
+			return str(ship.get("id", ""))
+	return ""
+
+func _ship_id_from_resource_id(resource_id: int) -> String:
+	for ship in ships.get("ships", []):
+		if int(ship.get("shipResourceId", -1)) == resource_id:
 			return str(ship.get("id", ""))
 	return ""
 
