@@ -78,12 +78,12 @@ For every behavior row, record:
   - Terminal Velocity current behavior: `credits := 10000` in `godot_ev/scripts/main.gd` after 2026-05-19 correction from earlier scaffold value `5000`.
   - Status: `match`; confidence `medium`.
 
-- [ ] Starting location / system / landed-or-space state
-  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
-  - Primary evidence: original EV Classic running in Basilisk II; local-only captures `C:\Games\BasiliskII\ev-new-pilot-after-ship-name.png`, `C:\Games\BasiliskII\ev-new-pilot-enter-ship-5s.png`, and `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`.
+- [x] Starting location / system / landed-or-space state
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat plus `decoded-resource-backed` Levo landing text.
+  - Primary evidence: original EV Classic running in Basilisk II; local-only captures `C:\Games\BasiliskII\ev-new-pilot-after-ship-name.png`, `C:\Games\BasiliskII\ev-new-pilot-enter-ship-5s.png`, and `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`; decoded landing entry in `native_ev/data/sourced_ev_names.json` for `Levo`.
   - Observed original EV Classic behavior: title status panel reports `Levo system: Clean`; first playable state is in space near Levo, with message `Welcome to Escape Velocity - it would be a good idea to start by landing on Levo and checking out the prices. Hit ‘L’ to request landing clearance, then hit it again to land.`
-  - Terminal Velocity current behavior: first system in `native_ev/data/universe.json` is still `Sol`, and live frontend state is space.
-  - Status: `mismatch` for starting system/location; `match` for starting in space. Universe data still needs Levo-backed source integration before changing `current_system_index` safely.
+  - Terminal Velocity current behavior: `native_ev/data/universe.json` now starts with a Levo system containing source-backed `Levo Spaceport`; `godot_ev/scripts/main.gd` resolves `START_SYSTEM_NAME := "Levo"` by name; live frontend state remains space.
+  - Status: `match` for starting system/location and starting in space; confidence `medium` because Levo routing/coordinates are minimal integration scaffolding pending fuller decoded system topology.
 
 - [ ] Starting equipment/outfits/weapons
   - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.

@@ -534,6 +534,17 @@
   "traffic": [
     {
       "shipId": "shuttlecraft",
+      "name": "Levo Shuttle Contact",
+      "system": "Levo",
+      "x": 260,
+      "y": -180,
+      "heading": 110,
+      "speed": 0.8,
+      "faction": "civilian",
+      "disposition": "neutral"
+    },
+    {
+      "shipId": "shuttlecraft",
       "name": "Shuttlecraft Contact",
       "system": "Sirius",
       "x": -300,

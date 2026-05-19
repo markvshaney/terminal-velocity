@@ -1,13 +1,57 @@
 {
   "systems": [
     {
+      "name": "Levo",
+      "x": -95,
+      "y": 70,
+      "links": [
+        "Sol",
+        "Centauri",
+        "Sirius"
+      ],
+      "sourceEvidenceLabel": "original-runtime-observed+decoded-resource-backed",
+      "sourceEvidence": "Original EV Classic new-pilot runtime starts in space near Levo; decoded landing text says Levo is an independent world with tiny but neutral Levo Spaceport.",
+      "bodies": [
+        {
+          "name": "Levo Spaceport",
+          "x": 0,
+          "y": 0,
+          "r": 58,
+          "color": "SeaGreen",
+          "type": "planet",
+          "market": "Tiny neutral independent spaceport on Levo",
+          "sourceLandingName": "Levo",
+          "evidenceLabel": "decoded-resource-backed",
+          "sourceEvidence": "Levo is an independent world that has resisted joining the Confederation. Anyone is welcome at the tiny but neutral Levo Spaceport, located on the island of Locanda in Levo’s southern ocean.",
+          "inventory": {
+            "services": [
+              "repairs",
+              "outfitter",
+              "commodities",
+              "jobs",
+              "missions"
+            ],
+            "outfitsForSale": [
+              "cargo_pod",
+              "fuel_tank"
+            ],
+            "shipsForSale": [],
+            "weaponsForSale": [
+              "laser_cannon"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "Sol",
       "x": 0,
       "y": 0,
       "links": [
         "Centauri",
         "Sirius",
-        "Tau Ceti"
+        "Tau Ceti",
+        "Levo"
       ],
       "bodies": [
         {
@@ -105,7 +149,8 @@
         "Sol",
         "Sirius",
         "Enyo",
-        "Antares"
+        "Antares",
+        "Levo"
       ],
       "bodies": [
         {
@@ -175,7 +220,8 @@
         "Sol",
         "Centauri",
         "Enyo",
-        "Clotho"
+        "Clotho",
+        "Levo"
       ],
       "bodies": [
         {

@@ -182,6 +182,23 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertTrue(all('x' in system and 'y' in system for system in data['systems']))
         self.assertTrue(all(system['links'] for system in data['systems']))
 
+    def test_start_state_uses_source_backed_levo_system(self):
+        universe = load_universe()
+        economy = economy_manifest()
+        governments = government_manifest()
+        first_system = universe['systems'][0]
+        self.assertEqual(first_system['name'], 'Levo')
+        self.assertIn('Sol', first_system['links'])
+        levo_body = next(body for body in first_system['bodies'] if body['name'] == 'Levo Spaceport')
+        self.assertEqual(levo_body['sourceLandingName'], 'Levo')
+        self.assertEqual(levo_body['evidenceLabel'], 'decoded-resource-backed')
+        self.assertIn('tiny but neutral Levo Spaceport', levo_body['sourceEvidence'])
+        self.assertIn('Levo', economy['markets'])
+        self.assertEqual(governments['systems']['Levo']['government'], 'Independent')
+        main_script = (Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        self.assertIn('const START_SYSTEM_NAME := "Levo"', main_script)
+        self.assertIn('_system_index_by_name(START_SYSTEM_NAME, 0)', main_script)
+
     def test_universe_has_ev_style_route_density(self):
         universe = load_universe()
         economy = economy_manifest()

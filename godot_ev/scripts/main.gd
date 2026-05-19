@@ -14,6 +14,7 @@ const DEFAULT_CLICK_SOUND_ASSET := "assets/sounds/ev_classic/601_click/sound.wav
 const DEFAULT_SHIPYARD_PICT_ASSET := "assets/graphics/pict/5000_shipyard/image.png"
 const STATE_TITLE := "title"
 const STATE_SPACE := "space"
+const START_SYSTEM_NAME := "Levo"
 const PREFS_SAVE_PATH := "user://terminal_velocity_prefs.json"
 const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
 const MOVEMENT_LOG_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=right_turn ticks=12 ship="
@@ -156,6 +157,7 @@ func _load_data() -> void:
 	outfits = _json(repo_root + "/native_ev/data/outfits.json")
 	weapons = _json(repo_root + "/native_ev/data/weapons.json")
 	sounds = _json(repo_root + "/native_ev/data/sounds.json")
+	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
 	current_system = universe.get("systems", [])[current_system_index]
 	var initial_player_ship_id := "shuttlecraft"
 	for ship in ships.get("ships", []):
@@ -762,10 +764,17 @@ func _system_index_from_pilot(data: Dictionary) -> int:
 		return 0
 	var saved_system := str(data.get("system", ""))
 	if saved_system != "":
-		for i in range(systems.size()):
-			if str(systems[i].get("name", "")) == saved_system:
-				return i
+		return _system_index_by_name(saved_system, current_system_index)
 	return clampi(int(data.get("system_index", current_system_index)), 0, systems.size() - 1)
+
+func _system_index_by_name(system_name: String, fallback_index: int) -> int:
+	var systems: Array = universe.get("systems", [])
+	if systems.is_empty():
+		return 0
+	for i in range(systems.size()):
+		if str(systems[i].get("name", "")) == system_name:
+			return i
+	return clampi(fallback_index, 0, systems.size() - 1)
 
 func _ship_id_from_legacy_type(ship_type: String) -> String:
 	var normalized := ship_type.strip_edges().to_lower().replace(" ", "_")

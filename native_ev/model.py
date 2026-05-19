@@ -971,10 +971,10 @@ def serialize_save_data(
 
 
 def normalize_save_data(data):
-    current_system = data.get('currentSystem', 'Sol')
+    current_system = data.get('currentSystem', 'Levo')
     return {
         'schemaVersion': int(data.get('schemaVersion', 1)),
-        'credits': int(data.get('credits', 5000)),
+        'credits': int(data.get('credits', 10000)),
         'currentSystem': current_system,
         'selectedSystem': data.get('selectedSystem', current_system),
         'playerShipId': data.get('playerShipId', 'shuttlecraft'),

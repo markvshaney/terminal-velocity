@@ -183,6 +183,24 @@
         "buy": 155,
         "sell": 130
       }
+    },
+    "Levo": {
+      "food": {
+        "buy": 48,
+        "sell": 40
+      },
+      "industrial_goods": {
+        "buy": 92,
+        "sell": 78
+      },
+      "medical_supplies": {
+        "buy": 118,
+        "sell": 102
+      },
+      "luxuries": {
+        "buy": 190,
+        "sell": 158
+      }
     }
   }
 }

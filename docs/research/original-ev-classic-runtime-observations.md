@@ -57,11 +57,13 @@ Derived observations:
 
 - `godot_ev/scripts/main.gd` already selected `shuttlecraft`; this matches the observed starting ship type.
 - `godot_ev/scripts/main.gd` used `credits := 5000`; corrected to `credits := 10000` after this observation.
-- `native_ev/data/universe.json` still starts at `Sol`, while original EV Classic start-state evidence points to Levo. This remains a mismatch because Levo-backed universe integration is not yet complete.
+- `native_ev/data/universe.json` now starts at `Levo`, with `Levo Spaceport` backed by the decoded landing-name evidence text in `native_ev/data/sourced_ev_names.json`.
+- `godot_ev/scripts/main.gd` now resolves `START_SYSTEM_NAME := "Levo"` by name instead of depending only on index `0`.
+- Levo routing/coordinates are intentionally minimal integration scaffolding pending fuller decoded system-topology work; the start-state mismatch is closed, but complete EV galaxy topology remains partial.
 - Starting equipment remains partial: the first HUD proves no secondary weapon and free cargo space 20, but a full inventory/status screen was not captured in this automation pass.
 
 ## Open verification items
 
 - Open player/ship info or a landed status/outfitter screen without changing inventory, to record exact starting weapons/outfits.
-- Source-integrate Levo/system data from decoded EV Classic resources before changing Terminal Velocity’s `current_system_index`/universe start system.
+- Decode/source-integrate fuller EV Classic system topology and coordinates beyond the Levo start-state bridge.
 - Cross-check the `Rendell StarDrive 805R cargo shuttle` prompt against decoded static resources if exact ship variant/resource naming matters.
