@@ -57,35 +57,39 @@ For every behavior row, record:
 
 ### Start state / new pilot flow
 
-- [ ] Title preferences screen visual/wording pass
-  - Evidence label: `inferred-scaffold`
-  - Primary evidence needed: user visual inspection against original EV Classic prefs screen in Basilisk II/original runtime.
-  - Terminal Velocity current behavior: 2026-05-19 implementation has persisted EV Classic-style prefs scaffold in `godot_ev/scripts/main.gd` plus generated prefs artifact at `user://selftest/title_prefs.png`.
-  - Status: `scaffold`
-  - Remote-only note: user cannot do visual original-runtime comparison right now; keep this item for later local/visual work.
+- [x] Title preferences screen visual/wording pass
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Primary evidence: original EV Classic running in Basilisk II; local-only capture path `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`.
+  - Observed visible groups/controls: `Navigation Controls:`, `Escort Controls:`, `Weapon Controls:`, `Misc. Controls:`, `Sound Volume: Quiet`, `Intro Music`, `Game Speed...`, `Cancel`, `OK`.
+  - Terminal Velocity current behavior: 2026-05-19 Godot modal in `godot_ev/scripts/main.gd` copies the observed prefs layout/wording and keeps saved mappings for Intro Music, Sound Volume, and Game Speed; self-test emits `prefScreen=original-ev-classic-observed` plus `user://selftest/title_prefs.png`.
+  - Status: `match` for visible prefs screen wording/layout target; confidence `medium` because the raw screenshot remains local-only and font/spacing are approximated in Godot.
 
-- [ ] Starting ship
-  - Evidence label: `unknown`
-  - Primary evidence needed: original EV Classic new-pilot observation or decoded/default pilot/resource data.
-  - Terminal Velocity current behavior: Godot frontend selects `argosy` in `godot_ev/scripts/main.gd`; this is current implementation state, not fidelity proof.
-  - Status: `scaffold`
+- [x] Starting ship
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Primary evidence: original EV Classic running in Basilisk II; local-only captures `C:\Games\BasiliskII\ev-new-pilot-after-ship-name.png` and `C:\Games\BasiliskII\ev-new-pilot-enter-ship.png`.
+  - Observed original EV Classic behavior: new pilot defaults to pilot name `Rick Hardslab`, ship name `Starseeker`, and prompt text `Now, please christen your brand-new Rendell StarDrive 805R cargo shuttle:`; title status panel reports `Ship Type: Shuttlecraft`.
+  - Terminal Velocity current behavior: Godot frontend selects `shuttlecraft` in `godot_ev/scripts/main.gd`.
+  - Status: `match`; confidence `medium` because captures remain local-only and the exact `805R cargo shuttle` resource meaning still needs static resource cross-check.
 
-- [ ] Starting credits
-  - Evidence label: `terminal-velocity-observed`
-  - Terminal Velocity current behavior: `credits := 5000` in `godot_ev/scripts/main.gd`.
-  - Primary evidence needed: original EV Classic new-pilot observation or decoded data/manual.
-  - Status: `unknown`
+- [x] Starting credits
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Primary evidence: original EV Classic running in Basilisk II; local-only capture `C:\Games\BasiliskII\ev-new-pilot-enter-ship-5s.png` / later in-space captures.
+  - Observed original EV Classic behavior: first playable space HUD shows `Credits: 10,000`.
+  - Terminal Velocity current behavior: `credits := 10000` in `godot_ev/scripts/main.gd` after 2026-05-19 correction from earlier scaffold value `5000`.
+  - Status: `match`; confidence `medium`.
 
 - [ ] Starting location / system / landed-or-space state
-  - Evidence label: `unknown`
-  - Primary evidence needed: original EV Classic new-pilot observation.
-  - Terminal Velocity current behavior: first system in `native_ev/data/universe.json` and live space frontend state unless landing state is set elsewhere.
-  - Status: `scaffold`
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Primary evidence: original EV Classic running in Basilisk II; local-only captures `C:\Games\BasiliskII\ev-new-pilot-after-ship-name.png`, `C:\Games\BasiliskII\ev-new-pilot-enter-ship-5s.png`, and `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`.
+  - Observed original EV Classic behavior: title status panel reports `Levo system: Clean`; first playable state is in space near Levo, with message `Welcome to Escape Velocity - it would be a good idea to start by landing on Levo and checking out the prices. Hit ‘L’ to request landing clearance, then hit it again to land.`
+  - Terminal Velocity current behavior: first system in `native_ev/data/universe.json` is still `Sol`, and live frontend state is space.
+  - Status: `mismatch` for starting system/location; `match` for starting in space. Universe data still needs Levo-backed source integration before changing `current_system_index` safely.
 
 - [ ] Starting equipment/outfits/weapons
-  - Evidence label: `unknown`
-  - Primary evidence needed: original runtime observation or decoded ship/outfit data.
-  - Status: `unknown`
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Primary evidence: original EV Classic first playable in-space HUD; local-only capture `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`.
+  - Observed original EV Classic behavior: HUD shows full Shield/Fuel bars, `No Secondary Weapon`, `No Target`, and `Free: 20`; detailed outfits/weapons inventory was not opened successfully during automation.
+  - Status: `partial`; verification needed: open player/ship info or landed outfitter/status screen without changing inventory.
 
 ### Ship facing and rendering
 

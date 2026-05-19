@@ -69,17 +69,17 @@ Related ROM acquisition options artifact: `docs/research/2026-05-18-basilisk-com
   - Size: 19,038,995 bytes
   - SHA256: `6798f5aa7531749bc85555aa37e14e4b321639227af83d3c01c13da4c2755e7d`
 
-- [ ] Classic Mac ROM located.
-  - Status: blocked/pending user-provided authorized material
-  - Search result: no obvious `Basilisk`, `SheepShaver`, or `Mac*ROM*` file found under `/mnt/c/Users/bh` during the 2026-05-18 search.
-  - User update 2026-05-18: no Mac OS media is currently available from the user; ROM availability is also unresolved.
-  - Research update 2026-05-18: source-backed clean route is to dump from an owned/borrowed compatible physical 68k Mac; strong target families are LC 475 / Performa 475 / Quadra 605 / Quadra 650 / Centris 650 class. Scruss reports LC475 and Classic II worked for Basilisk II ROM extraction/use and IIvx did not.
-  - Source artifact: `docs/research/2026-05-18-basilisk-compatible-rom-acquisition-options.md`
-  - Next action: acquire/borrow/buy access to a compatible color-capable 68k Mac and dump its ROM, then stage it outside the repo under `/home/bh/workspaces/loki/ev-classic-emulator/roms/` for hashing/provenance capture.
-  - Last-resort technical option: Internet ROM archive candidates exist, but they are provenance/legal-risky; do not use as project truth without explicit user authorization and a `technical-bootstrap-only` label.
+- [x] Classic Mac ROM located/staged for technical bootstrap.
+  - Status: completed/staged locally 2026-05-19 with provenance caveat.
+  - Earlier search result: no obvious user-owned `Basilisk`, `SheepShaver`, or `Mac*ROM*` file was found under `/mnt/c/Users/bh` during the 2026-05-18 search.
+  - Clean route remains: dump from an owned/borrowed compatible color-capable 68k Mac if publishable/provenance-clean evidence is needed.
+  - Bootstrap decision: archive-sourced Basilisk-compatible 68k Macintosh ROMs are acceptable for local runtime bootstrap when needed; observations using this route carry a ROM provenance caveat.
+  - Local ROM manifest: `/home/bh/workspaces/loki/ev-classic-emulator/local/roms/ROM-MANIFEST.local.md`
+  - Selected ROM path: `/home/bh/workspaces/loki/ev-classic-emulator/local/roms/F1ACAD13 - Quadra 610,650,maybe 800.ROM`
+  - Selected ROM SHA256: `05ad753fb594e656cf078023ec189e09e2a7655a780de993b75b8c51ed6b09ca`
 
-- [ ] Compatible Classic Mac OS install/media located.
-  - Status: completed/staged locally 2026-05-18
+- [x] Compatible Classic Mac OS install/media located/staged.
+  - Status: completed/staged locally 2026-05-18; bootable disk image selected 2026-05-19 with provenance caveat.
   - Search result: no compatible Mac OS media was identified during the 2026-05-18 search.
   - User update 2026-05-18: user does not have any Mac OS media.
   - Found 2026-05-18: Apple-hosted System 7.5.3 installer parts are directly reachable from `download.info.apple.com`; all 19 expected parts responded `200 OK` to HEAD checks.
@@ -87,7 +87,9 @@ Related ROM acquisition options artifact: `docs/research/2026-05-18-basilisk-com
   - Local staging path: `/home/bh/workspaces/loki/ev-classic-emulator/os-images/apple-system-7.5.3/`
   - Local-only manifest: `/home/bh/workspaces/loki/ev-classic-emulator/reference-archive/manifests/2026-05-18-apple-system-7.5.3-download.md`
   - Verification: 19 installer parts downloaded; total size 22,763,648 bytes; per-file SHA256 and source URLs recorded in the local-only manifest; emulator workspace is not a git repository.
-  - Remaining OS workflow issue: validate a clean Basilisk II bootstrap/install workflow for the 19-part System 7.5.3 installer set without relying on provenance-weak prebuilt abandonware images.
+  - Bootable disk image path: `/home/bh/workspaces/loki/ev-classic-emulator/local/disks/System7_5_3.img`
+  - Bootable disk image manifest: `/home/bh/workspaces/loki/ev-classic-emulator/local/disks/DISK-MANIFEST.local.md`
+  - Remaining clean-route issue: validate a clean Basilisk II bootstrap/install workflow for the 19-part Apple-hosted System 7.5.3 installer set if provenance-clean OS setup becomes necessary.
   - Hardware trigger: buy/borrow a USB CD/DVD drive only if we abandon the Apple-hosted installer route and choose a physical retail OS source that cannot otherwise be imaged.
 
 - [x] Emulator located or installed.
@@ -99,7 +101,7 @@ Related ROM acquisition options artifact: `docs/research/2026-05-18-basilisk-com
   - Desktop shortcut: `C:\Users\bh\Desktop\Basilisk II GUI.lnk`
   - Local-only install manifest: `/home/bh/workspaces/loki/ev-classic-emulator/reference-archive/manifests/2026-05-18-basiliskii-windows-install.md`
   - Verification: Windows Defender scan found no threats; GUI launch smoke stayed alive for 5 seconds; executables are unsigned.
-  - Remaining blocker: ROM/OS material is still needed before useful emulator configuration.
+  - Earlier blocker resolved for technical-bootstrap work on 2026-05-19; ROM/OS materials now exist locally with provenance caveats.
 
 ## Execution checklist
 
@@ -109,39 +111,49 @@ Related ROM acquisition options artifact: `docs/research/2026-05-18-basilisk-com
   - Subdirs: `roms/`, `os-images/`, `disks/`, `captures/raw/`, `captures/notes/`, `shared/`, `tools/`, `reference-archive/`
   - Verification: workspace exists and `git -C /home/bh/workspaces/loki/ev-classic-emulator rev-parse --show-toplevel` reports it is not a git repository.
 
-- [ ] Stage authorized ROM/OS/game inputs outside the repo.
-  - Status: partially complete; OS and EV installer staged, blocked on ROM
+- [x] Stage ROM/OS/game inputs outside the repo.
+  - Status: completed for technical-bootstrap work; cleaner user-owned ROM/OS provenance remains optional if needed for publication or anomaly diagnosis.
   - Done when: local-only notes record paths, sizes, hashes, and source/provenance labels for ROM, OS media, and EV installer/app.
 
-- [ ] Configure emulator using local-only paths.
-  - Status: blocked until emulator, ROM, and OS media are available
+- [x] Configure emulator using local-only paths.
+  - Status: completed 2026-05-19 for local technical-bootstrap observation.
   - Preferred route: Basilisk II for 68k Classic Mac OS; SheepShaver only if the authorized package/environment requires PPC.
-  - Done when: emulator path/version/config are recorded in local-only notes.
+  - Config path: `C:\Games\BasiliskII\BasiliskII_prefs`
+  - Configured ROM/disk paths point at the local-only emulator workspace.
 
 - [ ] Build clean baseline Mac disk.
-  - Status: blocked until emulator, ROM, OS media, and EV Classic installer are available
+  - Status: partially complete; Mac OS boots and EV Classic launches, but a pristine baseline snapshot/restore copy is not yet recorded here.
+  - Evidence: EV Classic launch capture exists at local-only path `C:\Games\BasiliskII\basiliskii-ev-launched-check.png`.
   - Done when: Mac OS boots, EV Classic launches, and a pristine disk copy/snapshot exists outside the repo.
 
 - [ ] Create first observation artifact before drawing behavior conclusions.
-  - Status: pending after launch
+  - Status: partially satisfied for title prefs screen; broader observation artifact still pending.
   - Path: `docs/research/original-ev-classic-runtime-observations.md`
   - Done when: artifact includes observation protocol, emulator/version/config, source material hashes, capture references, evidence labels, confidence, and uncertainty notes.
 
-- [ ] Capture start/new-pilot baseline.
-  - Status: blocked until original runtime launches
+- [x] Capture title preferences screen.
+  - Status: completed 2026-05-19 for the visible Set Prefs screen.
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Local-only capture: `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`.
+  - Derived visible controls: `Navigation Controls:`, `Escort Controls:`, `Weapon Controls:`, `Misc. Controls:`, `Sound Volume: Quiet`, `Intro Music`, `Game Speed...`, `Cancel`, `OK`.
+  - Consumed by: `docs/checklists/ev-classic-behavior-baseline-checklist.md` and `godot_ev/scripts/main.gd` prefs modal.
+
+- [x] Capture start/new-pilot baseline.
+  - Status: completed/partial 2026-05-19 for start ship, credits, first playable state, starting system/location, and first-HUD equipment clues; detailed equipment inventory remains a follow-up.
   - Feeds: `docs/checklists/ev-classic-behavior-baseline-checklist.md` start-state rows.
-  - Done when: starting ship, credits, location, landed/space state, and initial equipment are recorded with `original-runtime-observed` evidence or explicit uncertainty.
+  - Observation artifact: `docs/research/original-ev-classic-runtime-observations.md`.
+  - Local-only captures include `C:\Games\BasiliskII\ev-new-pilot-after-ship-name.png`, `C:\Games\BasiliskII\ev-new-pilot-enter-ship.png`, and `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`.
 
 - [ ] Capture movement/facing baseline.
-  - Status: blocked until original runtime launches
+  - Status: unblocked; original runtime launches, but measured movement/facing captures are not yet recorded.
   - Feeds: `docs/checklists/ev-classic-behavior-baseline-checklist.md` ship-facing and movement rows.
   - Done when: turn/thrust/no-input captures distinguish measured values from qualitative impressions.
 
 - [ ] Capture landing/hyperspace/basic-combat smoke baseline.
-  - Status: blocked until original runtime launches
+  - Status: unblocked; original runtime launches, but landing/hyperspace/basic-combat observations are not yet recorded.
   - Feeds: `docs/checklists/ev-classic-behavior-baseline-checklist.md` landing/hyperspace/basic-combat rows.
   - Done when: each observation has capture reference, evidence label, confidence, and Terminal Velocity comparison target.
 
 ## Current next action
 
-Acquire/provide a compatible 68k Mac ROM, preferably by dumping an owned/borrowed LC 475 / Performa 475 / Quadra 605 / Quadra 650 / Centris 650-class machine. Apple-hosted System 7.5.3 installer files were staged locally on 2026-05-18 with hashes/provenance recorded in a local-only manifest. Basilisk II Windows GUI and the local-only workspace are already installed/created on Think; do not buy a CD-ROM drive unless we abandon the Apple-hosted installer route and select physical optical media that cannot otherwise be imaged. After ROM acquisition, validate the clean bootstrap/install workflow for the 19-part System 7.5.3 set, then configure Basilisk II.
+Use the existing Basilisk II install to capture source-backed original EV Classic runtime screens and behavior, starting with the title preferences screen. Keep screenshots/captures local-only unless explicitly reviewed for commit/publication; record derived observations and evidence labels in repo docs. Treat observations from the current archive-sourced ROM/boot disk route as original-runtime observations with provenance caveats, and revisit cleaner ROM/OS provenance only if emulator-specific anomalies appear or publishable evidence is needed.

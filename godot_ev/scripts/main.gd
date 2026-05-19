@@ -66,7 +66,7 @@ var pref_full_screen_on := false
 var pref_intro_animation_on := true
 var pref_ask_before_buying_on := true
 var pref_resume_game_on := false
-var credits := 5000
+var credits := 10000
 var cargo := 0
 var landing_tab := 0
 var selected_landing_item := 0
@@ -804,20 +804,17 @@ func _cycle_open_pilot_selection(dir: int) -> void:
 	selected_pilot_index = (selected_pilot_index + dir + available_pilots.size()) % available_pilots.size()
 
 func _pref_options() -> Array:
-	# EV-style preferences; Classic EV-era speed slider wording remains as a source-fidelity reminder.
-	# Help text preserves the existing keyboard contract: Space toggles the selected preference.
+	# Original EV Classic prefs surface observed from the title Set Prefs button exposes
+	# key bindings plus Sound Volume, Intro Music, and Game Speed controls.
 	var speed_labels := ["Slowest", "Slower", "Normal", "Faster", "Fastest"]
 	return [
-		{"kind": "radio", "label": "Game speed", "value": speed_labels[pref_game_speed_index], "note": "Classic speed setting"},
-		{"kind": "toggle", "label": "Play game music", "enabled": pref_music_on, "note": "saved"},
-		{"kind": "toggle", "label": "Play game sounds", "enabled": pref_sound_on, "note": "saved"},
-		{"kind": "toggle", "label": "Enable intro animation", "enabled": pref_intro_animation_on, "note": "title"},
-		{"kind": "toggle", "label": "Always ask before buying", "enabled": pref_ask_before_buying_on, "note": "trading"},
-		{"kind": "toggle", "label": "Resume Game", "enabled": pref_resume_game_on, "note": "title"},
+		{"kind": "toggle", "label": "Intro Music", "enabled": pref_music_on, "note": "original visible checkbox"},
+		{"kind": "radio", "label": "Game Speed...", "value": speed_labels[pref_game_speed_index], "note": "original visible button"},
+		{"kind": "toggle", "label": "Sound Volume: Quiet", "enabled": pref_sound_on, "note": "original visible spinner"},
 	]
 
 func _prefs_list_rect() -> Rect2:
-	return Rect2(402, 350, 476, 150)
+	return Rect2(300, 620, 460, 120)
 
 func _prefs_save_data() -> Dictionary:
 	return {
@@ -872,27 +869,21 @@ func _toggle_selected_pref() -> void:
 	_play_sound("ui_click")
 	match selected_pref_index:
 		0:
+			pref_music_on = not pref_music_on
+		1:
 			pref_game_speed_index = (pref_game_speed_index + 1) % 5
 			_apply_pref_runtime_side_effects()
-		1:
-			pref_music_on = not pref_music_on
 		2:
 			pref_sound_on = not pref_sound_on
-		3:
-			pref_intro_animation_on = not pref_intro_animation_on
-		4:
-			pref_ask_before_buying_on = not pref_ask_before_buying_on
-		5:
-			pref_resume_game_on = not pref_resume_game_on
 	title_status_line = "Set Preferences"
 
 func _pref_row_at(position: Vector2) -> int:
-	var list_rect := _prefs_list_rect()
-	if not list_rect.has_point(position):
-		return -1
-	var row := int((position.y - list_rect.position.y) / 25.0)
-	if row >= 0 and row < _pref_options().size():
-		return row
+	if Rect2(525, 625, 220, 28).has_point(position):
+		return 0
+	if Rect2(532, 708, 172, 34).has_point(position):
+		return 1
+	if Rect2(302, 625, 190, 28).has_point(position):
+		return 2
 	return -1
 
 func _open_pilot_row_at(position: Vector2) -> int:
@@ -913,8 +904,8 @@ func _cancel_title_modal() -> void:
 func _title_modal_action_at(position: Vector2) -> String:
 	if title_modal == "":
 		return ""
-	var ok_rect := Rect2(686, 510, 116, 34) if title_modal == "prefs" else Rect2(700, 492, 116, 34)
-	var cancel_rect := Rect2(822, 510, 116, 34) if title_modal == "prefs" else Rect2(836, 492, 116, 34)
+	var ok_rect := Rect2(940, 708, 86, 34) if title_modal == "prefs" else Rect2(700, 492, 116, 34)
+	var cancel_rect := Rect2(828, 708, 86, 34) if title_modal == "prefs" else Rect2(836, 492, 116, 34)
 	if ok_rect.has_point(position):
 		return "ok"
 	if cancel_rect.has_point(position):
@@ -1023,10 +1014,11 @@ func _draw_title_screen(center: Vector2, font: Font) -> void:
 	draw_string(font, status_rect.position + Vector2(0, 48), title_status_line, HORIZONTAL_ALIGNMENT_CENTER, status_rect.size.x, 18, Color(0.70, 1.0, 0.66))
 	for button in _title_buttons():
 		_draw_title_button(button, font)
-	if title_modal != "":
+	if title_modal == "":
+		draw_string(font, Vector2(300, 716), "Personal-use Godot reconstruction. Title substituted: Terminal Velocity.", HORIZONTAL_ALIGNMENT_CENTER, 680, 15, Color(0.52, 0.82, 0.52))
+		draw_string(font, Vector2(300, 742), "Enter/click Enter Ship to start. N/O/S/A/Q shortcuts mirror the title menu.", HORIZONTAL_ALIGNMENT_CENTER, 680, 15, Color(0.42, 0.68, 0.44))
+	else:
 		_draw_title_modal(font)
-	draw_string(font, Vector2(300, 716), "Personal-use Godot reconstruction. Title substituted: Terminal Velocity.", HORIZONTAL_ALIGNMENT_CENTER, 680, 15, Color(0.52, 0.82, 0.52))
-	draw_string(font, Vector2(300, 742), "Enter/click Enter Ship to start. N/O/S/A/Q shortcuts mirror the title menu.", HORIZONTAL_ALIGNMENT_CENTER, 680, 15, Color(0.42, 0.68, 0.44))
 
 func _draw_title_button(button: Dictionary, font: Font) -> void:
 	var rect: Rect2 = button["rect"]
@@ -1052,10 +1044,13 @@ func _draw_title_side_decoration(anchor: Vector2, flip: bool) -> void:
 	draw_arc(anchor + Vector2(150 * dir, 0), 24, 0, TAU, 28, green, 2.0)
 
 func _draw_title_modal(font: Font) -> void:
-	var rect := Rect2(300, 285, 680, 270)
-	draw_rect(rect, Color(0.82, 0.82, 0.78, 0.98), true)
+	var rect := Rect2(270, 215, 740, 360)
+	if title_modal == "prefs":
+		rect = Rect2(220, 92, 840, 660)
+	draw_rect(rect, Color(0.82, 0.82, 0.78, 1.0), true)
 	draw_rect(rect, Color(0.08, 0.08, 0.08), false, 2.0)
-	draw_rect(Rect2(rect.position + Vector2(8, 8), Vector2(rect.size.x - 16, 24)), Color(0.18, 0.18, 0.18), true)
+	if title_modal != "prefs":
+		draw_rect(Rect2(rect.position + Vector2(8, 8), Vector2(rect.size.x - 16, 24)), Color(0.18, 0.18, 0.18), true)
 	if title_modal == "about":
 		_draw_about_modal(rect, font)
 		return
@@ -1117,29 +1112,89 @@ func _draw_about_modal(rect: Rect2, font: Font) -> void:
 	draw_string(font, rect.position + Vector2(42, 232), "Return or Escape closes.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
 
 func _draw_prefs_modal(rect: Rect2, font: Font) -> void:
-	draw_string(font, rect.position + Vector2(0, 28), "Set Preferences", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
-	draw_string(font, rect.position + Vector2(42, 66), "Terminal Velocity Preferences", HORIZONTAL_ALIGNMENT_LEFT, 590, 17, Color(0.02, 0.02, 0.02))
-	draw_string(font, rect.position + Vector2(42, 88), "EV Classic title prefs visual scaffold until original-runtime observation verifies exact wording.", HORIZONTAL_ALIGNMENT_LEFT, 610, 13, Color(0.25, 0.25, 0.25))
-	var list_rect := _prefs_list_rect()
-	draw_rect(list_rect, Color(0.98, 0.98, 0.94), true)
-	draw_rect(list_rect, Color(0.10, 0.10, 0.10), false, 1.0)
-	var options := _pref_options()
-	for i in range(options.size()):
-		var row_rect := Rect2(list_rect.position + Vector2(0, i * 25), Vector2(list_rect.size.x, 25))
-		if i == selected_pref_index:
-			draw_rect(row_rect.grow(-2), Color(0.22, 0.40, 0.85, 0.95), true)
-		var option: Dictionary = options[i]
-		var color := Color(1, 1, 1) if i == selected_pref_index else Color(0.05, 0.05, 0.05)
-		if str(option.get("kind", "toggle")) == "radio":
-			_draw_radio_choice(row_rect.position + Vector2(14, 7), true, color)
-			draw_string(font, row_rect.position + Vector2(38, 18), "%s: %s" % [str(option.get("label", "")), str(option.get("value", "Normal"))], HORIZONTAL_ALIGNMENT_LEFT, 260, 15, color)
-		else:
-			_draw_checkbox(row_rect.position + Vector2(14, 6), bool(option.get("enabled", false)), color)
-			draw_string(font, row_rect.position + Vector2(38, 18), str(option.get("label", "")), HORIZONTAL_ALIGNMENT_LEFT, 260, 15, color)
-		draw_string(font, row_rect.position + Vector2(320, 18), str(option.get("note", "")), HORIZONTAL_ALIGNMENT_LEFT, 140, 12, color)
-	_draw_modal_button(Rect2(686, 510, 116, 34), "SavePrefs", font)
-	_draw_modal_button(Rect2(822, 510, 116, 34), "Cancel", font)
-	draw_string(font, rect.position + Vector2(42, 232), "Up/Down selects. Space changes. Return saves. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+	# Source-backed from original EV Classic title Set Prefs screen observed in Basilisk II
+	# on 2026-05-19. Keep the proprietary screenshot local-only; copy only derived
+	# layout/wording into the repo.
+	var black := Color(0.02, 0.02, 0.02)
+	var group_color := Color(0.08, 0.08, 0.08)
+	_draw_pref_group(Rect2(246, 114, 285, 405), "Navigation Controls:", font)
+	_draw_key_binding(Vector2(300, 170), "Accelerate:", "Up", font)
+	_draw_key_binding(Vector2(300, 207), "Rev. Course:", "Down", font)
+	_draw_key_binding(Vector2(300, 244), "Rotate Right:", "Right", font)
+	_draw_key_binding(Vector2(300, 281), "Rotate Left:", "Left", font)
+	_draw_key_binding(Vector2(300, 318), "Afterburner:", "Z", font)
+	_draw_key_binding(Vector2(300, 355), "Autopilot:", "A", font)
+	_draw_key_binding(Vector2(300, 392), "Hyper Mode:", "H", font)
+	_draw_key_binding(Vector2(300, 429), "Hyper Select:", "Backslash", font)
+	_draw_key_binding(Vector2(300, 466), "Jump:", "J", font)
+	_draw_key_binding(Vector2(300, 503), "Nav Off:", "~", font)
+
+	_draw_pref_group(Rect2(542, 114, 245, 126), "Escort Controls:", font)
+	_draw_key_binding(Vector2(550, 170), "Retarget:", "F", font, 105, 120)
+	_draw_key_binding(Vector2(550, 207), "Recall:\n(option = dock)", "C", font, 105, 120)
+	_draw_key_binding(Vector2(550, 244), "Hold Pos:", "D", font, 105, 120)
+
+	_draw_pref_group(Rect2(542, 295, 245, 230), "Weapon Controls:", font)
+	_draw_key_binding(Vector2(550, 351), "Fire Primary:", "Space", font, 105, 120)
+	_draw_key_binding(Vector2(550, 388), "Fire\nSecondary:", "Shift", font, 105, 120)
+	_draw_key_binding(Vector2(550, 425), "Select\nSecondary:", "W", font, 105, 120)
+	_draw_key_binding(Vector2(550, 462), "Weap. Safety:", "S", font, 105, 120)
+	_draw_key_binding(Vector2(550, 499), "Target Select:", "Tab", font, 105, 120)
+	_draw_key_binding(Vector2(550, 536), "Closest Targ:", "R", font, 105, 120)
+
+	_draw_pref_group(Rect2(798, 114, 246, 454), "Misc. Controls:", font)
+	_draw_key_binding(Vector2(808, 170), "Pause:", "Escape", font, 105, 120)
+	_draw_key_binding(Vector2(808, 207), "Acknowledge:", "Return", font, 105, 120)
+	_draw_key_binding(Vector2(808, 244), "Communicate:", "Y", font, 105, 120)
+	_draw_key_binding(Vector2(808, 281), "Land:", "L", font, 105, 120)
+	_draw_key_binding(Vector2(808, 318), "Jettison:   ⌘", "K", font, 105, 120)
+	_draw_key_binding(Vector2(808, 355), "Board:", "B", font, 105, 120)
+	_draw_key_binding(Vector2(808, 392), "Eject:      ⌘", "E", font, 105, 120)
+	_draw_key_binding(Vector2(808, 429), "Destruct:   ⌘", "D", font, 105, 120)
+	_draw_key_binding(Vector2(808, 466), "Map:", "M", font, 105, 120)
+	_draw_key_binding(Vector2(808, 503), "Player Info:", "P", font, 105, 120)
+	_draw_key_binding(Vector2(808, 540), "Mission Info:", "I", font, 105, 120)
+	_draw_key_binding(Vector2(808, 577), "Cloak:", "U", font, 105, 120)
+
+	draw_string(font, Vector2(305, 606), "Sound Volume:", HORIZONTAL_ALIGNMENT_LEFT, 220, 22, black)
+	var sound_row := Rect2(302, 625, 190, 28)
+	if selected_pref_index == 2:
+		draw_rect(sound_row.grow(2), Color(0.78, 0.78, 0.74), true)
+	_draw_spinner(Vector2(305, 626), font)
+	draw_string(font, Vector2(333, 646), "Quiet", HORIZONTAL_ALIGNMENT_LEFT, 140, 19, black)
+
+	var intro_row := Rect2(525, 625, 220, 28)
+	if selected_pref_index == 0:
+		draw_rect(intro_row.grow(2), Color(0.78, 0.78, 0.74), true)
+	_draw_checkbox(Vector2(526, 628), pref_music_on, group_color)
+	draw_string(font, Vector2(550, 646), "Intro Music", HORIZONTAL_ALIGNMENT_LEFT, 180, 19, black)
+
+	var speed_rect := Rect2(532, 708, 172, 34)
+	if selected_pref_index == 1:
+		draw_rect(speed_rect.grow(3), Color(0.78, 0.78, 0.74), true)
+	_draw_modal_button(speed_rect, "Game Speed...", font)
+	_draw_modal_button(Rect2(828, 708, 86, 34), "Cancel", font)
+	_draw_modal_button(Rect2(940, 708, 86, 34), "OK", font)
+
+func _draw_pref_group(rect: Rect2, title: String, font: Font) -> void:
+	draw_rect(rect, Color(0, 0, 0, 0), false, 1.0)
+	draw_rect(Rect2(rect.position + Vector2(8, -9), Vector2(180, 18)), Color(0.82, 0.82, 0.78), true)
+	draw_string(font, rect.position + Vector2(14, 5), "... " + title, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 28, 16, Color(0.02, 0.02, 0.02))
+
+func _draw_key_binding(position: Vector2, label: String, key_name: String, font: Font, label_width: float = 100.0, key_width: float = 120.0) -> void:
+	var label_lines := label.split("\n")
+	for i in range(label_lines.size()):
+		draw_string(font, position + Vector2(0, 0 + i * 16), label_lines[i], HORIZONTAL_ALIGNMENT_LEFT, label_width, 15, Color(0.02, 0.02, 0.02))
+	var key_rect := Rect2(position + Vector2(label_width, -16), Vector2(key_width, 31))
+	draw_rect(key_rect, Color(0.98, 0.98, 0.96), true)
+	draw_rect(key_rect, Color(0.05, 0.05, 0.05), false, 1.0)
+	draw_string(font, key_rect.position + Vector2(8, 23), key_name, HORIZONTAL_ALIGNMENT_LEFT, key_width - 16, 18, Color(0.02, 0.02, 0.02))
+
+func _draw_spinner(position: Vector2, font: Font) -> void:
+	var box := Rect2(position, Vector2(17, 28))
+	draw_rect(box, Color(0.98, 0.98, 0.96), true)
+	draw_rect(box, Color(0.05, 0.05, 0.05), false, 1.0)
+	draw_string(font, position + Vector2(2, 12), "↕", HORIZONTAL_ALIGNMENT_LEFT, 15, 18, Color(0.02, 0.02, 0.02))
 
 func _draw_checkbox(position: Vector2, checked: bool, color: Color) -> void:
 	var box := Rect2(position, Vector2(12, 12))

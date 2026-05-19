@@ -112,24 +112,31 @@ def _png_alpha_pixel_count(path: Path) -> int:
 
 
 class NativeEvModelTests(unittest.TestCase):
-    def test_godot_prefs_modal_matches_ev_classic_scaffold_contract(self):
+    def test_godot_prefs_modal_matches_original_ev_classic_observation(self):
         source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd'
         text = source.read_text()
         self.assertIn('const PREFS_SAVE_PATH := "user://terminal_velocity_prefs.json"', text)
-        self.assertIn('Set Preferences', text)
-        self.assertIn('Play game music', text)
-        self.assertIn('Play game sounds', text)
-        self.assertIn('Enable intro animation', text)
-        self.assertIn('Always ask before buying', text)
-        self.assertIn('Resume Game', text)
-        self.assertIn('SavePrefs', text)
+        for symbol in [
+            'Source-backed from original EV Classic title Set Prefs screen observed in Basilisk II',
+            'Navigation Controls:',
+            'Escort Controls:',
+            'Weapon Controls:',
+            'Misc. Controls:',
+            'Sound Volume:',
+            'Intro Music',
+            'Game Speed...',
+            'Cancel',
+            'OK',
+            'Backslash',
+            'Closest Targ:',
+        ]:
+            self.assertIn(symbol, text)
         self.assertIn('load_prefs', text)
-        self.assertIn('visual scaffold until original-runtime observation verifies exact wording', text)
 
     def test_godot_self_test_covers_prefs_screenshot_artifact(self):
         source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'self_test.gd'
         text = source.read_text()
-        self.assertIn('prefScreen=ev-classic-visual-scaffold', text)
+        self.assertIn('prefScreen=original-ev-classic-observed', text)
         self.assertIn('prefsScreenshot=', text)
         self.assertIn('user://selftest/title_prefs.png', text)
         self.assertIn('_write_prefs_screenshot_artifact', text)
@@ -1003,13 +1010,12 @@ class NativeEvModelTests(unittest.TestCase):
             'personal-use EV-style Godot reconstruction',
             'title_modal = "prefs"',
             'func _draw_prefs_modal',
-            'Set Preferences',
-            'EV-style preferences',
+            'Navigation Controls:',
+            'Intro Music',
             'pref_sound_on',
             'pref_music_on',
             'pref_game_speed_index',
-            'Classic EV-era speed slider',
-            'Space toggles',
+            'Game Speed...',
         ]:
             self.assertIn(symbol, main_script)
         self.assertNotIn('Preferences are not implemented yet.', main_script)
