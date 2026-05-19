@@ -6,6 +6,8 @@ Decision artifact: `docs/decisions/2026-05-18-ev-family-profile-architecture.md`
 
 Research artifact: `docs/research/ev-community-engine-survey.md`
 
+Behavior baseline checklist: `docs/checklists/ev-classic-behavior-baseline-checklist.md`
+
 Purpose: live execution surface for moving Terminal Velocity toward one shared EV-family runtime with separate Classic/Nova source-data profiles.
 
 ## Current verdict
