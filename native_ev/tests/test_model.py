@@ -952,6 +952,27 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, self_test_script)
 
+    def test_godot_title_stubs_are_real_modals(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'title_modal = "about"',
+            'func _draw_about_modal',
+            'About Terminal Velocity',
+            'personal-use EV-style Godot reconstruction',
+            'title_modal = "prefs"',
+            'func _draw_prefs_modal',
+            'Set Preferences',
+            'EV-style preferences',
+            'pref_sound_on',
+            'pref_music_on',
+            'pref_game_speed_index',
+            'Classic EV-era speed slider',
+            'Space toggles',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertNotIn('Preferences are not implemented yet.', main_script)
+
     def test_godot_shipyard_loads_source_backed_pict_art(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

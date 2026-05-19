@@ -53,6 +53,11 @@ var loaded_ship_name := ""
 var loaded_pilot_file := ""
 var available_pilots: Array[Dictionary] = []
 var selected_pilot_index := 0
+var selected_pref_index := 0
+var pref_sound_on := true
+var pref_music_on := false
+var pref_game_speed_index := 2
+var pref_full_screen_on := false
 var credits := 5000
 var cargo := 0
 var landing_tab := 0
@@ -168,6 +173,8 @@ func _sound_by_id(sound_id: String) -> Dictionary:
 	return {}
 
 func _play_sound(sound_id: String) -> void:
+	if not pref_sound_on:
+		return
 	if _sound_by_id(sound_id).is_empty():
 		return
 	var player: AudioStreamPlayer = sound_players.get(sound_id, null)
@@ -391,9 +398,12 @@ func _activate_title_button(label: String) -> void:
 		"Open Pilot":
 			_open_pilot_modal()
 		"Set Prefs":
-			title_status_line = "Preferences are not implemented yet."
+			title_modal = "prefs"
+			selected_pref_index = 0
+			title_status_line = "Set Preferences"
 		"About TV":
-			title_status_line = "Terminal Velocity — personal-use EV-style Godot front end."
+			title_modal = "about"
+			title_status_line = "About Terminal Velocity"
 		"Quit TV":
 			get_tree().quit()
 
@@ -415,9 +425,18 @@ func _handle_title_modal_input(event: InputEvent) -> void:
 			KEY_ENTER:
 				_accept_title_modal_step()
 			KEY_UP:
-				_cycle_open_pilot_selection(-1)
+				if title_modal == "prefs":
+					_cycle_pref_selection(-1)
+				else:
+					_cycle_open_pilot_selection(-1)
 			KEY_DOWN:
-				_cycle_open_pilot_selection(1)
+				if title_modal == "prefs":
+					_cycle_pref_selection(1)
+				else:
+					_cycle_open_pilot_selection(1)
+			KEY_SPACE:
+				if title_modal == "prefs":
+					_toggle_selected_pref()
 			KEY_BACKSPACE:
 				_backspace_title_modal_text()
 			_:
@@ -428,6 +447,12 @@ func _handle_title_modal_input(event: InputEvent) -> void:
 			var row := _open_pilot_row_at(event.position)
 			if row >= 0:
 				selected_pilot_index = row
+				return
+		if title_modal == "prefs":
+			var pref_row := _pref_row_at(event.position)
+			if pref_row >= 0:
+				selected_pref_index = pref_row
+				_toggle_selected_pref()
 				return
 		var action := _title_modal_action_at(event.position)
 		if action == "cancel":
@@ -449,6 +474,14 @@ func _backspace_title_modal_text() -> void:
 
 func _accept_title_modal_step() -> void:
 	_play_sound("ui_click")
+	if title_modal == "about":
+		title_modal = ""
+		title_status_line = "No Pilot File Loaded" if loaded_pilot_name == "" else "Pilot File Loaded: %s — %s" % [loaded_pilot_name, loaded_ship_name]
+		return
+	if title_modal == "prefs":
+		title_modal = ""
+		title_status_line = "Preferences set for this session."
+		return
 	if title_modal == "open_pilot":
 		_load_selected_pilot_file()
 		return
@@ -684,6 +717,43 @@ func _cycle_open_pilot_selection(dir: int) -> void:
 		return
 	selected_pilot_index = (selected_pilot_index + dir + available_pilots.size()) % available_pilots.size()
 
+func _pref_options() -> Array:
+	var speed_labels := ["Slower", "Slow", "Normal", "Fast", "Faster"]
+	return [
+		{"kind": "speed", "label": "Game speed", "value": speed_labels[pref_game_speed_index], "note": "Classic EV-era speed slider"},
+		{"kind": "toggle", "label": "Play sounds", "enabled": pref_sound_on, "note": "EV-style UI sounds"},
+		{"kind": "toggle", "label": "Play music", "enabled": pref_music_on, "note": "reserved until music is wired"},
+		{"kind": "toggle", "label": "Full screen", "enabled": pref_full_screen_on, "note": "window mode"},
+	]
+
+func _cycle_pref_selection(dir: int) -> void:
+	var options := _pref_options()
+	selected_pref_index = (selected_pref_index + dir + options.size()) % options.size()
+
+func _toggle_selected_pref() -> void:
+	_play_sound("ui_click")
+	match selected_pref_index:
+		0:
+			pref_game_speed_index = (pref_game_speed_index + 1) % 5
+			Engine.time_scale = [0.65, 0.8, 1.0, 1.2, 1.4][pref_game_speed_index]
+		1:
+			pref_sound_on = not pref_sound_on
+		2:
+			pref_music_on = not pref_music_on
+		3:
+			pref_full_screen_on = not pref_full_screen_on
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if pref_full_screen_on else DisplayServer.WINDOW_MODE_WINDOWED)
+	title_status_line = "Set Preferences"
+
+func _pref_row_at(position: Vector2) -> int:
+	var list_rect := Rect2(390, 382, 500, 120)
+	if not list_rect.has_point(position):
+		return -1
+	var row := int((position.y - list_rect.position.y) / 30.0)
+	if row >= 0 and row < _pref_options().size():
+		return row
+	return -1
+
 func _open_pilot_row_at(position: Vector2) -> int:
 	var list_rect := Rect2(360, 365, 560, 90)
 	if not list_rect.has_point(position):
@@ -695,7 +765,7 @@ func _open_pilot_row_at(position: Vector2) -> int:
 
 func _cancel_title_modal() -> void:
 	title_modal = ""
-	title_status_line = "No Pilot File Loaded"
+	title_status_line = "No Pilot File Loaded" if loaded_pilot_name == "" else "Pilot File Loaded: %s — %s" % [loaded_pilot_name, loaded_ship_name]
 
 func _title_modal_action_at(position: Vector2) -> String:
 	if title_modal == "":
@@ -837,6 +907,12 @@ func _draw_title_modal(font: Font) -> void:
 	draw_rect(rect, Color(0.82, 0.82, 0.78, 0.98), true)
 	draw_rect(rect, Color(0.08, 0.08, 0.08), false, 2.0)
 	draw_rect(Rect2(rect.position + Vector2(8, 8), Vector2(rect.size.x - 16, 24)), Color(0.18, 0.18, 0.18), true)
+	if title_modal == "about":
+		_draw_about_modal(rect, font)
+		return
+	if title_modal == "prefs":
+		_draw_prefs_modal(rect, font)
+		return
 	if title_modal == "open_pilot":
 		_draw_open_pilot_modal(rect, font)
 		return
@@ -876,6 +952,47 @@ func _draw_open_pilot_modal(rect: Rect2, font: Font) -> void:
 	_draw_modal_button(Rect2(700, 492, 116, 34), "Open", font)
 	_draw_modal_button(Rect2(836, 492, 116, 34), "Cancel", font)
 	draw_string(font, rect.position + Vector2(42, 232), "Return opens. Up/Down selects. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+
+func _draw_about_modal(rect: Rect2, font: Font) -> void:
+	draw_string(font, rect.position + Vector2(0, 28), "About Terminal Velocity", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
+	var lines := [
+		"Terminal Velocity is a personal-use EV-style Godot reconstruction.",
+		"It loads local JSON manifests and extracted Classic EV-era resources.",
+		"Title and implementation are original; proprietary source files stay local.",
+		"Current slice: title pilots, source-backed ships, sounds, ports, jobs, and trading.",
+		"Keyboard: Enter starts, N creates, O opens, S prefs, Q quits.",
+	]
+	for i in range(lines.size()):
+		draw_string(font, rect.position + Vector2(42, 78 + i * 27), lines[i], HORIZONTAL_ALIGNMENT_LEFT, 595, 16, Color(0.02, 0.02, 0.02))
+	_draw_modal_button(Rect2(836, 492, 116, 34), "OK", font)
+	draw_string(font, rect.position + Vector2(42, 232), "Return or Escape closes.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+
+func _draw_prefs_modal(rect: Rect2, font: Font) -> void:
+	draw_string(font, rect.position + Vector2(0, 28), "Set Preferences", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
+	draw_string(font, rect.position + Vector2(42, 72), "EV-style preferences", HORIZONTAL_ALIGNMENT_LEFT, 590, 18, Color(0.02, 0.02, 0.02))
+	draw_string(font, rect.position + Vector2(42, 96), "Modeled after Classic EV's title-screen prefs; persisted format is not implemented yet.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+	var list_rect := Rect2(390, 382, 500, 120)
+	draw_rect(list_rect, Color(0.98, 0.98, 0.94), true)
+	draw_rect(list_rect, Color(0.10, 0.10, 0.10), false, 1.0)
+	var options := _pref_options()
+	for i in range(options.size()):
+		var row_rect := Rect2(list_rect.position + Vector2(0, i * 30), Vector2(list_rect.size.x, 30))
+		if i == selected_pref_index:
+			draw_rect(row_rect.grow(-2), Color(0.22, 0.40, 0.85, 0.95), true)
+		var option: Dictionary = options[i]
+		var color := Color(1, 1, 1) if i == selected_pref_index else Color(0.05, 0.05, 0.05)
+		var label := str(option.get("label", ""))
+		if str(option.get("kind", "toggle")) == "speed":
+			label = "%s: %s" % [label, str(option.get("value", "Normal"))]
+		else:
+			var enabled := bool(option.get("enabled", false))
+			var mark := "X" if enabled else " "
+			label = "[%s] %s" % [mark, label]
+		draw_string(font, row_rect.position + Vector2(10, 22), label, HORIZONTAL_ALIGNMENT_LEFT, 230, 16, color)
+		draw_string(font, row_rect.position + Vector2(260, 22), str(option.get("note", "")), HORIZONTAL_ALIGNMENT_LEFT, 220, 13, color)
+	_draw_modal_button(Rect2(700, 492, 116, 34), "OK", font)
+	_draw_modal_button(Rect2(836, 492, 116, 34), "Cancel", font)
+	draw_string(font, rect.position + Vector2(42, 232), "Up/Down selects. Space toggles. Return accepts. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
 
 func _draw_text_entry(rect: Rect2, value: String, font: Font) -> void:
 	draw_rect(rect, Color(1.0, 1.0, 1.0), true)
