@@ -173,11 +173,13 @@ Derived observations:
   - after 1000 ms Right Arrow hold: `frame_05` best, with `frame_23` as the strongest opposite/symmetric alternative;
   - after the subsequent 1000 ms Left Arrow return: `frame_19` best.
 - The frame-match loop therefore supports an approximate one-second right-turn delta of about `15` facing cells for this Shuttlecraft capture (`frame_20 -> frame_05`, modulo 36, followed by a left-turn return near `frame_19`). Confidence is moderate, not final: the capture was not frame-aligned, includes key-posting/OS/emulator latency, and the small shuttle sprite has near-symmetric alternatives.
-- The current evidence supports keeping Terminal Velocity's decoded-field-backed `turning` implementation and deterministic movement log, but the exact EV Classic runtime mapping from `turning=60` to facing cells/tick remains partial. Do not retune the Godot `60 -> 18 cells/s` compatibility mapping from this single non-frame-aligned observation alone.
+- Follow-up multi-sample measurement on 2026-05-25 used the same safe in-space state and paired Right Arrow/Left Arrow holds at `250`, `500`, `1000`, and `2000 ms`. Local-only captures are named `C:\Games\BasiliskII\ev-turn-multisample-20260525-152121-<duration>ms-{before,right,return}.png`.
+- Multi-sample full-capture diffs stayed localized to the ship sprite area (`247..268` changed pixels; bboxes around `x=240..263`, `y=255..274`). Candidate frame matches from a common `frame_19` baseline were: `250 ms -> frame_24` (`+5` cells), `500 ms -> frame_31` (`+12` cells), `1000 ms -> frame_06` (`+23` cells modulo 36), and `2000 ms -> frame_28` (`+45` cells modulo 36). Return captures mostly returned to `frame_19`, with the `2000 ms` return at `frame_17`.
+- This supports an original-runtime Shuttlecraft turn rate near `22.5` facing cells/sec for decoded `turning=60`. Terminal Velocity was retuned from the earlier compatibility mapping to `turning * 0.375` (`60 -> 22.5 cells/sec`). Confidence is higher than the single-sample observation but still partial because the capture is not frame-aligned and uses template matching.
 
 ## Open verification items
 
-- Repeat the turn measurement with frame-aligned capture or multiple fixed-duration samples to confirm whether Shuttlecraft `turning=60` maps to exactly `15`, `16`, `18`, or another stable facing-cells/sec value in original EV Classic.
+- Later, confirm the `22.5` cells/sec Shuttlecraft turn-rate mapping with frame-aligned capture or an independent runtime timing method.
 - Open a player/ship info screen or an outfitter/status screen at a port that exposes one, without changing inventory, to record exact starting primary weapons/outfits.
 - Terminal Velocity now models Strict Play as a New Pilot per-pilot option defaulting off/unchecked, saves it as `strict_play`, and reports the self-test contract `strictPlay=off-by-default`; destructive death semantics remain untested and should not be tested on reusable pilots.
 - Complete the accepted `Ferry Passengers to New Istanbul` mission on the non-strict pilot after learning reliable departure/hyperspace movement away from Levo.

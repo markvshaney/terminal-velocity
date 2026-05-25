@@ -349,10 +349,10 @@ func _ship_max_speed() -> float:
 	return float(player_ship.get("maxSpeed", 413.0))
 
 func _ship_turn_cells_per_second() -> float:
-	# source-backed EV Data.rez ship physics: raw turning field. The 0.3 scale preserves
-	# the prior deterministic Godot movement cadence for Shuttlecraft (60 -> 18 cells/s)
-	# pending original-runtime turn-rate timing measurement.
-	return float(player_ship.get("turning", 60.0)) * 0.3
+	# Source-backed EV Data.rez ship physics: raw turning field. Multi-sample
+	# original-runtime Shuttlecraft captures on 2026-05-25 support roughly 22.5
+	# facing cells/s for turning=60, so the runtime scale is 0.375.
+	return float(player_ship.get("turning", 60.0)) * 0.375
 
 func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, braking: bool) -> void:
 	if turn_dir != 0 and not player_frames.is_empty():
