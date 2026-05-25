@@ -25,20 +25,15 @@
           "sourceEvidence": "Levo is an independent world that has resisted joining the Confederation. Anyone is welcome at the tiny but neutral Levo Spaceport, located on the island of Locanda in Levo’s southern ocean.",
           "inventory": {
             "services": [
-              "repairs",
-              "outfitter",
               "commodities",
               "jobs",
               "missions"
             ],
-            "outfitsForSale": [
-              "cargo_pod",
-              "fuel_tank"
-            ],
+            "outfitsForSale": [],
             "shipsForSale": [],
-            "weaponsForSale": [
-              "laser_cannon"
-            ]
+            "weaponsForSale": [],
+            "sourceEvidenceLabel": "original-runtime-observed",
+            "sourceEvidence": "Original EV Classic Levo landed screen shows Spaceport Bar, Mission Computer, Commodity Exchange, and Leave; no visible outfitter button."
           }
         }
       ]

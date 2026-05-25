@@ -15,6 +15,7 @@ const DEFAULT_SHIPYARD_PICT_ASSET := "assets/graphics/pict/5000_shipyard/image.p
 const STATE_TITLE := "title"
 const STATE_SPACE := "space"
 const START_SYSTEM_NAME := "Levo"
+const EV_CLASSIC_COMMODITY_LOT_SIZE := 10
 const PREFS_SAVE_PATH := "user://terminal_velocity_prefs.json"
 const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
 const MOVEMENT_LOG_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=right_turn ticks=12 ship="
@@ -54,6 +55,7 @@ var title_status_line := "No pilot loaded."
 var title_modal := ""
 var pilot_name_input := ""
 var ship_name_input := "Starseeker"
+var strict_play_selected := false
 var loaded_pilot_name := ""
 var loaded_ship_name := ""
 var loaded_pilot_file := ""
@@ -481,6 +483,7 @@ func _activate_title_button(label: String) -> void:
 			title_modal = "new_pilot_name"
 			pilot_name_input = ""
 			ship_name_input = "Starseeker"
+			strict_play_selected = false
 			title_status_line = "Creating new pilot."
 		"Open Pilot":
 			_open_pilot_modal()
@@ -524,6 +527,8 @@ func _handle_title_modal_input(event: InputEvent) -> void:
 			KEY_SPACE:
 				if title_modal == "prefs":
 					_toggle_selected_pref()
+				elif title_modal == "new_pilot_name":
+					strict_play_selected = not strict_play_selected
 			KEY_BACKSPACE:
 				_backspace_title_modal_text()
 			_:
@@ -541,6 +546,9 @@ func _handle_title_modal_input(event: InputEvent) -> void:
 				selected_pref_index = pref_row
 				_toggle_selected_pref()
 				return
+		if title_modal == "new_pilot_name" and _strict_play_toggle_rect().has_point(event.position):
+			strict_play_selected = not strict_play_selected
+			return
 		var action := _title_modal_action_at(event.position)
 		if action == "cancel":
 			_cancel_title_modal()
@@ -626,6 +634,7 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"commodity_hold": commodity_hold,
 		"owned_outfits": owned_outfits,
 		"owned_weapons": owned_weapons,
+		"strict_play": strict_play_selected,
 	}
 
 func _pilot_ship_class() -> int:
@@ -713,6 +722,7 @@ func _load_selected_pilot_file() -> void:
 func _apply_pilot_data(data: Dictionary) -> void:
 	loaded_pilot_name = str(data.get("pilot_name", loaded_pilot_name))
 	loaded_ship_name = str(data.get("ship_name", loaded_ship_name))
+	strict_play_selected = bool(data.get("strict_play", false))
 	credits = int(data.get("credits", credits))
 	cargo = int(data.get("cargo", cargo))
 	current_system_index = _system_index_from_pilot(data)
@@ -913,8 +923,11 @@ func _cancel_title_modal() -> void:
 func _title_modal_action_at(position: Vector2) -> String:
 	if title_modal == "":
 		return ""
-	var ok_rect := Rect2(940, 708, 86, 34) if title_modal == "prefs" else Rect2(700, 492, 116, 34)
-	var cancel_rect := Rect2(828, 708, 86, 34) if title_modal == "prefs" else Rect2(836, 492, 116, 34)
+	var ok_rect := Rect2(940, 708, 86, 34) if title_modal == "prefs" else Rect2(836, 492, 116, 34)
+	var cancel_rect := Rect2(828, 708, 86, 34) if title_modal == "prefs" else Rect2(700, 492, 116, 34)
+	if title_modal == "open_pilot":
+		ok_rect = Rect2(700, 492, 116, 34)
+		cancel_rect = Rect2(836, 492, 116, 34)
 	if ok_rect.has_point(position):
 		return "ok"
 	if cancel_rect.has_point(position):
@@ -1069,8 +1082,8 @@ func _draw_title_modal(font: Font) -> void:
 	if title_modal == "open_pilot":
 		_draw_open_pilot_modal(rect, font)
 		return
-	var title := "Create New Pilot"
-	var prompt := "Pilot Name:"
+	var title := "New Pilot"
+	var prompt := "Enter your name, pilot:"
 	var value := pilot_name_input
 	if title_modal == "new_ship_name":
 		title = "New Pilot"
@@ -1081,9 +1094,22 @@ func _draw_title_modal(font: Font) -> void:
 	if title_modal == "new_ship_name":
 		draw_string(font, rect.position + Vector2(42, 116), "Ship Name:", HORIZONTAL_ALIGNMENT_LEFT, 590, 18, Color(0.02, 0.02, 0.02))
 	_draw_text_entry(Rect2(rect.position + Vector2(185, 102), Vector2(360, 34)), value, font)
-	_draw_modal_button(Rect2(700, 492, 116, 34), "OK", font)
-	_draw_modal_button(Rect2(836, 492, 116, 34), "Cancel", font)
+	if title_modal == "new_pilot_name":
+		# Source-backed from original EV Classic New Pilot dialog observed in Basilisk II
+		# on 2026-05-20. Strict Play is off by default; leave it optional and saved
+		# per pilot without implementing destructive death semantics yet.
+		_draw_checkbox(_strict_play_checkbox_rect().position, strict_play_selected, Color(0.02, 0.02, 0.02))
+		draw_string(font, rect.position + Vector2(70, 157), "Strict Play", HORIZONTAL_ALIGNMENT_LEFT, 240, 18, Color(0.02, 0.02, 0.02))
+		draw_string(font, rect.position + Vector2(42, 194), "If you check this box, when you're dead, you're dead. No reincarnation allowed.", HORIZONTAL_ALIGNMENT_LEFT, 650, 16, Color(0.02, 0.02, 0.02))
+	_draw_modal_button(Rect2(700, 492, 116, 34), "Cancel", font)
+	_draw_modal_button(Rect2(836, 492, 116, 34), "OK", font)
 	draw_string(font, rect.position + Vector2(42, 232), "Return accepts. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+
+func _strict_play_checkbox_rect() -> Rect2:
+	return Rect2(312, 356, 12, 12)
+
+func _strict_play_toggle_rect() -> Rect2:
+	return Rect2(312, 350, 210, 28)
 
 func _draw_open_pilot_modal(rect: Rect2, font: Font) -> void:
 	draw_string(font, rect.position + Vector2(0, 28), "Open Pilot", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
@@ -1419,15 +1445,15 @@ func _draw_landing_panel() -> void:
 	var body := {}
 	if not nearest.is_empty():
 		body = nearest["body"]
-		port = str(body.get("name", "Port"))
+		port = str(body.get("sourceLandingName", body.get("name", "Port")))
 		market = str(body.get("market", "Local market"))
 	var rect := Rect2(190, 135, 900, 520)
 	draw_rect(rect, Color(0.035, 0.045, 0.065, 0.96), true)
 	draw_rect(rect, Color(0.28, 0.43, 0.62, 1.0), false, 2.0)
 	var font := ThemeDB.fallback_font
-	draw_string(font, rect.position + Vector2(30, 46), "Landed: " + port, HORIZONTAL_ALIGNMENT_LEFT, 820, 28, Color(1.0, 0.92, 0.72))
+	draw_string(font, rect.position + Vector2(30, 46), port, HORIZONTAL_ALIGNMENT_LEFT, 820, 28, Color(1.0, 0.92, 0.72))
 	draw_string(font, rect.position + Vector2(30, 78), market, HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.80, 0.90, 1.0))
-	_draw_tab_bar(rect)
+	_draw_ev_classic_landing_buttons(rect, body)
 	match landing_tab:
 		0:
 			_draw_mission_computer(rect, body)
@@ -1437,17 +1463,24 @@ func _draw_landing_panel() -> void:
 			_draw_outfitter(rect, body)
 		3:
 			_draw_shipyard(rect, body)
-	draw_string(font, rect.position + Vector2(30, 492), "F1 Missions  F2 Commodities  F3 Outfitter  F4 Shipyard  ↑/↓ select  |  Press L to launch", HORIZONTAL_ALIGNMENT_LEFT, 840, 16, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(30, 492), "F1 Mission Computer  F2 Commodity Exchange  L Leave  ↑/↓ select", HORIZONTAL_ALIGNMENT_LEFT, 840, 16, Color(0.95, 0.86, 0.58))
 
-func _draw_tab_bar(rect: Rect2) -> void:
+func _draw_ev_classic_landing_buttons(rect: Rect2, body: Dictionary) -> void:
 	var font := ThemeDB.fallback_font
-	var labels := ["F1 Mission Computer", "F2 Commodity Exchange", "F3 Outfitter", "F4 Shipyard"]
+	var inventory := _station_inventory(body)
+	var labels := ["Spaceport Bar", "Mission Computer", "Commodity Exchange"]
+	if inventory.get("services", []).has("outfitter") or not inventory.get("outfitsForSale", []).is_empty() or not inventory.get("weaponsForSale", []).is_empty():
+		labels.append("Outfitter")
+	if inventory.get("services", []).has("shipyard") or not inventory.get("shipsForSale", []).is_empty():
+		labels.append("Shipyard")
+	labels.append("Leave")
 	for i in range(labels.size()):
-		var tab_rect := Rect2(rect.position + Vector2(30 + i * 210, 104), Vector2(198, 30))
-		var active := i == landing_tab
-		draw_rect(tab_rect, Color(0.12, 0.20, 0.30, 1.0) if active else Color(0.06, 0.08, 0.11, 1.0), true)
-		draw_rect(tab_rect, Color(0.35, 0.55, 0.75, 1.0), false, 1.0)
-		draw_string(font, tab_rect.position + Vector2(8, 20), labels[i], HORIZONTAL_ALIGNMENT_LEFT, 184, 13, Color(0.88, 0.94, 1.0))
+		var button_rect := Rect2(rect.position + Vector2(30 + i * 142, 104), Vector2(132, 30))
+		var label := str(labels[i])
+		var active := (landing_tab == 0 and label == "Mission Computer") or (landing_tab == 1 and label == "Commodity Exchange") or (landing_tab == 2 and label == "Outfitter") or (landing_tab == 3 and label == "Shipyard")
+		draw_rect(button_rect, Color(0.12, 0.20, 0.30, 1.0) if active else Color(0.06, 0.08, 0.11, 1.0), true)
+		draw_rect(button_rect, Color(0.35, 0.55, 0.75, 1.0), false, 1.0)
+		draw_string(font, button_rect.position + Vector2(6, 20), label, HORIZONTAL_ALIGNMENT_CENTER, 120, 13, Color(0.88, 0.94, 1.0))
 
 func _draw_mission_computer(rect: Rect2, body: Dictionary) -> void:
 	var font := ThemeDB.fallback_font
@@ -1470,17 +1503,26 @@ func _draw_commodity_exchange(rect: Rect2) -> void:
 	var font := ThemeDB.fallback_font
 	var market_prices := _market_prices(current_system.get("name", ""))
 	draw_string(font, rect.position + Vector2(30, 166), "Commodity Exchange", HORIZONTAL_ALIGNMENT_LEFT, 820, 22, Color(0.92, 0.96, 1.0))
-	draw_string(font, rect.position + Vector2(30, 192), "B buys one ton   S sells one ton", HORIZONTAL_ALIGNMENT_LEFT, 820, 14, Color(0.95, 0.86, 0.58))
-	var y := 204.0
+	draw_string(font, rect.position + Vector2(30, 192), "In Hold:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(230, 192), "Price:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(520, 192), "Buy", HORIZONTAL_ALIGNMENT_LEFT, 80, 14, Color(0.95, 0.86, 0.58))
+	var y := 218.0
 	var commodities: Array = economy.get("commodities", [])
 	for i in range(min(8, commodities.size())):
 		var commodity: Dictionary = commodities[i]
 		var commodity_id := str(commodity.get("id", ""))
 		var prices: Dictionary = market_prices.get(commodity_id, {})
-		var marker := "▶" if i == selected_landing_item else "•"
+		var marker := "▶" if i == selected_landing_item else " "
 		var held := int(commodity_hold.get(commodity_id, 0))
-		draw_string(font, rect.position + Vector2(30, y), "%s %s  buy %s / sell %s   held %d" % [marker, commodity.get("name", commodity_id), prices.get("buy", "—"), prices.get("sell", "—"), held], HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.82, 0.92, 0.86))
+		var hold_text := "" if held == 0 else str(held)
+		var status := _ev_classic_price_status(prices)
+		draw_string(font, rect.position + Vector2(30, y), "%s %-11s %s" % [marker, commodity.get("name", commodity_id), hold_text], HORIZONTAL_ALIGNMENT_LEFT, 190, 16, Color(0.82, 0.92, 0.86))
+		draw_string(font, rect.position + Vector2(230, y), "%s  %s" % [status, str(prices.get("buy", "—"))], HORIZONTAL_ALIGNMENT_LEFT, 180, 16, Color(0.82, 0.92, 0.86))
+		draw_string(font, rect.position + Vector2(520, y), "B", HORIZONTAL_ALIGNMENT_LEFT, 40, 16, Color(0.82, 0.92, 0.86))
 		y += 28.0
+
+func _ev_classic_price_status(prices: Dictionary) -> String:
+	return str(prices.get("evClassicPriceStatus", ""))
 
 func _draw_outfitter(rect: Rect2, body: Dictionary) -> void:
 	var font := ThemeDB.fallback_font
@@ -1635,10 +1677,16 @@ func _buy_selected_commodity() -> void:
 	if credits < price:
 		status_line = "Not enough credits"
 		return
-	credits -= price
-	cargo += 1
-	commodity_hold[commodity_id] = int(commodity_hold.get(commodity_id, 0)) + 1
-	status_line = "Bought 1 ton of " + str(commodity.get("name", commodity_id))
+	var free_space := cargo_space - cargo
+	var affordable_tons := int(floor(float(credits) / float(price)))
+	var tons: int = min(EV_CLASSIC_COMMODITY_LOT_SIZE, free_space, affordable_tons)
+	if tons <= 0:
+		status_line = "Not enough credits"
+		return
+	credits -= price * tons
+	cargo += tons
+	commodity_hold[commodity_id] = int(commodity_hold.get(commodity_id, 0)) + tons
+	status_line = "Bought %d tons of %s" % [tons, str(commodity.get("name", commodity_id))]
 	_play_sound("ui_click")
 
 func _sell_selected_commodity() -> void:
@@ -1653,10 +1701,11 @@ func _sell_selected_commodity() -> void:
 		status_line = "No cargo to sell"
 		return
 	var price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("sell", 0))
-	credits += price
-	cargo = max(0, cargo - 1)
-	commodity_hold[commodity_id] = held - 1
-	status_line = "Sold 1 ton of " + str(commodity.get("name", commodity_id))
+	var tons: int = min(EV_CLASSIC_COMMODITY_LOT_SIZE, held)
+	credits += price * tons
+	cargo = max(0, cargo - tons)
+	commodity_hold[commodity_id] = held - tons
+	status_line = "Sold %d tons of %s" % [tons, str(commodity.get("name", commodity_id))]
 	_play_sound("ui_click")
 
 func _outfitter_sale_items(body: Dictionary) -> Array:

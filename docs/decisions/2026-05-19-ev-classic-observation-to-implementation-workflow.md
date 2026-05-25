@@ -1,0 +1,105 @@
+# EV Classic observation-to-implementation workflow
+
+Date: 2026-05-19
+
+Purpose: keep original EV Classic runtime observations from turning into either untracked chat notes or unreviewed implementation drift. Raw captures remain local-only; this artifact records the decision workflow. The live execution surface is `docs/checklists/ev-classic-fidelity-implementation-backlog.md`.
+
+## Decision
+
+Use both surfaces:
+
+- `docs/research/original-ev-classic-runtime-observations.md` records derived original-system observations, evidence labels, capture paths, caveats, and provenance for future Terminal Velocity implementation.
+- `docs/checklists/ev-classic-fidelity-implementation-backlog.md` tracks recommendations, candidate implementations, status, next action, and verification.
+
+Observation alone is not implementation authority. Each observation gets classified before code/data changes.
+
+Original-system observations should not remain only in chat or ephemeral screenshots. If an observation may shape future Terminal Velocity behavior, data, UI, economy, services, missions, combat, hazards, progression, or fidelity tests, store the derived observation in the research log first, then classify it for immediate implementation, backlog tracking, or observation-only retention.
+
+Use observation seeds as the bridge between play and implementation. A seed is a compact, evidence-labeled record of a played/observed behavior plus the likely Terminal Velocity surface it may affect. Seeds let gameplay observations accumulate safely until they are ready to be incorporated into Terminal Velocity data, code, tests, or backlog items. A seed may be incomplete, but it must preserve the evidence boundary and name what remains missing before implementation.
+
+Player skill sets learned while operating original EV are also implementation inputs. Record reusable skills such as mission-running judgment, trade-route selection, mission+trade pairing, fuel/risk management, combat avoidance/engagement, ship modification, outfitting, and system-provisioning judgment as part of the seed when they are learned from play. These learned skills can later inform Terminal Velocity tutorials, hints, progression design, balance, AI/player guidance, and regression scenarios. Learned skills may be reused by other pilots/test profiles; preserve that transferability explicitly while keeping pilot-specific state, cargo, reputation, deadlines, equipment, and save-risk constraints separate.
+
+When a play session involves missions or travel risk, include a play report. The report should explain how the mission was completed or why it failed, which route was chosen, what constraints mattered, whether pirates/hostiles/asteroids appeared, how threats were avoided or handled, and what reusable lessons should transfer to future pilots and Terminal Velocity design.
+
+## Classification rules
+
+### Incorporate immediately
+
+Use for small, low-risk, source-backed corrections where the target surface is obvious and bounded.
+
+Examples:
+
+- starting credits
+- visible button labels
+- commodity names/prices for a specific observed port
+- start location/state corrections
+- UI wording directly visible in original runtime
+
+Required closeout:
+
+1. Update data/code/docs/tests in a small patch.
+2. Add or update a test when practical.
+3. Run Python tests and Godot selftest/check-only.
+4. Mark the backlog item `implemented` or `verified`.
+
+### Record as candidate
+
+Use when the observation suggests an implementation but needs more evidence, a design choice, or broader scope control.
+
+Examples:
+
+- physics tuning
+- combat behavior
+- economy-wide rules inferred from one port
+- galaxy topology beyond decoded evidence
+- save/load or resource-format changes
+
+Required closeout:
+
+1. Record the observation in the research artifact.
+2. Add a backlog item with `status: candidate` or `status: needs evidence`.
+3. Name the next evidence/action needed.
+4. Do not silently implement broad behavior.
+
+### Keep observation-only
+
+Use when the observation is useful context but not currently actionable.
+
+Examples:
+
+- one-off UI state with no planned Terminal Velocity surface
+- ambiguous visual read
+- proprietary/raw evidence that should not be integrated directly
+
+Required closeout:
+
+1. Record derived fact and caveat.
+2. Mark backlog only if it implies future work.
+
+## Evidence labels
+
+Use existing evidence labels consistently:
+
+- `original-runtime-observed`: observed in EV Classic running locally through Basilisk II.
+- `decoded-resource-backed`: derived from decoded EV Classic resources/manifests.
+- `terminal-velocity-observed`: observed in the Terminal Velocity implementation.
+- `external-adaptation-observed`: observed in a community engine/adaptation; hypothesis only unless confirmed by primary evidence.
+- `unknown`: not yet source-backed.
+
+## Status vocabulary for the backlog
+
+- `candidate`: plausible implementation, not yet ready.
+- `needs evidence`: blocked on runtime/resource observation.
+- `ready`: sufficiently source-backed and bounded; safe to implement.
+- `implemented`: code/data/docs changed; verification may still be pending.
+- `verified`: implementation and tests/selftests passed.
+- `deferred`: intentionally not doing now; reason recorded.
+- `blocked`: cannot proceed until named blocker clears.
+
+## Guardrails
+
+- Do not use external adaptations as source of truth.
+- Do not put raw proprietary captures or assets in the repo without explicit review/approval.
+- Do not infer global rules from one runtime observation unless the artifact says it is an inference and the backlog keeps it as a candidate.
+- For repository changes, report files modified and verification run.
+- If a recommendation list has multiple future actions, update the backlog in the same turn instead of leaving it only in chat.

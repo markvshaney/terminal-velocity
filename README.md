@@ -60,6 +60,14 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\bh\Games\Termin
 powershell.exe -NoProfile -STA -ExecutionPolicy Bypass -File C:\Users\bh\Games\TerminalVelocity\TerminalVelocity.ps1 -SelfTest
 ```
 
+Symbolic gameplay scenario/eval harness from WSL:
+
+```bash
+python3 tools/run_gameplay_scenarios.py --pretty
+```
+
+The first built-in scenario is `levo_merchant_first_hop`: start at Levo, buy one 10-ton commodity lot, accept a safe cargo job, jump to Sol, land at Earth, and complete the delivery. This is a Terminal Velocity automation scaffold, not an EV Classic fidelity claim.
+
 ## Controls
 
 - `W` / `Up`: thrust

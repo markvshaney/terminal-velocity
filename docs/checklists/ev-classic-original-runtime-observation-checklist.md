@@ -144,16 +144,23 @@ Related ROM acquisition options artifact: `docs/research/2026-05-18-basilisk-com
   - Observation artifact: `docs/research/original-ev-classic-runtime-observations.md`.
   - Local-only captures include `C:\Games\BasiliskII\ev-new-pilot-after-ship-name.png`, `C:\Games\BasiliskII\ev-new-pilot-enter-ship.png`, and `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`.
 
+- [x] Capture Strict Play New Pilot dialog default state.
+  - Status: completed 2026-05-20.
+  - Local-only capture: `C:\Games\BasiliskII\ev-new-pilot-strict-play-unchecked.png`.
+  - Observed original EV Classic behavior: `Strict Play` appears in the `Enter your name, pilot:` New Pilot dialog and defaults unchecked/off; the dialog was cancelled after capture and Strict Play was not selected.
+
 - [ ] Capture movement/facing baseline.
   - Status: unblocked; original runtime launches, but measured movement/facing captures are not yet recorded.
   - Feeds: `docs/checklists/ev-classic-behavior-baseline-checklist.md` ship-facing and movement rows.
   - Done when: turn/thrust/no-input captures distinguish measured values from qualitative impressions.
 
 - [ ] Capture landing/hyperspace/basic-combat smoke baseline.
-  - Status: unblocked; original runtime launches, but landing/hyperspace/basic-combat observations are not yet recorded.
+  - Status: partial; landing/takeoff, Hyper Mode, Hyper Select, near-center jump failure, mission info, and movement away from Levo were observed in the 2026-05-20 non-strict gameplay learning pass. Automation hit intermittent Basilisk keyboard-input reliability after movement, but human takeover later demonstrated successful hyperspace to Kathoon and landing; the post-landing state is screenshot-confirmed while the exact route/jump input sequence still needs step-by-step capture. Basic combat remains intentionally unrecorded/unfinished.
+  - Local-only blocker capture: `C:\Games\BasiliskII\ev-gameplay-learning-rigel-input-recovery-failed-20260520.png`.
+  - Local-only successful travel/landing capture: `C:\Games\BasiliskII\ev-kathoon-landed-user-demonstrated-2026-05-20.png`.
   - Feeds: `docs/checklists/ev-classic-behavior-baseline-checklist.md` landing/hyperspace/basic-combat rows.
   - Done when: each observation has capture reference, evidence label, confidence, and Terminal Velocity comparison target.
 
 ## Current next action
 
-Use the existing Basilisk II install to capture source-backed original EV Classic runtime screens and behavior, starting with the title preferences screen. Keep screenshots/captures local-only unless explicitly reviewed for commit/publication; record derived observations and evidence labels in repo docs. Treat observations from the current archive-sourced ROM/boot disk route as original-runtime observations with provenance caveats, and revisit cleaner ROM/OS provenance only if emulator-specific anomalies appear or publishable evidence is needed.
+Use the existing Basilisk II install to continue source-backed original EV Classic runtime observation. The current non-strict mission/travel pilot has a user-demonstrated successful hyperspace to Kathoon and a screenshot-confirmed landed state at Maxwell's Purchase; next safe observation step is to capture the exact map/route/jump sequence step-by-step while staying in observation mode if the user is driving. Keep screenshots/captures local-only unless explicitly reviewed for commit/publication; record derived observations and evidence labels in repo docs. Treat observations from the current archive-sourced ROM/boot disk route as original-runtime observations with provenance caveats, and revisit cleaner ROM/OS provenance only if emulator-specific anomalies appear or publishable evidence is needed.

@@ -75,17 +75,17 @@
   },
   "contraband": {
     "Federation": [
-      "luxuries"
+      "equipment"
     ],
     "Centauri Protectorate": [
-      "luxuries"
+      "equipment"
     ],
     "Independent": [
-      "medical_supplies"
+      "medical"
     ],
     "Militia Compact": [
-      "luxuries",
-      "medical_supplies"
+      "equipment",
+      "medical"
     ],
     "Rim Freehold": []
   }

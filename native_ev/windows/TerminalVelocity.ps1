@@ -1683,21 +1683,21 @@ $timer.Add_Tick({
         $savedCurrentSystemIndexForPolice = $currentSystemIndex
         $savedSelectedSystemIndexForPolice = $selectedSystemIndex
         $savedMedicalHold = $null
-        if ($commodityHold.ContainsKey('medical_supplies')) { $savedMedicalHold = @{ Tons=[int]$commodityHold['medical_supplies'].Tons; Basis=[int]$commodityHold['medical_supplies'].Basis } }
+        if ($commodityHold.ContainsKey('medical')) { $savedMedicalHold = @{ Tons=[int]$commodityHold['medical'].Tons; Basis=[int]$commodityHold['medical'].Basis } }
         $script:currentSystemIndex = 2
         $script:selectedSystemIndex = 2
         $script:credits = 5000
-        $commodityHold['medical_supplies'] = @{ Tons=1; Basis=110 }
+        $commodityHold['medical'] = @{ Tons=1; Basis=110 }
         $script:cargoUsed = $savedCargoUsedForPolice + 1
         $bribesBefore = $totalBribesPaid
         Scan-For-Contraband 'SelfTest Freeport Patrol'
         if ($totalBribesPaid -le $bribesBefore) { throw "SelfTest expected Independent contraband bribe" }
-        if ([int]$commodityHold['medical_supplies'].Tons -ne 1) { throw "SelfTest expected bribe to avoid confiscation" }
+        if ([int]$commodityHold['medical'].Tons -ne 1) { throw "SelfTest expected bribe to avoid confiscation" }
         $script:currentSystemIndex = 5
         $script:selectedSystemIndex = 5
         $script:credits = 0
-        $commodityHold['luxuries'] = @{ Tons=1; Basis=180 }
-        $commodityHold['medical_supplies'] = @{ Tons=1; Basis=110 }
+        $commodityHold['equipment'] = @{ Tons=1; Basis=180 }
+        $commodityHold['medical'] = @{ Tons=1; Basis=110 }
         $script:cargoUsed = $savedCargoUsedForPolice + 2
         $confiscationsBefore = $contrabandConfiscations
         $savedMilitiaLegalForPolice = [int]$legalRecords['Militia Compact']
@@ -1710,8 +1710,8 @@ $timer.Add_Tick({
         $script:selectedSystemIndex = $savedSelectedSystemIndexForPolice
         $script:credits = $savedCreditsForPolice
         $script:cargoUsed = $savedCargoUsedForPolice
-        if ($savedMedicalHold -eq $null) { if ($commodityHold.ContainsKey('medical_supplies')) { $commodityHold.Remove('medical_supplies') } } else { $commodityHold['medical_supplies'] = $savedMedicalHold }
-        if ($commodityHold.ContainsKey('luxuries')) { $commodityHold.Remove('luxuries') }
+        if ($savedMedicalHold -eq $null) { if ($commodityHold.ContainsKey('medical')) { $commodityHold.Remove('medical') } } else { $commodityHold['medical'] = $savedMedicalHold }
+        if ($commodityHold.ContainsKey('equipment')) { $commodityHold.Remove('equipment') }
         $savedFedRepForClemency = [int]$reputation['Federation']
         $savedFedLegalForClemency = [int]$legalRecords['Federation']
         $script:credits = 5000

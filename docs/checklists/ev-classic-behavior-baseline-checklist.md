@@ -61,8 +61,16 @@ For every behavior row, record:
   - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
   - Primary evidence: original EV Classic running in Basilisk II; local-only capture path `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`.
   - Observed visible groups/controls: `Navigation Controls:`, `Escort Controls:`, `Weapon Controls:`, `Misc. Controls:`, `Sound Volume: Quiet`, `Intro Music`, `Game Speed...`, `Cancel`, `OK`.
+  - Strict Play note: the observed Set Prefs screen does not show a `Strict Play` control; 2026-05-20 external/pilot-file evidence indicates Strict Play is per-pilot state, so its UI should be investigated in the new-pilot flow rather than added to Set Prefs.
   - Terminal Velocity current behavior: 2026-05-19 Godot modal in `godot_ev/scripts/main.gd` copies the observed prefs layout/wording and keeps saved mappings for Intro Music, Sound Volume, and Game Speed; self-test emits `prefScreen=original-ev-classic-observed` plus `user://selftest/title_prefs.png`.
   - Status: `match` for visible prefs screen wording/layout target; confidence `medium` because the raw screenshot remains local-only and font/spacing are approximated in Godot.
+
+- [x] Strict Play / permadeath pilot option
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat, plus `local-manual-string-backed` and `pilot-file-structure-backed`.
+  - Primary evidence: original EV Classic New Pilot dialog capture, local-only path `C:\Games\BasiliskII\ev-new-pilot-strict-play-unchecked.png`; local `System7_5_3.img` string/manual text says the `New Pilot` dialog lets the player name the pilot and decide whether to play by Strict rules. The same manual text says Strict death is final, while not playing by Strict rules lets the player use `Open Pilot` to resume from the last landed planet. Ambrosia forum archive pilot-file notes identify a per-pilot `strictPlayFlag` in resource `129` (`MpďL`) with `0 = strict play off`.
+  - Observed original EV Classic behavior: Set Prefs, Levo landed, and commodity screens do not expose the control. The New Pilot dialog shows `Enter your name, pilot:`, default name `Rick Hardslab`, an unchecked `Strict Play` checkbox, explanatory text `If you check this box, when you're dead, you're dead. No reincarnation allowed.`, and `Cancel` / `OK` buttons. The dialog was cancelled after capture; no destructive strict-play test was performed.
+  - Terminal Velocity current behavior: `godot_ev/scripts/main.gd` now places `Strict Play` in the New Pilot name dialog, defaults it unchecked/off, lets the player toggle it before naming the pilot, stores it per pilot as `strict_play`, and reloads that per-pilot flag. `godot_ev/scripts/self_test.gd` reports `strictPlay=off-by-default`.
+  - Status: `implemented-default-off`; source-backed off semantics are `Strict Play` unchecked / `strictPlayFlag = 0`. Exact destructive death behavior remains intentionally untested and is not implemented yet.
 
 - [x] Starting ship
   - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
@@ -87,9 +95,16 @@ For every behavior row, record:
 
 - [ ] Starting equipment/outfits/weapons
   - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
-  - Primary evidence: original EV Classic first playable in-space HUD; local-only capture `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`.
-  - Observed original EV Classic behavior: HUD shows full Shield/Fuel bars, `No Secondary Weapon`, `No Target`, and `Free: 20`; detailed outfits/weapons inventory was not opened successfully during automation.
-  - Status: `partial`; verification needed: open player/ship info or landed outfitter/status screen without changing inventory.
+  - Primary evidence: original EV Classic first playable in-space HUD; local-only captures `C:\Games\BasiliskII\ev-new-pilot-after-intro-wait2.png`, `C:\Games\BasiliskII\ev-start-equipment-landing-postmessage-l.png`, `C:\Games\BasiliskII\ev-start-equipment-landed-levo.png`, and `C:\Games\BasiliskII\ev-start-equipment-levo-commodity-screen.png`.
+  - Observed original EV Classic behavior: HUD shows full Shield/Fuel bars, `No Secondary Weapon`, `No Target`, and `Free: 20`; first landing clearance says `Cleared to land, Starseeker. Commence final approach.`; Levo landed screen has `Spaceport Bar`, `Mission Computer`, `Commodity Exchange`, and `Leave`, with no visible outfitter button; Levo Commodity Exchange `In Hold:` column is blank for `Food`, `Industrial`, `Medical`, `Metal`, and `Equipment`.
+  - Status: `partial`; verification still needed: open a player/ship info screen or an outfitter/status screen at a port that exposes one, without changing inventory, to record exact starting primary weapons/outfits.
+
+- [x] Levo Commodity Exchange buy/sell prices
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Primary evidence: original EV Classic running in Basilisk II; local-only captures `C:\Games\BasiliskII\ev-start-equipment-levo-commodity-screen.png`, `C:\Games\BasiliskII\ev-levo-food-after-buy.png`, `C:\Games\BasiliskII\ev-levo-food-after-sell.png`, `C:\Games\BasiliskII\ev-levo-industrial-after-buy.png`, `C:\Games\BasiliskII\ev-levo-industrial-after-sell.png`, `C:\Games\BasiliskII\ev-levo-medical-after-buy.png`, `C:\Games\BasiliskII\ev-levo-medical-after-sell.png`, `C:\Games\BasiliskII\ev-levo-metal-after-buy.png`, `C:\Games\BasiliskII\ev-levo-metal-after-sell.png`, `C:\Games\BasiliskII\ev-levo-equipment-after-buy.png`, and `C:\Games\BasiliskII\ev-levo-equipment-after-sell.png`.
+  - Observed original EV Classic behavior: `Buy` purchases 10 tons at a time from the starting shuttle state. Buying 10 tons of each Levo commodity reduced credits by exactly 10 times the displayed price; selling the lot restored credits to `10,000`. Levo same-port sale prices therefore equal displayed buy prices: Food `120`, Industrial `192`, Medical `600`, Metal `144`, Equipment `360`.
+  - Terminal Velocity current behavior: `native_ev/data/economy.json` now uses those source-backed Levo sell prices, and `native_ev/tests/test_model.py` asserts the buy and sell prices.
+  - Status: `match`; confidence `medium-high` because the observation is direct runtime behavior, while captures remain local-only and only Levo was tested.
 
 ### Ship facing and rendering
 
@@ -134,16 +149,18 @@ For every behavior row, record:
 ### Landing and hyperspace loop
 
 - [ ] Land/takeoff state transitions
-  - Evidence label: `unknown`
-  - Primary evidence needed: original runtime observation.
+  - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
+  - Primary evidence: local-only captures from 2026-05-20 non-strict gameplay learning pass under `C:\Games\BasiliskII\ev-gameplay-learning-*`, plus previous Levo landing captures.
+  - Observed original EV Classic behavior: `L` requests landing clearance near Levo; a second `L` lands. Clicking `Leave` from the Levo landing panel launches and shows `Leaving Levo on May 22nd, 2276.` after the passenger-mission acceptance pass.
   - Terminal Velocity current behavior: current Godot landing state should be logged and compared.
-  - Status: `unknown`
+  - Status: `partial`; takeoff/landing text is observed, but exact timing and transition animation/sound still need capture.
 
 - [ ] Hyperspace availability and destination selection
-  - Evidence label: `decoded-resource-backed` for map links where decoded; runtime behavior still needs observation.
-  - Primary evidence needed: decoded topology plus original runtime behavior.
+  - Evidence label: `original-runtime-observed` for Levo UI/control behavior plus `decoded-resource-backed` for map links where decoded.
+  - Primary evidence: preferences capture `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`, local-only runtime capture `C:\Games\BasiliskII\ev-gameplay-learning-hyperselect-rigel-20260520.png`, and human-takeover landed-state capture `C:\Games\BasiliskII\ev-kathoon-landed-user-demonstrated-2026-05-20.png`.
+  - Observed original EV Classic behavior: nav keys are `H` for Hyper Mode, Backslash for Hyper Select, and `J` for Jump. In Hyper Mode from Levo, Backslash selected `Rigel`; jumping too near Levo failed with `Can't initiate hyperspace jump - not yet far enough away from system center.` User demonstrated successful hyperspace to Kathoon and landing; the resulting landed panel at Maxwell's Purchase is screenshot-confirmed with `Free: 2`, `Special: Multiple`, and `Credits: 10,000`.
   - Terminal Velocity current behavior: uses `links` from `native_ev/data/universe.json`.
-  - Status: partial.
+  - Status: partial; destination selection and near-center failure are screenshot-observed, and successful travel to Kathoon is user-demonstrated with a screenshot-confirmed landed state. Exact route-selection/jump inputs and hyperspace timing still need step-by-step capture.
 
 - [ ] Hyperspace timing / animation / sound
   - Evidence label: `unknown`

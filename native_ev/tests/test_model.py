@@ -138,8 +138,26 @@ class NativeEvModelTests(unittest.TestCase):
         text = source.read_text()
         self.assertIn('prefScreen=original-ev-classic-observed', text)
         self.assertIn('prefsScreenshot=', text)
+        self.assertIn('strictPlay=off-by-default', text)
         self.assertIn('user://selftest/title_prefs.png', text)
         self.assertIn('_write_prefs_screenshot_artifact', text)
+
+    def test_godot_new_pilot_modal_matches_original_ev_strict_play_observation(self):
+        source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd'
+        text = source.read_text()
+        for symbol in [
+            'var strict_play_selected := false',
+            'strict_play_selected = false',
+            'Enter your name, pilot:',
+            'Strict Play',
+            "If you check this box, when you're dead, you're dead. No reincarnation allowed.",
+            '_strict_play_checkbox_rect',
+            '_strict_play_toggle_rect',
+            'Rect2(700, 492, 116, 34), "Cancel"',
+            'Rect2(836, 492, 116, 34), "OK"',
+            '"strict_play": strict_play_selected',
+        ]:
+            self.assertIn(symbol, text)
 
     def test_godot_deterministic_movement_log_contract(self):
         root = Path(__file__).resolve().parents[2]
@@ -198,6 +216,50 @@ class NativeEvModelTests(unittest.TestCase):
         main_script = (Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd').read_text()
         self.assertIn('const START_SYSTEM_NAME := "Levo"', main_script)
         self.assertIn('_system_index_by_name(START_SYSTEM_NAME, 0)', main_script)
+
+    def test_levo_starting_market_matches_original_runtime_observation(self):
+        universe = load_universe()
+        economy = economy_manifest()
+        levo_body = next(body for body in universe['systems'][0]['bodies'] if body['name'] == 'Levo Spaceport')
+        inventory = station_inventory(universe, 'Levo', 'Levo Spaceport')
+        self.assertEqual(inventory['outfitsForSale'], [])
+        self.assertEqual(inventory['weaponsForSale'], [])
+        self.assertNotIn('outfitter', inventory['services'])
+        self.assertEqual([commodity['name'] for commodity in economy['commodities']], [
+            'Food',
+            'Industrial',
+            'Medical',
+            'Metal',
+            'Equipment',
+        ])
+        levo_market = economy['markets']['Levo']
+        self.assertEqual(levo_market['food']['buy'], 120)
+        self.assertEqual(levo_market['industrial']['buy'], 192)
+        self.assertEqual(levo_market['medical']['buy'], 600)
+        self.assertEqual(levo_market['metal']['buy'], 144)
+        self.assertEqual(levo_market['equipment']['buy'], 360)
+        self.assertEqual(levo_market['food']['sell'], 120)
+        self.assertEqual(levo_market['industrial']['sell'], 192)
+        self.assertEqual(levo_market['medical']['sell'], 600)
+        self.assertEqual(levo_market['metal']['sell'], 144)
+        self.assertEqual(levo_market['equipment']['sell'], 360)
+        self.assertEqual({prices['evClassicPriceStatus'] for prices in levo_market.values()}, {'Low', 'Med'})
+
+    def test_godot_landing_panel_uses_original_levo_button_and_hold_wording(self):
+        source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd'
+        text = source.read_text()
+        for symbol in [
+            'Spaceport Bar',
+            'Mission Computer',
+            'Commodity Exchange',
+            'In Hold:',
+            'Price:',
+            'Buy',
+            'Leave',
+            '_draw_ev_classic_landing_buttons',
+            '_ev_classic_price_status',
+        ]:
+            self.assertIn(symbol, text)
 
     def test_universe_has_ev_style_route_density(self):
         universe = load_universe()
@@ -714,10 +776,10 @@ class NativeEvModelTests(unittest.TestCase):
         data = economy_manifest()
         commodity_ids = {commodity['id'] for commodity in data['commodities']}
         self.assertIn('food', commodity_ids)
-        self.assertIn('industrial_goods', commodity_ids)
+        self.assertIn('industrial', commodity_ids)
         self.assertIn('Sol', data['markets'])
         self.assertIn('Sirius', data['markets'])
-        self.assertGreater(data['markets']['Sirius']['industrial_goods']['sell'], data['markets']['Sol']['industrial_goods']['buy'])
+        self.assertGreater(data['markets']['Sirius']['industrial']['sell'], data['markets']['Sol']['industrial']['buy'])
 
     def test_trade_profit_math(self):
         self.assertEqual(trade_profit(buy_price=80, sell_price=125, quantity=4), 180)
@@ -740,12 +802,12 @@ class NativeEvModelTests(unittest.TestCase):
         data = government_manifest()
         self.assertIn('Sol', data['systems'])
         self.assertEqual(data['systems']['Sol']['government'], 'Federation')
-        self.assertIn('luxuries', data['contraband']['Federation'])
+        self.assertIn('equipment', data['contraband']['Federation'])
         self.assertGreater(data['governments']['Federation']['finePerTon'], 0)
 
     def test_contraband_fine_math(self):
-        self.assertEqual(fine_for_contraband({'luxuries': 2, 'food': 5}, {'luxuries'}, 400), 800)
-        self.assertEqual(fine_for_contraband({'food': 5}, {'luxuries'}, 400), 0)
+        self.assertEqual(fine_for_contraband({'equipment': 2, 'food': 5}, {'equipment'}, 400), 800)
+        self.assertEqual(fine_for_contraband({'food': 5}, {'equipment'}, 400), 0)
 
     def test_police_outcome_bribes_low_level_contraband_when_config_allows(self):
         governments = government_manifest()
@@ -754,14 +816,14 @@ class NativeEvModelTests(unittest.TestCase):
             governments,
             reputation,
             government='Independent',
-            hold={'medical_supplies': 1, 'food': 2},
+            hold={'medical': 1, 'food': 2},
             credits=2000,
             legal_records={'Independent': 0},
             accept_bribe=True,
         )
         self.assertEqual(outcome['action'], 'bribe')
         self.assertGreater(outcome['creditsDelta'], -1000)
-        self.assertEqual(outcome['confiscated'], {'medical_supplies': 0})
+        self.assertEqual(outcome['confiscated'], {'medical': 0})
         self.assertEqual(outcome['legalDelta'], 0)
 
     def test_police_outcome_fines_and_confiscates_contraband(self):
@@ -771,14 +833,14 @@ class NativeEvModelTests(unittest.TestCase):
             governments,
             reputation,
             government='Federation',
-            hold={'luxuries': 2, 'food': 3},
+            hold={'equipment': 2, 'food': 3},
             credits=5000,
             legal_records={'Federation': 0},
             accept_bribe=False,
         )
         self.assertEqual(outcome['action'], 'fine')
         self.assertEqual(outcome['creditsDelta'], -800)
-        self.assertEqual(outcome['confiscated'], {'luxuries': 2})
+        self.assertEqual(outcome['confiscated'], {'equipment': 2})
         self.assertEqual(outcome['legalDelta'], -10)
 
     def test_police_outcome_escalates_when_player_cannot_pay_fine(self):
@@ -788,13 +850,13 @@ class NativeEvModelTests(unittest.TestCase):
             governments,
             reputation,
             government='Militia Compact',
-            hold={'luxuries': 1, 'medical_supplies': 1},
+            hold={'equipment': 1, 'medical': 1},
             credits=100,
             legal_records={'Militia Compact': -40},
             accept_bribe=False,
         )
         self.assertEqual(outcome['action'], 'confiscate')
-        self.assertEqual(outcome['confiscated'], {'luxuries': 1, 'medical_supplies': 1})
+        self.assertEqual(outcome['confiscated'], {'equipment': 1, 'medical': 1})
         self.assertLessEqual(outcome['legalDelta'], -25)
         self.assertEqual(government_patrol_posture(reputation, {'Militia Compact': -70}, 'Militia Compact'), 'hostile')
 
@@ -883,7 +945,7 @@ class NativeEvModelTests(unittest.TestCase):
             cargo_used=7,
             cargo_space=45,
             owned_outfits={'cargo_pod': 2, 'fuel_tank': 1},
-            commodity_hold={'industrial_goods': {'tons': 3, 'basis': 240}},
+            commodity_hold={'industrial': {'tons': 3, 'basis': 240}},
             active_mission_ids=['frontier_sample_hera_freeport'],
             completed_mission_ids=['intro_courier_earth_hera'],
             story_flags=['story_intro_complete', 'frontier_chain_started'],
@@ -897,7 +959,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(loaded['currentSystem'], 'Centauri')
         self.assertEqual(loaded['playerShipId'], 'light_freighter')
         self.assertEqual(loaded['ownedOutfits']['cargo_pod'], 2)
-        self.assertEqual(loaded['commodityHold']['industrial_goods']['tons'], 3)
+        self.assertEqual(loaded['commodityHold']['industrial']['tons'], 3)
         self.assertEqual(loaded['activeMissionIds'], ['frontier_sample_hera_freeport'])
         self.assertEqual(loaded['completedMissionIds'], ['intro_courier_earth_hera'])
         self.assertIn('story_intro_complete', loaded['storyFlags'])
@@ -977,12 +1039,22 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertIn(key_name, main_script)
         for prompt in [
             'Enter accepts mission',
-            'B buys one ton',
-            'S sells one ton',
+            'In Hold:',
+            'Price:',
+            'Buy',
             'B buys selected upgrade',
             'B buys selected ship',
         ]:
             self.assertIn(prompt, main_script)
+
+    def test_godot_commodity_trade_uses_ev_classic_ten_ton_lots(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        self.assertIn('const EV_CLASSIC_COMMODITY_LOT_SIZE := 10', main_script)
+        self.assertIn('min(EV_CLASSIC_COMMODITY_LOT_SIZE, free_space, affordable_tons)', main_script)
+        self.assertIn('price * tons', main_script)
+        self.assertIn('Bought %d tons of %s', main_script)
+        self.assertIn('Sold %d tons of %s', main_script)
 
     def test_godot_click_sound_is_wired_to_landing_actions(self):
         root = Path(__file__).resolve().parents[2]
