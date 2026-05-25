@@ -149,8 +149,35 @@ Derived status:
 - User authorization/framing: multiple non-strict pilots may be created for separate strategy learning tracks, so the reusable mission/trade pilot does not need to carry piracy/combat-risk experiments.
 - Mission/Bar/Holo-Vid flows are now source-backed enough to inform Terminal Velocity UI/backlog work. Hyperspace travel is now user-demonstrated to Kathoon with a screenshot-confirmed landed state, but the exact route-selection/jump input sequence still needs a captured step-by-step pass before being treated as screenshot-confirmed original-runtime control behavior.
 
+## 2026-05-25 movement turn-rate capture
+
+Evidence gathered:
+
+- Live Basilisk II was initially minimized; it was restored to a visible `646x509` window and captured successfully.
+- Starting state was EV Classic in space near a planet, HUD showing full Shield/Fuel bars, `Nav System Off`, `No Secondary Weapon`, `No Target`, `Free: 2`, `Special: Multiple`, and `Credits: 15,000`.
+- Local-only captures:
+  - `C:\Games\BasiliskII\ev-movement-measure-before-20260525-131902.png`
+  - `C:\Games\BasiliskII\ev-movement-measure-right1s-after-20260525-131902.png`
+  - `C:\Games\BasiliskII\ev-movement-before-shipcrop-20260525-131902.png`
+  - `C:\Games\BasiliskII\ev-movement-after-shipcrop-20260525-131902.png`
+  - `C:\Games\BasiliskII\ev-movement-measure-left1s-return-20260525-131902.png`
+- Bounded input: held extended-key Right Arrow (`VK 39`) for `1000 ms`, then captured; held extended-key Left Arrow (`VK 37`) for `1000 ms`, then captured.
+- Pixel comparison between before and right-arrow-after captures changed only the ship sprite area (`254` pixels, bbox `x=240..260`, `y=255..275`), supporting a clean rotation observation without broad UI/state changes.
+
+Derived observations:
+
+- Arrow-key turning input was responsive in this live state; this is not the same command-key input blocker seen in previous hyperspace attempts.
+- A 1-second Right Arrow hold visibly changed the shuttle sprite orientation by a large discrete step. Full-capture pixel comparison changed only the ship sprite area (`254` pixels, bbox `x=240..260`, `y=255..275`).
+- Offline template matching against the decoded Shuttlecraft frame assets (`native_ev/assets/ships/ev_classic/shuttle/frame_*.png`) found a best-fit scale of about `0.5x` for the original runtime sprite in the full captures. Candidate frame matches were:
+  - before Right Arrow hold: `frame_20` best, with `frame_21` and `frame_02` as nearby alternatives depending on color/shape scoring;
+  - after 1000 ms Right Arrow hold: `frame_05` best, with `frame_23` as the strongest opposite/symmetric alternative;
+  - after the subsequent 1000 ms Left Arrow return: `frame_19` best.
+- The frame-match loop therefore supports an approximate one-second right-turn delta of about `15` facing cells for this Shuttlecraft capture (`frame_20 -> frame_05`, modulo 36, followed by a left-turn return near `frame_19`). Confidence is moderate, not final: the capture was not frame-aligned, includes key-posting/OS/emulator latency, and the small shuttle sprite has near-symmetric alternatives.
+- The current evidence supports keeping Terminal Velocity's decoded-field-backed `turning` implementation and deterministic movement log, but the exact EV Classic runtime mapping from `turning=60` to facing cells/tick remains partial. Do not retune the Godot `60 -> 18 cells/s` compatibility mapping from this single non-frame-aligned observation alone.
+
 ## Open verification items
 
+- Repeat the turn measurement with frame-aligned capture or multiple fixed-duration samples to confirm whether Shuttlecraft `turning=60` maps to exactly `15`, `16`, `18`, or another stable facing-cells/sec value in original EV Classic.
 - Open a player/ship info screen or an outfitter/status screen at a port that exposes one, without changing inventory, to record exact starting primary weapons/outfits.
 - Terminal Velocity now models Strict Play as a New Pilot per-pilot option defaulting off/unchecked, saves it as `strict_play`, and reports the self-test contract `strictPlay=off-by-default`; destructive death semantics remain untested and should not be tested on reusable pilots.
 - Complete the accepted `Ferry Passengers to New Istanbul` mission on the non-strict pilot after learning reliable departure/hyperspace movement away from Levo.

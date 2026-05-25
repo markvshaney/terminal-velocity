@@ -128,23 +128,23 @@ For every behavior row, record:
 
 ### Movement feel
 
-- [ ] Turning rate
-  - Evidence label: `unknown`
-  - Primary evidence needed: original runtime capture at fixed time/frame interval.
-  - Terminal Velocity current behavior: needs deterministic Godot log of facing index after N ticks.
-  - Status: `unknown`
+- [x] Turning rate
+  - Evidence label: `decoded-resource-backed` for source field, `terminal-velocity-observed` for current deterministic Godot mapping, and `original-runtime-observed` for bounded arrow-key responsiveness plus candidate template-matched facing delta.
+  - Primary evidence: EV Classic `Data.rez` ship-like record primitive words decoded from `native_ev/data/sourced_ev_structures.json`; EVNEW `CShipResource::Load` reads words 0-8 as cargo, shields, acceleration, max speed, turning, fuel, free mass, armor, shield recharge. Shuttlecraft word 4 is `60`. Original-runtime capture on 2026-05-25 held Right Arrow for 1000 ms and changed only the ship sprite area (`254` pixels; local-only captures `C:\Games\BasiliskII\ev-movement-measure-before-20260525-131902.png`, `...right1s-after-20260525-131902.png`, and `...left1s-return-20260525-131902.png`). Offline template matching against decoded Shuttlecraft frames found candidate matches `frame_20 -> frame_05` for the right-turn hold and `frame_19` after the left-turn return, supporting an approximate one-second delta near `15` facing cells but not a final exact timing constant.
+  - Terminal Velocity current behavior: `godot_ev/scripts/main.gd` reads `player_ship.turning` and maps Shuttlecraft `60` to the existing 18 facing-cells/sec cadence pending frame-aligned/multi-sample original-runtime measurement; deterministic Godot movement log records facing index after N ticks.
+  - Status: `partial`; source field is decoded and wired, runtime turn responsiveness is observed, but exact EV Classic integration/timing remains unmeasured. Do not retune from the single non-frame-aligned template match alone.
 
-- [ ] Acceleration curve
-  - Evidence label: `unknown`
-  - Primary evidence needed: original runtime measurement or decoded physics fields if found.
-  - Terminal Velocity current behavior: needs deterministic log of velocity after N thrust ticks.
-  - Status: `unknown`
+- [x] Acceleration curve
+  - Evidence label: `decoded-resource-backed` for source field, `terminal-velocity-observed` for current deterministic Godot mapping.
+  - Primary evidence: EV Classic `Data.rez` ship-like record word 2. Shuttlecraft acceleration is `979`; Light Freighter acceleration is `428`.
+  - Terminal Velocity current behavior: `native_ev/data/ships.json` now carries per-ship `acceleration`; Godot uses the selected ship's value with a compatibility scale for current world units and deterministic thrust logs.
+  - Status: `partial`; source field is decoded and wired, but exact EV Classic acceleration integration/friction curve remains unmeasured.
 
-- [ ] Max speed and inertial drift
-  - Evidence label: `unknown`
-  - Primary evidence needed: original runtime measurement or decoded ship/physics fields.
-  - Terminal Velocity current behavior: needs deterministic logs.
-  - Status: `unknown`
+- [x] Max speed and inertial drift
+  - Evidence label: `decoded-resource-backed` for source field, `terminal-velocity-observed` for current deterministic Godot mapping.
+  - Primary evidence: EV Classic `Data.rez` ship-like record word 3. Shuttlecraft max speed is `413`; Light Freighter max speed is `188`.
+  - Terminal Velocity current behavior: `native_ev/data/ships.json` now carries per-ship `maxSpeed`; Godot clamps thrusting velocity to `_ship_max_speed()` and keeps the existing drift damping.
+  - Status: `partial`; max-speed field is decoded and wired, but exact original-runtime velocity cap/friction behavior still needs fixed-frame observation.
 
 ### Landing and hyperspace loop
 
@@ -159,7 +159,7 @@ For every behavior row, record:
   - Evidence label: `original-runtime-observed` for Levo UI/control behavior plus `decoded-resource-backed` for map links where decoded.
   - Primary evidence: preferences capture `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`, local-only runtime capture `C:\Games\BasiliskII\ev-gameplay-learning-hyperselect-rigel-20260520.png`, and human-takeover landed-state capture `C:\Games\BasiliskII\ev-kathoon-landed-user-demonstrated-2026-05-20.png`.
   - Observed original EV Classic behavior: nav keys are `H` for Hyper Mode, Backslash for Hyper Select, and `J` for Jump. In Hyper Mode from Levo, Backslash selected `Rigel`; jumping too near Levo failed with `Can't initiate hyperspace jump - not yet far enough away from system center.` User demonstrated successful hyperspace to Kathoon and landing; the resulting landed panel at Maxwell's Purchase is screenshot-confirmed with `Free: 2`, `Special: Multiple`, and `Credits: 10,000`.
-  - Terminal Velocity current behavior: uses `links` from `native_ev/data/universe.json`.
+  - Terminal Velocity current behavior: uses `links` from `native_ev/data/universe.json`; source-backed EV Classic default keys are now the primary Godot controls for this loop (`H` Hyper Mode, Backslash Hyper Select, `J` Jump, `L` land/launch), with former scaffold reset/hyperspace shortcuts removed from those keys.
   - Status: partial; destination selection and near-center failure are screenshot-observed, and successful travel to Kathoon is user-demonstrated with a screenshot-confirmed landed state. Exact route-selection/jump inputs and hyperspace timing still need step-by-step capture.
 
 - [ ] Hyperspace timing / animation / sound
@@ -197,7 +197,7 @@ For every behavior row, record:
 ## Instrumentation needed in Terminal Velocity
 
 - [x] Deterministic Godot movement log: selected ship, tick count, facing index, angle, velocity, and position.
-  - Status: `terminal-velocity-observed` 2026-05-19 via `--tv-movement-log` in `godot_ev/scripts/main.gd`; emits right-turn and thrust scenarios for remote/headless comparison work.
+  - Status: `terminal-velocity-observed` 2026-05-19 via `--tv-movement-log` in `godot_ev/scripts/main.gd`; `godot_ev/windows/RunGodot.ps1 -MovementLog` runs it headlessly for repeatable comparison work.
 - [ ] Deterministic turn/thrust scenarios: after N ticks of left/right/thrust/no-input.
 - [ ] Event log for landing/takeoff/hyperspace transitions.
 - [ ] Event log for target acquisition, weapon firing, projectile spawn, hit, and explosion.

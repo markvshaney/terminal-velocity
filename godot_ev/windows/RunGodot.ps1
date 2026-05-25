@@ -1,5 +1,6 @@
 param(
-    [switch]$SelfTest
+    [switch]$SelfTest,
+    [switch]$MovementLog
 )
 
 $Godot = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe\Godot_v4.6.2-stable_win64_console.exe"
@@ -14,6 +15,8 @@ if (!(Test-Path (Join-Path $Project "project.godot"))) {
 
 if ($SelfTest) {
     & $Godot --headless --path $Project --script "res://scripts/self_test.gd"
+} elseif ($MovementLog) {
+    & $Godot --headless --path $Project -- --tv-movement-log
 } else {
     & $Godot --path $Project
 }

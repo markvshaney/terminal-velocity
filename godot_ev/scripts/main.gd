@@ -332,15 +332,31 @@ func _handle_input(delta: float) -> void:
 	if game_state == STATE_TITLE:
 		return
 	var turn_dir := 0
-	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+	if Input.is_key_pressed(KEY_LEFT):
 		turn_dir -= 1
 	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		turn_dir += 1
-	_apply_movement_controls(delta, turn_dir, Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP), Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN))
+	_apply_movement_controls(delta, turn_dir, Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP) or _afterburner_active(), Input.is_key_pressed(KEY_DOWN))
+
+func _ship_acceleration() -> float:
+	# source-backed EV Data.rez ship physics: raw acceleration field from the
+	# player ship record, with the existing Godot world-scale compatibility divisor
+	# used until original-runtime frame/tick integration is measured.
+	return float(player_ship.get("acceleration", 250.0)) / 4.0
+
+func _ship_max_speed() -> float:
+	# source-backed EV Data.rez ship physics: raw maxSpeed field from the player ship record.
+	return float(player_ship.get("maxSpeed", 413.0))
+
+func _ship_turn_cells_per_second() -> float:
+	# source-backed EV Data.rez ship physics: raw turning field. The 0.3 scale preserves
+	# the prior deterministic Godot movement cadence for Shuttlecraft (60 -> 18 cells/s)
+	# pending original-runtime turn-rate timing measurement.
+	return float(player_ship.get("turning", 60.0)) * 0.3
 
 func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, braking: bool) -> void:
 	if turn_dir != 0 and not player_frames.is_empty():
-		turn_cell_progress += float(turn_dir) * 18.0 * delta
+		turn_cell_progress += float(turn_dir) * _ship_turn_cells_per_second() * delta
 		while turn_cell_progress >= 1.0:
 			player_facing_index = (player_facing_index + 1) % player_frames.size()
 			turn_cell_progress -= 1.0
@@ -352,7 +368,8 @@ func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, brak
 	angle_deg = _facing_degrees(player_facing_index, max(player_frames.size(), FRAME_COUNT))
 	var nose := Vector2.UP.rotated(deg_to_rad(angle_deg))
 	if thrusting:
-		vel += nose * 250.0 * delta
+		vel += nose * _ship_acceleration() * delta
+		vel = vel.limit_length(_ship_max_speed())
 	if braking:
 		vel *= pow(0.90, delta * 60.0)
 
@@ -393,19 +410,22 @@ func _unhandled_input(event: InputEvent) -> void:
 		match event.keycode:
 			KEY_E:
 				_try_land()
-			KEY_L:
-				landed = false
-				status_line = "Launched from " + current_system.get("name", "system")
-			KEY_N:
-				_cycle_link(1)
-			KEY_P:
-				_cycle_link(-1)
-			KEY_H:
-				_jump()
+			KEY_L: _ev_land_or_launch()
+			KEY_N: _cycle_target(1)
+			KEY_P: _show_player_info()
+			KEY_I: _show_mission_info()
+			KEY_H: _toggle_hyper_mode()
+			KEY_BACKSLASH: _cycle_link(1)
+			KEY_J: _jump()
 			KEY_M:
 				_toggle_universe_map()
 			KEY_T:
 				_cycle_target(1)
+			KEY_R: _select_closest_target()
+			KEY_A: _toggle_autopilot()
+			KEY_Z: _afterburner_active()
+			KEY_TAB: _fire_primary_weapon()
+			KEY_SPACE: _fire_secondary_weapon()
 			KEY_F1:
 				landing_tab = 0
 				selected_landing_item = 0
@@ -437,17 +457,7 @@ func _unhandled_input(event: InputEvent) -> void:
 						1: _buy_selected_commodity()
 						2: _buy_selected_outfit_or_weapon()
 						3: _buy_selected_ship()
-			KEY_S:
-				if landed and landing_tab == 1:
-					_sell_selected_commodity()
-			KEY_R:
-				pos = PLAYER_START
-				vel = Vector2.ZERO
-				player_facing_index = 0
-				angle_deg = 0.0
-				turn_cell_progress = 0.0
-				landed = false
-				status_line = "Reset in " + current_system.get("name", "system")
+			KEY_S: _change_secondary_weapon()
 
 func _handle_title_input(event: InputEvent) -> void:
 	if title_modal != "":
@@ -957,6 +967,59 @@ func _cycle_target(dir: int) -> void:
 	selected_target_index = (selected_target_index + dir + targets.size()) % targets.size()
 	status_line = "Target: Contact %d at %.0f range" % [selected_target_index + 1, pos.distance_to(targets[selected_target_index])]
 
+func _select_closest_target() -> void:
+	var targets := _npc_world_offsets()
+	if targets.is_empty():
+		selected_target_index = 0
+		status_line = "No scanner targets"
+		return
+	var closest_index := 0
+	var closest_distance := pos.distance_to(targets[0])
+	for i in range(1, targets.size()):
+		var distance := pos.distance_to(targets[i])
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_index = i
+	selected_target_index = closest_index
+	status_line = "Closest target: Contact %d at %.0f range" % [selected_target_index + 1, closest_distance]
+
+func _ev_land_or_launch() -> void:
+	if landed:
+		landed = false
+		status_line = "Launched from " + current_system.get("name", "system")
+		return
+	_try_land()
+
+func _toggle_hyper_mode() -> void:
+	status_line = "Hyper Mode: select destination with \\ then press J"
+
+func _show_player_info() -> void:
+	status_line = "Player Info: %s / %s / %d credits" % [loaded_pilot_name if loaded_pilot_name != "" else "Pilot", player_ship_id, credits]
+
+func _show_mission_info() -> void:
+	if active_missions.is_empty():
+		status_line = "Mission Info: no active missions"
+		return
+	status_line = "Mission Info: " + ", ".join(active_missions)
+
+func _toggle_autopilot() -> void:
+	status_line = "Autopilot not implemented yet"
+
+func _afterburner_active() -> bool:
+	return Input.is_key_pressed(KEY_Z)
+
+func _fire_primary_weapon() -> void:
+	status_line = "Primary weapon not implemented yet"
+
+func _fire_secondary_weapon() -> void:
+	status_line = "Secondary weapon not implemented yet"
+
+func _change_secondary_weapon() -> void:
+	if landed and landing_tab == 1:
+		_sell_selected_commodity()
+		return
+	status_line = "Change secondary weapon not implemented yet"
+
 func _jump() -> void:
 	var systems: Array = universe.get("systems", [])
 	var links: Array = current_system.get("links", [])
@@ -1338,7 +1401,7 @@ func _draw_hud() -> void:
 	if not targets.is_empty():
 		target_range = pos.distance_to(targets[selected_target_index % targets.size()])
 	draw_string(font, Vector2(1024, 280), "Target: Contact %d  %.0f" % [selected_target_index + 1, target_range], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(1.0, 0.82, 0.35))
-	draw_string(font, Vector2(20, 785), "W/A/D thrust+turn  E land  L launch  T target  N/P select jump  H hyperspace  R reset  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
 
 func _draw_scanner_blips(scanner_center: Vector2, scanner_radius: float) -> void:
 	var targets := _npc_world_offsets()
@@ -1366,8 +1429,8 @@ func _draw_universe_map() -> void:
 		selected_name = str(links[selected_link_index % links.size()])
 	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
-	draw_string(font, rect.position + Vector2(690, 154), "N/P selects linked destinations", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 178), "H jumps   M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 154), "\\ selects linked destinations", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 178), "J jumps   M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
 	var bounds := _system_coordinate_bounds(systems)
 	var point_by_name: Dictionary = {}
 	for system in systems:

@@ -179,6 +179,7 @@ class NativeEvModelTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
         self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         checklist = (root / 'docs' / 'checklists' / 'ev-classic-behavior-baseline-checklist.md').read_text()
         for symbol in [
             '--tv-movement-log',
@@ -191,6 +192,8 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('movementLog=deterministic', self_test_script)
+        self.assertIn('[switch]$MovementLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-movement-log', run_script)
         self.assertIn('Deterministic Godot movement log', checklist)
         self.assertIn('Status: `terminal-velocity-observed`', checklist)
 
@@ -557,6 +560,24 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(by_ordinal[5]['shipResourceId'], 133)
         self.assertEqual(by_ordinal[5]['assetDir'], 'assets/ships/ev_classic/frigate')
         self.assertEqual(by_ordinal[0]['shipyardPictResourceId'], 5000)
+        self.assertEqual(by_ordinal[0]['sourceDataPhysicsFields'], {
+            'cargoSpace': 20,
+            'shields': 180,
+            'acceleration': 979,
+            'maxSpeed': 413,
+            'turning': 60,
+            'fuel': 400,
+            'freeMass': 15,
+            'armor': 100,
+            'shieldRecharge': 42,
+        })
+        self.assertEqual(by_ordinal[0]['acceleration'], 979)
+        self.assertEqual(by_ordinal[0]['maxSpeed'], 413)
+        self.assertEqual(by_ordinal[0]['turning'], 60)
+        self.assertEqual(by_ordinal[0]['physicsSource'], 'EV Data.rez ship-like record words 0-8 via EVNEW CShipResource field order')
+        self.assertEqual(by_ordinal[1]['sourceDataPhysicsFields']['acceleration'], 428)
+        self.assertEqual(by_ordinal[1]['sourceDataPhysicsFields']['maxSpeed'], 188)
+        self.assertEqual(by_ordinal[1]['sourceDataPhysicsFields']['turning'], 30)
         self.assertEqual(by_ordinal[0]['shipyardPictAssetFile'], 'assets/graphics/pict/5000_shipyard/image.png')
         self.assertTrue((Path('native_ev') / by_ordinal[0]['shipyardPictAssetFile']).exists())
         self.assertEqual(by_ordinal[15]['shipyardPictResourceId'], 5015)
@@ -1156,6 +1177,28 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_defaults_to_observed_ev_classic_keybindings(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'KEY_L: _ev_land_or_launch()',
+            'KEY_J: _jump()',
+            'KEY_H: _toggle_hyper_mode()',
+            'KEY_BACKSLASH: _cycle_link(1)',
+            'KEY_N: _cycle_target(1)',
+            'KEY_R: _select_closest_target()',
+            'KEY_P: _show_player_info()',
+            'KEY_I: _show_mission_info()',
+            'KEY_Z: _afterburner_active()',
+            'KEY_TAB: _fire_primary_weapon()',
+            'KEY_SPACE: _fire_secondary_weapon()',
+            'KEY_S: _change_secondary_weapon()',
+            'KEY_A: _toggle_autopilot()',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertNotIn('KEY_H:\n\t\t\t\t_jump()', main_script)
+        self.assertNotIn('KEY_R:\n\t\t\t\tpos = PLAYER_START', main_script)
+
     def test_godot_universe_map_screen_is_actionable(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
@@ -1182,6 +1225,11 @@ class NativeEvModelTests(unittest.TestCase):
             'cell-center registration',
             'player_facing_index',
             'turn_cell_progress',
+            '_ship_acceleration()',
+            '_ship_max_speed()',
+            '_ship_turn_cells_per_second()',
+            'source-backed EV Data.rez ship physics',
+            'vel = vel.limit_length(_ship_max_speed())',
             '_visible_facing_index(player_facing_index)',
             '_draw_center_registered_ship_cell',
             'center - size * 0.5',

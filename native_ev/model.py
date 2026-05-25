@@ -384,6 +384,27 @@ def _role_for_ship_name(name):
     return 'npc-fast'
 
 
+def _ev_classic_ship_physics_fields(record):
+    """Decode source-backed EV Classic ship physics primitives.
+
+    Field order comes from EVNEW's CShipResource::Load/Save for the 1860-byte
+    ship resource record: words 0-8 are Cargo, Shields, Acceleration, Max
+    Speed, Turning, Fuel, Free Mass, Armor, and Shield Recharge.
+    """
+    fields = _fields_by_index(record)
+    return {
+        'cargoSpace': int(fields.get(0, 0)),
+        'shields': int(fields.get(1, 0)),
+        'acceleration': int(fields.get(2, 0)),
+        'maxSpeed': int(fields.get(3, 0)),
+        'turning': int(fields.get(4, 0)),
+        'fuel': int(fields.get(5, 0)),
+        'freeMass': int(fields.get(6, 0)),
+        'armor': int(fields.get(7, 0)),
+        'shieldRecharge': int(fields.get(8, 0)),
+    }
+
+
 def _ship_combat_stats(ship_name, width, height):
     area = int(width or 0) * int(height or 0)
     if 'shuttle' in ship_name.lower():
@@ -430,6 +451,9 @@ def ev_classic_data_ship_manifest(structures_path=SOURCED_EV_STRUCTURES_PATH, gr
             ship_id = f"{ship_id}_{record['ordinal']}"
         used_ids.add(ship_id)
         stats = _ship_combat_stats(name, sprite['width'], sprite['height'])
+        physics = _ev_classic_ship_physics_fields(record)
+        stats['cargoSpace'] = physics['cargoSpace']
+        stats['hull'] = physics['armor']
         ship = {
             'id': ship_id,
             'name': name,
@@ -443,6 +467,15 @@ def ev_classic_data_ship_manifest(structures_path=SOURCED_EV_STRUCTURES_PATH, gr
             'width': sprite['width'],
             'height': sprite['height'],
             'role': _role_for_ship_name(name),
+            'sourceDataPhysicsFields': physics,
+            'physicsSource': 'EV Data.rez ship-like record words 0-8 via EVNEW CShipResource field order',
+            'acceleration': physics['acceleration'],
+            'maxSpeed': physics['maxSpeed'],
+            'turning': physics['turning'],
+            'shields': physics['shields'],
+            'shieldRecharge': physics['shieldRecharge'],
+            'fuel': physics['fuel'],
+            'freeMass': physics['freeMass'],
             **stats,
         }
         shipyard_pict = shipyard_picts_by_ordinal.get(record['ordinal'])
