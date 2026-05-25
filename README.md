@@ -64,9 +64,11 @@ Symbolic gameplay scenario/eval harness from WSL:
 
 ```bash
 python3 tools/run_gameplay_scenarios.py --pretty
+python3 tools/run_gameplay_scenarios.py --all --pretty
+python3 tools/run_gameplay_scenarios.py --list
 ```
 
-The first built-in scenario is `levo_merchant_first_hop`: start at Levo, buy one 10-ton commodity lot, accept a safe cargo job, jump to Sol, land at Earth, and complete the delivery. This is a Terminal Velocity automation scaffold, not an EV Classic fidelity claim.
+The built-in scenario curriculum currently includes `levo_merchant_first_hop`, `mission_runner_first_delivery`, `route_planner_refuel_loop`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`. These are Terminal Velocity automation scaffolds, not EV Classic fidelity claims.
 
 ## Controls
 

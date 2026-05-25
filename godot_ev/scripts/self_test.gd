@@ -8,6 +8,7 @@ func _initialize() -> void:
 	var universe: Dictionary = _json(root + "/native_ev/data/universe.json")
 	var ships: Dictionary = _json(root + "/native_ev/data/ships.json")
 	var sounds: Dictionary = _json(root + "/native_ev/data/sounds.json")
+	var gameplay_curriculum: Dictionary = _json(root + "/native_ev/data/gameplay_curriculum.json")
 	var systems: Array = universe.get("systems", [])
 	var ship_defs: Array = ships.get("ships", [])
 	if systems.is_empty():
@@ -19,6 +20,7 @@ func _initialize() -> void:
 		quit(1)
 		return
 	var loaded_sounds := _verify_sound_assets(root, sounds)
+	var gameplay_scenarios := _verify_gameplay_curriculum(gameplay_curriculum)
 	var loaded_picts := _verify_shipyard_picts(root, ship_defs)
 	var prefs_screenshot := await _write_prefs_screenshot_artifact()
 	var player_check_id := "argosy"
@@ -41,7 +43,7 @@ func _initialize() -> void:
 		printerr("GODOT SELFTEST FAIL %s frames=%d" % [player_check_id, frame_ok])
 		quit(1)
 		return
-	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d pictsLoaded=%d prefScreen=original-ev-classic-observed prefsScreenshot=%s strictPlay=off-by-default movementLog=deterministic data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, loaded_picts, prefs_screenshot])
+	print("GODOT SELFTEST OK systems=%d ships=%d %sFrames=%d soundsLoaded=%d gameplayScenarios=%d pictsLoaded=%d prefScreen=original-ev-classic-observed prefsScreenshot=%s strictPlay=off-by-default movementLog=deterministic data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, gameplay_scenarios, loaded_picts, prefs_screenshot])
 	quit(0)
 
 func _write_prefs_screenshot_artifact() -> String:
@@ -96,6 +98,32 @@ func _write_headless_prefs_contract_artifact() -> String:
 		quit(1)
 		return ""
 	return ProjectSettings.globalize_path(PREFS_SCREENSHOT_PATH)
+
+func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
+	var scenario_order: Array = curriculum.get("scenarioOrder", [])
+	var scenarios: Dictionary = curriculum.get("scenarios", {})
+	var required := [
+		"levo_merchant_first_hop",
+		"mission_runner_first_delivery",
+		"route_planner_refuel_loop",
+		"blocked_reason_curriculum",
+		"disposable_combat_placeholder",
+	]
+	if scenario_order != required:
+		printerr("GODOT SELFTEST FAIL gameplay scenario order")
+		quit(1)
+		return 0
+	for scenario_name in required:
+		if not scenarios.has(scenario_name):
+			printerr("GODOT SELFTEST FAIL gameplay scenario missing " + scenario_name)
+			quit(1)
+			return 0
+		var summary: Dictionary = scenarios.get(scenario_name, {})
+		if str(summary.get("purpose", "")) == "" or str(summary.get("surface", "")) == "":
+			printerr("GODOT SELFTEST FAIL gameplay scenario summary incomplete " + scenario_name)
+			quit(1)
+			return 0
+	return scenario_order.size()
 
 func _verify_shipyard_picts(root: String, ship_defs: Array) -> int:
 	var loaded := 0

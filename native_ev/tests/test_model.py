@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import re
 import struct
 import unittest
@@ -141,6 +142,21 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('strictPlay=off-by-default', text)
         self.assertIn('user://selftest/title_prefs.png', text)
         self.assertIn('_write_prefs_screenshot_artifact', text)
+
+    def test_godot_self_test_covers_gameplay_scenario_curriculum(self):
+        from native_ev.scenario_eval import available_scenarios
+
+        root = Path(__file__).resolve().parents[2]
+        manifest_path = root / 'native_ev' / 'data' / 'gameplay_curriculum.json'
+        manifest = json.loads(manifest_path.read_text())
+        self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
+
+        self.assertEqual(manifest['scenarioOrder'], available_scenarios())
+        self.assertIn('native_ev/data/gameplay_curriculum.json', self_test_script)
+        self.assertIn('gameplayScenarios=%d', self_test_script)
+        self.assertIn('_verify_gameplay_curriculum', self_test_script)
+        self.assertIn('blocked_reason_curriculum', manifest['scenarioOrder'])
+        self.assertIn('disposable_combat_placeholder', manifest['scenarioOrder'])
 
     def test_godot_new_pilot_modal_matches_original_ev_strict_play_observation(self):
         source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd'

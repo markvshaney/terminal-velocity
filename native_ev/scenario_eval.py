@@ -18,6 +18,18 @@ STARTING_CARGO_CAPACITY = 20
 STARTING_FUEL = 6
 START_SYSTEM = 'Levo'
 START_BODY = 'Levo Spaceport'
+SCENARIO_CURRICULUM = [
+    'levo_merchant_first_hop',
+    'mission_runner_first_delivery',
+    'route_planner_refuel_loop',
+    'blocked_reason_curriculum',
+    'disposable_combat_placeholder',
+]
+
+
+def available_scenarios() -> list[str]:
+    """Return the symbolic gameplay curriculum in intended execution order."""
+    return list(SCENARIO_CURRICULUM)
 
 
 def _system(universe: dict[str, Any], name: str) -> dict[str, Any]:
@@ -49,6 +61,7 @@ def initial_gameplay_state() -> dict[str, Any]:
         'activeJobs': [],
         'completedJobs': [],
         'fuel': STARTING_FUEL,
+        'combatExecuted': False,
         'strictPlay': False,
         'knownSystems': known_systems,
     }
@@ -106,6 +119,7 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         'destinationSystem': destination_system,
         'destinationBody': destination_body,
         'tons': tons,
+        'reservedCargoTons': tons,
         'pay': pay,
         'risk': action.get('risk', 'safe'),
     }
@@ -143,6 +157,45 @@ def _land(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, A
     return True
 
 
+def _depart(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    previous_body = state['landedBody']
+    state['landedBody'] = None
+    trace.append({'type': 'depart', 'system': state['currentSystem'], 'body': previous_body})
+    return True
+
+
+def _refuel(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    if state['landedBody'] is None:
+        trace.append({'type': 'blocked_refuel', 'reason': 'not landed', 'system': state['currentSystem']})
+        return False
+    state['fuel'] = STARTING_FUEL
+    trace.append({'type': 'refuel', 'system': state['currentSystem'], 'body': state['landedBody'], 'fuelAfter': state['fuel']})
+    return True
+
+
+def _set_state(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    for key, value in action.get('values', {}).items():
+        state[key] = value
+    trace.append({'type': 'state_adjustment', 'values': deepcopy(action.get('values', {}))})
+    return True
+
+
+def _combat_placeholder_guardrail(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    state['combatExecuted'] = False
+    trace.append({
+        'type': 'combat_placeholder_guardrail',
+        'purpose': 'define disposable non-strict combat/piracy scaffold without executing destructive tests',
+        'stopConditions': [
+            'Strict Play enabled',
+            'low shields or hull',
+            'mission/trade pilot contamination',
+            'unclear save state',
+            'unverified input delivery',
+        ],
+    })
+    return True
+
+
 def _complete_cargo_jobs(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     remaining = []
     completed_any = False
@@ -170,6 +223,46 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': 'Earth'},
             {'type': 'complete_cargo_jobs'},
         ]
+    if name == 'mission_runner_first_delivery':
+        return [
+            {
+                'type': 'accept_cargo_job',
+                'id': 'levo_landfall_courier',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Landfall',
+                'tons': 8,
+                'pay': 900,
+                'risk': 'safe',
+            },
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Landfall'},
+            {'type': 'complete_cargo_jobs'},
+        ]
+    if name == 'route_planner_refuel_loop':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'jump', 'destinationSystem': 'Levo', 'expectBlocked': True},
+            {'type': 'refuel'},
+        ]
+    if name == 'blocked_reason_curriculum':
+        return [
+            {'type': 'depart'},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'expectBlocked': True},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'set_state', 'values': {'cargoUsed': 15}},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'cargoUsed': 0, 'credits': 0}},
+            {'type': 'buy_commodity_lot', 'commodity': 'medical', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'credits': STARTING_CREDITS}},
+            {'type': 'jump', 'destinationSystem': 'Antares', 'expectBlocked': True},
+            {'type': 'complete_cargo_jobs', 'expectBlocked': True},
+        ]
+    if name == 'disposable_combat_placeholder':
+        return [
+            {'type': 'combat_placeholder_guardrail'},
+        ]
     raise ValueError(f'unknown scenario {name}')
 
 
@@ -183,6 +276,34 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'accepted_safe_cargo_job': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('risk') == 'safe' for event in trace) else 'failed',
             'reached_neighbor_and_landed': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' else 'failed',
             'completed_safe_cargo_job': 'passed' if 'complete_cargo_job' in event_types and not state.get('activeJobs') else 'failed',
+        })
+    elif name == 'mission_runner_first_delivery':
+        checks.update({
+            'accepted_reserved_cargo_job': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('reservedCargoTons') == 8 for event in trace) else 'failed',
+            'reached_destination': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Landfall' else 'failed',
+            'completed_delivery': 'passed' if state.get('completedJobs') == ['levo_landfall_courier'] and not state.get('activeJobs') else 'failed',
+            'released_reserved_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
+        })
+    elif name == 'route_planner_refuel_loop':
+        checks.update({
+            'spent_fuel_on_jump': 'passed' if any(event.get('type') == 'jump' and event.get('fuelAfter') == STARTING_FUEL - 1 for event in trace) else 'failed',
+            'blocked_empty_fuel_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
+            'refueled_while_landed': 'passed' if any(event.get('type') == 'refuel' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
+        })
+    elif name == 'blocked_reason_curriculum':
+        checks.update({
+            'recorded_not_landed': 'passed' if any(event.get('type') == 'blocked_buy_commodity_lot' and event.get('reason') == 'not landed' for event in trace) else 'failed',
+            'recorded_insufficient_cargo': 'passed' if any(event.get('type') == 'blocked_buy_commodity_lot' and event.get('reason') == 'insufficient cargo space' for event in trace) else 'failed',
+            'recorded_insufficient_credits': 'passed' if any(event.get('type') == 'blocked_buy_commodity_lot' and event.get('reason') == 'insufficient credits' for event in trace) else 'failed',
+            'recorded_invalid_destination': 'passed' if any(event.get('type') == 'blocked_jump' and 'not linked' in event.get('reason', '') for event in trace) else 'failed',
+            'recorded_no_deliverable_job': 'passed' if any(event.get('type') == 'blocked_complete_cargo_job' and event.get('reason') == 'no deliverable job at current landing' for event in trace) else 'failed',
+        })
+    elif name == 'disposable_combat_placeholder':
+        stop_conditions = next((event.get('stopConditions', []) for event in trace if event.get('type') == 'combat_placeholder_guardrail'), [])
+        checks.update({
+            'strict_play_off': 'passed' if state.get('strictPlay') is False else 'failed',
+            'combat_not_executed': 'passed' if state.get('combatExecuted') is False else 'failed',
+            'stop_conditions_recorded': 'passed' if {'Strict Play enabled', 'low shields or hull', 'unclear save state'}.issubset(set(stop_conditions)) else 'failed',
         })
     return checks
 
@@ -203,7 +324,11 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'accept_cargo_job': _accept_cargo_job,
         'jump': _jump,
         'land': _land,
+        'depart': _depart,
+        'refuel': _refuel,
+        'set_state': _set_state,
         'complete_cargo_jobs': _complete_cargo_jobs,
+        'combat_placeholder_guardrail': _combat_placeholder_guardrail,
     }
     all_actions_valid = True
     for action in actions if actions is not None else default_actions_for_scenario(name):
@@ -217,7 +342,10 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
             trace.append({'type': 'blocked_action', 'reason': f'unknown action {action_type}'})
             all_actions_valid = False
             break
-        if not handler(state, action, trace):
+        action_ok = handler(state, action, trace)
+        if not action_ok:
+            if action.get('expectBlocked') is True:
+                continue
             all_actions_valid = False
             break
     checks = _scenario_checks(name, state, trace, all_actions_valid)
@@ -231,6 +359,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'metrics': {
             'commodityLotSize': COMMODITY_LOT_SIZE,
             'jumps': sum(1 for event in trace if event.get('type') == 'jump'),
+            'jobsCompleted': len(state.get('completedJobs', [])),
             'events': len(trace),
             'creditsDelta': state['credits'] - STARTING_CREDITS,
         },

@@ -180,13 +180,13 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Fidelity boundary: learning aids may explain Terminal Velocity behavior directly; do not present unverified EV Classic facts as canonical.
 
 - [x] Automated gameplay learning harness and skill curriculum
-  - Status: `implemented-initial`
+  - Status: `implemented-extended`
   - Source: `docs/research/ev-automated-gameplay-learning-synthesis.md`; `docs/research/ev-gameplay-autoresearch-results.jsonl`; source-grounded EV-family mission data from `/tmp/ev-source-deep-dive-20260521/text/`; Tea Leaves early EV merchant-loop guide; LP Archive EV Nova role/playstyle framing; prior Basilisk stabilization notes.
   - Scope: build a symbolic/LLM-controller gameplay loop for Terminal Velocity before attempting long unattended Basilisk play. Minimum pieces: structured game-state observer, bounded action API, reusable skill library, scenario/evaluator ladder, action/evidence trace logging, and separate non-strict pilot/scenario profiles for merchant, route-planner, mission-runner, outfitter, and disposable combat.
   - Initial curriculum: screen classifier; Levo commodity 10-ton lot; safe passenger/cargo mission; route to known neighbor and land/refuel; mission completion; opportunistic trade with mission-reserved cargo; mission-surface archive; map objective arrows; pirate avoidance; blocked-reason recognition for combat/cargo/legal/ship gates.
-  - Implementation: `native_ev/scenario_eval.py` now provides a structured state/action/evaluator harness and `tools/run_gameplay_scenarios.py` runs the built-in `levo_merchant_first_hop` scenario.
-  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval -v`; `python3 tools/run_gameplay_scenarios.py --pretty`; full `python3 -m unittest discover -s native_ev/tests -v` passed after implementation.
-  - Next action: extend the harness with separate mission-runner, route-planner/refuel, blocked-reason, and disposable-combat scenarios; then wire selected scenario summaries into Godot self-test/autopilot once the pure harness stabilizes.
+  - Implementation: `native_ev/scenario_eval.py` now provides a structured state/action/evaluator harness and the scenario curriculum `levo_merchant_first_hop`, `mission_runner_first_delivery`, `route_planner_refuel_loop`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`; `tools/run_gameplay_scenarios.py --all` runs the full curriculum. `native_ev/data/gameplay_curriculum.json` exposes the curriculum to Godot self-test, which reports `gameplayScenarios=5`.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval -v`; `python3 -m unittest discover -s native_ev/tests -v`; `python3 tools/run_gameplay_scenarios.py --all --pretty`; Windows Godot `RunGodot.ps1 -SelfTest` passed with `gameplayScenarios=5`.
+  - Next action: add richer mission-surface/archive, map objective-arrow, pirate-avoidance, and outfitter/ship-ladder scenarios; then decide which scenario outcomes should become in-game tutorial/hint surfaces.
   - Fidelity boundary: use this as an automation/design scaffold. Original EV Classic fidelity claims still require original runtime, decoded Classic resources, or manual/docs confirmation; long unattended Basilisk play, Strict Play, and piracy/combat on reusable pilots remain gated.
 
 ## Deferred / guardrail items

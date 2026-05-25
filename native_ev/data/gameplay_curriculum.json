@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "method": "terminal-velocity-symbolic-gameplay-curriculum-v1",
+  "source": "native_ev/scenario_eval.py",
+  "fidelityBoundary": "Terminal Velocity automation/design scaffold; not an EV Classic fidelity claim without original runtime, decoded Classic resources, or manual/docs confirmation.",
+  "scenarioOrder": [
+    "levo_merchant_first_hop",
+    "mission_runner_first_delivery",
+    "route_planner_refuel_loop",
+    "blocked_reason_curriculum",
+    "disposable_combat_placeholder"
+  ],
+  "scenarios": {
+    "levo_merchant_first_hop": {
+      "purpose": "Merchant first-hop loop: buy a Levo commodity lot, accept a safe cargo job, jump, land, and complete delivery.",
+      "surface": "merchant+mission hybrid"
+    },
+    "mission_runner_first_delivery": {
+      "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",
+      "surface": "mission runner"
+    },
+    "route_planner_refuel_loop": {
+      "purpose": "Route-planner loop: spend fuel on a jump, detect insufficient fuel as a blocker, and refuel while landed.",
+      "surface": "route planning/refuel"
+    },
+    "blocked_reason_curriculum": {
+      "purpose": "Safe blocker recognition: not landed, insufficient cargo, insufficient credits, invalid destination, and no deliverable job.",
+      "surface": "controller feedback"
+    },
+    "disposable_combat_placeholder": {
+      "purpose": "Combat/piracy guardrail scaffold only; records stop conditions without executing destructive tests.",
+      "surface": "disposable non-strict combat planning"
+    }
+  }
+}
