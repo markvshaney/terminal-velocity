@@ -159,6 +159,21 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('blocked_reason_curriculum', manifest['scenarioOrder'])
         self.assertIn('disposable_combat_placeholder', manifest['scenarioOrder'])
 
+    def test_wsl_godot_launcher_can_run_selftest_via_windows_binary(self):
+        root = Path(__file__).resolve().parents[2]
+        launcher = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            'self-test',
+            'powershell.exe',
+            'Godot_v4.6.2-stable_win64_console.exe',
+            'wslpath -w',
+            '--headless --path',
+            "--script 'res://scripts/self_test.gd'",
+            'tv-movement-log',
+            'tv-low-fuel-jump-log',
+        ]:
+            self.assertIn(symbol, launcher)
+
     def test_godot_new_pilot_modal_matches_original_ev_strict_play_observation(self):
         source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd'
         text = source.read_text()
