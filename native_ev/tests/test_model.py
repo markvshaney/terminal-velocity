@@ -266,6 +266,11 @@ class NativeEvModelTests(unittest.TestCase):
             'sourceLabel=terminal-velocity-observed',
             'oracleStatus=user_demonstrated_pending_original_trace',
             '_select_map_route_at_position(click_position)',
+            'func _map_linked_stop_at_position',
+            'func _map_hovered_link_name',
+            'Route selected: %s → %s — press J to jump',
+            'Hold Shift and click a linked system',
+            'No route from current system',
             'greenLine=true',
         ]:
             self.assertIn(symbol, main_script)

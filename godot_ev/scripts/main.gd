@@ -603,7 +603,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_title_input(event)
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		if map_visible and event.shift_pressed and _select_map_route_at_position(event.position):
+		if map_visible and not event.shift_pressed and not event.ctrl_pressed:
+			status_line = "Hold Shift and click a linked system"
+			get_viewport().set_input_as_handled()
+			return
+		if map_visible and (event.shift_pressed or event.ctrl_pressed) and _select_map_route_at_position(event.position):
 			get_viewport().set_input_as_handled()
 			return
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -1174,24 +1178,44 @@ func _map_system_points(systems: Array) -> Dictionary:
 		points[str(system.get("name", ""))] = _system_map_point(system, bounds, plot_rect)
 	return points
 
-func _select_map_route_at_position(click_position: Vector2) -> bool:
+func _map_linked_stop_at_position(click_position: Vector2) -> int:
 	var systems: Array = universe.get("systems", [])
 	var links: Array = current_system.get("links", [])
 	if systems.is_empty() or links.is_empty():
-		return false
+		return -1
 	var point_by_name := _map_system_points(systems)
 	for i in range(links.size()):
 		var linked_name := str(links[i])
 		if not point_by_name.has(linked_name):
 			continue
 		var linked_point: Vector2 = point_by_name[linked_name]
-		if click_position.distance_to(linked_point) <= 14.0:
-			selected_link_index = i
-			status_line = "Route set: %s → %s" % [str(current_system.get("name", "?")), linked_name]
-			_play_sound("ui_click")
-			return true
+		if click_position.distance_to(linked_point) <= 18.0:
+			return i
+	return -1
+
+func _map_hovered_link_name() -> String:
+	if not map_visible or not (Input.is_key_pressed(KEY_SHIFT) or Input.is_key_pressed(KEY_CTRL)):
+		return ""
+	var hover_index := _map_linked_stop_at_position(get_viewport().get_mouse_position())
+	var links: Array = current_system.get("links", [])
+	if hover_index < 0 or hover_index >= links.size():
+		return ""
+	return str(links[hover_index])
+
+func _select_map_route_at_position(click_position: Vector2) -> bool:
+	var links: Array = current_system.get("links", [])
+	if links.is_empty():
+		status_line = "No route from current system"
+		return true
+	var hover_index := _map_linked_stop_at_position(click_position)
+	if hover_index >= 0 and hover_index < links.size():
+		var linked_name := str(links[hover_index])
+		selected_link_index = hover_index
+		status_line = "Route selected: %s → %s — press J to jump" % [str(current_system.get("name", "?")), linked_name]
+		_play_sound("ui_click")
+		return true
 	if _map_plot_rect().has_point(click_position):
-		status_line = "Shift-click a linked stop to set route"
+		status_line = "Hold Shift and click a linked system"
 		return true
 	return false
 
@@ -1673,10 +1697,13 @@ func _draw_universe_map() -> void:
 		selected_name = str(links[selected_link_index % links.size()])
 	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
-	draw_string(font, rect.position + Vector2(690, 154), "\\ selects linked destinations", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 178), "Shift-click a linked stop to set route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 202), "J jumps   M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 154), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 178), "Shift-click linked stop: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 202), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
 	var point_by_name := _map_system_points(systems)
+	var hovered_name := _map_hovered_link_name()
+	if hovered_name != "":
+		draw_string(font, rect.position + Vector2(690, 226), "Release click to route: " + hovered_name, HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.45, 1.0, 0.65))
 	for system in systems:
 		var map_point: Vector2 = point_by_name.get(str(system.get("name", "")), plot_rect.position)
 		for linked_name in system.get("links", []):
@@ -1695,11 +1722,15 @@ func _draw_universe_map() -> void:
 		var linked := links.has(system_name)
 		var is_current := system_name == str(current_system.get("name", ""))
 		var is_selected := system_name == selected_name
+		var is_hovered := system_name == hovered_name
 		var color := Color(0.46, 0.72, 1.0)
 		var radius := 4.0
 		if linked:
 			color = Color(0.66, 0.95, 1.0)
 			radius = 5.0
+		if is_hovered:
+			color = Color(0.55, 1.0, 0.70)
+			radius = 8.0
 		if is_selected:
 			color = Color(0.30, 1.0, 0.55)
 			radius = 7.0
