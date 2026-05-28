@@ -156,17 +156,39 @@ For every behavior row, record:
   - Status: `partial`; takeoff/landing text is observed, but exact timing and transition animation/sound still need capture.
 
 - [ ] Hyperspace availability and destination selection
-  - Evidence label: `original-runtime-observed` for Levo UI/control behavior plus `decoded-resource-backed` for map links where decoded.
-  - Primary evidence: preferences capture `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`, local-only runtime capture `C:\Games\BasiliskII\ev-gameplay-learning-hyperselect-rigel-20260520.png`, and human-takeover landed-state capture `C:\Games\BasiliskII\ev-kathoon-landed-user-demonstrated-2026-05-20.png`.
-  - Observed original EV Classic behavior: nav keys are `H` for Hyper Mode, Backslash for Hyper Select, and `J` for Jump. In Hyper Mode from Levo, Backslash selected `Rigel`; jumping too near Levo failed with `Can't initiate hyperspace jump - not yet far enough away from system center.` User demonstrated successful hyperspace to Kathoon and landing; the resulting landed panel at Maxwell's Purchase is screenshot-confirmed with `Free: 2`, `Special: Multiple`, and `Credits: 10,000`.
-  - Terminal Velocity current behavior: uses `links` from `native_ev/data/universe.json`; source-backed EV Classic default keys are now the primary Godot controls for this loop (`H` Hyper Mode, Backslash Hyper Select, `J` Jump, `L` land/launch), with former scaffold reset/hyperspace shortcuts removed from those keys.
-  - Status: partial; destination selection and near-center failure are screenshot-observed, and successful travel to Kathoon is user-demonstrated with a screenshot-confirmed landed state. Exact route-selection/jump inputs and hyperspace timing still need step-by-step capture.
+  - Evidence label: `original-runtime-observed` for Levo UI/control behavior plus `decoded-resource-backed` for map links where decoded; `terminal-velocity-observed` for current deterministic Godot travel log.
+  - Primary evidence: preferences capture `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`, local-only runtime capture `C:\Games\BasiliskII\ev-gameplay-learning-hyperselect-rigel-20260520.png`, human-takeover landed-state capture `C:\Games\BasiliskII\ev-kathoon-landed-user-demonstrated-2026-05-20.png`, and `RunGodot.ps1 -TravelEventLog` output.
+  - Observed original EV Classic behavior: nav keys are `H` for Hyper Mode, Backslash for Hyper Select, and `J` for Jump. In Hyper Mode from Levo, Backslash selected `Rigel`; jumping too near Levo failed with `Can't initiate hyperspace jump - not yet far enough away from system center.` User demonstrated that holding Shift and clicking the next available map stop draws a green route line from the current system to that destination. User demonstrated successful hyperspace to Kathoon and landing; the resulting landed panel at Maxwell's Purchase is screenshot-confirmed with `Free: 2`, `Special: Multiple`, and `Credits: 10,000`.
+  - Terminal Velocity current behavior: uses `links` from `native_ev/data/universe.json`; source-backed EV Classic default keys are now the primary Godot controls for this loop (`H` Hyper Mode, Backslash Hyper Select, `J` Jump, `L` land/launch), with former scaffold reset/hyperspace shortcuts removed from those keys. `godot_ev/scripts/main.gd` supports Shift-clicking a linked stop on the galaxy map to set the selected route and draws the active current-to-destination route as a bright green line. It also exposes a deterministic `--tv-travel-event-log` / `RunGodot.ps1 -TravelEventLog` path that prints start, land request, leave, hyper mode, hyper select, and jump events for comparison.
+  - Status: partial but instrumented; destination selection, Shift-click route-line selection, and near-center failure are observed/user-demonstrated, and successful travel to Kathoon is user-demonstrated with a screenshot-confirmed landed state. Exact route-selection timing and hyperspace animation/sound still need step-by-step original-runtime capture.
 
 - [ ] Hyperspace timing / animation / sound
   - Evidence label: `unknown`
   - Primary evidence needed: original runtime capture.
   - Terminal Velocity current behavior: needs deterministic event log and sound binding check.
   - Status: `unknown`
+
+### Spaceport / services UI exploration
+
+- [ ] Full landed button/option walkthrough by port
+  - Evidence label: `unknown` until captured in original EV Classic; `terminal-velocity-observed` for current deterministic Godot landed-service matrix.
+  - Primary evidence needed: original-runtime screenshots and notes for every visible landed action, starting with Levo and nearby early-game ports. Current TV comparison surface: `RunGodot.ps1 -LandedUiMatrix` / `--tv-landed-ui-matrix` prints each body’s visible landed buttons, services, counts, mutating actions, and `observationGuard=before_after_capture_required`.
+  - Scope: `Spaceport Bar`, `Mission Computer`, `Commodity Exchange`, `Leave`, and any port-specific services such as outfitter/shipyard/gambling where exposed.
+  - Terminal Velocity current behavior: landed button labels are centralized in `_ev_classic_landing_button_labels(body)` and reused by the draw path plus the matrix log.
+  - Status: `instrumented`; original EV click-through still pending and must use before/after capture plus mutation-risk notes, not random clicking.
+
+- [ ] Outfitter / ship equipment walkthrough
+  - Evidence label: `unknown` until captured in original EV Classic.
+  - Primary evidence needed: original-runtime capture at a port with an outfitter or equivalent equipment UI.
+  - Scope: exact starting primary weapon/outfit visibility, buy/sell affordances, disabled states, prices, mass/cargo effects, and confirmation/cancel behavior.
+  - Terminal Velocity current behavior: starting-equipment implementation remains partial until this is source-backed.
+  - Status: `queued`; use non-strict/disposable pilot state and avoid irreversible purchases unless credit/inventory deltas are intentionally being measured.
+
+- [ ] Spaceport Bar / gambling walkthrough
+  - Evidence label: `unknown` until captured in original EV Classic.
+  - Primary evidence needed: original-runtime captures of bar text/options, gossip/job offers, gambling entry points, bet controls, result messages, and credit deltas.
+  - Terminal Velocity current behavior: not yet compared.
+  - Status: `queued`; gambling is allowed only on disposable/non-strict pilot state or immediately reversible saved copies because it mutates credits.
 
 ### Basic combat
 
@@ -196,12 +218,18 @@ For every behavior row, record:
 
 ## Instrumentation needed in Terminal Velocity
 
-- [x] Deterministic Godot movement log: selected ship, tick count, facing index, angle, velocity, and position.
-  - Status: `terminal-velocity-observed` 2026-05-19 via `--tv-movement-log` in `godot_ev/scripts/main.gd`; `godot_ev/windows/RunGodot.ps1 -MovementLog` runs it headlessly for repeatable comparison work.
-- [ ] Deterministic turn/thrust scenarios: after N ticks of left/right/thrust/no-input.
-- [ ] Event log for landing/takeoff/hyperspace transitions.
+- [x] Deterministic Godot movement log: selected ship, tick count, facing index, angle, velocity, position, and selected ship physics fields.
+  - Status: `terminal-velocity-observed` 2026-05-25 via `--tv-movement-log` in `godot_ev/scripts/main.gd`; `godot_ev/windows/RunGodot.ps1 -MovementLog` runs it headlessly for repeatable comparison work.
+  - Scenarios: `right_turn` 12 ticks, `left_turn` 12 ticks, `thrust` 30 ticks, `coast` 30 ticks, and `thrust_right_turn` 30 ticks.
+  - Current Shuttlecraft output shape includes `tickCount`, `facingIndex`, `angle`, `velocity`, `position`, `acceleration`, `maxSpeed`, `turning`, and `turnCellsPerSecond`.
+- [x] Deterministic turn/thrust scenarios: after N ticks of left/right/thrust/no-input.
+  - Status: `terminal-velocity-observed`; covered by `RunGodot.ps1 -MovementLog` and `native_ev.tests.test_model.NativeEvModelTests.test_godot_deterministic_movement_log_contract`.
+- [x] Event log for landing/takeoff/hyperspace transitions.
+  - Status: `terminal-velocity-observed`; `godot_ev/scripts/main.gd` supports `--tv-travel-event-log`, and `godot_ev/windows/RunGodot.ps1 -TravelEventLog` runs it headlessly.
 - [ ] Event log for target acquisition, weapon firing, projectile spawn, hit, and explosion.
 - [ ] Self-test output should include selected profile once profile loading exists: `profile=classic`.
+- [x] Landed service matrix log for non-mutating before/after planning.
+  - Status: `terminal-velocity-observed`; `--tv-landed-ui-matrix` / `RunGodot.ps1 -LandedUiMatrix` prints visible buttons/services and flags mutating actions before live original-EV click-through.
 
 ## Contamination guardrail for external adaptations
 
@@ -223,5 +251,7 @@ Primary-source verification needed: <what would confirm/refute it>
 3. Locate/provide authorized Classic Mac ROM and compatible Mac OS install/media.
 4. Finish profile descriptor work so future behavior logs are profile-addressed.
 5. Add `profile=classic` to Godot self-test output.
-6. Add deterministic movement/facing logs for Terminal Velocity.
-7. Populate this checklist only with evidence-labeled behavior claims; avoid using adaptation observations as truth.
+6. Compare `RunGodot.ps1 -TravelEventLog` against original-runtime travel captures.
+7. Run original EV landed service/button click-through with before/after captures, using the `RunGodot.ps1 -LandedUiMatrix` output as the TV comparison matrix.
+8. Add event logs for combat targeting, firing, projectile spawn, hit, and explosion.
+9. Populate this checklist only with evidence-labeled behavior claims; avoid using adaptation observations as truth.

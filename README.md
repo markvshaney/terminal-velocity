@@ -68,7 +68,7 @@ python3 tools/run_gameplay_scenarios.py --all --pretty
 python3 tools/run_gameplay_scenarios.py --list
 ```
 
-The built-in scenario curriculum currently includes `levo_merchant_first_hop`, `mission_runner_first_delivery`, `route_planner_refuel_loop`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`. These are Terminal Velocity automation scaffolds, not EV Classic fidelity claims.
+The built-in scenario curriculum currently includes `levo_merchant_first_hop`, `mission_runner_first_delivery`, `route_planner_refuel_loop`, `low_fuel_jump_recovery`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`. These are Terminal Velocity automation scaffolds, not EV Classic fidelity claims.
 
 ## Controls
 

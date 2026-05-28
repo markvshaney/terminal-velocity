@@ -19,6 +19,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'levo_merchant_first_hop',
                 'mission_runner_first_delivery',
                 'route_planner_refuel_loop',
+                'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
                 'disposable_combat_placeholder',
             ],
@@ -117,6 +118,27 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         )
         self.assertIn(
             {'type': 'refuel', 'system': 'Sol', 'body': 'Earth', 'fuelAfter': 6},
+            result['trace'],
+        )
+
+    def test_low_fuel_jump_recovery_blocks_jump_preserves_state_then_refuels(self):
+        result = run_scripted_scenario('low_fuel_jump_recovery')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['fuel'], 6)
+        self.assertEqual(result['metrics']['jumps'], 0)
+        self.assertEqual(result['checks']['started_with_empty_fuel'], 'passed')
+        self.assertEqual(result['checks']['blocked_low_fuel_jump'], 'passed')
+        self.assertEqual(result['checks']['preserved_system_after_block'], 'passed')
+        self.assertEqual(result['checks']['refueled_after_block'], 'passed')
+        self.assertIn(
+            {'type': 'blocked_jump', 'originSystem': 'Levo', 'destinationSystem': 'Sol', 'reason': 'insufficient fuel'},
+            result['trace'],
+        )
+        self.assertIn(
+            {'type': 'refuel', 'system': 'Levo', 'body': 'Levo Spaceport', 'fuelAfter': 6},
             result['trace'],
         )
 

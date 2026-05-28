@@ -155,6 +155,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('native_ev/data/gameplay_curriculum.json', self_test_script)
         self.assertIn('gameplayScenarios=%d', self_test_script)
         self.assertIn('_verify_gameplay_curriculum', self_test_script)
+        self.assertIn('low_fuel_jump_recovery', manifest['scenarioOrder'])
         self.assertIn('blocked_reason_curriculum', manifest['scenarioOrder'])
         self.assertIn('disposable_combat_placeholder', manifest['scenarioOrder'])
 
@@ -185,10 +186,20 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-movement-log',
             'func _run_deterministic_movement_log',
             'TV_MOVEMENT_LOG scenario=right_turn ticks=12 ship=',
+            'TV_MOVEMENT_LOG scenario=left_turn ticks=12 ship=',
             'TV_MOVEMENT_LOG scenario=thrust ticks=30 ship=',
+            'TV_MOVEMENT_LOG scenario=coast ticks=30 ship=',
+            'TV_MOVEMENT_LOG scenario=thrust_right_turn ticks=30 ship=',
+            'func _movement_scenarios',
+            'tickCount=',
             'facingIndex=',
+            'angle=',
             'velocity=',
             'position=',
+            'acceleration=',
+            'maxSpeed=',
+            'turning=',
+            'turnCellsPerSecond=',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('movementLog=deterministic', self_test_script)
@@ -196,6 +207,136 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-movement-log', run_script)
         self.assertIn('Deterministic Godot movement log', checklist)
         self.assertIn('Status: `terminal-velocity-observed`', checklist)
+
+    def test_godot_travel_and_landed_ui_logs_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        checklist = (root / 'docs' / 'checklists' / 'ev-classic-behavior-baseline-checklist.md').read_text()
+        for symbol in [
+            '--tv-travel-event-log',
+            '--tv-landed-ui-matrix',
+            'func _run_travel_event_log',
+            'func _run_landed_ui_matrix',
+            'TV_TRAVEL_EVENT',
+            'TV_LANDED_UI_MATRIX',
+            '"hyper_select"',
+            '"jump"',
+            'observationGuard=before_after_capture_required',
+            '_ev_classic_landing_button_labels',
+            'Spaceport Bar',
+            'Mission Computer',
+            'Commodity Exchange',
+            'Outfitter',
+            'Shipyard',
+            'Leave',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$TravelEventLog', run_script)
+        self.assertIn('[switch]$LandedUiMatrix', run_script)
+        self.assertIn('--headless --path $Project -- --tv-travel-event-log', run_script)
+        self.assertIn('--headless --path $Project -- --tv-landed-ui-matrix', run_script)
+        self.assertIn('Event log for landing/takeoff/hyperspace transitions', checklist)
+        self.assertIn('Full landed button/option walkthrough by port', checklist)
+
+    def test_godot_map_route_autoresearch_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-map-route-log',
+            'func _run_map_route_log',
+            'TV_MAP_ROUTE_EVENT',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=user_demonstrated_pending_original_trace',
+            '_select_map_route_at_position(click_position)',
+            'greenLine=true',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MapRouteLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-map-route-log', run_script)
+        self.assertIn('Basilisk source-oracle lane', plan)
+        self.assertIn('Godot fast-eval lane', plan)
+        self.assertIn('Bridge gate', plan)
+
+    def test_godot_route_jump_autoresearch_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-route-jump-log',
+            'func _run_route_jump_log',
+            'TV_ROUTE_JUMP_EVENT',
+            '_select_first_linked_map_route()',
+            '_jump()',
+            'jumpSucceeded=true',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=user_demonstrated_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$RouteJumpLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-route-jump-log', run_script)
+        self.assertIn('Route-jump scenario contract', plan)
+        self.assertIn('select route → jump', plan)
+
+    def test_godot_route_jump_land_refuel_autoresearch_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-route-land-refuel-log',
+            'func _run_route_land_refuel_log',
+            'TV_ROUTE_LAND_REFUEL_EVENT',
+            '_select_first_linked_map_route()',
+            '_jump()',
+            '_try_land()',
+            'landingSucceeded=true',
+            'refuelAvailable=true',
+            'travelLoopComplete=true',
+            'var fuel_before_jump := player_fuel',
+            'var fuel_after_jump := player_fuel',
+            'var fuel_before_refuel := player_fuel',
+            'var fuel_after_refuel := player_fuel',
+            '_jump_fuel_cost()',
+            '_refuel_current_ship()',
+            'fuelBeforeJump=%d fuelAfterJump=%d fuelBeforeRefuel=%d fuelAfterRefuel=%d fuelMax=%d',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=user_demonstrated_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$RouteLandRefuelLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-route-land-refuel-log', run_script)
+        self.assertIn('Route-land-refuel scenario contract', plan)
+        self.assertIn('select route → jump → land/refuel', plan)
+
+    def test_godot_low_fuel_jump_autoresearch_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-low-fuel-jump-log',
+            'func _run_low_fuel_jump_log',
+            'TV_LOW_FUEL_JUMP_EVENT',
+            '_select_first_linked_map_route()',
+            'player_fuel = 0',
+            'var fuel_before_jump := player_fuel',
+            'var fuel_after_jump := player_fuel',
+            '_jump()',
+            'jumpBlocked=true',
+            'blockReason=insufficient_fuel',
+            'fuelBeforeJump=%d fuelAfterJump=%d fuelMax=%d',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=user_demonstrated_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$LowFuelJumpLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-low-fuel-jump-log', run_script)
+        self.assertIn('Low-fuel jump scenario contract', plan)
+        self.assertIn('blocked low-fuel jump', plan)
 
     def test_all_36_shuttle_frames_exist(self):
         paths = shuttle_frame_paths()
@@ -1215,6 +1356,21 @@ class NativeEvModelTests(unittest.TestCase):
             'system.get("y"',
             'draw_line(map_point',
             'draw_circle(map_point',
+        ]:
+            self.assertIn(symbol, main_script)
+
+    def test_godot_universe_map_shift_click_sets_green_route(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'event.shift_pressed',
+            '_select_map_route_at_position(event.position)',
+            'func _select_map_route_at_position',
+            'func _map_system_points',
+            'Shift-click a linked stop to set route',
+            'Route set:',
+            'Color(0.15, 1.0, 0.28, 0.95)',
+            'draw_line(current_point, selected_point',
         ]:
             self.assertIn(symbol, main_script)
 

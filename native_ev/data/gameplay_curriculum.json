@@ -7,6 +7,7 @@
     "levo_merchant_first_hop",
     "mission_runner_first_delivery",
     "route_planner_refuel_loop",
+    "low_fuel_jump_recovery",
     "blocked_reason_curriculum",
     "disposable_combat_placeholder"
   ],
@@ -22,6 +23,10 @@
     "route_planner_refuel_loop": {
       "purpose": "Route-planner loop: spend fuel on a jump, detect insufficient fuel as a blocker, and refuel while landed.",
       "surface": "route planning/refuel"
+    },
+    "low_fuel_jump_recovery": {
+      "purpose": "Low-fuel recovery loop: force empty fuel, block a route jump without changing systems, and refuel at the current landed port.",
+      "surface": "route planning/refuel recovery"
     },
     "blocked_reason_curriculum": {
       "purpose": "Safe blocker recognition: not landed, insufficient cargo, insufficient credits, invalid destination, and no deliverable job.",

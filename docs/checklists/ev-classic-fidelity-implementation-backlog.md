@@ -115,14 +115,22 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: capture deterministic original-runtime turning/facing sequence and compare against Terminal Velocity movement log.
 
 - [ ] Movement tuning: turn rate, acceleration curve, max speed, inertial drift
-  - Status: `needs evidence`
-  - Source: behavior baseline checklist marks these unknown.
-  - Next action: original-runtime capture or decoded ship/physics fields; compare with deterministic Godot movement logs.
+  - Status: `instrumented / needs original comparison`
+  - Source: behavior baseline checklist marks exact original acceleration/max-speed/drift integration as unknown; decoded EV Classic ship fields are wired and Terminal Velocity now emits deterministic movement scenarios.
+  - Implementation/instrumentation: `RunGodot.ps1 -MovementLog` emits `right_turn`, `left_turn`, `thrust`, `coast`, and `thrust_right_turn` scenarios with tick count, facing index, angle, velocity, position, and selected ship physics fields.
+  - Next action: capture original-runtime acceleration/max-speed/drift against the same scenario shape, then tune Terminal Velocity integration if the deterministic logs diverge.
 
 - [ ] Land/takeoff and hyperspace timing/sound/animation fidelity
-  - Status: `blocked`
+  - Status: `instrumented / needs original comparison`
   - Source: baseline checklist marks landing/hyperspace loop partial or unknown; 2026-05-20 recovery/continuation passes found post-movement key automation no longer delivered visible `J`/`I`/`M`/`A` effects from the `Hyperspace / Rigel` state, even though arrow acceleration and animation still worked. User correction: the player must be far enough from the planet/system center before hyperspace can start, so jump attempts must be iterated after sustained movement rather than abandoned after one try. Follow-up iteration used multiple longer acceleration segments plus `J` retries; no successful transit or distance-failure message was captured.
-  - Next action: before implementing timing changes or attempting more mission travel from this pilot, use a fresh non-strict session/pilot or alternate input route that first proves reliable letter-hotkey receipt (`I`, `M`, `L`, `H`, `J`, `A`) before and after movement, then capture successful hyperspace transit and compare to Godot event logs.
+  - Implementation/instrumentation: `RunGodot.ps1 -TravelEventLog` emits deterministic start, land request, leave, hyper mode, hyper select, and jump events from current Terminal Velocity behavior.
+  - Next action: use a fresh non-strict original EV session/pilot or alternate input route that first proves reliable letter-hotkey receipt (`I`, `M`, `L`, `H`, `J`, `A`) before and after movement, then capture successful hyperspace transit and compare to Godot event logs.
+
+- [ ] Landed service/button matrix: bar, mission computer, commodities, outfitter, shipyard, gambling
+  - Status: `instrumented / needs original click-through`
+  - Source: user-requested EV mirroring pass for clicking available landed buttons/options; Levo original-runtime observation only proves `Spaceport Bar`, `Mission Computer`, `Commodity Exchange`, and `Leave` are visible there, with no outfitter button.
+  - Implementation/instrumentation: `RunGodot.ps1 -LandedUiMatrix` emits each TV body’s visible landed buttons, services, item counts, mutating actions, and `observationGuard=before_after_capture_required`.
+  - Next action: run bounded original EV click-through starting at Levo and then an outfitter/shipyard/gambling-capable early port, using disposable/non-strict state and before/after captures for every mutating option.
 
 - [ ] Basic combat fidelity: fire rate, projectile speed/lifetime/damage, target selection, explosions
   - Status: `needs evidence`
@@ -184,8 +192,8 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Source: `docs/research/ev-automated-gameplay-learning-synthesis.md`; `docs/research/ev-gameplay-autoresearch-results.jsonl`; source-grounded EV-family mission data from `/tmp/ev-source-deep-dive-20260521/text/`; Tea Leaves early EV merchant-loop guide; LP Archive EV Nova role/playstyle framing; prior Basilisk stabilization notes.
   - Scope: build a symbolic/LLM-controller gameplay loop for Terminal Velocity before attempting long unattended Basilisk play. Minimum pieces: structured game-state observer, bounded action API, reusable skill library, scenario/evaluator ladder, action/evidence trace logging, and separate non-strict pilot/scenario profiles for merchant, route-planner, mission-runner, outfitter, and disposable combat.
   - Initial curriculum: screen classifier; Levo commodity 10-ton lot; safe passenger/cargo mission; route to known neighbor and land/refuel; mission completion; opportunistic trade with mission-reserved cargo; mission-surface archive; map objective arrows; pirate avoidance; blocked-reason recognition for combat/cargo/legal/ship gates.
-  - Implementation: `native_ev/scenario_eval.py` now provides a structured state/action/evaluator harness and the scenario curriculum `levo_merchant_first_hop`, `mission_runner_first_delivery`, `route_planner_refuel_loop`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`; `tools/run_gameplay_scenarios.py --all` runs the full curriculum. `native_ev/data/gameplay_curriculum.json` exposes the curriculum to Godot self-test, which reports `gameplayScenarios=5`.
-  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval -v`; `python3 -m unittest discover -s native_ev/tests -v`; `python3 tools/run_gameplay_scenarios.py --all --pretty`; Windows Godot `RunGodot.ps1 -SelfTest` passed with `gameplayScenarios=5`.
+  - Implementation: `native_ev/scenario_eval.py` now provides a structured state/action/evaluator harness and the scenario curriculum `levo_merchant_first_hop`, `mission_runner_first_delivery`, `route_planner_refuel_loop`, `low_fuel_jump_recovery`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`; `tools/run_gameplay_scenarios.py --all` runs the full curriculum. `native_ev/data/gameplay_curriculum.json` exposes the curriculum to Godot self-test, which reports `gameplayScenarios=6`.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval -v`; `python3 -m unittest discover -s native_ev/tests -v`; `python3 tools/run_gameplay_scenarios.py --all --pretty`; Windows Godot `RunGodot.ps1 -SelfTest` passed with `gameplayScenarios=6`.
   - Next action: add richer mission-surface/archive, map objective-arrow, pirate-avoidance, and outfitter/ship-ladder scenarios; then decide which scenario outcomes should become in-game tutorial/hint surfaces.
   - Fidelity boundary: use this as an automation/design scaffold. Original EV Classic fidelity claims still require original runtime, decoded Classic resources, or manual/docs confirmation; long unattended Basilisk play, Strict Play, and piracy/combat on reusable pilots remain gated.
 

@@ -19,7 +19,16 @@ const EV_CLASSIC_COMMODITY_LOT_SIZE := 10
 const PREFS_SAVE_PATH := "user://terminal_velocity_prefs.json"
 const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
 const MOVEMENT_LOG_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=right_turn ticks=12 ship="
+const MOVEMENT_LOG_LEFT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=left_turn ticks=12 ship="
 const MOVEMENT_LOG_THRUST_PREFIX := "TV_MOVEMENT_LOG scenario=thrust ticks=30 ship="
+const MOVEMENT_LOG_COAST_PREFIX := "TV_MOVEMENT_LOG scenario=coast ticks=30 ship="
+const MOVEMENT_LOG_THRUST_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=thrust_right_turn ticks=30 ship="
+const TRAVEL_EVENT_LOG_PREFIX := "TV_TRAVEL_EVENT"
+const LANDED_UI_MATRIX_PREFIX := "TV_LANDED_UI_MATRIX"
+const MAP_ROUTE_EVENT_LOG_PREFIX := "TV_MAP_ROUTE_EVENT"
+const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
+const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
+const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 
 var repo_root := ""
 var universe := {}
@@ -81,6 +90,7 @@ var owned_outfits: Dictionary = {}
 var owned_weapons: Dictionary = {}
 var player_ship_id := "shuttlecraft"
 var cargo_space := 20
+var player_fuel := 0
 
 func _ready() -> void:
 	get_window().title = "Terminal Velocity — Godot EV Frontend — cell-center registration"
@@ -99,6 +109,18 @@ func _ready() -> void:
 		call_deferred("_capture_prefs_screenshot_and_quit")
 	if OS.get_cmdline_args().has("--tv-movement-log") or OS.get_cmdline_user_args().has("--tv-movement-log"):
 		call_deferred("_run_deterministic_movement_log")
+	if OS.get_cmdline_args().has("--tv-travel-event-log") or OS.get_cmdline_user_args().has("--tv-travel-event-log"):
+		call_deferred("_run_travel_event_log")
+	if OS.get_cmdline_args().has("--tv-landed-ui-matrix") or OS.get_cmdline_user_args().has("--tv-landed-ui-matrix"):
+		call_deferred("_run_landed_ui_matrix")
+	if OS.get_cmdline_args().has("--tv-map-route-log") or OS.get_cmdline_user_args().has("--tv-map-route-log"):
+		call_deferred("_run_map_route_log")
+	if OS.get_cmdline_args().has("--tv-route-jump-log") or OS.get_cmdline_user_args().has("--tv-route-jump-log"):
+		call_deferred("_run_route_jump_log")
+	if OS.get_cmdline_args().has("--tv-route-land-refuel-log") or OS.get_cmdline_user_args().has("--tv-route-land-refuel-log"):
+		call_deferred("_run_route_land_refuel_log")
+	if OS.get_cmdline_args().has("--tv-low-fuel-jump-log") or OS.get_cmdline_user_args().has("--tv-low-fuel-jump-log"):
+		call_deferred("_run_low_fuel_jump_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -170,6 +192,7 @@ func _load_data() -> void:
 		player_ship = ships["ships"][0]
 	player_ship_id = str(player_ship.get("id", initial_player_ship_id))
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
+	player_fuel = _max_player_fuel()
 	var player_frame_set := _load_ship_frame_set(player_ship)
 	player_frames = player_frame_set["frames"]
 	player_frame_offsets = player_frame_set["offsets"]
@@ -388,24 +411,201 @@ func _reset_deterministic_motion_state() -> void:
 	angle_deg = 0.0
 	turn_cell_progress = 0.0
 
+func _movement_scenarios() -> Array[Dictionary]:
+	return [
+		{"prefix": MOVEMENT_LOG_RIGHT_TURN_PREFIX, "ticks": 12, "turn_dir": 1, "thrusting": false, "braking": false},
+		{"prefix": MOVEMENT_LOG_LEFT_TURN_PREFIX, "ticks": 12, "turn_dir": -1, "thrusting": false, "braking": false},
+		{"prefix": MOVEMENT_LOG_THRUST_PREFIX, "ticks": 30, "turn_dir": 0, "thrusting": true, "braking": false},
+		{"prefix": MOVEMENT_LOG_COAST_PREFIX, "ticks": 30, "turn_dir": 0, "thrusting": false, "braking": false},
+		{"prefix": MOVEMENT_LOG_THRUST_RIGHT_TURN_PREFIX, "ticks": 30, "turn_dir": 1, "thrusting": true, "braking": false},
+	]
+
 func _run_deterministic_movement_log() -> void:
-	_reset_deterministic_motion_state()
-	for _i in range(12):
-		_advance_motion_step(1.0 / 60.0, 1, false, false)
-	_print_movement_log(MOVEMENT_LOG_RIGHT_TURN_PREFIX, 12)
-	_reset_deterministic_motion_state()
-	for _i in range(30):
-		_advance_motion_step(1.0 / 60.0, 0, true, false)
-	_print_movement_log(MOVEMENT_LOG_THRUST_PREFIX, 30)
+	for scenario in _movement_scenarios():
+		var ticks := int(scenario["ticks"])
+		_reset_deterministic_motion_state()
+		for _i in range(ticks):
+			_advance_motion_step(1.0 / 60.0, int(scenario["turn_dir"]), bool(scenario["thrusting"]), bool(scenario["braking"]))
+		_print_movement_log(str(scenario["prefix"]), ticks)
 	get_tree().quit(0)
 
 func _print_movement_log(prefix: String, ticks: int) -> void:
-	print(prefix + "%s tickCount=%d facingIndex=%d angle=%.3f velocity=(%.3f,%.3f) position=(%.3f,%.3f)" % [player_ship_id, ticks, player_facing_index, angle_deg, vel.x, vel.y, pos.x, pos.y])
+	print(prefix + "%s tickCount=%d facingIndex=%d angle=%.3f velocity=(%.3f,%.3f) position=(%.3f,%.3f) acceleration=%.3f maxSpeed=%.3f turning=%.3f turnCellsPerSecond=%.3f" % [player_ship_id, ticks, player_facing_index, angle_deg, vel.x, vel.y, pos.x, pos.y, _ship_acceleration(), _ship_max_speed(), float(player_ship.get("turning", 60.0)), _ship_turn_cells_per_second()])
+
+func _reset_travel_state() -> void:
+	game_state = STATE_SPACE
+	landed = false
+	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
+	current_system = universe.get("systems", [])[current_system_index]
+	selected_link_index = 0
+	pos = PLAYER_START
+	vel = Vector2.ZERO
+	status_line = ""
+	landing_tab = 0
+	selected_landing_item = 0
+	player_fuel = _max_player_fuel()
+
+func _run_travel_event_log() -> void:
+	_reset_travel_state()
+	_print_travel_event("start", "system=%s landed=%s position=(%.1f,%.1f)" % [current_system.get("name", "?"), str(landed), pos.x, pos.y])
+	_try_land()
+	_print_travel_event("land_request", "system=%s landed=%s status=\"%s\"" % [current_system.get("name", "?"), str(landed), status_line])
+	_ev_land_or_launch()
+	_print_travel_event("leave", "system=%s landed=%s status=\"%s\"" % [current_system.get("name", "?"), str(landed), status_line])
+	_toggle_hyper_mode()
+	_print_travel_event("hyper_mode", "system=%s destination=%s status=\"%s\"" % [current_system.get("name", "?"), _selected_destination_name(), status_line])
+	_cycle_link(1)
+	_print_travel_event("hyper_select", "system=%s destination=%s status=\"%s\"" % [current_system.get("name", "?"), _selected_destination_name(), status_line])
+	_jump()
+	_print_travel_event("jump", "system=%s landed=%s position=(%.1f,%.1f) status=\"%s\"" % [current_system.get("name", "?"), str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _print_travel_event(event_name: String, details: String) -> void:
+	print("%s event=%s %s" % [TRAVEL_EVENT_LOG_PREFIX, event_name, details])
+
+func _selected_destination_name() -> String:
+	var links: Array = current_system.get("links", [])
+	if links.is_empty():
+		return "None"
+	return str(links[selected_link_index % links.size()])
+
+func _run_landed_ui_matrix() -> void:
+	_reset_travel_state()
+	for system_index in range(universe.get("systems", []).size()):
+		current_system_index = system_index
+		current_system = universe.get("systems", [])[system_index]
+		for body in current_system.get("bodies", []):
+			_print_landed_ui_matrix_for_body(body)
+	get_tree().quit(0)
+
+func _print_landed_ui_matrix_for_body(body: Dictionary) -> void:
+	var inventory := _station_inventory(body)
+	var buttons := _ev_classic_landing_button_labels(body)
+	var mission_count := _available_missions(body).size()
+	var commodity_count: int = economy.get("commodities", []).size() if inventory.get("services", []).has("commodities") else 0
+	var outfitter_count := _outfitter_sale_items(body).size()
+	var shipyard_count := _shipyard_listings(body).size()
+	var mutating_actions := []
+	if mission_count > 0:
+		mutating_actions.append("accept_mission")
+	if commodity_count > 0:
+		mutating_actions.append("buy_sell_commodity")
+	if outfitter_count > 0:
+		mutating_actions.append("buy_outfit_or_weapon")
+	if shipyard_count > 0:
+		mutating_actions.append("buy_ship")
+	print("%s system=%s body=%s buttons=%s services=%s missions=%d commodities=%d outfitterItems=%d shipyardListings=%d mutatingActions=%s observationGuard=before_after_capture_required" % [LANDED_UI_MATRIX_PREFIX, current_system.get("name", "?"), body.get("name", "?"), JSON.stringify(buttons), JSON.stringify(inventory.get("services", [])), mission_count, commodity_count, outfitter_count, shipyard_count, JSON.stringify(mutating_actions)])
+
+func _run_map_route_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var before_destination := _selected_destination_name()
+	var route_selected := _select_first_linked_map_route()
+	var after_destination := _selected_destination_name()
+	var green_line_active := route_selected and after_destination != "None" and after_destination != str(current_system.get("name", ""))
+	var green_line_status := "greenLine=true" if green_line_active else "greenLine=false"
+	print("%s current=%s beforeDestination=%s afterDestination=%s selected=%s %s sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), before_destination, after_destination, str(route_selected), green_line_status, status_line])
+	get_tree().quit(0)
+
+func _select_first_linked_map_route() -> bool:
+	var systems: Array = universe.get("systems", [])
+	var links: Array = current_system.get("links", [])
+	if systems.is_empty() or links.is_empty():
+		return false
+	var point_by_name := _map_system_points(systems)
+	var first_link := str(links[0])
+	if not point_by_name.has(first_link):
+		return false
+	var click_position: Vector2 = point_by_name[first_link]
+	return _select_map_route_at_position(click_position)
+
+func _run_route_jump_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var route_selected := _select_first_linked_map_route()
+	var destination := _selected_destination_name()
+	_jump()
+	var final_system := str(current_system.get("name", "?"))
+	var jump_succeeded := route_selected and final_system == destination and final_system != start_system
+	var jump_status := "jumpSucceeded=true" if jump_succeeded else "jumpSucceeded=false"
+	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [ROUTE_JUMP_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_status, str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _run_route_land_refuel_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var route_selected := _select_first_linked_map_route()
+	var destination := _selected_destination_name()
+	var fuel_before_jump := player_fuel
+	_jump()
+	var fuel_after_jump := player_fuel
+	var final_system := str(current_system.get("name", "?"))
+	var jump_succeeded := route_selected and final_system == destination and final_system != start_system and fuel_after_jump == fuel_before_jump - _jump_fuel_cost()
+	_try_land()
+	var landed_body := _current_body()
+	var landing_succeeded := landed and not landed_body.is_empty()
+	var refuel_available := _body_refuel_available(landed_body)
+	var fuel_before_refuel := player_fuel
+	var refuel_succeeded := _refuel_current_ship()
+	var fuel_after_refuel := player_fuel
+	var travel_loop_complete := jump_succeeded and landing_succeeded and refuel_available and refuel_succeeded and fuel_after_refuel == _max_player_fuel()
+	var jump_status := "jumpSucceeded=true" if jump_succeeded else "jumpSucceeded=false"
+	var landing_status := "landingSucceeded=true" if landing_succeeded else "landingSucceeded=false"
+	var refuel_status := "refuelAvailable=true" if refuel_available else "refuelAvailable=false"
+	var loop_status := "travelLoopComplete=true" if travel_loop_complete else "travelLoopComplete=false"
+	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s landedBody=\"%s\" %s refuelSucceeded=%s %s fuelBeforeJump=%d fuelAfterJump=%d fuelBeforeRefuel=%d fuelAfterRefuel=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_status, landing_status, str(landed_body.get("name", "None")), refuel_status, str(refuel_succeeded), loop_status, fuel_before_jump, fuel_after_jump, fuel_before_refuel, fuel_after_refuel, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _run_low_fuel_jump_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var route_selected := _select_first_linked_map_route()
+	var destination := _selected_destination_name()
+	player_fuel = 0
+	var fuel_before_jump := player_fuel
+	_jump()
+	var fuel_after_jump := player_fuel
+	var final_system := str(current_system.get("name", "?"))
+	var jump_blocked := route_selected and final_system == start_system and fuel_after_jump == fuel_before_jump and status_line == "Insufficient fuel for hyperspace"
+	var jump_blocked_status := "jumpBlocked=true" if jump_blocked else "jumpBlocked=false"
+	var block_reason := "blockReason=insufficient_fuel" if jump_blocked else "blockReason=none"
+	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s fuelBeforeJump=%d fuelAfterJump=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [LOW_FUEL_JUMP_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_blocked_status, block_reason, fuel_before_jump, fuel_after_jump, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _body_refuel_available(body: Dictionary) -> bool:
+	var inventory := _station_inventory(body)
+	var services: Array = inventory.get("services", [])
+	return services.has("repairs") or inventory.get("outfitsForSale", []).has("fuel_tank")
+
+func _max_player_fuel() -> int:
+	return int(player_ship.get("fuel", player_ship.get("sourceData", {}).get("fuel", 6)))
+
+func _jump_fuel_cost() -> int:
+	return 1
+
+func _refuel_current_ship() -> bool:
+	if not landed:
+		status_line = "Cannot refuel in space"
+		return false
+	var body := _current_body()
+	if not _body_refuel_available(body):
+		status_line = "No refuel service at " + str(body.get("name", "port"))
+		return false
+	player_fuel = _max_player_fuel()
+	status_line = "Refueled at " + str(body.get("name", "port"))
+	return true
 
 func _unhandled_input(event: InputEvent) -> void:
 	if game_state == STATE_TITLE:
 		_handle_title_input(event)
 		return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if map_visible and event.shift_pressed and _select_map_route_at_position(event.position):
+			get_viewport().set_input_as_handled()
+			return
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
 			KEY_E:
@@ -632,6 +832,7 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"credits": credits,
 		"cargo": cargo,
 		"cargo_space": cargo_space,
+		"fuel": player_fuel,
 		"system": current_system.get("name", ""),
 		"system_index": current_system_index,
 		"position": {"x": pos.x, "y": pos.y},
@@ -756,6 +957,7 @@ func _apply_pilot_data(data: Dictionary) -> void:
 		desired_ship_id = _ship_id_from_legacy_type(str(data.get("ship_type", "")))
 	if desired_ship_id != "":
 		_set_player_ship_by_id(desired_ship_id)
+	player_fuel = clampi(int(data.get("fuel", player_fuel)), 0, _max_player_fuel())
 	if player_frames.is_empty():
 		player_facing_index = int(data.get("facing_index", 0))
 	else:
@@ -826,6 +1028,7 @@ func _set_player_ship_by_id(ship_id: String) -> void:
 	player_frame_offsets = player_frame_set["offsets"]
 	player_frame_alpha_counts = player_frame_set["alpha_counts"]
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
+	player_fuel = min(player_fuel, _max_player_fuel())
 
 func _cycle_open_pilot_selection(dir: int) -> void:
 	if title_modal != "open_pilot" or available_pilots.is_empty():
@@ -955,6 +1158,43 @@ func _toggle_universe_map() -> void:
 	map_visible = not map_visible
 	status_line = "Galaxy map open" if map_visible else "Galaxy map closed"
 
+func _map_rect() -> Rect2:
+	return Rect2(160, 92, 960, 616)
+
+func _map_plot_rect() -> Rect2:
+	return Rect2(_map_rect().position + Vector2(42, 74), Vector2(610, 456))
+
+func _map_system_points(systems: Array) -> Dictionary:
+	var points: Dictionary = {}
+	if systems.is_empty():
+		return points
+	var bounds := _system_coordinate_bounds(systems)
+	var plot_rect := _map_plot_rect()
+	for system in systems:
+		points[str(system.get("name", ""))] = _system_map_point(system, bounds, plot_rect)
+	return points
+
+func _select_map_route_at_position(click_position: Vector2) -> bool:
+	var systems: Array = universe.get("systems", [])
+	var links: Array = current_system.get("links", [])
+	if systems.is_empty() or links.is_empty():
+		return false
+	var point_by_name := _map_system_points(systems)
+	for i in range(links.size()):
+		var linked_name := str(links[i])
+		if not point_by_name.has(linked_name):
+			continue
+		var linked_point: Vector2 = point_by_name[linked_name]
+		if click_position.distance_to(linked_point) <= 14.0:
+			selected_link_index = i
+			status_line = "Route set: %s → %s" % [str(current_system.get("name", "?")), linked_name]
+			_play_sound("ui_click")
+			return true
+	if _map_plot_rect().has_point(click_position):
+		status_line = "Shift-click a linked stop to set route"
+		return true
+	return false
+
 func _npc_world_offsets() -> Array[Vector2]:
 	return [Vector2(260, -180), Vector2(-340, 220), Vector2(520, 160), Vector2(-640, -260)]
 
@@ -1025,6 +1265,9 @@ func _jump() -> void:
 	var links: Array = current_system.get("links", [])
 	if links.is_empty():
 		return
+	if player_fuel < _jump_fuel_cost():
+		status_line = "Insufficient fuel for hyperspace"
+		return
 	var destination := str(links[selected_link_index % links.size()])
 	for i in range(systems.size()):
 		if systems[i].get("name", "") == destination:
@@ -1034,6 +1277,7 @@ func _jump() -> void:
 			pos = PLAYER_START
 			vel = Vector2.ZERO
 			landed = false
+			player_fuel = max(0, player_fuel - _jump_fuel_cost())
 			status_line = "Hyperspace arrival: " + destination
 			return
 
@@ -1418,8 +1662,8 @@ func _draw_universe_map() -> void:
 	if systems.is_empty():
 		return
 	var font := ThemeDB.fallback_font
-	var rect := Rect2(160, 92, 960, 616)
-	var plot_rect := Rect2(rect.position + Vector2(42, 74), Vector2(610, 456))
+	var rect := _map_rect()
+	var plot_rect := _map_plot_rect()
 	draw_rect(rect, Color(0.018, 0.026, 0.042, 0.96), true)
 	draw_rect(rect, Color(0.24, 0.54, 0.78, 1.0), false, 2.0)
 	draw_string(font, rect.position + Vector2(0, 40), "GALAXY MAP", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 24, Color(0.86, 0.96, 1.0))
@@ -1430,12 +1674,9 @@ func _draw_universe_map() -> void:
 	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
 	draw_string(font, rect.position + Vector2(690, 154), "\\ selects linked destinations", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 178), "J jumps   M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
-	var bounds := _system_coordinate_bounds(systems)
-	var point_by_name: Dictionary = {}
-	for system in systems:
-		var map_point := _system_map_point(system, bounds, plot_rect)
-		point_by_name[str(system.get("name", ""))] = map_point
+	draw_string(font, rect.position + Vector2(690, 178), "Shift-click a linked stop to set route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 202), "J jumps   M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	var point_by_name := _map_system_points(systems)
 	for system in systems:
 		var map_point: Vector2 = point_by_name.get(str(system.get("name", "")), plot_rect.position)
 		for linked_name in system.get("links", []):
@@ -1443,6 +1684,11 @@ func _draw_universe_map() -> void:
 				continue
 			var linked_point: Vector2 = point_by_name[str(linked_name)]
 			draw_line(map_point, linked_point, Color(0.12, 0.32, 0.52, 0.72), 1.0)
+	var current_name := str(current_system.get("name", ""))
+	if point_by_name.has(current_name) and point_by_name.has(selected_name):
+		var current_point: Vector2 = point_by_name[current_name]
+		var selected_point: Vector2 = point_by_name[selected_name]
+		draw_line(current_point, selected_point, Color(0.15, 1.0, 0.28, 0.95), 3.0)
 	for system in systems:
 		var system_name := str(system.get("name", "?"))
 		var map_point: Vector2 = point_by_name.get(system_name, plot_rect.position)
@@ -1528,8 +1774,7 @@ func _draw_landing_panel() -> void:
 			_draw_shipyard(rect, body)
 	draw_string(font, rect.position + Vector2(30, 492), "F1 Mission Computer  F2 Commodity Exchange  L Leave  ↑/↓ select", HORIZONTAL_ALIGNMENT_LEFT, 840, 16, Color(0.95, 0.86, 0.58))
 
-func _draw_ev_classic_landing_buttons(rect: Rect2, body: Dictionary) -> void:
-	var font := ThemeDB.fallback_font
+func _ev_classic_landing_button_labels(body: Dictionary) -> Array:
 	var inventory := _station_inventory(body)
 	var labels := ["Spaceport Bar", "Mission Computer", "Commodity Exchange"]
 	if inventory.get("services", []).has("outfitter") or not inventory.get("outfitsForSale", []).is_empty() or not inventory.get("weaponsForSale", []).is_empty():
@@ -1537,6 +1782,12 @@ func _draw_ev_classic_landing_buttons(rect: Rect2, body: Dictionary) -> void:
 	if inventory.get("services", []).has("shipyard") or not inventory.get("shipsForSale", []).is_empty():
 		labels.append("Shipyard")
 	labels.append("Leave")
+	return labels
+
+func _draw_ev_classic_landing_buttons(rect: Rect2, body: Dictionary) -> void:
+	var font := ThemeDB.fallback_font
+	var inventory := _station_inventory(body)
+	var labels := _ev_classic_landing_button_labels(body)
 	for i in range(labels.size()):
 		var button_rect := Rect2(rect.position + Vector2(30 + i * 142, 104), Vector2(132, 30))
 		var label := str(labels[i])

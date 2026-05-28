@@ -1,0 +1,149 @@
+# Terminal Velocity Godot autoresearch loop
+
+Date: 2026-05-28
+
+## Decision
+
+Apply bounded autoresearch to both the original EV Classic runtime and the Godot Terminal Velocity runtime, but keep their authority separate.
+
+- **Basilisk source-oracle lane**: answers what original EV Classic actually does.
+- **Godot fast-eval lane**: answers whether Terminal Velocity can reproduce, test, and iterate on that behavior quickly.
+- **Bridge gate**: promotes Godot findings only when their premise is source-backed or explicitly labeled as scaffold/hypothesis.
+
+## Basilisk source-oracle lane
+
+Goal: collect narrow, source-of-truth observations from original EV Classic without turning emulator operation into the primary iteration surface.
+
+Trusted surface:
+
+- Local Basilisk/original EV Classic screenshots, traces, and user demonstrations.
+- Decoded EV Classic resources and original/manual evidence.
+
+Mutable/output surface:
+
+- `docs/research/original-ev-classic-runtime-observations.md`
+- `docs/checklists/ev-classic-behavior-baseline-checklist.md`
+- `docs/checklists/ev-classic-fidelity-implementation-backlog.md`
+- local-only captures under `C:\Games\BasiliskII\`
+
+Metric/rubric:
+
+- one concrete behavior observed or refuted;
+- evidence label assigned (`original-runtime-observed`, `user-demonstrated`, `decoded-resource-backed`, `secondary-hypothesis`, or `unknown`);
+- next verification question narrowed if evidence remains partial.
+
+Approval/safety gates:
+
+- no Strict Play;
+- no destructive or combat-risk testing on reusable pilots without approval;
+- no unattended long-running original-EV play;
+- local-only captures remain local.
+
+## Godot fast-eval lane
+
+Goal: use Godot as the cheap structured sandbox for repeated navigation, landing, refuel, mission, trade, and combat-scenario checks.
+
+Trusted/read-only surface:
+
+- Source-backed Basilisk/decoded-resource observations and bridge-gate labels.
+- Existing test suite and deterministic Godot logs.
+
+Mutable/output surface:
+
+- Godot scenario log hooks in `godot_ev/scripts/main.gd`.
+- Windows launcher switches in `godot_ev/windows/RunGodot.ps1`.
+- Contract tests in `native_ev/tests/test_model.py`.
+- Local results in `docs/research/ev-gameplay-autoresearch-results.jsonl` and future Godot scenario logs.
+
+Metric/rubric:
+
+- scenario produces structured state/action log;
+- scenario objective passes/fails mechanically;
+- safety/source label is present;
+- regression tests and Godot self-test pass.
+
+First Godot scenario contract:
+
+- `RunGodot.ps1 -MapRouteLog` / `--tv-map-route-log`
+- Resets to Levo, opens map-equivalent route state, simulates clicking the first linked destination through the same `_select_map_route_at_position(click_position)` path used by Shift-click input, and logs:
+  - current system;
+  - selected destination before and after;
+  - whether route selection succeeded;
+  - whether the green current-to-selected route-line contract is active;
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=user_demonstrated_pending_original_trace`.
+
+Route-jump scenario contract:
+
+- `RunGodot.ps1 -RouteJumpLog` / `--tv-route-jump-log`
+- Executes the next select route → jump primitive in the Godot fast-eval lane.
+- Resets to Levo, selects the first linked destination through `_select_first_linked_map_route()`, calls `_jump()`, and logs:
+  - starting system;
+  - selected destination;
+  - final system after jump;
+  - whether route selection succeeded;
+  - whether jump succeeded (`jumpSucceeded=true`/`false`);
+  - landed state and reset position;
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=user_demonstrated_pending_original_trace`.
+
+Route-land-refuel scenario contract:
+
+- `RunGodot.ps1 -RouteLandRefuelLog` / `--tv-route-land-refuel-log`
+- Executes the first complete select route → jump → land/refuel travel-loop primitive in the Godot fast-eval lane.
+- Resets to Levo, selects the first linked destination through `_select_first_linked_map_route()`, records fuel before jump, calls `_jump()`, records fuel after jump, calls `_try_land()` at the arrival spawn, checks whether the landed body exposes refuel-capable service scaffolding, calls `_refuel_current_ship()`, and logs:
+  - starting system;
+  - selected destination;
+  - final system after jump;
+  - whether route selection and jump succeeded;
+  - landed body and whether landing succeeded (`landingSucceeded=true`/`false`);
+  - whether refuel-capable service scaffolding is available (`refuelAvailable=true`/`false`);
+  - whether refuel action succeeded (`refuelSucceeded=true`/`false`);
+  - fuel quantities before/after jump and before/after refuel (`fuelBeforeJump`, `fuelAfterJump`, `fuelBeforeRefuel`, `fuelAfterRefuel`, `fuelMax`);
+  - whether the complete travel loop passed (`travelLoopComplete=true`/`false`);
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=user_demonstrated_pending_original_trace`.
+
+Low-fuel jump scenario contract:
+
+- `RunGodot.ps1 -LowFuelJumpLog` / `--tv-low-fuel-jump-log`
+- Exercises a blocked low-fuel jump in the Godot fast-eval lane.
+- Resets to Levo, selects the first linked destination through `_select_first_linked_map_route()`, sets player fuel to zero, records fuel before jump, calls `_jump()`, records fuel after jump, and logs:
+  - starting system;
+  - selected destination;
+  - final system after the blocked jump attempt;
+  - whether route selection succeeded;
+  - whether the jump was blocked (`jumpBlocked=true`/`false`);
+  - block reason (`blockReason=insufficient_fuel`);
+  - fuel quantities before/after the blocked jump (`fuelBeforeJump`, `fuelAfterJump`, `fuelMax`);
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=user_demonstrated_pending_original_trace`.
+
+## Bridge gate
+
+A Godot behavior can be optimized freely only when one of these is true:
+
+1. It is backed by original-runtime, decoded-resource, or user-demonstrated evidence.
+2. It is explicitly marked `scaffold` or `hypothesis` and cannot be cited as EV Classic fidelity proof.
+3. It is a pure Terminal Velocity instrumentation/test helper with no fidelity claim.
+
+If Godot exploration exposes ambiguity, route back to Basilisk with a narrow source-oracle question rather than treating the Godot result as truth.
+
+## Current bridge state
+
+Shift-click map routing is approved for the first Godot fast-eval scenario because the user demonstrated the original behavior: holding Shift and clicking the next available map stop draws a green route line connecting current system to the next system. Exact original-runtime timing/input trace remains pending, so the Godot log must retain `oracleStatus=user_demonstrated_pending_original_trace` until a captured Basilisk trace confirms it.
+
+## Verification commands
+
+```bash
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_map_route_autoresearch_log_contract
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_route_jump_autoresearch_log_contract
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_route_jump_land_refuel_autoresearch_log_contract
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_low_fuel_jump_autoresearch_log_contract
+python3 -m unittest native_ev.tests.test_model -q
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -MapRouteLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -RouteJumpLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -RouteLandRefuelLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -LowFuelJumpLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -SelfTest
+```

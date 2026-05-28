@@ -185,3 +185,22 @@ Derived observations:
 - Complete the accepted `Ferry Passengers to New Istanbul` mission on the non-strict pilot after learning reliable departure/hyperspace movement away from Levo.
 - Decode/source-integrate fuller EV Classic system topology and coordinates beyond the Levo start-state bridge.
 - Cross-check the `Rendell StarDrive 805R cargo shuttle` prompt against decoded static resources if exact ship variant/resource naming matters.
+
+## 2026-05-26 landed-service click-through attempt — blocked before EV launch
+
+Local-only captures:
+
+- `C:\Games\BasiliskII\ev-landed-ui-clickthrough-blocked-finder-20260526.png`
+- `C:\Games\BasiliskII\ev-landed-ui-clickthrough-blocked-lockscreen-20260526.png`
+
+Derived observations / blocker:
+
+- Goal was the bounded original EV Classic landed-service click-through for `Spaceport Bar`, `Mission Computer`, `Commodity Exchange`, `Leave`, and later outfitter/shipyard/gambling-capable ports, using before/after captures and disposable/non-strict state for mutations.
+- Basilisk II launched and `PrintWindow` capture showed the Mac Finder with the `Escape Velocity 1.0.5` folder visible. Visible items included `Escape Velocity`, `EV Data`, `EV Graphics`, `EV Titles`, `EV Sounds`, `Register Escape Velocity`, `Pilots`, `EV Plug-Ins`, `EV Music`, `READ ME`, `Documentation ƒ`, and `Web Site urls ƒ`.
+- The Windows foreground was `Windows Default Lock Screen` (`LogonUI` running). Full-desktop capture showed the host lock screen, not the Basilisk window. Synthetic click attempts did not launch EV while the session was locked.
+- No new EV Classic gameplay behavior was observed in this attempt, and no pilot/save/credit/cargo/equipment state was mutated.
+
+Backlog link/status:
+
+- `docs/checklists/ev-classic-fidelity-implementation-backlog.md` item `Landed service/button matrix: bar, mission computer, commodities, outfitter, shipyard, gambling` remains `instrumented / needs original click-through`.
+- Next action: unlock/foreground the Windows session, then rerun the bounded Basilisk capture loop starting from EV launch; do not treat this blocked attempt as gameplay evidence.

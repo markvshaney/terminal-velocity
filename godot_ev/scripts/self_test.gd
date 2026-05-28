@@ -106,6 +106,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"levo_merchant_first_hop",
 		"mission_runner_first_delivery",
 		"route_planner_refuel_loop",
+		"low_fuel_jump_recovery",
 		"blocked_reason_curriculum",
 		"disposable_combat_placeholder",
 	]

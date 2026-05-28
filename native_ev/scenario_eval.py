@@ -22,6 +22,7 @@ SCENARIO_CURRICULUM = [
     'levo_merchant_first_hop',
     'mission_runner_first_delivery',
     'route_planner_refuel_loop',
+    'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
     'disposable_combat_placeholder',
 ]
@@ -246,6 +247,12 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Levo', 'expectBlocked': True},
             {'type': 'refuel'},
         ]
+    if name == 'low_fuel_jump_recovery':
+        return [
+            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'jump', 'destinationSystem': 'Sol', 'expectBlocked': True},
+            {'type': 'refuel'},
+        ]
     if name == 'blocked_reason_curriculum':
         return [
             {'type': 'depart'},
@@ -289,6 +296,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'spent_fuel_on_jump': 'passed' if any(event.get('type') == 'jump' and event.get('fuelAfter') == STARTING_FUEL - 1 for event in trace) else 'failed',
             'blocked_empty_fuel_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
             'refueled_while_landed': 'passed' if any(event.get('type') == 'refuel' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
+        })
+    elif name == 'low_fuel_jump_recovery':
+        checks.update({
+            'started_with_empty_fuel': 'passed' if any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('fuel') == 0 for event in trace) else 'failed',
+            'blocked_low_fuel_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('originSystem') == START_SYSTEM and event.get('destinationSystem') == 'Sol' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
+            'preserved_system_after_block': 'passed' if state.get('currentSystem') == START_SYSTEM else 'failed',
+            'refueled_after_block': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == START_SYSTEM and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
         })
     elif name == 'blocked_reason_curriculum':
         checks.update({
