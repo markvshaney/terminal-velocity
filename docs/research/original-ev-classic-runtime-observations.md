@@ -153,9 +153,9 @@ Derived status:
 
 - `Seed:` Shift-click multi-stop route path on the galaxy map.
 - `Surface:` controls, map UI, hyperspace route planning, tests.
-- `Evidence:` user-observed original-runtime behavior in Basilisk II; step-by-step screenshot capture still needed before labeling as screenshot-confirmed `original-runtime-observed`.
-- `Observed behavior:` user reports that holding Shift and clicking more than one available system in original EV Classic/Basilisk extends a green line into a multi-step route path, not merely a single selected next hop.
-- `Learned skill/use:` route planning is a multi-hop navigation skill: players can pre-plan several adjacent hyperspace legs visually, then execute the route one leg at a time. This should inform Terminal Velocity onboarding and route tests.
+- `Evidence:` user-observed original-runtime behavior in Basilisk II; user-provided screenshot on 2026-05-29 from local Hermes cache `/home/bh/.hermes/profiles/loki-game/image_cache/img_b83b166ad25c.jpg` shows a stepwise green route path on the original EV Classic galaxy map.
+- `Observed behavior:` holding Shift and clicking more than one available system in original EV Classic/Basilisk extends a green line into a multi-step route path, not merely a single selected next hop. The 2026-05-29 screenshot shows a green path extending across multiple adjacent legs around `Rigel`, `Levo`, and `Kathoon`; the info panel reads `Destination System: Kathoon`, `Government: Independent`, `Legal Status: Clean`, `Ports: Maxwell's Purchase`, `Navigation Hazards: None`, and the HUD reads `Stellar Navigation / Maxwell's Purchase`.
+- `Learned skill/use:` route planning is a multi-hop navigation skill: players can pre-plan several adjacent hyperspace legs visually by Shift-clicking each step, then execute the route one leg at a time. This should inform Terminal Velocity onboarding and route tests.
 - `Play report:` no new live capture in this note; this is a durable seed from user correction during Terminal Velocity map-route implementation work.
 - `Implementation hint:` Terminal Velocity should store an ordered route queue/path, append Shift-clicked systems that are linked from the current route tail, draw the full green polyline, and consume/advance the first leg on jump.
 - `Backlog link/status:` `EV Classic map multi-stop Shift-click route planning`; status `needs evidence / ready for scaffold`.

@@ -85,8 +85,8 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Do not implement from adaptation data alone.
 
 - [x] EV Classic map multi-stop Shift-click route planning
-  - Status: `verified scaffold / needs original edge-case pass`
-  - Source: user-observed original-runtime behavior in Basilisk II on 2026-05-28; see `docs/research/original-ev-classic-runtime-observations.md#2026-05-28-map-multi-stop-route-planning-seed`.
+  - Status: `verified scaffold / screenshot-confirmed original route-path example; needs edge-case pass`
+  - Source: user-observed original-runtime behavior in Basilisk II on 2026-05-28; user-provided screenshot-confirmed example on 2026-05-29; see `docs/research/original-ev-classic-runtime-observations.md#2026-05-28-map-multi-stop-route-planning-seed`.
   - Scope: holding Shift and clicking multiple available systems should extend a green multi-hop route path. Terminal Velocity now stores an ordered route queue/path, appends only systems linked from the current route tail, draws the full green polyline, and consumes/advances the first leg on jump.
   - Implementation: Godot map route selection uses `selected_route` with tail-linked append and full green route drawing; symbolic scenario `shift_click_multi_stop_route_queue` verifies Levo → Sol → Sirius queue construction and first-leg consumption.
   - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg -v`; `./run_godot.sh tv-map-route-log`; full native tests and `./run_godot.sh self-test` pass with `gameplayScenarios=11`.
