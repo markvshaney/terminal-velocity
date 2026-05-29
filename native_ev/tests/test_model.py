@@ -1327,6 +1327,11 @@ class NativeEvModelTests(unittest.TestCase):
             'func _cargo_available_tons() -> int:',
             'Cargo: %d/%d (%d mission, %d free)',
             'Mission Info: %d active / %d tons reserved',
+            'func _set_status(message: String) -> void:',
+            'status_messages.append(message)',
+            'Messages:',
+            '_set_status("Need %d free cargo tons" % tons)',
+            '_set_status("Cargo hold full")',
         ]:
             self.assertIn(prompt, main_script)
 

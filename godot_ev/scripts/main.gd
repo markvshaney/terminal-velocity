@@ -65,6 +65,7 @@ var selected_target_index := 0
 var map_visible := false
 var stars: Array[Vector2] = []
 var status_line := ""
+var status_messages: Array[String] = []
 var title_status_line := "No pilot loaded."
 var title_modal := ""
 var pilot_name_input := ""
@@ -1468,6 +1469,12 @@ func _mission_reserved_cargo_tons() -> int:
 func _cargo_available_tons() -> int:
 	return max(0, cargo_space - cargo)
 
+func _set_status(message: String) -> void:
+	status_line = message
+	status_messages.append(message)
+	while status_messages.size() > 6:
+		status_messages.remove_at(0)
+
 func _toggle_autopilot() -> void:
 	status_line = "Autopilot not implemented yet"
 
@@ -1859,6 +1866,13 @@ func _draw_hud() -> void:
 	draw_rect(Rect2(0, 0, 1280, 78), Color(0.02, 0.035, 0.06, 0.92), true)
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
 	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Cargo: %d/%d (%d mission, %d free)    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
+	if not status_messages.is_empty():
+		draw_rect(Rect2(20, 92, 430, 62), Color(0.02, 0.035, 0.06, 0.84), true)
+		draw_string(font, Vector2(32, 114), "Messages:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
+		var y := 136.0
+		for message in status_messages.slice(max(0, status_messages.size() - 2), status_messages.size()):
+			draw_string(font, Vector2(32, y), "• " + str(message), HORIZONTAL_ALIGNMENT_LEFT, 400, 13, Color(0.82, 0.88, 0.95))
+			y += 18.0
 	draw_rect(Rect2(1010, 96, 250, 190), Color(0.02, 0.04, 0.06, 0.88), true)
 	draw_arc(Vector2(1135, 190), 78, 0, TAU, 64, Color(0.30, 0.75, 0.95), 1.0)
 	draw_line(Vector2(1135, 112), Vector2(1135, 268), Color(0.12, 0.35, 0.50), 1.0)
@@ -2198,12 +2212,12 @@ func _cycle_landing_selection(dir: int) -> void:
 func _accept_selected_mission() -> void:
 	var available := _available_missions(_current_body())
 	if available.is_empty():
-		status_line = "No mission to accept"
+		_set_status("No mission to accept")
 		return
 	var mission: Dictionary = available[selected_landing_item % available.size()]
 	var tons := int(mission.get("cargoTons", 0))
 	if tons > _cargo_available_tons():
-		status_line = "Need %d free cargo tons" % tons
+		_set_status("Need %d free cargo tons" % tons)
 		return
 	var mission_id := str(mission.get("id", ""))
 	active_missions.append(mission_id)
@@ -2211,56 +2225,56 @@ func _accept_selected_mission() -> void:
 	for flag in mission.get("setsFlags", []):
 		if not story_flags.has(flag):
 			story_flags.append(flag)
-	status_line = "Accepted mission: " + str(mission.get("title", mission_id))
+	_set_status("Accepted mission: " + str(mission.get("title", mission_id)))
 	_play_sound("ui_click")
 	selected_landing_item = 0
 
 func _buy_selected_commodity() -> void:
 	var commodities: Array = economy.get("commodities", [])
 	if commodities.is_empty():
-		status_line = "No commodities available"
+		_set_status("No commodities available")
 		return
 	var commodity: Dictionary = commodities[selected_landing_item % commodities.size()]
 	var commodity_id := str(commodity.get("id", ""))
 	var price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("buy", 0))
 	if price <= 0:
-		status_line = "Commodity unavailable here"
+		_set_status("Commodity unavailable here")
 		return
 	if cargo >= cargo_space:
-		status_line = "Cargo hold full"
+		_set_status("Cargo hold full")
 		return
 	if credits < price:
-		status_line = "Not enough credits"
+		_set_status("Not enough credits")
 		return
 	var free_space := _cargo_available_tons()
 	var affordable_tons := int(floor(float(credits) / float(price)))
 	var tons: int = min(EV_CLASSIC_COMMODITY_LOT_SIZE, free_space, affordable_tons)
 	if tons <= 0:
-		status_line = "Not enough credits"
+		_set_status("Not enough credits")
 		return
 	credits -= price * tons
 	cargo += tons
 	commodity_hold[commodity_id] = int(commodity_hold.get(commodity_id, 0)) + tons
-	status_line = "Bought %d tons of %s" % [tons, str(commodity.get("name", commodity_id))]
+	_set_status("Bought %d tons of %s" % [tons, str(commodity.get("name", commodity_id))])
 	_play_sound("ui_click")
 
 func _sell_selected_commodity() -> void:
 	var commodities: Array = economy.get("commodities", [])
 	if commodities.is_empty():
-		status_line = "No commodities available"
+		_set_status("No commodities available")
 		return
 	var commodity: Dictionary = commodities[selected_landing_item % commodities.size()]
 	var commodity_id := str(commodity.get("id", ""))
 	var held := int(commodity_hold.get(commodity_id, 0))
 	if held <= 0:
-		status_line = "No cargo to sell"
+		_set_status("No cargo to sell")
 		return
 	var price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("sell", 0))
 	var tons: int = min(EV_CLASSIC_COMMODITY_LOT_SIZE, held)
 	credits += price * tons
 	cargo = max(0, cargo - tons)
 	commodity_hold[commodity_id] = held - tons
-	status_line = "Sold %d tons of %s" % [tons, str(commodity.get("name", commodity_id))]
+	_set_status("Sold %d tons of %s" % [tons, str(commodity.get("name", commodity_id))])
 	_play_sound("ui_click")
 
 func _outfitter_sale_items(body: Dictionary) -> Array:
