@@ -1439,7 +1439,9 @@ func _show_mission_info() -> void:
 	if active_missions.is_empty():
 		status_line = "Mission Info: no active missions"
 		return
-	status_line = " | ".join(_mission_summary_lines())
+	var reserved := _mission_reserved_cargo_tons()
+	var summaries := _mission_summary_lines()
+	status_line = "Mission Info: %d active / %d tons reserved / %d free | %s" % [active_missions.size(), reserved, _cargo_available_tons(), " | ".join(summaries)]
 
 func _mission_summary_lines() -> Array[String]:
 	var lines: Array[String] = []
@@ -1462,6 +1464,9 @@ func _mission_reserved_cargo_tons() -> int:
 	for mission_id in active_missions:
 		total += int(_mission_by_id(str(mission_id)).get("cargoTons", 0))
 	return total
+
+func _cargo_available_tons() -> int:
+	return max(0, cargo_space - cargo)
 
 func _toggle_autopilot() -> void:
 	status_line = "Autopilot not implemented yet"
@@ -1853,7 +1858,7 @@ func _draw_hud() -> void:
 	var destination := _selected_destination_name()
 	draw_rect(Rect2(0, 0, 1280, 78), Color(0.02, 0.035, 0.06, 0.92), true)
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
-	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Cargo: %d/%d    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, cargo, cargo_space, player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
+	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Cargo: %d/%d (%d mission, %d free)    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
 	draw_rect(Rect2(1010, 96, 250, 190), Color(0.02, 0.04, 0.06, 0.88), true)
 	draw_arc(Vector2(1135, 190), 78, 0, TAU, 64, Color(0.30, 0.75, 0.95), 1.0)
 	draw_line(Vector2(1135, 112), Vector2(1135, 268), Color(0.12, 0.35, 0.50), 1.0)
@@ -2197,7 +2202,7 @@ func _accept_selected_mission() -> void:
 		return
 	var mission: Dictionary = available[selected_landing_item % available.size()]
 	var tons := int(mission.get("cargoTons", 0))
-	if cargo + tons > cargo_space:
+	if tons > _cargo_available_tons():
 		status_line = "Need %d free cargo tons" % tons
 		return
 	var mission_id := str(mission.get("id", ""))
@@ -2227,7 +2232,7 @@ func _buy_selected_commodity() -> void:
 	if credits < price:
 		status_line = "Not enough credits"
 		return
-	var free_space := cargo_space - cargo
+	var free_space := _cargo_available_tons()
 	var affordable_tons := int(floor(float(credits) / float(price)))
 	var tons: int = min(EV_CLASSIC_COMMODITY_LOT_SIZE, free_space, affordable_tons)
 	if tons <= 0:

@@ -1324,6 +1324,9 @@ class NativeEvModelTests(unittest.TestCase):
             'func _mission_summary_lines() -> Array[String]:',
             'Mission Info: %s to %s/%s, %d tons, %d cr',
             'Cargo reserved for missions:',
+            'func _cargo_available_tons() -> int:',
+            'Cargo: %d/%d (%d mission, %d free)',
+            'Mission Info: %d active / %d tons reserved',
         ]:
             self.assertIn(prompt, main_script)
 

@@ -185,11 +185,13 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: draft a data schema proposal separating global pilot state from per-government standing.
   - Fidelity boundary: formulas and exact thresholds need EV Classic confirmation.
 
-- [ ] Cargo reservation, trade-route learning, and event-sensitive economy
-  - Status: `candidate`
+- [x] Cargo/trade coupling and mission-reserved capacity
+  - Status: `implemented Terminal Velocity scaffold / source-family structured`
   - Source: EVN mission cargo fields, Nova Bible commodity purchase-location fields, and disaster/commodity-price references.
   - Scope: make cargo a shared constraint across missions and trade; expose mission-reserved cargo/passengers in trade screens; retain discovered buy/sell markets, route profit per jump/day, fuel/refuel risk, and event/disaster price effects.
-  - Next action: draft a cargo/trade UI ticket that prevents mission cargo from feeling invisible or arbitrary.
+  - Implementation: Godot Mission Info (`I`) summarizes active mission count, reserved mission tons, and free capacity; the HUD shows `Cargo: used/capacity (mission, free)`; Commodity Exchange already displays `Cargo reserved for missions`; mission acceptance and commodity buys use the shared `_cargo_available_tons()` helper so mission cargo and trade cargo compete visibly for the same hold.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v`; `./run_godot.sh tv-first-mission-delivery-log` emitted `missionAccepted=true`, `cargoAfterAccept=3`, `cargoAfterDelivery=0`, `missionDelivered=true`.
+  - Next action: add a small EV-style message-log/blocked-reason surface for cargo/trade failures, then defer exact Classic commodity prices/events until decoded resources or runtime confirmation.
   - Fidelity boundary: exact Classic commodity prices/events require decoded resources or runtime confirmation.
 
 - [ ] Ship/outfit comparison and upgrade consequence surfaces
