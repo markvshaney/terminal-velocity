@@ -476,6 +476,19 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_map_mission_destination_marker_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'func _active_mission_destination_systems() -> Array[String]:',
+            'Mission destination:',
+            'Mission objective marker: active mission destinations are highlighted on the map.',
+            '_active_mission_destination_systems()',
+            'is_mission_destination',
+            'Color(1.0, 0.45, 0.22',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_mission_log_overlay_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

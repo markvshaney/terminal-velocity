@@ -2091,6 +2091,16 @@ func _draw_hud() -> void:
 	draw_string(font, Vector2(1024, 280), "Target: Contact %d  %.0f" % [selected_target_index + 1, target_range], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(1.0, 0.82, 0.35))
 	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F6 save  F10 help  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
 
+func _active_mission_destination_systems() -> Array[String]:
+	var destinations: Array[String] = []
+	for mission_id in active_missions:
+		var mission := _mission_by_id(str(mission_id))
+		var destination_system := str(mission.get("destinationSystem", ""))
+		if destination_system != "" and not destinations.has(destination_system):
+			destinations.append(destination_system)
+	destinations.sort()
+	return destinations
+
 func _mission_log_detail_lines() -> Array[String]:
 	var lines: Array[String] = []
 	if active_missions.is_empty():
@@ -2209,6 +2219,7 @@ func _draw_help_overlay() -> void:
 		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
 		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops.",
 		"Map service summary: selected systems show Terminal Velocity station services.",
+		"Mission objective marker: active mission destinations are highlighted on the map.",
 		"Mission route helper: G queues the active mission destination when known.",
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
@@ -2249,9 +2260,12 @@ func _draw_universe_map() -> void:
 	var links: Array = current_system.get("links", [])
 	var route_tail_links: Array = _map_route_tail_links()
 	var selected_name := _selected_destination_name()
+	var mission_destination_systems := _active_mission_destination_systems()
 	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
 	draw_string(font, rect.position + Vector2(690, 144), "Services: %s" % _system_service_summary(selected_name), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.95, 0.86, 0.58))
+	if not mission_destination_systems.is_empty():
+		draw_string(font, rect.position + Vector2(690, 158), "Mission destination: " + ", ".join(mission_destination_systems), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(1.0, 0.45, 0.22))
 	draw_string(font, rect.position + Vector2(690, 166), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
 	draw_string(font, rect.position + Vector2(690, 190), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
 	draw_string(font, rect.position + Vector2(690, 214), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
@@ -2287,8 +2301,12 @@ func _draw_universe_map() -> void:
 		var is_current := system_name == str(current_system.get("name", ""))
 		var is_selected := system_name == selected_name or selected_route.has(system_name)
 		var is_hovered := system_name == hovered_name
+		var is_mission_destination := mission_destination_systems.has(system_name)
 		var color := Color(0.46, 0.72, 1.0)
 		var radius := 4.0
+		if is_mission_destination:
+			color = Color(1.0, 0.45, 0.22, 0.95)
+			radius = 7.0
 		if linked:
 			color = Color(0.66, 0.95, 1.0)
 			radius = 5.0
