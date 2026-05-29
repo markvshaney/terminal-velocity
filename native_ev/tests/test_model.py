@@ -220,6 +220,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-navigation-guardrail-log', run_script)
         self.assertIn('[switch]$NavigationGuardrailLog', windows_script)
 
+    def test_godot_outfitter_shipyard_purchases_feed_recent_messages_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            '_set_status("No outfitter stock")',
+            '_set_status("Not enough credits")',
+            '_set_status("Bought " + str(item.get("name", item_id)))',
+            '_set_status("No ships for sale")',
+            '_set_status("Ship manifest missing " + ship_id)',
+            '_set_status("Bought ship: " + ship_id)',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_wsl_godot_launcher_can_run_selftest_via_windows_binary(self):
         root = Path(__file__).resolve().parents[2]
         launcher = (root / 'run_godot.sh').read_text()

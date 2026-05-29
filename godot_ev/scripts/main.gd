@@ -2839,12 +2839,12 @@ func _outfitter_sale_items(body: Dictionary) -> Array:
 func _buy_selected_outfit_or_weapon() -> void:
 	var sale_items := _outfitter_sale_items(_current_body())
 	if sale_items.is_empty():
-		status_line = "No outfitter stock"
+		_set_status("No outfitter stock")
 		return
 	var item: Dictionary = sale_items[selected_landing_item % sale_items.size()]
 	var price := int(item.get("price", 0))
 	if credits < price:
-		status_line = "Not enough credits"
+		_set_status("Not enough credits")
 		return
 	credits -= price
 	var item_id := str(item.get("id", ""))
@@ -2854,7 +2854,7 @@ func _buy_selected_outfit_or_weapon() -> void:
 		owned_outfits[item_id] = int(owned_outfits.get(item_id, 0)) + 1
 		var effects: Dictionary = item.get("effects", {})
 		cargo_space += int(effects.get("cargoSpace", 0))
-	status_line = "Bought " + str(item.get("name", item_id))
+	_set_status("Bought " + str(item.get("name", item_id)))
 	_play_sound("ui_click")
 
 func _shipyard_listings(body: Dictionary) -> Array:
@@ -2886,17 +2886,17 @@ func _outfit_effect_summary(item: Dictionary) -> String:
 func _buy_selected_ship() -> void:
 	var listings := _shipyard_listings(_current_body())
 	if listings.is_empty():
-		status_line = "No ships for sale"
+		_set_status("No ships for sale")
 		return
 	var listing: Dictionary = listings[selected_landing_item % listings.size()]
 	var price := int(listing.get("price", 0))
 	if credits < price:
-		status_line = "Not enough credits"
+		_set_status("Not enough credits")
 		return
 	var ship_id := str(listing.get("shipId", ""))
 	var new_ship := _ship_by_id(ship_id)
 	if new_ship.is_empty():
-		status_line = "Ship manifest missing " + ship_id
+		_set_status("Ship manifest missing " + ship_id)
 		return
 	credits -= price
 	player_ship = new_ship
@@ -2906,7 +2906,7 @@ func _buy_selected_ship() -> void:
 	player_frame_offsets = player_frame_set["offsets"]
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
 	cargo = min(cargo, cargo_space)
-	status_line = "Bought ship: " + ship_id
+	_set_status("Bought ship: " + ship_id)
 	_play_sound("ui_click")
 
 func _ship_by_id(ship_id: String) -> Dictionary:
