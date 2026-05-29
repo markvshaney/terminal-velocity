@@ -378,6 +378,8 @@ class NativeEvModelTests(unittest.TestCase):
             'missionRouteQueued=true',
             'sourceLabel=terminal-velocity-design-scaffold',
             'oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace',
+            'KEY_G: _route_to_active_mission_destination()',
+            'G queues active mission route',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('[switch]$MissionRouteHintLog', run_script)

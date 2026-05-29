@@ -767,6 +767,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_J: _jump()
 			KEY_M:
 				_toggle_universe_map()
+			KEY_G: _route_to_active_mission_destination()
 			KEY_T:
 				_cycle_target(1)
 			KEY_R: _select_closest_target()
@@ -1893,11 +1894,12 @@ func _draw_universe_map() -> void:
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
 	draw_string(font, rect.position + Vector2(690, 154), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
 	draw_string(font, rect.position + Vector2(690, 178), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 202), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 202), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 226), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
 	var point_by_name := _map_system_points(systems)
 	var hovered_name := _map_hovered_link_name()
 	if hovered_name != "":
-		draw_string(font, rect.position + Vector2(690, 226), "Release click to route: " + hovered_name, HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.45, 1.0, 0.65))
+		draw_string(font, rect.position + Vector2(690, 250), "Release click to route: " + hovered_name, HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.45, 1.0, 0.65))
 	for system in systems:
 		var map_point: Vector2 = point_by_name.get(str(system.get("name", "")), plot_rect.position)
 		for linked_name in system.get("links", []):
