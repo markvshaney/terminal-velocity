@@ -146,7 +146,8 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
 - [ ] Landed service/button matrix: bar, mission computer, commodities, outfitter, shipyard, gambling
   - Status: `instrumented / needs original click-through`
   - Source: user-requested EV mirroring pass for clicking available landed buttons/options; Levo original-runtime observation only proves `Spaceport Bar`, `Mission Computer`, `Commodity Exchange`, and `Leave` are visible there, with no outfitter button.
-  - Implementation/instrumentation: `RunGodot.ps1 -LandedUiMatrix` emits each TV body’s visible landed buttons, services, item counts, mutating actions, and `observationGuard=before_after_capture_required`.
+  - Implementation/instrumentation: `RunGodot.ps1 -LandedUiMatrix` emits each TV body’s visible landed buttons, services, item counts, mutating actions, and `observationGuard=before_after_capture_required`. Terminal Velocity now also exposes service availability in play: landed panels show `Refuel: F5 available` or `Refuel: unavailable`, the HUD shows current/max fuel, F5 refuels when local service exists, and blocked/success refuel attempts flow through the recent message surface.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable native_ev.tests.test_model.NativeEvModelTests.test_godot_route_jump_land_refuel_autoresearch_log_contract -v`; `./run_godot.sh tv-route-land-refuel-log` emitted `refuelAvailable=true`, `refuelSucceeded=true`, and `travelLoopComplete=true`.
   - Next action: run bounded original EV click-through starting at Levo and then an outfitter/shipyard/gambling-capable early port, using disposable/non-strict state and before/after captures for every mutating option.
 
 - [ ] Basic combat fidelity: fire rate, projectile speed/lifetime/damage, target selection, explosions

@@ -734,14 +734,14 @@ func _jump_fuel_cost() -> int:
 
 func _refuel_current_ship() -> bool:
 	if not landed:
-		status_line = "Cannot refuel in space"
+		_set_status("Cannot refuel in space")
 		return false
 	var body := _current_body()
 	if not _body_refuel_available(body):
-		status_line = "No refuel service at " + str(body.get("name", "port"))
+		_set_status("No refuel service at " + str(body.get("name", "port")))
 		return false
 	player_fuel = _max_player_fuel()
-	status_line = "Refueled at " + str(body.get("name", "port"))
+	_set_status("Refueled at " + str(body.get("name", "port")))
 	return true
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -796,6 +796,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				landing_tab = 3
 				selected_landing_item = 0
 				status_line = "Landing tab: Shipyard"
+			KEY_F5:
+				if landed:
+					_refuel_current_ship()
+				else:
+					_set_status("Cannot refuel in space")
 			KEY_UP:
 				if landed:
 					_cycle_landing_selection(-1)
@@ -1871,7 +1876,7 @@ func _draw_hud() -> void:
 	var destination := _selected_destination_name()
 	draw_rect(Rect2(0, 0, 1280, 78), Color(0.02, 0.035, 0.06, 0.92), true)
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
-	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Cargo: %d/%d (%d mission, %d free)    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
+	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Fuel: %d/%d    Cargo: %d/%d (%d mission, %d free)    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, player_fuel, _max_player_fuel(), cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
 	if not status_messages.is_empty():
 		draw_rect(Rect2(20, 92, 430, 62), Color(0.02, 0.035, 0.06, 0.84), true)
 		draw_string(font, Vector2(32, 114), "Messages:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
@@ -1904,6 +1909,7 @@ func _draw_help_overlay() -> void:
 		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops.",
 		"Mission route helper: G queues the active mission destination when known.",
 		"Mission cargo: I shows reserved tons; HUD and market show mission/free cargo.",
+		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
 		"Buying: Enter accepts selected mission; B buys selected commodity, outfit, or ship.",
 		"Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
@@ -2044,7 +2050,9 @@ func _draw_landing_panel() -> void:
 	draw_rect(rect, Color(0.28, 0.43, 0.62, 1.0), false, 2.0)
 	var font := ThemeDB.fallback_font
 	draw_string(font, rect.position + Vector2(30, 46), port, HORIZONTAL_ALIGNMENT_LEFT, 820, 28, Color(1.0, 0.92, 0.72))
-	draw_string(font, rect.position + Vector2(30, 78), market, HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.80, 0.90, 1.0))
+	draw_string(font, rect.position + Vector2(30, 78), market, HORIZONTAL_ALIGNMENT_LEFT, 620, 16, Color(0.80, 0.90, 1.0))
+	var refuel_text := "Refuel: F5 available" if _body_refuel_available(body) else "Refuel: unavailable"
+	draw_string(font, rect.position + Vector2(690, 78), refuel_text, HORIZONTAL_ALIGNMENT_LEFT, 180, 16, Color(0.95, 0.86, 0.58))
 	_draw_ev_classic_landing_buttons(rect, body)
 	match landing_tab:
 		0:
@@ -2055,7 +2063,7 @@ func _draw_landing_panel() -> void:
 			_draw_outfitter(rect, body)
 		3:
 			_draw_shipyard(rect, body)
-	draw_string(font, rect.position + Vector2(30, 492), "F1 Mission Computer  F2 Commodity Exchange  L Leave  ↑/↓ select", HORIZONTAL_ALIGNMENT_LEFT, 840, 16, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(30, 492), "F1 Mission Computer  F2 Commodity Exchange  F5 Refuel  L Leave  ↑/↓ select", HORIZONTAL_ALIGNMENT_LEFT, 840, 16, Color(0.95, 0.86, 0.58))
 
 func _ev_classic_landing_button_labels(body: Dictionary) -> Array:
 	var inventory := _station_inventory(body)

@@ -1341,6 +1341,11 @@ class NativeEvModelTests(unittest.TestCase):
             'Mission route helper: G queues the active mission destination when known.',
             'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
             'KEY_F10:',
+            'Fuel: %d/%d',
+            'KEY_F5:',
+            'Refuel: F5 available',
+            'F5 Refuel',
+            '_set_status("Refueled at " + str(body.get("name", "port")))',
         ]:
             self.assertIn(prompt, main_script)
 
