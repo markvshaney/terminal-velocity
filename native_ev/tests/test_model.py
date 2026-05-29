@@ -427,6 +427,25 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Pilot save/resume scenario contract', plan)
         self.assertIn('save → mutate → reopen pilot', plan)
 
+    def test_godot_player_inventory_overlay_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'var player_info_visible := false',
+            'func _draw_player_info_overlay',
+            'func _player_inventory_lines',
+            'player_info_visible = not player_info_visible',
+            'Terminal Velocity player info helper/scaffold',
+            'Ship:',
+            'Credits:',
+            'Cargo:',
+            'Fuel:',
+            'Outfits:',
+            'Weapons:',
+            'P toggles player info',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_mission_log_overlay_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

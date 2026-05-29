@@ -208,8 +208,8 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Status: `implemented Terminal Velocity helper/scaffold`
   - Source: same EV-family deep dive plus recurring guide/player-pain signals from GameFAQs, EVN Wiki, Ambrosia/Cythera archives, and EV Nova manual/walkthroughs.
   - Scope: add or plan durable player learning aids: beginner guide, keyboard overlay, map/service reference, trading guide, combat guide, ship/outfit comparison help, faction/storyline hinting, and mission checklist/log.
-  - Implementation: Godot now has an F10 help overlay that explains currently wired keys, map route planning, the `G` mission-route helper, mission/free cargo reservation, landing tabs, buy/accept controls, recent message feedback, shipyard/outfitter comparison surfaces, refuel, and F6 pilot save/resume. The overlay explicitly labels itself `Terminal Velocity helper/scaffold — not an EV Classic fidelity claim`.
-  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v`; `./run_godot.sh self-test`.
+  - Implementation: Godot now has an F10 help overlay that explains currently wired keys, map route planning, the `G` mission-route helper, mission/free cargo reservation, landing tabs, buy/accept controls, recent message feedback, player-info/inventory overlay, shipyard/outfitter comparison surfaces, refuel, and F6 pilot save/resume. The overlay explicitly labels itself `Terminal Velocity helper/scaffold — not an EV Classic fidelity claim`.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v`; `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_player_inventory_overlay_contract -v`; `./run_godot.sh self-test`.
   - Next action: broad Classic strategy/tutorial detail should wait for stronger manual/runtime evidence; the next safe playable slice is likely refuel/service visibility or save/load pilot persistence.
   - Fidelity boundary: learning aids may explain Terminal Velocity behavior directly; do not present unverified EV Classic facts as canonical.
 

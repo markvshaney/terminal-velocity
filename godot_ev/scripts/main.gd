@@ -67,6 +67,7 @@ var selected_target_index := 0
 var map_visible := false
 var help_visible := false
 var mission_log_visible := false
+var player_info_visible := false
 var stars: Array[Vector2] = []
 var status_line := ""
 var status_messages: Array[String] = []
@@ -1592,6 +1593,7 @@ func _toggle_hyper_mode() -> void:
 	status_line = "Hyper Mode: select destination with \\ then press J"
 
 func _show_player_info() -> void:
+	player_info_visible = not player_info_visible
 	status_line = "Player Info: %s / %s / %d credits" % [loaded_pilot_name if loaded_pilot_name != "" else "Pilot", player_ship_id, credits]
 
 func _show_mission_info() -> void:
@@ -1718,6 +1720,8 @@ func _draw() -> void:
 		_draw_landing_panel()
 	if mission_log_visible:
 		_draw_mission_log_overlay()
+	if player_info_visible:
+		_draw_player_info_overlay()
 	if help_visible:
 		_draw_help_overlay()
 
@@ -2123,6 +2127,39 @@ func _draw_mission_log_overlay() -> void:
 		draw_string(font, Vector2(rect.position.x + 42, y), line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 84, 16, color)
 		y += 28.0
 
+func _draw_player_info_overlay() -> void:
+	var font := ThemeDB.fallback_font
+	var rect := Rect2(260, 150, 760, 430)
+	draw_rect(rect, Color(0.018, 0.026, 0.042, 0.96), true)
+	draw_rect(rect, Color(0.35, 0.62, 0.85, 1.0), false, 2.0)
+	draw_string(font, rect.position + Vector2(0, 38), "Player Info", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 24, Color(0.92, 0.98, 1.0))
+	draw_string(font, rect.position + Vector2(36, 72), "Terminal Velocity player info helper/scaffold — not an EV Classic fidelity claim. P toggles player info.", HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 72, 14, Color(0.95, 0.86, 0.58))
+	var y := rect.position.y + 112.0
+	for line in _player_inventory_lines():
+		draw_string(font, Vector2(rect.position.x + 42, y), line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 84, 16, Color(0.86, 0.92, 1.0))
+		y += 30.0
+
+func _player_inventory_lines() -> Array[String]:
+	var pilot_name := loaded_pilot_name if loaded_pilot_name != "" else "Pilot"
+	return [
+		"Pilot: %s" % pilot_name,
+		"Ship: %s" % player_ship_id,
+		"Credits: %d" % credits,
+		"Cargo: %d/%d (%d mission, %d free)" % [cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons()],
+		"Fuel: %d/%d" % [player_fuel, _max_player_fuel()],
+		"Outfits: %s" % _inventory_dictionary_summary(owned_outfits),
+		"Weapons: %s" % _inventory_dictionary_summary(owned_weapons),
+	]
+
+func _inventory_dictionary_summary(items: Dictionary) -> String:
+	if items.is_empty():
+		return "none"
+	var parts: Array[String] = []
+	for key in items.keys():
+		parts.append("%s x%d" % [str(key), int(items.get(key, 0))])
+	parts.sort()
+	return ", ".join(parts)
+
 func _draw_help_overlay() -> void:
 	var font := ThemeDB.fallback_font
 	var rect := Rect2(250, 120, 780, 520)
@@ -2137,6 +2174,7 @@ func _draw_help_overlay() -> void:
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
+		"Player info: P toggles player info with ship, cargo, fuel, outfits, and weapons.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
 		"Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
 		"Trade route helper: linked-market profit hints are Terminal Velocity scaffold.",
