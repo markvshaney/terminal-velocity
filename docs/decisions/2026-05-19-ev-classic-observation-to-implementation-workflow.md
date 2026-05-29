@@ -103,3 +103,19 @@ Use existing evidence labels consistently:
 - Do not infer global rules from one runtime observation unless the artifact says it is an inference and the backlog keeps it as a candidate.
 - For repository changes, report files modified and verification run.
 - If a recommendation list has multiple future actions, update the backlog in the same turn instead of leaving it only in chat.
+
+## Execution cadence preference
+
+The preferred Terminal Velocity workflow is proactive and implementation-forward, not timid or ritual-heavy. Safe local changes should move fast enough that playable progress does not take eternity.
+
+Checklist for safe local implementation slices:
+
+1. Batch related changes into one coherent player-visible slice instead of splitting adjacent polish into many micro-slices.
+2. Prefer direct implementation once scope is bounded; do not over-plan or repeatedly ask when the next safe action is clear.
+3. Use targeted tests while developing, then run full native/Godot verification once at the commit boundary.
+4. Use proportional verification: heavier tests for persistence, data migration, source/fidelity claims, or cross-system behavior; lighter tests for local text/layout polish.
+5. Update docs/checklists when the player-visible surface, verifier, source/fidelity boundary, or future decision changes; avoid doc churn for every tiny implementation detail.
+6. Preserve real gates for real risk: Strict Play, destructive original-EV tests, credentials/account/provider/gateway changes, external messages, publishing, pushes, or other irreversible/socially consequential actions.
+7. If repeated input/tooling produces no state change, treat it as a tooling/input failure and change strategy instead of continuing cautiously.
+
+This preference does not remove evidence boundaries: original EV Classic remains truth for fidelity claims, while Terminal Velocity scaffolds must stay labeled as scaffolds until source-backed.
