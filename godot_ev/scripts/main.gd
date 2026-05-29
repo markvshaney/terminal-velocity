@@ -63,6 +63,7 @@ var selected_link_index := 0
 var selected_route: Array = []
 var selected_target_index := 0
 var map_visible := false
+var help_visible := false
 var stars: Array[Vector2] = []
 var status_line := ""
 var status_messages: Array[String] = []
@@ -769,6 +770,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_M:
 				_toggle_universe_map()
 			KEY_G: _route_to_active_mission_destination()
+			KEY_F10:
+				help_visible = not help_visible
+				status_line = "Help overlay: " + ("on" if help_visible else "off")
 			KEY_T:
 				_cycle_target(1)
 			KEY_R: _select_closest_target()
@@ -1557,6 +1561,8 @@ func _draw() -> void:
 		_draw_universe_map()
 	if landed:
 		_draw_landing_panel()
+	if help_visible:
+		_draw_help_overlay()
 
 func _draw_title_screen(center: Vector2, font: Font) -> void:
 	for star in stars:
@@ -1884,7 +1890,30 @@ func _draw_hud() -> void:
 	if not targets.is_empty():
 		target_range = pos.distance_to(targets[selected_target_index % targets.size()])
 	draw_string(font, Vector2(1024, 280), "Target: Contact %d  %.0f" % [selected_target_index + 1, target_range], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(1.0, 0.82, 0.35))
-	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F10 help  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+
+func _draw_help_overlay() -> void:
+	var font := ThemeDB.fallback_font
+	var rect := Rect2(250, 120, 780, 520)
+	draw_rect(rect, Color(0.018, 0.026, 0.042, 0.96), true)
+	draw_rect(rect, Color(0.35, 0.62, 0.85, 1.0), false, 2.0)
+	draw_string(font, rect.position + Vector2(0, 38), "Terminal Velocity Help", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 24, Color(0.92, 0.98, 1.0))
+	var lines := [
+		"Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
+		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
+		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops.",
+		"Mission route helper: G queues the active mission destination when known.",
+		"Mission cargo: I shows reserved tons; HUD and market show mission/free cargo.",
+		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
+		"Buying: Enter accepts selected mission; B buys selected commodity, outfit, or ship.",
+		"Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
+		"Messages: recent success and blocked-reason feedback appears under the HUD.",
+		"F10 closes this help overlay. Exact Classic behavior still needs source/runtime evidence."
+	]
+	var y := rect.position.y + 80.0
+	for line in lines:
+		draw_string(font, Vector2(rect.position.x + 36, y), "• " + line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 72, 16, Color(0.82, 0.90, 1.0))
+		y += 38.0
 
 func _draw_scanner_blips(scanner_center: Vector2, scanner_radius: float) -> void:
 	var targets := _npc_world_offsets()

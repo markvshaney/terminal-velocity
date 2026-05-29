@@ -1336,6 +1336,11 @@ class NativeEvModelTests(unittest.TestCase):
             'Δ cargo %+d  Δ hull %+d  Δ speed %+d',
             'func _outfit_effect_summary(item: Dictionary) -> String:',
             'Effect: ',
+            'func _draw_help_overlay() -> void:',
+            'Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.',
+            'Mission route helper: G queues the active mission destination when known.',
+            'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
+            'KEY_F10:',
         ]:
             self.assertIn(prompt, main_script)
 

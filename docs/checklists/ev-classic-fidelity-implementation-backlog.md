@@ -203,11 +203,13 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: add a safe in-game learning/help overlay that explains currently wired keys, route helper, mission cargo reservation, and ship/outfit comparison without making unverified Classic claims.
   - Fidelity boundary: exact EV Classic item stats and persistence behavior require Classic resource/manual/runtime confirmation; current comparison uses the local structured manifest as a Terminal Velocity scaffold.
 
-- [ ] In-game learning/documentation surfaces for EV-style strategy
-  - Status: `candidate`
+- [x] In-game learning/documentation surfaces for EV-style strategy
+  - Status: `implemented Terminal Velocity helper/scaffold`
   - Source: same EV-family deep dive plus recurring guide/player-pain signals from GameFAQs, EVN Wiki, Ambrosia/Cythera archives, and EV Nova manual/walkthroughs.
   - Scope: add or plan durable player learning aids: beginner guide, keyboard overlay, map/service reference, trading guide, combat guide, ship/outfit comparison help, faction/storyline hinting, and mission checklist/log.
-  - Next action: draft a Terminal Velocity player-learning surface plan that separates in-game UI, static docs, and future modder/reference docs.
+  - Implementation: Godot now has an F10 help overlay that explains currently wired keys, map route planning, the `G` mission-route helper, mission/free cargo reservation, landing tabs, buy/accept controls, recent message feedback, and shipyard/outfitter comparison surfaces. The overlay explicitly labels itself `Terminal Velocity helper/scaffold — not an EV Classic fidelity claim`.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v`; `./run_godot.sh self-test`.
+  - Next action: broad Classic strategy/tutorial detail should wait for stronger manual/runtime evidence; the next safe playable slice is likely refuel/service visibility or save/load pilot persistence.
   - Fidelity boundary: learning aids may explain Terminal Velocity behavior directly; do not present unverified EV Classic facts as canonical.
 
 - [x] Automated gameplay learning harness and skill curriculum
