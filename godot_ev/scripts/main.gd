@@ -1329,6 +1329,7 @@ func _list_pilot_files() -> Array[Dictionary]:
 					"system": str(data.get("system", "?")),
 					"credits": int(data.get("credits", 0)),
 					"strict_play": bool(data.get("strict_play", false)),
+					"status_line": str(data.get("status_line", "")),
 				})
 		file_name = dir.get_next()
 	dir.list_dir_end()
@@ -1998,13 +1999,17 @@ func _draw_open_pilot_modal(rect: Rect2, font: Font) -> void:
 
 func _open_pilot_row_text(entry: Dictionary) -> String:
 	var strict_label := "on" if bool(entry.get("strict_play", false)) else "off"
-	return "%s — %s / %s | System: %s | Credits: %d | Strict Play: %s" % [
+	var status_text := str(entry.get("status_line", ""))
+	if status_text.strip_edges() == "":
+		status_text = "No recent status"
+	return "%s — %s / %s | System: %s | Credits: %d | Strict Play: %s | Status: %s" % [
 		str(entry.get("pilot_name", "")),
 		str(entry.get("ship_name", "")),
 		str(entry.get("ship_type", "Shuttlecraft")),
 		str(entry.get("system", "?")),
 		int(entry.get("credits", 0)),
 		strict_label,
+		status_text,
 	]
 
 func _draw_about_modal(rect: Rect2, font: Font) -> void:

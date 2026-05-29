@@ -555,6 +555,8 @@ class NativeEvModelTests(unittest.TestCase):
             'str(data.get("system", "?"))',
             'int(data.get("credits", 0))',
             'bool(data.get("strict_play", false))',
+            'str(data.get("status_line", ""))',
+            'Status: %s',
             '_open_pilot_row_text(entry)',
         ]:
             self.assertIn(symbol, main_script)
