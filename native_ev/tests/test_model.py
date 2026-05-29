@@ -388,6 +388,38 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission route-hint scenario contract', plan)
         self.assertIn('active mission destination → queued route leg', plan)
 
+    def test_godot_pilot_save_resume_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-pilot-save-resume-log',
+            'func _run_pilot_save_resume_log',
+            'TV_PILOT_SAVE_RESUME_EVENT',
+            'KEY_F6: _save_current_pilot_file()',
+            'func _save_current_pilot_file',
+            '_save_new_pilot_file(loaded_pilot_name, loaded_ship_name)',
+            '_load_selected_pilot_file()',
+            'saveSucceeded=true',
+            'resumeSucceeded=true',
+            'systemRoundTrip=true',
+            'fuelRoundTrip=true',
+            'creditsRoundTrip=true',
+            'missionRoundTrip=true',
+            'strictPlayRoundTrip=true',
+            'sourceLabel=terminal-velocity-save-scaffold',
+            'oracleStatus=save_resume_pending_ev_classic_file_trace',
+            'F6 saves current pilot',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$PilotSaveResumeLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-pilot-save-resume-log', run_script)
+        self.assertIn('tv-pilot-save-resume-log', wrapper)
+        self.assertIn('Pilot save/resume scenario contract', plan)
+        self.assertIn('save → mutate → reopen pilot', plan)
+
     def test_godot_mission_offer_scan_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

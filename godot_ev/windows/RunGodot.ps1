@@ -9,7 +9,8 @@ param(
     [switch]$LowFuelJumpLog,
     [switch]$MissionOfferScanLog,
     [switch]$MissionRouteHintLog,
-    [switch]$FirstMissionDeliveryLog
+    [switch]$FirstMissionDeliveryLog,
+    [switch]$PilotSaveResumeLog
 )
 
 $Godot = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe\Godot_v4.6.2-stable_win64_console.exe"
@@ -44,6 +45,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-route-hint-log
 } elseif ($FirstMissionDeliveryLog) {
     & $Godot --headless --path $Project -- --tv-first-mission-delivery-log
+} elseif ($PilotSaveResumeLog) {
+    & $Godot --headless --path $Project -- --tv-pilot-save-resume-log
 } else {
     & $Godot --path $Project
 }

@@ -32,6 +32,7 @@ const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
+const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
 var repo_root := ""
@@ -134,6 +135,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_route_hint_log")
 	if OS.get_cmdline_args().has("--tv-first-mission-delivery-log") or OS.get_cmdline_user_args().has("--tv-first-mission-delivery-log"):
 		call_deferred("_run_first_mission_delivery_log")
+	if OS.get_cmdline_args().has("--tv-pilot-save-resume-log") or OS.get_cmdline_user_args().has("--tv-pilot-save-resume-log"):
+		call_deferred("_run_pilot_save_resume_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -684,6 +687,53 @@ func _run_first_mission_delivery_log() -> void:
 	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" %s actualAcceptedMission=%s %s destinationSystem=%s destinationBody=\"%s\" routeToDestinationSelected=%s finalSystem=%s landedBody=\"%s\" completedMissions=%s %s creditsBeforeAccept=%d creditsAfterDelivery=%d reward=%d cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterDelivery=%d activeMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD, accepted_mission_id, accepted_status, destination_system, destination_body, str(route_to_destination_selected), str(current_system.get("name", "?")), str(_current_body().get("name", "None")), JSON.stringify(completed_ids), delivered_status, credits_before_accept, credits_after_delivery, reward, cargo_before_accept, cargo_after_accept, cargo_after_delivery, JSON.stringify(active_missions), JSON.stringify(story_flags), status_line])
 	get_tree().quit(0)
 
+func _run_pilot_save_resume_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	loaded_pilot_name = "Save Resume Test"
+	loaded_ship_name = "RoundTrip"
+	strict_play_selected = false
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	var accepted_body := _current_body()
+	var mission_before_accept: Dictionary = _first_available_mission(accepted_body)
+	var accepted_mission_id := str(mission_before_accept.get("id", "none"))
+	_accept_selected_mission()
+	var saved_system := str(current_system.get("name", "?"))
+	var saved_fuel := player_fuel
+	var saved_credits := credits
+	var saved_active_missions := active_missions.duplicate()
+	var saved_strict_play := strict_play_selected
+	var save_succeeded := _save_current_pilot_file()
+	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
+	current_system = universe.get("systems", [])[current_system_index]
+	player_fuel = 0
+	credits = 1
+	active_missions.clear()
+	strict_play_selected = true
+	_open_pilot_modal()
+	for i in range(available_pilots.size()):
+		if str(available_pilots[i].get("pilot_name", "")) == loaded_pilot_name:
+			selected_pilot_index = i
+			break
+	_load_selected_pilot_file()
+	var system_round_trip := str(current_system.get("name", "?")) == saved_system
+	var fuel_round_trip := player_fuel == saved_fuel
+	var credits_round_trip := credits == saved_credits
+	var mission_round_trip := active_missions == saved_active_missions and active_missions.has(accepted_mission_id)
+	var strict_round_trip := strict_play_selected == saved_strict_play
+	var resume_succeeded := save_succeeded and system_round_trip and fuel_round_trip and credits_round_trip and mission_round_trip and strict_round_trip
+	var save_status := "saveSucceeded=true" if save_succeeded else "saveSucceeded=false"
+	var resume_status := "resumeSucceeded=true" if resume_succeeded else "resumeSucceeded=false"
+	var system_status := "systemRoundTrip=true" if system_round_trip else "systemRoundTrip=false"
+	var fuel_status := "fuelRoundTrip=true" if fuel_round_trip else "fuelRoundTrip=false"
+	var credits_status := "creditsRoundTrip=true" if credits_round_trip else "creditsRoundTrip=false"
+	var mission_status := "missionRoundTrip=true" if mission_round_trip else "missionRoundTrip=false"
+	var strict_status := "strictPlayRoundTrip=true" if strict_round_trip else "strictPlayRoundTrip=false"
+	print("%s pilot=\"%s\" routeToSolSelected=%s acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s %s %s %s %s savedSystem=%s resumedSystem=%s savedFuel=%d resumedFuel=%d savedCredits=%d resumedCredits=%d activeMissions=%s strictPlay=%s sourceLabel=terminal-velocity-save-scaffold oracleStatus=save_resume_pending_ev_classic_file_trace status=\"%s\"" % [PILOT_SAVE_RESUME_EVENT_LOG_PREFIX, loaded_pilot_name, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, save_status, resume_status, system_status, fuel_status, credits_status, mission_status, strict_status, saved_system, str(current_system.get("name", "?")), saved_fuel, player_fuel, saved_credits, credits, JSON.stringify(active_missions), str(strict_play_selected), status_line])
+	get_tree().quit(0)
+
 func _position_at_body(body_name: String) -> bool:
 	for body in current_system.get("bodies", []):
 		if str(body.get("name", "")) == body_name:
@@ -801,6 +851,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					_refuel_current_ship()
 				else:
 					_set_status("Cannot refuel in space")
+			KEY_F6: _save_current_pilot_file()
 			KEY_UP:
 				if landed:
 					_cycle_landing_selection(-1)
@@ -979,6 +1030,18 @@ func _save_new_pilot_file(pilot_name: String, ship_name: String) -> String:
 	file.store_string(JSON.stringify(pilot_data, "\t"))
 	file.close()
 	return path
+
+func _save_current_pilot_file() -> bool:
+	if loaded_pilot_name.strip_edges() == "":
+		_set_status("No pilot loaded to save")
+		return false
+	loaded_pilot_file = _save_new_pilot_file(loaded_pilot_name, loaded_ship_name)
+	var saved := loaded_pilot_file != ""
+	if saved:
+		_set_status("Saved pilot: %s" % loaded_pilot_name)
+	else:
+		_set_status("Pilot save failed")
+	return saved
 
 func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 	return {
@@ -1895,7 +1958,7 @@ func _draw_hud() -> void:
 	if not targets.is_empty():
 		target_range = pos.distance_to(targets[selected_target_index % targets.size()])
 	draw_string(font, Vector2(1024, 280), "Target: Contact %d  %.0f" % [selected_target_index + 1, target_range], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(1.0, 0.82, 0.35))
-	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F10 help  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F6 save  F10 help  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
 
 func _draw_help_overlay() -> void:
 	var font := ThemeDB.fallback_font
@@ -1910,6 +1973,7 @@ func _draw_help_overlay() -> void:
 		"Mission route helper: G queues the active mission destination when known.",
 		"Mission cargo: I shows reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
+		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
 		"Buying: Enter accepts selected mission; B buys selected commodity, outfit, or ship.",
 		"Shipyard/outfitter: listings show local manifest deltas/effects before buying.",

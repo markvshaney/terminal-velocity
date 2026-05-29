@@ -158,6 +158,17 @@ First mission delivery scenario contract:
   - `sourceLabel=terminal-velocity-observed`;
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
 
+Pilot save/resume scenario contract:
+
+- `RunGodot.ps1 -PilotSaveResumeLog` / `--tv-pilot-save-resume-log`
+- Exercises save → mutate → reopen pilot in the Godot fast-eval lane as a Terminal Velocity persistence scaffold, not an EV Classic pilot-file fidelity claim.
+- Creates/overwrites a deterministic non-strict, non-player test pilot, accepts the intro courier mission, saves current pilot state with `F6`-equivalent `_save_current_pilot_file()`, mutates live state including the Strict Play flag, reopens the saved pilot through the title-screen pilot-file path, and logs:
+  - save and resume booleans (`saveSucceeded=true`, `resumeSucceeded=true`);
+  - round-trip checks for system, fuel, credits, active mission ids, and Strict Play flag;
+  - active mission ids after resume;
+  - `sourceLabel=terminal-velocity-save-scaffold`;
+  - `oracleStatus=save_resume_pending_ev_classic_file_trace`.
+
 ## Bridge gate
 
 A Godot behavior can be optimized freely only when one of these is true:
@@ -182,6 +193,7 @@ python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_low
 python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_offer_scan_autoresearch_log_contract
 python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract
 python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_first_mission_delivery_autoresearch_log_contract
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_pilot_save_resume_log_contract
 python3 -m unittest native_ev.tests.test_model -q
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -MapRouteLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -RouteJumpLog
@@ -190,5 +202,6 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/w
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -MissionOfferScanLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -MissionRouteHintLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -FirstMissionDeliveryLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -PilotSaveResumeLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -SelfTest
 ```

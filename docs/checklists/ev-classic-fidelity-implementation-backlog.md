@@ -208,10 +208,19 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Status: `implemented Terminal Velocity helper/scaffold`
   - Source: same EV-family deep dive plus recurring guide/player-pain signals from GameFAQs, EVN Wiki, Ambrosia/Cythera archives, and EV Nova manual/walkthroughs.
   - Scope: add or plan durable player learning aids: beginner guide, keyboard overlay, map/service reference, trading guide, combat guide, ship/outfit comparison help, faction/storyline hinting, and mission checklist/log.
-  - Implementation: Godot now has an F10 help overlay that explains currently wired keys, map route planning, the `G` mission-route helper, mission/free cargo reservation, landing tabs, buy/accept controls, recent message feedback, and shipyard/outfitter comparison surfaces. The overlay explicitly labels itself `Terminal Velocity helper/scaffold — not an EV Classic fidelity claim`.
+  - Implementation: Godot now has an F10 help overlay that explains currently wired keys, map route planning, the `G` mission-route helper, mission/free cargo reservation, landing tabs, buy/accept controls, recent message feedback, shipyard/outfitter comparison surfaces, refuel, and F6 pilot save/resume. The overlay explicitly labels itself `Terminal Velocity helper/scaffold — not an EV Classic fidelity claim`.
   - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v`; `./run_godot.sh self-test`.
   - Next action: broad Classic strategy/tutorial detail should wait for stronger manual/runtime evidence; the next safe playable slice is likely refuel/service visibility or save/load pilot persistence.
   - Fidelity boundary: learning aids may explain Terminal Velocity behavior directly; do not present unverified EV Classic facts as canonical.
+
+- [x] Pilot save/resume persistence affordance
+  - Status: `implemented Terminal Velocity save scaffold / needs EV Classic pilot-file evidence`
+  - Source: Terminal Velocity JSON pilot persistence path and existing title-screen New/Open Pilot flow; exact EV Classic pilot file layout and autosave/manual-save semantics remain unverified.
+  - Scope: make longer sessions resumable by saving current system, position/velocity/facing, fuel, credits, cargo/cargo space, active/completed missions, story flags, commodity hold, owned outfits/weapons, ship identity, and Strict Play flag.
+  - Implementation: in-flight `F6` now saves the currently loaded pilot through the same `user://pilots/*.tvpilot.json` path used by New/Open Pilot; the HUD and F10 help expose `F6 save`; `./run_godot.sh tv-pilot-save-resume-log` / `RunGodot.ps1 -PilotSaveResumeLog` creates/overwrites a deterministic non-strict test pilot, accepts a courier mission, saves, mutates state including the Strict Play flag, reopens the pilot, and checks round-trip system/fuel/credits/active-mission/Strict-Play fields.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_pilot_save_resume_log_contract -v`; `./run_godot.sh tv-pilot-save-resume-log` emitted `saveSucceeded=true`, `resumeSucceeded=true`, `systemRoundTrip=true`, `fuelRoundTrip=true`, `creditsRoundTrip=true`, `missionRoundTrip=true`, and `strictPlayRoundTrip=true`; full native discovery passed 91 tests; Godot self-test passed with `gameplayScenarios=12`.
+  - Next action: if this verifies, consider a visible mission-log/status detail slice; defer exact Classic pilot-file fidelity until original pilot-file/resource evidence exists.
+  - Fidelity boundary: this is Terminal Velocity save/persistence implementation, not an EV Classic pilot-file fidelity claim.
 
 - [x] Automated gameplay learning harness and skill curriculum
   - Status: `implemented-extended`
