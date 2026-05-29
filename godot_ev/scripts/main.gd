@@ -36,6 +36,7 @@ const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVEN
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
+const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
 var repo_root := ""
@@ -150,6 +151,8 @@ func _ready() -> void:
 		call_deferred("_run_outfitter_shipyard_log")
 	if OS.get_cmdline_args().has("--tv-gameplay-curriculum-help-log") or OS.get_cmdline_user_args().has("--tv-gameplay-curriculum-help-log"):
 		call_deferred("_run_gameplay_curriculum_help_log")
+	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
+		call_deferred("_run_combat_guardrail_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -776,6 +779,17 @@ func _run_gameplay_curriculum_help_log() -> void:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
 	print("%s hintCount=%d hasPirateAvoidanceHint=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(hints[0]) if not hints.is_empty() else ""])
+	get_tree().quit(0)
+
+func _run_combat_guardrail_log() -> void:
+	status_messages.clear()
+	_fire_primary_weapon()
+	_fire_secondary_weapon()
+	_change_secondary_weapon()
+	var has_primary_guardrail := status_messages.has("Primary weapon guarded: combat not implemented; use disposable non-strict pilots for future combat tests")
+	var has_secondary_guardrail := status_messages.has("Secondary weapon guarded: combat not implemented; no live fire executed")
+	var has_change_guardrail := status_messages.has("Secondary weapon selection guarded: no combat loadout changes executed")
+	print("%s primaryGuardrail=%s secondaryGuardrail=%s changeGuardrail=%s combatExecuted=false strictPlay=%s sourceLabel=terminal-velocity-combat-guardrail-scaffold oracleStatus=combat_inputs_pending_ev_classic_trace messages=%s" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(has_primary_guardrail), str(has_secondary_guardrail), str(has_change_guardrail), str(strict_play_selected), JSON.stringify(status_messages)])
 	get_tree().quit(0)
 
 func _run_pilot_save_resume_log() -> void:
@@ -1724,16 +1738,16 @@ func _afterburner_active() -> bool:
 	return Input.is_key_pressed(KEY_Z)
 
 func _fire_primary_weapon() -> void:
-	status_line = "Primary weapon not implemented yet"
+	_set_status("Primary weapon guarded: combat not implemented; use disposable non-strict pilots for future combat tests")
 
 func _fire_secondary_weapon() -> void:
-	status_line = "Secondary weapon not implemented yet"
+	_set_status("Secondary weapon guarded: combat not implemented; no live fire executed")
 
 func _change_secondary_weapon() -> void:
 	if landed and landing_tab == 1:
 		_sell_selected_commodity()
 		return
-	status_line = "Change secondary weapon not implemented yet"
+	_set_status("Secondary weapon selection guarded: no combat loadout changes executed")
 
 func _jump() -> void:
 	var systems: Array = universe.get("systems", [])

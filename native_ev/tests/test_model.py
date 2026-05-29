@@ -179,6 +179,26 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-gameplay-curriculum-help-log', run_script)
         self.assertIn('[switch]$GameplayCurriculumHelpLog', windows_script)
 
+    def test_godot_combat_inputs_are_visible_guardrails_not_execution_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_COMBAT_GUARDRAIL_EVENT',
+            '--tv-combat-guardrail-log',
+            'func _run_combat_guardrail_log',
+            'Primary weapon guarded: combat not implemented',
+            'Secondary weapon guarded: combat not implemented',
+            'Secondary weapon selection guarded: no combat loadout changes executed',
+            'combatExecuted=false',
+            'sourceLabel=terminal-velocity-combat-guardrail-scaffold',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-combat-guardrail-log', run_script)
+        self.assertIn('[switch]$CombatGuardrailLog', windows_script)
+
     def test_wsl_godot_launcher_can_run_selftest_via_windows_binary(self):
         root = Path(__file__).resolve().parents[2]
         launcher = (root / 'run_godot.sh').read_text()
