@@ -14,7 +14,8 @@ param(
     [switch]$PilotSaveResumeLog,
     [switch]$OutfitterShipyardLog,
     [switch]$GameplayCurriculumHelpLog,
-    [switch]$CombatGuardrailLog
+    [switch]$CombatGuardrailLog,
+    [switch]$NavigationGuardrailLog
 )
 
 $Godot = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe\Godot_v4.6.2-stable_win64_console.exe"
@@ -59,6 +60,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-gameplay-curriculum-help-log
 } elseif ($CombatGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-combat-guardrail-log
+} elseif ($NavigationGuardrailLog) {
+    & $Godot --headless --path $Project -- --tv-navigation-guardrail-log
 } else {
     & $Godot --path $Project
 }

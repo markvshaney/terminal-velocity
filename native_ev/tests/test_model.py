@@ -199,6 +199,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-combat-guardrail-log', run_script)
         self.assertIn('[switch]$CombatGuardrailLog', windows_script)
 
+    def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_NAVIGATION_GUARDRAIL_EVENT',
+            '--tv-navigation-guardrail-log',
+            'func _run_navigation_guardrail_log',
+            'No hyperspace route selected; open map (M) or queue mission route (G)',
+            'Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route',
+            'No port in range; fly closer to a planet/station and slow below landing speed',
+            'Approach slower/closer to land; landing needs close range and speed under 90',
+            'Refuel unavailable here; choose a port with refuel service',
+            'sourceLabel=terminal-velocity-navigation-guardrail-scaffold',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-navigation-guardrail-log', run_script)
+        self.assertIn('[switch]$NavigationGuardrailLog', windows_script)
+
     def test_wsl_godot_launcher_can_run_selftest_via_windows_binary(self):
         root = Path(__file__).resolve().parents[2]
         launcher = (root / 'run_godot.sh').read_text()

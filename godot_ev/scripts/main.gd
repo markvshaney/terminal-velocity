@@ -37,6 +37,7 @@ const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
+const NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX := "TV_NAVIGATION_GUARDRAIL_EVENT"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
 var repo_root := ""
@@ -153,6 +154,8 @@ func _ready() -> void:
 		call_deferred("_run_gameplay_curriculum_help_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-navigation-guardrail-log") or OS.get_cmdline_user_args().has("--tv-navigation-guardrail-log"):
+		call_deferred("_run_navigation_guardrail_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -617,7 +620,7 @@ func _run_low_fuel_jump_log() -> void:
 	_jump()
 	var fuel_after_jump := player_fuel
 	var final_system := str(current_system.get("name", "?"))
-	var jump_blocked := route_selected and final_system == start_system and fuel_after_jump == fuel_before_jump and status_line == "Insufficient fuel for hyperspace"
+	var jump_blocked := route_selected and final_system == start_system and fuel_after_jump == fuel_before_jump and status_line == "Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route"
 	var jump_blocked_status := "jumpBlocked=true" if jump_blocked else "jumpBlocked=false"
 	var block_reason := "blockReason=insufficient_fuel" if jump_blocked else "blockReason=none"
 	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s fuelBeforeJump=%d fuelAfterJump=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [LOW_FUEL_JUMP_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_blocked_status, block_reason, fuel_before_jump, fuel_after_jump, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
@@ -792,6 +795,45 @@ func _run_combat_guardrail_log() -> void:
 	print("%s primaryGuardrail=%s secondaryGuardrail=%s changeGuardrail=%s combatExecuted=false strictPlay=%s sourceLabel=terminal-velocity-combat-guardrail-scaffold oracleStatus=combat_inputs_pending_ev_classic_trace messages=%s" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(has_primary_guardrail), str(has_secondary_guardrail), str(has_change_guardrail), str(strict_play_selected), JSON.stringify(status_messages)])
 	get_tree().quit(0)
 
+func _run_navigation_guardrail_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	var original_system: Dictionary = current_system.duplicate(true)
+	var no_link_system: Dictionary = current_system.duplicate(true)
+	no_link_system["links"] = []
+	current_system = no_link_system
+	_jump()
+	current_system = original_system
+	var no_route_guidance := status_messages.has("No hyperspace route selected; open map (M) or queue mission route (G)")
+	map_visible = true
+	_select_first_linked_map_route()
+	player_fuel = 0
+	_jump()
+	var fuel_guidance := status_messages.has("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route")
+	pos = Vector2(9999, 9999)
+	vel = Vector2.ZERO
+	_try_land()
+	var no_port_guidance := status_messages.has("No port in range; fly closer to a planet/station and slow below landing speed")
+	pos = Vector2(float(current_system.get("bodies", [])[0].get("x", 0)), float(current_system.get("bodies", [])[0].get("y", 0)))
+	vel = Vector2(120, 0)
+	_try_land()
+	var approach_guidance := status_messages.has("Approach slower/closer to land; landing needs close range and speed under 90")
+	landed = true
+	vel = Vector2.ZERO
+	var body := _current_body()
+	var inventory: Dictionary = body.get("inventory", {}).duplicate(true)
+	inventory["services"] = []
+	inventory["outfitsForSale"] = []
+	body["inventory"] = inventory
+	var original_bodies: Array = current_system.get("bodies", [])
+	var original_body: Dictionary = original_bodies[0]
+	original_bodies[0] = body
+	_refuel_current_ship()
+	original_bodies[0] = original_body
+	var refuel_guidance := status_messages.has("Refuel unavailable here; choose a port with refuel service")
+	print("%s noRouteGuidance=%s fuelGuidance=%s noPortGuidance=%s approachGuidance=%s refuelGuidance=%s sourceLabel=terminal-velocity-navigation-guardrail-scaffold oracleStatus=navigation_blocked_feedback_pending_playtest messages=%s" % [NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX, str(no_route_guidance), str(fuel_guidance), str(no_port_guidance), str(approach_guidance), str(refuel_guidance), JSON.stringify(status_messages)])
+	get_tree().quit(0)
+
 func _run_pilot_save_resume_log() -> void:
 	_reset_travel_state()
 	map_visible = true
@@ -937,11 +979,11 @@ func _jump_fuel_cost() -> int:
 
 func _refuel_current_ship() -> bool:
 	if not landed:
-		_set_status("Cannot refuel in space")
+		_set_status("Cannot refuel in space; land at a port with refuel service")
 		return false
 	var body := _current_body()
 	if not _body_refuel_available(body):
-		_set_status("No refuel service at " + str(body.get("name", "port")))
+		_set_status("Refuel unavailable here; choose a port with refuel service")
 		return false
 	player_fuel = _max_player_fuel()
 	_set_status("Refueled at " + str(body.get("name", "port")))
@@ -1753,9 +1795,10 @@ func _jump() -> void:
 	var systems: Array = universe.get("systems", [])
 	var links: Array = current_system.get("links", [])
 	if links.is_empty() and selected_route.is_empty():
+		_set_status("No hyperspace route selected; open map (M) or queue mission route (G)")
 		return
 	if player_fuel < _jump_fuel_cost():
-		status_line = "Insufficient fuel for hyperspace"
+		_set_status("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route")
 		return
 	var destination := _selected_destination_name()
 	for i in range(systems.size()):
@@ -1775,14 +1818,14 @@ func _jump() -> void:
 func _try_land() -> void:
 	var nearest := _nearest_body()
 	if nearest.is_empty():
-		status_line = "No port in range"
+		_set_status("No port in range; fly closer to a planet/station and slow below landing speed")
 		return
 	if nearest["distance"] < nearest["body"].get("r", 40) + 45 and vel.length() < 90:
 		landed = true
 		vel = Vector2.ZERO
-		status_line = "Landed at " + nearest["body"].get("name", "port")
+		_set_status("Landed at " + nearest["body"].get("name", "port"))
 	else:
-		status_line = "Approach slower/closer to land"
+		_set_status("Approach slower/closer to land; landing needs close range and speed under 90")
 
 func _nearest_body() -> Dictionary:
 	var best := {}
