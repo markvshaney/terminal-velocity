@@ -29,6 +29,7 @@ const MAP_ROUTE_EVENT_LOG_PREFIX := "TV_MAP_ROUTE_EVENT"
 const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
 const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
+const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
@@ -131,6 +132,8 @@ func _ready() -> void:
 		call_deferred("_run_route_land_refuel_log")
 	if OS.get_cmdline_args().has("--tv-low-fuel-jump-log") or OS.get_cmdline_user_args().has("--tv-low-fuel-jump-log"):
 		call_deferred("_run_low_fuel_jump_log")
+	if OS.get_cmdline_args().has("--tv-commodity-trade-log") or OS.get_cmdline_user_args().has("--tv-commodity-trade-log"):
+		call_deferred("_run_commodity_trade_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
@@ -463,6 +466,8 @@ func _reset_travel_state() -> void:
 	landing_tab = 0
 	selected_landing_item = 0
 	player_fuel = _max_player_fuel()
+	commodity_hold.clear()
+	cargo = 0
 
 func _run_travel_event_log() -> void:
 	_reset_travel_state()
@@ -604,6 +609,35 @@ func _run_low_fuel_jump_log() -> void:
 	var jump_blocked_status := "jumpBlocked=true" if jump_blocked else "jumpBlocked=false"
 	var block_reason := "blockReason=insufficient_fuel" if jump_blocked else "blockReason=none"
 	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s fuelBeforeJump=%d fuelAfterJump=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [LOW_FUEL_JUMP_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_blocked_status, block_reason, fuel_before_jump, fuel_after_jump, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _run_commodity_trade_log() -> void:
+	_reset_travel_state()
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var commodities: Array = economy.get("commodities", [])
+	var commodity: Dictionary = commodities[0] if not commodities.is_empty() else {}
+	var commodity_id := str(commodity.get("id", "none"))
+	var buy_price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("buy", 0))
+	var sell_price := _commodity_sell_price(commodity_id)
+	var credits_before_buy := credits
+	var cargo_before_buy := cargo
+	_buy_selected_commodity()
+	var credits_after_buy := credits
+	var cargo_after_buy := cargo
+	var held_after_buy := int(commodity_hold.get(commodity_id, 0))
+	var buy_succeeded := buy_price > 0 and held_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo_after_buy == cargo_before_buy + EV_CLASSIC_COMMODITY_LOT_SIZE and credits_after_buy == credits_before_buy - (buy_price * EV_CLASSIC_COMMODITY_LOT_SIZE)
+	_sell_selected_commodity()
+	var credits_after_sell := credits
+	var cargo_after_sell := cargo
+	var held_after_sell := int(commodity_hold.get(commodity_id, 0))
+	var sell_succeeded := sell_price > 0 and held_after_sell == 0 and cargo_after_sell == cargo_before_buy and credits_after_sell == credits_after_buy + (sell_price * EV_CLASSIC_COMMODITY_LOT_SIZE)
+	var round_trip_visible := buy_succeeded and sell_succeeded and status_messages.has("Bought %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, str(commodity.get("name", commodity_id))]) and status_messages.has("Sold %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, str(commodity.get("name", commodity_id))])
+	var buy_status := "buySucceeded=true" if buy_succeeded else "buySucceeded=false"
+	var sell_status := "sellSucceeded=true" if sell_succeeded else "sellSucceeded=false"
+	var visible_status := "roundTripVisible=true" if round_trip_visible else "roundTripVisible=false"
+	print("%s system=%s commodity=%s buyPrice=%d sellPrice=%d %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBeforeBuy=%d cargoAfterBuy=%d cargoAfterSell=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=original-runtime-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [COMMODITY_TRADE_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, sell_price, buy_status, sell_status, visible_status, credits_before_buy, credits_after_buy, credits_after_sell, cargo_before_buy, cargo_after_buy, cargo_after_sell, held_after_buy, held_after_sell, status_line])
 	get_tree().quit(0)
 
 func _run_mission_offer_scan_log() -> void:
@@ -2069,7 +2103,7 @@ func _draw_help_overlay() -> void:
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
-		"Buying: Enter accepts selected mission; B buys selected commodity, outfit, or ship.",
+		"Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
 		"Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
 		"Messages: recent success and blocked-reason feedback appears under the HUD.",
 		"F10 closes this help overlay. Exact Classic behavior still needs source/runtime evidence."
@@ -2267,9 +2301,11 @@ func _draw_commodity_exchange(rect: Rect2) -> void:
 	var market_prices := _market_prices(current_system.get("name", ""))
 	draw_string(font, rect.position + Vector2(30, 166), "Commodity Exchange", HORIZONTAL_ALIGNMENT_LEFT, 820, 22, Color(0.92, 0.96, 1.0))
 	draw_string(font, rect.position + Vector2(30, 192), "In Hold:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
-	draw_string(font, rect.position + Vector2(230, 192), "Price:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
-	draw_string(font, rect.position + Vector2(520, 192), "Buy", HORIZONTAL_ALIGNMENT_LEFT, 80, 14, Color(0.95, 0.86, 0.58))
-	draw_string(font, rect.position + Vector2(600, 192), "Cargo reserved for missions: %d" % _mission_reserved_cargo_tons(), HORIZONTAL_ALIGNMENT_LEFT, 260, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(230, 192), "Buy Price:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(390, 192), "Sell Price:", HORIZONTAL_ALIGNMENT_LEFT, 120, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(520, 192), "Buy B", HORIZONTAL_ALIGNMENT_LEFT, 80, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(600, 192), "Sell S", HORIZONTAL_ALIGNMENT_LEFT, 80, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(680, 192), "Cargo reserved for missions: %d" % _mission_reserved_cargo_tons(), HORIZONTAL_ALIGNMENT_LEFT, 180, 14, Color(0.95, 0.86, 0.58))
 	var y := 218.0
 	var commodities: Array = economy.get("commodities", [])
 	for i in range(min(8, commodities.size())):
@@ -2280,13 +2316,19 @@ func _draw_commodity_exchange(rect: Rect2) -> void:
 		var held := int(commodity_hold.get(commodity_id, 0))
 		var hold_text := "" if held == 0 else str(held)
 		var status := _ev_classic_price_status(prices)
+		var sell_price_text := str(prices.get("sell", "—"))
 		draw_string(font, rect.position + Vector2(30, y), "%s %-11s %s" % [marker, commodity.get("name", commodity_id), hold_text], HORIZONTAL_ALIGNMENT_LEFT, 190, 16, Color(0.82, 0.92, 0.86))
-		draw_string(font, rect.position + Vector2(230, y), "%s  %s" % [status, str(prices.get("buy", "—"))], HORIZONTAL_ALIGNMENT_LEFT, 180, 16, Color(0.82, 0.92, 0.86))
+		draw_string(font, rect.position + Vector2(230, y), "%s  %s" % [status, str(prices.get("buy", "—"))], HORIZONTAL_ALIGNMENT_LEFT, 150, 16, Color(0.82, 0.92, 0.86))
+		draw_string(font, rect.position + Vector2(390, y), sell_price_text, HORIZONTAL_ALIGNMENT_LEFT, 100, 16, Color(0.82, 0.92, 0.86))
 		draw_string(font, rect.position + Vector2(520, y), "B", HORIZONTAL_ALIGNMENT_LEFT, 40, 16, Color(0.82, 0.92, 0.86))
+		draw_string(font, rect.position + Vector2(600, y), "S" if held > 0 else "—", HORIZONTAL_ALIGNMENT_LEFT, 40, 16, Color(0.82, 0.92, 0.86))
 		y += 28.0
 
 func _ev_classic_price_status(prices: Dictionary) -> String:
 	return str(prices.get("evClassicPriceStatus", ""))
+
+func _commodity_sell_price(commodity_id: String) -> int:
+	return int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("sell", 0))
 
 func _draw_outfitter(rect: Rect2, body: Dictionary) -> void:
 	var font := ThemeDB.fallback_font
@@ -2469,7 +2511,10 @@ func _sell_selected_commodity() -> void:
 	if held <= 0:
 		_set_status("No cargo to sell")
 		return
-	var price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("sell", 0))
+	var price := _commodity_sell_price(commodity_id)
+	if price <= 0:
+		_set_status("No sell price here")
+		return
 	var tons: int = min(EV_CLASSIC_COMMODITY_LOT_SIZE, held)
 	credits += price * tons
 	cargo = max(0, cargo - tons)

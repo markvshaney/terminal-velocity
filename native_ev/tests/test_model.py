@@ -1438,6 +1438,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Bought %d tons of %s', main_script)
         self.assertIn('Sold %d tons of %s', main_script)
 
+    def test_godot_commodity_buy_sell_affordance_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            'const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"',
+            '--tv-commodity-trade-log',
+            'func _run_commodity_trade_log() -> void:',
+            'buySucceeded=true',
+            'sellSucceeded=true',
+            'roundTripVisible=true',
+            'Buy B',
+            'Sell S',
+            'Sell Price:',
+            'S sells selected cargo',
+            'No sell price here',
+            'func _commodity_sell_price(commodity_id: String) -> int:',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$CommodityTradeLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-commodity-trade-log', run_script)
+        self.assertIn('tv-commodity-trade-log', launcher)
+
     def test_godot_click_sound_is_wired_to_landing_actions(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
