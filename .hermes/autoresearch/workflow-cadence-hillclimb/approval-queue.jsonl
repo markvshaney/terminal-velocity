@@ -1,0 +1,1 @@
+{"schema":"workflow-cadence-hillclimb/approval-queue.v1","created":"2026-05-29","purpose":"Approval-gated workflow changes; scheduled runs must not execute these directly."}
