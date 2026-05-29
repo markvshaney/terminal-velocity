@@ -23,6 +23,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'chapter_one_courier_chain',
                 'alignment_choice_guardrail',
                 'mission_destination_route_hint',
+                'outfitter_ship_ladder_intro',
                 'shift_click_multi_stop_route_queue',
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
@@ -221,6 +222,22 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['queued_active_mission_destination'], 'passed')
         self.assertEqual(result['trace'][-1]['destinationSystem'], 'Centauri')
         self.assertEqual(result['trace'][-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
+
+    def test_outfitter_ship_ladder_intro_buys_upgrade_weapon_and_bigger_ship(self):
+        result = run_scripted_scenario('outfitter_ship_ladder_intro')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['playerShipId'], 'light_freighter')
+        self.assertEqual(result['state']['ownedOutfits']['cargo_pod'], 1)
+        self.assertEqual(result['state']['ownedWeapons']['laser_cannon'], 1)
+        self.assertGreater(result['state']['cargoCapacity'], 20)
+        self.assertEqual(result['checks']['bought_first_outfit'], 'passed')
+        self.assertEqual(result['checks']['bought_first_weapon'], 'passed')
+        self.assertEqual(result['checks']['upgraded_to_larger_ship'], 'passed')
+        self.assertEqual(result['checks']['recorded_outfitter_ship_ladder_source_boundary'], 'passed')
+        self.assertIn('terminal-velocity-outfitter-ship-ladder-scaffold', {event.get('sourceLabel') for event in result['trace']})
 
     def test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg(self):
         result = run_scripted_scenario('shift_click_multi_stop_route_queue')

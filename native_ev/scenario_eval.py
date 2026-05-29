@@ -10,7 +10,17 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from native_ev.model import available_mission_ids, economy_manifest, load_universe, mission_manifest, system_distance
+from native_ev.model import (
+    available_mission_ids,
+    economy_manifest,
+    load_universe,
+    mission_manifest,
+    outfit_manifest,
+    ship_manifest,
+    station_inventory,
+    weapon_manifest,
+    system_distance,
+)
 
 COMMODITY_LOT_SIZE = 10
 STARTING_CREDITS = 10000
@@ -26,6 +36,7 @@ SCENARIO_CURRICULUM = [
     'chapter_one_courier_chain',
     'alignment_choice_guardrail',
     'mission_destination_route_hint',
+    'outfitter_ship_ladder_intro',
     'shift_click_multi_stop_route_queue',
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
@@ -77,6 +88,11 @@ def initial_gameplay_state() -> dict[str, Any]:
         'combatExecuted': False,
         'strictPlay': False,
         'knownSystems': known_systems,
+        'playerShipId': 'shuttlecraft',
+        'ownedOutfits': {},
+        'ownedWeapons': {},
+        'maxHull': 100,
+        'maxFuel': STARTING_FUEL,
     }
 
 
@@ -324,6 +340,102 @@ def _accept_manifest_mission(state: dict[str, Any], action: dict[str, Any], trac
     }, trace)
 
 
+def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    if state['landedBody'] is None:
+        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'not landed', 'system': state['currentSystem']})
+        return False
+    universe = load_universe()
+    inventory = station_inventory(universe, state['currentSystem'], state['landedBody'])
+    item_id = str(action['itemId'])
+    outfit_by_id = {item['id']: item for item in outfit_manifest().get('outfits', [])}
+    weapon_by_id = {item['id']: item for item in weapon_manifest().get('weapons', [])}
+    if item_id in outfit_by_id:
+        if item_id not in inventory.get('outfitsForSale', []):
+            trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'outfit not for sale here', 'itemId': item_id, 'system': state['currentSystem'], 'body': state['landedBody']})
+            return False
+        item = outfit_by_id[item_id]
+        sale_type = 'outfit'
+    elif item_id in weapon_by_id:
+        if item_id not in inventory.get('weaponsForSale', []):
+            trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'weapon not for sale here', 'itemId': item_id, 'system': state['currentSystem'], 'body': state['landedBody']})
+            return False
+        item = weapon_by_id[item_id]
+        sale_type = 'weapon'
+    else:
+        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'unknown item', 'itemId': item_id})
+        return False
+    price = int(item.get('price', 0))
+    if state['credits'] < price:
+        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'insufficient credits', 'itemId': item_id, 'price': price, 'credits': state['credits']})
+        return False
+    state['credits'] -= price
+    if sale_type == 'weapon':
+        state['ownedWeapons'][item_id] = int(state['ownedWeapons'].get(item_id, 0)) + 1
+    else:
+        state['ownedOutfits'][item_id] = int(state['ownedOutfits'].get(item_id, 0)) + 1
+        effects = item.get('effects', {})
+        state['cargoCapacity'] += int(effects.get('cargoSpace', 0))
+        state['maxHull'] += int(effects.get('maxHull', 0))
+        state['maxFuel'] += int(effects.get('maxFuel', 0))
+    trace.append({
+        'type': 'buy_outfit_or_weapon',
+        'saleType': sale_type,
+        'itemId': item_id,
+        'name': item.get('name', item_id),
+        'price': price,
+        'creditsAfter': state['credits'],
+        'cargoCapacity': state['cargoCapacity'],
+        'maxHull': state['maxHull'],
+        'maxFuel': state['maxFuel'],
+        'sourceLabel': 'terminal-velocity-outfitter-ship-ladder-scaffold',
+        'oracleStatus': 'manifest_scaffold_pending_original_outfitter_trace',
+    })
+    return True
+
+
+def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    if state['landedBody'] is None:
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'not landed', 'system': state['currentSystem']})
+        return False
+    universe = load_universe()
+    inventory = station_inventory(universe, state['currentSystem'], state['landedBody'])
+    ship_id = str(action['shipId'])
+    listings = {item['shipId']: item for item in outfit_manifest().get('shipyard', [])}
+    ships = {item['id']: item for item in ship_manifest().get('ships', [])}
+    if ship_id not in inventory.get('shipsForSale', []):
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'ship not for sale here', 'shipId': ship_id, 'system': state['currentSystem'], 'body': state['landedBody']})
+        return False
+    if ship_id not in listings or ship_id not in ships:
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'ship manifest missing', 'shipId': ship_id})
+        return False
+    listing = listings[ship_id]
+    price = int(listing.get('price', 0))
+    if state['credits'] < price:
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'insufficient credits', 'shipId': ship_id, 'price': price, 'credits': state['credits']})
+        return False
+    previous_ship = state['playerShipId']
+    previous_cargo = state['cargoCapacity']
+    ship = ships[ship_id]
+    state['credits'] -= price
+    state['playerShipId'] = ship_id
+    state['cargoCapacity'] = int(ship.get('cargoSpace', state['cargoCapacity']))
+    state['cargoUsed'] = min(int(state['cargoUsed']), int(state['cargoCapacity']))
+    state['maxHull'] = int(ship.get('hull', state.get('maxHull', 100)))
+    state['maxFuel'] = int(ship.get('fuel', state.get('maxFuel', STARTING_FUEL)))
+    trace.append({
+        'type': 'buy_ship',
+        'shipId': ship_id,
+        'previousShipId': previous_ship,
+        'price': price,
+        'creditsAfter': state['credits'],
+        'cargoCapacityBefore': previous_cargo,
+        'cargoCapacityAfter': state['cargoCapacity'],
+        'sourceLabel': 'terminal-velocity-outfitter-ship-ladder-scaffold',
+        'oracleStatus': 'manifest_scaffold_pending_original_shipyard_trace',
+    })
+    return True
+
+
 def _combat_placeholder_guardrail(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     state['combatExecuted'] = False
     trace.append({
@@ -445,6 +557,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'depart'},
             {'type': 'route_to_active_mission_destination'},
         ]
+    if name == 'outfitter_ship_ladder_intro':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod'},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'laser_cannon'},
+            {'type': 'set_state', 'values': {'credits': 60000}},
+            {'type': 'buy_ship', 'shipId': 'light_freighter'},
+        ]
     if name == 'shift_click_multi_stop_route_queue':
         return [
             {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
@@ -530,6 +651,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         checks.update({
             'queued_active_mission_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] and any(event.get('type') == 'route_to_active_mission_destination' and event.get('missionId') == 'intro_courier_earth_hera' and event.get('destinationSystem') == 'Centauri' and event.get('routeQueued') for event in trace) else 'failed',
         })
+    elif name == 'outfitter_ship_ladder_intro':
+        checks.update({
+            'bought_first_outfit': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and any(event.get('type') == 'buy_outfit_or_weapon' and event.get('saleType') == 'outfit' and event.get('itemId') == 'cargo_pod' for event in trace) else 'failed',
+            'bought_first_weapon': 'passed' if state.get('ownedWeapons', {}).get('laser_cannon') == 1 and any(event.get('type') == 'buy_outfit_or_weapon' and event.get('saleType') == 'weapon' and event.get('itemId') == 'laser_cannon' for event in trace) else 'failed',
+            'upgraded_to_larger_ship': 'passed' if state.get('playerShipId') == 'light_freighter' and any(event.get('type') == 'buy_ship' and event.get('previousShipId') == 'shuttlecraft' and int(event.get('cargoCapacityAfter', 0)) > int(event.get('cargoCapacityBefore', 0)) for event in trace) else 'failed',
+            'recorded_outfitter_ship_ladder_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-outfitter-ship-ladder-scaffold' and 'pending_original' in event.get('oracleStatus', '') for event in trace if event.get('type') in {'buy_outfit_or_weapon', 'buy_ship'}) else 'failed',
+        })
     elif name == 'shift_click_multi_stop_route_queue':
         appended_paths = [event.get('greenRoutePath') for event in trace if event.get('type') == 'append_route_stop']
         checks.update({
@@ -590,6 +718,8 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'route_to_active_mission_destination': _route_to_active_mission_destination,
         'scan_mission_offers': _scan_mission_offers,
         'accept_manifest_mission': _accept_manifest_mission,
+        'buy_outfit_or_weapon': _buy_outfit_or_weapon,
+        'buy_ship': _buy_ship,
         'complete_cargo_jobs': _complete_cargo_jobs,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
     }
