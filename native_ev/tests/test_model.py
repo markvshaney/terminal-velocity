@@ -452,6 +452,22 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_mission_completion_history_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'var completed_mission_history: Array = []',
+            'func _mission_completion_history_lines',
+            'Completed mission history',
+            'Cargo released:',
+            'Reward paid:',
+            'completed_mission_history.append',
+            '"completed_mission_history": completed_mission_history',
+            'completed_mission_history = data.get("completed_mission_history", completed_mission_history)',
+            '_mission_completion_record',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_mission_offer_scan_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

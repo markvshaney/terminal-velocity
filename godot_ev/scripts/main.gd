@@ -93,6 +93,7 @@ var landing_tab := 0
 var selected_landing_item := 0
 var active_missions: Array = []
 var completed_missions: Array = []
+var completed_mission_history: Array = []
 var story_flags: Array = []
 var commodity_hold: Dictionary = {}
 var owned_outfits: Dictionary = {}
@@ -763,14 +764,27 @@ func _complete_arrived_missions() -> Array:
 		active_missions.erase(mission_id)
 		if not completed_missions.has(mission_id):
 			completed_missions.append(mission_id)
-		cargo = max(0, cargo - int(mission.get("cargoTons", 0)))
-		credits += int(mission.get("reward", 0))
+		var cargo_released := int(mission.get("cargoTons", 0))
+		var reward_paid := int(mission.get("reward", 0))
+		cargo = max(0, cargo - cargo_released)
+		credits += reward_paid
+		completed_mission_history.append(_mission_completion_record(mission, cargo_released, reward_paid))
 		for flag in mission.get("completionFlags", []):
 			if not story_flags.has(flag):
 				story_flags.append(flag)
 		completed_now.append(mission_id)
 	status_line = "Completed missions: " + ", ".join(completed_now) if not completed_now.is_empty() else "No missions completed"
 	return completed_now
+
+func _mission_completion_record(mission: Dictionary, cargo_released: int, reward_paid: int) -> Dictionary:
+	return {
+		"id": str(mission.get("id", "")),
+		"title": str(mission.get("title", mission.get("id", "Mission"))),
+		"system": str(current_system.get("name", "?")),
+		"body": str(_current_body().get("name", "?")),
+		"cargo_released": cargo_released,
+		"reward_paid": reward_paid,
+	}
 
 func _body_refuel_available(body: Dictionary) -> bool:
 	var inventory := _station_inventory(body)
@@ -1064,6 +1078,7 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"facing_index": player_facing_index,
 		"active_missions": active_missions,
 		"completed_missions": completed_missions,
+		"completed_mission_history": completed_mission_history,
 		"story_flags": story_flags,
 		"commodity_hold": commodity_hold,
 		"owned_outfits": owned_outfits,
@@ -1189,6 +1204,7 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	cargo = mini(cargo, cargo_space)
 	active_missions = data.get("active_missions", active_missions)
 	completed_missions = data.get("completed_missions", completed_missions)
+	completed_mission_history = data.get("completed_mission_history", completed_mission_history)
 	story_flags = data.get("story_flags", story_flags)
 	commodity_hold = data.get("commodity_hold", commodity_hold)
 	owned_outfits = data.get("owned_outfits", owned_outfits)
@@ -1986,6 +2002,19 @@ func _mission_log_detail_lines() -> Array[String]:
 		if description != "":
 			lines.append("Briefing: " + description)
 		lines.append("")
+	lines.append_array(_mission_completion_history_lines())
+	return lines
+
+func _mission_completion_history_lines() -> Array[String]:
+	var lines: Array[String] = []
+	if completed_mission_history.is_empty():
+		return lines
+	lines.append("Completed mission history")
+	for record in completed_mission_history.slice(max(0, completed_mission_history.size() - 3), completed_mission_history.size()):
+		var item: Dictionary = record
+		lines.append(str(item.get("title", item.get("id", "Mission"))) + " at " + str(item.get("system", "?")) + " / " + str(item.get("body", "?")))
+		lines.append("Cargo released: %d tons" % int(item.get("cargo_released", 0)))
+		lines.append("Reward paid: %d credits" % int(item.get("reward_paid", 0)))
 	return lines
 
 func _mission_progress_line(mission: Dictionary) -> String:
@@ -2020,7 +2049,7 @@ func _draw_mission_log_overlay() -> void:
 			y += 12.0
 			continue
 		var color := Color(0.86, 0.92, 1.0)
-		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Progress:") or line.begins_with("Route hint:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:"):
+		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Progress:") or line.begins_with("Route hint:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:") or line.begins_with("Cargo released:") or line.begins_with("Reward paid:"):
 			color = Color(0.72, 0.84, 0.96)
 		draw_string(font, Vector2(rect.position.x + 42, y), line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 84, 16, color)
 		y += 28.0
