@@ -157,7 +157,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('_verify_gameplay_curriculum', self_test_script)
         self.assertIn('low_fuel_jump_recovery', manifest['scenarioOrder'])
         self.assertIn('blocked_reason_curriculum', manifest['scenarioOrder'])
+        self.assertIn('pirate_avoidance_escape_route', manifest['scenarioOrder'])
         self.assertIn('disposable_combat_placeholder', manifest['scenarioOrder'])
+
+    def test_godot_help_exposes_gameplay_curriculum_hints_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'var gameplay_curriculum := {}',
+            'native_ev/data/gameplay_curriculum.json',
+            'func _gameplay_curriculum_hint_lines',
+            'Terminal Velocity curriculum hints — scaffold',
+            'pirate_avoidance_escape_route',
+            'TV_GAMEPLAY_CURRICULUM_HELP',
+            '--tv-gameplay-curriculum-help-log',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-gameplay-curriculum-help-log', run_script)
+        self.assertIn('[switch]$GameplayCurriculumHelpLog', windows_script)
 
     def test_wsl_godot_launcher_can_run_selftest_via_windows_binary(self):
         root = Path(__file__).resolve().parents[2]

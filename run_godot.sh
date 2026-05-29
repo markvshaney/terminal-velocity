@@ -24,6 +24,7 @@ Modes:
   tv-first-mission-delivery-log Run first mission acceptance/delivery log
   tv-pilot-save-resume-log Run pilot save/resume log
   tv-outfitter-shipyard-log Run outfitter/shipyard purchase progression log
+  tv-gameplay-curriculum-help-log Run gameplay curriculum help/hint log
 USAGE
 }
 
@@ -35,7 +36,7 @@ case "$mode" in
     self-test)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' --script 'res://scripts/self_test.gd'"
         ;;
-    tv-movement-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log|tv-commodity-trade-log|tv-mission-offer-scan-log|tv-mission-route-hint-log|tv-first-mission-delivery-log|tv-pilot-save-resume-log|tv-outfitter-shipyard-log)
+    tv-movement-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log|tv-commodity-trade-log|tv-mission-offer-scan-log|tv-mission-route-hint-log|tv-first-mission-delivery-log|tv-pilot-save-resume-log|tv-outfitter-shipyard-log|tv-gameplay-curriculum-help-log)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' -- --$mode"
         ;;
     -h|--help|help)

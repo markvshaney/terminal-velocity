@@ -35,6 +35,7 @@ const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
+const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
 var repo_root := ""
@@ -45,6 +46,7 @@ var economy := {}
 var outfits := {}
 var weapons := {}
 var sounds := {}
+var gameplay_curriculum := {}
 var sound_players: Dictionary = {}
 var shipyard_pict_textures: Dictionary = {}
 var current_system_index := 0
@@ -146,6 +148,8 @@ func _ready() -> void:
 		call_deferred("_run_pilot_save_resume_log")
 	if OS.get_cmdline_args().has("--tv-outfitter-shipyard-log") or OS.get_cmdline_user_args().has("--tv-outfitter-shipyard-log"):
 		call_deferred("_run_outfitter_shipyard_log")
+	if OS.get_cmdline_args().has("--tv-gameplay-curriculum-help-log") or OS.get_cmdline_user_args().has("--tv-gameplay-curriculum-help-log"):
+		call_deferred("_run_gameplay_curriculum_help_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -206,6 +210,7 @@ func _load_data() -> void:
 	outfits = _json(repo_root + "/native_ev/data/outfits.json")
 	weapons = _json(repo_root + "/native_ev/data/weapons.json")
 	sounds = _json(repo_root + "/native_ev/data/sounds.json")
+	gameplay_curriculum = _json(repo_root + "/native_ev/data/gameplay_curriculum.json")
 	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
 	current_system = universe.get("systems", [])[current_system_index]
 	var initial_player_ship_id := "shuttlecraft"
@@ -762,6 +767,15 @@ func _run_outfitter_shipyard_log() -> void:
 	var cargo_space_status := "cargoSpaceIncreased=true" if cargo_space_increased else "cargoSpaceIncreased=false"
 	var shipyard_art_status := "shipyardArtLoaded=true" if shipyard_art_loaded else "shipyardArtLoaded=false"
 	print("%s routeToSolSelected=%s system=%s body=%s %s %s %s %s %s startingCargoSpace=%d cargoAfterOutfit=%d finalCargoSpace=%d creditsAfter=%d sourceLabel=terminal-velocity-outfitter-shipyard-scaffold oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace status=\"%s\"" % [OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), landed_body, cargo_pod_status, laser_status, light_freighter_status, cargo_space_status, shipyard_art_status, starting_cargo_space, cargo_space_after_outfit, cargo_space, credits, status_line])
+	get_tree().quit(0)
+
+func _run_gameplay_curriculum_help_log() -> void:
+	var hints := _gameplay_curriculum_hint_lines()
+	var has_pirate_hint := false
+	for line in hints:
+		if str(line).contains("pirate_avoidance_escape_route"):
+			has_pirate_hint = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pilot_save_resume_log() -> void:
@@ -2272,10 +2286,24 @@ func _draw_help_overlay() -> void:
 		"Messages: recent success and blocked-reason feedback appears under the HUD.",
 		"F10 closes this help overlay. Exact Classic behavior still needs source/runtime evidence."
 	]
+	lines.append_array(_gameplay_curriculum_hint_lines().slice(0, 4))
 	var y := rect.position.y + 80.0
 	for line in lines:
 		draw_string(font, Vector2(rect.position.x + 36, y), "• " + line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 72, 16, Color(0.82, 0.90, 1.0))
-		y += 38.0
+		y += 28.0
+
+func _gameplay_curriculum_hint_lines() -> Array[String]:
+	var lines: Array[String] = ["Terminal Velocity curriculum hints — scaffold from native_ev/data/gameplay_curriculum.json"]
+	var scenario_order: Array = gameplay_curriculum.get("scenarioOrder", [])
+	var scenarios: Dictionary = gameplay_curriculum.get("scenarios", {})
+	for scenario_name in scenario_order:
+		var summary: Dictionary = scenarios.get(str(scenario_name), {})
+		var surface := str(summary.get("surface", ""))
+		var purpose := str(summary.get("purpose", ""))
+		if surface == "" or purpose == "":
+			continue
+		lines.append("%s: %s — %s" % [str(scenario_name), surface, purpose])
+	return lines
 
 func _draw_scanner_blips(scanner_center: Vector2, scanner_radius: float) -> void:
 	var targets := _npc_world_offsets()
