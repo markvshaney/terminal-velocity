@@ -388,6 +388,28 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission route-hint scenario contract', plan)
         self.assertIn('active mission destination → queued route leg', plan)
 
+    def test_godot_outfitter_shipyard_progression_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            '--tv-outfitter-shipyard-log',
+            'func _run_outfitter_shipyard_log',
+            'TV_OUTFITTER_SHIPYARD_EVENT',
+            'boughtCargoPod=true',
+            'boughtLaser=true',
+            'boughtLightFreighter=true',
+            'cargoSpaceIncreased=true',
+            'shipyardArtLoaded=true',
+            'sourceLabel=terminal-velocity-outfitter-shipyard-scaffold',
+            'oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$OutfitterShipyardLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-outfitter-shipyard-log', run_script)
+        self.assertIn('tv-outfitter-shipyard-log', wrapper)
+
     def test_godot_pilot_save_resume_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

@@ -34,6 +34,7 @@ const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
+const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
 var repo_root := ""
@@ -143,6 +144,8 @@ func _ready() -> void:
 		call_deferred("_run_first_mission_delivery_log")
 	if OS.get_cmdline_args().has("--tv-pilot-save-resume-log") or OS.get_cmdline_user_args().has("--tv-pilot-save-resume-log"):
 		call_deferred("_run_pilot_save_resume_log")
+	if OS.get_cmdline_args().has("--tv-outfitter-shipyard-log") or OS.get_cmdline_user_args().has("--tv-outfitter-shipyard-log"):
+		call_deferred("_run_outfitter_shipyard_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -722,6 +725,43 @@ func _run_first_mission_delivery_log() -> void:
 	var accepted_status := "missionAccepted=true" if mission_accepted else "missionAccepted=false"
 	var delivered_status := "missionDelivered=true" if mission_delivered else "missionDelivered=false"
 	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" %s actualAcceptedMission=%s %s destinationSystem=%s destinationBody=\"%s\" routeToDestinationSelected=%s finalSystem=%s landedBody=\"%s\" completedMissions=%s %s creditsBeforeAccept=%d creditsAfterDelivery=%d reward=%d cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterDelivery=%d activeMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD, accepted_mission_id, accepted_status, destination_system, destination_body, str(route_to_destination_selected), str(current_system.get("name", "?")), str(_current_body().get("name", "None")), JSON.stringify(completed_ids), delivered_status, credits_before_accept, credits_after_delivery, reward, cargo_before_accept, cargo_after_accept, cargo_after_delivery, JSON.stringify(active_missions), JSON.stringify(story_flags), status_line])
+	get_tree().quit(0)
+
+func _run_outfitter_shipyard_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	var landed_body := str(_current_body().get("name", ""))
+	var starting_cargo_space := cargo_space
+	credits = 100000
+	landing_tab = 2
+	selected_landing_item = 0
+	_buy_selected_outfit_or_weapon()
+	var bought_cargo_pod := owned_outfits.has("cargo_pod") and int(owned_outfits.get("cargo_pod", 0)) > 0
+	var cargo_space_after_outfit := cargo_space
+	selected_landing_item = 3
+	_buy_selected_outfit_or_weapon()
+	var bought_laser := owned_weapons.has("laser_cannon") and int(owned_weapons.get("laser_cannon", 0)) > 0
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(_current_body())
+	var light_freighter_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			light_freighter_listing = shipyard_listings[i]
+			break
+	var shipyard_art_loaded := not light_freighter_listing.is_empty() and _shipyard_texture_for_listing(light_freighter_listing) != null
+	_buy_selected_ship()
+	var bought_light_freighter := player_ship_id == "light_freighter"
+	var cargo_space_increased := cargo_space_after_outfit > starting_cargo_space and cargo_space > starting_cargo_space
+	var cargo_pod_status := "boughtCargoPod=true" if bought_cargo_pod else "boughtCargoPod=false"
+	var laser_status := "boughtLaser=true" if bought_laser else "boughtLaser=false"
+	var light_freighter_status := "boughtLightFreighter=true" if bought_light_freighter else "boughtLightFreighter=false"
+	var cargo_space_status := "cargoSpaceIncreased=true" if cargo_space_increased else "cargoSpaceIncreased=false"
+	var shipyard_art_status := "shipyardArtLoaded=true" if shipyard_art_loaded else "shipyardArtLoaded=false"
+	print("%s routeToSolSelected=%s system=%s body=%s %s %s %s %s %s startingCargoSpace=%d cargoAfterOutfit=%d finalCargoSpace=%d creditsAfter=%d sourceLabel=terminal-velocity-outfitter-shipyard-scaffold oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace status=\"%s\"" % [OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), landed_body, cargo_pod_status, laser_status, light_freighter_status, cargo_space_status, shipyard_art_status, starting_cargo_space, cargo_space_after_outfit, cargo_space, credits, status_line])
 	get_tree().quit(0)
 
 func _run_pilot_save_resume_log() -> void:
