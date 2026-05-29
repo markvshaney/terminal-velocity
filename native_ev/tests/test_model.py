@@ -461,6 +461,21 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_map_service_summary_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'func _system_service_summary(system_name: String) -> String:',
+            'Services: %s',
+            'refuel',
+            'outfitter',
+            'shipyard',
+            'commodity',
+            '_system_service_summary(selected_name)',
+            'Map service summary: selected systems show Terminal Velocity station services.',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_mission_log_overlay_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

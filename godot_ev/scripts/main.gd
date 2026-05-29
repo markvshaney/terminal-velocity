@@ -1493,6 +1493,30 @@ func _system_by_name(system_name: String) -> Dictionary:
 			return system
 	return {}
 
+func _system_service_summary(system_name: String) -> String:
+	var system := _system_by_name(system_name)
+	if system.is_empty():
+		return "unknown"
+	var services: Array[String] = []
+	for body in system.get("bodies", []):
+		var inventory: Dictionary = body.get("inventory", {})
+		for service in inventory.get("services", []):
+			var service_name := str(service)
+			if not services.has(service_name):
+				services.append(service_name)
+		if not inventory.get("outfitsForSale", []).is_empty() and not services.has("outfitter"):
+			services.append("outfitter")
+		if not inventory.get("shipsForSale", []).is_empty() and not services.has("shipyard"):
+			services.append("shipyard")
+		if not inventory.get("weaponsForSale", []).is_empty() and not services.has("outfitter"):
+			services.append("outfitter")
+	if _market_prices(system_name).size() > 0 and not services.has("commodity"):
+		services.append("commodity")
+	if services.is_empty():
+		return "none"
+	services.sort()
+	return ", ".join(services)
+
 func _map_route_tail_system_name() -> String:
 	if selected_route.is_empty():
 		return str(current_system.get("name", ""))
@@ -2184,6 +2208,7 @@ func _draw_help_overlay() -> void:
 		"Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
 		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
 		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops.",
+		"Map service summary: selected systems show Terminal Velocity station services.",
 		"Mission route helper: G queues the active mission destination when known.",
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
@@ -2226,10 +2251,11 @@ func _draw_universe_map() -> void:
 	var selected_name := _selected_destination_name()
 	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
-	draw_string(font, rect.position + Vector2(690, 154), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 178), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 202), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 226), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 144), "Services: %s" % _system_service_summary(selected_name), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(690, 166), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 190), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 214), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 238), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
 	var point_by_name := _map_system_points(systems)
 	var hovered_name := _map_hovered_link_name()
 	if hovered_name != "":
