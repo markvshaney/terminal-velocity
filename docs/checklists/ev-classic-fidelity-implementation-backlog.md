@@ -194,12 +194,14 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: defer exact Classic commodity prices/events until decoded resources or runtime confirmation; a safe next playable slice is source-backed ship/outfit comparison because the local manifest and PICT art are already wired.
   - Fidelity boundary: exact Classic commodity prices/events require decoded resources or runtime confirmation.
 
-- [ ] Ship/outfit comparison and upgrade consequence surfaces
-  - Status: `candidate`
-  - Source: EV Nova Bible outfit fields for mass, weapons, marines/capture, permits/intangible items, unsellable/persistent outfits, and ship-change consequences.
+- [x] Ship/outfit comparison and upgrade consequence surfaces
+  - Status: `implemented Terminal Velocity scaffold / source-backed manifest fields`
+  - Source: local EV Classic ship-like records in `native_ev/data/ships.json`, local shipyard PICT assets, local outfitter effect manifest; EV Nova Bible outfit fields remain source-family guidance only.
   - Scope: expose purchase deltas for mass, cargo/outfit space, crew/capture effects, weapon roles, licenses/permits, resale restrictions, and persistence across hull changes.
-  - Next action: draft shipyard/outfitter comparison UI fields and role tags.
-  - Fidelity boundary: exact EV Classic item stats and persistence behavior require Classic resource/manual/runtime confirmation.
+  - Implementation: Shipyard listings now show immediate deltas against the current hull for cargo, hull, max speed, and turning; outfitter listings now show concise numeric effect summaries for cargo, hull, and fuel upgrades. Existing Source PICT shipyard art remains visible on the selected listing.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v`; `./run_godot.sh self-test`.
+  - Next action: add a safe in-game learning/help overlay that explains currently wired keys, route helper, mission cargo reservation, and ship/outfit comparison without making unverified Classic claims.
+  - Fidelity boundary: exact EV Classic item stats and persistence behavior require Classic resource/manual/runtime confirmation; current comparison uses the local structured manifest as a Terminal Velocity scaffold.
 
 - [ ] In-game learning/documentation surfaces for EV-style strategy
   - Status: `candidate`

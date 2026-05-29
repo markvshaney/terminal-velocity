@@ -1332,6 +1332,10 @@ class NativeEvModelTests(unittest.TestCase):
             'Messages:',
             '_set_status("Need %d free cargo tons" % tons)',
             '_set_status("Cargo hold full")',
+            'func _ship_comparison_line(ship: Dictionary) -> String:',
+            'Δ cargo %+d  Δ hull %+d  Δ speed %+d',
+            'func _outfit_effect_summary(item: Dictionary) -> String:',
+            'Effect: ',
         ]:
             self.assertIn(prompt, main_script)
 

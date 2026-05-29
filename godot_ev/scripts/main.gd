@@ -2106,7 +2106,9 @@ func _draw_outfitter(rect: Rect2, body: Dictionary) -> void:
 		var sale_item: Dictionary = sale_items[i]
 		var marker := "▶" if i == selected_landing_item else "•"
 		draw_string(font, rect.position + Vector2(30, y), "%s %s — %d cr" % [marker, sale_item.get("name", sale_item.get("id", "Upgrade")), int(sale_item.get("price", 0))], HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.86, 0.92, 1.0))
-		y += 26.0
+		y += 20.0
+		draw_string(font, rect.position + Vector2(52, y), "Effect: " + _outfit_effect_summary(sale_item), HORIZONTAL_ALIGNMENT_LEFT, 760, 13, Color(0.68, 0.78, 0.90))
+		y += 22.0
 	if outfits_for_sale.is_empty() and weapons_for_sale.is_empty():
 		draw_string(font, rect.position + Vector2(30, y), "No outfitter inventory at this port.", HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.72, 0.82, 0.92))
 
@@ -2127,9 +2129,12 @@ func _draw_shipyard(rect: Rect2, body: Dictionary) -> void:
 			draw_string(font, rect.position + Vector2(690, 358), "Source PICT shipyard art", HORIZONTAL_ALIGNMENT_LEFT, 170, 13, Color(0.72, 0.82, 0.92))
 	for i in range(min(7, listings.size())):
 		var listing: Dictionary = listings[i]
+		var ship := _ship_by_id(str(listing.get("shipId", "")))
 		var marker := "▶" if i == selected_landing_item else "•"
 		draw_string(font, rect.position + Vector2(30, y), "%s %s — %d cr" % [marker, listing.get("shipId", "ship"), int(listing.get("price", 0))], HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.86, 0.92, 1.0))
-		y += 28.0
+		y += 20.0
+		draw_string(font, rect.position + Vector2(52, y), _ship_comparison_line(ship), HORIZONTAL_ALIGNMENT_LEFT, 600, 13, Color(0.68, 0.78, 0.90))
+		y += 22.0
 	if ships_for_sale.is_empty():
 		draw_string(font, rect.position + Vector2(30, y), "This port has no shipyard listings.", HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.72, 0.82, 0.92))
 
@@ -2314,6 +2319,28 @@ func _buy_selected_outfit_or_weapon() -> void:
 func _shipyard_listings(body: Dictionary) -> Array:
 	var inventory := _station_inventory(body)
 	return _filter_by_ids(outfits.get("shipyard", []), inventory.get("shipsForSale", []), "shipId")
+
+func _ship_comparison_line(ship: Dictionary) -> String:
+	if ship.is_empty():
+		return "Stats unavailable"
+	var delta_cargo := int(ship.get("cargoSpace", 0)) - int(player_ship.get("cargoSpace", 0))
+	var delta_hull := int(ship.get("hull", 0)) - int(player_ship.get("hull", 0))
+	var delta_speed := int(ship.get("maxSpeed", 0)) - int(player_ship.get("maxSpeed", 0))
+	var delta_turning := int(ship.get("turning", 0)) - int(player_ship.get("turning", 0))
+	return "Δ cargo %+d  Δ hull %+d  Δ speed %+d  Δ turn %+d" % [delta_cargo, delta_hull, delta_speed, delta_turning]
+
+func _outfit_effect_summary(item: Dictionary) -> String:
+	var effects: Dictionary = item.get("effects", {})
+	var parts: Array[String] = []
+	if effects.has("cargoSpace"):
+		parts.append("cargo %+d" % int(effects.get("cargoSpace", 0)))
+	if effects.has("maxHull"):
+		parts.append("hull %+d" % int(effects.get("maxHull", 0)))
+	if effects.has("maxFuel"):
+		parts.append("fuel %+d" % int(effects.get("maxFuel", 0)))
+	if parts.is_empty():
+		return str(item.get("description", "No numeric effect listed"))
+	return " / ".join(parts)
 
 func _buy_selected_ship() -> void:
 	var listings := _shipyard_listings(_current_body())
