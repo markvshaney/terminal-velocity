@@ -1978,6 +1978,8 @@ func _mission_log_detail_lines() -> Array[String]:
 		lines.append(str(mission.get("title", mission_id)))
 		lines.append("Status: Active")
 		lines.append("Destination: %s / %s" % [str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?"))])
+		lines.append("Progress: " + _mission_progress_line(mission))
+		lines.append("Route hint: " + _mission_route_hint_line(mission))
 		lines.append("Cargo reserved: %d tons" % int(mission.get("cargoTons", 0)))
 		lines.append("Reward: %d credits" % int(mission.get("reward", 0)))
 		var description := str(mission.get("description", ""))
@@ -1985,6 +1987,25 @@ func _mission_log_detail_lines() -> Array[String]:
 			lines.append("Briefing: " + description)
 		lines.append("")
 	return lines
+
+func _mission_progress_line(mission: Dictionary) -> String:
+	var destination_system := str(mission.get("destinationSystem", "?"))
+	var destination_body := str(mission.get("destinationBody", "?"))
+	var current_name := str(current_system.get("name", "?"))
+	if current_name != destination_system:
+		return "Travel to destination system %s from %s" % [destination_system, current_name]
+	if not landed:
+		return "Land at destination body %s" % destination_body
+	var body_name := str(_current_body().get("name", "?"))
+	if body_name == destination_body:
+		return "Ready to complete at current port"
+	return "Land at destination body %s; current port is %s" % [destination_body, body_name]
+
+func _mission_route_hint_line(mission: Dictionary) -> String:
+	var destination_system := str(mission.get("destinationSystem", "?"))
+	if str(current_system.get("name", "?")) == destination_system:
+		return "Destination system reached; use L to land if needed"
+	return "Press G to queue route toward %s" % destination_system
 
 func _draw_mission_log_overlay() -> void:
 	var font := ThemeDB.fallback_font
@@ -1999,7 +2020,7 @@ func _draw_mission_log_overlay() -> void:
 			y += 12.0
 			continue
 		var color := Color(0.86, 0.92, 1.0)
-		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:"):
+		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Progress:") or line.begins_with("Route hint:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:"):
 			color = Color(0.72, 0.84, 0.96)
 		draw_string(font, Vector2(rect.position.x + 42, y), line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 84, 16, color)
 		y += 28.0

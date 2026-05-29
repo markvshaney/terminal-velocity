@@ -437,6 +437,21 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_mission_log_route_progress_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'Progress:',
+            'Route hint:',
+            'Press G to queue route',
+            'Ready to complete at current port',
+            'Travel to destination system',
+            'Land at destination body',
+            'func _mission_progress_line',
+            'func _mission_route_hint_line',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_mission_offer_scan_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

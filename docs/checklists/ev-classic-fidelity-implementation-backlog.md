@@ -216,10 +216,10 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
 - [x] Visible mission log/status detail
   - Status: `implemented Terminal Velocity helper/scaffold`
   - Source: Terminal Velocity mission JSON and recurring EV-family player-guide pattern that active contracts need visible destination/cargo/reward status; exact EV Classic mission log window layout/text remains unverified.
-  - Scope: make active mission state visible without relying on transient status text: title, active status, destination system/body, cargo reserved, reward, and briefing when available.
-  - Implementation: `I` now toggles a Mission Log overlay and still updates the status line summary; the overlay is labeled `Terminal Velocity mission log helper/scaffold — not an EV Classic fidelity claim`.
-  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_overlay_contract -v`; full native discovery passed 92 tests; Godot self-test passed with `gameplayScenarios=12`.
-  - Next action: add route/progress detail or completion history only after current overlay verifies cleanly.
+  - Scope: make active mission state visible without relying on transient status text: title, active status, destination system/body, current progress, route hint, cargo reserved, reward, and briefing when available.
+  - Implementation: `I` now toggles a Mission Log overlay and still updates the status line summary; the overlay is labeled `Terminal Velocity mission log helper/scaffold — not an EV Classic fidelity claim`; active contracts show whether to travel, land, or complete at the current port plus a `G` route-helper hint.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_overlay_contract -v`; `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_route_progress_contract -v`; full native discovery passed 93 tests; Godot self-test passed with `gameplayScenarios=12`.
+  - Next action: add completion history or mission-log screenshots only after stronger UI evidence or a visual-review need appears.
   - Fidelity boundary: this is TV usability scaffolding, not a claim about the original Classic mission-log UI.
 
 - [x] Pilot save/resume persistence affordance
