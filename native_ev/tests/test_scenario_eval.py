@@ -18,6 +18,12 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             [
                 'levo_merchant_first_hop',
                 'mission_runner_first_delivery',
+                'scan_intro_mission_offers',
+                'intro_courier_mission_delivery',
+                'chapter_one_courier_chain',
+                'alignment_choice_guardrail',
+                'mission_destination_route_hint',
+                'shift_click_multi_stop_route_queue',
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
@@ -102,6 +108,129 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         accept = result['trace'][1]
         self.assertEqual(accept['id'], 'levo_landfall_courier')
         self.assertEqual(accept['reservedCargoTons'], 8)
+
+    def test_intro_courier_mission_delivery_matches_godot_fast_eval_contract(self):
+        result = run_scripted_scenario('intro_courier_mission_delivery')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera'])
+        self.assertEqual(result['state']['credits'], 11800)
+        self.assertIn('story_intro_started', result['state']['storyFlags'])
+        self.assertIn('story_intro_complete', result['state']['storyFlags'])
+        self.assertIn('federation_trusted_courier', result['state']['storyFlags'])
+        self.assertEqual(result['checks']['accepted_intro_courier'], 'passed')
+        self.assertEqual(result['checks']['completed_intro_courier'], 'passed')
+        self.assertEqual(result['checks']['released_intro_cargo'], 'passed')
+        self.assertEqual(result['checks']['applied_story_flags'], 'passed')
+        self.assertEqual(result['metrics']['jobsCompleted'], 1)
+        self.assertEqual(result['metrics']['creditsDelta'], 1800)
+        self.assertEqual(
+            [event['type'] for event in result['trace']],
+            [
+                'start',
+                'jump',
+                'land',
+                'accept_cargo_job',
+                'depart',
+                'jump',
+                'land',
+                'complete_cargo_job',
+            ],
+        )
+        accept = result['trace'][3]
+        self.assertEqual(accept['id'], 'intro_courier_earth_hera')
+        self.assertEqual(accept['originSystem'], 'Sol')
+        self.assertEqual(accept['originBody'], 'Earth')
+        self.assertEqual(accept['destinationSystem'], 'Centauri')
+        self.assertEqual(accept['destinationBody'], 'Luna')
+        self.assertEqual(accept['reservedCargoTons'], 3)
+        complete = result['trace'][-1]
+        self.assertEqual(complete['pay'], 1800)
+
+    def test_chapter_one_courier_chain_completes_three_story_deliveries(self):
+        result = run_scripted_scenario('chapter_one_courier_chain')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(
+            result['state']['completedJobs'],
+            ['intro_courier_earth_hera', 'frontier_sample_hera_freeport', 'freeport_return_earth'],
+        )
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['credits'], 17400)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        for flag in [
+            'story_intro_complete',
+            'frontier_samples_delivered',
+            'chapter_one_complete',
+            'federation_independent_bridge',
+        ]:
+            self.assertIn(flag, result['state']['storyFlags'])
+        self.assertEqual(result['checks']['completed_intro_frontier_return_chain'], 'passed')
+        self.assertEqual(result['metrics']['jobsCompleted'], 3)
+        self.assertEqual(result['metrics']['jumps'], 4)
+
+    def test_scan_mission_offers_archives_available_jobs_by_landed_surface(self):
+        result = run_scripted_scenario(
+            'scan_intro_mission_offers',
+            actions=[
+                {'type': 'jump', 'destinationSystem': 'Sol'},
+                {'type': 'land', 'body': 'Earth'},
+                {'type': 'scan_mission_offers'},
+            ],
+        )
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['checks']['archived_mission_offers'], 'passed')
+        self.assertEqual(result['state']['missionOfferArchive']['Sol/Earth']['Mission Computer'], ['intro_courier_earth_hera'])
+        scan = result['trace'][-1]
+        self.assertEqual(scan['type'], 'scan_mission_offers')
+        self.assertEqual(scan['system'], 'Sol')
+        self.assertEqual(scan['body'], 'Earth')
+        self.assertEqual(scan['offersBySurface']['Mission Computer'], ['intro_courier_earth_hera'])
+        self.assertEqual(scan['totalOffers'], 1)
+        self.assertEqual(scan['sourceLabel'], 'terminal-velocity-observed')
+        self.assertEqual(scan['oracleStatus'], 'terminal_velocity_eval_pending_original_trace')
+
+    def test_alignment_choice_blocks_mutually_exclusive_branch_after_accept(self):
+        result = run_scripted_scenario('alignment_choice_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertIn('federation_report_freeport', [job['id'] for job in result['state']['activeJobs']])
+        self.assertNotIn('freeport_pact_smugglers', [job['id'] for job in result['state']['activeJobs']])
+        self.assertIn('alignment_federation', result['state']['storyFlags'])
+        self.assertNotIn('alignment_freeport', result['state']['storyFlags'])
+        blocked = [event for event in result['trace'] if event.get('type') == 'blocked_manifest_mission']
+        self.assertEqual(blocked[-1]['missionId'], 'freeport_pact_smugglers')
+        self.assertEqual(blocked[-1]['reason'], 'not available at current landing')
+        self.assertEqual(result['checks']['blocked_mutually_exclusive_alignment'], 'passed')
+
+    def test_mission_destination_route_hint_sets_route_to_active_contract_destination(self):
+        result = run_scripted_scenario('mission_destination_route_hint')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['routeQueue'], ['Centauri'])
+        self.assertEqual(result['checks']['queued_active_mission_destination'], 'passed')
+        self.assertEqual(result['trace'][-1]['destinationSystem'], 'Centauri')
+        self.assertEqual(result['trace'][-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
+
+    def test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg(self):
+        result = run_scripted_scenario('shift_click_multi_stop_route_queue')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['routeQueue'], ['Sirius'])
+        self.assertEqual(result['checks']['green_multi_stop_route'], 'passed')
+        self.assertEqual(result['checks']['consumed_first_leg_only'], 'passed')
+        self.assertEqual(result['trace'][-1]['remainingRoute'], ['Sirius'])
 
     def test_route_planner_refuel_loop_spends_fuel_blocks_empty_jump_then_refuels(self):
         result = run_scripted_scenario('route_planner_refuel_loop')

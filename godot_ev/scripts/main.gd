@@ -29,6 +29,10 @@ const MAP_ROUTE_EVENT_LOG_PREFIX := "TV_MAP_ROUTE_EVENT"
 const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
 const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
+const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
+const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
+const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
+const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
 var repo_root := ""
 var universe := {}
@@ -56,6 +60,7 @@ var turn_cell_progress := 0.0
 var landed := false
 var game_state := STATE_TITLE
 var selected_link_index := 0
+var selected_route: Array = []
 var selected_target_index := 0
 var map_visible := false
 var stars: Array[Vector2] = []
@@ -121,6 +126,12 @@ func _ready() -> void:
 		call_deferred("_run_route_land_refuel_log")
 	if OS.get_cmdline_args().has("--tv-low-fuel-jump-log") or OS.get_cmdline_user_args().has("--tv-low-fuel-jump-log"):
 		call_deferred("_run_low_fuel_jump_log")
+	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
+		call_deferred("_run_mission_offer_scan_log")
+	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
+		call_deferred("_run_mission_route_hint_log")
+	if OS.get_cmdline_args().has("--tv-first-mission-delivery-log") or OS.get_cmdline_user_args().has("--tv-first-mission-delivery-log"):
+		call_deferred("_run_first_mission_delivery_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -438,6 +449,7 @@ func _reset_travel_state() -> void:
 	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
 	current_system = universe.get("systems", [])[current_system_index]
 	selected_link_index = 0
+	selected_route.clear()
 	pos = PLAYER_START
 	vel = Vector2.ZERO
 	status_line = ""
@@ -464,6 +476,8 @@ func _print_travel_event(event_name: String, details: String) -> void:
 	print("%s event=%s %s" % [TRAVEL_EVENT_LOG_PREFIX, event_name, details])
 
 func _selected_destination_name() -> String:
+	if not selected_route.is_empty():
+		return str(selected_route[0])
 	var links: Array = current_system.get("links", [])
 	if links.is_empty():
 		return "None"
@@ -501,22 +515,32 @@ func _run_map_route_log() -> void:
 	map_visible = true
 	var before_destination := _selected_destination_name()
 	var route_selected := _select_first_linked_map_route()
+	var route_extended := false
+	if route_selected:
+		route_extended = _select_first_linked_map_route()
 	var after_destination := _selected_destination_name()
-	var green_line_active := route_selected and after_destination != "None" and after_destination != str(current_system.get("name", ""))
+	var green_line_active := not selected_route.is_empty() and after_destination != "None" and after_destination != str(current_system.get("name", ""))
 	var green_line_status := "greenLine=true" if green_line_active else "greenLine=false"
-	print("%s current=%s beforeDestination=%s afterDestination=%s selected=%s %s sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), before_destination, after_destination, str(route_selected), green_line_status, status_line])
+	print("%s current=%s beforeDestination=%s afterDestination=%s selected=%s extended=%s %s routeHops=%d route=%s sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), before_destination, after_destination, str(route_selected), str(route_extended), green_line_status, selected_route.size(), JSON.stringify(selected_route), status_line])
 	get_tree().quit(0)
 
 func _select_first_linked_map_route() -> bool:
 	var systems: Array = universe.get("systems", [])
-	var links: Array = current_system.get("links", [])
+	var links: Array = _map_route_tail_links()
 	if systems.is_empty() or links.is_empty():
 		return false
-	var point_by_name := _map_system_points(systems)
 	var first_link := str(links[0])
-	if not point_by_name.has(first_link):
+	return _select_map_route_to_system(first_link)
+
+func _select_map_route_to_system(system_name: String) -> bool:
+	var systems: Array = universe.get("systems", [])
+	var links: Array = _map_route_tail_links()
+	if systems.is_empty() or links.is_empty() or not links.has(system_name):
 		return false
-	var click_position: Vector2 = point_by_name[first_link]
+	var point_by_name := _map_system_points(systems)
+	if not point_by_name.has(system_name):
+		return false
+	var click_position: Vector2 = point_by_name[system_name]
 	return _select_map_route_at_position(click_position)
 
 func _run_route_jump_log() -> void:
@@ -574,6 +598,126 @@ func _run_low_fuel_jump_log() -> void:
 	var block_reason := "blockReason=insufficient_fuel" if jump_blocked else "blockReason=none"
 	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s fuelBeforeJump=%d fuelAfterJump=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [LOW_FUEL_JUMP_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_blocked_status, block_reason, fuel_before_jump, fuel_after_jump, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
 	get_tree().quit(0)
+
+func _run_mission_offer_scan_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	landing_tab = 0
+	var body := _current_body()
+	var available := _available_missions(body)
+	var offer_ids := []
+	for mission in available:
+		offer_ids.append(str(mission.get("id", "")))
+	var offers_by_surface := {"Mission Computer": offer_ids}
+	var total_offers := offer_ids.size()
+	print("%s startSystem=Levo routeToSolSelected=%s scanSystem=%s scanBody=\"%s\" offersBySurface=%s totalOffers=%d sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_OFFER_SCAN_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(current_system.get("name", "?")), str(body.get("name", "None")), JSON.stringify(offers_by_surface), total_offers, status_line])
+	get_tree().quit(0)
+
+func _run_mission_route_hint_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	var accepted_body := _current_body()
+	var mission_before_accept: Dictionary = _first_available_mission(accepted_body)
+	var accepted_mission_id := str(mission_before_accept.get("id", "none"))
+	var destination_system := str(mission_before_accept.get("destinationSystem", "?"))
+	_accept_selected_mission()
+	var mission_accepted := active_missions.has(accepted_mission_id)
+	_ev_land_or_launch()
+	selected_route.clear()
+	var mission_route_queued := _route_to_active_mission_destination()
+	var mission_route_status := "missionRouteQueued=true" if mission_route_queued else "missionRouteQueued=false"
+	var queued_route := JSON.stringify(selected_route)
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s route=%s routeHops=%d sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, queued_route, selected_route.size(), status_line])
+	get_tree().quit(0)
+
+func _route_to_active_mission_destination() -> bool:
+	if active_missions.is_empty():
+		status_line = "No active mission destination"
+		return false
+	var mission := _mission_by_id(str(active_missions[0]))
+	if mission.is_empty():
+		status_line = "Active mission data unavailable"
+		return false
+	var destination_system := str(mission.get("destinationSystem", ""))
+	if destination_system == "":
+		status_line = "Active mission has no destination"
+		return false
+	return _select_map_route_to_system(destination_system)
+
+func _run_first_mission_delivery_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	var accepted_body := _current_body()
+	var mission_before_accept: Dictionary = _first_available_mission(accepted_body)
+	var accepted_mission_id := str(mission_before_accept.get("id", "none"))
+	var reward := int(mission_before_accept.get("reward", 0))
+	var destination_system := str(mission_before_accept.get("destinationSystem", "?"))
+	var destination_body := str(mission_before_accept.get("destinationBody", "?"))
+	var credits_before_accept := credits
+	var cargo_before_accept := cargo
+	_accept_selected_mission()
+	var cargo_after_accept := cargo
+	var mission_accepted := active_missions.has(accepted_mission_id)
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_destination_selected := _select_map_route_to_system("Centauri")
+	_jump()
+	_position_at_body(destination_body)
+	_try_land()
+	var completed_ids := _complete_arrived_missions()
+	var cargo_after_delivery := cargo
+	var credits_after_delivery := credits
+	var mission_delivered := completed_ids.has(accepted_mission_id) and completed_missions.has(accepted_mission_id) and cargo_after_delivery == cargo_before_accept and credits_after_delivery == credits_before_accept + reward
+	var accepted_status := "missionAccepted=true" if mission_accepted else "missionAccepted=false"
+	var delivered_status := "missionDelivered=true" if mission_delivered else "missionDelivered=false"
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" %s actualAcceptedMission=%s %s destinationSystem=%s destinationBody=\"%s\" routeToDestinationSelected=%s finalSystem=%s landedBody=\"%s\" completedMissions=%s %s creditsBeforeAccept=%d creditsAfterDelivery=%d reward=%d cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterDelivery=%d activeMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD, accepted_mission_id, accepted_status, destination_system, destination_body, str(route_to_destination_selected), str(current_system.get("name", "?")), str(_current_body().get("name", "None")), JSON.stringify(completed_ids), delivered_status, credits_before_accept, credits_after_delivery, reward, cargo_before_accept, cargo_after_accept, cargo_after_delivery, JSON.stringify(active_missions), JSON.stringify(story_flags), status_line])
+	get_tree().quit(0)
+
+func _position_at_body(body_name: String) -> bool:
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			vel = Vector2.ZERO
+			return true
+	return false
+
+func _first_available_mission(body: Dictionary) -> Dictionary:
+	var available := _available_missions(body)
+	if available.is_empty():
+		return {}
+	return available[0]
+
+func _complete_arrived_missions() -> Array:
+	var completed_now := []
+	var body := _current_body()
+	var system_name := str(current_system.get("name", ""))
+	var body_name := str(body.get("name", ""))
+	for mission_id in active_missions.duplicate():
+		var mission := _mission_by_id(str(mission_id))
+		if mission.is_empty():
+			continue
+		if str(mission.get("destinationSystem", "")) != system_name or str(mission.get("destinationBody", "")) != body_name:
+			continue
+		active_missions.erase(mission_id)
+		if not completed_missions.has(mission_id):
+			completed_missions.append(mission_id)
+		cargo = max(0, cargo - int(mission.get("cargoTons", 0)))
+		credits += int(mission.get("reward", 0))
+		for flag in mission.get("completionFlags", []):
+			if not story_flags.has(flag):
+				story_flags.append(flag)
+		completed_now.append(mission_id)
+	status_line = "Completed missions: " + ", ".join(completed_now) if not completed_now.is_empty() else "No missions completed"
+	return completed_now
 
 func _body_refuel_available(body: Dictionary) -> bool:
 	var inventory := _station_inventory(body)
@@ -1155,6 +1299,7 @@ func _cycle_link(dir: int) -> void:
 	var links: Array = current_system.get("links", [])
 	if links.is_empty():
 		return
+	selected_route.clear()
 	selected_link_index = (selected_link_index + dir + links.size()) % links.size()
 	status_line = "Destination: " + str(links[selected_link_index])
 
@@ -1178,14 +1323,33 @@ func _map_system_points(systems: Array) -> Dictionary:
 		points[str(system.get("name", ""))] = _system_map_point(system, bounds, plot_rect)
 	return points
 
+func _system_by_name(system_name: String) -> Dictionary:
+	for system in universe.get("systems", []):
+		if str(system.get("name", "")) == system_name:
+			return system
+	return {}
+
+func _map_route_tail_system_name() -> String:
+	if selected_route.is_empty():
+		return str(current_system.get("name", ""))
+	return str(selected_route[selected_route.size() - 1])
+
+func _map_route_tail_links() -> Array:
+	var tail_system := _system_by_name(_map_route_tail_system_name())
+	if tail_system.is_empty():
+		return []
+	return tail_system.get("links", [])
+
 func _map_linked_stop_at_position(click_position: Vector2) -> int:
 	var systems: Array = universe.get("systems", [])
-	var links: Array = current_system.get("links", [])
+	var links: Array = _map_route_tail_links()
 	if systems.is_empty() or links.is_empty():
 		return -1
 	var point_by_name := _map_system_points(systems)
 	for i in range(links.size()):
 		var linked_name := str(links[i])
+		if linked_name == str(current_system.get("name", "")) or selected_route.has(linked_name):
+			continue
 		if not point_by_name.has(linked_name):
 			continue
 		var linked_point: Vector2 = point_by_name[linked_name]
@@ -1197,25 +1361,35 @@ func _map_hovered_link_name() -> String:
 	if not map_visible or not (Input.is_key_pressed(KEY_SHIFT) or Input.is_key_pressed(KEY_CTRL)):
 		return ""
 	var hover_index := _map_linked_stop_at_position(get_viewport().get_mouse_position())
-	var links: Array = current_system.get("links", [])
+	var links: Array = _map_route_tail_links()
 	if hover_index < 0 or hover_index >= links.size():
 		return ""
 	return str(links[hover_index])
 
 func _select_map_route_at_position(click_position: Vector2) -> bool:
-	var links: Array = current_system.get("links", [])
+	return _append_map_route_at_position(click_position)
+
+func _append_map_route_at_position(click_position: Vector2) -> bool:
+	var links: Array = _map_route_tail_links()
 	if links.is_empty():
 		status_line = "No route from current system"
 		return true
 	var hover_index := _map_linked_stop_at_position(click_position)
 	if hover_index >= 0 and hover_index < links.size():
 		var linked_name := str(links[hover_index])
-		selected_link_index = hover_index
-		status_line = "Route selected: %s → %s — press J to jump" % [str(current_system.get("name", "?")), linked_name]
+		if selected_route.is_empty():
+			var current_links: Array = current_system.get("links", [])
+			selected_link_index = current_links.find(linked_name)
+			if selected_link_index < 0:
+				selected_link_index = 0
+			status_line = "Route selected: %s → %s — press J to jump" % [str(current_system.get("name", "?")), linked_name]
+		else:
+			status_line = "Route appended: %s" % " → ".join([str(current_system.get("name", "?"))] + selected_route + [linked_name])
+		selected_route.append(linked_name)
 		_play_sound("ui_click")
 		return true
 	if _map_plot_rect().has_point(click_position):
-		status_line = "Hold Shift and click a linked system"
+		status_line = "Hold Shift and click a linked system from " + _map_route_tail_system_name()
 		return true
 	return false
 
@@ -1264,7 +1438,29 @@ func _show_mission_info() -> void:
 	if active_missions.is_empty():
 		status_line = "Mission Info: no active missions"
 		return
-	status_line = "Mission Info: " + ", ".join(active_missions)
+	status_line = " | ".join(_mission_summary_lines())
+
+func _mission_summary_lines() -> Array[String]:
+	var lines: Array[String] = []
+	for mission_id in active_missions:
+		var mission := _mission_by_id(str(mission_id))
+		if mission.is_empty():
+			lines.append("Mission Info: " + str(mission_id))
+			continue
+		lines.append("Mission Info: %s to %s/%s, %d tons, %d cr" % [str(mission.get("title", mission_id)), str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?")), int(mission.get("cargoTons", 0)), int(mission.get("reward", 0))])
+	return lines
+
+func _mission_by_id(mission_id: String) -> Dictionary:
+	for mission in missions.get("missions", []):
+		if str(mission.get("id", "")) == mission_id:
+			return mission
+	return {}
+
+func _mission_reserved_cargo_tons() -> int:
+	var total := 0
+	for mission_id in active_missions:
+		total += int(_mission_by_id(str(mission_id)).get("cargoTons", 0))
+	return total
 
 func _toggle_autopilot() -> void:
 	status_line = "Autopilot not implemented yet"
@@ -1287,16 +1483,18 @@ func _change_secondary_weapon() -> void:
 func _jump() -> void:
 	var systems: Array = universe.get("systems", [])
 	var links: Array = current_system.get("links", [])
-	if links.is_empty():
+	if links.is_empty() and selected_route.is_empty():
 		return
 	if player_fuel < _jump_fuel_cost():
 		status_line = "Insufficient fuel for hyperspace"
 		return
-	var destination := str(links[selected_link_index % links.size()])
+	var destination := _selected_destination_name()
 	for i in range(systems.size()):
 		if systems[i].get("name", "") == destination:
 			current_system_index = i
 			current_system = systems[i]
+			if not selected_route.is_empty() and str(selected_route[0]) == destination:
+				selected_route.remove_at(0)
 			selected_link_index = 0
 			pos = PLAYER_START
 			vel = Vector2.ZERO
@@ -1651,10 +1849,7 @@ func _draw_center_registered_ship_cell(center: Vector2, tex: Texture2D, size: Ve
 
 func _draw_hud() -> void:
 	var font := ThemeDB.fallback_font
-	var links: Array = current_system.get("links", [])
-	var destination := "None"
-	if not links.is_empty():
-		destination = str(links[selected_link_index % links.size()])
+	var destination := _selected_destination_name()
 	draw_rect(Rect2(0, 0, 1280, 78), Color(0.02, 0.035, 0.06, 0.92), true)
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
 	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Cargo: %d/%d    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, cargo, cargo_space, player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
@@ -1692,13 +1887,12 @@ func _draw_universe_map() -> void:
 	draw_rect(rect, Color(0.24, 0.54, 0.78, 1.0), false, 2.0)
 	draw_string(font, rect.position + Vector2(0, 40), "GALAXY MAP", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 24, Color(0.86, 0.96, 1.0))
 	var links: Array = current_system.get("links", [])
-	var selected_name := "None"
-	if not links.is_empty():
-		selected_name = str(links[selected_link_index % links.size()])
+	var route_tail_links: Array = _map_route_tail_links()
+	var selected_name := _selected_destination_name()
 	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
 	draw_string(font, rect.position + Vector2(690, 154), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 178), "Shift-click linked stop: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 178), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
 	draw_string(font, rect.position + Vector2(690, 202), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
 	var point_by_name := _map_system_points(systems)
 	var hovered_name := _map_hovered_link_name()
@@ -1712,16 +1906,24 @@ func _draw_universe_map() -> void:
 			var linked_point: Vector2 = point_by_name[str(linked_name)]
 			draw_line(map_point, linked_point, Color(0.12, 0.32, 0.52, 0.72), 1.0)
 	var current_name := str(current_system.get("name", ""))
-	if point_by_name.has(current_name) and point_by_name.has(selected_name):
-		var current_point: Vector2 = point_by_name[current_name]
-		var selected_point: Vector2 = point_by_name[selected_name]
-		draw_line(current_point, selected_point, Color(0.15, 1.0, 0.28, 0.95), 3.0)
+	var route_names := [current_name]
+	if selected_route.is_empty() and selected_name != "None" and selected_name != current_name:
+		route_names.append(selected_name)
+	else:
+		route_names.append_array(selected_route)
+	for route_index in range(route_names.size() - 1):
+		var route_start_name := str(route_names[route_index])
+		var route_end_name := str(route_names[route_index + 1])
+		if point_by_name.has(route_start_name) and point_by_name.has(route_end_name):
+			var route_start_point: Vector2 = point_by_name[route_start_name]
+			var route_end_point: Vector2 = point_by_name[route_end_name]
+			draw_line(route_start_point, route_end_point, Color(0.15, 1.0, 0.28, 0.95), 3.0)
 	for system in systems:
 		var system_name := str(system.get("name", "?"))
 		var map_point: Vector2 = point_by_name.get(system_name, plot_rect.position)
-		var linked := links.has(system_name)
+		var linked := route_tail_links.has(system_name)
 		var is_current := system_name == str(current_system.get("name", ""))
-		var is_selected := system_name == selected_name
+		var is_selected := system_name == selected_name or selected_route.has(system_name)
 		var is_hovered := system_name == hovered_name
 		var color := Color(0.46, 0.72, 1.0)
 		var radius := 4.0
@@ -1851,6 +2053,7 @@ func _draw_commodity_exchange(rect: Rect2) -> void:
 	draw_string(font, rect.position + Vector2(30, 192), "In Hold:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
 	draw_string(font, rect.position + Vector2(230, 192), "Price:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
 	draw_string(font, rect.position + Vector2(520, 192), "Buy", HORIZONTAL_ALIGNMENT_LEFT, 80, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(600, 192), "Cargo reserved for missions: %d" % _mission_reserved_cargo_tons(), HORIZONTAL_ALIGNMENT_LEFT, 260, 14, Color(0.95, 0.86, 0.58))
 	var y := 218.0
 	var commodities: Array = economy.get("commodities", [])
 	for i in range(min(8, commodities.size())):

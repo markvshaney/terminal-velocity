@@ -105,6 +105,12 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 	var required := [
 		"levo_merchant_first_hop",
 		"mission_runner_first_delivery",
+		"scan_intro_mission_offers",
+		"intro_courier_mission_delivery",
+		"chapter_one_courier_chain",
+		"alignment_choice_guardrail",
+		"mission_destination_route_hint",
+		"shift_click_multi_stop_route_queue",
 		"route_planner_refuel_loop",
 		"low_fuel_jump_recovery",
 		"blocked_reason_curriculum",

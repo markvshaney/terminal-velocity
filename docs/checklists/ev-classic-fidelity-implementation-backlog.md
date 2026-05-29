@@ -57,6 +57,15 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Implementation: `native_ev/data/economy.json` uses Food `120`, Industrial `192`, Medical `600`, Metal `144`, Equipment `360` for both buy and sell at Levo, with EV Classic status labels where observed.
   - Caveat: this proves Levo same-port sell prices, not the global economy formula.
 
+## Development method / process optimization
+
+- [x] Source-aligned vertical-slice development method
+  - Status: `verified`
+  - Source/rationale: `docs/research/source-aligned-game-development-method.md`; uses project-local automation synthesis plus Godot best-practice docs and practitioner game-development sources on vertical slices, backlog granularity, agile/demonstrable iterations, and playtesting.
+  - Rule: develop gameplay as small vertical slices with one player-visible or symbolic behavior, one named scenario/evaluator, one cheap verification command, one source/fidelity label, and a backlog/docs update when future behavior is affected.
+  - Kanban rule: use direct TDD inside a tight single-slice loop; use Kanban only at feature/lane boundaries such as Godot UI, symbolic model, original EV observation, source/fidelity docs, and review.
+  - Fidelity guardrail: general game-development and automation sources improve method only; they do not justify EV Classic behavior claims.
+
 ## Candidates / potential implementations
 
 - [ ] Player strategy skills as distinct progression loops
@@ -74,6 +83,14 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Source: current Levo bridge is intentionally minimal.
   - Next action: decode/source-integrate topology records or capture/runtime-verify map links before broad universe changes.
   - Do not implement from adaptation data alone.
+
+- [x] EV Classic map multi-stop Shift-click route planning
+  - Status: `verified scaffold / needs original edge-case pass`
+  - Source: user-observed original-runtime behavior in Basilisk II on 2026-05-28; see `docs/research/original-ev-classic-runtime-observations.md#2026-05-28-map-multi-stop-route-planning-seed`.
+  - Scope: holding Shift and clicking multiple available systems should extend a green multi-hop route path. Terminal Velocity now stores an ordered route queue/path, appends only systems linked from the current route tail, draws the full green polyline, and consumes/advances the first leg on jump.
+  - Implementation: Godot map route selection uses `selected_route` with tail-linked append and full green route drawing; symbolic scenario `shift_click_multi_stop_route_queue` verifies Levo → Sol → Sirius queue construction and first-leg consumption.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg -v`; `./run_godot.sh tv-map-route-log`; full native tests and `./run_godot.sh self-test` pass with `gameplayScenarios=11`.
+  - Next action: capture an original-runtime step-by-step Basilisk pass when input/capture is reliable enough to verify exact edge cases such as route clearing, invalid clicks, and path truncation.
 
 - [ ] Exact starting primary weapons/outfits
   - Status: `needs evidence`
@@ -153,11 +170,13 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Fidelity boundary: EVN fields inform structure; exact EV Classic field names/limits require Classic confirmation.
 
 - [ ] Map objective arrows, fuel/range, and hyperspace feedback
-  - Status: `candidate`
-  - Source: EV Nova Bible `Jump Distance`, fuel/nav interface fields, and mission map-arrow flags; local EV Classic hyperspace attempts remain `runtime-observed` but inconclusive.
+  - Status: `partially implemented scaffold / original mission-map auto-objective not observed`
+  - Source: EV Nova Bible `Jump Distance`, fuel/nav interface fields, and mission map-arrow flags; local EV Classic hyperspace attempts remain `runtime-observed` but inconclusive. A 2026-05-28 original EV Classic/Basilisk capture with active missions visible in Mission Info found no visible automatic mission objective route/arrow/marker on the zoomed galaxy map; see `docs/research/original-ev-classic-runtime-observations.md` and local-only capture `C:\Games\BasiliskII\ev-mission-map-kathoon-active-missions-zoomout-20260528T235242Z.png`.
   - Scope: show mission travel/return/special-ship arrows, visible fuel/jump units, partial fuel state, route risk, and explicit feedback when jump conditions are not met.
-  - Next action: create a small UI/data plan for map overlays and hyperspace failure/success messages before more runtime travel attempts.
-  - Fidelity boundary: use EV-family docs for learning/UI structure; capture EV Classic runtime for exact jump timing/distance/sound/animation.
+  - Implementation: symbolic scenario `mission_destination_route_hint` accepts the intro courier mission and queues the active contract destination (`Centauri`) as the next route leg with `sourceLabel=terminal-velocity-design-scaffold` and `oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace`. Godot exposes the same route-hint surface through `./run_godot.sh tv-mission-route-hint-log` / `RunGodot.ps1 -MissionRouteHintLog`, emitting `TV_MISSION_ROUTE_HINT_EVENT`.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_destination_route_hint_sets_route_to_active_contract_destination -v`; `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v`; full native discovery passed 90 tests; Godot self-test passed with `gameplayScenarios=12`; Godot route-hint log emitted `missionRouteQueued=true route=["Centauri"] routeHops=1`.
+  - Next action: keep the Terminal Velocity mission route hint as an opt-in/helper scaffold or explicitly helper-labeled UI, not an EV Classic fidelity claim. To promote further, capture a stronger EV Classic pass that finds the mission destination on the map, tests multi-hop Shift-click routing through adjacent stops toward non-direct destinations such as Torgo Prime from Kathoon, and separately captures fuel/jump feedback.
+  - Fidelity boundary: use EV-family docs for learning/UI structure; capture EV Classic runtime for exact jump timing/distance/sound/animation; do not claim original EV auto-draws active mission objective routes from the current capture.
 
 - [ ] Per-government legal/reputation and AI behavior model
   - Status: `candidate`
@@ -192,9 +211,9 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Source: `docs/research/ev-automated-gameplay-learning-synthesis.md`; `docs/research/ev-gameplay-autoresearch-results.jsonl`; source-grounded EV-family mission data from `/tmp/ev-source-deep-dive-20260521/text/`; Tea Leaves early EV merchant-loop guide; LP Archive EV Nova role/playstyle framing; prior Basilisk stabilization notes.
   - Scope: build a symbolic/LLM-controller gameplay loop for Terminal Velocity before attempting long unattended Basilisk play. Minimum pieces: structured game-state observer, bounded action API, reusable skill library, scenario/evaluator ladder, action/evidence trace logging, and separate non-strict pilot/scenario profiles for merchant, route-planner, mission-runner, outfitter, and disposable combat.
   - Initial curriculum: screen classifier; Levo commodity 10-ton lot; safe passenger/cargo mission; route to known neighbor and land/refuel; mission completion; opportunistic trade with mission-reserved cargo; mission-surface archive; map objective arrows; pirate avoidance; blocked-reason recognition for combat/cargo/legal/ship gates.
-  - Implementation: `native_ev/scenario_eval.py` now provides a structured state/action/evaluator harness and the scenario curriculum `levo_merchant_first_hop`, `mission_runner_first_delivery`, `route_planner_refuel_loop`, `low_fuel_jump_recovery`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`; `tools/run_gameplay_scenarios.py --all` runs the full curriculum. `native_ev/data/gameplay_curriculum.json` exposes the curriculum to Godot self-test, which reports `gameplayScenarios=6`.
-  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval -v`; `python3 -m unittest discover -s native_ev/tests -v`; `python3 tools/run_gameplay_scenarios.py --all --pretty`; Windows Godot `RunGodot.ps1 -SelfTest` passed with `gameplayScenarios=6`.
-  - Next action: add richer mission-surface/archive, map objective-arrow, pirate-avoidance, and outfitter/ship-ladder scenarios; then decide which scenario outcomes should become in-game tutorial/hint surfaces.
+  - Implementation: `native_ev/scenario_eval.py` now provides a structured state/action/evaluator harness and the scenario curriculum `levo_merchant_first_hop`, `mission_runner_first_delivery`, `scan_intro_mission_offers`, `intro_courier_mission_delivery`, `chapter_one_courier_chain`, `alignment_choice_guardrail`, `mission_destination_route_hint`, `shift_click_multi_stop_route_queue`, `route_planner_refuel_loop`, `low_fuel_jump_recovery`, `blocked_reason_curriculum`, and `disposable_combat_placeholder`; `tools/run_gameplay_scenarios.py --all` runs the full curriculum. `native_ev/data/gameplay_curriculum.json` exposes the curriculum to Godot self-test, which reports `gameplayScenarios=12`.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval -v`; `python3 -m unittest discover -s native_ev/tests -p 'test_*.py'`; `python3 tools/run_gameplay_scenarios.py --all --pretty`; Godot `./run_godot.sh self-test` passed with `gameplayScenarios=12`.
+  - Next action: promote `mission_destination_route_hint` into Godot map overlay/arrow UI, add pirate-avoidance and outfitter/ship-ladder scenarios, then decide which scenario outcomes should become in-game tutorial/hint surfaces.
   - Fidelity boundary: use this as an automation/design scaffold. Original EV Classic fidelity claims still require original runtime, decoded Classic resources, or manual/docs confirmation; long unattended Basilisk play, Strict Play, and piracy/combat on reusable pilots remain gated.
 
 ## Deferred / guardrail items

@@ -149,6 +149,17 @@ Derived status:
 - User authorization/framing: multiple non-strict pilots may be created for separate strategy learning tracks, so the reusable mission/trade pilot does not need to carry piracy/combat-risk experiments.
 - Mission/Bar/Holo-Vid flows are now source-backed enough to inform Terminal Velocity UI/backlog work. Hyperspace travel is now user-demonstrated to Kathoon with a screenshot-confirmed landed state, but the exact route-selection/jump input sequence still needs a captured step-by-step pass before being treated as screenshot-confirmed original-runtime control behavior.
 
+## 2026-05-28 map multi-stop route planning seed
+
+- `Seed:` Shift-click multi-stop route path on the galaxy map.
+- `Surface:` controls, map UI, hyperspace route planning, tests.
+- `Evidence:` user-observed original-runtime behavior in Basilisk II; step-by-step screenshot capture still needed before labeling as screenshot-confirmed `original-runtime-observed`.
+- `Observed behavior:` user reports that holding Shift and clicking more than one available system in original EV Classic/Basilisk extends a green line into a multi-step route path, not merely a single selected next hop.
+- `Learned skill/use:` route planning is a multi-hop navigation skill: players can pre-plan several adjacent hyperspace legs visually, then execute the route one leg at a time. This should inform Terminal Velocity onboarding and route tests.
+- `Play report:` no new live capture in this note; this is a durable seed from user correction during Terminal Velocity map-route implementation work.
+- `Implementation hint:` Terminal Velocity should store an ordered route queue/path, append Shift-clicked systems that are linked from the current route tail, draw the full green polyline, and consume/advance the first leg on jump.
+- `Backlog link/status:` `EV Classic map multi-stop Shift-click route planning`; status `needs evidence / ready for scaffold`.
+
 ## 2026-05-25 movement turn-rate capture
 
 Evidence gathered:
@@ -176,6 +187,17 @@ Derived observations:
 - Follow-up multi-sample measurement on 2026-05-25 used the same safe in-space state and paired Right Arrow/Left Arrow holds at `250`, `500`, `1000`, and `2000 ms`. Local-only captures are named `C:\Games\BasiliskII\ev-turn-multisample-20260525-152121-<duration>ms-{before,right,return}.png`.
 - Multi-sample full-capture diffs stayed localized to the ship sprite area (`247..268` changed pixels; bboxes around `x=240..263`, `y=255..274`). Candidate frame matches from a common `frame_19` baseline were: `250 ms -> frame_24` (`+5` cells), `500 ms -> frame_31` (`+12` cells), `1000 ms -> frame_06` (`+23` cells modulo 36), and `2000 ms -> frame_28` (`+45` cells modulo 36). Return captures mostly returned to `frame_19`, with the `2000 ms` return at `frame_17`.
 - This supports an original-runtime Shuttlecraft turn rate near `22.5` facing cells/sec for decoded `turning=60`. Terminal Velocity was retuned from the earlier compatibility mapping to `turning * 0.375` (`60 -> 22.5 cells/sec`). Confidence is higher than the single-sample observation but still partial because the capture is not frame-aligned and uses template matching.
+
+## 2026-05-28 active mission map objective check
+
+- `Seed:` mission destination/objective indicators on the galaxy map while active missions are present.
+- `Surface:` map UI, mission routing, route hints, mission info, tests.
+- `Evidence:` screenshot-confirmed original-runtime observation in Basilisk II, local-only capture `C:\Games\BasiliskII\ev-mission-map-kathoon-active-missions-zoomout-20260528T235242Z.png`; Mission Info was also visible in the same live run before reopening the map.
+- `Observed behavior:` the active mission list contained `Rush Delivery to Torgo Prime` and `Ferry Passengers to Antares Station`. The selected Rush Delivery description read: `Get this shipment of food to Torgo Prime in the Torgo system before June 28th, 2276.` After closing Mission Info and reopening/zooming the map, the galaxy map still showed `Current System: Kathoon`, `Ports: Maxwell's Purchase`, `Navigation Hazards: None`, `Stellar Navigation / Maxwell's Purchase`, and no visible automatic mission objective arrow, destination marker, or mission route line to `Torgo Prime`/`Antares Station` in the visible map area. The visible green path should be interpreted as a manually planned route segment/next-stop path; if Torgo Prime is not directly linked from Kathoon, the correct original-EV action is to Shift-click through one or more adjacent stops rather than expecting a direct one-click route.
+- `Learned skill/use:` do not assume EV Classic auto-draws mission objective routes on the map just because a mission is active; players still need Mission Info text and manual map/hyperspace route planning. For non-adjacent mission destinations, route planning is explicitly multi-hop: Shift-click the next available adjacent stop(s) toward the destination.
+- `Play report:` non-strict pilot remained safe in space near Kathoon with active missions; this was an observation-only UI check after route/map work, not a mission completion attempt.
+- `Implementation hint:` keep Terminal Velocity's active-mission route hint labeled as a helpful design scaffold rather than an EV Classic fidelity claim. A source-backed EV behavior would instead emphasize mission text plus manual route planning; if a TV assist remains, make it opt-in/helper-labeled rather than automatic original behavior.
+- `Backlog link/status:` `Map objective arrows, fuel/range, and hyperspace feedback`; status `partial original evidence: no visible auto mission objective route in current capture / mission route hint remains scaffold`.
 
 ## Open verification items
 

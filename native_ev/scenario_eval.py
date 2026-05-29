@@ -10,7 +10,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from native_ev.model import economy_manifest, load_universe, system_distance
+from native_ev.model import available_mission_ids, economy_manifest, load_universe, mission_manifest, system_distance
 
 COMMODITY_LOT_SIZE = 10
 STARTING_CREDITS = 10000
@@ -21,6 +21,12 @@ START_BODY = 'Levo Spaceport'
 SCENARIO_CURRICULUM = [
     'levo_merchant_first_hop',
     'mission_runner_first_delivery',
+    'scan_intro_mission_offers',
+    'intro_courier_mission_delivery',
+    'chapter_one_courier_chain',
+    'alignment_choice_guardrail',
+    'mission_destination_route_hint',
+    'shift_click_multi_stop_route_queue',
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
@@ -61,6 +67,12 @@ def initial_gameplay_state() -> dict[str, Any]:
         'cargoHold': {},
         'activeJobs': [],
         'completedJobs': [],
+        'storyFlags': [],
+        'missionOfferArchive': {},
+        'routeQueue': [],
+        'routeSourceLabel': None,
+        'reputation': {'Federation': 5, 'Independent': 7},
+        'legalRecords': {'Federation': 0, 'Independent': 0},
         'fuel': STARTING_FUEL,
         'combatExecuted': False,
         'strictPlay': False,
@@ -99,6 +111,38 @@ def _buy_commodity_lot(state: dict[str, Any], action: dict[str, Any], trace: lis
     return True
 
 
+def _route_tail_system(state: dict[str, Any]) -> str:
+    route_queue = state.get('routeQueue', [])
+    if route_queue:
+        return str(route_queue[-1])
+    return str(state['currentSystem'])
+
+
+def _append_route_stop(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    destination = str(action['destinationSystem'])
+    universe = load_universe()
+    tail_name = _route_tail_system(state)
+    tail_system = next((system for system in universe.get('systems', []) if system.get('name') == tail_name), None)
+    if not tail_system or destination not in tail_system.get('links', []):
+        trace.append({'type': 'blocked_append_route_stop', 'destinationSystem': destination, 'tailSystem': tail_name, 'reason': 'not linked from route tail', 'routeQueue': list(state.get('routeQueue', []))})
+        return True
+    if destination == state['currentSystem'] or destination in state.get('routeQueue', []):
+        trace.append({'type': 'blocked_append_route_stop', 'destinationSystem': destination, 'tailSystem': tail_name, 'reason': 'duplicate or current system', 'routeQueue': list(state.get('routeQueue', []))})
+        return True
+    state.setdefault('routeQueue', []).append(destination)
+    state['routeSourceLabel'] = action.get('sourceLabel', 'original-runtime-observed')
+    trace.append({
+        'type': 'append_route_stop',
+        'destinationSystem': destination,
+        'tailSystem': tail_name,
+        'routeQueue': list(state['routeQueue']),
+        'greenRoutePath': [state['currentSystem']] + list(state['routeQueue']),
+        'sourceLabel': state['routeSourceLabel'],
+        'oracleStatus': action.get('oracleStatus', 'user_demonstrated_pending_original_trace'),
+    })
+    return True
+
+
 def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     universe = load_universe()
     destination_system = action['destinationSystem']
@@ -114,7 +158,7 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
     distance = system_distance(universe, state['currentSystem'], destination_system)
     pay = int(action.get('pay', 350 + tons * 120 + distance * 2))
     job = {
-        'id': action.get('id', f"cargo_{state['currentSystem'].lower()}_{destination_system.lower()}"),
+        'id': action.get('id', action.get('missionId', f"cargo_{state['currentSystem'].lower()}_{destination_system.lower()}")),
         'originSystem': state['currentSystem'],
         'originBody': state['landedBody'],
         'destinationSystem': destination_system,
@@ -123,29 +167,50 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         'reservedCargoTons': tons,
         'pay': pay,
         'risk': action.get('risk', 'safe'),
+        'setsFlags': list(action.get('setsFlags', [])),
+        'completionFlags': list(action.get('completionFlags', [])),
     }
     state['cargoUsed'] += tons
     state['activeJobs'].append(job)
+    for flag in job['setsFlags']:
+        if flag not in state['storyFlags']:
+            state['storyFlags'].append(flag)
     trace.append({'type': 'accept_cargo_job', **job, 'cargoUsed': state['cargoUsed']})
     return True
 
 
+def _blocked_jump_event(origin: str, destination: str | None, reason: str, route_queue: list[str]) -> dict[str, Any]:
+    event: dict[str, Any] = {'type': 'blocked_jump', 'originSystem': origin, 'destinationSystem': destination, 'reason': reason}
+    if route_queue:
+        event['routeQueue'] = list(route_queue)
+    return event
+
+
 def _jump(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     universe = load_universe()
-    destination = action['destinationSystem']
+    destination = action.get('destinationSystem')
+    if destination is None and state.get('routeQueue'):
+        destination = state['routeQueue'][0]
+    if destination is None:
+        trace.append(_blocked_jump_event(state['currentSystem'], None, 'no destination selected', list(state.get('routeQueue', []))))
+        return False
+    destination = str(destination)
     origin = state['currentSystem']
     links = set(_system(universe, origin).get('links', []))
     if destination not in links:
-        trace.append({'type': 'blocked_jump', 'originSystem': origin, 'destinationSystem': destination, 'reason': f'{destination} not linked from {origin}'})
+        trace.append(_blocked_jump_event(origin, destination, f'{destination} not linked from {origin}', list(state.get('routeQueue', []))))
         return False
     if state['fuel'] <= 0:
-        trace.append({'type': 'blocked_jump', 'originSystem': origin, 'destinationSystem': destination, 'reason': 'insufficient fuel'})
+        trace.append(_blocked_jump_event(origin, destination, 'insufficient fuel', list(state.get('routeQueue', []))))
         return False
+    previous_route = list(state.get('routeQueue', []))
     state['currentSystem'] = destination
     state['landedBody'] = None
     state['fuel'] -= 1
+    if previous_route and previous_route[0] == destination:
+        state['routeQueue'].pop(0)
     state['knownSystems'] = sorted(set(state.get('knownSystems', [])) | {destination} | set(_system(universe, destination).get('links', [])))
-    trace.append({'type': 'jump', 'originSystem': origin, 'destinationSystem': destination, 'fuelAfter': state['fuel']})
+    trace.append({'type': 'jump', 'originSystem': origin, 'destinationSystem': destination, 'fuelAfter': state['fuel'], 'previousRoute': previous_route, 'remainingRoute': list(state.get('routeQueue', []))})
     return True
 
 
@@ -181,6 +246,84 @@ def _set_state(state: dict[str, Any], action: dict[str, Any], trace: list[dict[s
     return True
 
 
+def _route_to_active_mission_destination(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    if not state.get('activeJobs'):
+        trace.append({'type': 'blocked_route_to_active_mission_destination', 'reason': 'no active mission', 'routeQueue': list(state.get('routeQueue', []))})
+        return True
+    job = state['activeJobs'][0]
+    destination = str(job.get('destinationSystem', ''))
+    before_size = len(state.get('routeQueue', []))
+    appended = _append_route_stop(state, {'destinationSystem': destination, 'sourceLabel': 'terminal-velocity-design-scaffold', 'oracleStatus': 'mission_objective_hint_pending_ev_classic_ui_trace'}, trace)
+    trace.append({
+        'type': 'route_to_active_mission_destination',
+        'missionId': job.get('id'),
+        'destinationSystem': destination,
+        'routeQueued': appended and len(state.get('routeQueue', [])) > before_size,
+        'routeQueue': list(state.get('routeQueue', [])),
+        'sourceLabel': 'terminal-velocity-design-scaffold',
+        'oracleStatus': 'mission_objective_hint_pending_ev_classic_ui_trace',
+    })
+    return True
+
+
+def _scan_mission_offers(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    if state['landedBody'] is None:
+        trace.append({'type': 'blocked_scan_mission_offers', 'reason': 'not landed', 'system': state['currentSystem']})
+        return False
+    missions = mission_manifest()
+    mission_ids = available_mission_ids(
+        missions,
+        state['currentSystem'],
+        state['landedBody'],
+        completed_ids=state.get('completedJobs', []),
+        active_ids=[job['id'] for job in state.get('activeJobs', [])],
+        flags=state.get('storyFlags', []),
+        reputation=state.get('reputation', {}),
+        legal_records=state.get('legalRecords', {}),
+    )
+    offers_by_surface: dict[str, list[str]] = {'Mission Computer': mission_ids}
+    archive_key = f"{state['currentSystem']}/{state['landedBody']}"
+    state['missionOfferArchive'][archive_key] = deepcopy(offers_by_surface)
+    trace.append({
+        'type': 'scan_mission_offers',
+        'system': state['currentSystem'],
+        'body': state['landedBody'],
+        'offersBySurface': offers_by_surface,
+        'totalOffers': sum(len(offers) for offers in offers_by_surface.values()),
+        'sourceLabel': 'terminal-velocity-observed',
+        'oracleStatus': 'terminal_velocity_eval_pending_original_trace',
+    })
+    return True
+
+
+def _accept_manifest_mission(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    mission_id = action['missionId']
+    missions = mission_manifest()
+    available_ids = available_mission_ids(
+        missions,
+        state['currentSystem'],
+        state['landedBody'],
+        completed_ids=state.get('completedJobs', []),
+        active_ids=[job['id'] for job in state.get('activeJobs', [])],
+        flags=state.get('storyFlags', []),
+        reputation=state.get('reputation', {}),
+        legal_records=state.get('legalRecords', {}),
+    )
+    if mission_id not in available_ids:
+        trace.append({'type': 'blocked_manifest_mission', 'missionId': mission_id, 'reason': 'not available at current landing', 'system': state['currentSystem'], 'body': state['landedBody']})
+        return True
+    mission = next(item for item in missions.get('missions', []) if item.get('id') == mission_id)
+    return _accept_cargo_job(state, {
+        'id': mission['id'],
+        'destinationSystem': mission['destinationSystem'],
+        'destinationBody': mission['destinationBody'],
+        'tons': mission.get('cargoTons', 0),
+        'pay': mission.get('reward', 0),
+        'setsFlags': mission.get('setsFlags', []),
+        'completionFlags': mission.get('completionFlags', []),
+    }, trace)
+
+
 def _combat_placeholder_guardrail(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     state['combatExecuted'] = False
     trace.append({
@@ -205,6 +348,9 @@ def _complete_cargo_jobs(state: dict[str, Any], _action: dict[str, Any], trace: 
             state['credits'] += int(job['pay'])
             state['cargoUsed'] -= int(job['tons'])
             state['completedJobs'].append(job['id'])
+            for flag in job.get('completionFlags', []):
+                if flag not in state['storyFlags']:
+                    state['storyFlags'].append(flag)
             trace.append({'type': 'complete_cargo_job', **job, 'creditsAfter': state['credits'], 'cargoUsed': state['cargoUsed']})
             completed_any = True
         else:
@@ -238,6 +384,72 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Centauri'},
             {'type': 'land', 'body': 'Landfall'},
             {'type': 'complete_cargo_jobs'},
+        ]
+    if name == 'chapter_one_courier_chain':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'accept_cargo_job', 'missionId': 'intro_courier_earth_hera', 'originSystem': 'Sol', 'originBody': 'Earth', 'destinationSystem': 'Centauri', 'destinationBody': 'Luna', 'tons': 3, 'pay': 1800, 'setsFlags': ['story_intro_started'], 'completionFlags': ['story_intro_complete', 'federation_trusted_courier']},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'accept_cargo_job', 'missionId': 'frontier_sample_hera_freeport', 'originSystem': 'Centauri', 'originBody': 'Luna', 'destinationSystem': 'Sirius', 'destinationBody': 'Sirius Station', 'tons': 4, 'pay': 2400, 'setsFlags': ['frontier_chain_started'], 'completionFlags': ['frontier_samples_delivered', 'reputation_independent_positive']},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sirius'},
+            {'type': 'land', 'body': 'Sirius Station'},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'accept_cargo_job', 'missionId': 'freeport_return_earth', 'originSystem': 'Sirius', 'originBody': 'Sirius Station', 'destinationSystem': 'Sol', 'destinationBody': 'Earth', 'tons': 5, 'pay': 3200, 'setsFlags': ['return_contract_started'], 'completionFlags': ['chapter_one_complete', 'federation_independent_bridge']},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'complete_cargo_jobs'},
+        ]
+    if name == 'scan_intro_mission_offers':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'scan_mission_offers'},
+        ]
+    if name == 'intro_courier_mission_delivery':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'intro_courier_earth_hera',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'risk': 'safe',
+                'setsFlags': ['story_intro_started'],
+                'completionFlags': ['story_intro_complete', 'federation_trusted_courier'],
+            },
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+        ]
+    if name == 'alignment_choice_guardrail':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'storyFlags': ['frontier_samples_delivered']}},
+            {'type': 'accept_manifest_mission', 'missionId': 'federation_report_freeport'},
+            {'type': 'accept_manifest_mission', 'missionId': 'freeport_pact_smugglers'},
+        ]
+    if name == 'mission_destination_route_hint':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
+            {'type': 'depart'},
+            {'type': 'route_to_active_mission_destination'},
+        ]
+    if name == 'shift_click_multi_stop_route_queue':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'jump'},
         ]
     if name == 'route_planner_refuel_loop':
         return [
@@ -291,6 +503,39 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'completed_delivery': 'passed' if state.get('completedJobs') == ['levo_landfall_courier'] and not state.get('activeJobs') else 'failed',
             'released_reserved_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
         })
+    elif name == 'intro_courier_mission_delivery':
+        checks.update({
+            'accepted_intro_courier': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'intro_courier_earth_hera' and event.get('originSystem') == 'Sol' and event.get('originBody') == 'Earth' and event.get('reservedCargoTons') == 3 for event in trace) else 'failed',
+            'reached_intro_destination': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' else 'failed',
+            'completed_intro_courier': 'passed' if state.get('completedJobs') == ['intro_courier_earth_hera'] and not state.get('activeJobs') and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
+            'released_intro_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
+            'applied_story_flags': 'passed' if {'story_intro_started', 'story_intro_complete', 'federation_trusted_courier'}.issubset(set(state.get('storyFlags', []))) else 'failed',
+        })
+    elif name == 'scan_intro_mission_offers':
+        checks.update({
+            'archived_mission_offers': 'passed' if state.get('missionOfferArchive', {}).get('Sol/Earth', {}).get('Mission Computer') == ['intro_courier_earth_hera'] else 'failed',
+        })
+    elif name == 'chapter_one_courier_chain':
+        expected_jobs = ['intro_courier_earth_hera', 'frontier_sample_hera_freeport', 'freeport_return_earth']
+        expected_flags = {'story_intro_complete', 'frontier_samples_delivered', 'chapter_one_complete', 'federation_independent_bridge'}
+        checks.update({
+            'completed_intro_frontier_return_chain': 'passed' if state.get('completedJobs') == expected_jobs and not state.get('activeJobs') and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 + 2400 + 3200 and expected_flags.issubset(set(state.get('storyFlags', []))) else 'failed',
+        })
+    elif name == 'alignment_choice_guardrail':
+        active_ids = [job['id'] for job in state.get('activeJobs', [])]
+        checks.update({
+            'blocked_mutually_exclusive_alignment': 'passed' if 'federation_report_freeport' in active_ids and 'freeport_pact_smugglers' not in active_ids and 'alignment_federation' in state.get('storyFlags', []) and 'alignment_freeport' not in state.get('storyFlags', []) and any(event.get('type') == 'blocked_manifest_mission' and event.get('missionId') == 'freeport_pact_smugglers' for event in trace) else 'failed',
+        })
+    elif name == 'mission_destination_route_hint':
+        checks.update({
+            'queued_active_mission_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] and any(event.get('type') == 'route_to_active_mission_destination' and event.get('missionId') == 'intro_courier_earth_hera' and event.get('destinationSystem') == 'Centauri' and event.get('routeQueued') for event in trace) else 'failed',
+        })
+    elif name == 'shift_click_multi_stop_route_queue':
+        appended_paths = [event.get('greenRoutePath') for event in trace if event.get('type') == 'append_route_stop']
+        checks.update({
+            'green_multi_stop_route': 'passed' if appended_paths and appended_paths[-1] == ['Levo', 'Sol', 'Sirius'] and state.get('routeSourceLabel') == 'original-runtime-observed' else 'failed',
+            'consumed_first_leg_only': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Sirius'] and any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol', 'Sirius'] and event.get('remainingRoute') == ['Sirius'] for event in trace) else 'failed',
+        })
     elif name == 'route_planner_refuel_loop':
         checks.update({
             'spent_fuel_on_jump': 'passed' if any(event.get('type') == 'jump' and event.get('fuelAfter') == STARTING_FUEL - 1 for event in trace) else 'failed',
@@ -341,6 +586,10 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'depart': _depart,
         'refuel': _refuel,
         'set_state': _set_state,
+        'append_route_stop': _append_route_stop,
+        'route_to_active_mission_destination': _route_to_active_mission_destination,
+        'scan_mission_offers': _scan_mission_offers,
+        'accept_manifest_mission': _accept_manifest_mission,
         'complete_cargo_jobs': _complete_cargo_jobs,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
     }

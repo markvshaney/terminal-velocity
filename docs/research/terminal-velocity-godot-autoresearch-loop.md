@@ -119,6 +119,45 @@ Low-fuel jump scenario contract:
   - `sourceLabel=terminal-velocity-observed`;
   - `oracleStatus=user_demonstrated_pending_original_trace`.
 
+Mission offer scan scenario contract:
+
+- `RunGodot.ps1 -MissionOfferScanLog` / `--tv-mission-offer-scan-log`
+- Exercises landed mission-offer discovery without accepting a mission in the Godot fast-eval lane.
+- Resets to Levo, route-selects Sol with `_select_map_route_to_system("Sol")`, jumps and lands at Earth, reads `_available_missions()` from the Mission Computer surface, and logs:
+  - whether route selection succeeded;
+  - scan system/body;
+  - mission offers grouped by surface (`offersBySurface={"Mission Computer":[...]}`);
+  - total offer count (`totalOffers`);
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
+
+Mission route-hint scenario contract:
+
+- `RunGodot.ps1 -MissionRouteHintLog` / `--tv-mission-route-hint-log`
+- Exercises active mission destination → queued route leg in the Godot fast-eval lane.
+- Resets to Levo, route-selects Sol, jumps and lands at Earth, accepts `intro_courier_earth_hera`, launches, clears prior map route state, calls `_route_to_active_mission_destination()`, and logs:
+  - whether the Sol route selection succeeded;
+  - accepted mission id and destination system;
+  - mission acceptance and route queue booleans (`missionAccepted=true`, `missionRouteQueued=true`);
+  - queued route and route hop count (`route=[...]`, `routeHops`);
+  - `sourceLabel=terminal-velocity-design-scaffold`;
+  - `oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace`.
+
+First mission delivery scenario contract:
+
+- `RunGodot.ps1 -FirstMissionDeliveryLog` / `--tv-first-mission-delivery-log`
+- Exercises the first deterministic accept mission → route → jump → land → complete delivery loop in the Godot fast-eval lane.
+- Resets to Levo, route-selects Sol with `_select_map_route_to_system("Sol")`, jumps and lands at Earth, accepts the first available mission (`intro_courier_earth_hera`), launches, route-selects Centauri, jumps, positions at Luna, lands, completes arrived missions, and logs:
+  - whether each route selection succeeded;
+  - accepted mission id and destination system/body;
+  - mission acceptance and delivery booleans (`missionAccepted=true`, `missionDelivered=true`);
+  - completed mission ids;
+  - credits before accept, credits after delivery, and reward (`creditsBeforeAccept`, `creditsAfterDelivery`, `reward`);
+  - cargo before accept, after accept, and after delivery (`cargoBeforeAccept`, `cargoAfterAccept`, `cargoAfterDelivery`);
+  - remaining active missions and story flags;
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
+
 ## Bridge gate
 
 A Godot behavior can be optimized freely only when one of these is true:
@@ -140,10 +179,16 @@ python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_map
 python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_route_jump_autoresearch_log_contract
 python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_route_jump_land_refuel_autoresearch_log_contract
 python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_low_fuel_jump_autoresearch_log_contract
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_offer_scan_autoresearch_log_contract
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract
+python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_first_mission_delivery_autoresearch_log_contract
 python3 -m unittest native_ev.tests.test_model -q
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -MapRouteLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -RouteJumpLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -RouteLandRefuelLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -LowFuelJumpLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -MissionOfferScanLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -MissionRouteHintLog
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -FirstMissionDeliveryLog
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$(wslpath -w godot_ev/windows/RunGodot.ps1)" -SelfTest
 ```

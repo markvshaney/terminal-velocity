@@ -6,6 +6,12 @@
   "scenarioOrder": [
     "levo_merchant_first_hop",
     "mission_runner_first_delivery",
+    "scan_intro_mission_offers",
+    "intro_courier_mission_delivery",
+    "chapter_one_courier_chain",
+    "alignment_choice_guardrail",
+    "mission_destination_route_hint",
+    "shift_click_multi_stop_route_queue",
     "route_planner_refuel_loop",
     "low_fuel_jump_recovery",
     "blocked_reason_curriculum",
@@ -35,6 +41,30 @@
     "disposable_combat_placeholder": {
       "purpose": "Combat/piracy guardrail scaffold only; records stop conditions without executing destructive tests.",
       "surface": "disposable non-strict combat planning"
+    },
+    "intro_courier_mission_delivery": {
+      "purpose": "Intro courier mission loop: travel from Levo to Earth, accept the first courier mission, reserve mission cargo, travel to Luna, complete delivery, release cargo, receive reward, and apply story flags.",
+      "surface": "mission runner/story progression"
+    },
+    "scan_intro_mission_offers": {
+      "purpose": "Mission-offer scan loop: travel to Earth, inspect landed mission offers by surface, and archive available mission ids before accepting a contract.",
+      "surface": "mission offer discovery/archive"
+    },
+    "chapter_one_courier_chain": {
+      "purpose": "Chapter-one courier chain: complete the intro courier, frontier sample transfer, and return contract in one deterministic noncombat story loop.",
+      "surface": "multi-mission story progression"
+    },
+    "alignment_choice_guardrail": {
+      "purpose": "Alignment branch guardrail: accept one mutually exclusive faction branch, then verify the incompatible branch is unavailable without mutating cargo or completing combat.",
+      "surface": "mission availability/faction alignment guardrail"
+    },
+    "shift_click_multi_stop_route_queue": {
+      "purpose": "Map route-planner loop: Shift-click linked stops to build a green multi-hop route queue, then consume only the first leg on jump.",
+      "surface": "map route planning/original-runtime-observed scaffold"
+    },
+    "mission_destination_route_hint": {
+      "purpose": "Mission objective route hint: after accepting an active courier contract, queue the contract destination as the next map route leg.",
+      "surface": "mission objective/map route guidance design scaffold"
     }
   }
 }

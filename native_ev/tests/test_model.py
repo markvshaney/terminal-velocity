@@ -272,6 +272,12 @@ class NativeEvModelTests(unittest.TestCase):
             'Hold Shift and click a linked system',
             'No route from current system',
             'greenLine=true',
+            'var selected_route: Array = []',
+            'func _map_route_tail_system_name() -> String:',
+            'func _append_map_route_at_position(click_position: Vector2) -> bool:',
+            'routeHops=%d route=%s',
+            'Route appended: %s',
+            'draw_line(route_start_point, route_end_point, Color(0.15, 1.0, 0.28, 0.95), 3.0)',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('[switch]$MapRouteLog', run_script)
@@ -357,6 +363,76 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-low-fuel-jump-log', run_script)
         self.assertIn('Low-fuel jump scenario contract', plan)
         self.assertIn('blocked low-fuel jump', plan)
+
+    def test_godot_mission_destination_route_hint_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-route-hint-log',
+            'func _run_mission_route_hint_log',
+            'TV_MISSION_ROUTE_HINT_EVENT',
+            'func _route_to_active_mission_destination',
+            'missionRouteQueued=true',
+            'sourceLabel=terminal-velocity-design-scaffold',
+            'oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionRouteHintLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-route-hint-log', run_script)
+        self.assertIn('tv-mission-route-hint-log', wrapper)
+        self.assertIn('Mission route-hint scenario contract', plan)
+        self.assertIn('active mission destination → queued route leg', plan)
+
+    def test_godot_mission_offer_scan_autoresearch_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            '--tv-mission-offer-scan-log',
+            'func _run_mission_offer_scan_log',
+            'TV_MISSION_OFFER_SCAN_EVENT',
+            '_select_map_route_to_system("Sol")',
+            'offersBySurface=',
+            'Mission Computer',
+            'totalOffers=%d',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=terminal_velocity_eval_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionOfferScanLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-offer-scan-log', run_script)
+        self.assertIn('tv-mission-offer-scan-log', launcher)
+
+    def test_godot_first_mission_delivery_autoresearch_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-first-mission-delivery-log',
+            'func _run_first_mission_delivery_log',
+            'TV_FIRST_MISSION_DELIVERY_EVENT',
+            '_select_map_route_to_system("Sol")',
+            '_accept_selected_mission()',
+            '_complete_arrived_missions()',
+            'acceptedMission=intro_courier_earth_hera',
+            'missionDelivered=true',
+            'creditsBeforeAccept=%d creditsAfterDelivery=%d reward=%d',
+            'cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterDelivery=%d',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=terminal_velocity_eval_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$FirstMissionDeliveryLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-first-mission-delivery-log', run_script)
+        self.assertIn('tv-first-mission-delivery-log', launcher)
+        self.assertIn('First mission delivery scenario contract', plan)
+        self.assertIn('accept mission → route → jump → land → complete delivery', plan)
 
     def test_all_36_shuttle_frames_exist(self):
         paths = shuttle_frame_paths()
@@ -1242,6 +1318,10 @@ class NativeEvModelTests(unittest.TestCase):
             'Buy',
             'B buys selected upgrade',
             'B buys selected ship',
+            'func _mission_by_id(mission_id: String) -> Dictionary:',
+            'func _mission_summary_lines() -> Array[String]:',
+            'Mission Info: %s to %s/%s, %d tons, %d cr',
+            'Cargo reserved for missions:',
         ]:
             self.assertIn(prompt, main_script)
 
@@ -1386,11 +1466,14 @@ class NativeEvModelTests(unittest.TestCase):
             'event.shift_pressed',
             '_select_map_route_at_position(event.position)',
             'func _select_map_route_at_position',
+            'func _append_map_route_at_position',
             'func _map_system_points',
-            'Shift-click a linked stop to set route',
-            'Route set:',
+            'func _map_route_tail_system_name() -> String:',
+            'Shift-click linked stops: green route',
+            'Route selected:',
+            'Route appended:',
             'Color(0.15, 1.0, 0.28, 0.95)',
-            'draw_line(current_point, selected_point',
+            'draw_line(route_start_point, route_end_point',
         ]:
             self.assertIn(symbol, main_script)
 

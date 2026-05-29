@@ -18,6 +18,9 @@ Modes:
   tv-route-jump-log       Run route jump log
   tv-route-land-refuel-log Run route/land/refuel log
   tv-low-fuel-jump-log    Run blocked low-fuel jump log
+  tv-mission-offer-scan-log Run mission offer scan log
+  tv-mission-route-hint-log Run mission destination route hint log
+  tv-first-mission-delivery-log Run first mission acceptance/delivery log
 USAGE
 }
 
@@ -29,7 +32,7 @@ case "$mode" in
     self-test)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' --script 'res://scripts/self_test.gd'"
         ;;
-    tv-movement-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log)
+    tv-movement-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log|tv-mission-offer-scan-log|tv-mission-route-hint-log|tv-first-mission-delivery-log)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' -- --$mode"
         ;;
     -h|--help|help)

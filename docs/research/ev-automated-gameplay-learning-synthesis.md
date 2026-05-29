@@ -17,6 +17,15 @@ Primary source artifacts used:
   - `evn_bible.txt`
 - Tea Leaves, *Playable Classics: Escape Velocity*, fetched live on 2026-05-24 from `http://tleaves.com/2005/06/27/playable-classics-escape-velocity/index.html`.
 - LP Archive, *Escape Velocity: Nova*, fetched live on 2026-05-24 from `https://lparchive.org/Escape-Velocity-Nova/`.
+- `docs/research/automated-gameplay-learning-reference-sources.md`
+  - Voyager / MineDojo (`arXiv:2305.16291`): `https://arxiv.org/abs/2305.16291`, `https://voyager.minedojo.org/`
+  - Go-Explore (`arXiv:1901.10995`): `https://arxiv.org/abs/1901.10995`
+  - GVGAI (`arXiv:1802.10363`): `https://arxiv.org/abs/1802.10363`
+  - Google Research, *Quickly Training Game-Playing Agents with Machine Learning*: `https://research.google/blog/quickly-training-game-playing-agents-with-machine-learning/`
+  - OpenAI VPT paper: `https://cdn.openai.com/vpt/Paper.pdf`
+  - BrowserGym: `https://github.com/ServiceNow/BrowserGym`
+  - WebArena (`arXiv:2307.13854`): `https://arxiv.org/abs/2307.13854`, `https://webarena.dev/`
+  - OSWorld (`arXiv:2404.07972`): `https://arxiv.org/abs/2404.07972`, `https://os-world.github.io/`
 
 Source labels:
 
@@ -25,6 +34,7 @@ Source labels:
 - `source-grounded EV-family`: EV Nova data-derived walkthrough/Bible evidence; transferable structure, not exact Classic proof.
 - `demo-hypothesis`: YouTube/LP examples identified but not yet transcript-mined.
 - `automation-design`: inference for Terminal Velocity agent/eval design based on the above.
+- `automation-design reference`: general game-agent/autonomous-task research source used for automation architecture only; not EV Classic behavior evidence.
 
 ## Executive learning model
 
@@ -311,6 +321,50 @@ The following tactics should be logged as hypotheses/design rules now and verifi
 - `keep_hypothesis`: Route policy should choose refuel-safe, politically safer lanes for fragile ships even if profit is lower.
 - `needs_disposable_pilot`: Destroy/disable/board/rescue/chase-off missions require combat-capable or disposable pilots.
 - `keep_hypothesis`: Upgrade planning should be role-specific, not a generic largest-ship heuristic.
+
+## 2026-05-28 general gameplay-learning source sweep additions
+
+Sources checked:
+
+- Voyager (`arXiv:2305.16291`): LLM game agent for Minecraft using automatic curriculum, an ever-growing executable skill library, environment feedback, execution errors, and self-verification.
+- Go-Explore (`arXiv:1901.10995`): hard-exploration method built around remembering visited states, returning to promising states first, then exploring from them, with later robustification.
+- GVGAI (`arXiv:1802.10363`): general video-game AI framework emphasizing multi-game/task benchmarking, game descriptions, and multiple evaluation tracks.
+- Google Research, “Quickly Training Game-Playing Agents with Machine Learning” (2021): recommends not one end-to-end agent, but ensembles of short gameplay-loop agents, semantic state/action APIs, and long tests made by remixing core loops with simple scripting.
+- OpenAI VPT paper/source page found via `cdn.openai.com/vpt/Paper.pdf` and OpenAI VPT index: supports using small action-labeled human data plus large unlabeled gameplay video for behavior pretraining. For Terminal Velocity, use the lightweight analogue: capture user/operator action traces and reuse them as macro demonstrations, not large-scale video ML.
+- Existing primary harness source notes: BrowserGym/WebArena/OSWorld patterns separate task/scenario manifests, setup, validation, result getters, expected rules, run events, and artifacts.
+
+Additional process upgrades for Terminal Velocity:
+
+1. **Curriculum queue, not ad-hoc next steps**
+   - Maintain a queue of gameplay skills ordered by prerequisite state: state classification → map route append → jump/land/refuel → scan services → mission accept → mission complete → trade-with-mission → upgrade planning → escape/combat.
+   - Each skill has a success metric, required observations, failure gates, and promotion criteria.
+
+2. **State archive / waypoint library**
+   - Keep reusable snapshots/checkpoints for known useful states: landed at Levo, map open, route selected, landed at first neighbor, mission accepted, commodity screen open, etc.
+   - Apply Go-Explore’s principle: return to a known promising state cheaply, then explore one new branch, instead of replaying the full journey from scratch.
+
+3. **Short loop agents / macros**
+   - Follow Google’s gameplay-loop framing: create separate small controllers/macros for 1–3 minute loops rather than one broad play agent.
+   - Compose loops with simple scripts for longer tasks: `scan_mission_surfaces` + `score_offer` + `reserve_cargo` + `append_route` + `jump_land_refuel` + `complete_mission`.
+
+4. **Executable skill library**
+   - Store successful routines as scripts/macros with preconditions, postconditions, and known failure modes.
+   - Promote only routines that have passed deterministic Terminal Velocity scenarios and, where fidelity matters, a bounded Basilisk sample.
+
+5. **Action-trace learning from human/operator demos**
+   - When the user demonstrates something in Basilisk, record timestamped action traces plus before/after probes and screenshots.
+   - Convert traces into reusable macros and test cases. This is the small-scale practical version of VPT/imitation-learning: action-labeled demonstrations are more valuable than prose recollection.
+
+6. **Scenario manifests and validators**
+   - Borrow browser/computer-agent harness structure: each gameplay eval should have a manifest with setup state, allowed actions, forbidden actions, expected result getters, validation rules, evidence artifacts, and teardown/reset policy.
+   - This avoids losing time interpreting screenshots after every action.
+
+7. **Generalization checks**
+   - Borrow GVGAI/Procgen-style thinking: a skill is not learned if it works only for Levo→Sol. Test route/trade/mission routines across multiple systems, cargo loads, fuel levels, and service availability states.
+
+8. **Basilisk as calibrator, not trainer**
+   - Original EV Classic remains source truth, but use it like a calibration oracle: sample exact UI/edge cases, then run broad learning in Terminal Velocity.
+   - Avoid long Basilisk sessions unless a captureable source-truth question cannot be answered by decoded resources or a short trace.
 
 ## Near-term implementation guidance for Terminal Velocity
 
