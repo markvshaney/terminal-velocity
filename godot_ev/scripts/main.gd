@@ -65,6 +65,7 @@ var selected_route: Array = []
 var selected_target_index := 0
 var map_visible := false
 var help_visible := false
+var mission_log_visible := false
 var stars: Array[Vector2] = []
 var status_line := ""
 var status_messages: Array[String] = []
@@ -1509,6 +1510,7 @@ func _show_player_info() -> void:
 	status_line = "Player Info: %s / %s / %d credits" % [loaded_pilot_name if loaded_pilot_name != "" else "Pilot", player_ship_id, credits]
 
 func _show_mission_info() -> void:
+	mission_log_visible = not mission_log_visible
 	if active_missions.is_empty():
 		status_line = "Mission Info: no active missions"
 		return
@@ -1629,6 +1631,8 @@ func _draw() -> void:
 		_draw_universe_map()
 	if landed:
 		_draw_landing_panel()
+	if mission_log_visible:
+		_draw_mission_log_overlay()
 	if help_visible:
 		_draw_help_overlay()
 
@@ -1960,6 +1964,46 @@ func _draw_hud() -> void:
 	draw_string(font, Vector2(1024, 280), "Target: Contact %d  %.0f" % [selected_target_index + 1, target_range], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(1.0, 0.82, 0.35))
 	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F6 save  F10 help  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
 
+func _mission_log_detail_lines() -> Array[String]:
+	var lines: Array[String] = []
+	if active_missions.is_empty():
+		lines.append("No active missions.")
+		return lines
+	for mission_id in active_missions:
+		var mission := _mission_by_id(str(mission_id))
+		if mission.is_empty():
+			lines.append("Mission: " + str(mission_id))
+			lines.append("Status: Active")
+			continue
+		lines.append(str(mission.get("title", mission_id)))
+		lines.append("Status: Active")
+		lines.append("Destination: %s / %s" % [str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?"))])
+		lines.append("Cargo reserved: %d tons" % int(mission.get("cargoTons", 0)))
+		lines.append("Reward: %d credits" % int(mission.get("reward", 0)))
+		var description := str(mission.get("description", ""))
+		if description != "":
+			lines.append("Briefing: " + description)
+		lines.append("")
+	return lines
+
+func _draw_mission_log_overlay() -> void:
+	var font := ThemeDB.fallback_font
+	var rect := Rect2(210, 112, 860, 560)
+	draw_rect(rect, Color(0.018, 0.026, 0.042, 0.96), true)
+	draw_rect(rect, Color(0.35, 0.62, 0.85, 1.0), false, 2.0)
+	draw_string(font, rect.position + Vector2(0, 38), "Mission Log", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 24, Color(0.92, 0.98, 1.0))
+	draw_string(font, rect.position + Vector2(36, 72), "Terminal Velocity mission log helper/scaffold — not an EV Classic fidelity claim. I toggles mission log.", HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 72, 14, Color(0.95, 0.86, 0.58))
+	var y := rect.position.y + 112.0
+	for line in _mission_log_detail_lines():
+		if line == "":
+			y += 12.0
+			continue
+		var color := Color(0.86, 0.92, 1.0)
+		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:"):
+			color = Color(0.72, 0.84, 0.96)
+		draw_string(font, Vector2(rect.position.x + 42, y), line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 84, 16, color)
+		y += 28.0
+
 func _draw_help_overlay() -> void:
 	var font := ThemeDB.fallback_font
 	var rect := Rect2(250, 120, 780, 520)
@@ -1971,7 +2015,7 @@ func _draw_help_overlay() -> void:
 		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
 		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops.",
 		"Mission route helper: G queues the active mission destination when known.",
-		"Mission cargo: I shows reserved tons; HUD and market show mission/free cargo.",
+		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",

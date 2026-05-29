@@ -420,6 +420,23 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Pilot save/resume scenario contract', plan)
         self.assertIn('save → mutate → reopen pilot', plan)
 
+    def test_godot_mission_log_overlay_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'var mission_log_visible := false',
+            'func _draw_mission_log_overlay',
+            'func _mission_log_detail_lines',
+            'mission_log_visible = not mission_log_visible',
+            'Terminal Velocity mission log helper/scaffold',
+            'Status: Active',
+            'Destination:',
+            'Cargo reserved:',
+            'Reward:',
+            'I toggles mission log',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_mission_offer_scan_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

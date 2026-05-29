@@ -213,6 +213,15 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: broad Classic strategy/tutorial detail should wait for stronger manual/runtime evidence; the next safe playable slice is likely refuel/service visibility or save/load pilot persistence.
   - Fidelity boundary: learning aids may explain Terminal Velocity behavior directly; do not present unverified EV Classic facts as canonical.
 
+- [x] Visible mission log/status detail
+  - Status: `implemented Terminal Velocity helper/scaffold`
+  - Source: Terminal Velocity mission JSON and recurring EV-family player-guide pattern that active contracts need visible destination/cargo/reward status; exact EV Classic mission log window layout/text remains unverified.
+  - Scope: make active mission state visible without relying on transient status text: title, active status, destination system/body, cargo reserved, reward, and briefing when available.
+  - Implementation: `I` now toggles a Mission Log overlay and still updates the status line summary; the overlay is labeled `Terminal Velocity mission log helper/scaffold — not an EV Classic fidelity claim`.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_overlay_contract -v`; full native discovery passed 92 tests; Godot self-test passed with `gameplayScenarios=12`.
+  - Next action: add route/progress detail or completion history only after current overlay verifies cleanly.
+  - Fidelity boundary: this is TV usability scaffolding, not a claim about the original Classic mission-log UI.
+
 - [x] Pilot save/resume persistence affordance
   - Status: `implemented Terminal Velocity save scaffold / needs EV Classic pilot-file evidence`
   - Source: Terminal Velocity JSON pilot persistence path and existing title-screen New/Open Pilot flow; exact EV Classic pilot file layout and autosave/manual-save semantics remain unverified.
