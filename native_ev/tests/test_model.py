@@ -658,6 +658,7 @@ class NativeEvModelTests(unittest.TestCase):
             'missionDelivered=true',
             'creditsBeforeAccept=%d creditsAfterDelivery=%d reward=%d',
             'cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterDelivery=%d',
+            'completionHistoryCount=%d latestCompletion=%s',
             'sourceLabel=terminal-velocity-observed',
             'oracleStatus=terminal_velocity_eval_pending_original_trace',
         ]:
