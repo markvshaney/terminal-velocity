@@ -1330,6 +1330,7 @@ func _list_pilot_files() -> Array[Dictionary]:
 					"credits": int(data.get("credits", 0)),
 					"strict_play": bool(data.get("strict_play", false)),
 					"status_line": str(data.get("status_line", "")),
+					"active_missions": data.get("active_missions", []),
 				})
 		file_name = dir.get_next()
 	dir.list_dir_end()
@@ -2002,15 +2003,26 @@ func _open_pilot_row_text(entry: Dictionary) -> String:
 	var status_text := str(entry.get("status_line", ""))
 	if status_text.strip_edges() == "":
 		status_text = "No recent status"
-	return "%s — %s / %s | System: %s | Credits: %d | Strict Play: %s | Status: %s" % [
+	return "%s — %s / %s | System: %s | Credits: %d | Strict Play: %s | Mission: %s | Status: %s" % [
 		str(entry.get("pilot_name", "")),
 		str(entry.get("ship_name", "")),
 		str(entry.get("ship_type", "Shuttlecraft")),
 		str(entry.get("system", "?")),
 		int(entry.get("credits", 0)),
 		strict_label,
+		_pilot_resume_mission_summary(entry),
 		status_text,
 	]
+
+func _pilot_resume_mission_summary(entry: Dictionary) -> String:
+	var active: Array = entry.get("active_missions", [])
+	if active.is_empty():
+		return "none"
+	var mission_id := str(active[0])
+	for mission in missions.get("missions", []):
+		if str(mission.get("id", "")) == mission_id:
+			return "%s to %s/%s" % [str(mission.get("title", mission_id)), str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?"))]
+	return mission_id
 
 func _draw_about_modal(rect: Rect2, font: Font) -> void:
 	draw_string(font, rect.position + Vector2(0, 28), "About Terminal Velocity", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))

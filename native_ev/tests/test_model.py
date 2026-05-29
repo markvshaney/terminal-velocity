@@ -557,6 +557,9 @@ class NativeEvModelTests(unittest.TestCase):
             'bool(data.get("strict_play", false))',
             'str(data.get("status_line", ""))',
             'Status: %s',
+            'data.get("active_missions", [])',
+            '_pilot_resume_mission_summary(entry)',
+            'Mission: %s',
             '_open_pilot_row_text(entry)',
         ]:
             self.assertIn(symbol, main_script)
