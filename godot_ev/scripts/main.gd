@@ -736,9 +736,22 @@ func _run_pilot_save_resume_log() -> void:
 	var mission_before_accept: Dictionary = _first_available_mission(accepted_body)
 	var accepted_mission_id := str(mission_before_accept.get("id", "none"))
 	_accept_selected_mission()
+	credits = 100000
+	landing_tab = 3
+	selected_landing_item = 1
+	_buy_selected_ship()
+	landing_tab = 2
+	selected_landing_item = 0
+	_buy_selected_outfit_or_weapon()
+	selected_landing_item = 3
+	_buy_selected_outfit_or_weapon()
 	var saved_system := str(current_system.get("name", "?"))
 	var saved_fuel := player_fuel
 	var saved_credits := credits
+	var saved_cargo_space := cargo_space
+	var saved_ship_id := player_ship_id
+	var saved_outfits := owned_outfits.duplicate()
+	var saved_weapons := owned_weapons.duplicate()
 	var saved_active_missions := active_missions.duplicate()
 	var saved_strict_play := strict_play_selected
 	var save_succeeded := _save_current_pilot_file()
@@ -747,6 +760,10 @@ func _run_pilot_save_resume_log() -> void:
 	player_fuel = 0
 	credits = 1
 	active_missions.clear()
+	owned_outfits.clear()
+	owned_weapons.clear()
+	cargo_space = 20
+	_set_player_ship_by_id("shuttlecraft")
 	strict_play_selected = true
 	_open_pilot_modal()
 	for i in range(available_pilots.size()):
@@ -759,7 +776,11 @@ func _run_pilot_save_resume_log() -> void:
 	var credits_round_trip := credits == saved_credits
 	var mission_round_trip := active_missions == saved_active_missions and active_missions.has(accepted_mission_id)
 	var strict_round_trip := strict_play_selected == saved_strict_play
-	var resume_succeeded := save_succeeded and system_round_trip and fuel_round_trip and credits_round_trip and mission_round_trip and strict_round_trip
+	var outfit_round_trip := _integer_count_dictionaries_match(owned_outfits, saved_outfits) and not owned_outfits.is_empty()
+	var weapon_round_trip := _integer_count_dictionaries_match(owned_weapons, saved_weapons) and not owned_weapons.is_empty()
+	var ship_round_trip := player_ship_id == saved_ship_id
+	var cargo_space_round_trip := cargo_space == saved_cargo_space
+	var resume_succeeded := save_succeeded and system_round_trip and fuel_round_trip and credits_round_trip and mission_round_trip and strict_round_trip and outfit_round_trip and weapon_round_trip and ship_round_trip and cargo_space_round_trip
 	var save_status := "saveSucceeded=true" if save_succeeded else "saveSucceeded=false"
 	var resume_status := "resumeSucceeded=true" if resume_succeeded else "resumeSucceeded=false"
 	var system_status := "systemRoundTrip=true" if system_round_trip else "systemRoundTrip=false"
@@ -767,7 +788,11 @@ func _run_pilot_save_resume_log() -> void:
 	var credits_status := "creditsRoundTrip=true" if credits_round_trip else "creditsRoundTrip=false"
 	var mission_status := "missionRoundTrip=true" if mission_round_trip else "missionRoundTrip=false"
 	var strict_status := "strictPlayRoundTrip=true" if strict_round_trip else "strictPlayRoundTrip=false"
-	print("%s pilot=\"%s\" routeToSolSelected=%s acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s %s %s %s %s savedSystem=%s resumedSystem=%s savedFuel=%d resumedFuel=%d savedCredits=%d resumedCredits=%d activeMissions=%s strictPlay=%s sourceLabel=terminal-velocity-save-scaffold oracleStatus=save_resume_pending_ev_classic_file_trace status=\"%s\"" % [PILOT_SAVE_RESUME_EVENT_LOG_PREFIX, loaded_pilot_name, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, save_status, resume_status, system_status, fuel_status, credits_status, mission_status, strict_status, saved_system, str(current_system.get("name", "?")), saved_fuel, player_fuel, saved_credits, credits, JSON.stringify(active_missions), str(strict_play_selected), status_line])
+	var outfit_status := "outfitRoundTrip=true" if outfit_round_trip else "outfitRoundTrip=false"
+	var weapon_status := "weaponRoundTrip=true" if weapon_round_trip else "weaponRoundTrip=false"
+	var ship_status := "shipRoundTrip=true" if ship_round_trip else "shipRoundTrip=false"
+	var cargo_space_status := "cargoSpaceRoundTrip=true" if cargo_space_round_trip else "cargoSpaceRoundTrip=false"
+	print("%s pilot=\"%s\" routeToSolSelected=%s acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s %s %s %s %s %s %s %s %s savedSystem=%s resumedSystem=%s savedFuel=%d resumedFuel=%d savedCredits=%d resumedCredits=%d savedShip=%s resumedShip=%s savedCargoSpace=%d resumedCargoSpace=%d savedOutfits=%s resumedOutfits=%s savedWeapons=%s resumedWeapons=%s activeMissions=%s strictPlay=%s sourceLabel=terminal-velocity-save-scaffold oracleStatus=save_resume_pending_ev_classic_file_trace status=\"%s\"" % [PILOT_SAVE_RESUME_EVENT_LOG_PREFIX, loaded_pilot_name, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, save_status, resume_status, system_status, fuel_status, credits_status, mission_status, strict_status, outfit_status, weapon_status, ship_status, cargo_space_status, saved_system, str(current_system.get("name", "?")), saved_fuel, player_fuel, saved_credits, credits, saved_ship_id, player_ship_id, saved_cargo_space, cargo_space, JSON.stringify(saved_outfits), JSON.stringify(owned_outfits), JSON.stringify(saved_weapons), JSON.stringify(owned_weapons), JSON.stringify(active_missions), str(strict_play_selected), status_line])
 	get_tree().quit(0)
 
 func _position_at_body(body_name: String) -> bool:
@@ -777,6 +802,16 @@ func _position_at_body(body_name: String) -> bool:
 			vel = Vector2.ZERO
 			return true
 	return false
+
+func _integer_count_dictionaries_match(left: Dictionary, right: Dictionary) -> bool:
+	if left.size() != right.size():
+		return false
+	for key in left.keys():
+		if not right.has(key):
+			return false
+		if int(left.get(key, 0)) != int(right.get(key, 0)):
+			return false
+	return true
 
 func _first_available_mission(body: Dictionary) -> Dictionary:
 	var available := _available_missions(body)

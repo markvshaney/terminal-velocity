@@ -162,10 +162,10 @@ Pilot save/resume scenario contract:
 
 - `RunGodot.ps1 -PilotSaveResumeLog` / `--tv-pilot-save-resume-log`
 - Exercises save → mutate → reopen pilot in the Godot fast-eval lane as a Terminal Velocity persistence scaffold, not an EV Classic pilot-file fidelity claim.
-- Creates/overwrites a deterministic non-strict, non-player test pilot, accepts the intro courier mission, saves current pilot state with `F6`-equivalent `_save_current_pilot_file()`, mutates live state including the Strict Play flag, reopens the saved pilot through the title-screen pilot-file path, and logs:
+- Creates/overwrites a deterministic non-strict, non-player test pilot, accepts the intro courier mission, buys a ship plus outfitter/weapon inventory, saves current pilot state with `F6`-equivalent `_save_current_pilot_file()`, mutates live state including inventory/ship/cargo-space and the Strict Play flag, reopens the saved pilot through the title-screen pilot-file path, and logs:
   - save and resume booleans (`saveSucceeded=true`, `resumeSucceeded=true`);
-  - round-trip checks for system, fuel, credits, active mission ids, and Strict Play flag;
-  - active mission ids after resume;
+  - round-trip checks for system, fuel, credits, active mission ids, Strict Play flag, owned outfits, owned weapons, ship id, and cargo-space;
+  - active mission ids plus saved/resumed outfit and weapon dictionaries after resume;
   - `sourceLabel=terminal-velocity-save-scaffold`;
   - `oracleStatus=save_resume_pending_ev_classic_file_trace`.
 
