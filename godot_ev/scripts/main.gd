@@ -2104,6 +2104,7 @@ func _draw_help_overlay() -> void:
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
 		"Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
+		"Trade route helper: linked-market profit hints are Terminal Velocity scaffold.",
 		"Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
 		"Messages: recent success and blocked-reason feedback appears under the HUD.",
 		"F10 closes this help overlay. Exact Classic behavior still needs source/runtime evidence."
@@ -2322,13 +2323,40 @@ func _draw_commodity_exchange(rect: Rect2) -> void:
 		draw_string(font, rect.position + Vector2(390, y), sell_price_text, HORIZONTAL_ALIGNMENT_LEFT, 100, 16, Color(0.82, 0.92, 0.86))
 		draw_string(font, rect.position + Vector2(520, y), "B", HORIZONTAL_ALIGNMENT_LEFT, 40, 16, Color(0.82, 0.92, 0.86))
 		draw_string(font, rect.position + Vector2(600, y), "S" if held > 0 else "—", HORIZONTAL_ALIGNMENT_LEFT, 40, 16, Color(0.82, 0.92, 0.86))
-		y += 28.0
+		y += 20.0
+		if i == selected_landing_item:
+			draw_string(font, rect.position + Vector2(52, y), _commodity_trade_hint_line(commodity_id), HORIZONTAL_ALIGNMENT_LEFT, 760, 13, Color(0.68, 0.78, 0.90))
+			y += 18.0
+		else:
+			y += 8.0
 
 func _ev_classic_price_status(prices: Dictionary) -> String:
 	return str(prices.get("evClassicPriceStatus", ""))
 
 func _commodity_sell_price(commodity_id: String) -> int:
 	return int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("sell", 0))
+
+func _commodity_trade_hint_line(commodity_id: String) -> String:
+	var current_name := str(current_system.get("name", ""))
+	var current_prices: Dictionary = _market_prices(current_name).get(commodity_id, {})
+	var buy_price := int(current_prices.get("buy", 0))
+	if buy_price <= 0:
+		return "No buy price here"
+	var best_system := ""
+	var best_sell := 0
+	var best_profit := -999999
+	for linked_name in current_system.get("links", []):
+		var sell_price := int(_market_prices(str(linked_name)).get(commodity_id, {}).get("sell", 0))
+		if sell_price <= 0:
+			continue
+		var profit := sell_price - buy_price
+		if best_system == "" or profit > best_profit:
+			best_system = str(linked_name)
+			best_sell = sell_price
+			best_profit = profit
+	if best_system == "":
+		return "No linked sell data"
+	return "Best linked sell: %s at %d (%+d cr/ton)" % [best_system, best_sell, best_profit]
 
 func _draw_outfitter(rect: Rect2, body: Dictionary) -> void:
 	var font := ThemeDB.fallback_font

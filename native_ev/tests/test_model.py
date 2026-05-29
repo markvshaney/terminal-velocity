@@ -1462,6 +1462,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-commodity-trade-log', run_script)
         self.assertIn('tv-commodity-trade-log', launcher)
 
+    def test_godot_commodity_route_hint_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'func _commodity_trade_hint_line(commodity_id: String) -> String:',
+            'Best linked sell:',
+            '%+d cr/ton',
+            'No linked sell data',
+            '_commodity_trade_hint_line(commodity_id)',
+            'Trade route helper: linked-market profit hints are Terminal Velocity scaffold.',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_click_sound_is_wired_to_landing_actions(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
