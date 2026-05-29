@@ -446,6 +446,21 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_open_pilot_list_shows_resume_context_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'func _open_pilot_row_text(entry: Dictionary) -> String:',
+            'System: %s',
+            'Credits: %d',
+            'Strict Play: %s',
+            'str(data.get("system", "?"))',
+            'int(data.get("credits", 0))',
+            'bool(data.get("strict_play", false))',
+            '_open_pilot_row_text(entry)',
+        ]:
+            self.assertIn(symbol, main_script)
+
     def test_godot_mission_log_overlay_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

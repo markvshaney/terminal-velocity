@@ -1205,6 +1205,9 @@ func _list_pilot_files() -> Array[Dictionary]:
 					"pilot_name": str(data.get("pilot_name", file_name)),
 					"ship_name": str(data.get("ship_name", "")),
 					"ship_type": str(data.get("ship_type", "Shuttlecraft")),
+					"system": str(data.get("system", "?")),
+					"credits": int(data.get("credits", 0)),
+					"strict_play": bool(data.get("strict_play", false)),
 				})
 		file_name = dir.get_next()
 	dir.list_dir_end()
@@ -1834,12 +1837,23 @@ func _draw_open_pilot_modal(rect: Rect2, font: Font) -> void:
 			if i == selected_pilot_index:
 				draw_rect(row_rect.grow(-2), Color(0.22, 0.40, 0.85, 0.95), true)
 			var entry := available_pilots[i]
-			var row_text := "%s — %s" % [str(entry.get("pilot_name", "")), str(entry.get("ship_name", ""))]
+			var row_text := _open_pilot_row_text(entry)
 			var color := Color(1, 1, 1) if i == selected_pilot_index else Color(0.05, 0.05, 0.05)
 			draw_string(font, row_rect.position + Vector2(10, 22), row_text, HORIZONTAL_ALIGNMENT_LEFT, row_rect.size.x - 20, 16, color)
 	_draw_modal_button(Rect2(700, 492, 116, 34), "Open", font)
 	_draw_modal_button(Rect2(836, 492, 116, 34), "Cancel", font)
 	draw_string(font, rect.position + Vector2(42, 232), "Return opens. Up/Down selects. Escape cancels.", HORIZONTAL_ALIGNMENT_LEFT, 590, 14, Color(0.25, 0.25, 0.25))
+
+func _open_pilot_row_text(entry: Dictionary) -> String:
+	var strict_label := "on" if bool(entry.get("strict_play", false)) else "off"
+	return "%s — %s / %s | System: %s | Credits: %d | Strict Play: %s" % [
+		str(entry.get("pilot_name", "")),
+		str(entry.get("ship_name", "")),
+		str(entry.get("ship_type", "Shuttlecraft")),
+		str(entry.get("system", "?")),
+		int(entry.get("credits", 0)),
+		strict_label,
+	]
 
 func _draw_about_modal(rect: Rect2, font: Font) -> void:
 	draw_string(font, rect.position + Vector2(0, 28), "About Terminal Velocity", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 18, Color(0.95, 0.95, 0.90))
