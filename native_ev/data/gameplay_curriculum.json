@@ -16,6 +16,7 @@
     "route_planner_refuel_loop",
     "low_fuel_jump_recovery",
     "blocked_reason_curriculum",
+    "pirate_avoidance_escape_route",
     "disposable_combat_placeholder"
   ],
   "scenarios": {
@@ -38,6 +39,10 @@
     "blocked_reason_curriculum": {
       "purpose": "Safe blocker recognition: not landed, insufficient cargo, insufficient credits, invalid destination, and no deliverable job.",
       "surface": "controller feedback"
+    },
+    "pirate_avoidance_escape_route": {
+      "purpose": "Pirate-avoidance loop: detect a symbolic pirate intercept, choose a linked safe-port jump, land, and verify combat remains unexecuted while preserving scaffold/source-boundary labels.",
+      "surface": "noncombat escape / disposable combat-prep scaffold"
     },
     "disposable_combat_placeholder": {
       "purpose": "Combat/piracy guardrail scaffold only; records stop conditions without executing destructive tests.",

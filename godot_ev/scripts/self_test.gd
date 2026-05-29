@@ -115,6 +115,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"route_planner_refuel_loop",
 		"low_fuel_jump_recovery",
 		"blocked_reason_curriculum",
+		"pirate_avoidance_escape_route",
 		"disposable_combat_placeholder",
 	]
 	if scenario_order != required:

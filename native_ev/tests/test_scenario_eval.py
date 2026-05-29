@@ -28,6 +28,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
+                'pirate_avoidance_escape_route',
                 'disposable_combat_placeholder',
             ],
         )
@@ -303,6 +304,22 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['recorded_insufficient_credits'], 'passed')
         self.assertEqual(result['checks']['recorded_invalid_destination'], 'passed')
         self.assertEqual(result['checks']['recorded_no_deliverable_job'], 'passed')
+
+    def test_pirate_avoidance_escape_route_records_noncombat_evasion(self):
+        result = run_scripted_scenario('pirate_avoidance_escape_route')
+
+        self.assertTrue(result['success'], result)
+        self.assertFalse(result['state']['combatExecuted'])
+        self.assertEqual(result['state']['threatPosture'], 'evaded')
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['checks']['detected_pirate_threat'], 'passed')
+        self.assertEqual(result['checks']['escaped_without_combat'], 'passed')
+        self.assertEqual(result['checks']['landed_at_safe_port'], 'passed')
+        avoidance = [event for event in result['trace'] if event['type'] == 'avoid_pirate_contact'][-1]
+        self.assertEqual(avoidance['sourceLabel'], 'terminal-velocity-pirate-avoidance-scaffold')
+        self.assertEqual(avoidance['oracleStatus'], 'pirate_avoidance_pending_ev_classic_combat_trace')
+        self.assertEqual(avoidance['decision'], 'jump_to_linked_safe_port')
 
     def test_disposable_combat_placeholder_defines_guardrails_without_combat_execution(self):
         result = run_scripted_scenario('disposable_combat_placeholder')

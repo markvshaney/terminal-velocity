@@ -41,6 +41,7 @@ SCENARIO_CURRICULUM = [
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
+    'pirate_avoidance_escape_route',
     'disposable_combat_placeholder',
 ]
 
@@ -86,6 +87,7 @@ def initial_gameplay_state() -> dict[str, Any]:
         'legalRecords': {'Federation': 0, 'Independent': 0},
         'fuel': STARTING_FUEL,
         'combatExecuted': False,
+        'threatPosture': 'clear',
         'strictPlay': False,
         'knownSystems': known_systems,
         'playerShipId': 'shuttlecraft',
@@ -436,6 +438,23 @@ def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[st
     return True
 
 
+def _avoid_pirate_contact(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    state['combatExecuted'] = False
+    state['threatPosture'] = 'evaded'
+    destination = str(action.get('safeDestinationSystem', 'Sol'))
+    trace.append({
+        'type': 'avoid_pirate_contact',
+        'threat': action.get('threat', 'pirate_intercept'),
+        'originSystem': state['currentSystem'],
+        'safeDestinationSystem': destination,
+        'decision': 'jump_to_linked_safe_port',
+        'combatExecuted': False,
+        'sourceLabel': 'terminal-velocity-pirate-avoidance-scaffold',
+        'oracleStatus': 'pirate_avoidance_pending_ev_classic_combat_trace',
+    })
+    return _jump(state, {'destinationSystem': destination}, trace)
+
+
 def _combat_placeholder_guardrail(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     state['combatExecuted'] = False
     trace.append({
@@ -599,6 +618,12 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Antares', 'expectBlocked': True},
             {'type': 'complete_cargo_jobs', 'expectBlocked': True},
         ]
+    if name == 'pirate_avoidance_escape_route':
+        return [
+            {'type': 'depart'},
+            {'type': 'avoid_pirate_contact', 'threat': 'pirate_intercept', 'safeDestinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+        ]
     if name == 'disposable_combat_placeholder':
         return [
             {'type': 'combat_placeholder_guardrail'},
@@ -685,6 +710,12 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_invalid_destination': 'passed' if any(event.get('type') == 'blocked_jump' and 'not linked' in event.get('reason', '') for event in trace) else 'failed',
             'recorded_no_deliverable_job': 'passed' if any(event.get('type') == 'blocked_complete_cargo_job' and event.get('reason') == 'no deliverable job at current landing' for event in trace) else 'failed',
         })
+    elif name == 'pirate_avoidance_escape_route':
+        checks.update({
+            'detected_pirate_threat': 'passed' if any(event.get('type') == 'avoid_pirate_contact' and event.get('threat') == 'pirate_intercept' for event in trace) else 'failed',
+            'escaped_without_combat': 'passed' if state.get('combatExecuted') is False and state.get('threatPosture') == 'evaded' and any(event.get('type') == 'jump' and event.get('destinationSystem') == 'Sol' for event in trace) else 'failed',
+            'landed_at_safe_port': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' else 'failed',
+        })
     elif name == 'disposable_combat_placeholder':
         stop_conditions = next((event.get('stopConditions', []) for event in trace if event.get('type') == 'combat_placeholder_guardrail'), [])
         checks.update({
@@ -720,6 +751,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'accept_manifest_mission': _accept_manifest_mission,
         'buy_outfit_or_weapon': _buy_outfit_or_weapon,
         'buy_ship': _buy_ship,
+        'avoid_pirate_contact': _avoid_pirate_contact,
         'complete_cargo_jobs': _complete_cargo_jobs,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
     }
