@@ -28,6 +28,7 @@ STARTING_CARGO_CAPACITY = 20
 STARTING_FUEL = 6
 START_SYSTEM = 'Levo'
 START_BODY = 'Levo Spaceport'
+MIN_JUMP_DISTANCE = 450
 SCENARIO_CURRICULUM = [
     'levo_merchant_first_hop',
     'mission_runner_first_delivery',
@@ -38,6 +39,7 @@ SCENARIO_CURRICULUM = [
     'mission_destination_route_hint',
     'outfitter_ship_ladder_intro',
     'shift_click_multi_stop_route_queue',
+    'near_center_jump_block',
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
@@ -95,6 +97,7 @@ def initial_gameplay_state() -> dict[str, Any]:
         'ownedWeapons': {},
         'maxHull': 100,
         'maxFuel': STARTING_FUEL,
+        'distanceFromSystemCenter': MIN_JUMP_DISTANCE + 50,
     }
 
 
@@ -221,10 +224,20 @@ def _jump(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, A
     if state['fuel'] <= 0:
         trace.append(_blocked_jump_event(origin, destination, 'insufficient fuel', list(state.get('routeQueue', []))))
         return False
+    distance_from_center = float(action.get('distanceFromSystemCenter', state.get('distanceFromSystemCenter', MIN_JUMP_DISTANCE + 50)))
+    if distance_from_center < MIN_JUMP_DISTANCE:
+        event = _blocked_jump_event(origin, destination, 'too close to system center', list(state.get('routeQueue', [])))
+        event['distanceFromSystemCenter'] = distance_from_center
+        event['minJumpDistance'] = MIN_JUMP_DISTANCE
+        event['sourceLabel'] = 'original-runtime-observed'
+        event['oracleStatus'] = 'near_center_jump_failure_observed_exact_distance_pending'
+        trace.append(event)
+        return False
     previous_route = list(state.get('routeQueue', []))
     state['currentSystem'] = destination
     state['landedBody'] = None
     state['fuel'] -= 1
+    state['distanceFromSystemCenter'] = 0
     if previous_route and previous_route[0] == destination:
         state['routeQueue'].pop(0)
     state['knownSystems'] = sorted(set(state.get('knownSystems', [])) | {destination} | set(_system(universe, destination).get('links', [])))
@@ -244,7 +257,8 @@ def _land(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, A
 def _depart(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     previous_body = state['landedBody']
     state['landedBody'] = None
-    trace.append({'type': 'depart', 'system': state['currentSystem'], 'body': previous_body})
+    state['distanceFromSystemCenter'] = MIN_JUMP_DISTANCE + 50
+    trace.append({'type': 'depart', 'system': state['currentSystem'], 'body': previous_body, 'distanceFromSystemCenter': state['distanceFromSystemCenter']})
     return True
 
 
@@ -591,6 +605,12 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'original-runtime-observed'},
             {'type': 'jump'},
         ]
+    if name == 'near_center_jump_block':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'set_state', 'values': {'distanceFromSystemCenter': 0}},
+            {'type': 'jump', 'expectBlocked': True},
+        ]
     if name == 'route_planner_refuel_loop':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -688,6 +708,12 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         checks.update({
             'green_multi_stop_route': 'passed' if appended_paths and appended_paths[-1] == ['Levo', 'Sol', 'Sirius'] and state.get('routeSourceLabel') == 'original-runtime-observed' else 'failed',
             'consumed_first_leg_only': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Sirius'] and any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol', 'Sirius'] and event.get('remainingRoute') == ['Sirius'] for event in trace) else 'failed',
+        })
+    elif name == 'near_center_jump_block':
+        checks.update({
+            'blocked_near_center_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'too close to system center' and event.get('sourceLabel') == 'original-runtime-observed' for event in trace) else 'failed',
+            'preserved_system_after_center_block': 'passed' if state.get('currentSystem') == START_SYSTEM else 'failed',
+            'preserved_fuel_after_center_block': 'passed' if state.get('fuel') == STARTING_FUEL else 'failed',
         })
     elif name == 'route_planner_refuel_loop':
         checks.update({

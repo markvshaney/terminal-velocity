@@ -7,6 +7,7 @@ param(
     [switch]$RouteJumpLog,
     [switch]$RouteLandRefuelLog,
     [switch]$LowFuelJumpLog,
+    [switch]$NearCenterJumpLog,
     [switch]$CommodityTradeLog,
     [switch]$MissionOfferScanLog,
     [switch]$MissionRouteHintLog,
@@ -53,6 +54,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-route-land-refuel-log
 } elseif ($LowFuelJumpLog) {
     & $Godot --headless --path $Project -- --tv-low-fuel-jump-log
+} elseif ($NearCenterJumpLog) {
+    & $Godot --headless --path $Project -- --tv-near-center-jump-log
 } elseif ($CommodityTradeLog) {
     & $Godot --headless --path $Project -- --tv-commodity-trade-log
 } elseif ($MissionOfferScanLog) {

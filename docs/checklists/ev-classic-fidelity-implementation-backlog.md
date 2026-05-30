@@ -97,8 +97,16 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Source: user-observed original-runtime behavior in Basilisk II on 2026-05-28; user-provided screenshot-confirmed example on 2026-05-29; see `docs/research/original-ev-classic-runtime-observations.md#2026-05-28-map-multi-stop-route-planning-seed`.
   - Scope: holding Shift and clicking multiple available systems should extend a green multi-hop route path. Terminal Velocity now stores an ordered route queue/path, appends only systems linked from the current route tail, draws the full green polyline, and consumes/advances the first leg on jump.
   - Implementation: Godot map route selection uses `selected_route` with tail-linked append and full green route drawing; symbolic scenario `shift_click_multi_stop_route_queue` verifies Levo → Sol → Sirius queue construction and first-leg consumption.
-  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg -v`; `./run_godot.sh tv-map-route-log`; full native tests and `./run_godot.sh self-test` pass with `gameplayScenarios=11`.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg -v`; `./run_godot.sh tv-map-route-log`; full native tests and `./run_godot.sh self-test` pass with `gameplayScenarios=15`.
   - Next action: capture an original-runtime step-by-step Basilisk pass when input/capture is reliable enough to verify exact edge cases such as route clearing, invalid clicks, and path truncation.
+
+- [x] EV Classic near-system-center hyperspace block
+  - Status: `implemented / original-runtime-observed label with exact distance pending`
+  - Source: original-runtime probe found a queued route jump can be blocked while the ship remains too close to the system center; exact EV Classic threshold still needs measurement.
+  - Scope: Terminal Velocity now blocks hyperspace before fuel consumption/system transition when `distanceFromSystemCenter` / Godot `pos.length()` is below the current scaffold threshold, preserving current system and fuel while reporting the original-runtime-observed failure text.
+  - Implementation: symbolic scenario `near_center_jump_block` records a `blocked_jump` with `reason="too close to system center"`, `sourceLabel=original-runtime-observed`, preserved fuel/system checks, and `minJumpDistance`; Godot `_jump()` enforces `MIN_HYPERSPACE_DISTANCE_FROM_CENTER` and exposes `./run_godot.sh tv-near-center-jump-log` plus the Windows `-NearCenterJumpLog` wrapper.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval`; `python3 tools/run_gameplay_scenarios.py --all`; `./run_godot.sh self-test`; `./run_godot.sh tv-near-center-jump-log`; regression probes `./run_godot.sh tv-route-jump-log` and `./run_godot.sh tv-low-fuel-jump-log`.
+  - Next action: measure exact original EV Classic distance/wording if a later Basilisk probe can capture the transition point cleanly.
 
 - [ ] Exact starting primary weapons/outfits
   - Status: `needs evidence`

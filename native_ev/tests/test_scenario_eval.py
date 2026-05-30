@@ -25,6 +25,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_destination_route_hint',
                 'outfitter_ship_ladder_intro',
                 'shift_click_multi_stop_route_queue',
+                'near_center_jump_block',
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
@@ -249,6 +250,19 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['green_multi_stop_route'], 'passed')
         self.assertEqual(result['checks']['consumed_first_leg_only'], 'passed')
         self.assertEqual(result['trace'][-1]['remainingRoute'], ['Sirius'])
+
+    def test_near_center_jump_block_preserves_state_with_original_runtime_label(self):
+        result = run_scripted_scenario('near_center_jump_block')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['fuel'], 6)
+        self.assertEqual(result['checks']['blocked_near_center_jump'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
+        self.assertEqual(blocked['destinationSystem'], 'Sol')
+        self.assertEqual(blocked['reason'], 'too close to system center')
+        self.assertEqual(blocked['sourceLabel'], 'original-runtime-observed')
+        self.assertEqual(blocked['oracleStatus'], 'near_center_jump_failure_observed_exact_distance_pending')
 
     def test_route_planner_refuel_loop_spends_fuel_blocks_empty_jump_then_refuels(self):
         result = run_scripted_scenario('route_planner_refuel_loop')

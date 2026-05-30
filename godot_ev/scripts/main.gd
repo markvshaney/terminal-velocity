@@ -30,6 +30,7 @@ const MAP_ROUTE_EVENT_LOG_PREFIX := "TV_MAP_ROUTE_EVENT"
 const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
 const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
+const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
@@ -50,6 +51,7 @@ const CONTRABAND_SCAN_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_EVENT"
 const CONTRABAND_RISK_EVENT_LOG_PREFIX := "TV_CONTRABAND_RISK_EVENT"
 const LEGAL_RESOURCE_SEMANTICS_SOURCE_BASIS := "sourceBasis=EV Classic Resource Bible: govt CrimeTol/penalties, interceptor scans, mission AvailRecord/ScanGovt/PayVal"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
+const MIN_HYPERSPACE_DISTANCE_FROM_CENTER := 450.0
 
 var repo_root := ""
 var universe := {}
@@ -160,6 +162,8 @@ func _ready() -> void:
 		call_deferred("_run_route_land_refuel_log")
 	if OS.get_cmdline_args().has("--tv-low-fuel-jump-log") or OS.get_cmdline_user_args().has("--tv-low-fuel-jump-log"):
 		call_deferred("_run_low_fuel_jump_log")
+	if OS.get_cmdline_args().has("--tv-near-center-jump-log") or OS.get_cmdline_user_args().has("--tv-near-center-jump-log"):
+		call_deferred("_run_near_center_jump_log")
 	if OS.get_cmdline_args().has("--tv-commodity-trade-log") or OS.get_cmdline_user_args().has("--tv-commodity-trade-log"):
 		call_deferred("_run_commodity_trade_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
@@ -628,6 +632,7 @@ func _run_route_jump_log() -> void:
 	var start_system := str(current_system.get("name", "?"))
 	var route_selected := _select_first_linked_map_route()
 	var destination := _selected_destination_name()
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var final_system := str(current_system.get("name", "?"))
 	var jump_succeeded := route_selected and final_system == destination and final_system != start_system
@@ -642,6 +647,7 @@ func _run_route_land_refuel_log() -> void:
 	var route_selected := _select_first_linked_map_route()
 	var destination := _selected_destination_name()
 	var fuel_before_jump := player_fuel
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var fuel_after_jump := player_fuel
 	var final_system := str(current_system.get("name", "?"))
@@ -669,6 +675,7 @@ func _run_low_fuel_jump_log() -> void:
 	var destination := _selected_destination_name()
 	player_fuel = 0
 	var fuel_before_jump := player_fuel
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var fuel_after_jump := player_fuel
 	var final_system := str(current_system.get("name", "?"))
@@ -676,6 +683,23 @@ func _run_low_fuel_jump_log() -> void:
 	var jump_blocked_status := "jumpBlocked=true" if jump_blocked else "jumpBlocked=false"
 	var block_reason := "blockReason=insufficient_fuel" if jump_blocked else "blockReason=none"
 	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s fuelBeforeJump=%d fuelAfterJump=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [LOW_FUEL_JUMP_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_blocked_status, block_reason, fuel_before_jump, fuel_after_jump, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _run_near_center_jump_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var route_selected := _select_first_linked_map_route()
+	var destination := _selected_destination_name()
+	pos = Vector2.ZERO
+	var fuel_before_jump := player_fuel
+	_jump()
+	var fuel_after_jump := player_fuel
+	var final_system := str(current_system.get("name", "?"))
+	var jump_blocked := route_selected and final_system == start_system and fuel_after_jump == fuel_before_jump and status_line == "Can't initiate hyperspace jump - not yet far enough away from system center."
+	var jump_blocked_status := "jumpBlocked=true" if jump_blocked else "jumpBlocked=false"
+	var block_reason := "blockReason=too_close_to_system_center" if jump_blocked else "blockReason=none"
+	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s fuelBeforeJump=%d fuelAfterJump=%d minJumpDistance=%.1f landed=%s position=(%.1f,%.1f) sourceLabel=original-runtime-observed oracleStatus=terminal_velocity_eval_implemented_from_original_runtime_probe status=\"%s\"" % [NEAR_CENTER_JUMP_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_blocked_status, block_reason, fuel_before_jump, fuel_after_jump, MIN_HYPERSPACE_DISTANCE_FROM_CENTER, str(landed), pos.x, pos.y, status_line])
 	get_tree().quit(0)
 
 func _run_commodity_trade_log() -> void:
@@ -1237,6 +1261,12 @@ func _max_player_fuel() -> int:
 
 func _jump_fuel_cost() -> int:
 	return 1
+
+func _too_close_to_system_center_for_jump() -> bool:
+	return pos.length() < MIN_HYPERSPACE_DISTANCE_FROM_CENTER
+
+func _move_to_scripted_hyperspace_distance() -> void:
+	pos = Vector2(MIN_HYPERSPACE_DISTANCE_FROM_CENTER + 50.0, 0.0)
 
 func _route_fuel_cost(route_hops := -1) -> int:
 	var hops := route_hops
@@ -2424,6 +2454,9 @@ func _jump() -> void:
 	var links: Array = current_system.get("links", [])
 	if links.is_empty() and selected_route.is_empty():
 		_set_status("No hyperspace route selected; open map (M) or queue mission route (G)")
+		return
+	if _too_close_to_system_center_for_jump():
+		_set_status("Can't initiate hyperspace jump - not yet far enough away from system center.")
 		return
 	if player_fuel < _jump_fuel_cost():
 		_set_status("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route")
