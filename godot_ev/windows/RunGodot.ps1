@@ -23,7 +23,8 @@ param(
     [switch]$MissionLegalEligibilityLog,
     [switch]$LegalConsequenceLog,
     [switch]$LegalClemencyLog,
-    [switch]$ContrabandScanLog
+    [switch]$ContrabandScanLog,
+    [switch]$ContrabandRiskLog
 )
 
 $Godot = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe\Godot_v4.6.2-stable_win64_console.exe"
@@ -86,6 +87,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-legal-clemency-log
 } elseif ($ContrabandScanLog) {
     & $Godot --headless --path $Project -- --tv-contraband-scan-log
+} elseif ($ContrabandRiskLog) {
+    & $Godot --headless --path $Project -- --tv-contraband-risk-log
 } else {
     & $Godot --path $Project
 }

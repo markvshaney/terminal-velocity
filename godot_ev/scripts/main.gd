@@ -47,6 +47,7 @@ const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILIT
 const LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX := "TV_LEGAL_CONSEQUENCE_EVENT"
 const LEGAL_CLEMENCY_EVENT_LOG_PREFIX := "TV_LEGAL_CLEMENCY_EVENT"
 const CONTRABAND_SCAN_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_EVENT"
+const CONTRABAND_RISK_EVENT_LOG_PREFIX := "TV_CONTRABAND_RISK_EVENT"
 const LEGAL_RESOURCE_SEMANTICS_SOURCE_BASIS := "sourceBasis=EV Classic Resource Bible: govt CrimeTol/penalties, interceptor scans, mission AvailRecord/ScanGovt/PayVal"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
@@ -193,6 +194,8 @@ func _ready() -> void:
 		call_deferred("_run_legal_clemency_log")
 	if OS.get_cmdline_args().has("--tv-contraband-scan-log") or OS.get_cmdline_user_args().has("--tv-contraband-scan-log"):
 		call_deferred("_run_contraband_scan_log")
+	if OS.get_cmdline_args().has("--tv-contraband-risk-log") or OS.get_cmdline_user_args().has("--tv-contraband-risk-log"):
+		call_deferred("_run_contraband_risk_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -1070,6 +1073,19 @@ func _run_contraband_scan_log() -> void:
 	var after_equipment := int(commodity_hold.get("equipment", 0))
 	var action := str(_last_contraband_scan_outcome.get("action", "none"))
 	print("%s routeToSolSelected=%s system=%s government=\"%s\" action=%s creditsBefore=%d creditsAfter=%d legalBefore=%d legalAfter=%d illegalEquipmentBefore=%d illegalEquipmentAfter=%d status=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-scan-semantics oracleStatus=classic_runtime_scan_frequency_and_fine_tuning_pending" % [CONTRABAND_SCAN_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, action, before_credits, after_credits, before_legal, after_legal, before_equipment, after_equipment, status_line])
+	get_tree().quit(0)
+
+func _run_contraband_risk_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	var government_name := _current_government_name()
+	var commodity_id := "equipment"
+	var risk_line := _commodity_legal_hint_line(commodity_id)
+	var is_contraband := _commodity_is_contraband_for_government(commodity_id, government_name)
+	var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" commodity=%s isContraband=%s finePerTon=%d bribeAllowed=%s hint=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending" % [CONTRABAND_RISK_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, commodity_id, str(is_contraband), int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), risk_line])
 	get_tree().quit(0)
 
 func _run_pilot_save_resume_log() -> void:
@@ -3266,6 +3282,8 @@ func _draw_commodity_exchange(rect: Rect2) -> void:
 		if i == selected_landing_item:
 			draw_string(font, rect.position + Vector2(52, y), _commodity_trade_hint_line(commodity_id), HORIZONTAL_ALIGNMENT_LEFT, 760, 13, Color(0.68, 0.78, 0.90))
 			y += 18.0
+			draw_string(font, rect.position + Vector2(52, y), _commodity_legal_hint_line(commodity_id), HORIZONTAL_ALIGNMENT_LEFT, 760, 13, Color(0.95, 0.70, 0.58))
+			y += 18.0
 		else:
 			y += 8.0
 
@@ -3296,6 +3314,17 @@ func _commodity_trade_hint_line(commodity_id: String) -> String:
 	if best_system == "":
 		return "No linked sell data"
 	return "Best linked sell: %s at %d (%+d cr/ton)" % [best_system, best_sell, best_profit]
+
+func _commodity_legal_hint_line(commodity_id: String) -> String:
+	var government_name := _current_government_name()
+	if _commodity_is_contraband_for_government(commodity_id, government_name):
+		var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
+		return "Legal risk: %s is contraband under %s scans; finePerTon=%d bribeAllowed=%s" % [commodity_id, government_name, int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false))]
+	return "Legal risk: no current %s contraband flag under %s; TV scaffold, scan wording pending" % [commodity_id, government_name]
+
+func _commodity_is_contraband_for_government(commodity_id: String, government_name: String) -> bool:
+	var illegal: Array = governments.get("contraband", {}).get(government_name, [])
+	return illegal.has(commodity_id)
 
 func _draw_outfitter(rect: Rect2, body: Dictionary) -> void:
 	var font := ThemeDB.fallback_font

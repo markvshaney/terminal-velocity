@@ -333,6 +333,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-legal-consequence-log', run_script)
         self.assertIn('tv-legal-clemency-log', run_script)
         self.assertIn('tv-contraband-scan-log', run_script)
+        self.assertIn('tv-contraband-risk-log', run_script)
         self.assertIn('[switch]$LegalStatusLog', windows_script)
         self.assertIn('[switch]$LegalServiceGateLog', windows_script)
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
@@ -340,6 +341,25 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)
         self.assertIn('[switch]$LegalClemencyLog', windows_script)
         self.assertIn('[switch]$ContrabandScanLog', windows_script)
+        self.assertIn('[switch]$ContrabandRiskLog', windows_script)
+
+    def test_godot_contraband_risk_surface_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        for symbol in [
+            'TV_CONTRABAND_RISK_EVENT',
+            '--tv-contraband-risk-log',
+            'func _run_contraband_risk_log',
+            'func _commodity_legal_hint_line(commodity_id: String) -> String:',
+            'func _commodity_is_contraband_for_government(commodity_id: String, government_name: String) -> bool:',
+            'Legal risk: %s is contraband under %s scans',
+            'Legal risk: no current %s contraband flag',
+            'finePerTon=%d',
+            'bribeAllowed=%s',
+            'sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface',
+            'oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending',
+        ]:
+            self.assertIn(symbol, main_script)
 
     def test_godot_outfitter_shipyard_purchases_feed_recent_messages_contract(self):
         root = Path(__file__).resolve().parents[2]
