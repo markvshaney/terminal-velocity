@@ -104,9 +104,9 @@
         "Pirate": 5
       },
       "legal": {
-        "Federation": -70,
-        "Centauri Protectorate": -55,
-        "Militia Compact": -70
+        "Federation": -25,
+        "Centauri Protectorate": -25,
+        "Militia Compact": -20
       }
     },
     "contraband_fine": {
@@ -114,7 +114,12 @@
         "Pirate": 1
       },
       "legal": {
-        "*": -10
+        "Federation": -3,
+        "Centauri Protectorate": -3,
+        "Independent": -5,
+        "Militia Compact": -5,
+        "Rim Freehold": 0,
+        "*": -3
       }
     }
   },
@@ -124,6 +129,15 @@
     "pirate": "Pirate"
   },
   "mechanics": {
+    "sourceBasis": "EV Classic Resource Bible semantics plus decoded sourced_ev_governments.json values for CrimeTol/SmugPenalty/KillPenalty where mapped; TV-specific governments remain explicit projections until full stock resource join",
+    "crimeToleranceLegalScore": -60,
+    "crimeToleranceLegalScoreByGovernment": {
+      "Federation": -50,
+      "Centauri Protectorate": -50,
+      "Independent": -60,
+      "Militia Compact": -60,
+      "Rim Freehold": -100
+    },
     "patrolHostileLegalScore": -60,
     "patrolWarningLegalScore": -20,
     "pirateFriendlyReputation": 5,

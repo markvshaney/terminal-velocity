@@ -309,6 +309,95 @@ Caveats:
 
 - Wiki/archive; verify technical claims against implementation/source when possible.
 
+## Follow-up missed source candidates
+
+These were found in a 2026-05-30 breadth pass after the initial wiki/source-candidate audit. They are candidates to inspect before future EV-fidelity or tooling work, not trusted behavior evidence by default.
+
+### Higher Intellect Vintage Wiki: EV Nova
+
+- URL: https://wiki.preterhuman.net/EV_Nova
+- Type: vintage-computing wiki mirror / secondary overview
+- Verification in this pass: HTTP 200.
+- Use for: high-level historical/context cross-checks and discovery leads.
+- Caveat: secondary wiki; not mechanics-fidelity evidence.
+
+### XentaxWiki: Escape Velocity Nova
+
+- URL: https://wiki.xentax.spektr.name/index.php/Escape_Velocity_Nova
+- Type: game-file/extraction wiki stub
+- Verification in this pass: HTTP 200.
+- Use for: file-format/extraction lead discovery if resource tooling hits unknown containers.
+- Caveat: appears sparse from search results; inspect before relying on it.
+
+### Ambrosia Software Forum Archive
+
+- URLs:
+  - http://asw.forums.cytheraguides.com/
+  - http://asw.forums.cytheraguides.com/category/22/escape-velocity
+  - http://www.cytheraguides.com/archives/asw_forums_faq.html
+- Type: archived Ambrosia forum surface
+- Verification in this pass: HTTP 200 for home, EV category, and FAQ.
+- Use for: historical developer/community discussions, player pain points, plugin development questions, strategy questions.
+- Caveat: forum posts are community evidence; verify mechanics claims against runtime/resources/manuals.
+
+### E-Maculation Basilisk II / compatibility wiki
+
+- URL: https://www.emaculation.com/doku.php/basilisk_ii
+- Compatibility sheet: https://www.emaculation.com/doku.php/compatibility_sheet
+- Type: emulator setup/compatibility wiki
+- Verification in this pass: search result found relevant Basilisk II / EV Nova compatibility notes; direct fetch returned 403.
+- Use for: emulator-route troubleshooting and Basilisk build/version leads, especially for EV Nova or black-screen issues.
+- Caveat: emulator operations source, not gameplay fidelity source; blocked by direct fetch in this environment.
+
+### ResForge
+
+- URL: https://github.com/andrews05/ResForge
+- Type: macOS resource editor with EV Nova template/editor support
+- Verification in this pass: HTTP 200.
+- Use for: EV Nova `.rez`/resource-template semantics, galaxy-map/resource editor behavior, cross-checking decoded manifests.
+- Caveat: editor/tool behavior, not runtime behavior; license/implementation boundaries apply.
+
+### EV Nova pilot/save tooling
+
+- Pilot conversion: https://github.com/halprin/escape-velocity-nova-pilot-conversion
+- EV Outfitter: https://github.com/foobaz/EV-Outfitter
+- Verification in this pass: HTTP 200 for both.
+- Use for: pilot-file/save-state clues, save conversion, player-state persistence surfaces.
+- Caveat: narrow tooling; inspect docs/code before deriving data semantics.
+
+### EV Classic context/viewer tooling
+
+- URL: https://github.com/Drtyblk7/EV-C.O.N-CONTEXT-Viewers
+- Type: browser/offline data reference viewers for EV Classic context/resource data
+- Verification in this pass: HTTP 200.
+- Use for: possible cross-check against local EV Classic resource extraction and system/ship/outfit views.
+- Caveat: community tool; must verify against original `.rez` files and local extraction provenance.
+
+### EV Nova modern-runtime packaging leads
+
+- Steam Deck notes: https://github.com/Megalex42/EV-Nova-on-Steam-Deck
+- Steam Deck prebuilt/package: https://github.com/SirStig/evnova-steamdeck-prebuilt
+- iXoft Clavius / EV Classic for Nova wrapper: https://ixoft.com/ev/
+- Verification in this pass: HTTP 200 for all three.
+- Use for: practical modern-run packaging, EV Classic-for-Nova launch flows, community compatibility assumptions.
+- Caveat: packaging/compatibility sources only; not clean-room behavior evidence.
+
+### Endless Velocity
+
+- URL: https://github.com/SirStig/endless-velocity
+- Type: EV Nova / Arpia 2 content adaptation into Endless Sky
+- Verification in this pass: HTTP 200.
+- Use for: adaptation comparison questions and data-conversion pain points.
+- Caveat: external adaptation; never use as source of truth without primary confirmation.
+
+### Speedrun.com EV Nova guide/forum surface
+
+- URL: https://www.speedrun.com/evn/guides/pjz28
+- Type: speedrun/community guide link surface
+- Verification in this pass: search result found; direct fetch returned 403.
+- Use for: route-optimization leads and player execution strategies.
+- Caveat: speedrun/community evidence only; likely needs browser or manual fetch if used.
+
 ## EV-inspired but not EV-compatible engines/games
 
 ### Endless Sky
@@ -371,6 +460,13 @@ These sources are high-value enough to consider adding to a reusable source regi
 - EVNToEndlessSky — conversion/data-semantics reference.
 - EV Stuff — community preservation and downloads hub.
 - Ambrosia Garden — community archive/wiki/forum surface.
+- EVN Wiki / Fandom — community wiki for EV Nova and EV-family terminology, legal/trading/combat/ship/outfit topics; treat as lower-confidence community guide/snippet evidence when blocked by bot protection.
+- Wikipedia / Wikiwand EV-family pages — high-level series context only; not mechanics-fidelity evidence.
+- ResForge — macOS resource editor with EV Nova templates/editors; high-value tool source for `.rez`/template/galaxy-map cross-checks.
+- EV Classic context/viewer tooling — possible cross-check for decoded Classic resources and generated reference views.
+- EV Nova pilot/save tooling — pilot conversion and save-editor candidates for persistence/pilot-file semantics.
+- Ambrosia Software Forum Archive — archived player/developer community evidence and strategy/plugin-development discussions.
+- E-Maculation wiki — emulator setup/compatibility source for Basilisk/EV runtime troubleshooting, not gameplay fidelity.
 
 ## Sources checked in this pass
 
@@ -389,10 +485,33 @@ These sources are high-value enough to consider adding to a reusable source regi
   - https://github.com/RyuKojiro/novafix
   - https://github.com/wraitii/WindRider
   - https://github.com/JoshuaAFerguson/terminal-velocity
-- Community/index pages:
+- Community/index/wiki pages:
   - https://escape-velocity.games/
   - https://wiki.ambrosia.garden/doku.php?id=start
   - https://andrews05.github.io/evstuff/
+  - https://evn.fandom.com/wiki/Escape_Velocity_Nova
+  - https://evn.fandom.com/wiki/Escape_Velocity_Override
+  - https://evn.fandom.com/wiki/Legal_status
+  - https://evn.fandom.com/wiki/Trading
+  - https://en.wikipedia.org/wiki/Escape_Velocity_(video_game)
+  - https://en.wikipedia.org/wiki/Escape_Velocity_Nova
+- Follow-up breadth-pass candidates:
+  - https://wiki.preterhuman.net/EV_Nova
+  - https://wiki.xentax.spektr.name/index.php/Escape_Velocity_Nova
+  - https://www.emaculation.com/doku.php/basilisk_ii
+  - https://www.emaculation.com/doku.php/compatibility_sheet
+  - http://asw.forums.cytheraguides.com/
+  - http://asw.forums.cytheraguides.com/category/22/escape-velocity
+  - http://www.cytheraguides.com/archives/asw_forums_faq.html
+  - https://github.com/andrews05/ResForge
+  - https://github.com/halprin/escape-velocity-nova-pilot-conversion
+  - https://github.com/foobaz/EV-Outfitter
+  - https://github.com/Drtyblk7/EV-C.O.N-CONTEXT-Viewers
+  - https://github.com/Megalex42/EV-Nova-on-Steam-Deck
+  - https://github.com/SirStig/evnova-steamdeck-prebuilt
+  - https://github.com/SirStig/endless-velocity
+  - https://ixoft.com/ev/
+  - https://www.speedrun.com/evn/guides/pjz28
 - Existing curated source registry entries for EV-adjacent engines:
   - Godot Engine docs/repo
   - MonoGame docs

@@ -14,8 +14,16 @@ param(
     [switch]$PilotSaveResumeLog,
     [switch]$OutfitterShipyardLog,
     [switch]$GameplayCurriculumHelpLog,
+    [switch]$CombatLog,
     [switch]$CombatGuardrailLog,
-    [switch]$NavigationGuardrailLog
+    [switch]$NavigationGuardrailLog,
+    [switch]$LegalStatusLog,
+    [switch]$LegalServiceGateLog,
+    [switch]$LegalPatrolPostureLog,
+    [switch]$MissionLegalEligibilityLog,
+    [switch]$LegalConsequenceLog,
+    [switch]$LegalClemencyLog,
+    [switch]$ContrabandScanLog
 )
 
 $Godot = "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe\Godot_v4.6.2-stable_win64_console.exe"
@@ -58,10 +66,26 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-outfitter-shipyard-log
 } elseif ($GameplayCurriculumHelpLog) {
     & $Godot --headless --path $Project -- --tv-gameplay-curriculum-help-log
+} elseif ($CombatLog) {
+    & $Godot --headless --path $Project -- --tv-combat-log
 } elseif ($CombatGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-combat-guardrail-log
 } elseif ($NavigationGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-navigation-guardrail-log
+} elseif ($LegalStatusLog) {
+    & $Godot --headless --path $Project -- --tv-legal-status-log
+} elseif ($LegalServiceGateLog) {
+    & $Godot --headless --path $Project -- --tv-legal-service-gate-log
+} elseif ($LegalPatrolPostureLog) {
+    & $Godot --headless --path $Project -- --tv-legal-patrol-posture-log
+} elseif ($MissionLegalEligibilityLog) {
+    & $Godot --headless --path $Project -- --tv-mission-legal-eligibility-log
+} elseif ($LegalConsequenceLog) {
+    & $Godot --headless --path $Project -- --tv-legal-consequence-log
+} elseif ($LegalClemencyLog) {
+    & $Godot --headless --path $Project -- --tv-legal-clemency-log
+} elseif ($ContrabandScanLog) {
+    & $Godot --headless --path $Project -- --tv-contraband-scan-log
 } else {
     & $Godot --path $Project
 }

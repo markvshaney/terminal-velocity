@@ -1,0 +1,749 @@
+{
+  "schemaVersion": 1,
+  "sourceFile": "source-assets/ev-classic/Nova Files/EV Data.rez",
+  "sourceSha256": "e5e8b5c667409b1c950a49e6aeb3a771609126e205959ef81e9328beabf2ba2f",
+  "sourceManifest": "native_ev/data/sourced_ev_structures.json",
+  "method": "ev-classic-resource-bible-govt-field-map-v1",
+  "sourceBasis": "EV Classic Resource Bible gövt field definitions plus local primitive BRGR structure decode",
+  "resourceIdBase": 128,
+  "recordRun": {
+    "candidateType": "government-or-status-like",
+    "recordSize": 192,
+    "count": 25,
+    "confidence": "manual-backed-field-map"
+  },
+  "fieldIndex": {
+    "unused": 0,
+    "flags": 1,
+    "ally": 2,
+    "enemy": 3,
+    "crimeTolerance": 4,
+    "smugglingPenalty": 5,
+    "disablePenalty": 6,
+    "boardPenalty": 7,
+    "killPenalty": 8,
+    "shootPenalty": 9,
+    "initialRecord": 10
+  },
+  "flagBits": {
+    "0x0001": "xenophobicWarshipsAttackNonAllies",
+    "0x0002": "attackCriminalInNonAlliedSystems",
+    "0x0004": "alwaysAttacksPlayer",
+    "0x0008": "neverAttacksPlayer",
+    "0x0010": "warshipsRetreatBelowQuarterShields",
+    "0x0020": "ignoreInGoodSamaritan",
+    "0x0100": "persShipsActAsEscapePodUsed",
+    "0x0200": "warshipsTakeBribes",
+    "0x0400": "cannotHailShips",
+    "0x0800": "shipsStartDisabled",
+    "0x1000": "warshipsPlunderBeforeDestroying",
+    "0x2000": "freightersTakeBribes",
+    "0x4000": "planetsTakeBribes",
+    "0x8000": "largeBribesOrAlwaysPlanetBribe"
+  },
+  "governments": [
+    {
+      "resourceId": 128,
+      "ordinal": 0,
+      "chunkIndex": 738,
+      "byteOffset": 200757,
+      "name": "Confederation",
+      "shortName": "Confed",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25362,
+        "flagsUnsigned": 25362,
+        "flagNames": [
+          "attackCriminalInNonAlliedSystems",
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 50,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 129,
+      "ordinal": 1,
+      "chunkIndex": 739,
+      "byteOffset": 200949,
+      "name": "Rebellion",
+      "shortName": "Rebel",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25088,
+        "flagsUnsigned": 25088,
+        "flagNames": [
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 75,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 130,
+      "ordinal": 2,
+      "chunkIndex": 740,
+      "byteOffset": 201141,
+      "name": "Pirates",
+      "shortName": "Pirate",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": -11503,
+        "flagsUnsigned": 54033,
+        "flagNames": [
+          "xenophobicWarshipsAttackNonAllies",
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "warshipsPlunderBeforeDestroying",
+          "planetsTakeBribes",
+          "largeBribesOrAlwaysPlanetBribe"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": -20,
+        "smugglingPenalty": 0,
+        "disablePenalty": 3,
+        "boardPenalty": 5,
+        "killPenalty": 10,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 131,
+      "ordinal": 3,
+      "chunkIndex": 741,
+      "byteOffset": 201333,
+      "name": "Cydonian",
+      "shortName": "Cydonian",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 16912,
+        "flagsUnsigned": 16912,
+        "flagNames": [
+          "warshipsRetreatBelowQuarterShields",
+          "warshipsTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 100,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 20,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 132,
+      "ordinal": 4,
+      "chunkIndex": 742,
+      "byteOffset": 201525,
+      "name": "Lethean",
+      "shortName": "Lethean",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 16912,
+        "flagsUnsigned": 16912,
+        "flagNames": [
+          "warshipsRetreatBelowQuarterShields",
+          "warshipsTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 100,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 20,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 133,
+      "ordinal": 5,
+      "chunkIndex": 743,
+      "byteOffset": 201717,
+      "name": "Militia",
+      "shortName": "Militia",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 17170,
+        "flagsUnsigned": 17170,
+        "flagNames": [
+          "attackCriminalInNonAlliedSystems",
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 60,
+        "smugglingPenalty": 5,
+        "disablePenalty": 10,
+        "boardPenalty": 15,
+        "killPenalty": 20,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 134,
+      "ordinal": 6,
+      "chunkIndex": 744,
+      "byteOffset": 201909,
+      "name": "Unexplored",
+      "shortName": "Unknown",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 2048,
+        "flagsUnsigned": 2048,
+        "flagNames": [
+          "shipsStartDisabled"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 32767,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 0,
+        "killPenalty": 0,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 135,
+      "ordinal": 7,
+      "chunkIndex": 745,
+      "byteOffset": 202101,
+      "name": "Astex",
+      "shortName": "Astex",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25360,
+        "flagsUnsigned": 25360,
+        "flagNames": [
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 50,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 136,
+      "ordinal": 8,
+      "chunkIndex": 746,
+      "byteOffset": 202293,
+      "name": "Merchants",
+      "shortName": "Merchant",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": [],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 32767,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 0,
+        "killPenalty": 0,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 137,
+      "ordinal": 9,
+      "chunkIndex": 747,
+      "byteOffset": 202485,
+      "name": "Mercenaries",
+      "shortName": "Mercenary",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 784,
+        "flagsUnsigned": 784,
+        "flagNames": [
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 60,
+        "smugglingPenalty": 5,
+        "disablePenalty": 10,
+        "boardPenalty": 15,
+        "killPenalty": 20,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 138,
+      "ordinal": 10,
+      "chunkIndex": 748,
+      "byteOffset": 202677,
+      "name": "Starbound Shipping",
+      "shortName": "Starbound",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": [],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 60,
+        "smugglingPenalty": 5,
+        "disablePenalty": 10,
+        "boardPenalty": 15,
+        "killPenalty": 20,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 139,
+      "ordinal": 11,
+      "chunkIndex": 749,
+      "byteOffset": 202869,
+      "name": "Consolidated Express",
+      "shortName": "ConEx",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": [],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 60,
+        "smugglingPenalty": 5,
+        "disablePenalty": 10,
+        "boardPenalty": 15,
+        "killPenalty": 20,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 140,
+      "ordinal": 12,
+      "chunkIndex": 750,
+      "byteOffset": 203061,
+      "name": "Aliens",
+      "shortName": "Alien",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 1025,
+        "flagsUnsigned": 1025,
+        "flagNames": [
+          "xenophobicWarshipsAttackNonAllies",
+          "cannotHailShips"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 0,
+        "smugglingPenalty": 9999,
+        "disablePenalty": 9999,
+        "boardPenalty": 9999,
+        "killPenalty": 9999,
+        "shootPenalty": 9999,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 141,
+      "ordinal": 13,
+      "chunkIndex": 751,
+      "byteOffset": 203253,
+      "name": "Derelicts",
+      "shortName": "Derelict",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 3072,
+        "flagsUnsigned": 3072,
+        "flagNames": [
+          "cannotHailShips",
+          "shipsStartDisabled"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 32000,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 0,
+        "killPenalty": 0,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 142,
+      "ordinal": 14,
+      "chunkIndex": 752,
+      "byteOffset": 203445,
+      "name": "United Galactic Express",
+      "shortName": "UGExp",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": [],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 100,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 15,
+        "shootPenalty": 20,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 143,
+      "ordinal": 15,
+      "chunkIndex": 753,
+      "byteOffset": 203637,
+      "name": "Psycho Confederation",
+      "shortName": "Confed",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25364,
+        "flagsUnsigned": 25364,
+        "flagNames": [
+          "alwaysAttacksPlayer",
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 50,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 144,
+      "ordinal": 16,
+      "chunkIndex": 754,
+      "byteOffset": 203829,
+      "name": "Escort Rebellion",
+      "shortName": "Rebel",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25152,
+        "flagsUnsigned": 25152,
+        "flagNames": [
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 75,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 145,
+      "ordinal": 17,
+      "chunkIndex": 755,
+      "byteOffset": 204021,
+      "name": "Escort Confederation",
+      "shortName": "Confed",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25424,
+        "flagsUnsigned": 25424,
+        "flagNames": [
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 50,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 146,
+      "ordinal": 18,
+      "chunkIndex": 756,
+      "byteOffset": 204213,
+      "name": "Psycho Rebellion",
+      "shortName": "Rebel",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25092,
+        "flagsUnsigned": 25092,
+        "flagNames": [
+          "alwaysAttacksPlayer",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 75,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 147,
+      "ordinal": 19,
+      "chunkIndex": 757,
+      "byteOffset": 204405,
+      "name": "Psycho ConEx",
+      "shortName": "ConEx",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 36,
+        "flagsUnsigned": 36,
+        "flagNames": [
+          "alwaysAttacksPlayer",
+          "ignoreInGoodSamaritan"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 60,
+        "smugglingPenalty": 5,
+        "disablePenalty": 10,
+        "boardPenalty": 15,
+        "killPenalty": 20,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 148,
+      "ordinal": 20,
+      "chunkIndex": 758,
+      "byteOffset": 204597,
+      "name": "Psycho Astex",
+      "shortName": "Astex",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25364,
+        "flagsUnsigned": 25364,
+        "flagNames": [
+          "alwaysAttacksPlayer",
+          "warshipsRetreatBelowQuarterShields",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 50,
+        "smugglingPenalty": 3,
+        "disablePenalty": 5,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 3,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 149,
+      "ordinal": 21,
+      "chunkIndex": 759,
+      "byteOffset": 204789,
+      "name": "Traitor Confederation",
+      "shortName": "Confed",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25394,
+        "flagsUnsigned": 25394,
+        "flagNames": [
+          "attackCriminalInNonAlliedSystems",
+          "warshipsRetreatBelowQuarterShields",
+          "ignoreInGoodSamaritan",
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 50,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 0,
+        "killPenalty": 0,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 150,
+      "ordinal": 22,
+      "chunkIndex": 760,
+      "byteOffset": 204981,
+      "name": "Psycho Aliens",
+      "shortName": "Alien",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 1285,
+        "flagsUnsigned": 1285,
+        "flagNames": [
+          "xenophobicWarshipsAttackNonAllies",
+          "alwaysAttacksPlayer",
+          "persShipsActAsEscapePodUsed",
+          "cannotHailShips"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 0,
+        "smugglingPenalty": 9999,
+        "disablePenalty": 9999,
+        "boardPenalty": 9999,
+        "killPenalty": 9999,
+        "shootPenalty": 9999,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 151,
+      "ordinal": 23,
+      "chunkIndex": 761,
+      "byteOffset": 205173,
+      "name": "Hunters",
+      "shortName": "Hunter",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 8,
+        "flagsUnsigned": 8,
+        "flagNames": [
+          "neverAttacksPlayer"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 9999,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 0,
+        "killPenalty": 0,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    },
+    {
+      "resourceId": 152,
+      "ordinal": 24,
+      "chunkIndex": 762,
+      "byteOffset": 205365,
+      "name": "NoEP Rebellion",
+      "shortName": "NoEP Rebellion",
+      "fieldSource": "EV Classic Resource Bible gövt fields, lines 179-229 of extracted text",
+      "semanticFields": {
+        "flagsSigned": 25344,
+        "flagsUnsigned": 25344,
+        "flagNames": [
+          "persShipsActAsEscapePodUsed",
+          "warshipsTakeBribes",
+          "freightersTakeBribes",
+          "planetsTakeBribes"
+        ],
+        "allyGovernmentId": 4,
+        "enemyGovernmentId": 0,
+        "crimeTolerance": 75,
+        "smugglingPenalty": 0,
+        "disablePenalty": 0,
+        "boardPenalty": 10,
+        "killPenalty": 25,
+        "shootPenalty": 0,
+        "shootPenaltyRuntimeNote": "EV Classic Resource Bible says ShootPenalty is currently ignored",
+        "initialRecord": 0
+      }
+    }
+  ]
+}

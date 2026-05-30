@@ -4,6 +4,7 @@ extends Node2D
 # Terminal Velocity backend contract instead of inventing a second data source:
 # native_ev/data/universe.json, native_ev/data/ships.json, native_ev/data/missions.json,
 # native_ev/data/economy.json, native_ev/data/outfits.json, native_ev/data/weapons.json,
+# native_ev/data/governments.json, native_ev/data/reputation.json,
 # native_ev/data/sounds.json, and 36-frame frame_%02d.png ship sprite folders.
 
 const VIEW_SIZE := Vector2(1280, 800)
@@ -36,8 +37,17 @@ const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVEN
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
+const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
 const NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX := "TV_NAVIGATION_GUARDRAIL_EVENT"
+const LEGAL_STATUS_EVENT_LOG_PREFIX := "TV_LEGAL_STATUS_EVENT"
+const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
+const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
+const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
+const LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX := "TV_LEGAL_CONSEQUENCE_EVENT"
+const LEGAL_CLEMENCY_EVENT_LOG_PREFIX := "TV_LEGAL_CLEMENCY_EVENT"
+const CONTRABAND_SCAN_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_EVENT"
+const LEGAL_RESOURCE_SEMANTICS_SOURCE_BASIS := "sourceBasis=EV Classic Resource Bible: govt CrimeTol/penalties, interceptor scans, mission AvailRecord/ScanGovt/PayVal"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 
 var repo_root := ""
@@ -47,6 +57,8 @@ var missions := {}
 var economy := {}
 var outfits := {}
 var weapons := {}
+var governments := {}
+var reputation := {}
 var sounds := {}
 var gameplay_curriculum := {}
 var sound_players: Dictionary = {}
@@ -105,6 +117,15 @@ var story_flags: Array = []
 var commodity_hold: Dictionary = {}
 var owned_outfits: Dictionary = {}
 var owned_weapons: Dictionary = {}
+var reputation_scores: Dictionary = {}
+var legal_records: Dictionary = {}
+var projectiles: Array[Dictionary] = []
+var target_shields: Dictionary = {}
+var target_hulls: Dictionary = {}
+var player_shields := 0
+var player_hull := 0
+var player_shield_recharge_progress := 0.0
+var _last_contraband_scan_outcome: Dictionary = {}
 var player_ship_id := "shuttlecraft"
 var cargo_space := 20
 var player_fuel := 0
@@ -152,10 +173,26 @@ func _ready() -> void:
 		call_deferred("_run_outfitter_shipyard_log")
 	if OS.get_cmdline_args().has("--tv-gameplay-curriculum-help-log") or OS.get_cmdline_user_args().has("--tv-gameplay-curriculum-help-log"):
 		call_deferred("_run_gameplay_curriculum_help_log")
+	if OS.get_cmdline_args().has("--tv-combat-log") or OS.get_cmdline_user_args().has("--tv-combat-log"):
+		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-navigation-guardrail-log") or OS.get_cmdline_user_args().has("--tv-navigation-guardrail-log"):
 		call_deferred("_run_navigation_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-legal-status-log") or OS.get_cmdline_user_args().has("--tv-legal-status-log"):
+		call_deferred("_run_legal_status_log")
+	if OS.get_cmdline_args().has("--tv-legal-service-gate-log") or OS.get_cmdline_user_args().has("--tv-legal-service-gate-log"):
+		call_deferred("_run_legal_service_gate_log")
+	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
+		call_deferred("_run_legal_patrol_posture_log")
+	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
+		call_deferred("_run_mission_legal_eligibility_log")
+	if OS.get_cmdline_args().has("--tv-legal-consequence-log") or OS.get_cmdline_user_args().has("--tv-legal-consequence-log"):
+		call_deferred("_run_legal_consequence_log")
+	if OS.get_cmdline_args().has("--tv-legal-clemency-log") or OS.get_cmdline_user_args().has("--tv-legal-clemency-log"):
+		call_deferred("_run_legal_clemency_log")
+	if OS.get_cmdline_args().has("--tv-contraband-scan-log") or OS.get_cmdline_user_args().has("--tv-contraband-scan-log"):
+		call_deferred("_run_contraband_scan_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -215,6 +252,8 @@ func _load_data() -> void:
 	economy = _json(repo_root + "/native_ev/data/economy.json")
 	outfits = _json(repo_root + "/native_ev/data/outfits.json")
 	weapons = _json(repo_root + "/native_ev/data/weapons.json")
+	governments = _json(repo_root + "/native_ev/data/governments.json")
+	reputation = _json(repo_root + "/native_ev/data/reputation.json")
 	sounds = _json(repo_root + "/native_ev/data/sounds.json")
 	gameplay_curriculum = _json(repo_root + "/native_ev/data/gameplay_curriculum.json")
 	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
@@ -229,6 +268,7 @@ func _load_data() -> void:
 	player_ship_id = str(player_ship.get("id", initial_player_ship_id))
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
 	player_fuel = _max_player_fuel()
+	_reset_player_combat_stats()
 	var player_frame_set := _load_ship_frame_set(player_ship)
 	player_frames = player_frame_set["frames"]
 	player_frame_offsets = player_frame_set["offsets"]
@@ -242,6 +282,7 @@ func _load_data() -> void:
 	npc_frames = npc_frame_set["frames"]
 	npc_frame_offsets = npc_frame_set["offsets"]
 	status_line = "Loaded %d systems, %d ships, %d %s frames" % [universe.get("systems", []).size(), ships.get("ships", []).size(), player_frames.size(), player_ship_id]
+	_reset_combat_targets()
 
 func _load_ship_frames(ship: Dictionary) -> Array[Texture2D]:
 	return _load_ship_frame_set(ship)["frames"]
@@ -383,6 +424,8 @@ func _process(delta: float) -> void:
 	if not landed:
 		pos += vel * delta
 		vel *= pow(0.995, delta * 60.0)
+		_recharge_player_shields(delta)
+		_advance_projectiles(delta)
 	queue_redraw()
 
 func _handle_input(delta: float) -> void:
@@ -483,6 +526,9 @@ func _reset_travel_state() -> void:
 	player_fuel = _max_player_fuel()
 	commodity_hold.clear()
 	cargo = 0
+	projectiles.clear()
+	_reset_player_combat_stats()
+	_reset_combat_targets()
 
 func _run_travel_event_log() -> void:
 	_reset_travel_state()
@@ -546,9 +592,12 @@ func _run_map_route_log() -> void:
 	if route_selected:
 		route_extended = _select_first_linked_map_route()
 	var after_destination := _selected_destination_name()
+	if route_extended:
+		player_fuel = max(0, selected_route.size() - 1)
+		status_line = _route_fuel_hint_line()
 	var green_line_active := not selected_route.is_empty() and after_destination != "None" and after_destination != str(current_system.get("name", ""))
 	var green_line_status := "greenLine=true" if green_line_active else "greenLine=false"
-	print("%s current=%s beforeDestination=%s afterDestination=%s selected=%s extended=%s %s routeHops=%d route=%s sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), before_destination, after_destination, str(route_selected), str(route_extended), green_line_status, selected_route.size(), JSON.stringify(selected_route), status_line])
+	print("%s current=%s beforeDestination=%s afterDestination=%s selected=%s extended=%s %s routeHops=%d route=%s preJumpFuelWarning=%s sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), before_destination, after_destination, str(route_selected), str(route_extended), green_line_status, selected_route.size(), JSON.stringify(selected_route), str(_route_fuel_warning_active()), status_line])
 	get_tree().quit(0)
 
 func _select_first_linked_map_route() -> bool:
@@ -687,9 +736,12 @@ func _run_mission_route_hint_log() -> void:
 	_ev_land_or_launch()
 	selected_route.clear()
 	var mission_route_queued := _route_to_active_mission_destination()
+	var fuel_before_route := player_fuel
+	var route_fuel_cost := _route_fuel_cost()
+	var pre_jump_fuel_warning := _route_fuel_warning_active()
 	var mission_route_status := "missionRouteQueued=true" if mission_route_queued else "missionRouteQueued=false"
 	var queued_route := JSON.stringify(selected_route)
-	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s route=%s routeHops=%d sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, queued_route, selected_route.size(), status_line])
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s route=%s routeHops=%d fuelBeforeRoute=%d routeFuelCost=%d preJumpFuelWarning=%s sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, queued_route, selected_route.size(), fuel_before_route, route_fuel_cost, str(pre_jump_fuel_warning), status_line])
 	get_tree().quit(0)
 
 func _route_to_active_mission_destination() -> bool:
@@ -786,16 +838,47 @@ func _run_gameplay_curriculum_help_log() -> void:
 	print("%s hintCount=%d hasPirateAvoidanceHint=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
-func _run_combat_guardrail_log() -> void:
+func _run_combat_log() -> void:
+	_reset_travel_state()
 	status_messages.clear()
-	_fire_primary_weapon()
-	_fire_secondary_weapon()
-	_change_secondary_weapon()
-	var has_primary_guardrail := status_messages.has("Primary weapon guarded: combat not implemented; use disposable non-strict pilots for future combat tests")
-	var has_secondary_guardrail := status_messages.has("Secondary weapon guarded: combat not implemented; no live fire executed")
-	var has_change_guardrail := status_messages.has("Secondary weapon selection guarded: no combat loadout changes executed")
-	print("%s primaryGuardrail=%s secondaryGuardrail=%s changeGuardrail=%s combatExecuted=false strictPlay=%s sourceLabel=terminal-velocity-combat-guardrail-scaffold oracleStatus=combat_inputs_pending_ev_classic_trace messages=%s" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(has_primary_guardrail), str(has_secondary_guardrail), str(has_change_guardrail), str(strict_play_selected), JSON.stringify(status_messages)])
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	_select_closest_target()
+	var target_index := selected_target_index
+	var before_shields := int(target_shields.get(target_index, 0))
+	var before_hull := int(target_hulls.get(target_index, 0))
+	var before_player_shields := player_shields
+	var before_player_hull := player_hull
+	var spawned := _spawn_primary_projectile()
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+	var retaliation_fired := _spawn_npc_retaliation_projectile(target_index)
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+	_recharge_player_shields(2.0)
+	var after_shields := int(target_shields.get(target_index, 0))
+	var after_hull := int(target_hulls.get(target_index, 0))
+	var after_player_shields := player_shields
+	var after_player_hull := player_hull
+	var target_damaged := after_shields < before_shields or after_hull < before_hull
+	var player_damaged := after_player_shields < before_player_shields or after_player_hull < before_player_hull
+	var target_destroyed := _target_destroyed(target_index)
+	var primary_weapon := _primary_weapon_stats()
+	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
+	var source_resource_id := int(primary_weapon.get("sourceResourceId", -1))
+	var source_stock_name := str(primary_weapon.get("sourceStockName", primary_weapon.get("name", "Primary")))
+	var source_mass_damage := int(source_fields.get("MassDmg", primary_weapon.get("massDamage", 0)))
+	var source_energy_damage := int(source_fields.get("EnergyDmg", primary_weapon.get("energyDamage", 0)))
+	var source_reload := int(source_fields.get("Reload", primary_weapon.get("reloadFrames", 0)))
+	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
+	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
+	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
+	var applied_hull_damage := _weapon_hull_damage(primary_weapon)
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s targetDestroyed=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(target_destroyed), projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
+
+func _run_combat_guardrail_log() -> void:
+	_run_combat_log()
 
 func _run_navigation_guardrail_log() -> void:
 	_reset_travel_state()
@@ -834,6 +917,159 @@ func _run_navigation_guardrail_log() -> void:
 	original_bodies[0] = original_body
 	var refuel_guidance := status_messages.has("Refuel unavailable here; choose a port with refuel service")
 	print("%s noRouteGuidance=%s fuelGuidance=%s noPortGuidance=%s approachGuidance=%s refuelGuidance=%s sourceLabel=terminal-velocity-navigation-guardrail-scaffold oracleStatus=navigation_blocked_feedback_pending_playtest messages=%s" % [NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX, str(no_route_guidance), str(fuel_guidance), str(no_port_guidance), str(approach_guidance), str(refuel_guidance), JSON.stringify(status_messages)])
+	get_tree().quit(0)
+
+func _run_legal_status_log() -> void:
+	_reset_travel_state()
+	var start_system := str(current_system.get("name", "?"))
+	var start_government := _current_government_name()
+	var start_status := _legal_status_for_government(start_government)
+	legal_records[start_government] = -65
+	var penalty_status := _legal_status_for_government(start_government)
+	var dock_allowed := _government_docking_allowed(start_government)
+	var warning := _legal_warning_line(start_government)
+	print("%s system=%s government=\"%s\" cleanStatus=%s penaltyStatus=%s dockAllowed=%s legalScore=%d warning=\"%s\" sourceLabel=terminal-velocity-classic-resource-legal-semantics oracleStatus=classic_runtime_thresholds_pending" % [LEGAL_STATUS_EVENT_LOG_PREFIX, start_system, start_government, start_status, penalty_status, str(dock_allowed), int(legal_records.get(start_government, 0)), warning])
+	get_tree().quit(0)
+
+func _run_legal_service_gate_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	var body_name := str(_current_body().get("name", ""))
+	var government_name := _current_government_name()
+	legal_records[government_name] = -75
+	status_messages.clear()
+	landing_tab = 2
+	selected_landing_item = 0
+	credits = 100000
+	_buy_selected_outfit_or_weapon()
+	landing_tab = 3
+	_buy_selected_ship()
+	var service_blocked_message := _legal_service_blocked_message(government_name)
+	var blocked_count := 0
+	for message in status_messages:
+		if str(message) == service_blocked_message:
+			blocked_count += 1
+	var blocked_outfitter := blocked_count >= 1
+	var blocked_shipyard := blocked_count >= 2
+	var no_purchase := not owned_outfits.has("cargo_pod") and player_ship_id != "light_freighter"
+	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" legalScore=%d blockedOutfitter=%s blockedShipyard=%s noPurchase=%s serviceBlockedMessage=\"%s\" sourceLabel=terminal-velocity-legal-service-gate-scaffold oracleStatus=legal_service_denial_pending_ev_classic_confirmation" % [LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, int(legal_records.get(government_name, 0)), str(blocked_outfitter), str(blocked_shipyard), str(no_purchase), service_blocked_message])
+	get_tree().quit(0)
+
+func _run_legal_patrol_posture_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	var government_name := _current_government_name()
+	legal_records[government_name] = -75
+	status_messages.clear()
+	_emit_legal_patrol_warning_if_needed()
+	_select_closest_target()
+	var patrol_warning := status_messages.has(_legal_patrol_warning_message(government_name))
+	var hostile_posture := _legal_patrol_hostile_posture_active(government_name)
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" legalScore=%d patrolWarning=%s hostilePosture=%s combatExecuted=false targetStatus=\"%s\" sourceLabel=terminal-velocity-classic-resource-patrol-semantics oracleStatus=classic_runtime_combat_timing_pending" % [LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, int(legal_records.get(government_name, 0)), str(patrol_warning), str(hostile_posture), status_line])
+	get_tree().quit(0)
+
+func _run_mission_legal_eligibility_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	var body := _current_body()
+	var government_name := _current_government_name()
+	var test_mission := {
+		"id": "legal_clean_test_contract",
+		"title": "Clean Legal Standing Contract",
+		"originSystem": current_system.get("name", ""),
+		"originBody": body.get("name", ""),
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 1,
+		"reward": 100,
+		"description": "Terminal Velocity legal eligibility scaffold contract.",
+		"requiresFlags": [],
+		"excludesFlags": [],
+		"setsFlags": [],
+		"completionFlags": [],
+		"requirements": {"legalMin": {government_name: 0}}
+	}
+	var mission_list: Array = missions.get("missions", [])
+	mission_list.append(test_mission)
+	missions["missions"] = mission_list
+	legal_records[government_name] = 0
+	var clean_available := _available_missions(body).any(func(m): return str(m.get("id", "")) == "legal_clean_test_contract")
+	legal_records[government_name] = -75
+	var blocked_available := _available_missions(body).any(func(m): return str(m.get("id", "")) == "legal_clean_test_contract")
+	var blocked_reasons := _blocked_mission_reasons(body)
+	var blocked_reason := _mission_legal_requirement_block_reason(test_mission)
+	var visible_blocked_reason := not blocked_reasons.is_empty()
+	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" cleanAvailable=%s blockedAvailable=%s visibleBlockedReason=%s legalScore=%d blockedReason=\"%s\" sourceLabel=terminal-velocity-classic-resource-mission-availability oracleStatus=classic_runtime_ui_wording_pending" % [MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body.get("name", "?"), government_name, str(clean_available), str(blocked_available), str(visible_blocked_reason), int(legal_records.get(government_name, 0)), blocked_reason])
+	get_tree().quit(0)
+
+func _run_legal_consequence_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	var government_name := _current_government_name()
+	legal_records[government_name] = -75
+	reputation_scores[government_name] = 0
+	reputation_scores["Pirate"] = 0
+	status_messages.clear()
+	_select_closest_target()
+	var before_legal := int(legal_records.get(government_name, 0))
+	var before_reputation := int(reputation_scores.get(government_name, 0))
+	var before_pirate_reputation := int(reputation_scores.get("Pirate", 0))
+	_fire_primary_weapon()
+	var after_legal := int(legal_records.get(government_name, 0))
+	var after_reputation := int(reputation_scores.get(government_name, 0))
+	var after_pirate_reputation := int(reputation_scores.get("Pirate", 0))
+	var applied := status_messages.has(_legal_patrol_attack_message(government_name))
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" event=destroy_patrol manualBacked=true consequenceApplied=%s combatExecuted=false legalBefore=%d legalAfter=%d reputationBefore=%d reputationAfter=%d pirateReputationBefore=%d pirateReputationAfter=%d status=\"%s\" sourceLabel=terminal-velocity-classic-resource-govt-penalty-semantics oracleStatus=classic_runtime_combat_resolution_pending" % [LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, str(applied), before_legal, after_legal, before_reputation, after_reputation, before_pirate_reputation, after_pirate_reputation, status_line])
+	get_tree().quit(0)
+
+func _run_legal_clemency_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	_try_land()
+	var government_name := _current_government_name()
+	legal_records[government_name] = -45
+	reputation_scores[government_name] = int(reputation.get("mechanics", {}).get("clemencyMinReputation", 10))
+	credits = int(reputation.get("mechanics", {}).get("clemencyCost", 1000)) + 500
+	var before_legal := int(legal_records.get(government_name, 0))
+	var before_credits := credits
+	status_messages.clear()
+	var paid := _pay_legal_clemency()
+	var after_legal := int(legal_records.get(government_name, 0))
+	var after_credits := credits
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" paid=%s legalBefore=%d legalAfter=%d creditsBefore=%d creditsAfter=%d status=\"%s\" sourceLabel=terminal-velocity-inferred-clemency-scaffold oracleStatus=approved_inference_pending_ev_classic_confirmation" % [LEGAL_CLEMENCY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, str(paid), before_legal, after_legal, before_credits, after_credits, status_line])
+	get_tree().quit(0)
+
+func _run_contraband_scan_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_jump()
+	var government_name := _current_government_name()
+	commodity_hold["equipment"] = EV_CLASSIC_COMMODITY_LOT_SIZE
+	cargo = EV_CLASSIC_COMMODITY_LOT_SIZE
+	credits = 5000
+	legal_records[government_name] = 0
+	var before_credits := credits
+	var before_legal := int(legal_records.get(government_name, 0))
+	var before_equipment := int(commodity_hold.get("equipment", 0))
+	_try_land()
+	var after_credits := credits
+	var after_legal := int(legal_records.get(government_name, 0))
+	var after_equipment := int(commodity_hold.get("equipment", 0))
+	var action := str(_last_contraband_scan_outcome.get("action", "none"))
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" action=%s creditsBefore=%d creditsAfter=%d legalBefore=%d legalAfter=%d illegalEquipmentBefore=%d illegalEquipmentAfter=%d status=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-scan-semantics oracleStatus=classic_runtime_scan_frequency_and_fine_tuning_pending" % [CONTRABAND_SCAN_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, action, before_credits, after_credits, before_legal, after_legal, before_equipment, after_equipment, status_line])
 	get_tree().quit(0)
 
 func _run_pilot_save_resume_log() -> void:
@@ -986,6 +1222,28 @@ func _max_player_fuel() -> int:
 func _jump_fuel_cost() -> int:
 	return 1
 
+func _route_fuel_cost(route_hops := -1) -> int:
+	var hops := route_hops
+	if hops < 0:
+		hops = _queued_route_hops()
+	return hops * _jump_fuel_cost()
+
+func _queued_route_hops() -> int:
+	if not selected_route.is_empty():
+		return selected_route.size()
+	if _selected_destination_name() != "None" and _selected_destination_name() != str(current_system.get("name", "")):
+		return 1
+	return 0
+
+func _route_fuel_warning_active(route_hops := -1) -> bool:
+	return _route_fuel_cost(route_hops) > player_fuel
+
+func _route_fuel_hint_line(route_hops := -1) -> String:
+	var hops := _queued_route_hops() if route_hops < 0 else route_hops
+	var cost := _route_fuel_cost(hops)
+	var warning := " — refuel before full route" if cost > player_fuel else ""
+	return "Route fuel: %d hop(s), cost %d, fuel %d/%d%s" % [hops, cost, player_fuel, _max_player_fuel(), warning]
+
 func _refuel_current_ship() -> bool:
 	if not landed:
 		_set_status("Cannot refuel in space; land at a port with refuel service")
@@ -1056,6 +1314,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				else:
 					_set_status("Cannot refuel in space")
 			KEY_F6: _save_current_pilot_file()
+			KEY_C:
+				if landed:
+					_pay_legal_clemency()
+				else:
+					_set_status("Clemency unavailable in space; land at an aligned port")
 			KEY_UP:
 				if landed:
 					_cycle_landing_selection(-1)
@@ -1259,6 +1522,8 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"cargo": cargo,
 		"cargo_space": cargo_space,
 		"fuel": player_fuel,
+		"shields": player_shields,
+		"hull": player_hull,
 		"system": current_system.get("name", ""),
 		"system_index": current_system_index,
 		"position": {"x": pos.x, "y": pos.y},
@@ -1272,6 +1537,8 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"commodity_hold": commodity_hold,
 		"owned_outfits": owned_outfits,
 		"owned_weapons": owned_weapons,
+		"reputation_scores": reputation_scores,
+		"legal_records": legal_records,
 		"status_line": status_line,
 		"status_messages": status_messages,
 		"strict_play": strict_play_selected,
@@ -1392,6 +1659,8 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	if desired_ship_id != "":
 		_set_player_ship_by_id(desired_ship_id)
 	player_fuel = clampi(int(data.get("fuel", player_fuel)), 0, _max_player_fuel())
+	player_shields = clampi(int(data.get("shields", player_shields)), 0, _max_player_shields())
+	player_hull = clampi(int(data.get("hull", player_hull)), 0, _max_player_hull())
 	if player_frames.is_empty():
 		player_facing_index = int(data.get("facing_index", 0))
 	else:
@@ -1405,6 +1674,8 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	commodity_hold = data.get("commodity_hold", commodity_hold)
 	owned_outfits = data.get("owned_outfits", owned_outfits)
 	owned_weapons = data.get("owned_weapons", owned_weapons)
+	reputation_scores = data.get("reputation_scores", reputation_scores)
+	legal_records = data.get("legal_records", legal_records)
 	status_line = str(data.get("status_line", status_line))
 	status_messages.clear()
 	for message in data.get("status_messages", []):
@@ -1470,6 +1741,7 @@ func _set_player_ship_by_id(ship_id: String) -> void:
 	player_frame_alpha_counts = player_frame_set["alpha_counts"]
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
 	player_fuel = min(player_fuel, _max_player_fuel())
+	_reset_player_combat_stats()
 
 func _cycle_open_pilot_selection(dir: int) -> void:
 	if title_modal != "open_pilot" or available_pilots.is_empty():
@@ -1694,14 +1966,18 @@ func _append_map_route_at_position(click_position: Vector2) -> bool:
 	var hover_index := _map_linked_stop_at_position(click_position)
 	if hover_index >= 0 and hover_index < links.size():
 		var linked_name := str(links[hover_index])
+		var route_preview: Array = [str(current_system.get("name", "?"))] + selected_route + [linked_name]
+		var route_text := " → ".join(route_preview)
+		var route_hops := route_preview.size() - 1
+		var route_cost := route_hops * _jump_fuel_cost()
 		if selected_route.is_empty():
 			var current_links: Array = current_system.get("links", [])
 			selected_link_index = current_links.find(linked_name)
 			if selected_link_index < 0:
 				selected_link_index = 0
-			status_line = "Route selected: %s → %s — press J to jump" % [str(current_system.get("name", "?")), linked_name]
+			status_line = "Route selected: %s — fuel cost %d, fuel %d/%d — press J to jump" % [route_text, route_cost, player_fuel, _max_player_fuel()]
 		else:
-			status_line = "Route appended: %s" % " → ".join([str(current_system.get("name", "?"))] + selected_route + [linked_name])
+			status_line = "Route appended: %s — fuel cost %d, fuel %d/%d" % [route_text, route_cost, player_fuel, _max_player_fuel()]
 		selected_route.append(linked_name)
 		_play_sound("ui_click")
 		return true
@@ -1720,7 +1996,8 @@ func _cycle_target(dir: int) -> void:
 		status_line = "No scanner targets"
 		return
 	selected_target_index = (selected_target_index + dir + targets.size()) % targets.size()
-	status_line = "Target: Contact %d at %.0f range" % [selected_target_index + 1, pos.distance_to(targets[selected_target_index])]
+	var posture := " hostile legal patrol" if _legal_patrol_hostile_posture_active(_current_government_name()) else ""
+	status_line = "Target: Contact %d%s at %.0f range" % [selected_target_index + 1, posture, pos.distance_to(targets[selected_target_index])]
 
 func _select_closest_target() -> void:
 	var targets := _npc_world_offsets()
@@ -1736,7 +2013,8 @@ func _select_closest_target() -> void:
 			closest_distance = distance
 			closest_index = i
 	selected_target_index = closest_index
-	status_line = "Closest target: Contact %d at %.0f range" % [selected_target_index + 1, closest_distance]
+	var posture := " hostile legal patrol" if _legal_patrol_hostile_posture_active(_current_government_name()) else ""
+	status_line = "Closest target: Contact %d%s at %.0f range" % [selected_target_index + 1, posture, closest_distance]
 
 func _ev_land_or_launch() -> void:
 	if landed:
@@ -1786,6 +2064,141 @@ func _mission_reserved_cargo_tons() -> int:
 func _cargo_available_tons() -> int:
 	return max(0, cargo_space - cargo)
 
+func _current_government_name() -> String:
+	return _government_name_for_system(str(current_system.get("name", "")))
+
+func _government_name_for_system(system_name: String) -> String:
+	var systems_by_name: Dictionary = governments.get("systems", {})
+	return str(systems_by_name.get(system_name, {}).get("government", "Unknown"))
+
+func _legal_status_for_government(government_name: String) -> String:
+	var score := int(legal_records.get(government_name, 0))
+	var thresholds: Array = reputation.get("legalThresholds", [])
+	var best_status := "Clean"
+	var best_min := -1000000
+	for threshold in thresholds:
+		var min_score := int(threshold.get("minScore", 0))
+		if score >= min_score and min_score >= best_min:
+			best_status = str(threshold.get("status", best_status))
+			best_min = min_score
+	return best_status
+
+func _government_docking_allowed(government_name: String) -> bool:
+	var mechanics: Dictionary = reputation.get("mechanics", {})
+	var min_by_government: Dictionary = mechanics.get("dockMinLegalScoreByGovernment", {})
+	var min_score := int(min_by_government.get(government_name, mechanics.get("defaultDockMinLegalScore", -60)))
+	return int(legal_records.get(government_name, 0)) >= min_score
+
+func _government_crime_tolerance_score(government_name: String) -> int:
+	var mechanics: Dictionary = reputation.get("mechanics", {})
+	var tolerance_by_government: Dictionary = mechanics.get("crimeToleranceLegalScoreByGovernment", {})
+	return int(tolerance_by_government.get(government_name, mechanics.get("crimeToleranceLegalScore", mechanics.get("patrolHostileLegalScore", -60))))
+
+func _legal_service_access_allowed(government_name: String) -> bool:
+	return _government_docking_allowed(government_name)
+
+func _legal_service_blocked_message(government_name: String) -> String:
+	return "Services blocked by %s legal status; TV scaffold, exact Classic thresholds unconfirmed" % _legal_status_for_government(government_name)
+
+func _legal_patrol_hostile_posture_active(government_name: String) -> bool:
+	return int(legal_records.get(government_name, 0)) < _government_crime_tolerance_score(government_name)
+
+func _legal_patrol_warning_message(government_name: String) -> String:
+	return "%s patrols hostile: %s legal status below CrimeTol-style tolerance — Classic Resource Bible-backed scaffold, exact runtime behavior unconfirmed" % [government_name, _legal_status_for_government(government_name)]
+
+func _legal_patrol_attack_message(government_name: String) -> String:
+	return "%s patrol attack consequence applied: legal/reputation worsened; Classic Resource Bible govt penalty scaffold, exact combat consequences unconfirmed" % government_name
+
+func _emit_legal_patrol_warning_if_needed() -> void:
+	var government_name := _current_government_name()
+	if _legal_patrol_hostile_posture_active(government_name):
+		_set_status(_legal_patrol_warning_message(government_name))
+
+func _legal_warning_line(government_name: String) -> String:
+	var score := int(legal_records.get(government_name, 0))
+	var status := _legal_status_for_government(government_name)
+	var dock_state := "docking allowed" if _government_docking_allowed(government_name) else "docking blocked"
+	return "%s legal status: %s (%d) — %s; TV scaffold, exact Classic thresholds unconfirmed" % [government_name, status, score, dock_state]
+
+func _apply_reputation_event(event_id: String, context_government := "") -> void:
+	var event: Dictionary = reputation.get("events", {}).get(event_id, {})
+	var reputation_delta: Dictionary = event.get("reputation", {})
+	for government_name in reputation_delta.keys():
+		reputation_scores[str(government_name)] = int(reputation_scores.get(str(government_name), 0)) + int(reputation_delta.get(government_name, 0))
+	var legal_delta: Dictionary = event.get("legal", {})
+	for government_name in legal_delta.keys():
+		var target_government := context_government if str(government_name) == "*" else str(government_name)
+		if target_government == "":
+			continue
+		legal_records[target_government] = int(legal_records.get(target_government, 0)) + int(legal_delta.get(government_name, 0))
+
+func _pay_legal_clemency() -> bool:
+	if not landed:
+		_set_status("Clemency unavailable in space; land at an aligned port")
+		return false
+	var government_name := _current_government_name()
+	var mechanics: Dictionary = reputation.get("mechanics", {})
+	var min_reputation := int(mechanics.get("clemencyMinReputation", 10))
+	var max_legal_score := int(mechanics.get("clemencyMaxLegalScore", -20))
+	var legal_delta := int(mechanics.get("clemencyLegalDelta", 25))
+	var cost := int(mechanics.get("clemencyCost", 1000))
+	if int(reputation_scores.get(government_name, 0)) < min_reputation:
+		_set_status("Clemency denied: need %s reputation %d; inferred TV scaffold" % [government_name, min_reputation])
+		return false
+	if int(legal_records.get(government_name, 0)) > max_legal_score:
+		_set_status("Clemency unavailable: legal standing not low enough; inferred TV scaffold")
+		return false
+	if credits < cost:
+		_set_status("Clemency costs %d credits; insufficient funds" % cost)
+		return false
+	credits -= cost
+	legal_records[government_name] = min(0, int(legal_records.get(government_name, 0)) + legal_delta)
+	_set_status("Paid %d cr clemency with %s: legal now %d; inferred TV scaffold" % [cost, government_name, int(legal_records.get(government_name, 0))])
+	return true
+
+func _illegal_commodity_hold(government_name: String) -> Dictionary:
+	var illegal_ids: Array = governments.get("contraband", {}).get(government_name, [])
+	var illegal_hold := {}
+	for commodity_id in illegal_ids:
+		var held := int(commodity_hold.get(str(commodity_id), 0))
+		if held > 0:
+			illegal_hold[str(commodity_id)] = held
+	return illegal_hold
+
+func _apply_contraband_scan(accept_bribe := false) -> Dictionary:
+	var government_name := _current_government_name()
+	var illegal_hold := _illegal_commodity_hold(government_name)
+	var tons := 0
+	for amount in illegal_hold.values():
+		tons += int(amount)
+	_last_contraband_scan_outcome = {"action": "none", "tons": 0, "creditsDelta": 0, "legalDelta": 0, "confiscated": {}}
+	if tons <= 0:
+		return _last_contraband_scan_outcome
+	var government: Dictionary = governments.get("governments", {}).get(government_name, {})
+	var bribe_cost := int(government.get("bribePerTon", 0)) * tons
+	if accept_bribe and bool(government.get("bribeAllowed", false)) and bribe_cost > 0 and credits >= bribe_cost:
+		credits -= bribe_cost
+		_last_contraband_scan_outcome = {"action": "bribe", "tons": tons, "creditsDelta": -bribe_cost, "legalDelta": 0, "confiscated": {}}
+		_set_status("Paid %d cr contraband bribe to %s; government bribe scaffold" % [bribe_cost, government_name])
+		return _last_contraband_scan_outcome
+	var fine := int(government.get("finePerTon", 0)) * tons
+	var legal_by_government: Dictionary = reputation.get("events", {}).get("contraband_fine", {}).get("legal", {})
+	var legal_delta := int(legal_by_government.get(government_name, legal_by_government.get("*", -3)))
+	var action := "fine"
+	if credits >= fine:
+		credits -= fine
+	else:
+		action = "confiscate"
+		legal_delta = int(reputation.get("mechanics", {}).get("unpaidFineLegalPenalty", -25))
+	legal_records[government_name] = int(legal_records.get(government_name, 0)) + legal_delta
+	for commodity_id in illegal_hold.keys():
+		var confiscated := int(illegal_hold.get(commodity_id, 0))
+		commodity_hold[commodity_id] = max(0, int(commodity_hold.get(commodity_id, 0)) - confiscated)
+		cargo = max(0, cargo - confiscated)
+	_last_contraband_scan_outcome = {"action": action, "tons": tons, "creditsDelta": -fine if action == "fine" else 0, "legalDelta": legal_delta, "confiscated": illegal_hold}
+	_set_status("Contraband scan: %s %d tons, legal %+d; Classic Resource Bible smuggling scaffold" % [action, tons, legal_delta])
+	return _last_contraband_scan_outcome
+
 func _set_status(message: String) -> void:
 	status_line = message
 	status_messages.append(message)
@@ -1799,16 +2212,196 @@ func _afterburner_active() -> bool:
 	return Input.is_key_pressed(KEY_Z)
 
 func _fire_primary_weapon() -> void:
-	_set_status("Primary weapon guarded: combat not implemented; use disposable non-strict pilots for future combat tests")
+	if _spawn_primary_projectile():
+		return
+	_set_status("Primary weapon unavailable: no weapon data or targets")
 
 func _fire_secondary_weapon() -> void:
-	_set_status("Secondary weapon guarded: combat not implemented; no live fire executed")
+	_set_status("Secondary weapon not loaded; primary combat scaffold available with Tab")
 
 func _change_secondary_weapon() -> void:
 	if landed and landing_tab == 1:
 		_sell_selected_commodity()
 		return
-	_set_status("Secondary weapon selection guarded: no combat loadout changes executed")
+	_set_status("Secondary weapon selection: no secondary weapons installed")
+
+func _primary_weapon_stats() -> Dictionary:
+	var weapon_id := str(player_ship.get("weaponId", "laser_cannon"))
+	if owned_weapons.size() > 0:
+		for owned_id in owned_weapons.keys():
+			if int(owned_weapons.get(owned_id, 0)) > 0:
+				weapon_id = str(owned_id)
+				break
+	for weapon in weapons.get("weapons", []):
+		if str(weapon.get("id", "")) == weapon_id:
+			return weapon
+	var weapon_list: Array = weapons.get("weapons", [])
+	return weapon_list[0] if not weapon_list.is_empty() else {}
+
+func _reset_combat_targets() -> void:
+	target_shields.clear()
+	target_hulls.clear()
+	var npc_ship := _npc_ship_stats()
+	for i in range(_npc_world_offsets().size()):
+		target_shields[i] = int(npc_ship.get("shields", 100))
+		target_hulls[i] = int(npc_ship.get("hull", 100))
+
+func _npc_ship_stats() -> Dictionary:
+	for ship in ships.get("ships", []):
+		if str(ship.get("id", "")) != player_ship_id:
+			return ship
+	return player_ship
+
+func _target_destroyed(target_index: int) -> bool:
+	return int(target_shields.get(target_index, 0)) <= 0 and int(target_hulls.get(target_index, 0)) <= 0
+
+func _max_player_shields() -> int:
+	return int(player_ship.get("shields", 100))
+
+func _max_player_hull() -> int:
+	# EV Classic Resource Bible `shïp` Armor: armor takes damage once shields are down.
+	return int(player_ship.get("hull", player_ship.get("armor", 100)))
+
+func _reset_player_combat_stats() -> void:
+	player_shields = _max_player_shields()
+	player_hull = _max_player_hull()
+	player_shield_recharge_progress = 0.0
+
+func _recharge_player_shields(delta: float) -> void:
+	if player_shields >= _max_player_shields() or player_hull <= 0:
+		return
+	var recharge_frames: float = maxf(1.0, float(player_ship.get("shieldRecharge", 30)))
+	player_shield_recharge_progress += delta * 60.0
+	while player_shield_recharge_progress >= recharge_frames and player_shields < _max_player_shields():
+		player_shield_recharge_progress -= recharge_frames
+		player_shields += 1
+
+func _weapon_shield_damage(weapon: Dictionary) -> int:
+	var mass_damage := int(weapon.get("massDamage", weapon.get("damage", 1)))
+	var energy_damage := int(weapon.get("energyDamage", weapon.get("damage", 1)))
+	# EV Classic Resource Bible `wëap`: shields-up damage = MassDmg/4 + EnergyDmg, minimum 1.
+	return max(1, int(floor(float(mass_damage) / 4.0 + float(energy_damage))))
+
+func _weapon_hull_damage(weapon: Dictionary) -> int:
+	var mass_damage := int(weapon.get("massDamage", weapon.get("damage", 1)))
+	var energy_damage := int(weapon.get("energyDamage", weapon.get("damage", 1)))
+	# EV Classic Resource Bible `wëap`: shields-down damage = MassDmg + EnergyDmg/4, minimum 1.
+	return max(1, int(floor(float(mass_damage) + float(energy_damage) / 4.0)))
+
+func _spawn_primary_projectile() -> bool:
+	var targets := _npc_world_offsets()
+	var weapon := _primary_weapon_stats()
+	if targets.is_empty() or weapon.is_empty():
+		return false
+	var target_index := selected_target_index % targets.size()
+	if _target_destroyed(target_index):
+		_set_status("Target already disabled")
+		return false
+	var target_pos: Vector2 = targets[target_index]
+	var direction := (target_pos - pos).normalized()
+	if direction.length() <= 0.0:
+		direction = Vector2.UP.rotated(deg_to_rad(angle_deg))
+	var projectile := {
+		"position": pos,
+		"velocity": direction * float(weapon.get("speed", 9.0)) * 60.0,
+		"life": float(weapon.get("lifetime", 72)) / 60.0,
+		"shieldDamage": _weapon_shield_damage(weapon),
+		"hullDamage": _weapon_hull_damage(weapon),
+		"color": str(weapon.get("color", "OrangeRed")),
+		"radius": float(weapon.get("radius", 3)),
+		"targetIndex": target_index,
+	}
+	projectiles.append(projectile)
+	_set_status("Fired %s at Contact %d" % [str(weapon.get("name", "Primary")), target_index + 1])
+	_play_sound("ui_click")
+	return true
+
+func _spawn_npc_retaliation_projectile(target_index: int) -> bool:
+	var targets := _npc_world_offsets()
+	if target_index < 0 or target_index >= targets.size() or _target_destroyed(target_index):
+		return false
+	var npc_ship := _npc_ship_stats()
+	var weapon_id := str(npc_ship.get("weaponId", "pulse_cannon"))
+	var weapon := _weapon_stats_by_id(weapon_id)
+	if weapon.is_empty():
+		weapon = _primary_weapon_stats()
+	if weapon.is_empty():
+		return false
+	var origin: Vector2 = targets[target_index]
+	var direction := (pos - origin).normalized()
+	if direction.length() <= 0.0:
+		direction = Vector2.DOWN
+	projectiles.append({
+		"position": origin,
+		"velocity": direction * float(weapon.get("speed", 7.0)) * 60.0,
+		"life": float(weapon.get("lifetime", 72)) / 60.0,
+		"shieldDamage": _weapon_shield_damage(weapon),
+		"hullDamage": _weapon_hull_damage(weapon),
+		"color": str(weapon.get("color", "DeepSkyBlue")),
+		"radius": float(weapon.get("radius", 3)),
+		"targetIndex": -1,
+		"firedBy": "npc",
+	})
+	return true
+
+func _weapon_stats_by_id(weapon_id: String) -> Dictionary:
+	for weapon in weapons.get("weapons", []):
+		if str(weapon.get("id", "")) == weapon_id:
+			return weapon
+	return {}
+
+func _advance_projectiles(delta: float) -> void:
+	if projectiles.is_empty():
+		return
+	var survivors: Array[Dictionary] = []
+	var targets := _npc_world_offsets()
+	for projectile in projectiles:
+		var position: Vector2 = projectile.get("position", Vector2.ZERO)
+		position += projectile.get("velocity", Vector2.ZERO) * delta
+		projectile["position"] = position
+		projectile["life"] = float(projectile.get("life", 0.0)) - delta
+		var hit := false
+		if str(projectile.get("firedBy", "player")) == "npc":
+			if position.distance_to(pos) <= 28.0 + float(projectile.get("radius", 3.0)):
+				_apply_player_projectile_hit(projectile)
+				hit = true
+		else:
+			for i in range(targets.size()):
+				if _target_destroyed(i):
+					continue
+				if position.distance_to(targets[i]) <= 32.0 + float(projectile.get("radius", 3.0)):
+					_apply_projectile_hit(projectile, i)
+					hit = true
+					break
+		if not hit and float(projectile.get("life", 0.0)) > 0.0:
+			survivors.append(projectile)
+	projectiles = survivors
+
+func _apply_projectile_hit(projectile: Dictionary, target_index: int) -> void:
+	var shields := int(target_shields.get(target_index, 0))
+	var hull := int(target_hulls.get(target_index, 0))
+	if shields > 0:
+		shields = max(0, shields - int(projectile.get("shieldDamage", 1)))
+	else:
+		hull = max(0, hull - int(projectile.get("hullDamage", 1)))
+	target_shields[target_index] = shields
+	target_hulls[target_index] = hull
+	if _target_destroyed(target_index):
+		var government_name := _current_government_name()
+		if _legal_patrol_hostile_posture_active(government_name):
+			_apply_reputation_event("destroy_patrol", government_name)
+			_set_status(_legal_patrol_attack_message(government_name))
+		else:
+			_set_status("Contact %d disabled" % [target_index + 1])
+	else:
+		_set_status("Contact %d hit: shield %d hull %d" % [target_index + 1, shields, hull])
+
+func _apply_player_projectile_hit(projectile: Dictionary) -> void:
+	if player_shields > 0:
+		player_shields = max(0, player_shields - int(projectile.get("shieldDamage", 1)))
+	else:
+		player_hull = max(0, player_hull - int(projectile.get("hullDamage", 1)))
+	_set_status("Incoming hit: shield %d hull %d" % [player_shields, player_hull])
 
 func _jump() -> void:
 	var systems: Array = universe.get("systems", [])
@@ -1832,6 +2425,7 @@ func _jump() -> void:
 			landed = false
 			player_fuel = max(0, player_fuel - _jump_fuel_cost())
 			status_line = "Hyperspace arrival: " + destination
+			_emit_legal_patrol_warning_if_needed()
 			return
 
 func _try_land() -> void:
@@ -1843,6 +2437,7 @@ func _try_land() -> void:
 		landed = true
 		vel = Vector2.ZERO
 		_set_status("Landed at " + nearest["body"].get("name", "port"))
+		_apply_contraband_scan(false)
 	else:
 		_set_status("Approach slower/closer to land; landing needs close range and speed under 90")
 
@@ -1868,6 +2463,7 @@ func _draw() -> void:
 		if Rect2(Vector2.ZERO, VIEW_SIZE).has_point(screen):
 			draw_circle(screen, 1.0, Color(0.55, 0.62, 0.72))
 	_draw_bodies(center)
+	_draw_projectiles(center)
 	_draw_npcs(center)
 	_draw_player(center)
 	_draw_hud()
@@ -2161,13 +2757,22 @@ func _draw_npcs(center: Vector2) -> void:
 		return
 	var offsets := _npc_world_offsets()
 	for i in range(offsets.size()):
+		if _target_destroyed(i):
+			continue
 		var screen: Vector2 = center + (offsets[i] - pos) * WORLD_SCALE
 		var frame_index := (i * 7) % npc_frames.size()
 		var tex := npc_frames[frame_index]
 		var draw_offset := Vector2(tex.get_width(), tex.get_height()) * 0.5
 		draw_texture_rect(tex, Rect2(screen - draw_offset, Vector2(tex.get_width(), tex.get_height())), false)
-		var ring_color := Color(1.0, 0.80, 0.20, 0.95) if i == selected_target_index else Color(0.35, 0.55, 0.80, 0.7)
+		var legal_hostile := _legal_patrol_hostile_posture_active(_current_government_name())
+		var ring_color := Color(1.0, 0.32, 0.18, 0.95) if legal_hostile else (Color(1.0, 0.80, 0.20, 0.95) if i == selected_target_index else Color(0.35, 0.55, 0.80, 0.7))
 		draw_arc(screen, 28, 0, TAU, 20, ring_color, 1.0)
+		draw_string(ThemeDB.fallback_font, screen + Vector2(-26, 42), "S%d H%d" % [int(target_shields.get(i, 0)), int(target_hulls.get(i, 0))], HORIZONTAL_ALIGNMENT_LEFT, 90, 12, Color(0.95, 0.86, 0.58))
+
+func _draw_projectiles(center: Vector2) -> void:
+	for projectile in projectiles:
+		var screen: Vector2 = center + (projectile.get("position", Vector2.ZERO) - pos) * WORLD_SCALE
+		draw_circle(screen, float(projectile.get("radius", 3.0)), _named_color(str(projectile.get("color", "OrangeRed"))))
 
 func _draw_player(center: Vector2) -> void:
 	if player_frames.is_empty():
@@ -2215,7 +2820,9 @@ func _draw_hud() -> void:
 	var destination := _selected_destination_name()
 	draw_rect(Rect2(0, 0, 1280, 78), Color(0.02, 0.035, 0.06, 0.92), true)
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
-	draw_string(font, Vector2(20, 56), "System: %s    Destination: %s    Credits: %d    Fuel: %d/%d    Cargo: %d/%d (%d mission, %d free)    Ship: %s    Facing cell: %02d/%02d" % [current_system.get("name", "?"), destination, credits, player_fuel, _max_player_fuel(), cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), player_ship_id, player_facing_index, _visible_facing_index(player_facing_index)], HORIZONTAL_ALIGNMENT_LEFT, 1120, 16, Color(0.70, 0.86, 1.0))
+	var government_name := _current_government_name()
+	var legal_status := _legal_status_for_government(government_name)
+	draw_string(font, Vector2(20, 56), "System: %s (%s: %s)    Destination: %s    Credits: %d    Fuel: %d/%d    Shields: %d/%d    Hull: %d/%d    Cargo: %d/%d (%d mission, %d free)    Ship: %s" % [current_system.get("name", "?"), government_name, legal_status, destination, credits, player_fuel, _max_player_fuel(), player_shields, _max_player_shields(), player_hull, _max_player_hull(), cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), player_ship_id], HORIZONTAL_ALIGNMENT_LEFT, 1220, 16, Color(0.70, 0.86, 1.0))
 	if not status_messages.is_empty():
 		draw_rect(Rect2(20, 92, 430, 62), Color(0.02, 0.035, 0.06, 0.84), true)
 		draw_string(font, Vector2(32, 114), "Messages:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
@@ -2228,6 +2835,8 @@ func _draw_hud() -> void:
 	draw_line(Vector2(1135, 112), Vector2(1135, 268), Color(0.12, 0.35, 0.50), 1.0)
 	draw_line(Vector2(1057, 190), Vector2(1213, 190), Color(0.12, 0.35, 0.50), 1.0)
 	draw_string(font, Vector2(1030, 122), "Scanner", HORIZONTAL_ALIGNMENT_LEFT, 200, 16, Color(0.75, 0.95, 1.0))
+	if _legal_patrol_hostile_posture_active(government_name):
+		draw_string(font, Vector2(1030, 142), "Legal patrol hostile", HORIZONTAL_ALIGNMENT_LEFT, 200, 13, Color(1.0, 0.42, 0.28))
 	_draw_scanner_blips(Vector2(1135, 190), 78.0)
 	var target_range := 0.0
 	var targets := _npc_world_offsets()
@@ -2340,6 +2949,9 @@ func _player_inventory_lines() -> Array[String]:
 		"Credits: %d" % credits,
 		"Cargo: %d/%d (%d mission, %d free)" % [cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons()],
 		"Fuel: %d/%d" % [player_fuel, _max_player_fuel()],
+		"Government/legal: %s" % _legal_warning_line(_current_government_name()),
+		"Reputation scores: %s" % _inventory_dictionary_summary(reputation_scores),
+		"Legal records: %s" % _inventory_dictionary_summary(legal_records),
 		"Outfits: %s" % _inventory_dictionary_summary(owned_outfits),
 		"Weapons: %s" % _inventory_dictionary_summary(owned_weapons),
 	]
@@ -2363,11 +2975,12 @@ func _draw_help_overlay() -> void:
 		"Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
 		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
 		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops.",
-		"Map service summary: selected systems show Terminal Velocity station services.",
+		"Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
 		"Mission objective marker: active mission destinations are highlighted on the map.",
 		"Mission route helper: G queues the active mission destination when known.",
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
+		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Player info: P toggles player info with ship, cargo, fuel, outfits, and weapons.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
@@ -2403,8 +3016,21 @@ func _draw_scanner_blips(scanner_center: Vector2, scanner_radius: float) -> void
 		if relative.length() > scanner_radius - 8.0:
 			relative = relative.normalized() * (scanner_radius - 8.0)
 		var blip := scanner_center + relative
-		var color := Color(1.0, 0.78, 0.20) if i == selected_target_index else Color(0.30, 0.85, 1.0)
+		var legal_hostile := _legal_patrol_hostile_posture_active(_current_government_name())
+		var color := Color(1.0, 0.24, 0.18) if legal_hostile else (Color(1.0, 0.78, 0.20) if i == selected_target_index else Color(0.30, 0.85, 1.0))
 		draw_circle(blip, 4.0 if i == selected_target_index else 2.5, color)
+
+func _map_legal_risk_line(system_name: String) -> String:
+	if system_name == "None" or system_name == "":
+		return "Legal: no selected system"
+	var government_name := _government_name_for_system(system_name)
+	return "Legal: %s / %s (%d)" % [government_name, _legal_status_for_government(government_name), int(legal_records.get(government_name, 0))]
+
+func _map_legal_risk_color(system_name: String) -> Color:
+	var government_name := _government_name_for_system(system_name)
+	if _legal_patrol_hostile_posture_active(government_name):
+		return Color(1.0, 0.42, 0.28)
+	return Color(0.74, 0.90, 1.0)
 
 func _draw_universe_map() -> void:
 	var systems: Array = universe.get("systems", [])
@@ -2423,16 +3049,18 @@ func _draw_universe_map() -> void:
 	draw_string(font, rect.position + Vector2(690, 90), "Current: " + str(current_system.get("name", "?")), HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(1.0, 0.92, 0.58))
 	draw_string(font, rect.position + Vector2(690, 120), "Selected: " + selected_name, HORIZONTAL_ALIGNMENT_LEFT, 230, 18, Color(0.35, 1.0, 0.68))
 	draw_string(font, rect.position + Vector2(690, 144), "Services: %s" % _system_service_summary(selected_name), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(690, 162), _map_legal_risk_line(selected_name), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, _map_legal_risk_color(selected_name))
 	if not mission_destination_systems.is_empty():
-		draw_string(font, rect.position + Vector2(690, 158), "Mission destination: " + ", ".join(mission_destination_systems), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(1.0, 0.45, 0.22))
-	draw_string(font, rect.position + Vector2(690, 166), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 190), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 214), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 238), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+		draw_string(font, rect.position + Vector2(690, 180), "Mission destination: " + ", ".join(mission_destination_systems), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(1.0, 0.45, 0.22))
+	draw_string(font, rect.position + Vector2(690, 204), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 228), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 252), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 276), _route_fuel_hint_line(), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(690, 300), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
 	var point_by_name := _map_system_points(systems)
 	var hovered_name := _map_hovered_link_name()
 	if hovered_name != "":
-		draw_string(font, rect.position + Vector2(690, 250), "Release click to route: " + hovered_name, HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.45, 1.0, 0.65))
+		draw_string(font, rect.position + Vector2(690, 274), "Release click to route: " + hovered_name, HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.45, 1.0, 0.65))
 	for system in systems:
 		var map_point: Vector2 = point_by_name.get(str(system.get("name", "")), plot_rect.position)
 		for linked_name in system.get("links", []):
@@ -2481,7 +3109,7 @@ func _draw_universe_map() -> void:
 		draw_circle(map_point, radius, color)
 		draw_arc(map_point, radius + 4.0, 0, TAU, 24, color, 1.0)
 		draw_string(font, map_point + Vector2(8, -7), system_name, HORIZONTAL_ALIGNMENT_LEFT, 140, 13, color)
-	var y := rect.position.y + 240.0
+	var y := rect.position.y + 326.0
 	for system in systems:
 		var system_name := str(system.get("name", "?"))
 		var mark := " "
@@ -2536,6 +3164,9 @@ func _draw_landing_panel() -> void:
 	draw_string(font, rect.position + Vector2(30, 78), market, HORIZONTAL_ALIGNMENT_LEFT, 620, 16, Color(0.80, 0.90, 1.0))
 	var refuel_text := "Refuel: F5 available" if _body_refuel_available(body) else "Refuel: unavailable"
 	draw_string(font, rect.position + Vector2(690, 78), refuel_text, HORIZONTAL_ALIGNMENT_LEFT, 180, 16, Color(0.95, 0.86, 0.58))
+	var government_name := _current_government_name()
+	if not _legal_service_access_allowed(government_name):
+		draw_string(font, rect.position + Vector2(30, 98), _legal_service_blocked_message(government_name), HORIZONTAL_ALIGNMENT_LEFT, 820, 14, Color(1.0, 0.58, 0.42))
 	_draw_ev_classic_landing_buttons(rect, body)
 	match landing_tab:
 		0:
@@ -2576,8 +3207,13 @@ func _draw_mission_computer(rect: Rect2, body: Dictionary) -> void:
 	var available_missions := _available_missions(body)
 	if available_missions.is_empty():
 		draw_string(font, rect.position + Vector2(30, 202), "No special contracts available here.", HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.72, 0.82, 0.92))
+		_draw_blocked_mission_reasons(rect, body, 232.0)
 		return
-	draw_string(font, rect.position + Vector2(30, 192), "Enter accepts mission", HORIZONTAL_ALIGNMENT_LEFT, 820, 14, Color(0.95, 0.86, 0.58))
+	var blocked_reasons := _blocked_mission_reasons(body)
+	var help_text := "Enter accepts mission"
+	if not blocked_reasons.is_empty():
+		help_text += "  |  Some contracts unavailable: legal/reputation gates"
+	draw_string(font, rect.position + Vector2(30, 192), help_text, HORIZONTAL_ALIGNMENT_LEFT, 820, 14, Color(0.95, 0.86, 0.58))
 	var y := 202.0
 	for i in range(min(5, available_missions.size())):
 		var mission: Dictionary = available_missions[i]
@@ -2586,6 +3222,19 @@ func _draw_mission_computer(rect: Rect2, body: Dictionary) -> void:
 		y += 26.0
 		draw_string(font, rect.position + Vector2(52, y), "To %s / %s" % [mission.get("destinationSystem", "?"), mission.get("destinationBody", "?")], HORIZONTAL_ALIGNMENT_LEFT, 780, 14, Color(0.68, 0.78, 0.90))
 		y += 24.0
+	_draw_blocked_mission_reasons(rect, body, y + 4.0)
+
+func _draw_blocked_mission_reasons(rect: Rect2, body: Dictionary, y_start: float) -> void:
+	var reasons := _blocked_mission_reasons(body)
+	if reasons.is_empty():
+		return
+	var font := ThemeDB.fallback_font
+	var y := y_start
+	draw_string(font, rect.position + Vector2(30, y), "Unavailable contracts (TV scaffold):", HORIZONTAL_ALIGNMENT_LEFT, 820, 14, Color(1.0, 0.72, 0.46))
+	y += 22.0
+	for reason in reasons.slice(0, min(3, reasons.size())):
+		draw_string(font, rect.position + Vector2(52, y), "• " + str(reason), HORIZONTAL_ALIGNMENT_LEFT, 780, 13, Color(0.95, 0.70, 0.58))
+		y += 20.0
 
 func _draw_commodity_exchange(rect: Rect2) -> void:
 	var font := ThemeDB.fallback_font
@@ -2663,7 +3312,13 @@ func _draw_outfitter(rect: Rect2, body: Dictionary) -> void:
 		draw_string(font, rect.position + Vector2(30, y), "%s %s — %d cr" % [marker, sale_item.get("name", sale_item.get("id", "Upgrade")), int(sale_item.get("price", 0))], HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.86, 0.92, 1.0))
 		y += 20.0
 		draw_string(font, rect.position + Vector2(52, y), "Effect: " + _outfit_effect_summary(sale_item), HORIZONTAL_ALIGNMENT_LEFT, 760, 13, Color(0.68, 0.78, 0.90))
-		y += 22.0
+		y += 18.0
+		var source_line := _outfit_source_summary(sale_item)
+		if source_line != "":
+			draw_string(font, rect.position + Vector2(52, y), source_line, HORIZONTAL_ALIGNMENT_LEFT, 760, 12, Color(0.58, 0.70, 0.86))
+			y += 18.0
+		else:
+			y += 4.0
 	if outfits_for_sale.is_empty() and weapons_for_sale.is_empty():
 		draw_string(font, rect.position + Vector2(30, y), "No outfitter inventory at this port.", HORIZONTAL_ALIGNMENT_LEFT, 820, 16, Color(0.72, 0.82, 0.92))
 
@@ -2707,8 +3362,29 @@ func _available_missions(body: Dictionary) -> Array:
 			continue
 		if _has_any_flag(mission.get("excludesFlags", [])):
 			continue
+		if not _mission_requirements_met(mission):
+			continue
 		available_missions.append(mission)
 	return available_missions
+
+func _blocked_mission_reasons(body: Dictionary) -> Array[String]:
+	var reasons: Array[String] = []
+	var body_name := str(body.get("name", ""))
+	var system_name := str(current_system.get("name", ""))
+	for mission in missions.get("missions", []):
+		var mission_id := str(mission.get("id", ""))
+		if active_missions.has(mission_id) or completed_missions.has(mission_id):
+			continue
+		if mission.get("originSystem", "") != system_name or mission.get("originBody", "") != body_name:
+			continue
+		if not _has_all_flags(mission.get("requiresFlags", [])) or _has_any_flag(mission.get("excludesFlags", [])):
+			continue
+		if _mission_requirements_met(mission):
+			continue
+		var reason := _mission_requirement_block_reason(mission)
+		if reason != "":
+			reasons.append("%s: %s" % [str(mission.get("title", mission_id)), reason])
+	return reasons
 
 func _has_all_flags(required: Array) -> bool:
 	for flag in required:
@@ -2718,9 +3394,48 @@ func _has_all_flags(required: Array) -> bool:
 
 func _has_any_flag(excluded: Array) -> bool:
 	for flag in excluded:
-		if story_flags.has(flag):
+		if story_flags.has(str(flag)):
 			return true
 	return false
+
+func _mission_requirements_met(mission: Dictionary) -> bool:
+	var requirements: Dictionary = mission.get("requirements", {})
+	return _score_min_requirements_met(requirements.get("reputationMin", {}), reputation_scores) and _score_min_requirements_met(requirements.get("legalMin", {}), legal_records) and _score_max_requirements_met(requirements.get("legalMax", {}), legal_records)
+
+func _score_min_requirements_met(requirements: Dictionary, scores: Dictionary) -> bool:
+	for key in requirements.keys():
+		if int(scores.get(str(key), 0)) < int(requirements.get(key, 0)):
+			return false
+	return true
+
+func _score_max_requirements_met(requirements: Dictionary, scores: Dictionary) -> bool:
+	for key in requirements.keys():
+		if int(scores.get(str(key), 0)) > int(requirements.get(key, 0)):
+			return false
+	return true
+
+func _mission_requirement_block_reason(mission: Dictionary) -> String:
+	var legal_reason := _mission_legal_requirement_block_reason(mission)
+	if legal_reason != "requirements met":
+		return legal_reason
+	var requirements: Dictionary = mission.get("requirements", {})
+	var reputation_min: Dictionary = requirements.get("reputationMin", {})
+	for government_name in reputation_min.keys():
+		var score := int(reputation_scores.get(str(government_name), 0))
+		var minimum := int(reputation_min.get(government_name, 0))
+		if score < minimum:
+			return "%s reputation score %d below required %d; TV scaffold, exact Classic mission gates unconfirmed" % [str(government_name), score, minimum]
+	return "requirements met"
+
+func _mission_legal_requirement_block_reason(mission: Dictionary) -> String:
+	var requirements: Dictionary = mission.get("requirements", {})
+	var legal_min: Dictionary = requirements.get("legalMin", {})
+	for government_name in legal_min.keys():
+		var score := int(legal_records.get(str(government_name), 0))
+		var minimum := int(legal_min.get(government_name, 0))
+		if score < minimum:
+			return "%s legal score %d below required %d; TV scaffold, exact Classic mission gates unconfirmed" % [str(government_name), score, minimum]
+	return "requirements met"
 
 func _market_prices(system_name: String) -> Dictionary:
 	var market_prices: Dictionary = economy.get("markets", {}).get(system_name, {})
@@ -2854,6 +3569,10 @@ func _outfitter_sale_items(body: Dictionary) -> Array:
 	return sale_items
 
 func _buy_selected_outfit_or_weapon() -> void:
+	var government_name := _current_government_name()
+	if not _legal_service_access_allowed(government_name):
+		_set_status(_legal_service_blocked_message(government_name))
+		return
 	var sale_items := _outfitter_sale_items(_current_body())
 	if sale_items.is_empty():
 		_set_status("No outfitter stock")
@@ -2896,11 +3615,27 @@ func _outfit_effect_summary(item: Dictionary) -> String:
 		parts.append("hull %+d" % int(effects.get("maxHull", 0)))
 	if effects.has("maxFuel"):
 		parts.append("fuel %+d" % int(effects.get("maxFuel", 0)))
+	if item.get("saleType", "") == "weapon":
+		parts.append("MassDmg %d" % int(item.get("massDamage", 0)))
+		parts.append("EnergyDmg %d" % int(item.get("energyDamage", 0)))
 	if parts.is_empty():
 		return str(item.get("description", "No numeric effect listed"))
 	return " / ".join(parts)
 
+func _outfit_source_summary(item: Dictionary) -> String:
+	if item.get("saleType", "") != "weapon":
+		return ""
+	var stock_name := str(item.get("sourceStockName", ""))
+	var source_id := int(item.get("sourceResourceId", -1))
+	if stock_name == "" or source_id < 0:
+		return "Source: TV scaffold; stock EV mapping pending"
+	return "Source: stock %s (wëap %d); TV values scaffold until runtime-tuned" % [stock_name, source_id]
+
 func _buy_selected_ship() -> void:
+	var government_name := _current_government_name()
+	if not _legal_service_access_allowed(government_name):
+		_set_status(_legal_service_blocked_message(government_name))
+		return
 	var listings := _shipyard_listings(_current_body())
 	if listings.is_empty():
 		_set_status("No ships for sale")

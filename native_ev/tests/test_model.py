@@ -38,9 +38,12 @@ from native_ev.model import (
     ship_manifest,
     sound_manifest,
     sourced_ev_graphics_manifest,
+    sourced_ev_governments_manifest,
+    sourced_ev_missions_manifest,
     sourced_ev_names_manifest,
     sourced_ev_sounds_manifest,
     sourced_ev_structures_manifest,
+    sourced_ev_weapons_manifest,
     ship_graphics_crosswalk,
     ev_classic_data_ship_manifest,
     shuttle_frame_paths,
@@ -179,25 +182,52 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-gameplay-curriculum-help-log', run_script)
         self.assertIn('[switch]$GameplayCurriculumHelpLog', windows_script)
 
-    def test_godot_combat_inputs_are_visible_guardrails_not_execution_contract(self):
+    def test_godot_primary_combat_is_playable_scaffold_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
         for symbol in [
-            'TV_COMBAT_GUARDRAIL_EVENT',
-            '--tv-combat-guardrail-log',
-            'func _run_combat_guardrail_log',
-            'Primary weapon guarded: combat not implemented',
-            'Secondary weapon guarded: combat not implemented',
-            'Secondary weapon selection guarded: no combat loadout changes executed',
-            'combatExecuted=false',
-            'sourceLabel=terminal-velocity-combat-guardrail-scaffold',
+            'TV_COMBAT_EVENT',
+            '--tv-combat-log',
+            'func _run_combat_log',
+            'var projectiles: Array[Dictionary] = []',
+            'var target_shields: Dictionary = {}',
+            'var target_hulls: Dictionary = {}',
+            'func _primary_weapon_stats() -> Dictionary:',
+            'func _spawn_primary_projectile() -> bool:',
+            'func _advance_projectiles(delta: float) -> void:',
+            'func _apply_projectile_hit(projectile: Dictionary, target_index: int) -> void:',
+            'func _apply_player_projectile_hit(projectile: Dictionary) -> void:',
+            'func _spawn_npc_retaliation_projectile(target_index: int) -> bool:',
+            'func _weapon_shield_damage(weapon: Dictionary) -> int:',
+            'func _weapon_hull_damage(weapon: Dictionary) -> int:',
+            'combatExecuted=true',
+            'projectileSpawned=%s',
+            'retaliationFired=%s',
+            'targetDamaged=%s',
+            'playerDamaged=%s',
+            'playerShieldBefore=%d',
+            'playerHullAfter=%d',
+            'targetDestroyed=%s',
+            'sourceResourceId=%d',
+            r'sourceStockName=\"%s\"',
+            'sourceMassDmg=%d',
+            'sourceEnergyDmg=%d',
+            'sourceReload=%d',
+            'sourceCount=%d',
+            'appliedShieldDamage=%d',
+            'appliedHullDamage=%d',
+            'sourceAppliedFields=%s',
+            'sourceLabel=terminal-velocity-source-mined-combat-scaffold',
+            'EV Classic Resource Bible `wëap`: shields-up damage = MassDmg/4 + EnergyDmg',
+            'EV Classic Resource Bible `shïp` Armor: armor takes damage once shields are down.',
+            'oracleStatus=classic_runtime_weapon_timing_pending',
         ]:
             self.assertIn(symbol, main_script)
-        self.assertIn('tv-combat-guardrail-log', run_script)
-        self.assertIn('[switch]$CombatGuardrailLog', windows_script)
+        self.assertIn('tv-combat-log', run_script)
+        self.assertIn('[switch]$CombatLog', windows_script)
 
     def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
         root = Path(__file__).resolve().parents[2]
@@ -214,16 +244,108 @@ class NativeEvModelTests(unittest.TestCase):
             'No port in range; fly closer to a planet/station and slow below landing speed',
             'Approach slower/closer to land; landing needs close range and speed under 90',
             'Refuel unavailable here; choose a port with refuel service',
+            'func _route_fuel_hint_line',
+            'Route fuel: %d hop(s), cost %d, fuel %d/%d',
+            ' — refuel before full route',
+            'preJumpFuelWarning=%s',
+            'Route selected: %s — fuel cost %d, fuel %d/%d — press J to jump',
             'sourceLabel=terminal-velocity-navigation-guardrail-scaffold',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('tv-navigation-guardrail-log', run_script)
         self.assertIn('[switch]$NavigationGuardrailLog', windows_script)
 
+    def test_godot_legal_status_surface_is_scaffold_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        for symbol in [
+            'var governments := {}',
+            'var reputation := {}',
+            'var reputation_scores: Dictionary = {}',
+            'var legal_records: Dictionary = {}',
+            'native_ev/data/governments.json',
+            'native_ev/data/reputation.json',
+            'TV_LEGAL_STATUS_EVENT',
+            'TV_LEGAL_SERVICE_GATE_EVENT',
+            'TV_LEGAL_PATROL_POSTURE_EVENT',
+            'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
+            '--tv-legal-status-log',
+            '--tv-legal-service-gate-log',
+            '--tv-legal-patrol-posture-log',
+            '--tv-mission-legal-eligibility-log',
+            'func _run_legal_status_log',
+            'func _run_legal_service_gate_log',
+            'func _run_legal_patrol_posture_log',
+            'func _run_mission_legal_eligibility_log',
+            'func _current_government_name() -> String:',
+            'func _legal_status_for_government(government_name: String) -> String:',
+            'func _government_docking_allowed(government_name: String) -> bool:',
+            'func _government_name_for_system(system_name: String) -> String:',
+            'func _legal_service_access_allowed(government_name: String) -> bool:',
+            'func _legal_service_blocked_message(government_name: String) -> String:',
+            'func _legal_patrol_hostile_posture_active(government_name: String) -> bool:',
+            'func _legal_patrol_warning_message(government_name: String) -> String:',
+            'func _emit_legal_patrol_warning_if_needed() -> void:',
+            'func _mission_requirements_met(mission: Dictionary) -> bool:',
+            'func _blocked_mission_reasons(body: Dictionary) -> Array[String]:',
+            'func _draw_blocked_mission_reasons(rect: Rect2, body: Dictionary, y_start: float) -> void:',
+            'func _mission_requirement_block_reason(mission: Dictionary) -> String:',
+            'func _map_legal_risk_line(system_name: String) -> String:',
+            'func _map_legal_risk_color(system_name: String) -> Color:',
+            'func _legal_warning_line(government_name: String) -> String:',
+            'func _apply_reputation_event(event_id: String, context_government := "") -> void:',
+            'func _pay_legal_clemency() -> bool:',
+            'func _illegal_commodity_hold(government_name: String) -> Dictionary:',
+            'func _apply_contraband_scan(accept_bribe := false) -> Dictionary:',
+            'func _legal_patrol_attack_message(government_name: String) -> String:',
+            'Government/legal: %s',
+            'reputation_scores',
+            'legal_records',
+            'sourceBasis',
+            'crimeToleranceLegalScore',
+            'func _government_crime_tolerance_score(government_name: String) -> int:',
+            'sourceLabel=terminal-velocity-classic-resource-legal-semantics',
+            'oracleStatus=classic_runtime_thresholds_pending',
+            'exact Classic thresholds unconfirmed',
+            'sourceLabel=terminal-velocity-classic-resource-patrol-semantics',
+            'oracleStatus=classic_runtime_combat_timing_pending',
+            'combatExecuted=false',
+            'sourceLabel=terminal-velocity-classic-resource-mission-availability',
+            'oracleStatus=classic_runtime_ui_wording_pending',
+            'visibleBlockedReason=%s',
+            'Unavailable contracts (TV scaffold):',
+            'Legal: %s / %s (%d)',
+            'Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.',
+            'sourceLabel=terminal-velocity-classic-resource-govt-penalty-semantics',
+            'sourceLabel=terminal-velocity-inferred-clemency-scaffold',
+            'sourceLabel=terminal-velocity-classic-resource-smuggling-scan-semantics',
+            'oracleStatus=classic_runtime_scan_frequency_and_fine_tuning_pending',
+            'oracleStatus=approved_inference_pending_ev_classic_confirmation',
+            'Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-legal-status-log', run_script)
+        self.assertIn('tv-legal-service-gate-log', run_script)
+        self.assertIn('tv-legal-patrol-posture-log', run_script)
+        self.assertIn('tv-mission-legal-eligibility-log', run_script)
+        self.assertIn('tv-legal-consequence-log', run_script)
+        self.assertIn('tv-legal-clemency-log', run_script)
+        self.assertIn('tv-contraband-scan-log', run_script)
+        self.assertIn('[switch]$LegalStatusLog', windows_script)
+        self.assertIn('[switch]$LegalServiceGateLog', windows_script)
+        self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
+        self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
+        self.assertIn('[switch]$LegalConsequenceLog', windows_script)
+        self.assertIn('[switch]$LegalClemencyLog', windows_script)
+        self.assertIn('[switch]$ContrabandScanLog', windows_script)
+
     def test_godot_outfitter_shipyard_purchases_feed_recent_messages_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
         for symbol in [
+            '_set_status(_legal_service_blocked_message(government_name))',
             '_set_status("No outfitter stock")',
             '_set_status("Not enough credits")',
             '_set_status("Bought " + str(item.get("name", item_id)))',
@@ -342,7 +464,7 @@ class NativeEvModelTests(unittest.TestCase):
             '_select_map_route_at_position(click_position)',
             'func _map_linked_stop_at_position',
             'func _map_hovered_link_name',
-            'Route selected: %s → %s — press J to jump',
+            'Route selected: %s — fuel cost %d, fuel %d/%d — press J to jump',
             'Hold Shift and click a linked system',
             'No route from current system',
             'greenLine=true',
@@ -350,7 +472,8 @@ class NativeEvModelTests(unittest.TestCase):
             'func _map_route_tail_system_name() -> String:',
             'func _append_map_route_at_position(click_position: Vector2) -> bool:',
             'routeHops=%d route=%s',
-            'Route appended: %s',
+            'preJumpFuelWarning=%s',
+            'Route appended: %s — fuel cost %d, fuel %d/%d',
             'draw_line(route_start_point, route_end_point, Color(0.15, 1.0, 0.28, 0.95), 3.0)',
         ]:
             self.assertIn(symbol, main_script)
@@ -450,6 +573,9 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_MISSION_ROUTE_HINT_EVENT',
             'func _route_to_active_mission_destination',
             'missionRouteQueued=true',
+            'fuelBeforeRoute=%d',
+            'routeFuelCost=%d',
+            'preJumpFuelWarning=%s',
             'sourceLabel=terminal-velocity-design-scaffold',
             'oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace',
             'KEY_G: _route_to_active_mission_destination()',
@@ -478,6 +604,10 @@ class NativeEvModelTests(unittest.TestCase):
             'shipyardArtLoaded=true',
             'sourceLabel=terminal-velocity-outfitter-shipyard-scaffold',
             'oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace',
+            'func _outfit_source_summary',
+            'Source: stock %s (wëap %d); TV values scaffold until runtime-tuned',
+            'MassDmg %d',
+            'EnergyDmg %d',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('[switch]$OutfitterShipyardLog', run_script)
@@ -575,7 +705,8 @@ class NativeEvModelTests(unittest.TestCase):
             'shipyard',
             'commodity',
             '_system_service_summary(selected_name)',
-            'Map service summary: selected systems show Terminal Velocity station services.',
+            '_map_legal_risk_line(selected_name)',
+            'Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.',
         ]:
             self.assertIn(symbol, main_script)
 
@@ -819,6 +950,70 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(first_spob['fields'][0]['byteOffsetInRecord'], 0)
         self.assertGreater(first_system['byteOffset'], 0)
         self.assertGreater(first_spob['byteOffset'], first_system['byteOffset'])
+
+    def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
+        data = sourced_ev_weapons_manifest()
+        self.assertEqual(data['method'], 'ev-classic-resource-bible-weapon-field-map-v1')
+        self.assertEqual(data['sourceBasis'], 'EV Classic Resource Bible wëap/oütf field definitions plus local primitive BRGR structure decode')
+        self.assertEqual(data['weaponFieldOrder'][:6], ['Reload', 'Count', 'MassDmg', 'EnergyDmg', 'Guidance', 'Speed'])
+        self.assertEqual(len(data['weapons']), 42)
+        by_id = {weapon['resourceId']: weapon for weapon in data['weapons']}
+        laser = by_id[128]
+        self.assertEqual(laser['displayName'], 'Laser Cannon')
+        self.assertEqual(laser['semanticFields']['Reload']['wordIndex'], 0)
+        self.assertEqual(laser['semanticFields']['MassDmg']['wordIndex'], 2)
+        self.assertEqual(laser['semanticFields']['EnergyDmg']['wordIndex'], 3)
+        self.assertEqual(laser['semanticFields']['Guidance']['wordIndex'], 4)
+        self.assertEqual(laser['sourceDataOrdinal'], 0)
+        self.assertEqual(laser['outfitLinks'][0]['semanticFields']['ModType']['value'], 1)
+        self.assertEqual(laser['outfitLinks'][0]['semanticFields']['ModVal']['value'], 128)
+        self.assertEqual(by_id[131]['displayName'], 'Torp. Launcher')
+        self.assertEqual(by_id[131]['ammoOutfitLinks'][0]['outfitDisplayName'], 'Torpedo')
+        self.assertIn('Fighter Bay', by_id[146]['outfitNames'])
+        self.assertEqual(data['unresolvedOutfitWeaponLinks'][0]['outfitDisplayName'], 'Forklift')
+        self.assertEqual(data['unresolvedOutfitWeaponLinks'][0]['modValWeaponResourceId'], 191)
+
+    def test_sourced_ev_governments_manifest_maps_classic_resource_bible_fields(self):
+        data = sourced_ev_governments_manifest()
+        by_id = {entry['resourceId']: entry for entry in data['governments']}
+        confed = by_id[128]['semanticFields']
+        rebel = by_id[129]['semanticFields']
+        pirate = by_id[130]['semanticFields']
+        militia = by_id[133]['semanticFields']
+        self.assertEqual(confed['crimeTolerance'], 50)
+        self.assertEqual(confed['smugglingPenalty'], 3)
+        self.assertEqual(confed['killPenalty'], 25)
+        self.assertEqual(rebel['crimeTolerance'], 75)
+        self.assertEqual(pirate['crimeTolerance'], -20)
+        self.assertIn('xenophobicWarshipsAttackNonAllies', pirate['flagNames'])
+        self.assertEqual(militia['smugglingPenalty'], 5)
+        self.assertEqual(militia['killPenalty'], 20)
+        self.assertIn('EV Classic Resource Bible gövt fields', by_id[128]['fieldSource'])
+        self.assertEqual(confed['shootPenaltyRuntimeNote'], 'EV Classic Resource Bible says ShootPenalty is currently ignored')
+
+    def test_sourced_ev_missions_manifest_maps_classic_resource_bible_fields(self):
+        data = sourced_ev_missions_manifest()
+        self.assertEqual(data['recordRun']['recordSize'], 1970)
+        self.assertEqual(len(data['missions']), 116)
+        first = data['missions'][0]
+        self.assertEqual(first['resourceId'], 128)
+        self.assertEqual(first['fieldSource'], 'EV Classic Resource Bible mïsn fields through FailBitSet, lines 249-439 of extracted text')
+        self.assertEqual(first['rawFields']['availStel'], 20002)
+        self.assertEqual(first['semanticFields']['availability']['stellar'], {'kind': 'notGovernmentStellar', 'governmentIndex': 2})
+        self.assertEqual(first['semanticFields']['availability']['location'], 'missionComputer')
+        self.assertEqual(first['semanticFields']['availability']['randomPercent'], 50)
+        self.assertEqual(first['semanticFields']['cargo']['type'], {'kind': 'specificCargoType', 'cargoType': 6})
+        self.assertEqual(first['semanticFields']['cargo']['quantity'], {'kind': 'fixedTons', 'tons': 0})
+        self.assertEqual(first['semanticFields']['reward'], {'kind': 'credits', 'credits': 10000})
+        self.assertTrue(any(mission['semanticFields']['reward']['kind'] == 'cleanLegalRecord' for mission in data['missions']))
+        special_ship_mission = data['missions'][6]
+        self.assertEqual(special_ship_mission['semanticFields']['specialShips']['count'], {'kind': 'count', 'count': 3})
+        self.assertEqual(special_ship_mission['semanticFields']['specialShips']['system'], {'kind': 'initialSystem'})
+        self.assertEqual(special_ship_mission['semanticFields']['specialShips']['dude'], {'kind': 'specificDude', 'dudeId': 142})
+        self.assertEqual(special_ship_mission['semanticFields']['specialShips']['goal'], {'kind': 'board'})
+        self.assertEqual(special_ship_mission['semanticFields']['completion']['government'], {'kind': 'governmentId', 'governmentId': 129, 'governmentIndex': 1})
+        self.assertEqual(special_ship_mission['semanticFields']['completion']['reward'], 50)
+        self.assertEqual(special_ship_mission['semanticFields']['completion']['failureRecordPenalty'], -25)
 
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
@@ -1125,6 +1320,30 @@ class NativeEvModelTests(unittest.TestCase):
         ids = {weapon['id'] for weapon in data['weapons']}
         self.assertIn('laser_cannon', ids)
         self.assertIn('pulse_cannon', ids)
+        laser = next(weapon for weapon in data['weapons'] if weapon['id'] == 'laser_cannon')
+        for key in ['massDamage', 'energyDamage', 'reloadFrames', 'countFrames', 'guidanceMode', 'sourceBasis', 'decodedCandidateWeaponLikeRecord', 'sourceResourceId', 'sourceStockName', 'sourceStockWeaponFields']:
+            self.assertIn(key, laser)
+        self.assertEqual(laser['sourceResourceId'], 128)
+        self.assertEqual(laser['sourceStockName'], 'Laser Cannon')
+        self.assertEqual(laser['sourceStockWeaponFields']['Reload'], 146)
+        self.assertEqual(laser['sourceStockWeaponFields']['MassDmg'], 100)
+        self.assertEqual(laser['sourceStockWeaponFields']['EnergyDmg'], 7)
+        self.assertEqual(laser['massDamage'], laser['sourceStockWeaponFields']['MassDmg'])
+        self.assertEqual(laser['energyDamage'], laser['sourceStockWeaponFields']['EnergyDmg'])
+        self.assertEqual(laser['reloadFrames'], laser['sourceStockWeaponFields']['Reload'])
+        self.assertEqual(laser['cooldownTicks'], laser['sourceStockWeaponFields']['Reload'])
+        self.assertEqual(laser['sourceAppliedFields'], ['MassDmg', 'EnergyDmg', 'Reload'])
+        self.assertIn('projectile speed/lifetime/count semantics remain TV-tuned', laser['sourceApplicationBoundary'])
+        self.assertEqual(laser['massDamage'] // 4 + laser['energyDamage'], 32)
+        self.assertEqual(laser['massDamage'] + laser['energyDamage'] // 4, 101)
+        pulse = next(weapon for weapon in data['weapons'] if weapon['id'] == 'pulse_cannon')
+        self.assertEqual(pulse['sourceResourceId'], 129)
+        self.assertEqual(pulse['sourceStockName'], 'Neutron Blaster')
+        self.assertEqual(pulse['massDamage'], pulse['sourceStockWeaponFields']['MassDmg'])
+        self.assertEqual(pulse['energyDamage'], pulse['sourceStockWeaponFields']['EnergyDmg'])
+        self.assertEqual(pulse['reloadFrames'], pulse['sourceStockWeaponFields']['Reload'])
+        self.assertIn('MassDmg', laser['sourceBasis'])
+        self.assertEqual(laser['decodedCandidateWeaponLikeRecord']['sourceDataWeaponResourceId'], 128)
 
     def test_mission_manifest_loads_story_chain(self):
         data = mission_manifest()
@@ -1370,7 +1589,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(outcome['action'], 'fine')
         self.assertEqual(outcome['creditsDelta'], -800)
         self.assertEqual(outcome['confiscated'], {'equipment': 2})
-        self.assertEqual(outcome['legalDelta'], -10)
+        self.assertEqual(outcome['legalDelta'], -3)
 
     def test_police_outcome_escalates_when_player_cannot_pay_fine(self):
         governments = government_manifest()
@@ -1439,8 +1658,12 @@ class NativeEvModelTests(unittest.TestCase):
         reputation, legal = apply_reputation_event(data, reputation, legal, 'destroy_pirate')
         self.assertGreater(reputation['Federation'], 10)
         reputation, legal = apply_reputation_event(data, reputation, legal, 'contraband_fine', government='Federation')
-        self.assertLess(legal['Federation'], 0)
-        self.assertEqual(legal_status_for_score(data, legal['Federation']), 'Suspicious')
+        self.assertEqual(legal['Federation'], 2)
+        self.assertEqual(legal_status_for_score(data, legal['Federation']), 'Clean')
+        legal = {'Federation': -20, 'Independent': 0}
+        _reputation, legal = apply_reputation_event(data, reputation, legal, 'contraband_fine', government='Federation')
+        self.assertEqual(legal['Federation'], -23)
+        self.assertEqual(legal_status_for_score(data, legal['Federation']), 'Offender')
 
     def test_reputation_changes_effective_npc_disposition(self):
         data = reputation_manifest()

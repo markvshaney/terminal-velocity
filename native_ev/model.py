@@ -15,8 +15,11 @@ GOVERNMENTS_PATH = ROOT / 'data' / 'governments.json'
 REPUTATION_PATH = ROOT / 'data' / 'reputation.json'
 SOURCED_EV_NAMES_PATH = ROOT / 'data' / 'sourced_ev_names.json'
 SOURCED_EV_STRUCTURES_PATH = ROOT / 'data' / 'sourced_ev_structures.json'
+SOURCED_EV_GOVERNMENTS_PATH = ROOT / 'data' / 'sourced_ev_governments.json'
+SOURCED_EV_MISSIONS_PATH = ROOT / 'data' / 'sourced_ev_missions.json'
 SOURCED_EV_GRAPHICS_PATH = ROOT / 'data' / 'sourced_ev_graphics.json'
 SOURCED_EV_SOUNDS_PATH = ROOT / 'data' / 'sourced_ev_sounds.json'
+SOURCED_EV_WEAPONS_PATH = ROOT / 'data' / 'sourced_ev_weapons.json'
 
 
 def shuttle_frame_paths():
@@ -223,6 +226,41 @@ def sourced_ev_structures_manifest(path=SOURCED_EV_STRUCTURES_PATH):
     return data
 
 
+def sourced_ev_weapons_manifest(path=SOURCED_EV_WEAPONS_PATH):
+    data = json.loads(path.read_text())
+    if data.get('schemaVersion') != 1:
+        raise ValueError('sourced EV weapons manifest has unexpected schema version')
+    if data.get('method') != 'ev-classic-resource-bible-weapon-field-map-v1':
+        raise ValueError('sourced EV weapons manifest has unexpected extraction method')
+    if data.get('sourceBasis') != 'EV Classic Resource Bible wëap/oütf field definitions plus local primitive BRGR structure decode':
+        raise ValueError('sourced EV weapons manifest has unexpected source basis')
+    weapons = data.get('weapons', [])
+    if len(weapons) != 42:
+        raise ValueError('sourced EV weapons manifest has unexpected weapon count')
+    by_resource_id = {weapon.get('resourceId'): weapon for weapon in weapons}
+    for expected_id, expected_name in [(128, 'Laser Cannon'), (129, 'Neutron Blaster'), (131, 'Torp. Launcher'), (132, 'Missile Rack'), (146, 'Fighter Bay')]:
+        weapon = by_resource_id.get(expected_id)
+        if weapon is None:
+            raise ValueError(f'sourced EV weapons manifest missing resource {expected_id}')
+        if expected_name not in weapon.get('outfitNames', []):
+            raise ValueError(f'sourced EV weapon {expected_id} missing outfit name {expected_name}')
+    required_fields = ['Reload', 'Count', 'MassDmg', 'EnergyDmg', 'Guidance', 'Speed', 'AmmoType', 'Graphic', 'Inaccuracy', 'Sound', 'Impact', 'ExplodType', 'ProxRadius', 'BlastRadius', 'Flags']
+    for weapon in weapons:
+        for key in ['resourceId', 'sourceDataOrdinal', 'chunkIndex', 'byteOffset', 'size', 'semanticFields', 'rawWords0To14', 'sourceBasis', 'sourceConfidence']:
+            if key not in weapon:
+                raise ValueError(f'sourced EV weapon missing {key}')
+        fields = weapon['semanticFields']
+        for field_name in required_fields:
+            if field_name not in fields:
+                raise ValueError(f"sourced EV weapon {weapon['resourceId']} missing {field_name}")
+            if 'wordIndex' not in fields[field_name] or 'value' not in fields[field_name]:
+                raise ValueError(f"sourced EV weapon {weapon['resourceId']} field {field_name} missing word provenance")
+    unresolved = data.get('unresolvedOutfitWeaponLinks', [])
+    if not any(link.get('modValWeaponResourceId') == 191 and link.get('outfitDisplayName') == 'Forklift' for link in unresolved):
+        raise ValueError('sourced EV weapons manifest should preserve unresolved Forklift weapon link')
+    return data
+
+
 def sourced_ev_sounds_manifest(path=SOURCED_EV_SOUNDS_PATH):
     data = json.loads(path.read_text())
     if data.get('sourceFile') != 'source-assets/ev-classic/Nova Files/EV Sounds.rez':
@@ -255,6 +293,59 @@ def sourced_ev_sounds_manifest(path=SOURCED_EV_SOUNDS_PATH):
             raise ValueError('sourced EV sound resource should be decoded or explicit decode-error')
         if sound['size'] <= 0 or not sound['rawHeaderBytes']:
             raise ValueError(f"sourced EV sound resource {sound['resourceId']} has invalid byte metadata")
+    return data
+
+
+def sourced_ev_governments_manifest(path=SOURCED_EV_GOVERNMENTS_PATH):
+    data = json.loads(path.read_text())
+    if data.get('method') != 'ev-classic-resource-bible-govt-field-map-v1':
+        raise ValueError('sourced EV governments manifest has unexpected extraction method')
+    if data.get('sourceBasis') != 'EV Classic Resource Bible gövt field definitions plus local primitive BRGR structure decode':
+        raise ValueError('sourced EV governments manifest has unexpected source basis')
+    governments = data.get('governments', [])
+    if len(governments) < 20:
+        raise ValueError('sourced EV governments manifest has too few governments')
+    by_id = {entry.get('resourceId'): entry for entry in governments}
+    for expected_id in [128, 129, 130, 133]:
+        if expected_id not in by_id:
+            raise ValueError(f'sourced EV governments missing resource {expected_id}')
+    for entry in governments:
+        fields = entry.get('semanticFields', {})
+        for key in ['flagsUnsigned', 'flagNames', 'crimeTolerance', 'smugglingPenalty', 'disablePenalty', 'boardPenalty', 'killPenalty', 'shootPenalty', 'initialRecord']:
+            if key not in fields:
+                raise ValueError(f"sourced EV government {entry.get('resourceId')} missing {key}")
+    confed = by_id[128]['semanticFields']
+    pirate = by_id[130]['semanticFields']
+    if confed['crimeTolerance'] != 50 or confed['killPenalty'] != 25:
+        raise ValueError('Confed government semantics do not match Classic Resource Bible field map expectations')
+    if pirate['crimeTolerance'] != -20 or 'xenophobicWarshipsAttackNonAllies' not in pirate.get('flagNames', []):
+        raise ValueError('Pirate government semantics do not match Classic Resource Bible field map expectations')
+    return data
+
+
+def sourced_ev_missions_manifest(path=SOURCED_EV_MISSIONS_PATH):
+    data = json.loads(path.read_text())
+    if data.get('method') != 'ev-classic-resource-bible-misn-field-map-v1':
+        raise ValueError('sourced EV missions manifest has unexpected extraction method')
+    if data.get('sourceBasis') != 'EV Classic Resource Bible mïsn field definitions plus local primitive BRGR structure decode':
+        raise ValueError('sourced EV missions manifest has unexpected source basis')
+    missions = data.get('missions', [])
+    if len(missions) < 100:
+        raise ValueError('sourced EV missions manifest has too few missions')
+    field_index = data.get('fieldIndex', {})
+    for key in ['availStel', 'availBitSet', 'availLoc', 'availRecord', 'availRating', 'availRandom', 'travelStel', 'returnStel', 'cargoType', 'cargoQuantity', 'pickupMode', 'dropOffMode', 'scanGovernment', 'failIfScanned', 'unknownFieldBeforePayValue', 'payValue', 'shipCount', 'shipSystem', 'shipDude', 'shipGoal', 'shipBehavior', 'shipNameId', 'completionBitSet', 'completionGovernment', 'completionReward', 'failureBitSet']:
+        if key not in field_index:
+            raise ValueError(f'sourced EV missions manifest missing field index {key}')
+    for mission in missions[:10]:
+        semantic = mission.get('semanticFields', {})
+        for key in ['availability', 'travel', 'cargo', 'reward', 'specialShips', 'completion']:
+            if key not in semantic:
+                raise ValueError(f"sourced EV mission {mission.get('resourceId')} missing semantic {key}")
+    first = missions[0]
+    if first['resourceId'] != 128 or first['rawFields']['availStel'] != 20002:
+        raise ValueError('sourced EV mission 128 availability fields do not match decoded resource')
+    if first['semanticFields']['availability']['stellar']['kind'] != 'notGovernmentStellar':
+        raise ValueError('sourced EV mission 128 availability selector not decoded')
     return data
 
 
@@ -715,7 +806,9 @@ def _illegal_hold(hold, illegal_ids):
 def government_patrol_posture(reputation_data, legal_records, government):
     mechanics = reputation_data.get('mechanics', {})
     score = int((legal_records or {}).get(government, 0))
-    if score <= int(mechanics.get('patrolHostileLegalScore', -60)):
+    threshold_by_gov = mechanics.get('crimeToleranceLegalScoreByGovernment', {})
+    hostile_threshold = int(threshold_by_gov.get(government, mechanics.get('crimeToleranceLegalScore', mechanics.get('patrolHostileLegalScore', -60))))
+    if score <= hostile_threshold:
         return 'hostile'
     if score <= int(mechanics.get('patrolWarningLegalScore', -20)):
         return 'warning'
@@ -750,7 +843,8 @@ def enforcement_outcome(governments, reputation_data, *, government, hold, credi
     fine = fine_for_contraband(hold, illegal_ids, int(gov.get('finePerTon', 0)))
     if int(credits) >= fine:
         event = reputation_data.get('events', {}).get('contraband_fine', {})
-        legal_delta = int(event.get('legal', {}).get('*', 0))
+        legal_by_government = event.get('legal', {})
+        legal_delta = int(legal_by_government.get(government, legal_by_government.get('*', 0)))
         return {
             'action': 'fine',
             'creditsDelta': -fine,
@@ -893,11 +987,15 @@ def apply_reputation_event(data, reputation, legal_records, event_id, government
     legal_records = dict(legal_records or {})
     for faction, delta in event.get('reputation', {}).items():
         reputation[faction] = int(reputation.get(faction, 0)) + int(delta)
-    for gov, delta in event.get('legal', {}).items():
-        target = government if gov == '*' else gov
-        if target is None:
-            continue
-        legal_records[target] = int(legal_records.get(target, 0)) + int(delta)
+    legal_deltas = event.get('legal', {})
+    if government is not None and (government in legal_deltas or '*' in legal_deltas):
+        delta = legal_deltas.get(government, legal_deltas.get('*', 0))
+        legal_records[government] = int(legal_records.get(government, 0)) + int(delta)
+    else:
+        for gov, delta in legal_deltas.items():
+            if gov == '*':
+                continue
+            legal_records[gov] = int(legal_records.get(gov, 0)) + int(delta)
     return reputation, legal_records
 
 

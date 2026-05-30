@@ -6,10 +6,52 @@
       "speed": 9.0,
       "lifetime": 72,
       "damage": 18,
-      "cooldownTicks": 14,
+      "cooldownTicks": 146,
       "price": 950,
       "color": "OrangeRed",
-      "radius": 3
+      "radius": 3,
+      "massDamage": 100,
+      "energyDamage": 7,
+      "reloadFrames": 146,
+      "countFrames": 72,
+      "guidanceMode": -1,
+      "sourceBasis": "native_ev/data/sourced_ev_weapons.json mapped through EV Classic Resource Bible w\u00ebap/o\u00fctf fields including Reload, Count, MassDmg, EnergyDmg, Guidance, Speed, AmmoType; playable TV id/values remain scaffold unless they match sourceStockWeaponFields.",
+      "decodedCandidateWeaponLikeRecord": {
+        "sourceDataOrdinal": 0,
+        "sourceDataWeaponResourceId": 128,
+        "rawWords0To4": [
+          146,
+          0,
+          100,
+          7,
+          2
+        ]
+      },
+      "sourceResourceId": 128,
+      "sourceStockName": "Laser Cannon",
+      "sourceStockOutfitPrice": 5000,
+      "sourceStockWeaponFields": {
+        "Reload": 146,
+        "Count": 0,
+        "MassDmg": 100,
+        "EnergyDmg": 7,
+        "Guidance": 2,
+        "Speed": 0,
+        "AmmoType": 0,
+        "Graphic": 0,
+        "Sound": 0,
+        "Impact": 0,
+        "ExplodType": 0,
+        "ProxRadius": 0,
+        "BlastRadius": 0,
+        "Flags": 0
+      },
+      "sourceAppliedFields": [
+        "MassDmg",
+        "EnergyDmg",
+        "Reload"
+      ],
+      "sourceApplicationBoundary": "Uses decoded EV Classic weapon damage and reload fields for TV combat scaffold; projectile speed/lifetime/count semantics remain TV-tuned pending Classic runtime confirmation."
     },
     {
       "id": "pulse_cannon",
@@ -17,10 +59,52 @@
       "speed": 7.0,
       "lifetime": 84,
       "damage": 12,
-      "cooldownTicks": 22,
+      "cooldownTicks": 149,
       "price": 1400,
       "color": "DeepSkyBlue",
-      "radius": 4
+      "radius": 4,
+      "massDamage": 400,
+      "energyDamage": 7,
+      "reloadFrames": 149,
+      "countFrames": 84,
+      "guidanceMode": -1,
+      "sourceBasis": "native_ev/data/sourced_ev_weapons.json mapped through EV Classic Resource Bible w\u00ebap/o\u00fctf fields including Reload, Count, MassDmg, EnergyDmg, Guidance, Speed, AmmoType; playable TV id/values remain scaffold unless they match sourceStockWeaponFields.",
+      "decodedCandidateWeaponLikeRecord": {
+        "sourceDataOrdinal": 1,
+        "sourceDataWeaponResourceId": 129,
+        "rawWords0To4": [
+          149,
+          1,
+          400,
+          7,
+          2
+        ]
+      },
+      "sourceResourceId": 129,
+      "sourceStockName": "Neutron Blaster",
+      "sourceStockOutfitPrice": 30000,
+      "sourceStockWeaponFields": {
+        "Reload": 149,
+        "Count": 1,
+        "MassDmg": 400,
+        "EnergyDmg": 7,
+        "Guidance": 2,
+        "Speed": 0,
+        "AmmoType": 0,
+        "Graphic": 0,
+        "Sound": 0,
+        "Impact": 0,
+        "ExplodType": 0,
+        "ProxRadius": 0,
+        "BlastRadius": 0,
+        "Flags": 0
+      },
+      "sourceAppliedFields": [
+        "MassDmg",
+        "EnergyDmg",
+        "Reload"
+      ],
+      "sourceApplicationBoundary": "Uses decoded EV Classic weapon damage and reload fields for TV combat scaffold; projectile speed/lifetime/count semantics remain TV-tuned pending Classic runtime confirmation."
     }
   ]
 }
