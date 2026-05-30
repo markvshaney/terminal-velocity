@@ -15,6 +15,13 @@ First load and follow these skills:
 - game-prototyping if building a gameplay slice
 - systematic-debugging if blocked by tool/runtime failures
 
+Stored-artifact regression checklist before implementation:
+- exact artifact read with line numbers?
+- every skill named by the artifact loaded?
+- repo state inspected after artifact rules are active?
+- live backlog/docs inspected for the current slice?
+- post-slice gate check ready to run before any final report?
+
 Hard requirements:
 1. Inspect live repo state first:
    - git status --short
@@ -88,6 +95,13 @@ Current durable context to respect:
 - Original runtime observations live in docs/research/original-ev-classic-runtime-observations.md
 - Existing high-value pending areas include original-runtime comparison for movement/facing, hyperspace/land/takeoff timing, landed service matrices, combat fidelity, legal/reputation/runtime UI confirmation, economy spread/edge cases, topology/service provisioning, and continuing source-mined gameplay scaffolds.
 - If the repo has uncommitted work, finish/cohere/verify that current slice before choosing a fresh one.
+
+Post-slice gate template before using the closeout block:
+- real gate? (Strict Play/destructive original-EV test/credentials/account/provider/gateway/external publication/push/PR/live-browser mutation/irreversible or social side effect)
+- hard tool/time/budget cap?
+- unsafe dirty worktree that must be stabilized first?
+- no safe backlog/docs slice remains after inspection?
+If all answers are no, do not close out; start the next safe local slice.
 
 Closeout format only when the autonomous run is genuinely ending because a real gate/tool cap/time cap/no-safe-alternative has been reached. Do **not** emit this closeout after every completed slice if another safe local slice is available; treat the completed slice as a checkpoint and keep working. A local branch being ahead/push-gated is not itself a reason to stop local work.
 - inspected:

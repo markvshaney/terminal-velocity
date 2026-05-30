@@ -35,7 +35,7 @@ Examples:
 - start location/state corrections
 - UI wording directly visible in original runtime
 
-Required closeout:
+Required slice evidence before the run can close (close out only when a real gate, cap, unsafe dirty state, or no-safe-local-slice condition has been reached):
 
 1. Update data/code/docs/tests in a small patch.
 2. Add or update a test when practical.
@@ -54,7 +54,7 @@ Examples:
 - galaxy topology beyond decoded evidence
 - save/load or resource-format changes
 
-Required closeout:
+Required candidate record before the run can close (close out only when a real gate, cap, unsafe dirty state, or no-safe-local-slice condition has been reached):
 
 1. Record the observation in the research artifact.
 2. Add a backlog item with `status: candidate` or `status: needs evidence`.
@@ -71,7 +71,7 @@ Examples:
 - ambiguous visual read
 - proprietary/raw evidence that should not be integrated directly
 
-Required closeout:
+Required observation-only record before the run can close (close out only when a real gate, cap, unsafe dirty state, or no-safe-local-slice condition has been reached):
 
 1. Record derived fact and caveat.
 2. Mark backlog only if it implies future work.
@@ -124,5 +124,7 @@ Checklist for safe local implementation slices:
 12. Approval asks are friction too. Do not ask approval for routine safe local work: source mining, generated manifests, tests, docs/backlog edits, scaffolds, reversible hygiene, or player-visible local slices. Gate only real risk: Strict Play, destructive original-EV tests, credentials/account/provider/gateway changes, external messages, publishing, pushes, live-browser mutations, or other irreversible/socially consequential actions.
 13. Process bug recorded 2026-05-29: acknowledging a workflow bug, patching memory/docs, and stopping is still defective if safe local implementation work remains. Durable correction must be paired with actual repo progress and verification in the same turn whenever tools can do it.
 14. Process bug recorded 2026-05-30: completing one verified/committed slice is a checkpoint, not a stopping condition. If another safe local slice remains, continue selecting from the backlog in the same autonomous run. Do not treat an unpushed local commit as a blocker; push/publication is gated, but safe local work can continue on top of the unpushed branch.
+15. Recurrence analysis recorded 2026-05-30: if the agent stops after one verified safe slice, classify the origin as a mechanism-application failure, not a missing preference. Known contributing triggers are: failing to load all skills named by the continuation prompt; treating source-aligned "slice done" criteria, observation-workflow "required closeout" language, or generic inspected/changed/verified reporting habits as higher priority than the autonomous continuation rule; and failing to run a post-slice gate check (`is there a real gate, tool/time cap, dirty-worktree safety issue, or truly no safe local backlog slice?`). Required prevention: after every verified slice in this mode, inspect repo/backlog state and either start the next safe local slice or name the concrete gate/cap/no-safe-alternative evidence.
+16. Remediation checklist recorded 2026-05-30: the 6:19 p.m. and 6:23 p.m. process-failure posts describe a combined failure class: stored-artifact lookup was skipped, required skills were not fully loaded, memory substituted for the exact artifact, and the completed-slice closeout reflex overrode continuation. Track step-by-step remediation in `docs/checklists/agent-continuation-process-failure-remediation.md` before resuming ordinary TV implementation work.
 
 This preference does not remove evidence boundaries: original EV Classic remains truth for fidelity claims, while Terminal Velocity scaffolds must stay labeled as scaffolds until source-backed.
