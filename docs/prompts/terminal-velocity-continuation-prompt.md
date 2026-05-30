@@ -36,7 +36,7 @@ Hard requirements:
    - explicit source/fidelity labels,
    - docs/backlog update when future behavior is affected.
 
-4. Do not stop at recommendations. Pick the strongest safe local next slice from the live backlog and repo state, implement it, verify it, update docs/checklists, then continue to the next safe slice until a real gate is reached.
+4. Do not stop at recommendations or at a completed slice. Pick the strongest safe local next slice from the live backlog and repo state, implement it, verify it, update docs/checklists, then continue to the next safe slice until a real gate is reached **and no other safe local slice remains available**. A push/PR/publication gate on the just-finished commit is not a blocker to starting the next local slice; keep the unpushed commit local and continue from the backlog unless the worktree state itself prevents safe continuation.
 
 5. Use Basilisk II only for bounded original-runtime questions:
    - local root: C:\Games\BasiliskII\
@@ -56,7 +56,7 @@ Hard requirements:
 
 7. Prefer the fast Terminal Velocity lane for implementation/eval:
    - Python tests: python3 -m unittest discover -s native_ev/tests -p 'test_*.py'
-   - scenario harness: tools/run_gameplay_scenarios.py --all --pretty
+   - scenario harness: python3 tools/run_gameplay_scenarios.py --all --pretty
    - Godot wrapper: ./run_godot.sh self-test
    - use existing wrapper probes such as tv-map-route-log, tv-route-jump-log, tv-low-fuel-jump-log, tv-mission-route-hint-log, tv-combat-log, tv-legal-status-log, etc.
    - when adding a new Godot probe, expose it through run_godot.sh and godot_ev/windows/RunGodot.ps1.
@@ -89,7 +89,7 @@ Current durable context to respect:
 - Existing high-value pending areas include original-runtime comparison for movement/facing, hyperspace/land/takeoff timing, landed service matrices, combat fidelity, legal/reputation/runtime UI confirmation, economy spread/edge cases, topology/service provisioning, and continuing source-mined gameplay scaffolds.
 - If the repo has uncommitted work, finish/cohere/verify that current slice before choosing a fresh one.
 
-Closeout format after each autonomous run:
+Closeout format only when the autonomous run is genuinely ending because a real gate/tool cap/time cap/no-safe-alternative has been reached. Do **not** emit this closeout after every completed slice if another safe local slice is available; treat the completed slice as a checkpoint and keep working. A local branch being ahead/push-gated is not itself a reason to stop local work.
 - inspected:
 - changed:
 - verified:
