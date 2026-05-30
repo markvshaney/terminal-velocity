@@ -112,6 +112,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"mission_destination_route_hint",
 		"outfitter_ship_ladder_intro",
 		"shift_click_multi_stop_route_queue",
+		"route_queue_invalid_stop_guardrail",
 		"near_center_jump_block",
 		"route_planner_refuel_loop",
 		"low_fuel_jump_recovery",

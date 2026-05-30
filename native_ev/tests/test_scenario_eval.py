@@ -25,6 +25,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_destination_route_hint',
                 'outfitter_ship_ladder_intro',
                 'shift_click_multi_stop_route_queue',
+                'route_queue_invalid_stop_guardrail',
                 'near_center_jump_block',
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
@@ -250,6 +251,19 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['green_multi_stop_route'], 'passed')
         self.assertEqual(result['checks']['consumed_first_leg_only'], 'passed')
         self.assertEqual(result['trace'][-1]['remainingRoute'], ['Sirius'])
+
+    def test_route_queue_invalid_stop_guardrail_preserves_valid_route(self):
+        result = run_scripted_scenario('route_queue_invalid_stop_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['routeQueue'], ['Sol'])
+        self.assertEqual(result['checks']['preserved_valid_route_after_invalid_clicks'], 'passed')
+        self.assertEqual(result['checks']['blocked_duplicate_or_current_system'], 'passed')
+        self.assertEqual(result['checks']['blocked_unlinked_route_tail_stop'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_append_route_stop']
+        self.assertEqual([event['destinationSystem'] for event in blocked], ['Levo', 'Antares'])
+        self.assertTrue(all(event['routeQueue'] == ['Sol'] for event in blocked))
 
     def test_near_center_jump_block_preserves_state_with_original_runtime_label(self):
         result = run_scripted_scenario('near_center_jump_block')

@@ -39,6 +39,7 @@ SCENARIO_CURRICULUM = [
     'mission_destination_route_hint',
     'outfitter_ship_ladder_intro',
     'shift_click_multi_stop_route_queue',
+    'route_queue_invalid_stop_guardrail',
     'near_center_jump_block',
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
@@ -605,6 +606,12 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'original-runtime-observed'},
             {'type': 'jump'},
         ]
+    if name == 'route_queue_invalid_stop_guardrail':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Levo', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Antares', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+        ]
     if name == 'near_center_jump_block':
         return [
             {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
@@ -708,6 +715,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         checks.update({
             'green_multi_stop_route': 'passed' if appended_paths and appended_paths[-1] == ['Levo', 'Sol', 'Sirius'] and state.get('routeSourceLabel') == 'original-runtime-observed' else 'failed',
             'consumed_first_leg_only': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Sirius'] and any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol', 'Sirius'] and event.get('remainingRoute') == ['Sirius'] for event in trace) else 'failed',
+        })
+    elif name == 'route_queue_invalid_stop_guardrail':
+        blocked_reasons = [event.get('reason') for event in trace if event.get('type') == 'blocked_append_route_stop']
+        checks.update({
+            'preserved_valid_route_after_invalid_clicks': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('routeQueue') == ['Sol'] else 'failed',
+            'blocked_duplicate_or_current_system': 'passed' if 'duplicate or current system' in blocked_reasons else 'failed',
+            'blocked_unlinked_route_tail_stop': 'passed' if 'not linked from route tail' in blocked_reasons else 'failed',
         })
     elif name == 'near_center_jump_block':
         checks.update({

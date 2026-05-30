@@ -4,6 +4,7 @@ param(
     [switch]$TravelEventLog,
     [switch]$LandedUiMatrix,
     [switch]$MapRouteLog,
+    [switch]$RouteInvalidLog,
     [switch]$RouteJumpLog,
     [switch]$RouteLandRefuelLog,
     [switch]$LowFuelJumpLog,
@@ -48,6 +49,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-landed-ui-matrix
 } elseif ($MapRouteLog) {
     & $Godot --headless --path $Project -- --tv-map-route-log
+} elseif ($RouteInvalidLog) {
+    & $Godot --headless --path $Project -- --tv-route-invalid-log
 } elseif ($RouteJumpLog) {
     & $Godot --headless --path $Project -- --tv-route-jump-log
 } elseif ($RouteLandRefuelLog) {

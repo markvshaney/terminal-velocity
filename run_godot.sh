@@ -15,6 +15,7 @@ Modes:
   tv-travel-event-log     Run travel event log
   tv-landed-ui-matrix     Run landed UI matrix log
   tv-map-route-log        Run map route log
+  tv-route-invalid-log    Run invalid/duplicate map route guardrail log
   tv-route-jump-log       Run route jump log
   tv-route-land-refuel-log Run route/land/refuel log
   tv-low-fuel-jump-log    Run blocked low-fuel jump log
@@ -48,7 +49,7 @@ case "$mode" in
     self-test)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' --script 'res://scripts/self_test.gd'"
         ;;
-    tv-movement-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log|tv-near-center-jump-log|tv-commodity-trade-log|tv-mission-offer-scan-log|tv-mission-route-hint-log|tv-first-mission-delivery-log|tv-pilot-save-resume-log|tv-outfitter-shipyard-log|tv-gameplay-curriculum-help-log|tv-combat-log|tv-combat-guardrail-log|tv-navigation-guardrail-log|tv-legal-status-log|tv-legal-service-gate-log|tv-legal-patrol-posture-log|tv-mission-legal-eligibility-log|tv-legal-consequence-log|tv-legal-clemency-log|tv-contraband-scan-log|tv-contraband-risk-log)
+    tv-movement-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-invalid-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log|tv-near-center-jump-log|tv-commodity-trade-log|tv-mission-offer-scan-log|tv-mission-route-hint-log|tv-first-mission-delivery-log|tv-pilot-save-resume-log|tv-outfitter-shipyard-log|tv-gameplay-curriculum-help-log|tv-combat-log|tv-combat-guardrail-log|tv-navigation-guardrail-log|tv-legal-status-log|tv-legal-service-gate-log|tv-legal-patrol-posture-log|tv-mission-legal-eligibility-log|tv-legal-consequence-log|tv-legal-clemency-log|tv-contraband-scan-log|tv-contraband-risk-log)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' -- --$mode"
         ;;
     -h|--help|help)

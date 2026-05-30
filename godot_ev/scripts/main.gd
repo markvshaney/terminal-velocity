@@ -156,6 +156,8 @@ func _ready() -> void:
 		call_deferred("_run_landed_ui_matrix")
 	if OS.get_cmdline_args().has("--tv-map-route-log") or OS.get_cmdline_user_args().has("--tv-map-route-log"):
 		call_deferred("_run_map_route_log")
+	if OS.get_cmdline_args().has("--tv-route-invalid-log") or OS.get_cmdline_user_args().has("--tv-route-invalid-log"):
+		call_deferred("_run_route_invalid_log")
 	if OS.get_cmdline_args().has("--tv-route-jump-log") or OS.get_cmdline_user_args().has("--tv-route-jump-log"):
 		call_deferred("_run_route_jump_log")
 	if OS.get_cmdline_args().has("--tv-route-land-refuel-log") or OS.get_cmdline_user_args().has("--tv-route-land-refuel-log"):
@@ -605,6 +607,26 @@ func _run_map_route_log() -> void:
 	var green_line_active := not selected_route.is_empty() and after_destination != "None" and after_destination != str(current_system.get("name", ""))
 	var green_line_status := "greenLine=true" if green_line_active else "greenLine=false"
 	print("%s current=%s beforeDestination=%s afterDestination=%s selected=%s extended=%s %s routeHops=%d route=%s preJumpFuelWarning=%s sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), before_destination, after_destination, str(route_selected), str(route_extended), green_line_status, selected_route.size(), JSON.stringify(selected_route), str(_route_fuel_warning_active()), status_line])
+	get_tree().quit(0)
+
+func _run_route_invalid_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_selected := _select_map_route_to_system("Sol")
+	var route_before_invalid := selected_route.duplicate()
+	var duplicate_click_handled := false
+	var unlinked_click_handled := false
+	var point_by_name := _map_system_points(universe.get("systems", []))
+	if point_by_name.has("Levo"):
+		duplicate_click_handled = _select_map_route_at_position(point_by_name["Levo"])
+	var status_after_duplicate := status_line
+	var route_after_duplicate := selected_route.duplicate()
+	if point_by_name.has("Antares"):
+		unlinked_click_handled = _select_map_route_at_position(point_by_name["Antares"])
+	var status_after_unlinked := status_line
+	var route_preserved := route_selected and route_before_invalid == ["Sol"] and route_after_duplicate == ["Sol"] and selected_route == ["Sol"]
+	var green_line_status := "greenLine=true" if not selected_route.is_empty() else "greenLine=false"
+	print("%s current=%s routeSelected=%s duplicateClickHandled=%s unlinkedClickHandled=%s routePreserved=%s %s route=%s statusAfterDuplicate=\"%s\" statusAfterUnlinked=\"%s\" sourceLabel=terminal-velocity-route-guardrail oracleStatus=route_invalid_click_edges_pending_ev_classic_trace" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), str(route_selected), str(duplicate_click_handled), str(unlinked_click_handled), str(route_preserved), green_line_status, JSON.stringify(selected_route), status_after_duplicate, status_after_unlinked])
 	get_tree().quit(0)
 
 func _select_first_linked_map_route() -> bool:

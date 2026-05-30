@@ -495,10 +495,17 @@ class NativeEvModelTests(unittest.TestCase):
             'preJumpFuelWarning=%s',
             'Route appended: %s — fuel cost %d, fuel %d/%d',
             'draw_line(route_start_point, route_end_point, Color(0.15, 1.0, 0.28, 0.95), 3.0)',
+            '--tv-route-invalid-log',
+            'func _run_route_invalid_log',
+            'routePreserved=%s',
+            'sourceLabel=terminal-velocity-route-guardrail',
+            'oracleStatus=route_invalid_click_edges_pending_ev_classic_trace',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('[switch]$MapRouteLog', run_script)
+        self.assertIn('[switch]$RouteInvalidLog', run_script)
         self.assertIn('--headless --path $Project -- --tv-map-route-log', run_script)
+        self.assertIn('--headless --path $Project -- --tv-route-invalid-log', run_script)
         self.assertIn('Basilisk source-oracle lane', plan)
         self.assertIn('Godot fast-eval lane', plan)
         self.assertIn('Bridge gate', plan)
