@@ -89,6 +89,8 @@ Hard requirements:
    - repeat.
    Ask only for real gates: external actions, destructive original-EV tests, Strict Play/death tests, publication, credentials/accounts, live repo pushes/PRs, or risky host/system changes.
 
+11. Treat tool caps as per-run budgets, not task completion or task failure. Batch file inspection, edits, and verification where safe; prefer one compound terminal verification command over many separate probe calls; avoid rereading large unchanged files; and reserve the final few tool calls before cap for docs/backlog completion, git status/diff inspection, and a commit-shaped checkpoint. If the cap is approaching while a slice is only target-verified, stop starting new behavior and stabilize the current slice first. For work that may outlive the current turn or cap, use the durable long-task/checkpoint surface when available: record tool caps, current state, remaining verification, next wakeup/resume action, and continue in a fresh run instead of sending a vague out-of-budget status.
+
 Current durable context to respect:
 - The backlog is the live execution surface: docs/checklists/ev-classic-fidelity-implementation-backlog.md
 - The source-aligned method is documented in docs/research/source-aligned-game-development-method.md

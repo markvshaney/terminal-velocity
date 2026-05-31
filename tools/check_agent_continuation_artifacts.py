@@ -20,6 +20,9 @@ REPO_CHECKS = {
         "push/PR/publication gate on the just-finished commit is not a blocker",
         "Closeout format only when the autonomous run is genuinely ending",
         "no other safe local slice remains available",
+        "Treat tool caps as per-run budgets",
+        "reserve the final few tool calls before cap",
+        "next wakeup/resume action",
     ],
     "docs/checklists/agent-continuation-process-failure-remediation.md": [
         "The exact artifact must be read before executing instructions derived from it",
