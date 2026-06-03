@@ -717,6 +717,34 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-mission-log-history-log', run_script)
         self.assertIn('tv-mission-log-history-log', wrapper)
 
+    def test_godot_active_mission_deadline_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+
+        for symbol in [
+            '--tv-active-mission-deadline-log',
+            'func _run_active_mission_deadline_log',
+            'TV_ACTIVE_MISSION_DEADLINE_EVENT',
+            'var current_day := 0',
+            'var mission_acceptance_days: Dictionary = {}',
+            'func _mission_deadline_lines',
+            'Deadline: accepted day %d, current day %d, limit %d day(s), %d day(s) remaining',
+            'Deadline source: %s; exact Classic UI pending',
+            'deadlineVisible=%s',
+            'sourceVisible=%s',
+            'sourceLabel=terminal-velocity-active-deadline-display-scaffold',
+            'oracleStatus=active_deadline_ui_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$ActiveMissionDeadlineLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-active-mission-deadline-log', run_script)
+        self.assertIn('tv-active-mission-deadline-log', wrapper)
+        self.assertIn('Active mission deadline display scenario contract', plan)
+        self.assertIn('4 day(s) remaining', main_script)
+
     def test_godot_outfitter_shipyard_progression_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

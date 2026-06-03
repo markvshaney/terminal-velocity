@@ -178,6 +178,14 @@ Mission log history scenario contract:
 - `sourceLabel=terminal-velocity-mission-log-history-scaffold`; `oracleStatus=mission_history_ui_pending_classic_runtime_trace`.
 - This is a player-facing helper scaffold, not an EV Classic claim about exact mission-history UI.
 
+Active mission deadline display scenario contract:
+
+- `RunGodot.ps1 -ActiveMissionDeadlineLog` / `--tv-active-mission-deadline-log`
+- Verifies the active mission-detail overlay exposes deadline counters before the mission has completed, failed, or been aborted.
+- Seeds deterministic mission `active_deadline_display_probe` with `timeLimitDays=5`, sets `acceptedDay=1` and `currentDay=2`, then logs `deadlineVisible=true` when the generated detail lines include `Deadline: accepted day 1, current day 2, limit 5 day(s), 4 day(s) remaining`.
+- Deadline lines also include `Deadline source: terminal-velocity-active-deadline-display-scaffold; exact Classic UI pending`, with `sourceLabel=terminal-velocity-active-deadline-display-scaffold` and `oracleStatus=active_deadline_ui_pending_classic_runtime_trace`.
+- This is a Terminal Velocity helper scaffold for player clarity; exact EV Classic date/deadline wording remains pending runtime/manual evidence.
+
 First mission delivery scenario contract:
 
 - `RunGodot.ps1 -FirstMissionDeliveryLog` / `--tv-first-mission-delivery-log`

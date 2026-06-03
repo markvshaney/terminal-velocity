@@ -118,8 +118,10 @@ var credits := 10000
 var cargo := 0
 var landing_tab := 0
 var selected_landing_item := 0
+var current_day := 0
 var active_missions: Array = []
 var completed_missions: Array = []
+var mission_acceptance_days: Dictionary = {}
 var completed_mission_history: Array = []
 var aborted_mission_history: Array = []
 var failed_mission_history: Array = []
@@ -189,6 +191,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_deadline_failure_log")
 	if OS.get_cmdline_args().has("--tv-mission-log-history-log") or OS.get_cmdline_user_args().has("--tv-mission-log-history-log"):
 		call_deferred("_run_mission_log_history_log")
+	if OS.get_cmdline_args().has("--tv-active-mission-deadline-log") or OS.get_cmdline_user_args().has("--tv-active-mission-deadline-log"):
+		call_deferred("_run_active_mission_deadline_log")
 	if OS.get_cmdline_args().has("--tv-first-mission-delivery-log") or OS.get_cmdline_user_args().has("--tv-first-mission-delivery-log"):
 		call_deferred("_run_first_mission_delivery_log")
 	if OS.get_cmdline_args().has("--tv-pilot-save-resume-log") or OS.get_cmdline_user_args().has("--tv-pilot-save-resume-log"):
@@ -550,8 +554,10 @@ func _reset_travel_state() -> void:
 	landing_tab = 0
 	selected_landing_item = 0
 	player_fuel = _max_player_fuel()
+	current_day = 0
 	active_missions.clear()
 	completed_missions.clear()
+	mission_acceptance_days.clear()
 	completed_mission_history.clear()
 	aborted_mission_history.clear()
 	failed_mission_history.clear()
@@ -938,6 +944,33 @@ func _run_mission_log_history_log() -> void:
 	var failed_deadline_visible := lines.has("Deadline: accepted day 0, failed day 3, limit 2 day(s)")
 	var failed_source_visible := lines.has("Failure source: ev-classic-resource-bible-backed-mission-failure-scaffold; exact Classic UI pending")
 	print("%s noActiveVisible=%s completedHistoryVisible=%s abortedHistoryVisible=%s failedHistoryVisible=%s failedDeadlineVisible=%s failedSourceVisible=%s lineCount=%d lines=%s sourceLabel=terminal-velocity-mission-log-history-scaffold oracleStatus=mission_history_ui_pending_classic_runtime_trace" % [MISSION_LOG_HISTORY_EVENT_LOG_PREFIX, str(no_active_visible), str(completed_visible), str(aborted_visible), str(failed_visible), str(failed_deadline_visible), str(failed_source_visible), lines.size(), JSON.stringify(lines)])
+	get_tree().quit(0)
+
+func _run_active_mission_deadline_log() -> void:
+	_reset_travel_state()
+	var deadline_mission := {
+		"id": "active_deadline_display_probe",
+		"title": "Active Deadline Display Probe",
+		"originSystem": "Levo",
+		"originBody": "Levo",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 2,
+		"reward": 900,
+		"description": "Probe mission used to verify active deadline display.",
+		"timeLimitDays": 5,
+		"sourceLabel": "terminal-velocity-active-deadline-display-scaffold",
+		"oracleStatus": "active_deadline_ui_pending_classic_runtime_trace",
+	}
+	missions["missions"].append(deadline_mission)
+	current_day = 2
+	active_missions.append(str(deadline_mission.get("id")))
+	mission_acceptance_days[str(deadline_mission.get("id"))] = 1
+	cargo = int(deadline_mission.get("cargoTons", 0))
+	var lines := _mission_log_detail_lines()
+	var deadline_visible := lines.has("Deadline: accepted day 1, current day 2, limit 5 day(s), 4 day(s) remaining")
+	var source_visible := lines.has("Deadline source: terminal-velocity-active-deadline-display-scaffold; exact Classic UI pending")
+	print("TV_ACTIVE_MISSION_DEADLINE_EVENT activeMission=%s currentDay=%d acceptedDay=%d timeLimitDays=%d deadlineVisible=%s sourceVisible=%s lines=%s sourceLabel=terminal-velocity-active-deadline-display-scaffold oracleStatus=active_deadline_ui_pending_classic_runtime_trace" % [str(deadline_mission.get("id")), current_day, int(mission_acceptance_days.get(str(deadline_mission.get("id")), 0)), int(deadline_mission.get("timeLimitDays", 0)), str(deadline_visible), str(source_visible), JSON.stringify(lines)])
 	get_tree().quit(0)
 
 func _run_first_mission_delivery_log() -> void:
@@ -1393,6 +1426,7 @@ func _complete_arrived_missions() -> Array:
 		if str(mission.get("destinationSystem", "")) != system_name or str(mission.get("destinationBody", "")) != body_name:
 			continue
 		active_missions.erase(mission_id)
+		mission_acceptance_days.erase(str(mission_id))
 		if not completed_missions.has(mission_id):
 			completed_missions.append(mission_id)
 		var cargo_released := int(mission.get("cargoTons", 0))
@@ -1420,6 +1454,7 @@ func _abort_active_mission(mission_id := "") -> bool:
 	var mission := _mission_by_id(selected_id)
 	var cargo_released := int(mission.get("cargoTons", 0)) if not mission.is_empty() else 0
 	active_missions.erase(selected_id)
+	mission_acceptance_days.erase(str(selected_id))
 	cargo = max(0, cargo - cargo_released)
 	aborted_mission_history.append(_mission_abort_record(mission, selected_id, cargo_released))
 	_set_status("Aborted mission: %s; released %d cargo tons" % [str(mission.get("title", selected_id)) if not mission.is_empty() else selected_id, cargo_released])
@@ -1451,6 +1486,7 @@ func _fail_mission_deadline(mission: Dictionary, accepted_day: int, current_day:
 	var government_name := str(mission.get("completionGovernment", "Federation"))
 	var failure_flag := "fail_mission_bit_%d" % int(mission.get("failureBitSet", 0))
 	active_missions.erase(mission_id)
+	mission_acceptance_days.erase(str(mission_id))
 	cargo = max(0, cargo - cargo_released)
 	if not story_flags.has(failure_flag):
 		story_flags.append(failure_flag)
@@ -1814,7 +1850,9 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"velocity": {"x": vel.x, "y": vel.y},
 		"angle_deg": angle_deg,
 		"facing_index": player_facing_index,
+		"current_day": current_day,
 		"active_missions": active_missions,
+		"mission_acceptance_days": mission_acceptance_days,
 		"completed_missions": completed_missions,
 		"completed_mission_history": completed_mission_history,
 		"aborted_mission_history": aborted_mission_history,
@@ -1953,7 +1991,9 @@ func _apply_pilot_data(data: Dictionary) -> void:
 		player_facing_index = int(data.get("facing_index", _facing_frame_index(angle_deg, player_frames.size()))) % player_frames.size()
 	cargo_space = int(data.get("cargo_space", cargo_space))
 	cargo = mini(cargo, cargo_space)
+	current_day = int(data.get("current_day", current_day))
 	active_missions = data.get("active_missions", active_missions)
+	mission_acceptance_days = data.get("mission_acceptance_days", mission_acceptance_days)
 	completed_missions = data.get("completed_missions", completed_missions)
 	completed_mission_history = data.get("completed_mission_history", completed_mission_history)
 	aborted_mission_history = data.get("aborted_mission_history", aborted_mission_history)
@@ -3175,6 +3215,7 @@ func _mission_log_detail_lines() -> Array[String]:
 			lines.append("Destination: %s / %s" % [str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?"))])
 			lines.append("Progress: " + _mission_progress_line(mission))
 			lines.append("Route hint: " + _mission_route_hint_line(mission))
+			lines.append_array(_mission_deadline_lines(mission))
 			lines.append("Cargo reserved: %d tons" % int(mission.get("cargoTons", 0)))
 			lines.append("Reward: %d credits" % int(mission.get("reward", 0)))
 			var description := str(mission.get("description", ""))
@@ -3243,6 +3284,19 @@ func _mission_route_hint_line(mission: Dictionary) -> String:
 		return "Destination system reached; use L to land if needed"
 	return "Press G to queue route toward %s" % destination_system
 
+func _mission_deadline_lines(mission: Dictionary) -> Array[String]:
+	var lines: Array[String] = []
+	if not mission.has("timeLimitDays"):
+		return lines
+	var mission_id := str(mission.get("id", ""))
+	var accepted_day := int(mission_acceptance_days.get(mission_id, current_day))
+	var time_limit_days := int(mission.get("timeLimitDays", 0))
+	var due_day: int = accepted_day + time_limit_days
+	var remaining_days: int = max(0, due_day - current_day)
+	lines.append("Deadline: accepted day %d, current day %d, limit %d day(s), %d day(s) remaining" % [accepted_day, current_day, time_limit_days, remaining_days])
+	lines.append("Deadline source: %s; exact Classic UI pending" % str(mission.get("sourceLabel", "terminal-velocity-active-deadline-display-scaffold")))
+	return lines
+
 func _draw_mission_log_overlay() -> void:
 	var font := ThemeDB.fallback_font
 	var rect := Rect2(210, 112, 860, 560)
@@ -3256,7 +3310,7 @@ func _draw_mission_log_overlay() -> void:
 			y += 12.0
 			continue
 		var color := Color(0.86, 0.92, 1.0)
-		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Progress:") or line.begins_with("Route hint:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:") or line.begins_with("Cargo released:") or line.begins_with("Reward paid:"):
+		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Progress:") or line.begins_with("Route hint:") or line.begins_with("Deadline:") or line.begins_with("Deadline source:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:") or line.begins_with("Cargo released:") or line.begins_with("Reward paid:"):
 			color = Color(0.72, 0.84, 0.96)
 		draw_string(font, Vector2(rect.position.x + 42, y), line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 84, 16, color)
 		y += 28.0
@@ -3842,6 +3896,7 @@ func _accept_selected_mission() -> void:
 		return
 	var mission_id := str(mission.get("id", ""))
 	active_missions.append(mission_id)
+	mission_acceptance_days[mission_id] = current_day
 	cargo += tons
 	for flag in mission.get("setsFlags", []):
 		if not story_flags.has(flag):
