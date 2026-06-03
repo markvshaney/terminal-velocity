@@ -1,20 +1,17 @@
 {
   "active_gate": {
-    "reason": "User authorized a long-running Terminal Velocity completion runner; autonomous safe-local repo work is approved. Push/PR/merge/destructive original-EV tests/gateway/provider/credential changes remain gated unless explicitly requested in the origin chat.",
-    "type": "publication_gate_only"
+    "type": "risk_gate_only",
+    "reason": "User requested long-running Terminal Velocity tasks run continuously until the end and avoid unnecessary approvals. Safe local file/test/commit work is approved; only genuinely risky external/destructive/account-impacting actions remain gated."
   },
-  "current_milestone": "godot_active_mission_deadline_display_verified_under_kanban",
+  "current_milestone": "continuous_completion_runner_active",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract -v -> OK",
-    "./run_godot.sh tv-active-mission-deadline-log -> deadlineVisible=true sourceVisible=true remaining=4 day(s)",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_history_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_failure_log_contract -v -> OK (3 tests)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (122 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
-    "./run_godot.sh tv-mission-log-history-log -> failedDeadlineVisible=true failedSourceVisible=true",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20"
+    "cronjob create aafb9b3eac29 -> every 5m, repeat forever, enabled, deliver=origin, profile=loki-game, workdir=/home/bh/workspaces/loki/terminal-velocity",
+    "cronjob remove f31074cbec03 -> removed paused every-720m hillclimb job",
+    "cronjob remove e12f13d4b75e -> removed paused old bounded runner",
+    "hermes kanban --board terminal-velocity archive t_5d681084 -> archived duplicate Kanban continuation task to preserve one writer"
   ],
-  "next_resume_action": "Kanban lane is active and cron runner e12f13d4b75e is paused; start future TV slices from kanban_show plus git status/log, ledger/events, continuation prompt, harness audit, and backlog. Active mission deadline display is verified; choose the next safe source-aligned gameplay/fidelity slice, such as original/manual/resource evidence for mission abort/deadline UI/CanAbort/failure descriptions or another player-visible helper/probe. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Continuous cron runner aafb9b3eac29 runs every 5 minutes forever. Each tick must inspect ledger/events, continuation prompt, git status/log, and backlog; perform the strongest safe-local source-aligned Terminal Velocity slice; verify; commit coherent local changes; update ledger/events; and continue on the next tick unless a real risk gate, terminal blocker, or agreed completion milestone is reached.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -32,26 +29,32 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Resume Terminal Velocity autonomous safe-local development from ledger/events, continuation prompt, harness audit, git status/log, and backlog. Completion runner cadence is now every 5 minutes for near-continuous progress; avoid overlapping edits, finish/checkpoint dirty work before starting new slices, and keep exact Classic claims source-labeled.",
+  "resume_prompt": "Resume Terminal Velocity continuous autonomous development. Do not stop after one verified slice; treat slices as checkpoints. Avoid unnecessary approvals: safe local file edits, tests, probes, docs, and coherent local commits are preapproved. Gate only push/PR/merge/rebase, destructive original-EV/Strict Play, credentials/providers/supervision/gateway, publication, or other real external/account-impacting actions unless explicitly approved.",
   "runner": {
+    "kind": "cronjob",
+    "job_id": "aafb9b3eac29",
+    "name": "Terminal Velocity continuous completion runner",
+    "profile": "loki-game",
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
+    "schedule": "every 5m",
+    "repeat": "forever",
     "deliver": "origin",
     "enabled_toolsets": [
       "file",
       "terminal",
       "session_search"
     ],
-    "job_id": "e12f13d4b75e",
-    "kind": "kanban-worker",
-    "name": "Terminal Velocity completion runner",
-    "profile": "loki-game",
-    "schedule": "every 5m",
     "side_effect_boundaries": [
-      "safe local file/test/commit work allowed",
-      "push/PR/merge/destructive EV/gateway/provider/credential changes gated"
+      "safe local file/test/probe/docs/commit work allowed without per-step approval",
+      "push/PR/merge/rebase/destructive EV/gateway/provider/credential/publication changes gated unless explicitly approved"
     ],
-    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
-    "previous_cron_job_id": "e12f13d4b75e",
-    "previous_cron_state": "paused/already paused at cutover; terminal-velocity profile cron list empty during t_f853333b"
+    "superseded_jobs": [
+      "f31074cbec03",
+      "e12f13d4b75e"
+    ],
+    "superseded_kanban_tasks": [
+      "t_5d681084"
+    ]
   },
   "safe_backlog": [
     {
@@ -77,11 +80,11 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "schema_version": 1,
-  "status": "kanban_review_required_after_verified_slice",
+  "status": "continuous_cron_active",
   "task_id": "terminal-velocity-game-development",
   "tool_caps_policy": {
-    "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint",
-    "rule": "Tool/time/context caps are per-run budgets, not task completion."
+    "rule": "Tool/time/context caps are per-run budgets, not task completion.",
+    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval"
   },
-  "updated_at": "2026-06-03T18:45:40-04:00"
+  "updated_at": "2026-06-03T18:49:13-04:00"
 }
