@@ -27,6 +27,8 @@ const MOVEMENT_LOG_THRUST_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=thrust_
 const TRAVEL_EVENT_LOG_PREFIX := "TV_TRAVEL_EVENT"
 const LANDED_UI_MATRIX_PREFIX := "TV_LANDED_UI_MATRIX"
 const MAP_ROUTE_EVENT_LOG_PREFIX := "TV_MAP_ROUTE_EVENT"
+const ROUTE_CLEAR_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_EVENT"
+const ROUTE_CLEAR_RESELECT_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_RESELECT_EVENT"
 const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
 const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
@@ -158,6 +160,10 @@ func _ready() -> void:
 		call_deferred("_run_map_route_log")
 	if OS.get_cmdline_args().has("--tv-route-invalid-log") or OS.get_cmdline_user_args().has("--tv-route-invalid-log"):
 		call_deferred("_run_route_invalid_log")
+	if OS.get_cmdline_args().has("--tv-route-clear-log") or OS.get_cmdline_user_args().has("--tv-route-clear-log"):
+		call_deferred("_run_route_clear_log")
+	if OS.get_cmdline_args().has("--tv-route-clear-reselect-log") or OS.get_cmdline_user_args().has("--tv-route-clear-reselect-log"):
+		call_deferred("_run_route_clear_reselect_log")
 	if OS.get_cmdline_args().has("--tv-route-jump-log") or OS.get_cmdline_user_args().has("--tv-route-jump-log"):
 		call_deferred("_run_route_jump_log")
 	if OS.get_cmdline_args().has("--tv-route-land-refuel-log") or OS.get_cmdline_user_args().has("--tv-route-land-refuel-log"):
@@ -561,7 +567,7 @@ func _selected_destination_name() -> String:
 	if not selected_route.is_empty():
 		return str(selected_route[0])
 	var links: Array = current_system.get("links", [])
-	if links.is_empty():
+	if links.is_empty() or selected_link_index < 0:
 		return "None"
 	return str(links[selected_link_index % links.size()])
 
@@ -627,6 +633,39 @@ func _run_route_invalid_log() -> void:
 	var route_preserved := route_selected and route_before_invalid == ["Sol"] and route_after_duplicate == ["Sol"] and selected_route == ["Sol"]
 	var green_line_status := "greenLine=true" if not selected_route.is_empty() else "greenLine=false"
 	print("%s current=%s routeSelected=%s duplicateClickHandled=%s unlinkedClickHandled=%s routePreserved=%s %s route=%s statusAfterDuplicate=\"%s\" statusAfterUnlinked=\"%s\" sourceLabel=terminal-velocity-route-guardrail oracleStatus=route_invalid_click_edges_pending_ev_classic_trace" % [MAP_ROUTE_EVENT_LOG_PREFIX, current_system.get("name", "?"), str(route_selected), str(duplicate_click_handled), str(unlinked_click_handled), str(route_preserved), green_line_status, JSON.stringify(selected_route), status_after_duplicate, status_after_unlinked])
+	get_tree().quit(0)
+
+func _run_route_clear_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_selected := _select_map_route_to_system("Sol")
+	var route_extended := _select_map_route_to_system("Sirius")
+	var route_before_clear := selected_route.duplicate()
+	var clear_handled := _clear_selected_route()
+	var route_after_clear := selected_route.duplicate()
+	_jump()
+	var blocked_jump_after_clear := status_messages.has("No hyperspace route selected; open map (M) or queue mission route (G)")
+	var green_line_status := "greenLine=true" if not selected_route.is_empty() else "greenLine=false"
+	print("%s current=%s routeSelected=%s routeExtended=%s clearHandled=%s routeBeforeClear=%s routeAfterClear=%s blockedJumpAfterClear=%s %s sourceLabel=terminal-velocity-route-guardrail oracleStatus=route_clear_pending_ev_classic_trace status=\"%s\"" % [ROUTE_CLEAR_EVENT_LOG_PREFIX, current_system.get("name", "?"), str(route_selected), str(route_extended), str(clear_handled), JSON.stringify(route_before_clear), JSON.stringify(route_after_clear), str(blocked_jump_after_clear), green_line_status, status_line])
+	get_tree().quit(0)
+
+func _run_route_clear_reselect_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_selected := _select_map_route_to_system("Sol")
+	var route_extended := _select_map_route_to_system("Sirius")
+	var clear_handled := _clear_selected_route()
+	_jump()
+	var blocked_jump_after_clear := status_messages.has("No hyperspace route selected; open map (M) or queue mission route (G)")
+	var selected_before_reselect := _selected_destination_name()
+	_cycle_link(1)
+	var selected_after_reselect := _selected_destination_name()
+	_move_to_scripted_hyperspace_distance()
+	var start_system := str(current_system.get("name", "?"))
+	_jump()
+	var final_system := str(current_system.get("name", "?"))
+	var jumped_after_reselect := final_system != start_system and final_system == selected_after_reselect
+	print("%s startSystem=%s finalSystem=%s routeSelected=%s routeExtended=%s clearHandled=%s blockedJumpAfterClear=%s selectedBeforeReselect=%s selectedAfterReselect=%s jumpedAfterReselect=%s sourceLabel=terminal-velocity-route-guardrail oracleStatus=route_clear_reselect_pending_ev_classic_trace status=\"%s\"" % [ROUTE_CLEAR_RESELECT_EVENT_LOG_PREFIX, start_system, final_system, str(route_selected), str(route_extended), str(clear_handled), str(blocked_jump_after_clear), selected_before_reselect, selected_after_reselect, str(jumped_after_reselect), status_line])
 	get_tree().quit(0)
 
 func _select_first_linked_map_route() -> bool:
@@ -1349,6 +1388,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_J: _jump()
 			KEY_M:
 				_toggle_universe_map()
+			KEY_BACKSPACE, KEY_DELETE:
+				if map_visible:
+					_clear_selected_route()
 			KEY_G: _route_to_active_mission_destination()
 			KEY_F10:
 				help_visible = not help_visible
@@ -2026,6 +2068,16 @@ func _map_hovered_link_name() -> String:
 func _select_map_route_at_position(click_position: Vector2) -> bool:
 	return _append_map_route_at_position(click_position)
 
+func _clear_selected_route() -> bool:
+	if selected_route.is_empty():
+		status_line = "No route to clear"
+		return true
+	selected_route.clear()
+	selected_link_index = -1
+	status_line = "Route cleared — open map (M) or queue mission route (G) to choose a destination"
+	_play_sound("ui_click")
+	return true
+
 func _append_map_route_at_position(click_position: Vector2) -> bool:
 	var links: Array = _map_route_tail_links()
 	if links.is_empty():
@@ -2477,13 +2529,16 @@ func _jump() -> void:
 	if links.is_empty() and selected_route.is_empty():
 		_set_status("No hyperspace route selected; open map (M) or queue mission route (G)")
 		return
+	var destination := _selected_destination_name()
+	if destination == "None":
+		_set_status("No hyperspace route selected; open map (M) or queue mission route (G)")
+		return
 	if _too_close_to_system_center_for_jump():
 		_set_status("Can't initiate hyperspace jump - not yet far enough away from system center.")
 		return
 	if player_fuel < _jump_fuel_cost():
 		_set_status("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route")
 		return
-	var destination := _selected_destination_name()
 	for i in range(systems.size()):
 		if systems[i].get("name", "") == destination:
 			current_system_index = i
@@ -3045,7 +3100,7 @@ func _draw_help_overlay() -> void:
 	var lines := [
 		"Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
 		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
-		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops.",
+		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops; Backspace/Delete clears route.",
 		"Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
 		"Mission objective marker: active mission destinations are highlighted on the map.",
 		"Mission route helper: G queues the active mission destination when known.",
@@ -3125,9 +3180,10 @@ func _draw_universe_map() -> void:
 		draw_string(font, rect.position + Vector2(690, 180), "Mission destination: " + ", ".join(mission_destination_systems), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(1.0, 0.45, 0.22))
 	draw_string(font, rect.position + Vector2(690, 204), "\\ cycles routes   J jumps", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
 	draw_string(font, rect.position + Vector2(690, 228), "Shift-click linked stops: green route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 252), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
-	draw_string(font, rect.position + Vector2(690, 276), _route_fuel_hint_line(), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.95, 0.86, 0.58))
-	draw_string(font, rect.position + Vector2(690, 300), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 252), "Backspace/Delete clears queued route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 276), "G queues active mission route", HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.70, 0.82, 0.96))
+	draw_string(font, rect.position + Vector2(690, 300), _route_fuel_hint_line(), HORIZONTAL_ALIGNMENT_LEFT, 250, 14, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(690, 324), "M closes map", HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(0.70, 0.82, 0.96))
 	var point_by_name := _map_system_points(systems)
 	var hovered_name := _map_hovered_link_name()
 	if hovered_name != "":

@@ -14,6 +14,8 @@
     "outfitter_ship_ladder_intro",
     "shift_click_multi_stop_route_queue",
     "route_queue_invalid_stop_guardrail",
+    "route_queue_clear_guardrail",
+    "route_queue_clear_reselect_guardrail",
     "near_center_jump_block",
     "route_planner_refuel_loop",
     "low_fuel_jump_recovery",
@@ -72,6 +74,14 @@
     },
     "route_queue_invalid_stop_guardrail": {
       "purpose": "Map route guardrail loop: preserve the current green route queue when a duplicate/current-system or unlinked stop is attempted from the route tail.",
+      "surface": "map route planning/Terminal Velocity guardrail scaffold"
+    },
+    "route_queue_clear_guardrail": {
+      "purpose": "Map route guardrail loop: clear a queued multi-stop route explicitly, then block jump until another destination is selected.",
+      "surface": "map route planning/Terminal Velocity guardrail scaffold"
+    },
+    "route_queue_clear_reselect_guardrail": {
+      "purpose": "Map route guardrail loop: after clearing a queued multi-stop route, accept a fresh route selection and jump only after that re-selection.",
       "surface": "map route planning/Terminal Velocity guardrail scaffold"
     },
     "near_center_jump_block": {

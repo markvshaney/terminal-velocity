@@ -26,6 +26,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'outfitter_ship_ladder_intro',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
+                'route_queue_clear_guardrail',
+                'route_queue_clear_reselect_guardrail',
                 'near_center_jump_block',
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
@@ -264,6 +266,34 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         blocked = [event for event in result['trace'] if event['type'] == 'blocked_append_route_stop']
         self.assertEqual([event['destinationSystem'] for event in blocked], ['Levo', 'Antares'])
         self.assertTrue(all(event['routeQueue'] == ['Sol'] for event in blocked))
+
+    def test_route_queue_clear_guardrail_clears_route_and_blocks_unselected_jump(self):
+        result = run_scripted_scenario('route_queue_clear_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['routeQueue'], [])
+        self.assertEqual(result['checks']['cleared_multi_stop_route'], 'passed')
+        self.assertEqual(result['checks']['blocked_jump_after_clear'], 'passed')
+        self.assertEqual(result['checks']['recorded_clear_source_boundary'], 'passed')
+        clear_event = [event for event in result['trace'] if event['type'] == 'clear_route_queue'][-1]
+        self.assertEqual(clear_event['previousRoute'], ['Sol', 'Sirius'])
+        self.assertEqual(clear_event['sourceLabel'], 'terminal-velocity-route-guardrail')
+        blocked_jump = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
+        self.assertIsNone(blocked_jump['destinationSystem'])
+        self.assertEqual(blocked_jump['reason'], 'no destination selected')
+
+    def test_route_queue_clear_reselect_guardrail_recovers_after_new_route_selection(self):
+        result = run_scripted_scenario('route_queue_clear_reselect_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['routeQueue'], [])
+        self.assertEqual(result['checks']['blocked_jump_after_clear'], 'passed')
+        self.assertEqual(result['checks']['reselected_after_clear'], 'passed')
+        self.assertEqual(result['checks']['jumped_after_reselect'], 'passed')
+        event_types = [event['type'] for event in result['trace']]
+        self.assertEqual(event_types[-3:], ['blocked_jump', 'append_route_stop', 'jump'])
 
     def test_near_center_jump_block_preserves_state_with_original_runtime_label(self):
         result = run_scripted_scenario('near_center_jump_block')

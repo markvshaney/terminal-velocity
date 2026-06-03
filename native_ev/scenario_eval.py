@@ -40,6 +40,8 @@ SCENARIO_CURRICULUM = [
     'outfitter_ship_ladder_intro',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
+    'route_queue_clear_guardrail',
+    'route_queue_clear_reselect_guardrail',
     'near_center_jump_block',
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
@@ -161,6 +163,20 @@ def _append_route_stop(state: dict[str, Any], action: dict[str, Any], trace: lis
         'greenRoutePath': [state['currentSystem']] + list(state['routeQueue']),
         'sourceLabel': state['routeSourceLabel'],
         'oracleStatus': action.get('oracleStatus', 'user_demonstrated_pending_original_trace'),
+    })
+    return True
+
+
+def _clear_route_queue(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    previous_route = list(state.get('routeQueue', []))
+    state['routeQueue'] = []
+    state['routeSourceLabel'] = None
+    trace.append({
+        'type': 'clear_route_queue',
+        'previousRoute': previous_route,
+        'routeQueue': [],
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-guardrail'),
+        'oracleStatus': action.get('oracleStatus', 'route_clear_pending_ev_classic_trace'),
     })
     return True
 
@@ -612,6 +628,22 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'append_route_stop', 'destinationSystem': 'Levo', 'sourceLabel': 'terminal-velocity-route-guardrail'},
             {'type': 'append_route_stop', 'destinationSystem': 'Antares', 'sourceLabel': 'terminal-velocity-route-guardrail'},
         ]
+    if name == 'route_queue_clear_guardrail':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'clear_route_queue', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+            {'type': 'jump', 'expectBlocked': True},
+        ]
+    if name == 'route_queue_clear_reselect_guardrail':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'clear_route_queue', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+            {'type': 'jump', 'expectBlocked': True},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+            {'type': 'jump'},
+        ]
     if name == 'near_center_jump_block':
         return [
             {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
@@ -723,6 +755,18 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_duplicate_or_current_system': 'passed' if 'duplicate or current system' in blocked_reasons else 'failed',
             'blocked_unlinked_route_tail_stop': 'passed' if 'not linked from route tail' in blocked_reasons else 'failed',
         })
+    elif name == 'route_queue_clear_guardrail':
+        checks.update({
+            'cleared_multi_stop_route': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('previousRoute') == ['Sol', 'Sirius'] and event.get('routeQueue') == [] for event in trace) and state.get('routeQueue') == [] else 'failed',
+            'blocked_jump_after_clear': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'no destination selected' for event in trace) else 'failed',
+            'recorded_clear_source_boundary': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' and 'pending_ev_classic_trace' in event.get('oracleStatus', '') for event in trace) else 'failed',
+        })
+    elif name == 'route_queue_clear_reselect_guardrail':
+        checks.update({
+            'blocked_jump_after_clear': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'no destination selected' for event in trace) else 'failed',
+            'reselected_after_clear': 'passed' if any(event.get('type') == 'append_route_stop' and event.get('destinationSystem') == 'Sol' and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' for event in trace) else 'failed',
+            'jumped_after_reselect': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == [] and any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol'] and event.get('remainingRoute') == [] for event in trace) else 'failed',
+        })
     elif name == 'near_center_jump_block':
         checks.update({
             'blocked_near_center_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'too close to system center' and event.get('sourceLabel') == 'original-runtime-observed' for event in trace) else 'failed',
@@ -786,6 +830,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'refuel': _refuel,
         'set_state': _set_state,
         'append_route_stop': _append_route_stop,
+        'clear_route_queue': _clear_route_queue,
         'route_to_active_mission_destination': _route_to_active_mission_destination,
         'scan_mission_offers': _scan_mission_offers,
         'accept_manifest_mission': _accept_manifest_mission,

@@ -500,12 +500,32 @@ class NativeEvModelTests(unittest.TestCase):
             'routePreserved=%s',
             'sourceLabel=terminal-velocity-route-guardrail',
             'oracleStatus=route_invalid_click_edges_pending_ev_classic_trace',
+            '--tv-route-clear-log',
+            'func _run_route_clear_log',
+            'TV_ROUTE_CLEAR_EVENT',
+            'func _clear_selected_route() -> bool:',
+            'Backspace/Delete clears queued route',
+            'clearHandled=%s',
+            'routeAfterClear=%s',
+            'blockedJumpAfterClear=%s',
+            'oracleStatus=route_clear_pending_ev_classic_trace',
+            '--tv-route-clear-reselect-log',
+            'func _run_route_clear_reselect_log',
+            'TV_ROUTE_CLEAR_RESELECT_EVENT',
+            'selectedBeforeReselect=%s',
+            'selectedAfterReselect=%s',
+            'jumpedAfterReselect=%s',
+            'oracleStatus=route_clear_reselect_pending_ev_classic_trace',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('[switch]$MapRouteLog', run_script)
         self.assertIn('[switch]$RouteInvalidLog', run_script)
+        self.assertIn('[switch]$RouteClearLog', run_script)
+        self.assertIn('[switch]$RouteClearReselectLog', run_script)
         self.assertIn('--headless --path $Project -- --tv-map-route-log', run_script)
         self.assertIn('--headless --path $Project -- --tv-route-invalid-log', run_script)
+        self.assertIn('--headless --path $Project -- --tv-route-clear-log', run_script)
+        self.assertIn('--headless --path $Project -- --tv-route-clear-reselect-log', run_script)
         self.assertIn('Basilisk source-oracle lane', plan)
         self.assertIn('Godot fast-eval lane', plan)
         self.assertIn('Bridge gate', plan)

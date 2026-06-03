@@ -5,6 +5,8 @@ param(
     [switch]$LandedUiMatrix,
     [switch]$MapRouteLog,
     [switch]$RouteInvalidLog,
+    [switch]$RouteClearLog,
+    [switch]$RouteClearReselectLog,
     [switch]$RouteJumpLog,
     [switch]$RouteLandRefuelLog,
     [switch]$LowFuelJumpLog,
@@ -51,6 +53,10 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-map-route-log
 } elseif ($RouteInvalidLog) {
     & $Godot --headless --path $Project -- --tv-route-invalid-log
+} elseif ($RouteClearLog) {
+    & $Godot --headless --path $Project -- --tv-route-clear-log
+} elseif ($RouteClearReselectLog) {
+    & $Godot --headless --path $Project -- --tv-route-clear-reselect-log
 } elseif ($RouteJumpLog) {
     & $Godot --headless --path $Project -- --tv-route-jump-log
 } elseif ($RouteLandRefuelLog) {
