@@ -133,6 +133,20 @@ Mission offer scan scenario contract:
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
   The selected-offer detail lines are Terminal Velocity helper scaffolding for player clarity; exact Classic Mission Computer detail UI remains pending original-runtime/manual evidence.
 
+Mission chain offer scenario contract:
+
+- `RunGodot.ps1 -MissionChainOfferLog` / `--tv-mission-chain-offer-log`
+- Exercises offer continuity after a completed courier job in the Godot fast-eval lane.
+- Resets to Levo, route-selects Sol, accepts and delivers `intro_courier_earth_hera` at Luna, then scans Luna's Mission Computer for the newly unlocked `frontier_sample_hera_freeport` offer and logs:
+  - first-mission acceptance and delivery booleans (`firstMissionAccepted=true`, `firstMissionDelivered=true`);
+  - completion ids and story flags;
+  - chain scan system/body;
+  - chain-offer visibility (`chainOfferVisible=true`) and offer ids;
+  - selected-chain-offer detail visibility (`selectedChainOfferDetailsVisible=true`) using the same Terminal Velocity helper lines/source boundary as the base offer scan;
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
+  This is a Terminal Velocity chain-continuity/playability probe; exact EV Classic Mission Computer offer refresh and detail UI remain pending original-runtime/manual evidence.
+
 Mission route-hint scenario contract:
 
 - `RunGodot.ps1 -MissionRouteHintLog` / `--tv-mission-route-hint-log`

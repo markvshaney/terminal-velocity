@@ -13,6 +13,7 @@ param(
     [switch]$NearCenterJumpLog,
     [switch]$CommodityTradeLog,
     [switch]$MissionOfferScanLog,
+    [switch]$MissionChainOfferLog,
     [switch]$MissionRouteHintLog,
     [switch]$MissionAbortLog,
     [switch]$MissionDeadlineFailureLog,
@@ -73,6 +74,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-commodity-trade-log
 } elseif ($MissionOfferScanLog) {
     & $Godot --headless --path $Project -- --tv-mission-offer-scan-log
+} elseif ($MissionChainOfferLog) {
+    & $Godot --headless --path $Project -- --tv-mission-chain-offer-log
 } elseif ($MissionRouteHintLog) {
     & $Godot --headless --path $Project -- --tv-mission-route-hint-log
 } elseif ($MissionAbortLog) {

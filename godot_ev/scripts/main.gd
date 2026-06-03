@@ -35,6 +35,7 @@ const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
+const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
@@ -183,6 +184,8 @@ func _ready() -> void:
 		call_deferred("_run_commodity_trade_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
+	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
+		call_deferred("_run_mission_chain_offer_log")
 	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
 		call_deferred("_run_mission_route_hint_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
@@ -835,6 +838,40 @@ func _run_mission_offer_scan_log() -> void:
 	var total_offers := offer_ids.size()
 	var selected_offer_details_visible := offer_detail_lines.has("Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending")
 	print("%s startSystem=Levo routeToSolSelected=%s scanSystem=%s scanBody=\"%s\" offersBySurface=%s totalOffers=%d selectedOfferDetailsVisible=%s selectedOfferDetails=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_OFFER_SCAN_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(current_system.get("name", "?")), str(body.get("name", "None")), JSON.stringify(offers_by_surface), total_offers, str(selected_offer_details_visible), JSON.stringify(offer_detail_lines), status_line])
+	get_tree().quit(0)
+
+func _run_mission_chain_offer_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var initial_body := _current_body()
+	var first_mission: Dictionary = _first_available_mission(initial_body)
+	var first_mission_id := str(first_mission.get("id", "none"))
+	_accept_selected_mission()
+	var first_mission_accepted := active_missions.has(first_mission_id)
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_chain_stop_selected := _select_map_route_to_system("Centauri")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Luna")
+	_try_land()
+	var completed_ids := _complete_arrived_missions()
+	var first_mission_delivered := completed_ids.has(first_mission_id)
+	var chain_body := _current_body()
+	var chain_offers := _available_missions(chain_body)
+	var chain_offer_ids := []
+	var selected_chain_detail_lines: Array[String] = []
+	for mission in chain_offers:
+		chain_offer_ids.append(str(mission.get("id", "")))
+		if selected_chain_detail_lines.is_empty():
+			selected_chain_detail_lines = _mission_offer_detail_lines(mission)
+	var frontier_offer_visible := chain_offer_ids.has("frontier_sample_hera_freeport")
+	var chain_offer_details_visible := selected_chain_detail_lines.has("Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending")
+	print("%s startSystem=Levo routeToSolSelected=%s firstMissionAccepted=%s firstMissionDelivered=%s completedMissions=%s routeToChainStopSelected=%s scanSystem=%s scanBody=\"%s\" chainOfferVisible=%s chainOffers=%s selectedChainOfferDetailsVisible=%s selectedChainOfferDetails=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(first_mission_accepted), str(first_mission_delivered), JSON.stringify(completed_ids), str(route_to_chain_stop_selected), str(current_system.get("name", "?")), str(chain_body.get("name", "None")), str(frontier_offer_visible), JSON.stringify(chain_offer_ids), str(chain_offer_details_visible), JSON.stringify(selected_chain_detail_lines), JSON.stringify(story_flags), status_line])
 	get_tree().quit(0)
 
 func _run_mission_route_hint_log() -> void:

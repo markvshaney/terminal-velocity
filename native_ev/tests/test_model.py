@@ -960,6 +960,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-mission-offer-scan-log', run_script)
         self.assertIn('tv-mission-offer-scan-log', launcher)
 
+    def test_godot_mission_chain_offer_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-chain-offer-log',
+            'func _run_mission_chain_offer_log',
+            'TV_MISSION_CHAIN_OFFER_EVENT',
+            'firstMissionDelivered=%s',
+            'chainOfferVisible=%s',
+            'frontier_sample_hera_freeport',
+            'selectedChainOfferDetailsVisible=%s',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=terminal_velocity_eval_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionChainOfferLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-chain-offer-log', run_script)
+        self.assertIn('tv-mission-chain-offer-log', launcher)
+        self.assertIn('Mission chain offer scenario contract', plan)
+        self.assertIn('frontier_sample_hera_freeport', plan)
+
     def test_godot_first_mission_delivery_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
