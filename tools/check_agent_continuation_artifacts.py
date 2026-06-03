@@ -78,6 +78,11 @@ def main() -> int:
         default=None,
         help="Optional Loki Game profile home to lint profile-local skill safeguards",
     )
+    parser.add_argument(
+        "--shared-skills-home",
+        default="/home/bh/.hermes/shared-skills",
+        help="Optional shared skill root to use when a profile-local skill is intentionally provided via skills.external_dirs",
+    )
     args = parser.parse_args()
 
     repo = Path(args.repo).resolve()
@@ -87,8 +92,15 @@ def main() -> int:
 
     if args.profile_home:
         profile_home = Path(args.profile_home).expanduser().resolve()
+        shared_skills_home = Path(args.shared_skills_home).expanduser().resolve()
         for rel, needles in OPTIONAL_PROFILE_CHECKS.items():
-            failures.extend(check_file(profile_home, rel, needles))
+            profile_failures = check_file(profile_home, rel, needles)
+            if profile_failures and rel.startswith("skills/"):
+                shared_rel = rel.removeprefix("skills/")
+                shared_failures = check_file(shared_skills_home, shared_rel, needles)
+                failures.extend([] if not shared_failures else profile_failures)
+            else:
+                failures.extend(profile_failures)
 
     if failures:
         print("CONTINUATION ARTIFACT CHECK FAILED")

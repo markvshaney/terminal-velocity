@@ -99,6 +99,7 @@ These are optional follow-ups beyond prompt wording. They are not required to re
 - [x] Add the continuation-artifact linter to the normal verification bundle for process/prompt-only changes.
 - [ ] Consider a Hermes-level/runtime check only if prompt/skill safeguards keep failing: a continuation-mode session state flag plus a pre-final-answer guard that detects `next safe local action` without a named stop condition. This would need code-level tests and activation through the Loki Game gateway/process boundary.
 - [ ] If a run is likely to exceed a single tool/turn budget, create an explicit checkpoint/resume artifact rather than a final report; resumption should start from that artifact and re-run the slice-boundary gate check.
+- [ ] Use `docs/checklists/long-running-game-development-harness-audit.md` as the current deficiency/improvement source for durable Terminal Velocity game-development continuation; update it when runtime/profile/skill architecture changes.
 
 ## Outside-source cross-check
 

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "task_id": "terminal-velocity-game-development",
+  "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
+  "operational_owner_candidate": "loki-game",
+  "repo": "/home/bh/workspaces/loki/terminal-velocity",
+  "status": "checkpointed_not_scheduled",
+  "current_milestone": "harness_deficiency_audit_completed",
+  "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
+  "active_gate": {
+    "type": "approval_required",
+    "reason": "Starting recurring cron/background/Kanban runner or changing gateway/profile routing is approval-gated."
+  },
+  "tool_caps_policy": {
+    "rule": "Tool/time/context caps are per-run budgets, not task completion.",
+    "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint"
+  },
+  "required_start_artifacts": [
+    "docs/prompts/terminal-velocity-continuation-prompt.md",
+    "docs/checklists/agent-continuation-process-failure-remediation.md",
+    "docs/checklists/long-running-game-development-harness-audit.md"
+  ],
+  "required_skill_candidates": [
+    "source-and-fidelity",
+    "artifact-governance",
+    "bounded-autoresearch",
+    "game-prototyping",
+    "ev-terminal-velocity-play",
+    "ev-classic-basilisk-observation",
+    "terminal-velocity-provenance"
+  ],
+  "safe_backlog": [
+    {
+      "id": "skill-availability-audit",
+      "description": "Audit which Loki Game Terminal Velocity skills should be shared/promoted or explicitly loaded by the chosen runner profile.",
+      "gate": "broad profile/skill propagation remains approval-gated; read-only audit is safe"
+    },
+    {
+      "id": "runner-prompt-draft",
+      "description": "Draft a self-contained cron/Kanban runner prompt that reads this ledger, performs one safe local slice, verifies, checkpoints, and records gates.",
+      "gate": "scheduling/activation approval required"
+    },
+    {
+      "id": "long-task-tool-triage",
+      "description": "Inspect Hermes source/docs for the implied long_task tool and decide whether to implement/expose it or correct misleading docs.",
+      "gate": "Hermes code changes safe-local until push/restart/supervision"
+    }
+  ],
+  "last_verified_commands": [
+    "python3 tools/check_agent_continuation_artifacts.py --repo . --profile-home /home/bh/.hermes/profiles/loki-game -> CONTINUATION ARTIFACT CHECK OK",
+    "python3 -m py_compile tools/check_agent_continuation_artifacts.py -> ok",
+    "git diff --check -> ok"
+  ],
+  "next_resume_action": "Read this ledger, read docs/checklists/long-running-game-development-harness-audit.md, then perform safe backlog item skill-availability-audit unless the user authorizes runner scheduling first.",
+  "updated_at": "2026-06-02T09:37:13-04:00"
+}
