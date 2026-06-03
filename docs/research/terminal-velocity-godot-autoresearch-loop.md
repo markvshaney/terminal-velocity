@@ -150,13 +150,15 @@ Mission chain offer scenario contract:
 Mission alignment branch scenario contract:
 
 - `RunGodot.ps1 -MissionAlignmentBranchLog` / `--tv-mission-alignment-branch-log`
-- Extends the chain-continuity fast-eval path through `frontier_sample_hera_freeport` delivery at Sirius Station, then scans the Mission Computer for the mutually exclusive chapter-one alignment branch offers and logs:
+- Continues the intro courier chain through Sirius Station, verifies that both `chapter_one_alignment` branch offers (`federation_report_freeport`, `freeport_pact_smugglers`) become visible, then accepts the Federation branch and verifies the Freeport branch disappears from available offers through the Terminal Velocity choice-group scaffold. The log records:
   - first and chain mission delivery booleans;
   - Sirius Station scan system/body;
   - branch-offer visibility (`branchOffersVisible=true`) for both `federation_report_freeport` and `freeport_pact_smugglers`;
   - shared choice group (`chapter_one_alignment`);
+  - `federationBranchAccepted=true` and `freeportBranchHiddenAfterChoice=true`;
+  - `choiceBoundary=terminal_velocity_choice_group_scaffold_exact_classic_branch_ui_pending`;
   - reputation snapshot needed by the current Terminal Velocity legal/reputation gates;
-  - completion ids and story flags;
+  - active/completed mission ids and story flags;
   - `sourceLabel=terminal-velocity-observed`;
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
   This is a Terminal Velocity story-branch/playability probe; exact EV Classic branch offer UI, random refresh timing, and legal/reputation thresholds remain pending original-runtime/manual/resource evidence.

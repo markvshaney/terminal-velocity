@@ -919,12 +919,22 @@ func _run_mission_alignment_branch_log() -> void:
 	var federation_visible := branch_offer_ids.has("federation_report_freeport")
 	var freeport_visible := branch_offer_ids.has("freeport_pact_smugglers")
 	var branch_choice_group_visible := branch_choice_groups.has("chapter_one_alignment")
+	selected_landing_item = branch_offer_ids.find("federation_report_freeport")
+	if selected_landing_item < 0:
+		selected_landing_item = 0
+	_accept_selected_mission()
+	var federation_branch_accepted := active_missions.has("federation_report_freeport")
+	var offers_after_choice := _available_missions(branch_body)
+	var offer_ids_after_choice := []
+	for mission in offers_after_choice:
+		offer_ids_after_choice.append(str(mission.get("id", "")))
+	var freeport_branch_hidden_after_choice := not offer_ids_after_choice.has("freeport_pact_smugglers")
 	var reputation_snapshot := {
 		"Federation": int(reputation_scores.get("Federation", 0)),
 		"Independent": int(reputation_scores.get("Independent", 0)),
 		"Centauri Protectorate": int(reputation_scores.get("Centauri Protectorate", 0))
 	}
-	print("%s startSystem=Levo routeToSolSelected=%s routeToLunaSelected=%s firstMissionDelivered=%s chainMissionAccepted=%s routeToSiriusSelected=%s chainMissionDelivered=%s scanSystem=%s scanBody=\"%s\" branchOffersVisible=%s federationOfferVisible=%s freeportOfferVisible=%s branchOffers=%s choiceGroups=%s reputation=%s completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(route_to_luna_selected), str(first_completed), str(chain_accepted), str(route_to_sirius_selected), str(chain_delivered), str(current_system.get("name", "?")), str(branch_body.get("name", "None")), str(federation_visible and freeport_visible and branch_choice_group_visible), str(federation_visible), str(freeport_visible), JSON.stringify(branch_offer_ids), JSON.stringify(branch_choice_groups), JSON.stringify(reputation_snapshot), JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
+	print("%s startSystem=Levo routeToSolSelected=%s routeToLunaSelected=%s firstMissionDelivered=%s chainMissionAccepted=%s routeToSiriusSelected=%s chainMissionDelivered=%s scanSystem=%s scanBody=\"%s\" branchOffersVisible=%s federationOfferVisible=%s freeportOfferVisible=%s branchOffers=%s choiceGroups=%s federationBranchAccepted=%s freeportBranchHiddenAfterChoice=%s offersAfterChoice=%s reputation=%s activeMissions=%s completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace choiceBoundary=terminal_velocity_choice_group_scaffold_exact_classic_branch_ui_pending status=\"%s\"" % [MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(route_to_luna_selected), str(first_completed), str(chain_accepted), str(route_to_sirius_selected), str(chain_delivered), str(current_system.get("name", "?")), str(branch_body.get("name", "None")), str(federation_visible and freeport_visible and branch_choice_group_visible), str(federation_visible), str(freeport_visible), JSON.stringify(branch_offer_ids), JSON.stringify(branch_choice_groups), str(federation_branch_accepted), str(freeport_branch_hidden_after_choice), JSON.stringify(offer_ids_after_choice), JSON.stringify(reputation_snapshot), JSON.stringify(active_missions), JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
 	get_tree().quit(0)
 
 func _run_mission_route_hint_log() -> void:
