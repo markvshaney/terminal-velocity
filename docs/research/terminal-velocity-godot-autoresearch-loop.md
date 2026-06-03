@@ -169,6 +169,14 @@ Mission deadline failure scenario contract:
   - `oracleStatus=deadline_failure_runtime_ui_pending_classic_trace`.
   This remains a scaffold for exact EV Classic runtime/UI timing until a Basilisk/manual trace confirms player-facing wording and date behavior.
 
+Mission log history scenario contract:
+
+- `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`
+- Verifies the Terminal Velocity mission log helper remains useful after mission state transitions leave no active mission.
+- Seeds completed, aborted, and failed mission-history records with no active missions, then logs `noActiveVisible=true`, `completedHistoryVisible=true`, `abortedHistoryVisible=true`, and `failedHistoryVisible=true` plus the generated line list.
+- `sourceLabel=terminal-velocity-mission-log-history-scaffold`; `oracleStatus=mission_history_ui_pending_classic_runtime_trace`.
+- This is a player-facing helper scaffold, not an EV Classic claim about exact mission-history UI.
+
 First mission delivery scenario contract:
 
 - `RunGodot.ps1 -FirstMissionDeliveryLog` / `--tv-first-mission-delivery-log`

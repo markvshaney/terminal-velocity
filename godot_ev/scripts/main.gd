@@ -38,6 +38,7 @@ const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
+const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
@@ -186,6 +187,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_abort_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
 		call_deferred("_run_mission_deadline_failure_log")
+	if OS.get_cmdline_args().has("--tv-mission-log-history-log") or OS.get_cmdline_user_args().has("--tv-mission-log-history-log"):
+		call_deferred("_run_mission_log_history_log")
 	if OS.get_cmdline_args().has("--tv-first-mission-delivery-log") or OS.get_cmdline_user_args().has("--tv-first-mission-delivery-log"):
 		call_deferred("_run_first_mission_delivery_log")
 	if OS.get_cmdline_args().has("--tv-pilot-save-resume-log") or OS.get_cmdline_user_args().has("--tv-pilot-save-resume-log"):
@@ -913,6 +916,26 @@ func _run_mission_deadline_failure_log() -> void:
 	var flag_status := "failureFlagSet=true" if story_flags.has("fail_mission_bit_42") else "failureFlagSet=false"
 	var reputation_status := "reputationPenaltyApplied=true" if after_reputation == before_reputation - 3 else "reputationPenaltyApplied=false"
 	print("%s acceptedMission=%s acceptedDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterFailure=%d %s %s %s %s reputationBefore=%d reputationAfter=%d activeMissions=%s failedHistoryCount=%d latestFailure=%s sourceLabel=ev-classic-resource-bible-backed-mission-failure-scaffold oracleStatus=deadline_failure_runtime_ui_pending_classic_trace status=\"%s\"" % [MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo, failure_status, cargo_status, flag_status, reputation_status, before_reputation, after_reputation, JSON.stringify(active_missions), failed_mission_history.size(), latest_failure, status_line])
+	get_tree().quit(0)
+
+func _run_mission_log_history_log() -> void:
+	_reset_travel_state()
+	completed_mission_history.append({
+		"id": "history_completed_probe",
+		"title": "Completed History Probe",
+		"system": "Sol",
+		"body": "Earth",
+		"cargo_released": 3,
+		"reward_paid": 1200,
+	})
+	aborted_mission_history.append(_mission_abort_record({"id": "history_aborted_probe", "title": "Aborted History Probe"}, "history_aborted_probe", 2))
+	failed_mission_history.append(_mission_deadline_failure_record({"id": "history_failed_probe", "title": "Failed History Probe", "timeLimitDays": 2}, 0, 3, 4, "fail_mission_bit_43", -5, "Federation"))
+	var lines := _mission_log_detail_lines()
+	var no_active_visible := lines.has("No active missions.")
+	var completed_visible := lines.has("Completed mission history")
+	var aborted_visible := lines.has("Aborted mission history")
+	var failed_visible := lines.has("Failed mission history")
+	print("%s noActiveVisible=%s completedHistoryVisible=%s abortedHistoryVisible=%s failedHistoryVisible=%s lineCount=%d lines=%s sourceLabel=terminal-velocity-mission-log-history-scaffold oracleStatus=mission_history_ui_pending_classic_runtime_trace" % [MISSION_LOG_HISTORY_EVENT_LOG_PREFIX, str(no_active_visible), str(completed_visible), str(aborted_visible), str(failed_visible), lines.size(), JSON.stringify(lines)])
 	get_tree().quit(0)
 
 func _run_first_mission_delivery_log() -> void:
@@ -3138,25 +3161,27 @@ func _mission_log_detail_lines() -> Array[String]:
 	var lines: Array[String] = []
 	if active_missions.is_empty():
 		lines.append("No active missions.")
-		return lines
-	for mission_id in active_missions:
-		var mission := _mission_by_id(str(mission_id))
-		if mission.is_empty():
-			lines.append("Mission: " + str(mission_id))
+	else:
+		for mission_id in active_missions:
+			var mission := _mission_by_id(str(mission_id))
+			if mission.is_empty():
+				lines.append("Mission: " + str(mission_id))
+				lines.append("Status: Active")
+				continue
+			lines.append(str(mission.get("title", mission_id)))
 			lines.append("Status: Active")
-			continue
-		lines.append(str(mission.get("title", mission_id)))
-		lines.append("Status: Active")
-		lines.append("Destination: %s / %s" % [str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?"))])
-		lines.append("Progress: " + _mission_progress_line(mission))
-		lines.append("Route hint: " + _mission_route_hint_line(mission))
-		lines.append("Cargo reserved: %d tons" % int(mission.get("cargoTons", 0)))
-		lines.append("Reward: %d credits" % int(mission.get("reward", 0)))
-		var description := str(mission.get("description", ""))
-		if description != "":
-			lines.append("Briefing: " + description)
-		lines.append("")
+			lines.append("Destination: %s / %s" % [str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?"))])
+			lines.append("Progress: " + _mission_progress_line(mission))
+			lines.append("Route hint: " + _mission_route_hint_line(mission))
+			lines.append("Cargo reserved: %d tons" % int(mission.get("cargoTons", 0)))
+			lines.append("Reward: %d credits" % int(mission.get("reward", 0)))
+			var description := str(mission.get("description", ""))
+			if description != "":
+				lines.append("Briefing: " + description)
+			lines.append("")
 	lines.append_array(_mission_completion_history_lines())
+	lines.append_array(_mission_abort_history_lines())
+	lines.append_array(_mission_failure_history_lines())
 	return lines
 
 func _mission_completion_history_lines() -> Array[String]:
@@ -3169,6 +3194,30 @@ func _mission_completion_history_lines() -> Array[String]:
 		lines.append(str(item.get("title", item.get("id", "Mission"))) + " at " + str(item.get("system", "?")) + " / " + str(item.get("body", "?")))
 		lines.append("Cargo released: %d tons" % int(item.get("cargo_released", 0)))
 		lines.append("Reward paid: %d credits" % int(item.get("reward_paid", 0)))
+	return lines
+
+func _mission_abort_history_lines() -> Array[String]:
+	var lines: Array[String] = []
+	if aborted_mission_history.is_empty():
+		return lines
+	lines.append("Aborted mission history")
+	for record in aborted_mission_history.slice(max(0, aborted_mission_history.size() - 3), aborted_mission_history.size()):
+		var item: Dictionary = record
+		lines.append(str(item.get("title", item.get("id", "Mission"))))
+		lines.append("Cargo released: %d tons" % int(item.get("cargo_released", 0)))
+	return lines
+
+func _mission_failure_history_lines() -> Array[String]:
+	var lines: Array[String] = []
+	if failed_mission_history.is_empty():
+		return lines
+	lines.append("Failed mission history")
+	for record in failed_mission_history.slice(max(0, failed_mission_history.size() - 3), failed_mission_history.size()):
+		var item: Dictionary = record
+		lines.append(str(item.get("title", item.get("id", "Mission"))))
+		lines.append("Failure flag: " + str(item.get("failure_flag", "pending")))
+		lines.append("Cargo released: %d tons" % int(item.get("cargo_released", 0)))
+		lines.append("Reputation: %s %+d" % [str(item.get("reputation_government", "Government")), int(item.get("reputation_delta", 0))])
 	return lines
 
 func _mission_progress_line(mission: Dictionary) -> String:
