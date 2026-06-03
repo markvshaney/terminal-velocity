@@ -16,7 +16,7 @@
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (118 tests)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=19"
   ],
-  "next_resume_action": "Continue with the next source-aligned playable/symbolic slice. Deterministic Godot logs that route from Levo to Sol now move to scripted hyperspace distance before jumping; keep this as the pattern for new fast-eval travel probes.",
+  "next_resume_action": "Next scheduled run should inspect git status/log plus backlog, then choose another safe source-aligned playable/symbolic slice. Do not redo mission abort scaffold or scripted jump-distance repair unless regressions appear.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -34,7 +34,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Continue Terminal Velocity autonomous safe-local development from the live repo state. Start by reading this ledger, events.jsonl, the continuation prompt, harness audit, git status/log, and the implementation backlog. New deterministic Godot travel probes should call _move_to_scripted_hyperspace_distance() before scripted _jump() when the test is not intentionally covering near-center blocking.",
+  "resume_prompt": "Resume Terminal Velocity autonomous safe-local development from ledger/events, continuation prompt, harness audit, git status/log, and backlog. Current checkpoint includes commits a4b489b and 3da6ede; worktree was expected clean after commit. Next action: pick the next strongest safe-local source-aligned slice; mission abort remains a TV scaffold pending Classic evidence.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -77,11 +77,11 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/failure consequences before adding penalties, story-flag rollback, deadline handling, or legal/reputation effects."
   ],
   "schema_version": 1,
-  "status": "running",
+  "status": "sleeping",
   "task_id": "terminal-velocity-game-development",
   "tool_caps_policy": {
     "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T19:48:46Z"
+  "updated_at": "2026-06-03T19:49:05Z"
 }
