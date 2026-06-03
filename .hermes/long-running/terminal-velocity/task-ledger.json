@@ -3,7 +3,7 @@
     "reason": "User authorized a long-running Terminal Velocity completion runner; autonomous safe-local repo work is approved. Push/PR/merge/destructive original-EV tests/gateway/provider/credential changes remain gated unless explicitly requested in the origin chat.",
     "type": "publication_gate_only"
   },
-  "current_milestone": "completion_runner_accelerated_to_15m_cadence",
+  "current_milestone": "completion_runner_accelerated_to_5m_cadence",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_deadline_failure_scaffold_releases_cargo_and_records_penalty -v -> OK",
@@ -13,7 +13,7 @@
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20"
   ],
-  "next_resume_action": "Runner cadence is now every 15 minutes, not every 2 hours. On each tick, start from git status/log plus this ledger/events, avoid overlapping work, and implement/verify/local-commit the next safe source-aligned Terminal Velocity slice. Push/PR/merge/destructive original-EV/Strict Play/gateway/provider/credential actions remain gated.",
+  "next_resume_action": "Runner cadence is now every 5 minutes. On each tick, start from git status/log plus this ledger/events, avoid overlapping work, and implement/verify/local-commit the next safe source-aligned Terminal Velocity slice. Push/PR/merge/destructive original-EV/Strict Play/gateway/provider/credential actions remain gated.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -31,7 +31,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Resume Terminal Velocity autonomous safe-local development from ledger/events, continuation prompt, harness audit, git status/log, and backlog. Completion runner cadence is now every 15 minutes for near-continuous progress; avoid overlapping edits, finish/checkpoint dirty work before starting new slices, and keep exact Classic claims source-labeled.",
+  "resume_prompt": "Resume Terminal Velocity autonomous safe-local development from ledger/events, continuation prompt, harness audit, git status/log, and backlog. Completion runner cadence is now every 5 minutes for near-continuous progress; avoid overlapping edits, finish/checkpoint dirty work before starting new slices, and keep exact Classic claims source-labeled.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -43,7 +43,7 @@
     "kind": "cronjob",
     "name": "Terminal Velocity completion runner",
     "profile": "loki-game",
-    "schedule": "every 15m",
+    "schedule": "every 5m",
     "side_effect_boundaries": [
       "safe local file/test/commit work allowed",
       "push/PR/merge/destructive EV/gateway/provider/credential changes gated"
@@ -80,5 +80,5 @@
     "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T17:06:00-04:00"
+  "updated_at": "2026-06-03T17:08:23-04:00"
 }
