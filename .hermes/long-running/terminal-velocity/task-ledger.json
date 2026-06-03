@@ -53,9 +53,28 @@
   ],
   "last_verified_commands": [
     "git status --short --branch -> ## main...origin/main (clean at scheduling time)",
-    "git log --oneline -5 -> latest 1695ac4 docs: record long-running TV harness audit"
+    "git log --oneline -5 -> latest 1695ac4 docs: record long-running TV harness audit",
+    "cronjob create -> e12f13d4b75e Terminal Velocity completion runner every 2h"
   ],
   "next_resume_action": "Scheduled runner should read this ledger, continuation prompt, long-running harness audit, and live backlog; then perform and locally commit the next safe source-aligned Terminal Velocity gameplay slice. Do not push/PR/merge or run destructive original-EV tests without a fresh explicit origin-chat approval.",
-  "updated_at": "2026-06-03T15:19:48-04:00",
-  "resume_prompt": "Resume Terminal Velocity long-running completion from /home/bh/workspaces/loki/terminal-velocity. Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, ev-classic-basilisk-observation, game-prototyping if building. Inspect git status, read .hermes/long-running/terminal-velocity/task-ledger.json, docs/prompts/terminal-velocity-continuation-prompt.md, docs/checklists/long-running-game-development-harness-audit.md, and docs/checklists/ev-classic-fidelity-implementation-backlog.md. Implement one source-aligned safe local gameplay/fidelity slice, verify with targeted Python/scenario/Godot commands, update docs/backlog and ledger/events, make a local conventional commit. Continue until a real gate/cap/no-safe-slice; never push/PR/merge/destructive-test unattended."
+  "updated_at": "2026-06-03T15:35:40-04:00",
+  "resume_prompt": "Resume Terminal Velocity long-running completion from /home/bh/workspaces/loki/terminal-velocity. Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, ev-classic-basilisk-observation, game-prototyping if building. Inspect git status, read .hermes/long-running/terminal-velocity/task-ledger.json, docs/prompts/terminal-velocity-continuation-prompt.md, docs/checklists/long-running-game-development-harness-audit.md, and docs/checklists/ev-classic-fidelity-implementation-backlog.md. Implement one source-aligned safe local gameplay/fidelity slice, verify with targeted Python/scenario/Godot commands, update docs/backlog and ledger/events, make a local conventional commit. Continue until a real gate/cap/no-safe-slice; never push/PR/merge/destructive-test unattended.",
+  "runner": {
+    "kind": "cronjob",
+    "job_id": "e12f13d4b75e",
+    "name": "Terminal Velocity completion runner",
+    "schedule": "every 2h",
+    "profile": "loki-game",
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
+    "deliver": "origin",
+    "enabled_toolsets": [
+      "file",
+      "terminal",
+      "session_search"
+    ],
+    "side_effect_boundaries": [
+      "safe local file/test/commit work allowed",
+      "push/PR/merge/destructive EV/gateway/provider/credential changes gated"
+    ]
+  }
 }
