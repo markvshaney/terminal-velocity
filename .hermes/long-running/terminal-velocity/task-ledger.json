@@ -3,7 +3,7 @@
     "reason": "User authorized a long-running Terminal Velocity completion runner; autonomous safe-local repo work is approved. Push/PR/merge/destructive original-EV tests/gateway/provider/credential changes remain gated unless explicitly requested in the origin chat.",
     "type": "publication_gate_only"
   },
-  "current_milestone": "durable_runner_authorized_by_user",
+  "current_milestone": "mission_abort_slice_verified_before_first_runner_tick",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
     "./run_godot.sh tv-mission-route-hint-log -> missionAccepted=true missionRouteQueued=true acceptedAtBody=Earth route=[\"Centauri\"]",
@@ -14,9 +14,13 @@
     "./run_godot.sh tv-mission-legal-eligibility-log -> cleanAvailable=true blockedAvailable=false visibleBlockedReason=true",
     "./run_godot.sh tv-contraband-scan-log -> system=Sol action=fine",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (118 tests)",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=19",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> OK (23 tests)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (19/19 passed)",
+    "./run_godot.sh tv-mission-abort-log -> TV_MISSION_ABORT_EVENT missionAccepted=true missionAborted=true reservedCargoReleased=true",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=19"
   ],
-  "next_resume_action": "Next scheduled run should inspect git status/log plus backlog, then choose another safe source-aligned playable/symbolic slice. Do not redo mission abort scaffold or scripted jump-distance repair unless regressions appear.",
+  "next_resume_action": "After push, start cron job e12f13d4b75e first tick; the runner should begin from a clean pushed worktree, read required artifacts/backlog, and implement the next safe source-aligned Terminal Velocity slice without push/PR/merge/destructive original-EV tests unattended.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -83,5 +87,5 @@
     "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T19:49:05Z"
+  "updated_at": "2026-06-03T15:58:40-04:00"
 }
