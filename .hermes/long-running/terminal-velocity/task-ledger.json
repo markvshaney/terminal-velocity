@@ -3,17 +3,18 @@
     "reason": "User authorized a long-running Terminal Velocity completion runner; autonomous safe-local repo work is approved. Push/PR/merge/destructive original-EV tests/gateway/provider/credential changes remain gated unless explicitly requested in the origin chat.",
     "type": "publication_gate_only"
   },
-  "current_milestone": "godot_mission_failure_history_deadline_details_verified",
+  "current_milestone": "godot_active_mission_deadline_display_verified_under_kanban",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_history_log_contract -v -> OK",
-    "./run_godot.sh tv-mission-log-history-log -> TV_MISSION_LOG_HISTORY_EVENT failedDeadlineVisible=true failedSourceVisible=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (121 tests)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract -v -> OK",
+    "./run_godot.sh tv-active-mission-deadline-log -> deadlineVisible=true sourceVisible=true remaining=4 day(s)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_history_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_failure_log_contract -v -> OK (3 tests)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (122 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20",
-    "git commit feat(godot): show failed mission deadline details"
+    "./run_godot.sh tv-mission-log-history-log -> failedDeadlineVisible=true failedSourceVisible=true",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, harness audit, and backlog; with failed mission history deadline/source detail verified, choose the next safe source-aligned gameplay/fidelity slice. Strong candidates: add active timed-mission deadline display/scenario if a safe Terminal Velocity scaffold is useful, mine Classic mission resource fields for CanAbort/failure descriptions/special flags, or improve legal/faction/map/fuel feedback. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Kanban lane is active and cron runner e12f13d4b75e is paused; start future TV slices from kanban_show plus git status/log, ledger/events, continuation prompt, harness audit, and backlog. Active mission deadline display is verified; choose the next safe source-aligned gameplay/fidelity slice, such as original/manual/resource evidence for mission abort/deadline UI/CanAbort/failure descriptions or another player-visible helper/probe. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -40,7 +41,7 @@
       "session_search"
     ],
     "job_id": "e12f13d4b75e",
-    "kind": "cronjob",
+    "kind": "kanban-worker",
     "name": "Terminal Velocity completion runner",
     "profile": "loki-game",
     "schedule": "every 5m",
@@ -48,7 +49,9 @@
       "safe local file/test/commit work allowed",
       "push/PR/merge/destructive EV/gateway/provider/credential changes gated"
     ],
-    "workdir": "/home/bh/workspaces/loki/terminal-velocity"
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
+    "previous_cron_job_id": "e12f13d4b75e",
+    "previous_cron_state": "paused/already paused at cutover; terminal-velocity profile cron list empty during t_f853333b"
   },
   "safe_backlog": [
     {
@@ -74,11 +77,11 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "schema_version": 1,
-  "status": "sleeping_until_next_scheduled_tick",
+  "status": "kanban_review_required_after_verified_slice",
   "task_id": "terminal-velocity-game-development",
   "tool_caps_policy": {
     "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T18:10:55-04:00"
+  "updated_at": "2026-06-03T18:45:40-04:00"
 }
