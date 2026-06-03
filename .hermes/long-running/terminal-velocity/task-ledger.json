@@ -1,20 +1,21 @@
 {
   "active_gate": {
     "reason": "Safe local file/test/commit work is approved. Push/PR/merge/rebase, destructive original-EV/Strict Play, credentials/providers/supervision/gateway, publication, and external/account-impacting actions remain gated.",
-    "type": "risk_gate_only"
+    "resume_after": "next cron tick continues safe-local work automatically",
+    "type": "risk_gate_only",
+    "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "mission_offer_selected_detail_helper_verified",
+  "current_milestone": "mission_chain_and_alignment_branch_logs_verified",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_offer_scan_autoresearch_log_contract -v -> OK",
-    "./run_godot.sh tv-mission-offer-scan-log -> selectedOfferDetailsVisible=true with Terminal Velocity helper/source-boundary lines; non-mutating offer scan",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (122 tests)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_chain_offer_log_contract -v && ./run_godot.sh tv-mission-chain-offer-log -> OK; chainOfferVisible=true; selectedChainOfferDetailsVisible=true; commit 56e86e7",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_branch_log_contract -v && ./run_godot.sh tv-mission-alignment-branch-log -> OK; branchOffersVisible=true; federationOfferVisible=true; freeportOfferVisible=true; commit 5a83d32",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (124 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20",
-    "git diff --check -> OK",
-    "git commit/amend -> feat(godot): show mission offer details (41d1bc8; ledger SHA corrected after amend)"
+    "git diff --check -> OK"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, harness audit, and backlog; with Mission Computer selected-offer helper details verified and committed, choose the next safe source-aligned gameplay/fidelity slice. Strong candidates: capture/mine Classic Mission Computer detail UI evidence, expand selectable multi-offer detail behavior, or add another player-visible legal/map/fuel/mission helper with Terminal Velocity source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: source-backed mission branch acceptance/exclusion probe, mission/legal offer blocked-reason UI, or original-resource/manual evidence for mission/legal thresholds. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -89,5 +90,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T23:11:34.151838Z"
+  "updated_at": "2026-06-03T23:30:00Z"
 }
