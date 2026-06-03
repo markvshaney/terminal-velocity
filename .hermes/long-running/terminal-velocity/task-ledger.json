@@ -6,14 +6,17 @@
   "current_milestone": "durable_runner_authorized_by_user",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_abort_log_contract -v -> OK (1 test)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> OK (23 tests)",
+    "./run_godot.sh tv-mission-route-hint-log -> missionAccepted=true missionRouteQueued=true acceptedAtBody=Earth route=[\"Centauri\"]",
+    "./run_godot.sh tv-first-mission-delivery-log -> missionDelivered=true finalSystem=Centauri landedBody=Luna cargoAfterDelivery=0",
+    "./run_godot.sh tv-mission-offer-scan-log -> scanSystem=Sol scanBody=Earth totalOffers=1",
+    "./run_godot.sh tv-pilot-save-resume-log -> save/resume round-trip booleans true",
+    "./run_godot.sh tv-outfitter-shipyard-log -> boughtCargoPod=true boughtLaser=true boughtLightFreighter=true",
+    "./run_godot.sh tv-mission-legal-eligibility-log -> cleanAvailable=true blockedAvailable=false visibleBlockedReason=true",
+    "./run_godot.sh tv-contraband-scan-log -> system=Sol action=fine",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (118 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary failed=0 passed=19 total=19",
-    "./run_godot.sh tv-mission-abort-log -> TV_MISSION_ABORT_EVENT missionAccepted=true missionAborted=true reservedCargoReleased=true cargoAfterAccept=3 cargoAfterAbort=0",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=19"
   ],
-  "next_resume_action": "Inspect the live backlog/worktree, then choose the next source-aligned playable or symbolic gameplay slice; mission abort consequences should remain scaffold-labeled until EV Classic/manual/resource evidence is captured.",
+  "next_resume_action": "Continue with the next source-aligned playable/symbolic slice. Deterministic Godot logs that route from Levo to Sol now move to scripted hyperspace distance before jumping; keep this as the pattern for new fast-eval travel probes.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -31,7 +34,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Continue Terminal Velocity autonomous safe-local development from the live repo state. Start by reading this ledger, events.jsonl, the continuation prompt, harness audit, git status/log, and the implementation backlog. Do not treat the mission-abort scaffold as EV Classic-confirmed; source/oracle boundary remains mission_abort_pending_classic_runtime_or_manual_trace.",
+  "resume_prompt": "Continue Terminal Velocity autonomous safe-local development from the live repo state. Start by reading this ledger, events.jsonl, the continuation prompt, harness audit, git status/log, and the implementation backlog. New deterministic Godot travel probes should call _move_to_scripted_hyperspace_distance() before scripted _jump() when the test is not intentionally covering near-center blocking.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -80,5 +83,5 @@
     "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T19:47:15Z"
+  "updated_at": "2026-06-03T19:48:46Z"
 }

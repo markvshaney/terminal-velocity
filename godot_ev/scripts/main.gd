@@ -805,6 +805,7 @@ func _run_mission_offer_scan_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	landing_tab = 0
@@ -822,6 +823,7 @@ func _run_mission_route_hint_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	var accepted_body := _current_body()
@@ -882,6 +884,7 @@ func _run_first_mission_delivery_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	var accepted_body := _current_body()
@@ -898,6 +901,7 @@ func _run_first_mission_delivery_log() -> void:
 	_ev_land_or_launch()
 	selected_route.clear()
 	var route_to_destination_selected := _select_map_route_to_system("Centauri")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_position_at_body(destination_body)
 	_try_land()
@@ -916,6 +920,7 @@ func _run_outfitter_shipyard_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	var landed_body := str(_current_body().get("name", ""))
@@ -1055,6 +1060,7 @@ func _run_legal_service_gate_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	var body_name := str(_current_body().get("name", ""))
@@ -1082,6 +1088,7 @@ func _run_legal_patrol_posture_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var government_name := _current_government_name()
 	legal_records[government_name] = -75
@@ -1097,6 +1104,7 @@ func _run_mission_legal_eligibility_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	var body := _current_body()
@@ -1134,6 +1142,7 @@ func _run_legal_consequence_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var government_name := _current_government_name()
 	legal_records[government_name] = -75
@@ -1156,6 +1165,7 @@ func _run_legal_clemency_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	var government_name := _current_government_name()
@@ -1175,6 +1185,7 @@ func _run_contraband_scan_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var government_name := _current_government_name()
 	commodity_hold["equipment"] = EV_CLASSIC_COMMODITY_LOT_SIZE
@@ -1196,6 +1207,7 @@ func _run_contraband_risk_log() -> void:
 	_reset_travel_state()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var government_name := _current_government_name()
 	var commodity_id := "equipment"
@@ -1212,6 +1224,7 @@ func _run_pilot_save_resume_log() -> void:
 	loaded_ship_name = "RoundTrip"
 	strict_play_selected = false
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	_try_land()
 	var accepted_body := _current_body()
