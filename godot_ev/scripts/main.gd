@@ -935,7 +935,9 @@ func _run_mission_log_history_log() -> void:
 	var completed_visible := lines.has("Completed mission history")
 	var aborted_visible := lines.has("Aborted mission history")
 	var failed_visible := lines.has("Failed mission history")
-	print("%s noActiveVisible=%s completedHistoryVisible=%s abortedHistoryVisible=%s failedHistoryVisible=%s lineCount=%d lines=%s sourceLabel=terminal-velocity-mission-log-history-scaffold oracleStatus=mission_history_ui_pending_classic_runtime_trace" % [MISSION_LOG_HISTORY_EVENT_LOG_PREFIX, str(no_active_visible), str(completed_visible), str(aborted_visible), str(failed_visible), lines.size(), JSON.stringify(lines)])
+	var failed_deadline_visible := lines.has("Deadline: accepted day 0, failed day 3, limit 2 day(s)")
+	var failed_source_visible := lines.has("Failure source: ev-classic-resource-bible-backed-mission-failure-scaffold; exact Classic UI pending")
+	print("%s noActiveVisible=%s completedHistoryVisible=%s abortedHistoryVisible=%s failedHistoryVisible=%s failedDeadlineVisible=%s failedSourceVisible=%s lineCount=%d lines=%s sourceLabel=terminal-velocity-mission-log-history-scaffold oracleStatus=mission_history_ui_pending_classic_runtime_trace" % [MISSION_LOG_HISTORY_EVENT_LOG_PREFIX, str(no_active_visible), str(completed_visible), str(aborted_visible), str(failed_visible), str(failed_deadline_visible), str(failed_source_visible), lines.size(), JSON.stringify(lines)])
 	get_tree().quit(0)
 
 func _run_first_mission_delivery_log() -> void:
@@ -3215,9 +3217,11 @@ func _mission_failure_history_lines() -> Array[String]:
 	for record in failed_mission_history.slice(max(0, failed_mission_history.size() - 3), failed_mission_history.size()):
 		var item: Dictionary = record
 		lines.append(str(item.get("title", item.get("id", "Mission"))))
+		lines.append("Deadline: accepted day %d, failed day %d, limit %d day(s)" % [int(item.get("accepted_day", 0)), int(item.get("current_day", 0)), int(item.get("time_limit_days", 0))])
 		lines.append("Failure flag: " + str(item.get("failure_flag", "pending")))
 		lines.append("Cargo released: %d tons" % int(item.get("cargo_released", 0)))
 		lines.append("Reputation: %s %+d" % [str(item.get("reputation_government", "Government")), int(item.get("reputation_delta", 0))])
+		lines.append("Failure source: %s; exact Classic UI pending" % str(item.get("sourceLabel", "terminal-velocity-failure-history-scaffold")))
 	return lines
 
 func _mission_progress_line(mission: Dictionary) -> String:

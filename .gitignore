@@ -13,6 +13,7 @@ __pycache__/
 savegame.json
 native_ev/savegame.json
 *.log
+.hermes/long-running/*/heartbeat.json
 
 # Original/proprietary local EV source files and intermediate extractions.
 # Keep these local; do not put original .rez/.nplay assets into git history.

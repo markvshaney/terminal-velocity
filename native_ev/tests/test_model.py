@@ -705,6 +705,10 @@ class NativeEvModelTests(unittest.TestCase):
             'completedHistoryVisible=%s',
             'abortedHistoryVisible=%s',
             'failedHistoryVisible=%s',
+            'failedDeadlineVisible=%s',
+            'failedSourceVisible=%s',
+            'Deadline: accepted day %d, failed day %d, limit %d day(s)',
+            'Failure source: %s; exact Classic UI pending',
             'sourceLabel=terminal-velocity-mission-log-history-scaffold',
             'oracleStatus=mission_history_ui_pending_classic_runtime_trace',
         ]:
