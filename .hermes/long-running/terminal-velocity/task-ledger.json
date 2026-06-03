@@ -3,24 +3,17 @@
     "reason": "User authorized a long-running Terminal Velocity completion runner; autonomous safe-local repo work is approved. Push/PR/merge/destructive original-EV tests/gateway/provider/credential changes remain gated unless explicitly requested in the origin chat.",
     "type": "publication_gate_only"
   },
-  "current_milestone": "mission_abort_slice_verified_before_first_runner_tick",
+  "current_milestone": "mission_deadline_failure_scaffold_verified_committed",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
-    "./run_godot.sh tv-mission-route-hint-log -> missionAccepted=true missionRouteQueued=true acceptedAtBody=Earth route=[\"Centauri\"]",
-    "./run_godot.sh tv-first-mission-delivery-log -> missionDelivered=true finalSystem=Centauri landedBody=Luna cargoAfterDelivery=0",
-    "./run_godot.sh tv-mission-offer-scan-log -> scanSystem=Sol scanBody=Earth totalOffers=1",
-    "./run_godot.sh tv-pilot-save-resume-log -> save/resume round-trip booleans true",
-    "./run_godot.sh tv-outfitter-shipyard-log -> boughtCargoPod=true boughtLaser=true boughtLightFreighter=true",
-    "./run_godot.sh tv-mission-legal-eligibility-log -> cleanAvailable=true blockedAvailable=false visibleBlockedReason=true",
-    "./run_godot.sh tv-contraband-scan-log -> system=Sol action=fine",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (118 tests)",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=19",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> OK (23 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (19/19 passed)",
-    "./run_godot.sh tv-mission-abort-log -> TV_MISSION_ABORT_EVENT missionAccepted=true missionAborted=true reservedCargoReleased=true",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=19"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_deadline_failure_scaffold_releases_cargo_and_records_penalty -v -> OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_gameplay_scenario_curriculum -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (119 tests)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20"
   ],
-  "next_resume_action": "After push, start cron job e12f13d4b75e first tick; the runner should begin from a clean pushed worktree, read required artifacts/backlog, and implement the next safe source-aligned Terminal Velocity slice without push/PR/merge/destructive original-EV tests unattended.",
+  "next_resume_action": "Start the next cron tick from git status/log plus this ledger/events; worktree is expected clean except local ledger/event checkpoint files if ignored. Pick the next strongest safe local source-aligned Terminal Velocity slice. Good candidates: original EV Classic/manual/resource evidence for mission abort/deadline UI/CanAbort/failure text, or a bounded player-visible Godot mission deadline/failure surface that preserves scaffold labels. Do not push/PR/merge or perform destructive original-EV/Strict Play tests unattended.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -38,7 +31,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Resume Terminal Velocity autonomous safe-local development from ledger/events, continuation prompt, harness audit, git status/log, and backlog. Current checkpoint includes commits a4b489b and 3da6ede; worktree was expected clean after commit. Next action: pick the next strongest safe-local source-aligned slice; mission abort remains a TV scaffold pending Classic evidence.",
+  "resume_prompt": "Resume Terminal Velocity autonomous safe-local development from ledger/events, continuation prompt, harness audit, git status/log, and backlog. Current checkpoint includes commit 9cb7949 adding mission_deadline_failure_scaffold: timed mission acceptance, day advancement past deadline, cargo release, failure flag recording, and half-CompReward reputation penalty scaffold, verified by native tests, scenario CLI 20/20, and Godot self-test gameplayScenarios=20. Next action: choose the strongest safe local source-aligned slice; keep exact Classic deadline/failure UI claims pending original runtime/manual evidence.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -78,7 +71,7 @@
       "gate": "Hermes code changes safe-local until push/restart/supervision",
       "id": "long-task-tool-triage"
     },
-    "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/failure consequences before adding penalties, story-flag rollback, deadline handling, or legal/reputation effects."
+    "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "schema_version": 1,
   "status": "sleeping",
@@ -87,5 +80,5 @@
     "near_cap_action": "write checkpoint, update next_resume_action, and stop starting new behavior until the next run wakes from the checkpoint",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T15:58:40-04:00"
+  "updated_at": "2026-06-03T16:05:47-04:00"
 }
