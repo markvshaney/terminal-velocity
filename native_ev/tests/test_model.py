@@ -984,6 +984,32 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission chain offer scenario contract', plan)
         self.assertIn('frontier_sample_hera_freeport', plan)
 
+    def test_godot_mission_alignment_branch_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-alignment-branch-log',
+            'func _run_mission_alignment_branch_log',
+            'TV_MISSION_ALIGNMENT_BRANCH_EVENT',
+            'branchOffersVisible=%s',
+            'federation_report_freeport',
+            'freeport_pact_smugglers',
+            'chapter_one_alignment',
+            'reputation_event_id',
+            '_apply_reputation_event(reputation_event_id',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=terminal_velocity_eval_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAlignmentBranchLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-alignment-branch-log', run_script)
+        self.assertIn('tv-mission-alignment-branch-log', launcher)
+        self.assertIn('Mission alignment branch scenario contract', plan)
+        self.assertIn('chapter_one_alignment', plan)
+
     def test_godot_first_mission_delivery_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

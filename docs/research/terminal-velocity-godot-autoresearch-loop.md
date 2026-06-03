@@ -147,6 +147,20 @@ Mission chain offer scenario contract:
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
   This is a Terminal Velocity chain-continuity/playability probe; exact EV Classic Mission Computer offer refresh and detail UI remain pending original-runtime/manual evidence.
 
+Mission alignment branch scenario contract:
+
+- `RunGodot.ps1 -MissionAlignmentBranchLog` / `--tv-mission-alignment-branch-log`
+- Extends the chain-continuity fast-eval path through `frontier_sample_hera_freeport` delivery at Sirius Station, then scans the Mission Computer for the mutually exclusive chapter-one alignment branch offers and logs:
+  - first and chain mission delivery booleans;
+  - Sirius Station scan system/body;
+  - branch-offer visibility (`branchOffersVisible=true`) for both `federation_report_freeport` and `freeport_pact_smugglers`;
+  - shared choice group (`chapter_one_alignment`);
+  - reputation snapshot needed by the current Terminal Velocity legal/reputation gates;
+  - completion ids and story flags;
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
+  This is a Terminal Velocity story-branch/playability probe; exact EV Classic branch offer UI, random refresh timing, and legal/reputation thresholds remain pending original-runtime/manual/resource evidence.
+
 Mission route-hint scenario contract:
 
 - `RunGodot.ps1 -MissionRouteHintLog` / `--tv-mission-route-hint-log`

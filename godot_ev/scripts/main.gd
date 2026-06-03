@@ -36,6 +36,7 @@ const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
+const MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_BRANCH_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
@@ -186,6 +187,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
 		call_deferred("_run_mission_chain_offer_log")
+	if OS.get_cmdline_args().has("--tv-mission-alignment-branch-log") or OS.get_cmdline_user_args().has("--tv-mission-alignment-branch-log"):
+		call_deferred("_run_mission_alignment_branch_log")
 	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
 		call_deferred("_run_mission_route_hint_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
@@ -874,6 +877,56 @@ func _run_mission_chain_offer_log() -> void:
 	print("%s startSystem=Levo routeToSolSelected=%s firstMissionAccepted=%s firstMissionDelivered=%s completedMissions=%s routeToChainStopSelected=%s scanSystem=%s scanBody=\"%s\" chainOfferVisible=%s chainOffers=%s selectedChainOfferDetailsVisible=%s selectedChainOfferDetails=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(first_mission_accepted), str(first_mission_delivered), JSON.stringify(completed_ids), str(route_to_chain_stop_selected), str(current_system.get("name", "?")), str(chain_body.get("name", "None")), str(frontier_offer_visible), JSON.stringify(chain_offer_ids), str(chain_offer_details_visible), JSON.stringify(selected_chain_detail_lines), JSON.stringify(story_flags), status_line])
 	get_tree().quit(0)
 
+func _run_mission_alignment_branch_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var first_mission := _first_available_mission(_current_body())
+	var first_mission_id := str(first_mission.get("id", "none"))
+	_accept_selected_mission()
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_luna_selected := _select_map_route_to_system("Centauri")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Luna")
+	_try_land()
+	var first_completed := _complete_arrived_missions().has(first_mission_id)
+	var chain_mission := _mission_by_id("frontier_sample_hera_freeport")
+	selected_landing_item = 0
+	_accept_selected_mission()
+	var chain_accepted := active_missions.has("frontier_sample_hera_freeport")
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_sirius_selected := _select_map_route_to_system(str(chain_mission.get("destinationSystem", "Sirius")))
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Sirius Station")
+	_try_land()
+	var chain_delivered := _complete_arrived_missions().has("frontier_sample_hera_freeport")
+	var branch_body := _current_body()
+	var branch_offers := _available_missions(branch_body)
+	var branch_offer_ids := []
+	var branch_choice_groups := []
+	for mission in branch_offers:
+		branch_offer_ids.append(str(mission.get("id", "")))
+		var choice_group := str(mission.get("choiceGroup", ""))
+		if choice_group != "" and not branch_choice_groups.has(choice_group):
+			branch_choice_groups.append(choice_group)
+	var federation_visible := branch_offer_ids.has("federation_report_freeport")
+	var freeport_visible := branch_offer_ids.has("freeport_pact_smugglers")
+	var branch_choice_group_visible := branch_choice_groups.has("chapter_one_alignment")
+	var reputation_snapshot := {
+		"Federation": int(reputation_scores.get("Federation", 0)),
+		"Independent": int(reputation_scores.get("Independent", 0)),
+		"Centauri Protectorate": int(reputation_scores.get("Centauri Protectorate", 0))
+	}
+	print("%s startSystem=Levo routeToSolSelected=%s routeToLunaSelected=%s firstMissionDelivered=%s chainMissionAccepted=%s routeToSiriusSelected=%s chainMissionDelivered=%s scanSystem=%s scanBody=\"%s\" branchOffersVisible=%s federationOfferVisible=%s freeportOfferVisible=%s branchOffers=%s choiceGroups=%s reputation=%s completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(route_to_luna_selected), str(first_completed), str(chain_accepted), str(route_to_sirius_selected), str(chain_delivered), str(current_system.get("name", "?")), str(branch_body.get("name", "None")), str(federation_visible and freeport_visible and branch_choice_group_visible), str(federation_visible), str(freeport_visible), JSON.stringify(branch_offer_ids), JSON.stringify(branch_choice_groups), JSON.stringify(reputation_snapshot), JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
+	get_tree().quit(0)
+
 func _run_mission_route_hint_log() -> void:
 	_reset_travel_state()
 	map_visible = true
@@ -1477,6 +1530,9 @@ func _complete_arrived_missions() -> Array:
 		cargo = max(0, cargo - cargo_released)
 		credits += reward_paid
 		completed_mission_history.append(_mission_completion_record(mission, cargo_released, reward_paid))
+		var reputation_event_id := str(mission.get("reputationEvent", ""))
+		if reputation_event_id != "" and reputation_event_id != "<null>":
+			_apply_reputation_event(reputation_event_id, _current_government_name())
 		for flag in mission.get("completionFlags", []):
 			if not story_flags.has(flag):
 				story_flags.append(flag)
