@@ -23,6 +23,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'chapter_one_courier_chain',
                 'alignment_choice_guardrail',
                 'mission_destination_route_hint',
+                'mission_abort_releases_reserved_cargo',
                 'outfitter_ship_ladder_intro',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
@@ -227,6 +228,24 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['queued_active_mission_destination'], 'passed')
         self.assertEqual(result['trace'][-1]['destinationSystem'], 'Centauri')
         self.assertEqual(result['trace'][-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
+
+    def test_mission_abort_releases_reserved_cargo_without_completion(self):
+        result = run_scripted_scenario('mission_abort_releases_reserved_cargo')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], [])
+        self.assertEqual(result['state']['abortedJobs'], ['intro_courier_earth_hera'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['checks']['aborted_active_mission'], 'passed')
+        self.assertEqual(result['checks']['released_aborted_mission_cargo'], 'passed')
+        abort_event = [event for event in result['trace'] if event['type'] == 'abort_mission'][-1]
+        self.assertEqual(abort_event['missionId'], 'intro_courier_earth_hera')
+        self.assertEqual(abort_event['releasedCargoTons'], 3)
+        self.assertEqual(abort_event['sourceLabel'], 'terminal-velocity-mission-abort-scaffold')
+        self.assertEqual(abort_event['oracleStatus'], 'mission_abort_pending_classic_runtime_or_manual_trace')
 
     def test_outfitter_ship_ladder_intro_buys_upgrade_weapon_and_bigger_ship(self):
         result = run_scripted_scenario('outfitter_ship_ladder_intro')

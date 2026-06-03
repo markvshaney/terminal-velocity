@@ -635,6 +635,33 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission route-hint scenario contract', plan)
         self.assertIn('active mission destination → queued route leg', plan)
 
+    def test_godot_mission_abort_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-abort-log',
+            'func _run_mission_abort_log',
+            'TV_MISSION_ABORT_EVENT',
+            'func _abort_active_mission',
+            'var aborted_mission_history: Array = []',
+            'missionAccepted=true',
+            'missionAborted=true',
+            'reservedCargoReleased=true',
+            'abortedHistoryCount=%d',
+            'sourceLabel=terminal-velocity-mission-abort-scaffold',
+            'oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace',
+            'KEY_X:',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAbortLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-abort-log', run_script)
+        self.assertIn('tv-mission-abort-log', wrapper)
+        self.assertIn('Mission abort scenario contract', plan)
+        self.assertIn('reserved cargo release', plan)
+
     def test_godot_outfitter_shipyard_progression_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

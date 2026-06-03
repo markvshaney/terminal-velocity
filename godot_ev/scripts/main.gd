@@ -36,6 +36,7 @@ const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
+const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
@@ -118,6 +119,7 @@ var selected_landing_item := 0
 var active_missions: Array = []
 var completed_missions: Array = []
 var completed_mission_history: Array = []
+var aborted_mission_history: Array = []
 var story_flags: Array = []
 var commodity_hold: Dictionary = {}
 var owned_outfits: Dictionary = {}
@@ -178,6 +180,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
 		call_deferred("_run_mission_route_hint_log")
+	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
+		call_deferred("_run_mission_abort_log")
 	if OS.get_cmdline_args().has("--tv-first-mission-delivery-log") or OS.get_cmdline_user_args().has("--tv-first-mission-delivery-log"):
 		call_deferred("_run_first_mission_delivery_log")
 	if OS.get_cmdline_args().has("--tv-pilot-save-resume-log") or OS.get_cmdline_user_args().has("--tv-pilot-save-resume-log"):
@@ -539,6 +543,11 @@ func _reset_travel_state() -> void:
 	landing_tab = 0
 	selected_landing_item = 0
 	player_fuel = _max_player_fuel()
+	active_missions.clear()
+	completed_missions.clear()
+	completed_mission_history.clear()
+	aborted_mission_history.clear()
+	story_flags.clear()
 	commodity_hold.clear()
 	cargo = 0
 	projectiles.clear()
@@ -845,6 +854,29 @@ func _route_to_active_mission_destination() -> bool:
 		status_line = "Active mission has no destination"
 		return false
 	return _select_map_route_to_system(destination_system)
+
+func _run_mission_abort_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var accepted_body := _current_body()
+	var mission_before_accept: Dictionary = _first_available_mission(accepted_body)
+	var accepted_mission_id := str(mission_before_accept.get("id", "none"))
+	var cargo_before_accept := cargo
+	_accept_selected_mission()
+	var cargo_after_accept := cargo
+	var mission_accepted := active_missions.has(accepted_mission_id)
+	var abort_succeeded := _abort_active_mission(accepted_mission_id)
+	var cargo_after_abort := cargo
+	var latest_abort := JSON.stringify(aborted_mission_history[aborted_mission_history.size() - 1]) if not aborted_mission_history.is_empty() else "{}"
+	var accepted_status := "missionAccepted=true" if mission_accepted else "missionAccepted=false"
+	var abort_status := "missionAborted=true" if abort_succeeded else "missionAborted=false"
+	var cargo_released_status := "reservedCargoReleased=true" if cargo_after_abort == cargo_before_accept else "reservedCargoReleased=false"
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterAbort=%d activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=terminal-velocity-mission-abort-scaffold oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_ABORT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, accepted_status, abort_status, cargo_released_status, cargo_before_accept, cargo_after_accept, cargo_after_abort, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_abort, status_line])
+	get_tree().quit(0)
 
 func _run_first_mission_delivery_log() -> void:
 	_reset_travel_state()
@@ -1302,6 +1334,36 @@ func _complete_arrived_missions() -> Array:
 	status_line = "Completed missions: " + ", ".join(completed_now) if not completed_now.is_empty() else "No missions completed"
 	return completed_now
 
+func _abort_active_mission(mission_id := "") -> bool:
+	if active_missions.is_empty():
+		_set_status("No active mission to abort")
+		return false
+	var selected_id := mission_id
+	if selected_id == "":
+		selected_id = str(active_missions[0])
+	if not active_missions.has(selected_id):
+		_set_status("Mission not active: " + selected_id)
+		return false
+	var mission := _mission_by_id(selected_id)
+	var cargo_released := int(mission.get("cargoTons", 0)) if not mission.is_empty() else 0
+	active_missions.erase(selected_id)
+	cargo = max(0, cargo - cargo_released)
+	aborted_mission_history.append(_mission_abort_record(mission, selected_id, cargo_released))
+	_set_status("Aborted mission: %s; released %d cargo tons" % [str(mission.get("title", selected_id)) if not mission.is_empty() else selected_id, cargo_released])
+	_play_sound("ui_click")
+	return true
+
+func _mission_abort_record(mission: Dictionary, mission_id: String, cargo_released: int) -> Dictionary:
+	return {
+		"id": mission_id,
+		"title": str(mission.get("title", mission_id)) if not mission.is_empty() else mission_id,
+		"system": str(current_system.get("name", "?")),
+		"body": str(_current_body().get("name", "?")),
+		"cargo_released": cargo_released,
+		"sourceLabel": "terminal-velocity-mission-abort-scaffold",
+		"oracleStatus": "mission_abort_pending_classic_runtime_or_manual_trace",
+	}
+
 func _mission_completion_record(mission: Dictionary, cargo_released: int, reward_paid: int) -> Dictionary:
 	return {
 		"id": str(mission.get("id", "")),
@@ -1438,6 +1500,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_ENTER:
 				if landed and landing_tab == 0:
 					_accept_selected_mission()
+			KEY_X:
+				_abort_active_mission()
 			KEY_B:
 				if landed:
 					match landing_tab:
@@ -1643,6 +1707,7 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"active_missions": active_missions,
 		"completed_missions": completed_missions,
 		"completed_mission_history": completed_mission_history,
+		"aborted_mission_history": aborted_mission_history,
 		"story_flags": story_flags,
 		"commodity_hold": commodity_hold,
 		"owned_outfits": owned_outfits,
@@ -1780,6 +1845,7 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	active_missions = data.get("active_missions", active_missions)
 	completed_missions = data.get("completed_missions", completed_missions)
 	completed_mission_history = data.get("completed_mission_history", completed_mission_history)
+	aborted_mission_history = data.get("aborted_mission_history", aborted_mission_history)
 	story_flags = data.get("story_flags", story_flags)
 	commodity_hold = data.get("commodity_hold", commodity_hold)
 	owned_outfits = data.get("owned_outfits", owned_outfits)

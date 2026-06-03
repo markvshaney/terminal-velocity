@@ -37,6 +37,7 @@ SCENARIO_CURRICULUM = [
     'chapter_one_courier_chain',
     'alignment_choice_guardrail',
     'mission_destination_route_hint',
+    'mission_abort_releases_reserved_cargo',
     'outfitter_ship_ladder_intro',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
@@ -523,6 +524,36 @@ def _complete_cargo_jobs(state: dict[str, Any], _action: dict[str, Any], trace: 
     return completed_any
 
 
+def _abort_active_mission(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    mission_id = action.get('missionId')
+    active_jobs = state.get('activeJobs', [])
+    if not active_jobs:
+        trace.append({'type': 'blocked_abort_mission', 'reason': 'no active mission', 'sourceLabel': 'terminal-velocity-mission-abort-scaffold', 'oracleStatus': 'mission_abort_pending_classic_runtime_or_manual_trace'})
+        return False
+    job = None
+    for candidate in active_jobs:
+        if mission_id is None or candidate.get('id') == mission_id:
+            job = candidate
+            break
+    if job is None:
+        trace.append({'type': 'blocked_abort_mission', 'missionId': mission_id, 'reason': 'mission not active', 'sourceLabel': 'terminal-velocity-mission-abort-scaffold', 'oracleStatus': 'mission_abort_pending_classic_runtime_or_manual_trace'})
+        return False
+    state['activeJobs'] = [candidate for candidate in active_jobs if candidate.get('id') != job.get('id')]
+    released = int(job.get('reservedCargoTons', job.get('tons', 0)))
+    state['cargoUsed'] = max(0, int(state.get('cargoUsed', 0)) - released)
+    state.setdefault('abortedJobs', []).append(job.get('id'))
+    trace.append({
+        'type': 'abort_mission',
+        'missionId': job.get('id'),
+        'releasedCargoTons': released,
+        'cargoUsed': state['cargoUsed'],
+        'activeJobs': [candidate.get('id') for candidate in state.get('activeJobs', [])],
+        'sourceLabel': 'terminal-velocity-mission-abort-scaffold',
+        'oracleStatus': 'mission_abort_pending_classic_runtime_or_manual_trace',
+    })
+    return True
+
+
 def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
     if name == 'levo_merchant_first_hop':
         return [
@@ -606,6 +637,13 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
             {'type': 'depart'},
             {'type': 'route_to_active_mission_destination'},
+        ]
+    if name == 'mission_abort_releases_reserved_cargo':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
+            {'type': 'abort_active_mission', 'missionId': 'intro_courier_earth_hera'},
         ]
     if name == 'outfitter_ship_ladder_intro':
         return [
@@ -735,6 +773,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         checks.update({
             'queued_active_mission_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] and any(event.get('type') == 'route_to_active_mission_destination' and event.get('missionId') == 'intro_courier_earth_hera' and event.get('destinationSystem') == 'Centauri' and event.get('routeQueued') for event in trace) else 'failed',
         })
+    elif name == 'mission_abort_releases_reserved_cargo':
+        checks.update({
+            'accepted_abort_test_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'intro_courier_earth_hera' and event.get('reservedCargoTons') == 3 for event in trace) else 'failed',
+            'aborted_active_mission': 'passed' if any(event.get('type') == 'abort_mission' and event.get('missionId') == 'intro_courier_earth_hera' for event in trace) and not state.get('activeJobs') else 'failed',
+            'released_aborted_mission_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
+            'recorded_abort_source_boundary': 'passed' if any(event.get('type') == 'abort_mission' and event.get('sourceLabel') == 'terminal-velocity-mission-abort-scaffold' and 'pending_classic' in event.get('oracleStatus', '') for event in trace) else 'failed',
+        })
     elif name == 'outfitter_ship_ladder_intro':
         checks.update({
             'bought_first_outfit': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and any(event.get('type') == 'buy_outfit_or_weapon' and event.get('saleType') == 'outfit' and event.get('itemId') == 'cargo_pod' for event in trace) else 'failed',
@@ -838,6 +883,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'buy_ship': _buy_ship,
         'avoid_pirate_contact': _avoid_pirate_contact,
         'complete_cargo_jobs': _complete_cargo_jobs,
+        'abort_active_mission': _abort_active_mission,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
     }
     all_actions_valid = True

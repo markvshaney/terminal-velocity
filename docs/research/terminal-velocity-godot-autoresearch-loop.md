@@ -143,6 +143,19 @@ Mission route-hint scenario contract:
   - `sourceLabel=terminal-velocity-design-scaffold`;
   - `oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace`.
 
+Mission abort scenario contract:
+
+- `RunGodot.ps1 -MissionAbortLog` / `--tv-mission-abort-log`
+- Exercises active mission abort and reserved cargo release in the Godot fast-eval lane.
+- Resets to Levo, route-selects Sol, moves to scripted hyperspace distance, jumps and lands at Earth, accepts `intro_courier_earth_hera`, aborts it without completion, and logs:
+  - whether route selection, mission acceptance, and mission abort succeeded;
+  - cargo before accept, after accept, and after abort (`cargoBeforeAccept`, `cargoAfterAccept`, `cargoAfterAbort`);
+  - active/completed mission ids plus `abortedHistoryCount` and latest abort record;
+  - `reservedCargoReleased=true` when the abort returns reserved cargo to the available hold;
+  - `sourceLabel=terminal-velocity-mission-abort-scaffold`;
+  - `oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace`.
+  This is a Terminal Velocity mission-state scaffold, not an EV Classic abort-semantics fidelity claim.
+
 First mission delivery scenario contract:
 
 - `RunGodot.ps1 -FirstMissionDeliveryLog` / `--tv-first-mission-delivery-log`

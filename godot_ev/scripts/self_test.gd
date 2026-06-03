@@ -110,6 +110,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"chapter_one_courier_chain",
 		"alignment_choice_guardrail",
 		"mission_destination_route_hint",
+		"mission_abort_releases_reserved_cargo",
 		"outfitter_ship_ladder_intro",
 		"shift_click_multi_stop_route_queue",
 		"route_queue_invalid_stop_guardrail",

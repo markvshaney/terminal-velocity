@@ -11,6 +11,7 @@
     "chapter_one_courier_chain",
     "alignment_choice_guardrail",
     "mission_destination_route_hint",
+    "mission_abort_releases_reserved_cargo",
     "outfitter_ship_ladder_intro",
     "shift_click_multi_stop_route_queue",
     "route_queue_invalid_stop_guardrail",
@@ -91,6 +92,10 @@
     "mission_destination_route_hint": {
       "purpose": "Mission objective route hint: after accepting an active courier contract, queue the contract destination as the next map route leg.",
       "surface": "mission objective/map route guidance design scaffold"
+    },
+    "mission_abort_releases_reserved_cargo": {
+      "purpose": "Mission abort scaffold: abort an active courier contract without completion, release its reserved cargo, and keep source/oracle boundaries explicit pending Classic confirmation.",
+      "surface": "mission state/recovery scaffold"
     },
     "outfitter_ship_ladder_intro": {
       "purpose": "Outfitter/ship-ladder intro: reach Earth, buy a cargo upgrade and weapon, then trade up to a larger ship from local manifest stock while preserving explicit scaffold/source-boundary labels.",
