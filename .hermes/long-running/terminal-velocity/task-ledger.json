@@ -3,18 +3,18 @@
     "reason": "Safe local file/test/commit work is approved. Push/PR/merge/rebase, destructive original-EV/Strict Play, credentials/providers/supervision/gateway, publication, and external/account-impacting actions remain gated.",
     "type": "risk_gate_only"
   },
-  "current_milestone": "mission_log_active_abort_guidance_verified",
+  "current_milestone": "mission_offer_selected_detail_helper_verified",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract -v -> OK",
-    "./run_godot.sh tv-active-mission-deadline-log -> deadlineVisible=true sourceVisible=true abortHintVisible=true abortSourceVisible=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_offer_scan_autoresearch_log_contract -v -> OK",
+    "./run_godot.sh tv-mission-offer-scan-log -> selectedOfferDetailsVisible=true with Terminal Velocity helper/source-boundary lines; non-mutating offer scan",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (122 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit/amend -> feat(godot): show active mission abort guidance (final SHA verified by git log after amend)"
+    "git commit -> feat(godot): show mission offer details (44f6c15)"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, harness audit, and backlog; with active mission abort guidance verified in the mission log helper, choose the next safe source-aligned gameplay/fidelity slice. Strong candidates: mine Classic mission resource/manual evidence for CanAbort/failure descriptions/special flags, improve mission offer/detail surfaces, or add another player-visible legal/map/fuel helper. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, harness audit, and backlog; with Mission Computer selected-offer helper details verified and committed, choose the next safe source-aligned gameplay/fidelity slice. Strong candidates: capture/mine Classic Mission Computer detail UI evidence, expand selectable multi-offer detail behavior, or add another player-visible legal/map/fuel/mission helper with Terminal Velocity source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -89,5 +89,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T22:54:36.510291Z"
+  "updated_at": "2026-06-03T23:11:34.151838Z"
 }

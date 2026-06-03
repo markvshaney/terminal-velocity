@@ -946,6 +946,12 @@ class NativeEvModelTests(unittest.TestCase):
             'offersBySurface=',
             'Mission Computer',
             'totalOffers=%d',
+            'func _mission_offer_detail_lines',
+            'selectedOfferDetailsVisible=%s',
+            'Briefing: %s',
+            'Offer route: %s / %s — %s',
+            'Offer terms: %d cr reward, %d cargo tons reserved on accept',
+            'Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending',
             'sourceLabel=terminal-velocity-observed',
             'oracleStatus=terminal_velocity_eval_pending_original_trace',
         ]:

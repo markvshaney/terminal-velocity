@@ -826,11 +826,15 @@ func _run_mission_offer_scan_log() -> void:
 	var body := _current_body()
 	var available := _available_missions(body)
 	var offer_ids := []
+	var offer_detail_lines: Array[String] = []
 	for mission in available:
 		offer_ids.append(str(mission.get("id", "")))
+		if offer_detail_lines.is_empty():
+			offer_detail_lines = _mission_offer_detail_lines(mission)
 	var offers_by_surface := {"Mission Computer": offer_ids}
 	var total_offers := offer_ids.size()
-	print("%s startSystem=Levo routeToSolSelected=%s scanSystem=%s scanBody=\"%s\" offersBySurface=%s totalOffers=%d sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_OFFER_SCAN_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(current_system.get("name", "?")), str(body.get("name", "None")), JSON.stringify(offers_by_surface), total_offers, status_line])
+	var selected_offer_details_visible := offer_detail_lines.has("Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending")
+	print("%s startSystem=Levo routeToSolSelected=%s scanSystem=%s scanBody=\"%s\" offersBySurface=%s totalOffers=%d selectedOfferDetailsVisible=%s selectedOfferDetails=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_OFFER_SCAN_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(current_system.get("name", "?")), str(body.get("name", "None")), JSON.stringify(offers_by_surface), total_offers, str(selected_offer_details_visible), JSON.stringify(offer_detail_lines), status_line])
 	get_tree().quit(0)
 
 func _run_mission_route_hint_log() -> void:
@@ -3619,7 +3623,24 @@ func _draw_mission_computer(rect: Rect2, body: Dictionary) -> void:
 		y += 26.0
 		draw_string(font, rect.position + Vector2(52, y), "To %s / %s" % [mission.get("destinationSystem", "?"), mission.get("destinationBody", "?")], HORIZONTAL_ALIGNMENT_LEFT, 780, 14, Color(0.68, 0.78, 0.90))
 		y += 24.0
+		if i == selected_landing_item:
+			for detail_line in _mission_offer_detail_lines(mission):
+				draw_string(font, rect.position + Vector2(52, y), detail_line, HORIZONTAL_ALIGNMENT_LEFT, 780, 13, Color(0.58, 0.72, 0.88))
+				y += 18.0
 	_draw_blocked_mission_reasons(rect, body, y + 4.0)
+
+func _mission_offer_detail_lines(mission: Dictionary) -> Array[String]:
+	var lines: Array[String] = []
+	var description := str(mission.get("description", ""))
+	if description != "":
+		lines.append("Briefing: %s" % description)
+	var destination_system := str(mission.get("destinationSystem", "?"))
+	var direct_route: bool = current_system.get("links", []).has(destination_system)
+	var route_hint: String = "direct linked hop" if direct_route else "route planning required"
+	lines.append("Offer route: %s / %s — %s" % [destination_system, str(mission.get("destinationBody", "?")), route_hint])
+	lines.append("Offer terms: %d cr reward, %d cargo tons reserved on accept" % [int(mission.get("reward", 0)), int(mission.get("cargoTons", 0))])
+	lines.append("Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending")
+	return lines
 
 func _draw_blocked_mission_reasons(rect: Rect2, body: Dictionary, y_start: float) -> void:
 	var reasons := _blocked_mission_reasons(body)
