@@ -38,6 +38,7 @@ SCENARIO_CURRICULUM = [
     'alignment_choice_guardrail',
     'mission_destination_route_hint',
     'mission_abort_releases_reserved_cargo',
+    'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
@@ -92,6 +93,7 @@ def initial_gameplay_state() -> dict[str, Any]:
         'reputation': {'Federation': 5, 'Independent': 7},
         'legalRecords': {'Federation': 0, 'Independent': 0},
         'fuel': STARTING_FUEL,
+        'currentDay': 0,
         'combatExecuted': False,
         'threatPosture': 'clear',
         'strictPlay': False,
@@ -206,6 +208,11 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         'reservedCargoTons': tons,
         'pay': pay,
         'risk': action.get('risk', 'safe'),
+        'acceptedDay': int(state.get('currentDay', 0)),
+        'timeLimitDays': action.get('timeLimitDays'),
+        'completionGovernment': action.get('completionGovernment'),
+        'completionReward': action.get('completionReward'),
+        'failureBitSet': action.get('failureBitSet'),
         'setsFlags': list(action.get('setsFlags', [])),
         'completionFlags': list(action.get('completionFlags', [])),
     }
@@ -215,6 +222,61 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         if flag not in state['storyFlags']:
             state['storyFlags'].append(flag)
     trace.append({'type': 'accept_cargo_job', **job, 'cargoUsed': state['cargoUsed']})
+    return True
+
+
+def _mission_failure_flag(failure_bit: Any) -> str | None:
+    if failure_bit is None or int(failure_bit) < 0:
+        return None
+    value = int(failure_bit)
+    if value >= 1000:
+        return f'clear_mission_bit_{value - 1000}'
+    return f'fail_mission_bit_{value}'
+
+
+def _advance_days(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    days = int(action.get('days', 1))
+    if days < 0:
+        trace.append({'type': 'blocked_advance_days', 'reason': 'negative days', 'days': days})
+        return False
+    before_day = int(state.get('currentDay', 0))
+    state['currentDay'] = before_day + days
+    trace.append({'type': 'advance_days', 'days': days, 'currentDay': state['currentDay']})
+    remaining_jobs = []
+    for job in state.get('activeJobs', []):
+        time_limit = job.get('timeLimitDays')
+        accepted_day = int(job.get('acceptedDay', 0))
+        if time_limit is not None and state['currentDay'] > accepted_day + int(time_limit):
+            released = int(job.get('reservedCargoTons', job.get('tons', 0)))
+            state['cargoUsed'] = max(0, int(state.get('cargoUsed', 0)) - released)
+            mission_id = job.get('id')
+            state.setdefault('failedJobs', []).append(mission_id)
+            failure_flag = _mission_failure_flag(job.get('failureBitSet'))
+            if failure_flag and failure_flag not in state.get('storyFlags', []):
+                state.setdefault('storyFlags', []).append(failure_flag)
+            completion_government = job.get('completionGovernment')
+            completion_reward = int(job.get('completionReward') or 0)
+            reputation_delta = 0
+            if completion_government and completion_reward:
+                reputation_delta = -(completion_reward // 2)
+                state.setdefault('reputation', {})[completion_government] = int(state.get('reputation', {}).get(completion_government, 0)) + reputation_delta
+            trace.append({
+                'type': 'mission_deadline_failure',
+                'missionId': mission_id,
+                'acceptedDay': accepted_day,
+                'currentDay': state['currentDay'],
+                'timeLimitDays': int(time_limit),
+                'releasedCargoTons': released,
+                'failureFlag': failure_flag,
+                'completionGovernment': completion_government,
+                'completionReward': completion_reward,
+                'reputationDelta': reputation_delta,
+                'sourceLabel': 'ev-classic-resource-bible-backed-mission-failure-scaffold',
+                'oracleStatus': 'deadline_failure_runtime_ui_pending_classic_trace',
+            })
+        else:
+            remaining_jobs.append(job)
+    state['activeJobs'] = remaining_jobs
     return True
 
 
@@ -371,6 +433,10 @@ def _accept_manifest_mission(state: dict[str, Any], action: dict[str, Any], trac
         'pay': mission.get('reward', 0),
         'setsFlags': mission.get('setsFlags', []),
         'completionFlags': mission.get('completionFlags', []),
+        'timeLimitDays': mission.get('timeLimitDays'),
+        'completionGovernment': mission.get('completionGovernment'),
+        'completionReward': mission.get('completionReward'),
+        'failureBitSet': mission.get('failureBitSet'),
     }, trace)
 
 
@@ -645,6 +711,25 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
             {'type': 'abort_active_mission', 'missionId': 'intro_courier_earth_hera'},
         ]
+    if name == 'mission_deadline_failure_scaffold':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_dispatch_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'timeLimitDays': 2,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'failureBitSet': 42,
+                'risk': 'deadline',
+            },
+            {'type': 'advance_days', 'days': 3},
+        ]
     if name == 'outfitter_ship_ladder_intro':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -780,6 +865,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'released_aborted_mission_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
             'recorded_abort_source_boundary': 'passed' if any(event.get('type') == 'abort_mission' and event.get('sourceLabel') == 'terminal-velocity-mission-abort-scaffold' and 'pending_classic' in event.get('oracleStatus', '') for event in trace) else 'failed',
         })
+    elif name == 'mission_deadline_failure_scaffold':
+        checks.update({
+            'accepted_deadline_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'deadline_dispatch_failure_probe' and event.get('timeLimitDays') == 2 for event in trace) else 'failed',
+            'expired_after_deadline': 'passed' if any(event.get('type') == 'mission_deadline_failure' and event.get('missionId') == 'deadline_dispatch_failure_probe' and event.get('currentDay') == 3 for event in trace) else 'failed',
+            'released_failed_mission_cargo': 'passed' if state.get('cargoUsed') == 0 and not state.get('activeJobs') else 'failed',
+            'recorded_failure_bit_and_reputation_penalty': 'passed' if 'fail_mission_bit_42' in state.get('storyFlags', []) and state.get('reputation', {}).get('Federation') == 2 else 'failed',
+            'recorded_deadline_source_boundary': 'passed' if any(event.get('type') == 'mission_deadline_failure' and event.get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-failure-scaffold' and event.get('oracleStatus') == 'deadline_failure_runtime_ui_pending_classic_trace' for event in trace) else 'failed',
+        })
     elif name == 'outfitter_ship_ladder_intro':
         checks.update({
             'bought_first_outfit': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and any(event.get('type') == 'buy_outfit_or_weapon' and event.get('saleType') == 'outfit' and event.get('itemId') == 'cargo_pod' for event in trace) else 'failed',
@@ -882,6 +975,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'buy_outfit_or_weapon': _buy_outfit_or_weapon,
         'buy_ship': _buy_ship,
         'avoid_pirate_contact': _avoid_pirate_contact,
+        'advance_days': _advance_days,
         'complete_cargo_jobs': _complete_cargo_jobs,
         'abort_active_mission': _abort_active_mission,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,

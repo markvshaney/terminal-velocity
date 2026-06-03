@@ -24,6 +24,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'alignment_choice_guardrail',
                 'mission_destination_route_hint',
                 'mission_abort_releases_reserved_cargo',
+                'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
@@ -246,6 +247,27 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(abort_event['releasedCargoTons'], 3)
         self.assertEqual(abort_event['sourceLabel'], 'terminal-velocity-mission-abort-scaffold')
         self.assertEqual(abort_event['oracleStatus'], 'mission_abort_pending_classic_runtime_or_manual_trace')
+
+    def test_mission_deadline_failure_scaffold_releases_cargo_and_records_penalty(self):
+        result = run_scripted_scenario('mission_deadline_failure_scaffold')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['currentDay'], 3)
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['failedJobs'], ['deadline_dispatch_failure_probe'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['reputation']['Federation'], 2)
+        self.assertIn('fail_mission_bit_42', result['state']['storyFlags'])
+        self.assertEqual(result['checks']['expired_after_deadline'], 'passed')
+        self.assertEqual(result['checks']['recorded_deadline_source_boundary'], 'passed')
+        failure = [event for event in result['trace'] if event['type'] == 'mission_deadline_failure'][-1]
+        self.assertEqual(failure['releasedCargoTons'], 3)
+        self.assertEqual(failure['failureFlag'], 'fail_mission_bit_42')
+        self.assertEqual(failure['reputationDelta'], -3)
+        self.assertEqual(failure['sourceLabel'], 'ev-classic-resource-bible-backed-mission-failure-scaffold')
+        self.assertEqual(failure['oracleStatus'], 'deadline_failure_runtime_ui_pending_classic_trace')
 
     def test_outfitter_ship_ladder_intro_buys_upgrade_weapon_and_bigger_ship(self):
         result = run_scripted_scenario('outfitter_ship_ladder_intro')

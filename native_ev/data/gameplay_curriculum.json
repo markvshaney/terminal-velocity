@@ -12,6 +12,7 @@
     "alignment_choice_guardrail",
     "mission_destination_route_hint",
     "mission_abort_releases_reserved_cargo",
+    "mission_deadline_failure_scaffold",
     "outfitter_ship_ladder_intro",
     "shift_click_multi_stop_route_queue",
     "route_queue_invalid_stop_guardrail",
@@ -96,6 +97,10 @@
     "mission_abort_releases_reserved_cargo": {
       "purpose": "Mission abort scaffold: abort an active courier contract without completion, release its reserved cargo, and keep source/oracle boundaries explicit pending Classic confirmation.",
       "surface": "mission state/recovery scaffold"
+    },
+    "mission_deadline_failure_scaffold": {
+      "purpose": "Mission deadline/failure scaffold: accept a timed delivery, advance past the limit, release reserved cargo, set a failure flag, and apply the EV Classic Resource Bible-backed half-CompReward reputation penalty while retaining runtime-UI confirmation as pending.",
+      "surface": "mission state/failure recovery scaffold"
     },
     "outfitter_ship_ladder_intro": {
       "purpose": "Outfitter/ship-ladder intro: reach Earth, buy a cargo upgrade and weapon, then trade up to a larger ship from local manifest stock while preserving explicit scaffold/source-boundary labels.",
