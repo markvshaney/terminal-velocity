@@ -740,6 +740,12 @@ class NativeEvModelTests(unittest.TestCase):
             'sourceVisible=%s',
             'abortHintVisible=%s',
             'abortSourceVisible=%s',
+            'func _active_mission_player_info_lines',
+            'Active mission: %s to %s/%s',
+            'Active mission deadline: %d day(s) remaining; exact Classic Player Info behavior pending',
+            'Active mission source: terminal-velocity-player-info-mission-scaffold; exact Classic Player Info behavior pending',
+            'playerInfoMissionVisible=%s',
+            'playerInfoDeadlineVisible=%s',
             'sourceLabel=terminal-velocity-active-deadline-display-scaffold',
             'oracleStatus=active_deadline_ui_pending_classic_runtime_trace',
         ]:

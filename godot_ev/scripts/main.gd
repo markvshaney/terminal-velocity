@@ -1072,11 +1072,14 @@ func _run_active_mission_deadline_log() -> void:
 	mission_acceptance_days[str(deadline_mission.get("id"))] = 1
 	cargo = int(deadline_mission.get("cargoTons", 0))
 	var lines := _mission_log_detail_lines()
+	var player_info_lines := _player_inventory_lines()
 	var deadline_visible := lines.has("Deadline: accepted day 1, current day 2, limit 5 day(s), 4 day(s) remaining")
 	var source_visible := lines.has("Deadline source: terminal-velocity-active-deadline-display-scaffold; exact Classic UI pending")
 	var abort_hint_visible := lines.has("Abort: press X to abort; TV scaffold releases 3 reserved cargo tons")
 	var abort_source_visible := lines.has("Abort source: terminal-velocity-mission-abort-scaffold; Classic CanAbort/UI pending")
-	print("TV_ACTIVE_MISSION_DEADLINE_EVENT activeMission=%s currentDay=%d acceptedDay=%d timeLimitDays=%d deadlineVisible=%s sourceVisible=%s abortHintVisible=%s abortSourceVisible=%s lines=%s sourceLabel=terminal-velocity-active-deadline-display-scaffold oracleStatus=active_deadline_ui_pending_classic_runtime_trace" % [str(deadline_mission.get("id")), current_day, int(mission_acceptance_days.get(str(deadline_mission.get("id")), 0)), int(deadline_mission.get("timeLimitDays", 0)), str(deadline_visible), str(source_visible), str(abort_hint_visible), str(abort_source_visible), JSON.stringify(lines)])
+	var player_info_mission_visible := player_info_lines.has("Active mission: Active Deadline Display Probe to Centauri/Luna")
+	var player_info_deadline_visible := player_info_lines.has("Active mission deadline: 4 day(s) remaining; exact Classic Player Info behavior pending")
+	print("TV_ACTIVE_MISSION_DEADLINE_EVENT activeMission=%s currentDay=%d acceptedDay=%d timeLimitDays=%d deadlineVisible=%s sourceVisible=%s abortHintVisible=%s abortSourceVisible=%s playerInfoMissionVisible=%s playerInfoDeadlineVisible=%s lines=%s playerInfoLines=%s sourceLabel=terminal-velocity-active-deadline-display-scaffold oracleStatus=active_deadline_ui_pending_classic_runtime_trace" % [str(deadline_mission.get("id")), current_day, int(mission_acceptance_days.get(str(deadline_mission.get("id")), 0)), int(deadline_mission.get("timeLimitDays", 0)), str(deadline_visible), str(source_visible), str(abort_hint_visible), str(abort_source_visible), str(player_info_mission_visible), str(player_info_deadline_visible), JSON.stringify(lines), JSON.stringify(player_info_lines)])
 	get_tree().quit(0)
 
 func _run_first_mission_delivery_log() -> void:
@@ -3446,7 +3449,7 @@ func _draw_player_info_overlay() -> void:
 
 func _player_inventory_lines() -> Array[String]:
 	var pilot_name := loaded_pilot_name if loaded_pilot_name != "" else "Pilot"
-	return [
+	var lines: Array[String] = [
 		"Pilot: %s" % pilot_name,
 		"Ship: %s" % player_ship_id,
 		"Credits: %d" % credits,
@@ -3458,6 +3461,28 @@ func _player_inventory_lines() -> Array[String]:
 		"Outfits: %s" % _inventory_dictionary_summary(owned_outfits),
 		"Weapons: %s" % _inventory_dictionary_summary(owned_weapons),
 	]
+	lines.append_array(_active_mission_player_info_lines())
+	return lines
+
+func _active_mission_player_info_lines() -> Array[String]:
+	var lines: Array[String] = []
+	if active_missions.is_empty():
+		lines.append("Active mission: none")
+		return lines
+	var mission := _mission_by_id(str(active_missions[0]))
+	if mission.is_empty():
+		lines.append("Active mission: " + str(active_missions[0]))
+		lines.append("Active mission source: terminal-velocity-player-info-mission-scaffold; exact Classic Player Info behavior pending")
+		return lines
+	lines.append("Active mission: %s to %s/%s" % [str(mission.get("title", mission.get("id", "Mission"))), str(mission.get("destinationSystem", "?")), str(mission.get("destinationBody", "?"))])
+	if mission.has("timeLimitDays"):
+		var mission_id := str(mission.get("id", ""))
+		var accepted_day := int(mission_acceptance_days.get(mission_id, current_day))
+		var remaining_days: int = max(0, accepted_day + int(mission.get("timeLimitDays", 0)) - current_day)
+		lines.append("Active mission deadline: %d day(s) remaining; exact Classic Player Info behavior pending" % remaining_days)
+	lines.append("Active mission cargo/reward: %d tons / %d credits" % [int(mission.get("cargoTons", 0)), int(mission.get("reward", 0))])
+	lines.append("Active mission source: terminal-velocity-player-info-mission-scaffold; exact Classic Player Info behavior pending")
+	return lines
 
 func _inventory_dictionary_summary(items: Dictionary) -> String:
 	if items.is_empty():
