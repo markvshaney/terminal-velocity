@@ -12,7 +12,7 @@
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): show mission offer details (44f6c15)"
+    "git commit/amend -> feat(godot): show mission offer details (41d1bc8; ledger SHA corrected after amend)"
   ],
   "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, harness audit, and backlog; with Mission Computer selected-offer helper details verified and committed, choose the next safe source-aligned gameplay/fidelity slice. Strong candidates: capture/mine Classic Mission Computer detail UI evidence, expand selectable multi-offer detail behavior, or add another player-visible legal/map/fuel/mission helper with Terminal Velocity source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
