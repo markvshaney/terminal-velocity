@@ -955,7 +955,7 @@ func _run_active_mission_deadline_log() -> void:
 		"originBody": "Levo",
 		"destinationSystem": "Centauri",
 		"destinationBody": "Luna",
-		"cargoTons": 2,
+		"cargoTons": 3,
 		"reward": 900,
 		"description": "Probe mission used to verify active deadline display.",
 		"timeLimitDays": 5,
@@ -970,7 +970,9 @@ func _run_active_mission_deadline_log() -> void:
 	var lines := _mission_log_detail_lines()
 	var deadline_visible := lines.has("Deadline: accepted day 1, current day 2, limit 5 day(s), 4 day(s) remaining")
 	var source_visible := lines.has("Deadline source: terminal-velocity-active-deadline-display-scaffold; exact Classic UI pending")
-	print("TV_ACTIVE_MISSION_DEADLINE_EVENT activeMission=%s currentDay=%d acceptedDay=%d timeLimitDays=%d deadlineVisible=%s sourceVisible=%s lines=%s sourceLabel=terminal-velocity-active-deadline-display-scaffold oracleStatus=active_deadline_ui_pending_classic_runtime_trace" % [str(deadline_mission.get("id")), current_day, int(mission_acceptance_days.get(str(deadline_mission.get("id")), 0)), int(deadline_mission.get("timeLimitDays", 0)), str(deadline_visible), str(source_visible), JSON.stringify(lines)])
+	var abort_hint_visible := lines.has("Abort: press X to abort; TV scaffold releases 3 reserved cargo tons")
+	var abort_source_visible := lines.has("Abort source: terminal-velocity-mission-abort-scaffold; Classic CanAbort/UI pending")
+	print("TV_ACTIVE_MISSION_DEADLINE_EVENT activeMission=%s currentDay=%d acceptedDay=%d timeLimitDays=%d deadlineVisible=%s sourceVisible=%s abortHintVisible=%s abortSourceVisible=%s lines=%s sourceLabel=terminal-velocity-active-deadline-display-scaffold oracleStatus=active_deadline_ui_pending_classic_runtime_trace" % [str(deadline_mission.get("id")), current_day, int(mission_acceptance_days.get(str(deadline_mission.get("id")), 0)), int(deadline_mission.get("timeLimitDays", 0)), str(deadline_visible), str(source_visible), str(abort_hint_visible), str(abort_source_visible), JSON.stringify(lines)])
 	get_tree().quit(0)
 
 func _run_first_mission_delivery_log() -> void:
@@ -3216,6 +3218,7 @@ func _mission_log_detail_lines() -> Array[String]:
 			lines.append("Progress: " + _mission_progress_line(mission))
 			lines.append("Route hint: " + _mission_route_hint_line(mission))
 			lines.append_array(_mission_deadline_lines(mission))
+			lines.append_array(_mission_abort_hint_lines(mission))
 			lines.append("Cargo reserved: %d tons" % int(mission.get("cargoTons", 0)))
 			lines.append("Reward: %d credits" % int(mission.get("reward", 0)))
 			var description := str(mission.get("description", ""))
@@ -3297,6 +3300,13 @@ func _mission_deadline_lines(mission: Dictionary) -> Array[String]:
 	lines.append("Deadline source: %s; exact Classic UI pending" % str(mission.get("sourceLabel", "terminal-velocity-active-deadline-display-scaffold")))
 	return lines
 
+func _mission_abort_hint_lines(mission: Dictionary) -> Array[String]:
+	var lines: Array[String] = []
+	var cargo_tons := int(mission.get("cargoTons", 0))
+	lines.append("Abort: press X to abort; TV scaffold releases %d reserved cargo tons" % cargo_tons)
+	lines.append("Abort source: terminal-velocity-mission-abort-scaffold; Classic CanAbort/UI pending")
+	return lines
+
 func _draw_mission_log_overlay() -> void:
 	var font := ThemeDB.fallback_font
 	var rect := Rect2(210, 112, 860, 560)
@@ -3310,7 +3320,7 @@ func _draw_mission_log_overlay() -> void:
 			y += 12.0
 			continue
 		var color := Color(0.86, 0.92, 1.0)
-		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Progress:") or line.begins_with("Route hint:") or line.begins_with("Deadline:") or line.begins_with("Deadline source:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:") or line.begins_with("Cargo released:") or line.begins_with("Reward paid:"):
+		if line.begins_with("Status:") or line.begins_with("Destination:") or line.begins_with("Progress:") or line.begins_with("Route hint:") or line.begins_with("Deadline:") or line.begins_with("Deadline source:") or line.begins_with("Abort:") or line.begins_with("Abort source:") or line.begins_with("Cargo reserved:") or line.begins_with("Reward:") or line.begins_with("Cargo released:") or line.begins_with("Reward paid:"):
 			color = Color(0.72, 0.84, 0.96)
 		draw_string(font, Vector2(rect.position.x + 42, y), line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 84, 16, color)
 		y += 28.0

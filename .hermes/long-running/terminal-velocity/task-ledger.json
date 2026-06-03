@@ -1,17 +1,20 @@
 {
   "active_gate": {
-    "type": "risk_gate_only",
-    "reason": "User requested long-running Terminal Velocity tasks run continuously until the end and avoid unnecessary approvals. Safe local file/test/commit work is approved; only genuinely risky external/destructive/account-impacting actions remain gated."
+    "reason": "Safe local file/test/commit work is approved. Push/PR/merge/rebase, destructive original-EV/Strict Play, credentials/providers/supervision/gateway, publication, and external/account-impacting actions remain gated.",
+    "type": "risk_gate_only"
   },
-  "current_milestone": "continuous_completion_runner_active",
+  "current_milestone": "mission_log_active_abort_guidance_verified",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "last_verified_commands": [
-    "cronjob create aafb9b3eac29 -> every 5m, repeat forever, enabled, deliver=origin, profile=loki-game, workdir=/home/bh/workspaces/loki/terminal-velocity",
-    "cronjob remove f31074cbec03 -> removed paused every-720m hillclimb job",
-    "cronjob remove e12f13d4b75e -> removed paused old bounded runner",
-    "hermes kanban --board terminal-velocity archive t_5d681084 -> archived duplicate Kanban continuation task to preserve one writer"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract -v -> OK",
+    "./run_godot.sh tv-active-mission-deadline-log -> deadlineVisible=true sourceVisible=true abortHintVisible=true abortSourceVisible=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (122 tests)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20",
+    "git diff --check -> OK",
+    "git commit/amend -> feat(godot): show active mission abort guidance (final SHA verified by git log after amend)"
   ],
-  "next_resume_action": "Continuous cron runner aafb9b3eac29 runs every 5 minutes forever. Each tick must inspect ledger/events, continuation prompt, git status/log, and backlog; perform the strongest safe-local source-aligned Terminal Velocity slice; verify; commit coherent local changes; update ledger/events; and continue on the next tick unless a real risk gate, terminal blocker, or agreed completion milestone is reached.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, harness audit, and backlog; with active mission abort guidance verified in the mission log helper, choose the next safe source-aligned gameplay/fidelity slice. Strong candidates: mine Classic mission resource/manual evidence for CanAbort/failure descriptions/special flags, improve mission offer/detail surfaces, or add another player-visible legal/map/fuel helper. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -31,19 +34,18 @@
   ],
   "resume_prompt": "Resume Terminal Velocity continuous autonomous development. Do not stop after one verified slice; treat slices as checkpoints. Avoid unnecessary approvals: safe local file edits, tests, probes, docs, and coherent local commits are preapproved. Gate only push/PR/merge/rebase, destructive original-EV/Strict Play, credentials/providers/supervision/gateway, publication, or other real external/account-impacting actions unless explicitly approved.",
   "runner": {
-    "kind": "cronjob",
-    "job_id": "aafb9b3eac29",
-    "name": "Terminal Velocity continuous completion runner",
-    "profile": "loki-game",
-    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
-    "schedule": "every 5m",
-    "repeat": "forever",
     "deliver": "origin",
     "enabled_toolsets": [
       "file",
       "terminal",
       "session_search"
     ],
+    "job_id": "aafb9b3eac29",
+    "kind": "cronjob",
+    "name": "Terminal Velocity continuous completion runner",
+    "profile": "loki-game",
+    "repeat": "forever",
+    "schedule": "every 5m",
     "side_effect_boundaries": [
       "safe local file/test/probe/docs/commit work allowed without per-step approval",
       "push/PR/merge/rebase/destructive EV/gateway/provider/credential/publication changes gated unless explicitly approved"
@@ -54,7 +56,8 @@
     ],
     "superseded_kanban_tasks": [
       "t_5d681084"
-    ]
+    ],
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity"
   },
   "safe_backlog": [
     {
@@ -83,8 +86,8 @@
   "status": "continuous_cron_active",
   "task_id": "terminal-velocity-game-development",
   "tool_caps_policy": {
-    "rule": "Tool/time/context caps are per-run budgets, not task completion.",
-    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval"
+    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
+    "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T18:49:13-04:00"
+  "updated_at": "2026-06-03T22:54:36.510291Z"
 }
