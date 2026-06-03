@@ -5,22 +5,22 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "mission_branch_choice_exclusion_verified",
+  "current_milestone": "active_mission_player_info_visibility_verified",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    "progress_heartbeats": "not needed; run stayed under 10 minutes",
+    "progress_heartbeats": "wrote progress heartbeat after Godot parse-warning repair/long verification exceeded ~10 minutes",
     "start_heartbeat": "wrote .hermes/long-running/terminal-velocity/heartbeat.json because send_message tool unavailable"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_branch_log_contract -v -> OK",
-    "./run_godot.sh tv-mission-alignment-branch-log -> federationBranchAccepted=true; freeportBranchHiddenAfterChoice=true; choiceBoundary=terminal_velocity_choice_group_scaffold_exact_classic_branch_ui_pending",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract -v -> OK",
+    "./run_godot.sh tv-active-mission-deadline-log -> playerInfoMissionVisible=true; playerInfoDeadlineVisible=true; sourceLabel=terminal-velocity-active-deadline-display-scaffold",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (124 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): verify mission branch choice exclusion (714ba90)"
+    "git commit -> feat(godot): show active mission in player info (d0079a8)"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: mine Classic mission resource/manual evidence for CanAbort/failure descriptions/special flags, expand player-visible mission/legal blocked-reason UI, or add another legal/map/fuel/mission helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic Mission Computer/Player Info evidence, expand player-visible legal/mission blocked-reason UI, or add another map/fuel/mission helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -95,5 +95,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-03T23:35:38Z"
+  "updated_at": "2026-06-03T23:54:36Z"
 }
