@@ -15,6 +15,7 @@ param(
     [switch]$MissionOfferScanLog,
     [switch]$MissionRouteHintLog,
     [switch]$MissionAbortLog,
+    [switch]$MissionDeadlineFailureLog,
     [switch]$FirstMissionDeliveryLog,
     [switch]$PilotSaveResumeLog,
     [switch]$OutfitterShipyardLog,
@@ -74,6 +75,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-route-hint-log
 } elseif ($MissionAbortLog) {
     & $Godot --headless --path $Project -- --tv-mission-abort-log
+} elseif ($MissionDeadlineFailureLog) {
+    & $Godot --headless --path $Project -- --tv-mission-deadline-failure-log
 } elseif ($FirstMissionDeliveryLog) {
     & $Godot --headless --path $Project -- --tv-first-mission-delivery-log
 } elseif ($PilotSaveResumeLog) {

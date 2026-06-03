@@ -37,6 +37,7 @@ const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
+const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
@@ -120,6 +121,7 @@ var active_missions: Array = []
 var completed_missions: Array = []
 var completed_mission_history: Array = []
 var aborted_mission_history: Array = []
+var failed_mission_history: Array = []
 var story_flags: Array = []
 var commodity_hold: Dictionary = {}
 var owned_outfits: Dictionary = {}
@@ -182,6 +184,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_route_hint_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
 		call_deferred("_run_mission_abort_log")
+	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
+		call_deferred("_run_mission_deadline_failure_log")
 	if OS.get_cmdline_args().has("--tv-first-mission-delivery-log") or OS.get_cmdline_user_args().has("--tv-first-mission-delivery-log"):
 		call_deferred("_run_first_mission_delivery_log")
 	if OS.get_cmdline_args().has("--tv-pilot-save-resume-log") or OS.get_cmdline_user_args().has("--tv-pilot-save-resume-log"):
@@ -547,6 +551,7 @@ func _reset_travel_state() -> void:
 	completed_missions.clear()
 	completed_mission_history.clear()
 	aborted_mission_history.clear()
+	failed_mission_history.clear()
 	story_flags.clear()
 	commodity_hold.clear()
 	cargo = 0
@@ -878,6 +883,36 @@ func _run_mission_abort_log() -> void:
 	var abort_status := "missionAborted=true" if abort_succeeded else "missionAborted=false"
 	var cargo_released_status := "reservedCargoReleased=true" if cargo_after_abort == cargo_before_accept else "reservedCargoReleased=false"
 	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterAbort=%d activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=terminal-velocity-mission-abort-scaffold oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_ABORT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, accepted_status, abort_status, cargo_released_status, cargo_before_accept, cargo_after_accept, cargo_after_abort, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_abort, status_line])
+	get_tree().quit(0)
+
+func _run_mission_deadline_failure_log() -> void:
+	_reset_travel_state()
+	var deadline_mission := {
+		"id": "deadline_dispatch_failure_probe",
+		"title": "Deadline Dispatch Failure Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 3,
+		"reward": 1200,
+		"completionReward": 6,
+		"failureBitSet": 42,
+		"completionGovernment": "Federation",
+		"timeLimitDays": 2,
+	}
+	var accepted_day := 0
+	var current_day := 3
+	active_missions.append(str(deadline_mission.get("id")))
+	cargo = int(deadline_mission.get("cargoTons", 0))
+	var cargo_after_accept := cargo
+	var before_reputation := int(reputation_scores.get("Federation", 0))
+	var failure_succeeded := _fail_mission_deadline(deadline_mission, accepted_day, current_day)
+	var after_reputation := int(reputation_scores.get("Federation", 0))
+	var latest_failure := JSON.stringify(failed_mission_history[failed_mission_history.size() - 1]) if not failed_mission_history.is_empty() else "{}"
+	var failure_status := "deadlineFailureRecorded=true" if failure_succeeded else "deadlineFailureRecorded=false"
+	var cargo_status := "reservedCargoReleased=true" if cargo == 0 else "reservedCargoReleased=false"
+	var flag_status := "failureFlagSet=true" if story_flags.has("fail_mission_bit_42") else "failureFlagSet=false"
+	var reputation_status := "reputationPenaltyApplied=true" if after_reputation == before_reputation - 3 else "reputationPenaltyApplied=false"
+	print("%s acceptedMission=%s acceptedDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterFailure=%d %s %s %s %s reputationBefore=%d reputationAfter=%d activeMissions=%s failedHistoryCount=%d latestFailure=%s sourceLabel=ev-classic-resource-bible-backed-mission-failure-scaffold oracleStatus=deadline_failure_runtime_ui_pending_classic_trace status=\"%s\"" % [MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo, failure_status, cargo_status, flag_status, reputation_status, before_reputation, after_reputation, JSON.stringify(active_missions), failed_mission_history.size(), latest_failure, status_line])
 	get_tree().quit(0)
 
 func _run_first_mission_delivery_log() -> void:
@@ -1377,6 +1412,43 @@ func _mission_abort_record(mission: Dictionary, mission_id: String, cargo_releas
 		"oracleStatus": "mission_abort_pending_classic_runtime_or_manual_trace",
 	}
 
+func _fail_mission_deadline(mission: Dictionary, accepted_day: int, current_day: int) -> bool:
+	var mission_id := str(mission.get("id", ""))
+	if mission_id == "" or not active_missions.has(mission_id):
+		_set_status("Deadline failure probe mission is not active")
+		return false
+	var time_limit_days := int(mission.get("timeLimitDays", 0))
+	if current_day - accepted_day <= time_limit_days:
+		_set_status("Deadline has not expired for mission: " + mission_id)
+		return false
+	var cargo_released := int(mission.get("cargoTons", 0))
+	var reputation_delta := -int(mission.get("completionReward", 0)) / 2
+	var government_name := str(mission.get("completionGovernment", "Federation"))
+	var failure_flag := "fail_mission_bit_%d" % int(mission.get("failureBitSet", 0))
+	active_missions.erase(mission_id)
+	cargo = max(0, cargo - cargo_released)
+	if not story_flags.has(failure_flag):
+		story_flags.append(failure_flag)
+	reputation_scores[government_name] = int(reputation_scores.get(government_name, 0)) + reputation_delta
+	failed_mission_history.append(_mission_deadline_failure_record(mission, accepted_day, current_day, cargo_released, failure_flag, reputation_delta, government_name))
+	_set_status("Mission deadline failed: %s; released %d cargo tons" % [str(mission.get("title", mission_id)), cargo_released])
+	return true
+
+func _mission_deadline_failure_record(mission: Dictionary, accepted_day: int, current_day: int, cargo_released: int, failure_flag: String, reputation_delta: int, government_name: String) -> Dictionary:
+	return {
+		"id": str(mission.get("id", "")),
+		"title": str(mission.get("title", mission.get("id", "Mission"))),
+		"accepted_day": accepted_day,
+		"current_day": current_day,
+		"time_limit_days": int(mission.get("timeLimitDays", 0)),
+		"cargo_released": cargo_released,
+		"failure_flag": failure_flag,
+		"reputation_government": government_name,
+		"reputation_delta": reputation_delta,
+		"sourceLabel": "ev-classic-resource-bible-backed-mission-failure-scaffold",
+		"oracleStatus": "deadline_failure_runtime_ui_pending_classic_trace",
+	}
+
 func _mission_completion_record(mission: Dictionary, cargo_released: int, reward_paid: int) -> Dictionary:
 	return {
 		"id": str(mission.get("id", "")),
@@ -1721,6 +1793,7 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"completed_missions": completed_missions,
 		"completed_mission_history": completed_mission_history,
 		"aborted_mission_history": aborted_mission_history,
+		"failed_mission_history": failed_mission_history,
 		"story_flags": story_flags,
 		"commodity_hold": commodity_hold,
 		"owned_outfits": owned_outfits,
@@ -1859,6 +1932,7 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	completed_missions = data.get("completed_missions", completed_missions)
 	completed_mission_history = data.get("completed_mission_history", completed_mission_history)
 	aborted_mission_history = data.get("aborted_mission_history", aborted_mission_history)
+	failed_mission_history = data.get("failed_mission_history", failed_mission_history)
 	story_flags = data.get("story_flags", story_flags)
 	commodity_hold = data.get("commodity_hold", commodity_hold)
 	owned_outfits = data.get("owned_outfits", owned_outfits)

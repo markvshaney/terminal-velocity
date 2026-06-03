@@ -663,6 +663,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission abort scenario contract', plan)
         self.assertIn('reserved cargo release', plan)
 
+    def test_godot_mission_deadline_failure_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            '--tv-mission-deadline-failure-log',
+            'func _run_mission_deadline_failure_log',
+            'TV_MISSION_DEADLINE_FAILURE_EVENT',
+            'func _fail_mission_deadline',
+            'var failed_mission_history: Array = []',
+            'deadlineFailureRecorded=true',
+            'reservedCargoReleased=true',
+            'failureFlagSet=true',
+            'reputationPenaltyApplied=true',
+            'failedHistoryCount=%d',
+            'sourceLabel=ev-classic-resource-bible-backed-mission-failure-scaffold',
+            'oracleStatus=deadline_failure_runtime_ui_pending_classic_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionDeadlineFailureLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-deadline-failure-log', run_script)
+        self.assertIn('tv-mission-deadline-failure-log', wrapper)
+
     def test_godot_outfitter_shipyard_progression_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

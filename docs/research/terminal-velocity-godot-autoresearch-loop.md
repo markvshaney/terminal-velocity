@@ -156,6 +156,19 @@ Mission abort scenario contract:
   - `oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace`.
   This is a Terminal Velocity mission-state scaffold, not an EV Classic abort-semantics fidelity claim.
 
+Mission deadline failure scenario contract:
+
+- `RunGodot.ps1 -MissionDeadlineFailureLog` / `--tv-mission-deadline-failure-log`
+- Exercises the EV Classic Resource Bible-backed timed-mission failure scaffold in the Godot fast-eval lane.
+- Seeds a deterministic active `deadline_dispatch_failure_probe`, advances beyond its `timeLimitDays`, releases reserved cargo, records `fail_mission_bit_42`, applies the half-`completionReward` Federation reputation penalty, and logs:
+  - accepted/current day and time limit (`acceptedDay`, `currentDay`, `timeLimitDays`);
+  - reserved cargo before and after failure (`cargoAfterAccept`, `cargoAfterFailure`, `reservedCargoReleased=true`);
+  - failure, flag, and reputation booleans (`deadlineFailureRecorded=true`, `failureFlagSet=true`, `reputationPenaltyApplied=true`);
+  - active mission ids plus `failedHistoryCount` and latest failure record;
+  - `sourceLabel=ev-classic-resource-bible-backed-mission-failure-scaffold`;
+  - `oracleStatus=deadline_failure_runtime_ui_pending_classic_trace`.
+  This remains a scaffold for exact EV Classic runtime/UI timing until a Basilisk/manual trace confirms player-facing wording and date behavior.
+
 First mission delivery scenario contract:
 
 - `RunGodot.ps1 -FirstMissionDeliveryLog` / `--tv-first-mission-delivery-log`
