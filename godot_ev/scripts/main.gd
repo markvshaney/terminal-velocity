@@ -1591,7 +1591,9 @@ func _run_secondary_weapon_log() -> void:
 	var secondary_sound_played := _sound_history_contains(secondary_sound_id)
 	var secondary_inventory_empty_visible := secondary_empty_line.contains("No Secondary Weapon")
 	var secondary_inventory_loaded_visible := secondary_loaded_line.contains(str(weapon.get("name", ""))) and secondary_loaded_line.contains(str(weapon.get("sourceStockName", "")))
-	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s secondaryInventoryEmptyVisible=%s secondaryInventoryLoadedVisible=%s primaryWeaponPreserved=%s sourcePrimaryId=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" secondaryWeaponSound=%s secondaryWeaponSoundPlayed=%s targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold soundSourceLabel=decoded-resource-backed-sound-binding oracleStatus=classic_runtime_secondary_weapon_behavior_pending soundOracleStatus=classic_runtime_sound_timing_pending" % [
+	var secondary_hud_fragment := _secondary_weapon_hud_fragment()
+	var secondary_hud_visible := secondary_hud_fragment.contains(str(weapon.get("name", ""))) and secondary_hud_fragment.contains("reload")
+	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s secondaryInventoryEmptyVisible=%s secondaryInventoryLoadedVisible=%s primaryWeaponPreserved=%s sourcePrimaryId=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" secondaryWeaponSound=%s secondaryWeaponSoundPlayed=%s secondaryHudVisible=%s secondaryHudFragment=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold soundSourceLabel=decoded-resource-backed-sound-binding oracleStatus=classic_runtime_secondary_weapon_behavior_pending soundOracleStatus=classic_runtime_sound_timing_pending" % [
 		SECONDARY_WEAPON_EVENT_LOG_PREFIX,
 		str(unavailable_at_start).to_lower(),
 		str(secondary_cycle_selected).to_lower(),
@@ -1607,6 +1609,8 @@ func _run_secondary_weapon_log() -> void:
 		str(weapon.get("name", "")),
 		secondary_sound_id,
 		str(secondary_sound_played).to_lower(),
+		str(secondary_hud_visible).to_lower(),
+		secondary_hud_fragment,
 		shield_before,
 		shield_after,
 		int(weapon.get("sourceResourceId", -1)),
@@ -4452,7 +4456,7 @@ func _draw_hud() -> void:
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
 	var government_name := _current_government_name()
 	var legal_status := _legal_status_for_government(government_name)
-	draw_string(font, Vector2(20, 56), "System: %s (%s: %s)    Destination: %s    Credits: %d    Fuel: %d/%d    Shields: %d/%d    Hull: %d/%d    Cargo: %d/%d (%d mission, %d free)%s%s    Ship: %s" % [current_system.get("name", "?"), government_name, legal_status, destination, credits, player_fuel, _max_player_fuel(), player_shields, _max_player_shields(), player_hull, _max_player_hull(), cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), _salvage_hud_fragment(), _combat_reward_hud_fragment(), player_ship_id], HORIZONTAL_ALIGNMENT_LEFT, 1220, 16, Color(0.70, 0.86, 1.0))
+	draw_string(font, Vector2(20, 56), "System: %s (%s: %s)    Destination: %s    Credits: %d    Fuel: %d/%d    Shields: %d/%d    Hull: %d/%d    Cargo: %d/%d (%d mission, %d free)%s%s%s    Ship: %s" % [current_system.get("name", "?"), government_name, legal_status, destination, credits, player_fuel, _max_player_fuel(), player_shields, _max_player_shields(), player_hull, _max_player_hull(), cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), _salvage_hud_fragment(), _combat_reward_hud_fragment(), _secondary_weapon_hud_fragment(), player_ship_id], HORIZONTAL_ALIGNMENT_LEFT, 1220, 16, Color(0.70, 0.86, 1.0))
 	if not status_messages.is_empty():
 		draw_rect(Rect2(20, 92, 430, 62), Color(0.02, 0.035, 0.06, 0.84), true)
 		draw_string(font, Vector2(32, 114), "Messages:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
@@ -4679,6 +4683,15 @@ func _combat_reward_hud_fragment() -> String:
 	for reward in combat_reward_history:
 		total_credits += int(reward.get("credits", 0))
 	return "    Rewards: %d disable(s)/%d cr" % [combat_reward_history.size(), total_credits]
+
+func _secondary_weapon_hud_fragment() -> String:
+	var weapon := _secondary_weapon_stats()
+	if weapon.is_empty():
+		return "    Secondary: No Secondary Weapon"
+	var weapon_name := str(weapon.get("name", weapon.get("id", "Secondary")))
+	var reload_frames := int(ceil(secondary_weapon_cooldown_frames))
+	var readiness := "ready" if reload_frames <= 0 else "reload %d frames" % reload_frames
+	return "    Secondary: %s (%s)" % [weapon_name, readiness]
 
 func _salvage_scanner_blip_count() -> int:
 	return cargo_salvage_pickups.size()
