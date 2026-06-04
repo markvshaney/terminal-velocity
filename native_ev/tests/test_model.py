@@ -358,6 +358,7 @@ class NativeEvModelTests(unittest.TestCase):
             'disabledFireBlocked=%s',
             'disabledJumpBlocked=%s',
             'disabledMovementBlocked=%s',
+            'disabledLaunchBlocked=%s',
             'recoveryTriggered=%s',
             'playerRecovered=%s',
             'recoveryStatusVisible=%s',

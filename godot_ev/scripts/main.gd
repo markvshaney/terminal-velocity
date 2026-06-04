@@ -1613,10 +1613,13 @@ func _run_player_disabled_log() -> void:
 	var movement_facing_before := player_facing_index
 	_apply_movement_controls(1.0 / 60.0, 1, true, false)
 	var disabled_movement_blocked := status_messages.has(_player_disabled_action_message()) and pos == movement_pos_before and vel == movement_vel_before and player_facing_index == movement_facing_before
+	landed = true
+	_ev_land_or_launch()
+	var disabled_launch_blocked := status_messages.has(_player_disabled_action_message()) and landed
 	var recovery_triggered := _recover_disabled_player_scaffold()
 	var player_recovered := not _player_disabled() and player_hull == _max_player_hull() and player_shields == _max_player_shields()
 	var recovery_status_visible := status_messages.has(_player_recovery_message())
-	print("%s playerDisabled=%s disabledStatusVisible=%s disabledExplosionVisible=%s disabledExplosionSound=%s disabledFireBlocked=%s disabledJumpBlocked=%s disabledMovementBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s hullBefore=%d hullAfterDisable=%d hullAfterRecovery=%d shieldsBefore=%d shieldsAfterRecovery=%d npcWeapon=%s sourceLabel=terminal-velocity-player-disabled-scaffold oracleStatus=classic_runtime_player_death_pending_strict_play_safe_trace" % [
+	print("%s playerDisabled=%s disabledStatusVisible=%s disabledExplosionVisible=%s disabledExplosionSound=%s disabledFireBlocked=%s disabledJumpBlocked=%s disabledMovementBlocked=%s disabledLaunchBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s hullBefore=%d hullAfterDisable=%d hullAfterRecovery=%d shieldsBefore=%d shieldsAfterRecovery=%d npcWeapon=%s sourceLabel=terminal-velocity-player-disabled-scaffold oracleStatus=classic_runtime_player_death_pending_strict_play_safe_trace" % [
 		PLAYER_DISABLED_EVENT_LOG_PREFIX,
 		str(player_disabled).to_lower(),
 		str(disabled_status_visible).to_lower(),
@@ -1625,6 +1628,7 @@ func _run_player_disabled_log() -> void:
 		str(disabled_fire_blocked).to_lower(),
 		str(disabled_jump_blocked).to_lower(),
 		str(disabled_movement_blocked).to_lower(),
+		str(disabled_launch_blocked).to_lower(),
 		str(recovery_triggered).to_lower(),
 		str(player_recovered).to_lower(),
 		str(recovery_status_visible).to_lower(),
@@ -3245,6 +3249,9 @@ func _select_next_live_target(start_index: int) -> bool:
 	return false
 
 func _ev_land_or_launch() -> void:
+	if _player_disabled():
+		_set_status(_player_disabled_action_message())
+		return
 	if landed:
 		landed = false
 		status_line = "Launched from " + current_system.get("name", "system")
