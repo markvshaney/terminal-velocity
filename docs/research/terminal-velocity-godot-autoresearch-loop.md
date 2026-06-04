@@ -296,6 +296,15 @@ Mission deadline abort scenario contract:
 - `sourceLabel=terminal-velocity-mission-deadline-abort-scaffold`; `oracleStatus=deadline_abort_pending_classic_runtime_or_manual_trace`.
 - This is a Terminal Velocity guardrail scaffold; exact EV Classic abort/deadline interaction, UI wording, and date inclusivity remain pending runtime/manual evidence.
 
+Mission deadline trade-carryover scenario contract:
+
+- `RunGodot.ps1 -MissionDeadlineTradeCarryoverLog` / `--tv-mission-deadline-trade-carryover-log`
+- Exercises the Terminal Velocity deadline-failure cleanup boundary when unrelated commodity cargo shares the hold with reserved mission cargo.
+- Seeds deterministic mission `deadline_dispatch_failure_probe`, buys an independent commodity lot, advances beyond `timeLimitDays`, applies deadline failure, then sells the preserved commodity cargo.
+- Logs mission failure, mission cargo release, trade cargo preservation, sale, failure-flag, and reputation-penalty booleans (`deadlineFailureRecorded=true`, `missionCargoReleased=true`, `tradeCargoPreserved=true`, `tradeCargoSold=true`, `failureFlagSet=true`, `reputationPenaltyApplied=true`) plus cargo/credit/reputation counters and latest failure history.
+- `sourceLabel=terminal-velocity-mission-deadline-trade-carryover-scaffold`; `oracleStatus=deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity guardrail scaffold; exact EV Classic missed-deadline behavior with mixed mission/trade cargo remains pending Classic runtime or manual trace evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`

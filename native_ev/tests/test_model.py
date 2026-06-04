@@ -1500,6 +1500,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-mission-deadline-abort-log', wrapper)
         self.assertIn('Mission deadline abort scenario contract', plan)
 
+    def test_godot_mission_deadline_trade_carryover_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-deadline-trade-carryover-log',
+            'func _run_mission_deadline_trade_carryover_log',
+            'TV_MISSION_DEADLINE_TRADE_CARRYOVER_EVENT',
+            'deadlineFailureRecorded=true',
+            'missionCargoReleased=true',
+            'tradeCargoPreserved=true',
+            'tradeCargoSold=true',
+            'failureFlagSet=true',
+            'reputationPenaltyApplied=true',
+            'sourceLabel=terminal-velocity-mission-deadline-trade-carryover-scaffold',
+            'oracleStatus=deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionDeadlineTradeCarryoverLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-deadline-trade-carryover-log', run_script)
+        self.assertIn('tv-mission-deadline-trade-carryover-log', wrapper)
+        self.assertIn('Mission deadline trade-carryover scenario contract', plan)
+
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

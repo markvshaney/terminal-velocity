@@ -51,6 +51,7 @@ const MISSION_DEADLINE_LAST_DAY_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_LAST_DA
 const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
 const MISSION_DEADLINE_SEQUENTIAL_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_SEQUENTIAL_EVENT"
 const MISSION_DEADLINE_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_ABORT_EVENT"
+const MISSION_DEADLINE_TRADE_CARRYOVER_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_TRADE_CARRYOVER_EVENT"
 const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
@@ -251,6 +252,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_deadline_sequential_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-abort-log"):
 		call_deferred("_run_mission_deadline_abort_log")
+	if OS.get_cmdline_args().has("--tv-mission-deadline-trade-carryover-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-trade-carryover-log"):
+		call_deferred("_run_mission_deadline_trade_carryover_log")
 	if OS.get_cmdline_args().has("--tv-mission-log-history-log") or OS.get_cmdline_user_args().has("--tv-mission-log-history-log"):
 		call_deferred("_run_mission_log_history_log")
 	if OS.get_cmdline_args().has("--tv-active-mission-deadline-log") or OS.get_cmdline_user_args().has("--tv-active-mission-deadline-log"):
@@ -1590,6 +1593,63 @@ func _run_mission_deadline_abort_log() -> void:
 	var flag_status := "failureFlagPreserved=true" if not story_flags.has("fail_mission_bit_42") else "failureFlagPreserved=false"
 	var reputation_status := "reputationPreserved=true" if reputation_after_late_check == reputation_before_abort else "reputationPreserved=false"
 	print("%s acceptedMission=%s acceptedDay=%d abortDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterAbort=%d %s %s %s %s %s reputationBefore=%d reputationAfter=%d activeMissions=%s completedMissions=%s failedHistoryCount=%d abortedHistoryCount=%d latestAbort=%s sourceLabel=terminal-velocity-mission-deadline-abort-scaffold oracleStatus=deadline_abort_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_DEADLINE_ABORT_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, accepted_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo_after_abort, abort_status, cargo_status, no_late_failure_status, flag_status, reputation_status, reputation_before_abort, reputation_after_late_check, JSON.stringify(active_missions), JSON.stringify(completed_missions), failed_mission_history.size(), aborted_mission_history.size(), latest_abort, status_line])
+	get_tree().quit(0)
+
+func _run_mission_deadline_trade_carryover_log() -> void:
+	_reset_travel_state()
+	var deadline_mission := {
+		"id": "deadline_dispatch_failure_probe",
+		"title": "Deadline Dispatch Failure Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 3,
+		"reward": 1200,
+		"completionReward": 6,
+		"failureBitSet": 42,
+		"completionGovernment": "Federation",
+		"timeLimitDays": 2,
+		"sourceLabel": "terminal-velocity-mission-deadline-trade-carryover-scaffold",
+		"oracleStatus": "deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace",
+	}
+	missions["missions"].append(deadline_mission)
+	var accepted_day := 0
+	active_missions.append(str(deadline_mission.get("id")))
+	mission_acceptance_days[str(deadline_mission.get("id"))] = accepted_day
+	cargo = int(deadline_mission.get("cargoTons", 0))
+	var cargo_after_accept := cargo
+	current_system_index = _system_index_by_name("Sol", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_trade := credits
+	_buy_selected_commodity()
+	var credits_after_buy := credits
+	var cargo_after_buy := cargo
+	var trade_cargo_after_buy := int(commodity_hold.get("food", 0))
+	current_day = 3
+	var reputation_before_failure := int(reputation_scores.get("Federation", 0))
+	var failure_succeeded := _fail_mission_deadline(deadline_mission, accepted_day, current_day)
+	var reputation_after_failure := int(reputation_scores.get("Federation", 0))
+	var cargo_after_failure := cargo
+	var trade_cargo_after_failure := int(commodity_hold.get("food", 0))
+	current_system_index = _system_index_by_name("Levo", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	landing_tab = 1
+	selected_landing_item = 0
+	_sell_selected_commodity()
+	var credits_after_sale := credits
+	var cargo_after_sale := cargo
+	var trade_cargo_after_sale := int(commodity_hold.get("food", 0))
+	var latest_failure := JSON.stringify(failed_mission_history[failed_mission_history.size() - 1]) if not failed_mission_history.is_empty() else "{}"
+	var failure_status := "deadlineFailureRecorded=true" if failure_succeeded else "deadlineFailureRecorded=false"
+	var mission_cargo_status := "missionCargoReleased=true" if cargo_after_failure == trade_cargo_after_failure else "missionCargoReleased=false"
+	var trade_preserved_status := "tradeCargoPreserved=true" if trade_cargo_after_failure == trade_cargo_after_buy and cargo_after_failure == trade_cargo_after_buy else "tradeCargoPreserved=false"
+	var trade_sold_status := "tradeCargoSold=true" if trade_cargo_after_sale == 0 and cargo_after_sale == 0 and credits_after_sale > credits_after_buy else "tradeCargoSold=false"
+	var flag_status := "failureFlagSet=true" if story_flags.has("fail_mission_bit_42") else "failureFlagSet=false"
+	var reputation_status := "reputationPenaltyApplied=true" if reputation_after_failure == reputation_before_failure - 3 else "reputationPenaltyApplied=false"
+	print("%s acceptedMission=%s acceptedDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterBuy=%d cargoAfterFailure=%d cargoAfterSale=%d tradeCargoAfterBuy=%d tradeCargoAfterFailure=%d tradeCargoAfterSale=%d creditsBeforeTrade=%d creditsAfterBuy=%d creditsAfterSale=%d %s %s %s %s %s %s reputationBefore=%d reputationAfter=%d activeMissions=%s failedHistoryCount=%d latestFailure=%s sourceLabel=terminal-velocity-mission-deadline-trade-carryover-scaffold oracleStatus=deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_DEADLINE_TRADE_CARRYOVER_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo_after_buy, cargo_after_failure, cargo_after_sale, trade_cargo_after_buy, trade_cargo_after_failure, trade_cargo_after_sale, credits_before_trade, credits_after_buy, credits_after_sale, failure_status, mission_cargo_status, trade_preserved_status, trade_sold_status, flag_status, reputation_status, reputation_before_failure, reputation_after_failure, JSON.stringify(active_missions), failed_mission_history.size(), latest_failure, status_line])
 	get_tree().quit(0)
 
 func _run_mission_log_history_log() -> void:
