@@ -51,6 +51,7 @@ SCENARIO_CURRICULUM = [
     'federation_alignment_delivery_loop',
     'freeport_alignment_delivery_loop',
     'alignment_completion_offer_scan_guardrail',
+    'alignment_completion_return_contract_loop',
     'mission_destination_route_hint',
     'mission_trade_hybrid_capacity_planning',
     'mission_trade_refuel_delivery_loop',
@@ -1140,6 +1141,21 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'completedJobs': ['freeport_pact_smugglers'], 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_freeport', 'freeport_network_asset'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
             {'type': 'scan_mission_offers'},
         ]
+    if name == 'alignment_completion_return_contract_loop':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'completedJobs': ['federation_report_freeport'], 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_federation', 'federation_intel_asset'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
+            {'type': 'accept_manifest_mission', 'missionId': 'freeport_return_earth'},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'activeJobs': [], 'completedJobs': ['freeport_pact_smugglers'], 'cargoUsed': 0, 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_freeport', 'freeport_network_asset'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
+            {'type': 'accept_manifest_mission', 'missionId': 'freeport_return_earth'},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'complete_cargo_jobs'},
+        ]
     if name == 'mission_destination_route_hint':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -1591,6 +1607,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'fed_completion_hides_alignment_offers': 'passed' if 'federation_report_freeport' not in fed_offers and 'freeport_pact_smugglers' not in fed_offers else 'failed',
             'freeport_completion_hides_alignment_offers': 'passed' if 'federation_report_freeport' not in freeport_offers and 'freeport_pact_smugglers' not in freeport_offers else 'failed',
             'recorded_completion_scan_source_boundary': 'passed' if len(scans) == 2 and all(event.get('sourceLabel') == 'terminal-velocity-observed' and event.get('oracleStatus') == 'terminal_velocity_eval_pending_original_trace' for event in scans) else 'failed',
+        })
+    elif name == 'alignment_completion_return_contract_loop':
+        accepts = [event for event in trace if event.get('type') == 'accept_cargo_job' and event.get('id') == 'freeport_return_earth']
+        completions = [event for event in trace if event.get('type') == 'complete_cargo_job' and event.get('id') == 'freeport_return_earth']
+        checks.update({
+            'accepted_return_contract_after_each_alignment': 'passed' if len(accepts) == 2 and all(event.get('reservedCargoTons') == 5 for event in accepts) else 'failed',
+            'completed_return_contract_after_each_alignment': 'passed' if len(completions) == 2 and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('cargoUsed') == 0 else 'failed',
+            'recorded_return_contract_source_boundary': 'passed' if len(accepts) == 2 and all(event.get('sourceLabel') == 'terminal-velocity-mission-scaffold' and event.get('oracleStatus') == 'mission_behavior_pending_classic_runtime_trace' for event in accepts) else 'failed',
         })
     elif name == 'mission_destination_route_hint':
         checks.update({

@@ -33,6 +33,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'federation_alignment_delivery_loop',
                 'freeport_alignment_delivery_loop',
                 'alignment_completion_offer_scan_guardrail',
+                'alignment_completion_return_contract_loop',
                 'mission_destination_route_hint',
                 'mission_trade_hybrid_capacity_planning',
                 'mission_trade_refuel_delivery_loop',
@@ -516,6 +517,23 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             self.assertEqual(mission_offers, ['freeport_return_earth'])
         self.assertEqual(scans[0]['sourceLabel'], 'terminal-velocity-observed')
         self.assertEqual(scans[0]['oracleStatus'], 'terminal_velocity_eval_pending_original_trace')
+
+    def test_alignment_completion_return_contract_accepts_after_either_branch(self):
+        result = run_scripted_scenario('alignment_completion_return_contract_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['checks']['accepted_return_contract_after_each_alignment'], 'passed')
+        self.assertEqual(result['checks']['completed_return_contract_after_each_alignment'], 'passed')
+        self.assertEqual(result['checks']['recorded_return_contract_source_boundary'], 'passed')
+        accepts = [event for event in result['trace'] if event.get('type') == 'accept_cargo_job' and event.get('id') == 'freeport_return_earth']
+        completions = [event for event in result['trace'] if event.get('type') == 'complete_cargo_job' and event.get('id') == 'freeport_return_earth']
+        self.assertEqual(len(accepts), 2)
+        self.assertEqual(len(completions), 2)
+        self.assertEqual([event['reservedCargoTons'] for event in accepts], [5, 5])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-mission-scaffold' for event in accepts))
 
     def test_mission_destination_route_hint_sets_route_to_active_contract_destination(self):
         result = run_scripted_scenario('mission_destination_route_hint')

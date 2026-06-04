@@ -21,6 +21,7 @@
     "federation_alignment_delivery_loop",
     "freeport_alignment_delivery_loop",
     "alignment_completion_offer_scan_guardrail",
+    "alignment_completion_return_contract_loop",
     "mission_destination_route_hint",
     "mission_trade_hybrid_capacity_planning",
     "mission_trade_refuel_delivery_loop",
@@ -130,6 +131,10 @@
     "alignment_completion_offer_scan_guardrail": {
       "purpose": "Alignment completion offer-scan guardrail: from each completed chapter-one alignment branch state, scan Sirius Station offers and verify the closed choice group no longer presents either branch while preserving pending-Classic UI boundaries.",
       "surface": "mission offer discovery/faction alignment completion guardrail"
+    },
+    "alignment_completion_return_contract_loop": {
+      "purpose": "Alignment completion return-contract loop: after each completed chapter-one alignment branch state, accept and deliver the non-branch return contract to verify story-chain recovery remains available under pending-Classic mission-behavior boundaries.",
+      "surface": "mission delivery/faction alignment completion recovery scaffold"
     },
     "shift_click_multi_stop_route_queue": {
       "purpose": "Map route-planner loop: Shift-click linked stops to build a green multi-hop route queue, then consume only the first leg on jump.",
