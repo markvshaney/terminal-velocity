@@ -5,7 +5,7 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "combat_disabled_target_retarget_guardrail",
+  "current_milestone": "legal_combat_consequence_projectile_guardrail",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "progress_heartbeats": "not needed; run stayed under long-run heartbeat threshold after start heartbeat",
@@ -13,17 +13,15 @@
     "visibility_degraded": "send_message tool unavailable; heartbeat file fallback used"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
-    "./run_godot.sh tv-combat-log -> destroyedTargetBlocked=true retargetedAfterDestroyed=true retargetedTargetIndex=1",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_combat_guardrail_log_contract -v -> OK",
-    "./run_godot.sh tv-combat-guardrail-log -> firstShotSpawned=true immediateSecondShotBlocked=true cooldownFrames=146 cooldownCleared=true shotAfterCooldownSpawned=true secondaryBlocked=true sourceReload=146",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-legal-consequence-log -> combatExecuted=true projectileSpawned=true targetDestroyed=true explosionTriggered=true consequenceApplied=true legalAfter=-100 reputationAfter=-15 pirateReputationAfter=5",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (128 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20 prefScreen=original-ev-classic-observed",
     "git diff --check -> OK",
-    "git commit -> feat(godot): retarget disabled combat contacts (fd8ee14)"
+    "git commit -> feat(godot): verify legal combat consequences (6068820)"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic combat runtime/resource evidence for projectile motion/explosion frames/rewards/legal consequences, improve combat target/AI retaliation guardrails, or add another player-visible legal/map/fuel/mission/combat helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic combat runtime/resource evidence for projectile motion/explosion frames/rewards/legal consequences, extend combat/AI retaliation/player death guardrails, or add another player-visible legal/map/fuel/mission/combat helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -98,5 +96,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T03:01:05Z"
+  "updated_at": "2026-06-04T03:10:01Z"
 }
