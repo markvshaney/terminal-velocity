@@ -65,6 +65,7 @@ SCENARIO_CURRICULUM = [
     'mission_abort_reaccept_delivery_loop',
     'mission_abort_forbidden_return_gate',
     'mission_abort_forbidden_return_completion_loop',
+    'mission_abort_reputation_penalty_guardrail',
     'mission_deadline_failure_scaffold',
     'mission_deadline_last_day_delivery_loop',
     'mission_deadline_completed_no_late_failure_loop',
@@ -352,6 +353,7 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         'completionReward': action.get('completionReward'),
         'failureBitSet': action.get('failureBitSet'),
         'canAbort': action.get('canAbort', True),
+        'abortReputationMultiplier': action.get('abortReputationMultiplier'),
         'setsFlags': list(action.get('setsFlags', [])),
         'completionFlags': list(action.get('completionFlags', [])),
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-mission-scaffold'),
@@ -956,14 +958,29 @@ def _abort_active_mission(state: dict[str, Any], action: dict[str, Any], trace: 
     released = int(job.get('reservedCargoTons', job.get('tons', 0)))
     state['cargoUsed'] = max(0, int(state.get('cargoUsed', 0)) - released)
     state.setdefault('abortedJobs', []).append(job.get('id'))
+    completion_government = job.get('completionGovernment')
+    completion_reward = int(job.get('completionReward') or 0)
+    abort_multiplier = job.get('abortReputationMultiplier')
+    reputation_delta = 0
+    source_label = 'terminal-velocity-mission-abort-scaffold'
+    oracle_status = 'mission_abort_pending_classic_runtime_or_manual_trace'
+    if completion_government and completion_reward and abort_multiplier is not None:
+        reputation_delta = -(completion_reward * int(abort_multiplier))
+        state.setdefault('reputation', {})[completion_government] = int(state.get('reputation', {}).get(completion_government, 0)) + reputation_delta
+        source_label = 'ev-classic-resource-bible-backed-mission-abort-penalty-scaffold'
+        oracle_status = 'classic_runtime_abort_penalty_ui_pending'
     trace.append({
         'type': 'abort_mission',
         'missionId': job.get('id'),
         'releasedCargoTons': released,
         'cargoUsed': state['cargoUsed'],
         'activeJobs': [candidate.get('id') for candidate in state.get('activeJobs', [])],
-        'sourceLabel': 'terminal-velocity-mission-abort-scaffold',
-        'oracleStatus': 'mission_abort_pending_classic_runtime_or_manual_trace',
+        'completionGovernment': completion_government,
+        'completionReward': completion_reward,
+        'abortReputationMultiplier': abort_multiplier,
+        'reputationDelta': reputation_delta,
+        'sourceLabel': source_label,
+        'oracleStatus': oracle_status,
     })
     return True
 
@@ -1454,6 +1471,27 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Centauri'},
             {'type': 'land', 'body': 'Luna'},
             {'type': 'complete_cargo_jobs'},
+        ]
+    if name == 'mission_abort_reputation_penalty_guardrail':
+        source_label = 'ev-classic-resource-bible-backed-mission-abort-penalty-scaffold'
+        oracle_status = 'classic_runtime_abort_penalty_ui_pending'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'abort_penalty_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'abortReputationMultiplier': 5,
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'abort_active_mission', 'missionId': 'abort_penalty_probe'},
         ]
     if name == 'mission_deadline_failure_scaffold':
         return [
@@ -2018,6 +2056,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'completed_non_abortable_return_job': 'passed' if completions and state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('activeJobs') == [] and state.get('completedJobs') == ['canabort_return_gate_probe'] else 'failed',
             'released_return_gate_cargo_and_reward': 'passed' if state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 and state.get('abortedJobs', []) == [] else 'failed',
             'recorded_canabort_return_cleanup_boundary': 'passed' if completions and all(event.get('sourceLabel') == 'ev-classic-resource-bible-backed-canabort-guardrail' and event.get('oracleStatus') == 'classic_runtime_canabort_return_cleanup_pending' for event in completions) else 'failed',
+        })
+    elif name == 'mission_abort_reputation_penalty_guardrail':
+        aborts = [event for event in trace if event.get('type') == 'abort_mission' and event.get('missionId') == 'abort_penalty_probe']
+        checks.update({
+            'aborted_penalty_mission': 'passed' if aborts and state.get('abortedJobs') == ['abort_penalty_probe'] and state.get('activeJobs') == [] else 'failed',
+            'released_abort_penalty_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
+            'applied_abort_reputation_reversal': 'passed' if state.get('reputation', {}).get('Federation') == -25 and aborts and aborts[-1].get('reputationDelta') == -30 and aborts[-1].get('abortReputationMultiplier') == 5 else 'failed',
+            'recorded_abort_penalty_source_boundary': 'passed' if aborts and aborts[-1].get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-abort-penalty-scaffold' and aborts[-1].get('oracleStatus') == 'classic_runtime_abort_penalty_ui_pending' else 'failed',
         })
     elif name == 'mission_deadline_failure_scaffold':
         checks.update({

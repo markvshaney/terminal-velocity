@@ -132,6 +132,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"mission_abort_reaccept_delivery_loop",
 		"mission_abort_forbidden_return_gate",
 		"mission_abort_forbidden_return_completion_loop",
+		"mission_abort_reputation_penalty_guardrail",
 		"mission_deadline_failure_scaffold",
 		"mission_deadline_last_day_delivery_loop",
 		"mission_deadline_completed_no_late_failure_loop",
