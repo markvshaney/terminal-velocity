@@ -5,7 +5,7 @@
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Secondary weapon selection/fire now preserves the ship primary weapon slot and logs primaryWeaponPreserved/sourcePrimaryId in the deterministic secondary-weapon probe.",
+  "current_milestone": "Combat target destruction now awards a deterministic Terminal Velocity scaffold reward, records combat_reward_history, and verifies save/resume visibility in tv-combat-log while Classic reward behavior remains pending.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
@@ -14,24 +14,23 @@
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "abc7c58 fix(godot): preserve primary weapon during secondary fire",
+  "last_commit": "51e3f4c feat(godot): reward disabled combat contacts",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v -> OK",
-    "./run_godot.sh tv-secondary-weapon-log -> TV_SECONDARY_WEAPON_EVENT primaryWeaponPreserved=true sourcePrimaryId=laser_cannon",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (133 tests)",
+    "./run_godot.sh tv-combat-log -> TV_COMBAT_EVENT combatRewardPaid=true combatRewardAmount=25 combatRewardRecorded=true combatRewardSaved=true combatRewardResumeVisible=true",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=20 failed=0 total=20",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> fix(godot): preserve primary weapon during secondary fire (abc7c58)"
+    "git commit -> feat(godot): reward disabled combat contacts (51e3f4c)"
   ],
-  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: original/source evidence for exact secondary weapon semantics/ammo/cycling, combat/explosion cadence, AI retaliation, loot/rewards, or another bounded mission/map/fuel/combat probe.",
+  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: bounded Classic/source evidence for combat rewards/bounties/legal effects, exact fire cadence/projectile motion/explosion timing, AI retaliation cadence, or another deterministic mission/map/fuel/combat probe.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 91,
+    "ahead": 93,
     "branch": "main",
     "dirty": false,
-    "head": "abc7c58"
+    "head": "51e3f4c"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -104,5 +103,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T06:02:35Z"
+  "updated_at": "2026-06-04T06:16:16Z"
 }
