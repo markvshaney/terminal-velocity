@@ -1,0 +1,33 @@
+{
+  "id": "classic",
+  "displayName": "Escape Velocity Classic",
+  "sourceLabel": "ev-classic-profile-descriptor-scaffold",
+  "oracleStatus": "profile_manifest_paths_source_backed_runtime_profile_switching_pending",
+  "startSystemName": "Levo",
+  "dataManifests": {
+    "universe": "native_ev/data/universe.json",
+    "ships": "native_ev/data/ships.json",
+    "missions": "native_ev/data/missions.json",
+    "economy": "native_ev/data/economy.json",
+    "sounds": "native_ev/data/sounds.json",
+    "weapons": "native_ev/data/weapons.json",
+    "outfits": "native_ev/data/outfits.json",
+    "governments": "native_ev/data/governments.json",
+    "reputation": "native_ev/data/reputation.json",
+    "gameplayCurriculum": "native_ev/data/gameplay_curriculum.json",
+    "helpOverlay": "native_ev/data/help_overlay.json"
+  },
+  "sourceManifests": {
+    "sourcedEvStructures": "native_ev/data/sourced_ev_structures.json",
+    "sourcedEvMissions": "native_ev/data/sourced_ev_missions.json",
+    "sourcedEvGovernments": "native_ev/data/sourced_ev_governments.json",
+    "sourcedEvGraphics": "native_ev/data/sourced_ev_graphics.json",
+    "sourcedEvSounds": "native_ev/data/sourced_ev_sounds.json",
+    "sourcedEvWeapons": "native_ev/data/sourced_ev_weapons.json"
+  },
+  "boundaries": [
+    "Classic is the active fidelity profile and first playable vertical-slice target.",
+    "Profile descriptor validates current manifest paths only; broad EV-family profile switching remains pending.",
+    "Original EV Classic runtime/resource evidence remains required before promoting scaffold behavior to Classic claims."
+  ]
+}

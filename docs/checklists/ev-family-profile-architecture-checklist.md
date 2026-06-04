@@ -19,19 +19,19 @@ Use **artifact + checklist**:
 
 ## Checklist
 
-- [ ] Define the smallest profile descriptor shape.
-  - Status: pending
-  - Next action: identify current hard-coded manifest/data paths in Python and Godot.
-  - Done when: there is a documented minimal descriptor with profile ID, display name, source family, manifest paths, asset roots, and rule flags.
+- [x] Define the smallest profile descriptor shape.
+  - Status: implemented 2026-06-04 as `native_ev/data/profiles/classic.json`.
+  - Current shape: profile ID/display name, start system, source/fidelity labels, runtime manifest paths, source manifest paths, and explicit profile-switching boundaries.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests -v`; `./run_godot.sh self-test` reports `profile=classic profileManifests=17`.
 
 - [x] Inventory current hard-coded Classic assumptions.
   - Status: completed 2026-05-18
   - Evidence: searched Python, Godot, and JSON surfaces under `native_ev/`, `godot_ev/`, and `tools/` for direct data paths, Classic resource names, `ev_classic` asset roots, and sourced manifest assumptions.
   - Result: see "Hard-coded Classic assumptions inventory" below.
 
-- [ ] Introduce profile-aware manifest loading without a broad rewrite.
-  - Status: pending
-  - Next action: define a minimal `classic` profile descriptor, then route Python and Godot runtime manifest paths through that descriptor while keeping the current `native_ev/data/*.json` contract intact initially.
+- [x] Introduce profile-aware manifest loading without a broad rewrite.
+  - Status: implemented initial Classic descriptor validation; broader runtime switching remains pending.
+  - Implementation: `native_ev.model.profile_manifest('classic')` validates descriptor IDs/source label and all listed runtime/source manifest paths; Godot self-test loads the same descriptor and fails fast on missing listed files while keeping the current `native_ev/data/*.json` contract intact.
   - Done when: existing Classic self-tests still pass through the profile path.
 
 - [ ] Keep Classic as the first fidelity vertical slice.
@@ -39,15 +39,13 @@ Use **artifact + checklist**:
   - Next action: continue integrating extracted Classic resources while avoiding new global assumptions that would block a Nova profile.
   - Done when: Classic remains playable and all new manifests/assets are profile-addressable or explicitly marked Classic-only.
 
-- [ ] Add tests for profile descriptor and asset path integrity.
-  - Status: pending
-  - Next action: extend existing `native_ev.tests.test_model` or nearby tests to validate the Classic profile descriptor and manifest existence.
-  - Done when: profile config errors fail fast in unit tests before Godot launch.
+- [x] Add tests for profile descriptor and asset path integrity.
+  - Status: implemented 2026-06-04.
+  - Verification: `NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests` fails fast if required Classic data/source manifest keys or paths disappear.
 
-- [ ] Add Godot self-test coverage for selected profile.
-  - Status: pending
-  - Next action: make the self-test print the selected profile ID and validate profile-loaded assets/data.
-  - Done when: Godot self-test clearly reports `profile=classic` and catches missing profile files.
+- [x] Add Godot self-test coverage for selected profile.
+  - Status: implemented 2026-06-04.
+  - Verification: `./run_godot.sh self-test` loads `native_ev/data/profiles/classic.json`, validates 17 profile-listed manifests, and reports `profile=classic profileManifests=17`.
 
 - [ ] Mine KestrelEngine for architecture ideas only.
   - Status: pending

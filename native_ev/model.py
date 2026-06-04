@@ -3,6 +3,7 @@ import json
 import re
 
 ROOT = Path(__file__).resolve().parent
+PROFILES_ROOT = ROOT / 'data' / 'profiles'
 SHUTTLE_DIR = ROOT / 'assets' / 'ships' / 'shuttle'
 UNIVERSE_PATH = ROOT / 'data' / 'universe.json'
 SHIPS_PATH = ROOT / 'data' / 'ships.json'
@@ -20,6 +21,38 @@ SOURCED_EV_MISSIONS_PATH = ROOT / 'data' / 'sourced_ev_missions.json'
 SOURCED_EV_GRAPHICS_PATH = ROOT / 'data' / 'sourced_ev_graphics.json'
 SOURCED_EV_SOUNDS_PATH = ROOT / 'data' / 'sourced_ev_sounds.json'
 SOURCED_EV_WEAPONS_PATH = ROOT / 'data' / 'sourced_ev_weapons.json'
+
+
+def profile_manifest(profile_id='classic', profiles_root=PROFILES_ROOT):
+    """Return a validated runtime profile descriptor.
+
+    Profiles are a small routing layer: they name the source/fidelity target and
+    the manifest paths consumed by Python/Godot without changing the current
+    single-Classic data contract yet.
+    """
+    if not re.fullmatch(r'[a-z0-9_-]+', profile_id):
+        raise ValueError(f'invalid profile id {profile_id!r}')
+    path = profiles_root / f'{profile_id}.json'
+    data = json.loads(path.read_text())
+    if data.get('id') != profile_id:
+        raise ValueError(f'profile {profile_id} id mismatch')
+    if data.get('sourceLabel') != 'ev-classic-profile-descriptor-scaffold':
+        raise ValueError(f'profile {profile_id} has unexpected source label')
+    manifests = data.get('dataManifests', {})
+    for key in ['universe', 'ships', 'missions', 'economy', 'sounds', 'weapons', 'outfits', 'governments', 'reputation', 'gameplayCurriculum', 'helpOverlay']:
+        rel = manifests.get(key)
+        if not rel:
+            raise ValueError(f'profile {profile_id} missing data manifest {key}')
+        if not (ROOT.parent / rel).exists():
+            raise ValueError(f'profile {profile_id} data manifest {key} missing at {rel}')
+    sources = data.get('sourceManifests', {})
+    for key in ['sourcedEvStructures', 'sourcedEvMissions', 'sourcedEvGovernments', 'sourcedEvGraphics', 'sourcedEvSounds', 'sourcedEvWeapons']:
+        rel = sources.get(key)
+        if not rel:
+            raise ValueError(f'profile {profile_id} missing source manifest {key}')
+        if not (ROOT.parent / rel).exists():
+            raise ValueError(f'profile {profile_id} source manifest {key} missing at {rel}')
+    return data
 
 
 def shuttle_frame_paths():

@@ -28,6 +28,7 @@ from native_ev.model import (
     mission_manifest,
     mission_unlock_flags,
     normalize_save_data,
+    profile_manifest,
     apply_reputation_event,
     legal_status_for_score,
     outfit_manifest,
@@ -124,6 +125,40 @@ def _png_alpha_pixel_count(path: Path) -> int:
 
 
 class NativeEvModelTests(unittest.TestCase):
+    def test_classic_profile_descriptor_validates_runtime_and_source_manifests(self):
+        profile = profile_manifest('classic')
+
+        self.assertEqual(profile['id'], 'classic')
+        self.assertEqual(profile['startSystemName'], 'Levo')
+        self.assertEqual(profile['sourceLabel'], 'ev-classic-profile-descriptor-scaffold')
+        self.assertEqual(
+            profile['oracleStatus'],
+            'profile_manifest_paths_source_backed_runtime_profile_switching_pending',
+        )
+        for key in [
+            'universe',
+            'ships',
+            'missions',
+            'economy',
+            'sounds',
+            'weapons',
+            'outfits',
+            'governments',
+            'reputation',
+            'gameplayCurriculum',
+            'helpOverlay',
+        ]:
+            self.assertIn(key, profile['dataManifests'])
+        for key in [
+            'sourcedEvStructures',
+            'sourcedEvMissions',
+            'sourcedEvGovernments',
+            'sourcedEvGraphics',
+            'sourcedEvSounds',
+            'sourcedEvWeapons',
+        ]:
+            self.assertIn(key, profile['sourceManifests'])
+
     def test_godot_prefs_modal_matches_original_ev_classic_observation(self):
         source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd'
         text = source.read_text()
@@ -177,6 +212,9 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('prefsScreenshot=', text)
         self.assertIn('strictPlay=off-by-default', text)
         self.assertIn('profile=classic', text)
+        self.assertIn('profileManifests=%d', text)
+        self.assertIn('native_ev/data/profiles/classic.json', text)
+        self.assertIn('_verify_classic_profile', text)
         self.assertIn('user://selftest/title_prefs.png', text)
         self.assertIn('_write_prefs_screenshot_artifact', text)
 

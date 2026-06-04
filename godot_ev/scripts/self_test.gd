@@ -5,6 +5,7 @@ const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
 
 func _initialize() -> void:
 	var root := _repo_root()
+	var profile: Dictionary = _json(root + "/native_ev/data/profiles/classic.json")
 	var universe: Dictionary = _json(root + "/native_ev/data/universe.json")
 	var ships: Dictionary = _json(root + "/native_ev/data/ships.json")
 	var sounds: Dictionary = _json(root + "/native_ev/data/sounds.json")
@@ -19,6 +20,7 @@ func _initialize() -> void:
 		printerr("GODOT SELFTEST FAIL no ships")
 		quit(1)
 		return
+	var profile_manifest_count := _verify_classic_profile(root, profile)
 	var loaded_sounds := _verify_sound_assets(root, sounds)
 	var gameplay_scenarios := _verify_gameplay_curriculum(gameplay_curriculum)
 	var loaded_picts := _verify_shipyard_picts(root, ship_defs)
@@ -43,8 +45,32 @@ func _initialize() -> void:
 		printerr("GODOT SELFTEST FAIL %s frames=%d" % [player_check_id, frame_ok])
 		quit(1)
 		return
-	print("GODOT SELFTEST OK profile=classic systems=%d ships=%d %sFrames=%d soundsLoaded=%d gameplayScenarios=%d pictsLoaded=%d prefScreen=original-ev-classic-observed prefsScreenshot=%s strictPlay=off-by-default movementLog=deterministic data=native_ev/data/universe.json" % [systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, gameplay_scenarios, loaded_picts, prefs_screenshot])
+	print("GODOT SELFTEST OK profile=classic profileManifests=%d systems=%d ships=%d %sFrames=%d soundsLoaded=%d gameplayScenarios=%d pictsLoaded=%d prefScreen=original-ev-classic-observed prefsScreenshot=%s strictPlay=off-by-default movementLog=deterministic data=native_ev/data/universe.json" % [profile_manifest_count, systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, gameplay_scenarios, loaded_picts, prefs_screenshot])
 	quit(0)
+
+func _verify_classic_profile(root: String, profile: Dictionary) -> int:
+	if profile.get("id", "") != "classic":
+		printerr("GODOT SELFTEST FAIL profile id")
+		quit(1)
+		return 0
+	if profile.get("startSystemName", "") != "Levo":
+		printerr("GODOT SELFTEST FAIL profile start system")
+		quit(1)
+		return 0
+	if profile.get("sourceLabel", "") != "ev-classic-profile-descriptor-scaffold":
+		printerr("GODOT SELFTEST FAIL profile source label")
+		quit(1)
+		return 0
+	var count := 0
+	for manifests in [profile.get("dataManifests", {}), profile.get("sourceManifests", {})]:
+		for key in manifests.keys():
+			var rel := str(manifests[key])
+			if not FileAccess.file_exists(root + "/" + rel):
+				printerr("GODOT SELFTEST FAIL profile missing " + key + " " + rel)
+				quit(1)
+				return 0
+			count += 1
+	return count
 
 func _write_prefs_screenshot_artifact() -> String:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
