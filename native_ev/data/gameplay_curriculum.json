@@ -16,6 +16,7 @@
     "intro_courier_mission_delivery",
     "chapter_one_courier_chain",
     "alignment_choice_guardrail",
+    "alignment_story_prereq_recovery",
     "alignment_offer_requirement_recovery",
     "federation_alignment_delivery_loop",
     "freeport_alignment_delivery_loop",
@@ -108,6 +109,10 @@
     "alignment_choice_guardrail": {
       "purpose": "Alignment branch guardrail: accept one mutually exclusive faction branch, then verify the incompatible branch is unavailable without mutating cargo or completing combat.",
       "surface": "mission availability/faction alignment guardrail"
+    },
+    "alignment_story_prereq_recovery": {
+      "purpose": "Alignment story prerequisite recovery: at Sirius Station, verify both chapter-one branch offers are hidden before the frontier sample story flag exists, then reappear once the story prerequisite is present while preserving pending-Classic UI boundaries.",
+      "surface": "mission availability/story prerequisite gate scaffold"
     },
     "alignment_offer_requirement_recovery": {
       "purpose": "Alignment offer requirement recovery: at Sirius Station, verify both chapter-one branch offers are hidden just below their reputation/legal thresholds, then reappear at the manifest thresholds while preserving pending-Classic UI boundaries.",

@@ -28,6 +28,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'intro_courier_mission_delivery',
                 'chapter_one_courier_chain',
                 'alignment_choice_guardrail',
+                'alignment_story_prereq_recovery',
                 'alignment_offer_requirement_recovery',
                 'federation_alignment_delivery_loop',
                 'freeport_alignment_delivery_loop',
@@ -433,6 +434,18 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['blocked_alignment_offers_below_requirements'], 'passed')
         self.assertEqual(result['checks']['recovered_alignment_offers_at_thresholds'], 'passed')
         self.assertEqual(result['checks']['recorded_requirement_gate_source_boundary'], 'passed')
+        scans = [event for event in result['trace'] if event['type'] == 'scan_mission_offers']
+        self.assertEqual(scans[0]['offersBySurface']['Mission Computer'], [])
+        self.assertEqual(scans[-1]['offersBySurface']['Mission Computer'], ['federation_report_freeport', 'freeport_pact_smugglers'])
+
+    def test_alignment_story_prereq_recovery_blocks_and_restores_branch_offers(self):
+        result = run_scripted_scenario('alignment_story_prereq_recovery')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['storyFlags'], ['frontier_samples_delivered'])
+        self.assertEqual(result['checks']['blocked_alignment_offers_without_story_prereq'], 'passed')
+        self.assertEqual(result['checks']['recovered_alignment_offers_after_story_prereq'], 'passed')
+        self.assertEqual(result['checks']['recorded_story_gate_source_boundary'], 'passed')
         scans = [event for event in result['trace'] if event['type'] == 'scan_mission_offers']
         self.assertEqual(scans[0]['offersBySurface']['Mission Computer'], [])
         self.assertEqual(scans[-1]['offersBySurface']['Mission Computer'], ['federation_report_freeport', 'freeport_pact_smugglers'])

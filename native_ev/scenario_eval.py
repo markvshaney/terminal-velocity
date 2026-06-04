@@ -46,6 +46,7 @@ SCENARIO_CURRICULUM = [
     'intro_courier_mission_delivery',
     'chapter_one_courier_chain',
     'alignment_choice_guardrail',
+    'alignment_story_prereq_recovery',
     'alignment_offer_requirement_recovery',
     'federation_alignment_delivery_loop',
     'freeport_alignment_delivery_loop',
@@ -1102,6 +1103,13 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
             {'type': 'scan_mission_offers'},
         ]
+    if name == 'alignment_story_prereq_recovery':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'storyFlags': [], 'completedJobs': ['freeport_return_earth'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
+            {'type': 'scan_mission_offers'},
+            {'type': 'set_state', 'values': {'storyFlags': ['frontier_samples_delivered']}},
+            {'type': 'scan_mission_offers'},
+        ]
     if name == 'federation_alignment_delivery_loop':
         return [
             {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'storyFlags': ['frontier_samples_delivered']}},
@@ -1543,6 +1551,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_alignment_offers_below_requirements': 'passed' if first_offers == [] else 'failed',
             'recovered_alignment_offers_at_thresholds': 'passed' if recovered_offers == ['federation_report_freeport', 'freeport_pact_smugglers'] else 'failed',
             'recorded_requirement_gate_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-observed' and event.get('oracleStatus') == 'terminal_velocity_eval_pending_original_trace' for event in scans) else 'failed',
+        })
+    elif name == 'alignment_story_prereq_recovery':
+        scans = [event for event in trace if event.get('type') == 'scan_mission_offers']
+        first_offers = scans[0].get('offersBySurface', {}).get('Mission Computer', []) if scans else []
+        recovered_offers = scans[-1].get('offersBySurface', {}).get('Mission Computer', []) if scans else []
+        checks.update({
+            'blocked_alignment_offers_without_story_prereq': 'passed' if first_offers == [] else 'failed',
+            'recovered_alignment_offers_after_story_prereq': 'passed' if recovered_offers == ['federation_report_freeport', 'freeport_pact_smugglers'] else 'failed',
+            'recorded_story_gate_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-observed' and event.get('oracleStatus') == 'terminal_velocity_eval_pending_original_trace' for event in scans) else 'failed',
         })
     elif name == 'federation_alignment_delivery_loop':
         checks.update({
