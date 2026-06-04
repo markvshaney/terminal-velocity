@@ -36,6 +36,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
+                'contraband_scan_clemency_recovery',
                 'pirate_avoidance_escape_route',
                 'disposable_combat_placeholder',
             ],
@@ -437,6 +438,25 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['recorded_insufficient_credits'], 'passed')
         self.assertEqual(result['checks']['recorded_invalid_destination'], 'passed')
         self.assertEqual(result['checks']['recorded_no_deliverable_job'], 'passed')
+
+    def test_contraband_scan_clemency_recovery_confiscates_and_repairs_legal_record(self):
+        result = run_scripted_scenario('contraband_scan_clemency_recovery')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['confiscated_federation_contraband'], 'passed')
+        self.assertEqual(result['checks']['applied_federation_fine_and_legal_penalty'], 'passed')
+        self.assertEqual(result['checks']['paid_clemency_after_scan'], 'passed')
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['credits'], 3200)
+        self.assertEqual(result['state']['legalRecords']['Federation'], -8)
+        scan = [event for event in result['trace'] if event['type'] == 'contraband_scan'][-1]
+        self.assertEqual(scan['sourceLabel'], 'terminal-velocity-classic-resource-smuggling-scan-semantics')
+        self.assertEqual(scan['oracleStatus'], 'classic_runtime_scan_frequency_and_ui_wording_pending')
+        self.assertEqual(scan['confiscated'], {'equipment': 2})
+        clemency = [event for event in result['trace'] if event['type'] == 'pay_legal_clemency'][-1]
+        self.assertEqual(clemency['sourceLabel'], 'terminal-velocity-inferred-clemency-scaffold')
+        self.assertEqual(clemency['oracleStatus'], 'approved_inference_pending_ev_classic_confirmation')
 
     def test_pirate_avoidance_escape_route_records_noncombat_evasion(self):
         result = run_scripted_scenario('pirate_avoidance_escape_route')

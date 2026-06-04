@@ -24,6 +24,7 @@
     "route_planner_refuel_loop",
     "low_fuel_jump_recovery",
     "blocked_reason_curriculum",
+    "contraband_scan_clemency_recovery",
     "pirate_avoidance_escape_route",
     "disposable_combat_placeholder"
   ],
@@ -47,6 +48,10 @@
     "blocked_reason_curriculum": {
       "purpose": "Safe blocker recognition: not landed, insufficient cargo, insufficient credits, invalid destination, and no deliverable job.",
       "surface": "controller feedback"
+    },
+    "contraband_scan_clemency_recovery": {
+      "purpose": "Contraband scan/recovery loop: confiscate illegal cargo, apply a government fine/legal penalty, then pay a clemency scaffold to partially repair the legal record while preserving source boundaries.",
+      "surface": "government patrol/legal recovery scaffold"
     },
     "pirate_avoidance_escape_route": {
       "purpose": "Pirate-avoidance loop: detect a symbolic pirate intercept, choose a linked safe-port jump, land, and verify combat remains unexecuted while preserving scaffold/source-boundary labels.",

@@ -12,10 +12,14 @@ from typing import Any
 
 from native_ev.model import (
     available_mission_ids,
+    clemency_offer,
     economy_manifest,
+    enforcement_outcome,
+    government_manifest,
     load_universe,
     mission_manifest,
     outfit_manifest,
+    reputation_manifest,
     ship_manifest,
     station_inventory,
     weapon_manifest,
@@ -50,6 +54,7 @@ SCENARIO_CURRICULUM = [
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
+    'contraband_scan_clemency_recovery',
     'pirate_avoidance_escape_route',
     'disposable_combat_placeholder',
 ]
@@ -600,6 +605,88 @@ def _combat_placeholder_guardrail(state: dict[str, Any], _action: dict[str, Any]
     return True
 
 
+def _current_government_name(state: dict[str, Any]) -> str:
+    governments = government_manifest()
+    mapping = governments.get('systems', {}).get(state['currentSystem'], {})
+    government = mapping.get('government')
+    if not government:
+        raise ValueError(f"system {state['currentSystem']} has no government mapping")
+    return str(government)
+
+
+def _apply_contraband_scan(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    government = str(action.get('government') or _current_government_name(state))
+    governments = government_manifest()
+    reputation = reputation_manifest()
+    outcome = enforcement_outcome(
+        governments,
+        reputation,
+        government=government,
+        hold=state.get('cargoHold', {}),
+        credits=state.get('credits', 0),
+        legal_records=state.get('legalRecords', {}),
+        accept_bribe=bool(action.get('acceptBribe', False)),
+    )
+    state['credits'] = int(state.get('credits', 0)) + int(outcome.get('creditsDelta', 0))
+    state.setdefault('legalRecords', {})[government] = int(state.get('legalRecords', {}).get(government, 0)) + int(outcome.get('legalDelta', 0))
+    confiscated = dict(outcome.get('confiscated', {}))
+    for commodity, tons in confiscated.items():
+        removed = int(tons)
+        if removed <= 0:
+            continue
+        before = int(state.get('cargoHold', {}).get(commodity, 0))
+        after = max(0, before - removed)
+        if after:
+            state.setdefault('cargoHold', {})[commodity] = after
+        else:
+            state.setdefault('cargoHold', {}).pop(commodity, None)
+        state['cargoUsed'] = max(0, int(state.get('cargoUsed', 0)) - min(before, removed))
+    trace.append({
+        'type': 'contraband_scan',
+        'government': government,
+        'action': outcome.get('action'),
+        'creditsDelta': int(outcome.get('creditsDelta', 0)),
+        'legalDelta': int(outcome.get('legalDelta', 0)),
+        'creditsAfter': state['credits'],
+        'legalAfter': state['legalRecords'][government],
+        'confiscated': confiscated,
+        'cargoHold': dict(state.get('cargoHold', {})),
+        'sourceLabel': 'terminal-velocity-classic-resource-smuggling-scan-semantics',
+        'oracleStatus': 'classic_runtime_scan_frequency_and_ui_wording_pending',
+    })
+    return True
+
+
+def _pay_legal_clemency(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    government = str(action.get('government') or _current_government_name(state))
+    offer = clemency_offer(
+        reputation_manifest(),
+        reputation_scores=state.get('reputation', {}),
+        legal_records=state.get('legalRecords', {}),
+        government=government,
+    )
+    if not offer.get('available'):
+        trace.append({'type': 'blocked_legal_clemency', 'government': government, 'reason': 'clemency unavailable', 'sourceLabel': 'terminal-velocity-inferred-clemency-scaffold', 'oracleStatus': 'approved_inference_pending_ev_classic_confirmation'})
+        return False
+    cost = int(offer.get('cost', 0))
+    if int(state.get('credits', 0)) < cost:
+        trace.append({'type': 'blocked_legal_clemency', 'government': government, 'reason': 'insufficient credits', 'cost': cost, 'credits': state.get('credits', 0), 'sourceLabel': 'terminal-velocity-inferred-clemency-scaffold', 'oracleStatus': 'approved_inference_pending_ev_classic_confirmation'})
+        return False
+    state['credits'] = int(state.get('credits', 0)) - cost
+    state.setdefault('legalRecords', {})[government] = int(state.get('legalRecords', {}).get(government, 0)) + int(offer.get('legalDelta', 0))
+    trace.append({
+        'type': 'pay_legal_clemency',
+        'government': government,
+        'cost': cost,
+        'legalDelta': int(offer.get('legalDelta', 0)),
+        'creditsAfter': state['credits'],
+        'legalAfter': state['legalRecords'][government],
+        'sourceLabel': 'terminal-velocity-inferred-clemency-scaffold',
+        'oracleStatus': 'approved_inference_pending_ev_classic_confirmation',
+    })
+    return True
+
+
 def _complete_cargo_jobs(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     remaining = []
     completed_any = False
@@ -848,6 +935,12 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Antares', 'expectBlocked': True},
             {'type': 'complete_cargo_jobs', 'expectBlocked': True},
         ]
+    if name == 'contraband_scan_clemency_recovery':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'cargoHold': {'equipment': 2}, 'cargoUsed': 2, 'credits': 5000, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
+            {'type': 'apply_contraband_scan', 'government': 'Federation'},
+            {'type': 'pay_legal_clemency', 'government': 'Federation'},
+        ]
     if name == 'pirate_avoidance_escape_route':
         return [
             {'type': 'depart'},
@@ -998,6 +1091,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_invalid_destination': 'passed' if any(event.get('type') == 'blocked_jump' and 'not linked' in event.get('reason', '') for event in trace) else 'failed',
             'recorded_no_deliverable_job': 'passed' if any(event.get('type') == 'blocked_complete_cargo_job' and event.get('reason') == 'no deliverable job at current landing' for event in trace) else 'failed',
         })
+    elif name == 'contraband_scan_clemency_recovery':
+        scan = next((event for event in trace if event.get('type') == 'contraband_scan'), {})
+        clemency = next((event for event in trace if event.get('type') == 'pay_legal_clemency'), {})
+        checks.update({
+            'confiscated_federation_contraband': 'passed' if scan.get('government') == 'Federation' and scan.get('action') == 'fine' and scan.get('confiscated') == {'equipment': 2} and state.get('cargoHold') == {} and state.get('cargoUsed') == 0 else 'failed',
+            'applied_federation_fine_and_legal_penalty': 'passed' if scan.get('creditsDelta') == -800 and scan.get('legalDelta') == -3 else 'failed',
+            'paid_clemency_after_scan': 'passed' if clemency.get('government') == 'Federation' and clemency.get('cost') == 1000 and clemency.get('legalDelta') == 25 and state.get('credits') == 3200 and state.get('legalRecords', {}).get('Federation') == -8 else 'failed',
+        })
     elif name == 'pirate_avoidance_escape_route':
         checks.update({
             'detected_pirate_threat': 'passed' if any(event.get('type') == 'avoid_pirate_contact' and event.get('threat') == 'pirate_intercept' for event in trace) else 'failed',
@@ -1046,6 +1147,8 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'complete_cargo_jobs': _complete_cargo_jobs,
         'abort_active_mission': _abort_active_mission,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
+        'apply_contraband_scan': _apply_contraband_scan,
+        'pay_legal_clemency': _pay_legal_clemency,
     }
     all_actions_valid = True
     for action in actions if actions is not None else default_actions_for_scenario(name):
