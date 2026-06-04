@@ -765,6 +765,9 @@ func _run_route_land_refuel_log() -> void:
 
 func _run_repair_service_log() -> void:
 	_reset_travel_state()
+	player_hull = max(1, _max_player_hull() - 10)
+	var in_space_blocked := not _repair_current_hull()
+	var in_space_message_visible := status_messages.has("Cannot repair in space; land at a port with repair service")
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
 	_move_to_scripted_hyperspace_distance()
@@ -793,7 +796,7 @@ func _run_repair_service_log() -> void:
 	var credits_after_insufficient := credits
 	var hull_after_insufficient := player_hull
 	var insufficient_message_visible := status_messages.has("Not enough credits for repairs: need %d" % insufficient_cost)
-	print("%s routeToSolSelected=%s system=%s body=\"%s\" repairAvailable=%s damagedHull=%d maxHull=%d expectedCost=%d repaired=%s repairedHull=%d creditsAfterRepair=%d repairMessageVisible=%s alreadyFullBlocked=%s alreadyFullMessageVisible=%s insufficientCost=%d creditsBeforeInsufficient=%d insufficientBlocked=%s insufficientMessageVisible=%s creditsAfterInsufficient=%d hullBeforeInsufficient=%d hullAfterInsufficient=%d sourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=repair_service_pending_ev_classic_runtime_trace status=\"%s\"" % [REPAIR_SERVICE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), str(body.get("name", "?")), str(repair_available), damaged_hull, max_hull, expected_cost, str(repaired), repaired_hull, credits_after_repair, str(repair_message_visible), str(already_full_blocked), str(already_full_message_visible), insufficient_cost, credits_before_insufficient, str(insufficient_blocked), str(insufficient_message_visible), credits_after_insufficient, hull_before_insufficient, hull_after_insufficient, status_line])
+	print("%s inSpaceBlocked=%s inSpaceMessageVisible=%s routeToSolSelected=%s system=%s body=\"%s\" repairAvailable=%s damagedHull=%d maxHull=%d expectedCost=%d repaired=%s repairedHull=%d creditsAfterRepair=%d repairMessageVisible=%s alreadyFullBlocked=%s alreadyFullMessageVisible=%s insufficientCost=%d creditsBeforeInsufficient=%d insufficientBlocked=%s insufficientMessageVisible=%s creditsAfterInsufficient=%d hullBeforeInsufficient=%d hullAfterInsufficient=%d sourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=repair_service_pending_ev_classic_runtime_trace status=\"%s\"" % [REPAIR_SERVICE_EVENT_LOG_PREFIX, str(in_space_blocked), str(in_space_message_visible), str(route_to_sol_selected), current_system.get("name", "?"), str(body.get("name", "?")), str(repair_available), damaged_hull, max_hull, expected_cost, str(repaired), repaired_hull, credits_after_repair, str(repair_message_visible), str(already_full_blocked), str(already_full_message_visible), insufficient_cost, credits_before_insufficient, str(insufficient_blocked), str(insufficient_message_visible), credits_after_insufficient, hull_before_insufficient, hull_after_insufficient, status_line])
 	get_tree().quit(0)
 
 func _run_low_fuel_jump_log() -> void:
@@ -1874,10 +1877,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					_set_status("Cannot refuel in space")
 			KEY_F6: _save_current_pilot_file()
 			KEY_F7:
-				if landed:
-					_repair_current_hull()
-				else:
-					_set_status("Cannot repair in space")
+				_repair_current_hull()
 			KEY_C:
 				if landed:
 					_pay_legal_clemency()
