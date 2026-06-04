@@ -28,6 +28,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'intro_courier_mission_delivery',
                 'chapter_one_courier_chain',
                 'alignment_choice_guardrail',
+                'alignment_offer_requirement_recovery',
                 'federation_alignment_delivery_loop',
                 'freeport_alignment_delivery_loop',
                 'mission_destination_route_hint',
@@ -422,6 +423,19 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(blocked[-1]['missionId'], 'freeport_pact_smugglers')
         self.assertEqual(blocked[-1]['reason'], 'not available at current landing')
         self.assertEqual(result['checks']['blocked_mutually_exclusive_alignment'], 'passed')
+
+    def test_alignment_offer_requirement_recovery_blocks_and_restores_branch_offers(self):
+        result = run_scripted_scenario('alignment_offer_requirement_recovery')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['checks']['blocked_alignment_offers_below_requirements'], 'passed')
+        self.assertEqual(result['checks']['recovered_alignment_offers_at_thresholds'], 'passed')
+        self.assertEqual(result['checks']['recorded_requirement_gate_source_boundary'], 'passed')
+        scans = [event for event in result['trace'] if event['type'] == 'scan_mission_offers']
+        self.assertEqual(scans[0]['offersBySurface']['Mission Computer'], [])
+        self.assertEqual(scans[-1]['offersBySurface']['Mission Computer'], ['federation_report_freeport', 'freeport_pact_smugglers'])
 
     def test_federation_alignment_delivery_loop_completes_branch_and_preserves_choice(self):
         result = run_scripted_scenario('federation_alignment_delivery_loop')

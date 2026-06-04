@@ -115,6 +115,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"intro_courier_mission_delivery",
 		"chapter_one_courier_chain",
 		"alignment_choice_guardrail",
+		"alignment_offer_requirement_recovery",
 		"federation_alignment_delivery_loop",
 		"freeport_alignment_delivery_loop",
 		"mission_destination_route_hint",
