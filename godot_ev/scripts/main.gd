@@ -50,6 +50,7 @@ const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
+const RETALIATION_EVENT_LOG_PREFIX := "TV_RETALIATION_EVENT"
 const PROJECTILE_MOTION_EVENT_LOG_PREFIX := "TV_PROJECTILE_MOTION_EVENT"
 const EXPLOSION_EVENT_LOG_PREFIX := "TV_EXPLOSION_EVENT"
 const CARGO_SALVAGE_EVENT_LOG_PREFIX := "TV_CARGO_SALVAGE_EVENT"
@@ -156,6 +157,7 @@ var player_hull := 0
 var player_shield_recharge_progress := 0.0
 var primary_weapon_cooldown_frames := 0.0
 var secondary_weapon_cooldown_frames := 0.0
+var npc_retaliation_cooldowns: Dictionary = {}
 var selected_secondary_weapon_index := 0
 var afterburner_fuel_progress := 0.0
 var _last_contraband_scan_outcome: Dictionary = {}
@@ -236,6 +238,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-retaliation-log") or OS.get_cmdline_user_args().has("--tv-retaliation-log"):
+		call_deferred("_run_retaliation_log")
 	if OS.get_cmdline_args().has("--tv-projectile-motion-log") or OS.get_cmdline_user_args().has("--tv-projectile-motion-log"):
 		call_deferred("_run_projectile_motion_log")
 	if OS.get_cmdline_args().has("--tv-explosion-log") or OS.get_cmdline_user_args().has("--tv-explosion-log"):
@@ -1570,6 +1574,33 @@ func _run_combat_guardrail_log() -> void:
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
 	var source_reload := int(source_fields.get("Reload", primary_weapon.get("reloadFrames", 0)))
 	print("%s firstShotSpawned=%s immediateSecondShotBlocked=%s cooldownFrames=%d cooldownCleared=%s shotAfterCooldownSpawned=%s secondaryBlocked=%s sourceReload=%d sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(first_shot_spawned), str(cooldown_blocked), int(cooldown_after_first), str(cooldown_cleared), str(third_shot_spawned), str(secondary_blocked), source_reload, status_line])
+	get_tree().quit(0)
+
+func _run_retaliation_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	_select_closest_target()
+	npc_retaliation_cooldowns.clear()
+	var target_index := selected_target_index
+	var first_retaliation_fired := _spawn_npc_retaliation_projectile(target_index)
+	var cooldown_after_first := float(npc_retaliation_cooldowns.get(target_index, 0.0))
+	var immediate_second_fired := _spawn_npc_retaliation_projectile(target_index)
+	var immediate_second_blocked := not immediate_second_fired and status_messages.has(_npc_retaliation_reload_message())
+	_advance_weapon_cooldowns(cooldown_after_first / 60.0)
+	var cooldown_cleared := float(npc_retaliation_cooldowns.get(target_index, 0.0)) <= 0.0
+	var retaliation_after_cooldown_fired := _spawn_npc_retaliation_projectile(target_index)
+	var player_shields_before := player_shields
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+	var player_damaged := player_shields < player_shields_before or player_hull < _max_player_hull()
+	var npc_weapon := _weapon_stats_by_id(str(_npc_ship_stats().get("weaponId", "pulse_cannon")))
+	if npc_weapon.is_empty():
+		npc_weapon = _primary_weapon_stats()
+	var source_fields: Dictionary = npc_weapon.get("sourceStockWeaponFields", {})
+	var source_reload := int(source_fields.get("Reload", npc_weapon.get("reloadFrames", 0)))
+	print("%s firstRetaliationFired=%s immediateSecondRetaliationBlocked=%s npcCooldownFrames=%d npcCooldownCleared=%s retaliationAfterCooldownFired=%s playerDamagedByRetaliation=%s sourceReload=%d sourceLabel=terminal-velocity-npc-retaliation-scaffold oracleStatus=classic_runtime_ai_retaliation_cadence_pending" % [RETALIATION_EVENT_LOG_PREFIX, str(first_retaliation_fired).to_lower(), str(immediate_second_blocked).to_lower(), int(cooldown_after_first), str(cooldown_cleared).to_lower(), str(retaliation_after_cooldown_fired).to_lower(), str(player_damaged).to_lower(), source_reload])
 	get_tree().quit(0)
 
 func _run_projectile_motion_log() -> void:
@@ -3427,17 +3458,23 @@ func _reset_player_combat_stats() -> void:
 	player_shield_recharge_progress = 0.0
 	primary_weapon_cooldown_frames = 0.0
 	secondary_weapon_cooldown_frames = 0.0
+	npc_retaliation_cooldowns.clear()
 	afterburner_fuel_progress = 0.0
 
 func _advance_weapon_cooldowns(delta: float) -> void:
 	primary_weapon_cooldown_frames = maxf(0.0, primary_weapon_cooldown_frames - delta * 60.0)
 	secondary_weapon_cooldown_frames = maxf(0.0, secondary_weapon_cooldown_frames - delta * 60.0)
+	for target_key in npc_retaliation_cooldowns.keys():
+		npc_retaliation_cooldowns[target_key] = maxf(0.0, float(npc_retaliation_cooldowns.get(target_key, 0.0)) - delta * 60.0)
 
 func _primary_weapon_reload_message() -> String:
 	return "Primary weapon reloading; wait for source-backed reload cadence"
 
 func _secondary_weapon_reload_message() -> String:
 	return "Secondary weapon reloading; wait for source-backed reload cadence"
+
+func _npc_retaliation_reload_message() -> String:
+	return "NPC retaliation reloading; Terminal Velocity AI cadence scaffold"
 
 func _player_disabled() -> bool:
 	return player_hull <= 0
@@ -3557,6 +3594,9 @@ func _spawn_npc_retaliation_projectile(target_index: int) -> bool:
 	var targets := _npc_world_offsets()
 	if target_index < 0 or target_index >= targets.size() or _target_destroyed(target_index):
 		return false
+	if float(npc_retaliation_cooldowns.get(target_index, 0.0)) > 0.0:
+		_set_status(_npc_retaliation_reload_message())
+		return false
 	var npc_ship := _npc_ship_stats()
 	var weapon_id := str(npc_ship.get("weaponId", "pulse_cannon"))
 	var weapon := _weapon_stats_by_id(weapon_id)
@@ -3579,6 +3619,7 @@ func _spawn_npc_retaliation_projectile(target_index: int) -> bool:
 		"targetIndex": -1,
 		"firedBy": "npc",
 	})
+	npc_retaliation_cooldowns[target_index] = float(weapon.get("reloadFrames", weapon.get("sourceStockWeaponFields", {}).get("Reload", 0)))
 	return true
 
 func _weapon_stats_by_id(weapon_id: String) -> Dictionary:

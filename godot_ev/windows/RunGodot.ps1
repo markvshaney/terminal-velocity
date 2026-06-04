@@ -29,6 +29,7 @@ param(
     [switch]$GameplayCurriculumHelpLog,
     [switch]$CombatLog,
     [switch]$CombatGuardrailLog,
+    [switch]$RetaliationLog,
     [switch]$ProjectileMotionLog,
     [switch]$ExplosionLog,
     [switch]$CargoSalvageLog,
@@ -116,6 +117,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-combat-log
 } elseif ($CombatGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-combat-guardrail-log
+} elseif ($RetaliationLog) {
+    & $Godot --headless --path $Project -- --tv-retaliation-log
 } elseif ($ProjectileMotionLog) {
     & $Godot --headless --path $Project -- --tv-projectile-motion-log
 } elseif ($ExplosionLog) {

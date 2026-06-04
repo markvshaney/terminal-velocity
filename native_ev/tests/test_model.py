@@ -479,6 +479,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-combat-guardrail-log', run_script)
         self.assertIn('[switch]$CombatGuardrailLog', windows_script)
 
+    def test_godot_retaliation_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_RETALIATION_EVENT',
+            '--tv-retaliation-log',
+            'var npc_retaliation_cooldowns: Dictionary = {}',
+            'func _run_retaliation_log() -> void:',
+            'func _npc_retaliation_reload_message() -> String:',
+            'firstRetaliationFired=%s',
+            'immediateSecondRetaliationBlocked=%s',
+            'npcCooldownFrames=%d',
+            'npcCooldownCleared=%s',
+            'retaliationAfterCooldownFired=%s',
+            'playerDamagedByRetaliation=%s',
+            'sourceLabel=terminal-velocity-npc-retaliation-scaffold',
+            'oracleStatus=classic_runtime_ai_retaliation_cadence_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-retaliation-log', run_script)
+        self.assertIn('[switch]$RetaliationLog', windows_script)
+
     def test_godot_cargo_salvage_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
