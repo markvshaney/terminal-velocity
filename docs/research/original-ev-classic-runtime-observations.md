@@ -34,6 +34,7 @@ When playing original EV Classic, seed future Terminal Velocity work by adding c
 - `Play report:` for mission/travel runs, summarize what mission was pursued, route chosen, cargo/passenger constraints, fuel/credit changes, completion/failure state, pirate/hostile/asteroid encounters, avoidance tactics, damage/risk outcome, and what should be reused by future pilots.
 - `Implementation hint:` likely Terminal Velocity incorporation target, or `unknown` if not yet clear.
 - `Backlog link/status:` corresponding item in `docs/checklists/ev-classic-fidelity-implementation-backlog.md`, with status such as `needs evidence`, `candidate`, `ready`, or `implemented`.
+- `Quirk/bug review:` if the behavior is odd, surprising, exploitable, inconsistent, potentially later-fixed, or might be mistaken for intended fidelity, add or link an entry in `docs/research/ev-classic-quirk-review-ledger.md` with `needs-review` until mulvray classifies it.
 
 Seeds are allowed to be incomplete if they preserve a real observation, but they must say what evidence is missing before implementation.
 

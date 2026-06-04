@@ -32,6 +32,12 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Rule: mission/travel play reports should document the active mission, route selection, cargo/passenger constraints, fuel/credit changes, completion/failure state, encountered pirates/hostiles/asteroids, avoidance or engagement tactics, damage/risk outcome, and reusable lessons for other pilots.
   - Future incorporation surfaces: Terminal Velocity mission tutorials, route-risk hints, pirate/hostile threat modeling, defensive-readiness balance, AI guidance, and regression scenarios for safe travel.
 
+- [x] Review Classic quirks separately from bugs before adopting them
+  - Status: `verified workflow rule`
+  - Source: user guidance on 2026-06-04: mulvray wants to review discovered quirks and decide whether they are bugs.
+  - Rule: newly discovered odd/surprising/exploitable/inconsistent/later-fixed Classic behavior must be logged in `docs/research/ev-classic-quirk-review-ledger.md` with evidence, candidate classification, why-it-might-be-a-quirk, why-it-might-be-a-bug, recommended Terminal Velocity handling, and `User decision: pending` before it becomes an intentional fidelity target.
+  - Default handling: preserve intentional mechanics and player-legible quirks; fix destructive/inconsistent/platform-artifact bugs; treat later EV-family fixes as review evidence, not automatic authority.
+
 ## Source-backed implementations already integrated
 
 - [x] EV Classic starting credits
