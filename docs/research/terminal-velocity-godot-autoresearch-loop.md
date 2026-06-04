@@ -184,6 +184,7 @@ Mission route-hint scenario contract:
   - whether the Sol route selection succeeded;
   - accepted mission id and destination system;
   - mission acceptance and route queue booleans (`missionAccepted=true`, `missionRouteQueued=true`);
+  - stale-route replacement guard (`staleRouteReplaced=true`) proving the `G` helper clears an unrelated queued/manual route before queuing the active mission destination;
   - queued route and route hop count (`route=[...]`, `routeHops`);
   - `sourceLabel=terminal-velocity-design-scaffold`;
   - `oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace`.

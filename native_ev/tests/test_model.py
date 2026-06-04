@@ -628,6 +628,8 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_MISSION_ROUTE_HINT_EVENT',
             'func _route_to_active_mission_destination',
             'missionRouteQueued=true',
+            'staleRouteReplaced=%s',
+            'selected_route.clear()\n\treturn _select_map_route_to_system(destination_system)',
             'fuelBeforeRoute=%d',
             'routeFuelCost=%d',
             'preJumpFuelWarning=%s',
