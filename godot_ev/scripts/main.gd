@@ -1363,6 +1363,7 @@ func _run_outfitter_shipyard_log() -> void:
 func _run_gameplay_curriculum_help_log() -> void:
 	var hints := _gameplay_curriculum_hint_lines()
 	var has_pirate_hint := false
+	var has_autopilot_help := false
 	var has_repair_help := false
 	var has_combat_help := false
 	var has_combat_rewards_help := false
@@ -1375,6 +1376,8 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_pirate_hint = true
 	var help_lines := _help_overlay_lines()
 	for line in help_lines:
+		if str(line).contains("Autopilot: A toggles a Terminal Velocity assist"):
+			has_autopilot_help = true
 		if str(line).contains("Repair: landed ports with repair service show F7"):
 			has_repair_help = true
 		if str(line).contains("Combat: Tab fires primary"):
@@ -1389,7 +1392,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_pirate_avoidance_help = true
 		if str(line).contains("Contraband: Player Info and map commodity hints flag"):
 			has_contraband_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(hints[0]) if not hints.is_empty() else ""])
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
