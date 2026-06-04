@@ -5,10 +5,10 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 214,
+    "ahead": 217,
     "dirty": false,
-    "head": "610bdf3",
-    "status_short": "## main...origin/main [ahead 214]"
+    "head": "24e57eb",
+    "status_short": "## main...origin/main [ahead 217]"
   },
   "operational_owner_candidate": "loki-game",
   "status": "running",
@@ -56,24 +56,27 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (39 tests OK)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (154 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=35 total=35)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=35)",
-    "git diff --check (OK)",
-    "git commit 610bdf3 test: add return margin guardrail scenario"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_federation_alignment_delivery_loop_completes_branch_and_preserves_choice -v (OK)",
+    "python3 tools/run_gameplay_scenarios.py federation_alignment_delivery_loop --pretty (success=true; completed_federation_alignment_delivery/preserved flags/blocked Freeport branch/source boundary passed)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (40 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=36 total=36)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (155 tests OK)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=36)",
+    "git commit a0f37ce test: add federation alignment delivery scenario",
+    "git commit 24e57eb chore(runner): checkpoint federation alignment slice"
   ],
-  "last_checkpoint_commit": "610bdf3",
-  "last_commit": "610bdf3",
+  "last_checkpoint_commit": "24e57eb",
+  "last_commit": "24e57eb",
   "last_commits": [
+    "24e57eb chore(runner): checkpoint federation alignment slice",
+    "a0f37ce test: add federation alignment delivery scenario",
+    "b45a4a2 chore(runner): checkpoint return margin guardrail",
     "610bdf3 test: add return margin guardrail scenario",
-    "51b1f2f chore(runner): checkpoint trade carryover slices",
-    "1835dba feat: surface mission trade carryover help",
-    "60314e0 test: add chapter one trade carryover scenario"
+    "51b1f2f chore(runner): checkpoint trade carryover slices"
   ],
-  "current_milestone": "Committed mission_trade_return_margin_guardrail: the native curriculum now evaluates an unprofitable Sirius Equipment return-cargo candidate for the Sol return leg, records a skip decision with pending-Classic source/oracle labels, then completes the third chapter-one return courier contract without cargo-hold contamination.",
-  "next_resume_action": "Inspect live backlog/checklists and choose the next strongest safe-local Terminal Velocity slice; likely continue noncombat mission/trade/story-chain scaffolds into source-bound player help/probes or prepare original-runtime evidence for economy/story-chain behavior while preserving pending-Classic boundaries.",
-  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after commit 610bdf3. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "current_milestone": "Committed federation_alignment_delivery_loop: the native curriculum now accepts the Federation Sirius report branch, delivers it to Earth, verifies credits/cargo/completed job state, preserves Federation alignment flags, blocks the incompatible Freeport branch afterward, and keeps mission behavior labeled terminal-velocity scaffold pending Classic trace.",
+  "next_resume_action": "Inspect live backlog/checklists and choose the next strongest safe-local Terminal Velocity slice; likely continue noncombat mission/trade/story-chain scaffolds into route/help/probe surfaces or prepare bounded original-runtime evidence while preserving pending-Classic boundaries.",
+  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after commit 24e57eb. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "kind": "cronjob",
     "name": "Terminal Velocity continuous completion runner",
@@ -107,5 +110,5 @@
     "progress": "not needed; run stayed under about 10 minutes after start heartbeat and no long verification exceeded heartbeat interval",
     "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T12:20:54.726182Z"
+  "updated_at": "2026-06-04T12:30:23Z"
 }
