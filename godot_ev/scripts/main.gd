@@ -43,6 +43,7 @@ const MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_BRANCH_
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
+const MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_PENALTY_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
 const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
 const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
@@ -228,6 +229,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_abort_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-forbidden-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-forbidden-log"):
 		call_deferred("_run_mission_abort_forbidden_log")
+	if OS.get_cmdline_args().has("--tv-mission-abort-penalty-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-penalty-log"):
+		call_deferred("_run_mission_abort_penalty_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
 		call_deferred("_run_mission_deadline_failure_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-completed-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-completed-log"):
@@ -1279,6 +1282,38 @@ func _run_mission_abort_forbidden_log() -> void:
 	var released_status := "reservedCargoReleasedAfterCompletion=true" if cargo == 0 else "reservedCargoReleasedAfterCompletion=false"
 	var reward_status := "rewardPaidAfterCompletion=true" if credits == credits_before_completion + int(probe_mission.get("reward", 0)) else "rewardPaidAfterCompletion=false"
 	print("%s acceptedMission=%s canAbort=false cargoAfterAccept=%d blockedAbort=%s blockedReasonVisible=%s cargoAfterBlockedAbort=%d %s %s %s %s activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestCompletion=%s sourceLabel=ev-classic-resource-bible-backed-canabort-guardrail oracleStatus=classic_runtime_canabort_return_cleanup_pending status=\"%s\"" % [MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX, str(probe_mission.get("id")), cargo_after_accept, str(blocked_abort), str(blocked_reason_visible), cargo_after_blocked_abort, preserved_status, completed_status, released_status, reward_status, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_completion, status_line])
+	get_tree().quit(0)
+
+func _run_mission_abort_penalty_log() -> void:
+	_reset_travel_state()
+	var probe_mission := {
+		"id": "abort_penalty_probe",
+		"title": "Abort Penalty Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 3,
+		"completionGovernment": "Federation",
+		"completionReward": 6,
+		"abortReputationMultiplier": 5,
+		"sourceLabel": "ev-classic-resource-bible-backed-mission-abort-penalty-scaffold",
+		"oracleStatus": "classic_runtime_abort_penalty_ui_pending",
+	}
+	missions["missions"].append(probe_mission)
+	active_missions.append(str(probe_mission.get("id")))
+	mission_acceptance_days[str(probe_mission.get("id"))] = current_day
+	cargo = int(probe_mission.get("cargoTons", 0))
+	reputation_scores["Federation"] = 5
+	var reputation_before_abort := int(reputation_scores.get("Federation", 0))
+	var cargo_before_abort := cargo
+	var abort_succeeded := _abort_active_mission(str(probe_mission.get("id")))
+	var latest_abort: Dictionary = aborted_mission_history[aborted_mission_history.size() - 1] if not aborted_mission_history.is_empty() else {}
+	var expected_delta := -int(probe_mission.get("completionReward", 0)) * int(probe_mission.get("abortReputationMultiplier", 0))
+	var actual_delta := int(latest_abort.get("reputation_delta", 0))
+	var reputation_after_abort := int(reputation_scores.get("Federation", 0))
+	var abort_status := "missionAborted=true" if abort_succeeded else "missionAborted=false"
+	var cargo_released_status := "reservedCargoReleased=true" if cargo == cargo_before_abort - int(probe_mission.get("cargoTons", 0)) else "reservedCargoReleased=false"
+	var reputation_status := "reputationPenaltyApplied=true" if actual_delta == expected_delta and reputation_after_abort == reputation_before_abort + expected_delta else "reputationPenaltyApplied=false"
+	print("%s acceptedMission=%s %s cargoBeforeAbort=%d cargoAfterAbort=%d %s reputationBeforeAbort=%d reputationAfterAbort=%d reputationDelta=%d expectedReputationDelta=%d %s activeMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=ev-classic-resource-bible-backed-mission-abort-penalty-scaffold oracleStatus=classic_runtime_abort_penalty_ui_pending status=\"%s\"" % [MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX, str(probe_mission.get("id")), abort_status, cargo_before_abort, cargo, cargo_released_status, reputation_before_abort, reputation_after_abort, actual_delta, expected_delta, reputation_status, JSON.stringify(active_missions), aborted_mission_history.size(), JSON.stringify(latest_abort), status_line])
 	get_tree().quit(0)
 
 func _run_mission_deadline_failure_log() -> void:
@@ -2484,14 +2519,29 @@ func _abort_active_mission(mission_id := "") -> bool:
 	return true
 
 func _mission_abort_record(mission: Dictionary, mission_id: String, cargo_released: int) -> Dictionary:
+	var completion_government := str(mission.get("completionGovernment", ""))
+	var completion_reward := int(mission.get("completionReward", 0))
+	var abort_multiplier := int(mission.get("abortReputationMultiplier", 0)) if mission.has("abortReputationMultiplier") else 0
+	var reputation_delta := 0
+	var source_label := "terminal-velocity-mission-abort-scaffold"
+	var oracle_status := "mission_abort_pending_classic_runtime_or_manual_trace"
+	if completion_government != "" and completion_reward > 0 and abort_multiplier != 0:
+		reputation_delta = -(completion_reward * abort_multiplier)
+		reputation_scores[completion_government] = int(reputation_scores.get(completion_government, 0)) + reputation_delta
+		source_label = "ev-classic-resource-bible-backed-mission-abort-penalty-scaffold"
+		oracle_status = "classic_runtime_abort_penalty_ui_pending"
 	return {
 		"id": mission_id,
 		"title": str(mission.get("title", mission_id)) if not mission.is_empty() else mission_id,
 		"system": str(current_system.get("name", "?")),
 		"body": str(_current_body().get("name", "?")),
 		"cargo_released": cargo_released,
-		"sourceLabel": "terminal-velocity-mission-abort-scaffold",
-		"oracleStatus": "mission_abort_pending_classic_runtime_or_manual_trace",
+		"reputation_government": completion_government,
+		"reputation_delta": reputation_delta,
+		"completion_reward": completion_reward,
+		"abort_reputation_multiplier": abort_multiplier,
+		"sourceLabel": source_label,
+		"oracleStatus": oracle_status,
 	}
 
 func _fail_mission_deadline(mission: Dictionary, accepted_day: int, current_day: int) -> bool:

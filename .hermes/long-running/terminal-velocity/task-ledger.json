@@ -5,14 +5,14 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 2,
+    "ahead": 3,
     "dirty": false,
     "head": "final SHA reported by git log after amend",
-    "status_short": "## main...origin/main [ahead 2]"
+    "status_short": "## main...origin/main [ahead 3]"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 2,
+    "ahead": 3,
     "dirty": "no"
   },
   "operational_owner_candidate": "loki-game",
@@ -91,9 +91,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Mission abort reputation penalty guardrail scenario committed and verified",
-  "last_commit": "final SHA reported by git log after amend Add mission abort reputation penalty scenario",
-  "last_checkpoint_commit": "final SHA reported by git log after amend Add mission abort reputation penalty scenario",
+  "current_milestone": "Godot mission abort reputation-penalty log committed and verified",
+  "last_commit": "final SHA reported by git log: feat(godot): expose mission abort penalty log",
+  "last_checkpoint_commit": "final SHA reported by git log: feat(godot): expose mission abort penalty log",
   "last_commits": [
     "commit containing legal clemency credit guardrail scenario; final SHA reported by git log after amend",
     "9ac1525 Expose secondary weapon recovery help",
@@ -102,13 +102,15 @@
     "3167360 Expose disabled recovery help"
   ],
   "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_abort_penalty_log_contract -v -> OK",
+    "./run_godot.sh tv-mission-abort-penalty-log -> TV_MISSION_ABORT_PENALTY_EVENT missionAborted=true reservedCargoReleased=true reputationPenaltyApplied=true",
     "python3 tools/run_gameplay_scenarios.py mission_abort_reputation_penalty_guardrail --pretty -> success true; checks passed",
-    "python3 tools/run_gameplay_scenarios.py --all -> summary passed=57 failed=0",
+    "python3 tools/run_gameplay_scenarios.py --all -> summary passed=57 failed=0 total=57",
     "python3 -m unittest native_ev.tests.test_scenario_eval -v -> Ran 61 tests OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 178 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 179 tests OK",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=57",
     "git diff --check -> OK",
-    "git commit -m 'Add mission abort reputation penalty scenario' -> final SHA reported by git log after amend"
+    "git commit -m \"feat(godot): expose mission abort penalty log\" -> 9c94bb1"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -117,7 +119,7 @@
     "progress_heartbeats_sent": 1,
     "note": "send_message tool unavailable in this cron surface; start/progress heartbeat written to fallback JSON (ignored local artifact, not committed)"
   },
-  "next_resume_action": "Inspect live backlog and choose the next bounded source-aligned Terminal Velocity slice. Strong candidates: original-runtime/resource evidence for exact abort UI/stock mission flags, or a player-visible Godot/log surface for the newly verified abort-penalty guardrail without repeated hardcoded help copy.",
+  "next_resume_action": "Inspect live backlog and choose the next bounded source-aligned Terminal Velocity slice. Strong candidates: original-runtime/resource evidence for exact abort UI/stock mission flags, or another player-visible mission/trade/navigation/service/combat loop without repeated hardcoded help copy.",
   "resume_prompt": "Continue Terminal Velocity safe-local vertical slices from /home/bh/workspaces/loki/terminal-velocity. Read ledger/events and continuation prompt, inspect git/backlog, preserve source-boundary labels, implement one player-visible or symbolic behavior, verify with Python/Godot, update docs/ledger/events, and commit locally.",
-  "updated_at": "2026-06-04T19:50:17Z"
+  "updated_at": "2026-06-04T19:56:55Z"
 }

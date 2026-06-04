@@ -212,6 +212,19 @@ Mission abort-forbidden return-cleanup scenario contract:
 - Logs blocked abort, preserved reserved cargo after the blocked abort, completion at return/destination body, cargo release, reward payment, active/completed/aborted history, `sourceLabel=ev-classic-resource-bible-backed-canabort-guardrail`, and `oracleStatus=classic_runtime_canabort_return_cleanup_pending`.
 - This is a source-backed Terminal Velocity guardrail for mission state cleanup; exact EV Classic runtime dialog/status text remains gated on original-runtime/manual evidence.
 
+Mission abort reputation-penalty scenario contract:
+
+- `RunGodot.ps1 -MissionAbortPenaltyLog` / `--tv-mission-abort-penalty-log`
+- Exercises the EV Classic Resource Bible-backed abort reputation reversal field in the Godot fast-eval lane while keeping exact Classic abort UI wording pending.
+- Seeds deterministic active mission `abort_penalty_probe` with `completionGovernment=Federation`, `completionReward=6`, `abortReputationMultiplier=5`, and `cargoTons=3`; starts Federation reputation at `5`; aborts the job; and logs:
+  - `missionAborted=true` and `reservedCargoReleased=true`;
+  - `reputationBeforeAbort`, `reputationAfterAbort`, `reputationDelta`, and `expectedReputationDelta`;
+  - `reputationPenaltyApplied=true` when the abort applies `-(completionReward * abortReputationMultiplier)`;
+  - active mission ids, abort-history count, and latest abort record;
+  - `sourceLabel=ev-classic-resource-bible-backed-mission-abort-penalty-scaffold`;
+  - `oracleStatus=classic_runtime_abort_penalty_ui_pending`.
+- This is a decoded-resource-backed Terminal Velocity guardrail for reputation state; exact EV Classic player-facing abort dialog/status remains gated on original-runtime/manual evidence.
+
 Mission deadline failure scenario contract:
 
 - `RunGodot.ps1 -MissionDeadlineFailureLog` / `--tv-mission-deadline-failure-log`

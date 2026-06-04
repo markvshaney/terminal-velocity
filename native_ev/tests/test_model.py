@@ -1269,6 +1269,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-mission-abort-forbidden-log', wrapper)
         self.assertIn('Mission abort-forbidden return-cleanup scenario contract', plan)
 
+    def test_godot_mission_abort_penalty_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-abort-penalty-log',
+            'func _run_mission_abort_penalty_log',
+            'TV_MISSION_ABORT_PENALTY_EVENT',
+            'abortReputationMultiplier',
+            'reputationDelta=%d',
+            'expectedReputationDelta=%d',
+            'reputationPenaltyApplied=true',
+            'reputation_scores[completion_government]',
+            'sourceLabel=ev-classic-resource-bible-backed-mission-abort-penalty-scaffold',
+            'oracleStatus=classic_runtime_abort_penalty_ui_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAbortPenaltyLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-abort-penalty-log', run_script)
+        self.assertIn('tv-mission-abort-penalty-log', wrapper)
+        self.assertIn('Mission abort reputation-penalty scenario contract', plan)
+
     def test_godot_mission_deadline_failure_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
