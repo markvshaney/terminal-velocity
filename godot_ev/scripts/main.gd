@@ -1482,6 +1482,9 @@ func _run_secondary_weapon_log() -> void:
 	owned_weapons["pulse_cannon"] = 1
 	_change_secondary_weapon()
 	var secondary_loaded_line := _secondary_weapon_inventory_line()
+	var primary_weapon := _primary_weapon_stats()
+	var source_primary_id := str(player_ship.get("weaponId", "laser_cannon"))
+	var primary_weapon_preserved := str(primary_weapon.get("id", "")) == source_primary_id
 	var secondary_cycle_selected := status_messages.has("Secondary weapon selected: %s" % str(_secondary_weapon_stats().get("name", "pulse_cannon")))
 	var shield_before := int(target_shields.get(selected_target_index, 0))
 	var secondary_projectile_spawned := _spawn_secondary_projectile()
@@ -1497,7 +1500,7 @@ func _run_secondary_weapon_log() -> void:
 	var source_fields: Dictionary = weapon.get("sourceStockWeaponFields", {})
 	var secondary_inventory_empty_visible := secondary_empty_line.contains("No Secondary Weapon")
 	var secondary_inventory_loaded_visible := secondary_loaded_line.contains(str(weapon.get("name", ""))) and secondary_loaded_line.contains(str(weapon.get("sourceStockName", "")))
-	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s secondaryInventoryEmptyVisible=%s secondaryInventoryLoadedVisible=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold oracleStatus=classic_runtime_secondary_weapon_behavior_pending" % [
+	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s secondaryInventoryEmptyVisible=%s secondaryInventoryLoadedVisible=%s primaryWeaponPreserved=%s sourcePrimaryId=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold oracleStatus=classic_runtime_secondary_weapon_behavior_pending" % [
 		SECONDARY_WEAPON_EVENT_LOG_PREFIX,
 		str(unavailable_at_start).to_lower(),
 		str(secondary_cycle_selected).to_lower(),
@@ -1507,6 +1510,8 @@ func _run_secondary_weapon_log() -> void:
 		str(target_damaged).to_lower(),
 		str(secondary_inventory_empty_visible).to_lower(),
 		str(secondary_inventory_loaded_visible).to_lower(),
+		str(primary_weapon_preserved).to_lower(),
+		source_primary_id,
 		str(weapon.get("id", "")),
 		str(weapon.get("name", "")),
 		shield_before,
@@ -3274,11 +3279,6 @@ func _secondary_weapon_stats() -> Dictionary:
 
 func _primary_weapon_stats() -> Dictionary:
 	var weapon_id := str(player_ship.get("weaponId", "laser_cannon"))
-	if owned_weapons.size() > 0:
-		for owned_id in owned_weapons.keys():
-			if int(owned_weapons.get(owned_id, 0)) > 0:
-				weapon_id = str(owned_id)
-				break
 	for weapon in weapons.get("weapons", []):
 		if str(weapon.get("id", "")) == weapon_id:
 			return weapon

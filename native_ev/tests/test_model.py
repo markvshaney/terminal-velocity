@@ -388,6 +388,8 @@ class NativeEvModelTests(unittest.TestCase):
             'secondaryTargetDamaged=%s',
             'secondaryInventoryEmptyVisible=%s',
             'secondaryInventoryLoadedVisible=%s',
+            'primaryWeaponPreserved=%s',
+            'sourcePrimaryId=%s',
             'Secondary weapon: %s — selected; source %s; exact Classic secondary behavior pending',
             'Secondary weapon: No Secondary Weapon — original-runtime-observed starting HUD; install/cycle with S before Space fires',
             'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
