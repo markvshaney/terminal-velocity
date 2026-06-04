@@ -223,7 +223,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.',
             'Mission abort/history: X aborts active TV scaffold missions; Mission Log preserves completed, aborted, and failed histories.',
             'Mission offers: Mission Computer detail lines show destination, cargo, deadline, story/legal/reputation gates, and branch-choice boundaries as TV helper scaffolds pending Classic UI evidence.',
-            'Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; TV scaffold capacity-planning loop.',
+            'Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.',
             'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
             'Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots before trading up; TV scaffold pending Classic store/stat trace.',
             'Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.',

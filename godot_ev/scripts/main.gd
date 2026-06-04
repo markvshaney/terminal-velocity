@@ -4881,7 +4881,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.",
 		"Route clearing: Backspace/Delete clears queued green routes; choose a fresh linked stop before retrying J.",
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
-		"Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; TV scaffold capacity-planning loop.",
+		"Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.",
 		"Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
 		"Mission abort/history: X aborts active TV scaffold missions; Mission Log preserves completed, aborted, and failed histories.",
 		"Mission offers: Mission Computer detail lines show destination, cargo, deadline, story/legal/reputation gates, and branch-choice boundaries as TV helper scaffolds pending Classic UI evidence.",
