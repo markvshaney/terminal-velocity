@@ -5,7 +5,7 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "mission_abort_blocked_feedback_guarded",
+  "current_milestone": "mission_route_fuel_status_visible",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "progress_heartbeats": "not needed; run stayed under the long-run heartbeat threshold after start heartbeat",
@@ -13,15 +13,15 @@
     "visibility_degraded": "send_message tool unavailable; heartbeat file fallback used"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_abort_log_contract -v -> OK",
-    "./run_godot.sh tv-mission-abort-log -> noActiveAbortBlocked=true noActiveAbortStatusVisible=true repeatAbortBlocked=true repeatAbortStatusVisible=true reservedCargoReleased=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK",
+    "./run_godot.sh tv-mission-route-hint-log -> routeStatusHasFuelHint=true lowFuelRouteWarningVisible=true staleRouteReplaced=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (126 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20 prefScreen=original-ev-classic-observed",
     "git diff --check -> OK",
-    "git commit -> feat(godot): guard mission abort blocked feedback (b9edd7e)"
+    "git commit -> feat(godot): show mission route fuel status (3dfdd0c)"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic Mission Computer evidence for exact abort/failure UI and CanAbort, improve route/fuel/original-runtime comparison probes, or add another player-visible legal/map/fuel/mission helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic Mission Computer evidence for exact abort/failure/branch UI, improve route/fuel/original-runtime comparison probes, or add another player-visible legal/map/fuel/mission helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -96,5 +96,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T01:14:56Z"
+  "updated_at": "2026-06-04T01:24:11Z"
 }
