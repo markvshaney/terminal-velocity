@@ -1306,6 +1306,18 @@ func _run_combat_log() -> void:
 	var destroyed_target_blocked := not _spawn_primary_projectile()
 	var retargeted_after_destroyed := status_messages.has("Target already disabled; retargeting to next active contact")
 	var retargeted_target_index := selected_target_index
+	var npc_weapon := _weapon_stats_by_id(str(_npc_ship_stats().get("weaponId", "pulse_cannon")))
+	if npc_weapon.is_empty():
+		npc_weapon = primary_weapon
+	var npc_hull_damage := _weapon_hull_damage(npc_weapon)
+	player_shields = 0
+	player_hull = npc_hull_damage
+	var player_disable_retaliation_fired := _spawn_npc_retaliation_projectile(retargeted_target_index)
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+	var player_disabled := player_hull <= 0
+	var player_disabled_status_visible := status_messages.has(_player_disabled_message())
+	var player_disabled_explosion := explosion_events.any(func(explosion): return str(explosion.get("sourceLabel", "")) == "terminal-velocity-player-disabled-scaffold")
 	var explosion_triggered := not explosion_events.is_empty()
 	var latest_explosion_source := str(explosion_events[-1].get("sourceLabel", "")) if explosion_triggered else ""
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
@@ -1317,7 +1329,7 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -3098,12 +3110,30 @@ func _record_explosion_event(target_index: int) -> void:
 	})
 	_play_sound("ui_click")
 
+func _player_disabled_message() -> String:
+	return "Player ship disabled; Terminal Velocity reload/new-pilot recovery scaffold (Strict Play death semantics pending Classic confirmation)"
+
+func _record_player_disabled_event() -> void:
+	explosion_events.append({
+		"position": pos,
+		"life": 2.0,
+		"radius": 10.0,
+		"targetIndex": -1,
+		"sourceLabel": "terminal-velocity-player-disabled-scaffold",
+		"oracleStatus": "classic_runtime_player_death_pending_strict_play_safe_trace",
+	})
+	_play_sound("ui_click")
+
 func _apply_player_projectile_hit(projectile: Dictionary) -> void:
 	if player_shields > 0:
 		player_shields = max(0, player_shields - int(projectile.get("shieldDamage", 1)))
 	else:
 		player_hull = max(0, player_hull - int(projectile.get("hullDamage", 1)))
-	_set_status("Incoming hit: shield %d hull %d" % [player_shields, player_hull])
+	if player_hull <= 0:
+		_record_player_disabled_event()
+		_set_status(_player_disabled_message())
+	else:
+		_set_status("Incoming hit: shield %d hull %d" % [player_shields, player_hull])
 
 func _jump() -> void:
 	var systems: Array = universe.get("systems", [])
