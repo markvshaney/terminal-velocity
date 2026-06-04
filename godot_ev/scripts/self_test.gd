@@ -6,10 +6,11 @@ const PREFS_SCREENSHOT_PATH := "user://selftest/title_prefs.png"
 func _initialize() -> void:
 	var root := _repo_root()
 	var profile: Dictionary = _json(root + "/native_ev/data/profiles/classic.json")
-	var universe: Dictionary = _json(root + "/native_ev/data/universe.json")
-	var ships: Dictionary = _json(root + "/native_ev/data/ships.json")
-	var sounds: Dictionary = _json(root + "/native_ev/data/sounds.json")
-	var gameplay_curriculum: Dictionary = _json(root + "/native_ev/data/gameplay_curriculum.json")
+	var manifests: Dictionary = profile.get("dataManifests", {})
+	var universe: Dictionary = _json(_profile_manifest_path(root, manifests, "universe", "native_ev/data/universe.json"))
+	var ships: Dictionary = _json(_profile_manifest_path(root, manifests, "ships", "native_ev/data/ships.json"))
+	var sounds: Dictionary = _json(_profile_manifest_path(root, manifests, "sounds", "native_ev/data/sounds.json"))
+	var gameplay_curriculum: Dictionary = _json(_profile_manifest_path(root, manifests, "gameplayCurriculum", "native_ev/data/gameplay_curriculum.json"))
 	var systems: Array = universe.get("systems", [])
 	var ship_defs: Array = ships.get("ships", [])
 	if systems.is_empty():
@@ -47,6 +48,9 @@ func _initialize() -> void:
 		return
 	print("GODOT SELFTEST OK profile=classic profileManifests=%d systems=%d ships=%d %sFrames=%d soundsLoaded=%d gameplayScenarios=%d pictsLoaded=%d prefScreen=original-ev-classic-observed prefsScreenshot=%s strictPlay=off-by-default movementLog=deterministic data=native_ev/data/universe.json" % [profile_manifest_count, systems.size(), ship_defs.size(), player_check_id, frame_ok, loaded_sounds, gameplay_scenarios, loaded_picts, prefs_screenshot])
 	quit(0)
+
+func _profile_manifest_path(root: String, manifests: Dictionary, key: String, fallback: String) -> String:
+	return root + "/" + str(manifests.get(key, fallback))
 
 func _verify_classic_profile(root: String, profile: Dictionary) -> int:
 	if profile.get("id", "") != "classic":

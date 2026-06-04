@@ -2777,6 +2777,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('frame_%02d.png', main_script)
         self.assertIn('EV-style', main_script)
 
+    def test_godot_self_test_loads_runtime_data_through_classic_profile(self):
+        root = Path(__file__).resolve().parents[2]
+        self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
+
+        self.assertIn('native_ev/data/profiles/classic.json', self_test_script)
+        self.assertIn('var manifests: Dictionary = profile.get("dataManifests", {})', self_test_script)
+        self.assertIn('_profile_manifest_path(root, manifests, "universe", "native_ev/data/universe.json")', self_test_script)
+        self.assertIn('_profile_manifest_path(root, manifests, "ships", "native_ev/data/ships.json")', self_test_script)
+        self.assertIn('_profile_manifest_path(root, manifests, "sounds", "native_ev/data/sounds.json")', self_test_script)
+        self.assertIn('_profile_manifest_path(root, manifests, "gameplayCurriculum", "native_ev/data/gameplay_curriculum.json")', self_test_script)
+        self.assertIn('func _profile_manifest_path(root: String, manifests: Dictionary, key: String, fallback: String) -> String', self_test_script)
+
     def test_godot_landing_ui_exposes_core_ev_panels_from_file_backed_manifests(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

@@ -44,8 +44,8 @@ Use **artifact + checklist**:
   - Verification: `NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests` fails fast if required Classic data/source manifest keys or paths disappear.
 
 - [x] Add Godot self-test coverage for selected profile.
-  - Status: implemented 2026-06-04.
-  - Verification: `./run_godot.sh self-test` loads `native_ev/data/profiles/classic.json`, validates 17 profile-listed manifests, and reports `profile=classic profileManifests=17`.
+  - Status: implemented 2026-06-04; tightened so the self-test loads runtime data through the Classic profile descriptor's `dataManifests` rather than parallel hard-coded paths.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_loads_runtime_data_through_classic_profile -v`; `./run_godot.sh self-test` loads `native_ev/data/profiles/classic.json`, validates 17 profile-listed manifests, and reports `profile=classic profileManifests=17`. `python3 -m unittest discover -s native_ev/tests -p 'test_*.py'` passed with 182 tests.
 
 - [ ] Mine KestrelEngine for architecture ideas only.
   - Status: pending
