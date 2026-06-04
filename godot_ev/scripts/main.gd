@@ -1372,6 +1372,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_recovery_help := false
 	var has_pirate_avoidance_help := false
 	var has_contraband_help := false
+	var has_legal_status_help := false
 	var has_mission_deadline_help := false
 	var has_trade_route_help := false
 	for line in hints:
@@ -1397,11 +1398,13 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_pirate_avoidance_help = true
 		if str(line).contains("Contraband: Player Info and map commodity hints flag"):
 			has_contraband_help = true
+		if str(line).contains("Legal status: Player Info shows current government/legal stance"):
+			has_legal_status_help = true
 		if str(line).contains("Mission deadlines: Mission Log and Player Info show"):
 			has_mission_deadline_help = true
 		if str(line).contains("Trade route helper: linked-market profit hints"):
 			has_trade_route_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasMissionDeadlineHelp=%s hasTradeRouteHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_mission_deadline_help), str(has_trade_route_help), str(hints[0]) if not hints.is_empty() else ""])
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasMissionDeadlineHelp=%s hasTradeRouteHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_mission_deadline_help), str(has_trade_route_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
@@ -4807,7 +4810,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
 		"Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
 		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
-		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
+		"Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
