@@ -408,6 +408,8 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_shield_recharge_log() -> void:',
             'player_shield_recharge_progress',
             'func _recharge_player_shields(delta: float) -> void:',
+            'func _combat_readiness_inventory_line() -> String:',
+            'Combat readiness: shields %d/%d; hull %d/%d (repair cost %d cr); shield recharge cadence source-backed scaffold',
             'shieldsAfterShortWait=%d',
             'shortWaitBlocked=%s',
             'shieldsAfterOneTick=%d',

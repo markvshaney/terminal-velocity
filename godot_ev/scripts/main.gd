@@ -4609,7 +4609,7 @@ func _player_inventory_lines() -> Array[String]:
 		"Credits: %d" % credits,
 		"Cargo: %d/%d (%d mission, %d free)" % [cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons()],
 		"Fuel: %d/%d" % [player_fuel, _max_player_fuel()],
-		"Hull: %d/%d (repair cost %d cr)" % [player_hull, _max_player_hull(), _repair_cost()],
+		_combat_readiness_inventory_line(),
 		"Government/legal: %s" % _legal_warning_line(_current_government_name()),
 		"Reputation scores: %s" % _inventory_dictionary_summary(reputation_scores),
 		"Legal records: %s" % _inventory_dictionary_summary(legal_records),
@@ -4621,6 +4621,9 @@ func _player_inventory_lines() -> Array[String]:
 	]
 	lines.append_array(_active_mission_player_info_lines())
 	return lines
+
+func _combat_readiness_inventory_line() -> String:
+	return "Combat readiness: shields %d/%d; hull %d/%d (repair cost %d cr); shield recharge cadence source-backed scaffold" % [player_shields, _max_player_shields(), player_hull, _max_player_hull(), _repair_cost()]
 
 func _salvage_pickup_inventory_line() -> String:
 	if cargo_salvage_pickups.is_empty():
@@ -4715,7 +4718,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
-		"Player info: P toggles player info with ship, cargo, fuel, outfits, and weapons.",
+		"Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.",
 		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
 		"Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
 		"Trade route helper: linked-market profit hints are Terminal Velocity scaffold.",
