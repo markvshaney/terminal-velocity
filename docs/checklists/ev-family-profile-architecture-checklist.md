@@ -30,9 +30,9 @@ Use **artifact + checklist**:
   - Result: see "Hard-coded Classic assumptions inventory" below.
 
 - [x] Introduce profile-aware manifest loading without a broad rewrite.
-  - Status: implemented initial Classic descriptor validation; broader runtime switching remains pending.
-  - Implementation: `native_ev.model.profile_manifest('classic')` validates descriptor IDs/source label and all listed runtime/source manifest paths; Godot self-test loads the same descriptor and fails fast on missing listed files while keeping the current `native_ev/data/*.json` contract intact.
-  - Done when: existing Classic self-tests still pass through the profile path.
+  - Status: implemented initial Classic descriptor validation and Godot runtime manifest routing; broader multi-profile switching remains pending.
+  - Implementation: `native_ev.model.profile_manifest('classic')` validates descriptor IDs/source label and all listed runtime/source manifest paths; `godot_ev/scripts/main.gd` loads `native_ev/data/profiles/classic.json` and resolves runtime data paths through `dataManifests` while keeping fallback paths compatible with the current `native_ev/data/*.json` contract.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_frontend_project_loads_existing_data_contract -v`; `./run_godot.sh self-test`.
 
 - [ ] Keep Classic as the first fidelity vertical slice.
   - Status: active direction

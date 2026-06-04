@@ -80,6 +80,7 @@ const AFTERBURNER_THRUST_MULTIPLIER := 1.75
 const AFTERBURNER_FUEL_PER_SECOND := 2.0
 
 var repo_root := ""
+var active_profile := {}
 var universe := {}
 var ships := {}
 var missions := {}
@@ -346,18 +347,20 @@ func _json(path: String) -> Variant:
 	return parsed
 
 func _load_data() -> void:
-	universe = _json(repo_root + "/native_ev/data/universe.json")
-	ships = _json(repo_root + "/native_ev/data/ships.json")
-	missions = _json(repo_root + "/native_ev/data/missions.json")
-	economy = _json(repo_root + "/native_ev/data/economy.json")
-	outfits = _json(repo_root + "/native_ev/data/outfits.json")
-	weapons = _json(repo_root + "/native_ev/data/weapons.json")
-	governments = _json(repo_root + "/native_ev/data/governments.json")
-	reputation = _json(repo_root + "/native_ev/data/reputation.json")
-	sounds = _json(repo_root + "/native_ev/data/sounds.json")
-	gameplay_curriculum = _json(repo_root + "/native_ev/data/gameplay_curriculum.json")
-	help_overlay = _json(repo_root + "/native_ev/data/help_overlay.json")
-	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
+	active_profile = _json(repo_root + "/native_ev/data/profiles/classic.json")
+	var manifests: Dictionary = active_profile.get("dataManifests", {})
+	universe = _json(_profile_manifest_path(manifests, "universe", "native_ev/data/universe.json"))
+	ships = _json(_profile_manifest_path(manifests, "ships", "native_ev/data/ships.json"))
+	missions = _json(_profile_manifest_path(manifests, "missions", "native_ev/data/missions.json"))
+	economy = _json(_profile_manifest_path(manifests, "economy", "native_ev/data/economy.json"))
+	outfits = _json(_profile_manifest_path(manifests, "outfits", "native_ev/data/outfits.json"))
+	weapons = _json(_profile_manifest_path(manifests, "weapons", "native_ev/data/weapons.json"))
+	governments = _json(_profile_manifest_path(manifests, "governments", "native_ev/data/governments.json"))
+	reputation = _json(_profile_manifest_path(manifests, "reputation", "native_ev/data/reputation.json"))
+	sounds = _json(_profile_manifest_path(manifests, "sounds", "native_ev/data/sounds.json"))
+	gameplay_curriculum = _json(_profile_manifest_path(manifests, "gameplayCurriculum", "native_ev/data/gameplay_curriculum.json"))
+	help_overlay = _json(_profile_manifest_path(manifests, "helpOverlay", "native_ev/data/help_overlay.json"))
+	current_system_index = _system_index_by_name(str(active_profile.get("startSystemName", START_SYSTEM_NAME)), 0)
 	current_system = universe.get("systems", [])[current_system_index]
 	var initial_player_ship_id := "shuttlecraft"
 	for ship in ships.get("ships", []):
@@ -384,6 +387,9 @@ func _load_data() -> void:
 	npc_frame_offsets = npc_frame_set["offsets"]
 	status_line = "Loaded %d systems, %d ships, %d %s frames" % [universe.get("systems", []).size(), ships.get("ships", []).size(), player_frames.size(), player_ship_id]
 	_reset_combat_targets()
+
+func _profile_manifest_path(manifests: Dictionary, key: String, fallback: String) -> String:
+	return repo_root + "/" + str(manifests.get(key, fallback))
 
 func _load_ship_frames(ship: Dictionary) -> Array[Texture2D]:
 	return _load_ship_frame_set(ship)["frames"]
