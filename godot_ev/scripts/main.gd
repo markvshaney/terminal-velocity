@@ -1302,6 +1302,10 @@ func _run_combat_log() -> void:
 		for _i in range(90):
 			_advance_projectiles(1.0 / 60.0)
 	var target_destroyed := _target_destroyed(target_index)
+	primary_weapon_cooldown_frames = 0.0
+	var destroyed_target_blocked := not _spawn_primary_projectile()
+	var retargeted_after_destroyed := status_messages.has("Target already disabled; retargeting to next active contact")
+	var retargeted_target_index := selected_target_index
 	var explosion_triggered := not explosion_events.is_empty()
 	var latest_explosion_source := str(explosion_events[-1].get("sourceLabel", "")) if explosion_triggered else ""
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
@@ -1313,7 +1317,7 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -2642,6 +2646,18 @@ func _select_closest_target() -> void:
 	var posture := " hostile legal patrol" if _legal_patrol_hostile_posture_active(_current_government_name()) else ""
 	status_line = "Closest target: Contact %d%s at %.0f range" % [selected_target_index + 1, posture, closest_distance]
 
+func _select_next_live_target(start_index: int) -> bool:
+	var targets := _npc_world_offsets()
+	if targets.is_empty():
+		selected_target_index = 0
+		return false
+	for offset in range(1, targets.size() + 1):
+		var candidate := (start_index + offset) % targets.size()
+		if not _target_destroyed(candidate):
+			selected_target_index = candidate
+			return true
+	return false
+
 func _ev_land_or_launch() -> void:
 	if landed:
 		landed = false
@@ -2942,7 +2958,10 @@ func _spawn_primary_projectile() -> bool:
 		return false
 	var target_index := selected_target_index % targets.size()
 	if _target_destroyed(target_index):
-		_set_status("Target already disabled")
+		if _select_next_live_target(target_index):
+			_set_status("Target already disabled; retargeting to next active contact")
+		else:
+			_set_status("Target already disabled; no active contacts")
 		return false
 	var target_pos: Vector2 = targets[target_index]
 	var direction := (target_pos - pos).normalized()
