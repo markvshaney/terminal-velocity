@@ -1378,6 +1378,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_mission_trade_hybrid_help := false
 	var has_trade_route_help := false
 	var has_map_service_help := false
+	var has_service_provisioning_help := false
 	var has_route_refuel_help := false
 	var has_shipyard_delta_help := false
 	var has_ship_ladder_help := false
@@ -1421,6 +1422,8 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_trade_route_help = true
 		if str(line).contains("Map service/legal summary: selected systems show"):
 			has_map_service_help = true
+		if str(line).contains("Service provisioning scout: newly reached ports need"):
+			has_service_provisioning_help = true
 		if str(line).contains("Route/fuel planning: G and Shift-click route status show"):
 			has_route_refuel_help = true
 		if str(line).contains("Shipyard/outfitter: listings show local manifest deltas/effects before buying"):
@@ -1437,7 +1440,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_blocked_action_help = true
 		if str(line).contains("Route clearing: Backspace/Delete clears queued green routes"):
 			has_route_clear_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasMissionDeadlineHelp=%s hasMissionAbortHistoryHelp=%s hasMissionTradeHybridHelp=%s hasTradeRouteHelp=%s hasMapServiceHelp=%s hasRouteRefuelHelp=%s hasShipyardDeltaHelp=%s hasShipLadderHelp=%s hasPilotPersistenceHelp=%s hasPlayerInfoHelp=%s hasRecentMessagesHelp=%s hasBlockedActionHelp=%s hasRouteClearHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_mission_deadline_help), str(has_mission_abort_history_help), str(has_mission_trade_hybrid_help), str(has_trade_route_help), str(has_map_service_help), str(has_route_refuel_help), str(has_shipyard_delta_help), str(has_ship_ladder_help), str(has_pilot_persistence_help), str(has_player_info_help), str(has_recent_messages_help), str(has_blocked_action_help), str(has_route_clear_help), str(hints[0]) if not hints.is_empty() else ""])
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasMissionDeadlineHelp=%s hasMissionAbortHistoryHelp=%s hasMissionTradeHybridHelp=%s hasTradeRouteHelp=%s hasMapServiceHelp=%s hasServiceProvisioningHelp=%s hasRouteRefuelHelp=%s hasShipyardDeltaHelp=%s hasShipLadderHelp=%s hasPilotPersistenceHelp=%s hasPlayerInfoHelp=%s hasRecentMessagesHelp=%s hasBlockedActionHelp=%s hasRouteClearHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_mission_deadline_help), str(has_mission_abort_history_help), str(has_mission_trade_hybrid_help), str(has_trade_route_help), str(has_map_service_help), str(has_service_provisioning_help), str(has_route_refuel_help), str(has_shipyard_delta_help), str(has_ship_ladder_help), str(has_pilot_persistence_help), str(has_player_info_help), str(has_recent_messages_help), str(has_blocked_action_help), str(has_route_clear_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
@@ -4854,6 +4857,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
 		"Trade route helper: linked-market profit hints are Terminal Velocity scaffold.",
 		"Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
+		"Service provisioning scout: newly reached ports need service/store checks before buying; Levo no-outfitter evidence is Classic-observed, other service matrices stay TV scaffold until confirmed.",
 		"Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots before trading up; TV scaffold pending Classic store/stat trace.",
 		"Messages: recent success and blocked-reason feedback appears under the HUD.",
 		"Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.",
