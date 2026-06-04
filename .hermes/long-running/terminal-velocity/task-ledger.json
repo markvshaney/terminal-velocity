@@ -1,31 +1,26 @@
 {
-  "active_gate": {
-    "reason": "no active gate; safe-local combat reward status feedback scaffold code/docs/tests/commit completed; Classic bounty/legal behavior remains evidence-gated but not blocking Terminal Velocity scaffold work",
-    "resume_after": "next cron tick",
-    "type": "none",
-    "withheld_action": null
-  },
-  "current_milestone": "Combat reward scaffold now gives immediate in-flight disable feedback with the local credit reward while retaining HUD/Player Info reward history and Classic bounty/legal evidence gates.",
+  "active_gate": null,
+  "current_milestone": "Committed two verified combat HUD/playability slices: selected target scanner detail and secondary weapon HUD reload status.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    "final_delivery": "cron_final_response",
-    "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_under_10_minutes",
+    "heartbeat_file": ".hermes/long-running/terminal-velocity/heartbeat.json",
     "send_message_available": false,
-    "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
   "last_commit": "d338f78 feat(godot): show combat reward status feedback",
-  "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
-    "./run_godot.sh tv-combat-log -> combatRewardStatusVisible=true plus reward persistence/HUD/Player Info true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (139 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
-    "git diff --check -> OK",
-    "git commit -> d338f78 feat(godot): show combat reward status feedback"
+  "last_commits": [
+    "3ca35e7 feat: surface selected target scanner detail",
+    "d0bd2db feat: show secondary weapon hud status"
   ],
-  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: exact Classic/source evidence for combat rewards/legal/death timing, or another bounded player-visible combat/navigation/mission feedback scaffold.",
+  "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_target_selection_log_contract -v && ./run_godot.sh tv-target-selection-log",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v && ./run_godot.sh tv-secondary-weapon-log",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (summary: total=20 passed=20 failed=0)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK profile=classic gameplayScenarios=20)",
+    "git diff --check"
+  ],
+  "next_resume_action": "Inspect the EV Classic fidelity backlog and implement the next bounded source-aligned Terminal Velocity playable/scenario slice; preserve scaffold labels until Classic evidence exists.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
@@ -49,7 +44,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Read this ledger, events tail, continuation prompt, git status/log, and backlog; preserve one-writer discipline; choose the next source-aligned playable/fidelity slice; verify and commit locally; update ledger/events.",
+  "resume_prompt": "Continue the autonomous Terminal Velocity runner from /home/bh/workspaces/loki/terminal-velocity. Read this ledger/events, verify clean writer state, inspect backlog, then implement and verify the next safe-local playable/fidelity slice. Do not push or restart gateways.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -106,5 +101,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T08:40:17.681876Z"
+  "updated_at": "2026-06-04T04:52:12-04:00"
 }
