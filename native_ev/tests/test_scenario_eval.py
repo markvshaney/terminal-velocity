@@ -23,6 +23,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'chapter_one_courier_chain',
                 'alignment_choice_guardrail',
                 'mission_destination_route_hint',
+                'mission_trade_hybrid_capacity_planning',
                 'mission_abort_releases_reserved_cargo',
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
@@ -229,6 +230,20 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['queued_active_mission_destination'], 'passed')
         self.assertEqual(result['trace'][-1]['destinationSystem'], 'Centauri')
         self.assertEqual(result['trace'][-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
+
+    def test_mission_trade_hybrid_capacity_planning_preserves_trade_cargo(self):
+        result = run_scripted_scenario('mission_trade_hybrid_capacity_planning')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['accepted_trade_aligned_mission'], 'passed')
+        self.assertEqual(result['checks']['bought_one_trade_lot_with_remaining_capacity'], 'passed')
+        self.assertEqual(result['checks']['blocked_second_lot_to_preserve_capacity_rule'], 'passed')
+        self.assertEqual(result['checks']['completed_mission_with_trade_cargo_still_held'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_buy_commodity_lot'][-1]
+        self.assertEqual(blocked['reason'], 'insufficient cargo space')
+        self.assertEqual(result['state']['completedJobs'], ['levo_trade_aligned_courier'])
+        self.assertEqual(result['state']['cargoHold']['food'], 10)
+        self.assertEqual(result['state']['cargoUsed'], 10)
 
     def test_mission_abort_releases_reserved_cargo_without_completion(self):
         result = run_scripted_scenario('mission_abort_releases_reserved_cargo')

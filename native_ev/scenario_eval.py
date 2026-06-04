@@ -37,6 +37,7 @@ SCENARIO_CURRICULUM = [
     'chapter_one_courier_chain',
     'alignment_choice_guardrail',
     'mission_destination_route_hint',
+    'mission_trade_hybrid_capacity_planning',
     'mission_abort_releases_reserved_cargo',
     'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
@@ -704,6 +705,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'depart'},
             {'type': 'route_to_active_mission_destination'},
         ]
+    if name == 'mission_trade_hybrid_capacity_planning':
+        return [
+            {'type': 'accept_cargo_job', 'id': 'levo_trade_aligned_courier', 'destinationSystem': 'Sol', 'destinationBody': 'Earth', 'tons': 8, 'pay': 900, 'risk': 'safe'},
+            {'type': 'buy_commodity_lot', 'commodity': 'food'},
+            {'type': 'buy_commodity_lot', 'commodity': 'industrial', 'expectBlocked': True},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'complete_cargo_jobs'},
+        ]
     if name == 'mission_abort_releases_reserved_cargo':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -857,6 +867,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
     elif name == 'mission_destination_route_hint':
         checks.update({
             'queued_active_mission_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] and any(event.get('type') == 'route_to_active_mission_destination' and event.get('missionId') == 'intro_courier_earth_hera' and event.get('destinationSystem') == 'Centauri' and event.get('routeQueued') for event in trace) else 'failed',
+        })
+    elif name == 'mission_trade_hybrid_capacity_planning':
+        checks.update({
+            'accepted_trade_aligned_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'levo_trade_aligned_courier' and event.get('reservedCargoTons') == 8 for event in trace) else 'failed',
+            'bought_one_trade_lot_with_remaining_capacity': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('commodity') == 'food' and event.get('cargoUsed') == 18 for event in trace) else 'failed',
+            'blocked_second_lot_to_preserve_capacity_rule': 'passed' if any(event.get('type') == 'blocked_buy_commodity_lot' and event.get('commodity') == 'industrial' and event.get('reason') == 'insufficient cargo space' for event in trace) else 'failed',
+            'completed_mission_with_trade_cargo_still_held': 'passed' if state.get('completedJobs') == ['levo_trade_aligned_courier'] and state.get('cargoUsed') == 10 and state.get('cargoHold', {}).get('food') == 10 else 'failed',
         })
     elif name == 'mission_abort_releases_reserved_cargo':
         checks.update({

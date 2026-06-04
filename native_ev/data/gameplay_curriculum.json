@@ -11,6 +11,7 @@
     "chapter_one_courier_chain",
     "alignment_choice_guardrail",
     "mission_destination_route_hint",
+    "mission_trade_hybrid_capacity_planning",
     "mission_abort_releases_reserved_cargo",
     "mission_deadline_failure_scaffold",
     "outfitter_ship_ladder_intro",
@@ -93,6 +94,10 @@
     "mission_destination_route_hint": {
       "purpose": "Mission objective route hint: after accepting an active courier contract, queue the contract destination as the next map route leg.",
       "surface": "mission objective/map route guidance design scaffold"
+    },
+    "mission_trade_hybrid_capacity_planning": {
+      "purpose": "Mission-trader hybrid loop: accept an 8-ton courier job, use the remaining capacity for one commodity lot, block a second lot for capacity, then complete the mission while retaining trade cargo.",
+      "surface": "mission/trade hybrid capacity planning scaffold"
     },
     "mission_abort_releases_reserved_cargo": {
       "purpose": "Mission abort scaffold: abort an active courier contract without completion, release its reserved cargo, and keep source/oracle boundaries explicit pending Classic confirmation.",
