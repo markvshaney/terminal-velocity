@@ -1241,10 +1241,15 @@ func _run_outfitter_shipyard_log() -> void:
 func _run_gameplay_curriculum_help_log() -> void:
 	var hints := _gameplay_curriculum_hint_lines()
 	var has_pirate_hint := false
+	var has_repair_help := false
 	for line in hints:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(hints[0]) if not hints.is_empty() else ""])
+	var help_lines := _help_overlay_lines()
+	for line in help_lines:
+		if str(line).contains("Repair: landed ports with repair service show F7"):
+			has_repair_help = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_combat_log() -> void:
@@ -3638,7 +3643,15 @@ func _draw_help_overlay() -> void:
 	draw_rect(rect, Color(0.018, 0.026, 0.042, 0.96), true)
 	draw_rect(rect, Color(0.35, 0.62, 0.85, 1.0), false, 2.0)
 	draw_string(font, rect.position + Vector2(0, 38), "Terminal Velocity Help", HORIZONTAL_ALIGNMENT_CENTER, rect.size.x, 24, Color(0.92, 0.98, 1.0))
-	var lines := [
+	var lines := _help_overlay_lines()
+	lines.append_array(_gameplay_curriculum_hint_lines().slice(0, 4))
+	var y := rect.position.y + 80.0
+	for line in lines:
+		draw_string(font, Vector2(rect.position.x + 36, y), "• " + line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 72, 16, Color(0.82, 0.90, 1.0))
+		y += 28.0
+
+func _help_overlay_lines() -> Array[String]:
+	return [
 		"Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
 		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
 		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops; Backspace/Delete clears route.",
@@ -3647,6 +3660,7 @@ func _draw_help_overlay() -> void:
 		"Mission route helper: G queues the active mission destination when known.",
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
+		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Player info: P toggles player info with ship, cargo, fuel, outfits, and weapons.",
@@ -3657,11 +3671,6 @@ func _draw_help_overlay() -> void:
 		"Messages: recent success and blocked-reason feedback appears under the HUD.",
 		"F10 closes this help overlay. Exact Classic behavior still needs source/runtime evidence."
 	]
-	lines.append_array(_gameplay_curriculum_hint_lines().slice(0, 4))
-	var y := rect.position.y + 80.0
-	for line in lines:
-		draw_string(font, Vector2(rect.position.x + 36, y), "• " + line, HORIZONTAL_ALIGNMENT_LEFT, rect.size.x - 72, 16, Color(0.82, 0.90, 1.0))
-		y += 28.0
 
 func _gameplay_curriculum_hint_lines() -> Array[String]:
 	var lines: Array[String] = ["Terminal Velocity curriculum hints — scaffold from native_ev/data/gameplay_curriculum.json"]

@@ -201,6 +201,8 @@ class NativeEvModelTests(unittest.TestCase):
             'func _gameplay_curriculum_hint_lines',
             'Terminal Velocity curriculum hints — scaffold',
             'pirate_avoidance_escape_route',
+            'Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.',
+            'hasRepairHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
