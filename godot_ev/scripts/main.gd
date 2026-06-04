@@ -36,6 +36,7 @@ const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
+const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
 const MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_BRANCH_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
@@ -187,6 +188,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
 		call_deferred("_run_mission_chain_offer_log")
+	if OS.get_cmdline_args().has("--tv-mission-chain-lock-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-lock-log"):
+		call_deferred("_run_mission_chain_lock_log")
 	if OS.get_cmdline_args().has("--tv-mission-alignment-branch-log") or OS.get_cmdline_user_args().has("--tv-mission-alignment-branch-log"):
 		call_deferred("_run_mission_alignment_branch_log")
 	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
@@ -875,6 +878,28 @@ func _run_mission_chain_offer_log() -> void:
 	var frontier_offer_visible := chain_offer_ids.has("frontier_sample_hera_freeport")
 	var chain_offer_details_visible := selected_chain_detail_lines.has("Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending")
 	print("%s startSystem=Levo routeToSolSelected=%s firstMissionAccepted=%s firstMissionDelivered=%s completedMissions=%s routeToChainStopSelected=%s scanSystem=%s scanBody=\"%s\" chainOfferVisible=%s chainOffers=%s selectedChainOfferDetailsVisible=%s selectedChainOfferDetails=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(first_mission_accepted), str(first_mission_delivered), JSON.stringify(completed_ids), str(route_to_chain_stop_selected), str(current_system.get("name", "?")), str(chain_body.get("name", "None")), str(frontier_offer_visible), JSON.stringify(chain_offer_ids), str(chain_offer_details_visible), JSON.stringify(selected_chain_detail_lines), JSON.stringify(story_flags), status_line])
+	get_tree().quit(0)
+
+func _run_mission_chain_lock_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_luna_selected := _select_map_route_to_system("Centauri")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Luna")
+	_try_land()
+	landing_tab = 0
+	var body := _current_body()
+	var available := _available_missions(body)
+	var blocked_reasons := _blocked_mission_reasons(body)
+	var locked_story_reason_visible := false
+	var locked_story_state_visible := false
+	for reason in blocked_reasons:
+		if str(reason).contains("requires missing story flag(s): story_intro_complete"):
+			locked_story_reason_visible = true
+		if str(reason).contains("storyGate=missing_required_flags"):
+			locked_story_state_visible = true
+	print("%s startSystem=Levo routeToLunaSelected=%s scanSystem=%s scanBody=\"%s\" availableOffers=%d blockedReasons=%s lockedStoryReasonVisible=%s lockedStoryStateVisible=%s sourceLabel=terminal-velocity-mission-story-gate-scaffold oracleStatus=classic_mission_offer_visibility_pending_original_trace status=\"%s\"" % [MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX, str(route_to_luna_selected), str(current_system.get("name", "?")), str(body.get("name", "None")), available.size(), JSON.stringify(blocked_reasons), str(locked_story_reason_visible), str(locked_story_state_visible), status_line])
 	get_tree().quit(0)
 
 func _run_mission_alignment_branch_log() -> void:
@@ -3936,7 +3961,9 @@ func _blocked_mission_reasons(body: Dictionary) -> Array[String]:
 			continue
 		if mission.get("originSystem", "") != system_name or mission.get("originBody", "") != body_name:
 			continue
-		if not _has_all_flags(mission.get("requiresFlags", [])) or _has_any_flag(mission.get("excludesFlags", [])):
+		var story_reason := _mission_story_gate_block_reason(mission)
+		if story_reason != "requirements met":
+			reasons.append("%s: %s" % [str(mission.get("title", mission_id)), story_reason])
 			continue
 		if _mission_requirements_met(mission):
 			continue
@@ -3956,6 +3983,30 @@ func _has_any_flag(excluded: Array) -> bool:
 		if story_flags.has(str(flag)):
 			return true
 	return false
+
+func _mission_story_gate_state(mission: Dictionary) -> String:
+	if not _has_all_flags(mission.get("requiresFlags", [])):
+		return "missing_required_flags"
+	if _has_any_flag(mission.get("excludesFlags", [])):
+		return "excluded_by_story_flags"
+	return "requirements met"
+
+func _mission_story_gate_block_reason(mission: Dictionary) -> String:
+	var missing_flags: Array[String] = []
+	for flag in mission.get("requiresFlags", []):
+		var flag_name := str(flag)
+		if not story_flags.has(flag_name):
+			missing_flags.append(flag_name)
+	if not missing_flags.is_empty():
+		return "requires missing story flag(s): %s; Terminal Velocity story-chain scaffold, exact Classic offer visibility pending; storyGate=%s" % [", ".join(missing_flags), _mission_story_gate_state(mission)]
+	var excluded_flags: Array[String] = []
+	for flag in mission.get("excludesFlags", []):
+		var flag_name := str(flag)
+		if story_flags.has(flag_name):
+			excluded_flags.append(flag_name)
+	if not excluded_flags.is_empty():
+		return "excluded by active story flag(s): %s; Terminal Velocity choice/exclusion scaffold, exact Classic offer visibility pending; storyGate=%s" % [", ".join(excluded_flags), _mission_story_gate_state(mission)]
+	return "requirements met"
 
 func _mission_requirements_met(mission: Dictionary) -> bool:
 	var requirements: Dictionary = mission.get("requirements", {})

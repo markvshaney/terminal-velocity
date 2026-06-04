@@ -147,6 +147,18 @@ Mission chain offer scenario contract:
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
   This is a Terminal Velocity chain-continuity/playability probe; exact EV Classic Mission Computer offer refresh and detail UI remain pending original-runtime/manual evidence.
 
+Mission chain lock scenario contract:
+
+- `RunGodot.ps1 -MissionChainLockLog` / `--tv-mission-chain-lock-log`
+- Exercises blocked story-chain offer reasons before a prerequisite courier job is complete in the Godot fast-eval lane.
+- Resets to Levo, route-selects Centauri, jumps and lands at Luna without completing `intro_courier_earth_hera`, then scans Luna's Mission Computer for blocked story-gate reasons around `frontier_sample_hera_freeport` and logs:
+  - route and scan context;
+  - available-offer count and blocked reason text;
+  - `lockedStoryReasonVisible=true` when missing `story_intro_complete` is surfaced to the Mission Computer/log contract;
+  - `sourceLabel=terminal-velocity-mission-story-gate-scaffold`;
+  - `oracleStatus=classic_mission_offer_visibility_pending_original_trace`.
+  This is a Terminal Velocity story-gate visibility scaffold; exact EV Classic behavior for hidden vs disabled/unavailable story-chain offers remains pending original-runtime/manual/resource trace.
+
 Mission alignment branch scenario contract:
 
 - `RunGodot.ps1 -MissionAlignmentBranchLog` / `--tv-mission-alignment-branch-log`

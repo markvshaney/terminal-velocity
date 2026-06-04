@@ -14,6 +14,7 @@ param(
     [switch]$CommodityTradeLog,
     [switch]$MissionOfferScanLog,
     [switch]$MissionChainOfferLog,
+    [switch]$MissionChainLockLog,
     [switch]$MissionAlignmentBranchLog,
     [switch]$MissionRouteHintLog,
     [switch]$MissionAbortLog,
@@ -77,6 +78,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-offer-scan-log
 } elseif ($MissionChainOfferLog) {
     & $Godot --headless --path $Project -- --tv-mission-chain-offer-log
+} elseif ($MissionChainLockLog) {
+    & $Godot --headless --path $Project -- --tv-mission-chain-lock-log
 } elseif ($MissionAlignmentBranchLog) {
     & $Godot --headless --path $Project -- --tv-mission-alignment-branch-log
 } elseif ($MissionRouteHintLog) {

@@ -756,6 +756,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Active mission deadline display scenario contract', plan)
         self.assertIn('4 day(s) remaining', main_script)
 
+    def test_godot_mission_chain_lock_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-chain-lock-log',
+            'func _run_mission_chain_lock_log',
+            'TV_MISSION_CHAIN_LOCK_EVENT',
+            'func _mission_story_gate_block_reason(mission: Dictionary) -> String:',
+            'func _mission_story_gate_state(mission: Dictionary) -> String:',
+            'lockedStoryReasonVisible=%s',
+            'requires missing story flag(s): %s; Terminal Velocity story-chain scaffold, exact Classic offer visibility pending',
+            'excluded by active story flag(s): %s; Terminal Velocity choice/exclusion scaffold, exact Classic offer visibility pending',
+            'sourceLabel=terminal-velocity-mission-story-gate-scaffold',
+            'oracleStatus=classic_mission_offer_visibility_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionChainLockLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-chain-lock-log', run_script)
+        self.assertIn('tv-mission-chain-lock-log', wrapper)
+        self.assertIn('Mission chain lock scenario contract', plan)
+        self.assertIn('lockedStoryReasonVisible=true', plan)
+
     def test_godot_outfitter_shipyard_progression_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
