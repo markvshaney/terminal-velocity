@@ -1350,6 +1350,25 @@ func _run_combat_log() -> void:
 	loaded_pilot_name = "Disabled Save Probe"
 	loaded_ship_name = "Starseeker"
 	var disabled_save_blocked := not _save_current_pilot_file() and status_messages.has(_player_disabled_action_message())
+	var disabled_service_refuel_blocked := not _refuel_current_ship() and status_messages.has(_player_disabled_action_message())
+	var disabled_service_repair_blocked := not _repair_current_hull() and status_messages.has(_player_disabled_action_message())
+	var disabled_service_clemency_blocked := not _pay_legal_clemency() and status_messages.has(_player_disabled_action_message())
+	var active_missions_before_disabled_accept := active_missions.size()
+	_accept_selected_mission()
+	var disabled_mission_accept_blocked := status_messages.has(_player_disabled_action_message()) and active_missions.size() == active_missions_before_disabled_accept
+	var credits_before_disabled_trade := credits
+	var cargo_before_disabled_trade := cargo
+	_buy_selected_commodity()
+	var disabled_trade_buy_blocked := status_messages.has(_player_disabled_action_message()) and credits == credits_before_disabled_trade and cargo == cargo_before_disabled_trade
+	_sell_selected_commodity()
+	var disabled_trade_sell_blocked := status_messages.has(_player_disabled_action_message()) and credits == credits_before_disabled_trade and cargo == cargo_before_disabled_trade
+	var owned_outfits_before_disabled_buy := owned_outfits.duplicate(true)
+	var owned_weapons_before_disabled_buy := owned_weapons.duplicate(true)
+	_buy_selected_outfit_or_weapon()
+	var disabled_outfit_buy_blocked := status_messages.has(_player_disabled_action_message()) and owned_outfits == owned_outfits_before_disabled_buy and owned_weapons == owned_weapons_before_disabled_buy
+	var player_ship_id_before_disabled_buy := player_ship_id
+	_buy_selected_ship()
+	var disabled_ship_buy_blocked := status_messages.has(_player_disabled_action_message()) and player_ship_id == player_ship_id_before_disabled_buy
 	var recovery_triggered := _recover_disabled_player_scaffold()
 	var player_recovered := not _player_disabled() and player_hull == _max_player_hull() and player_shields == _max_player_shields()
 	var recovery_status_visible := status_messages.has(_player_recovery_message())
@@ -1364,7 +1383,7 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s disabledMovementBlocked=%s disabledSaveBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(disabled_movement_blocked), str(disabled_save_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s disabledMovementBlocked=%s disabledSaveBlocked=%s disabledServiceRefuelBlocked=%s disabledServiceRepairBlocked=%s disabledServiceClemencyBlocked=%s disabledMissionAcceptBlocked=%s disabledTradeBuyBlocked=%s disabledTradeSellBlocked=%s disabledOutfitBuyBlocked=%s disabledShipBuyBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(disabled_movement_blocked), str(disabled_save_blocked), str(disabled_service_refuel_blocked), str(disabled_service_repair_blocked), str(disabled_service_clemency_blocked), str(disabled_mission_accept_blocked), str(disabled_trade_buy_blocked), str(disabled_trade_sell_blocked), str(disabled_outfit_buy_blocked), str(disabled_ship_buy_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -1887,6 +1906,8 @@ func _route_fuel_hint_line(route_hops := -1) -> String:
 	return "Route fuel: %d hop(s), cost %d, fuel %d/%d%s" % [hops, cost, player_fuel, _max_player_fuel(), warning]
 
 func _refuel_current_ship() -> bool:
+	if _disabled_player_action_blocked():
+		return false
 	if not landed:
 		_set_status("Cannot refuel in space; land at a port with refuel service")
 		return false
@@ -1899,6 +1920,8 @@ func _refuel_current_ship() -> bool:
 	return true
 
 func _repair_current_hull() -> bool:
+	if _disabled_player_action_blocked():
+		return false
 	if not landed:
 		_set_status("Cannot repair in space; land at a port with repair service")
 		return false
@@ -2843,6 +2866,8 @@ func _apply_reputation_event(event_id: String, context_government := "") -> void
 		legal_records[target_government] = int(legal_records.get(target_government, 0)) + int(legal_delta.get(government_name, 0))
 
 func _pay_legal_clemency() -> bool:
+	if _disabled_player_action_blocked():
+		return false
 	if not landed:
 		_set_status("Clemency unavailable in space; land at an aligned port")
 		return false
@@ -4488,6 +4513,8 @@ func _cycle_landing_selection(dir: int) -> void:
 	selected_landing_item = (selected_landing_item + dir + count) % count
 
 func _accept_selected_mission() -> void:
+	if _disabled_player_action_blocked():
+		return
 	var available := _available_missions(_current_body())
 	if available.is_empty():
 		_set_status("No mission to accept")
@@ -4509,6 +4536,8 @@ func _accept_selected_mission() -> void:
 	selected_landing_item = 0
 
 func _buy_selected_commodity() -> void:
+	if _disabled_player_action_blocked():
+		return
 	var commodities: Array = economy.get("commodities", [])
 	if commodities.is_empty():
 		_set_status("No commodities available")
@@ -4538,6 +4567,8 @@ func _buy_selected_commodity() -> void:
 	_play_sound("ui_click")
 
 func _sell_selected_commodity() -> void:
+	if _disabled_player_action_blocked():
+		return
 	var commodities: Array = economy.get("commodities", [])
 	if commodities.is_empty():
 		_set_status("No commodities available")
@@ -4573,6 +4604,8 @@ func _outfitter_sale_items(body: Dictionary) -> Array:
 	return sale_items
 
 func _buy_selected_outfit_or_weapon() -> void:
+	if _disabled_player_action_blocked():
+		return
 	var government_name := _current_government_name()
 	if not _legal_service_access_allowed(government_name):
 		_set_status(_legal_service_blocked_message(government_name))
@@ -4638,6 +4671,8 @@ func _outfit_source_summary(item: Dictionary) -> String:
 	return "Source: stock %s (wëap %d); TV values scaffold until runtime-tuned" % [stock_name, source_id]
 
 func _buy_selected_ship() -> void:
+	if _disabled_player_action_blocked():
+		return
 	var government_name := _current_government_name()
 	if not _legal_service_access_allowed(government_name):
 		_set_status(_legal_service_blocked_message(government_name))
