@@ -1318,6 +1318,15 @@ func _run_combat_log() -> void:
 	var player_disabled := player_hull <= 0
 	var player_disabled_status_visible := status_messages.has(_player_disabled_message())
 	var player_disabled_explosion := explosion_events.any(func(explosion): return str(explosion.get("sourceLabel", "")) == "terminal-velocity-player-disabled-scaffold")
+	primary_weapon_cooldown_frames = 0.0
+	var disabled_fire_blocked := not _spawn_primary_projectile()
+	var disabled_fire_guidance := status_messages.has(_player_disabled_action_message())
+	selected_route = [str(current_system.get("links", [])[0]) if not current_system.get("links", []).is_empty() else "Rigel"]
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var disabled_jump_guidance := status_messages.has(_player_disabled_action_message())
+	_try_land()
+	var disabled_land_guidance := status_messages.has(_player_disabled_action_message())
 	var explosion_triggered := not explosion_events.is_empty()
 	var latest_explosion_source := str(explosion_events[-1].get("sourceLabel", "")) if explosion_triggered else ""
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
@@ -1329,7 +1338,7 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -2876,6 +2885,9 @@ func _afterburner_active() -> bool:
 	return Input.is_key_pressed(KEY_Z)
 
 func _fire_primary_weapon() -> void:
+	if _player_disabled():
+		_set_status(_player_disabled_action_message())
+		return
 	if _spawn_primary_projectile():
 		return
 	_set_status("Primary weapon unavailable: no weapon data or targets")
@@ -2949,6 +2961,12 @@ func _advance_weapon_cooldowns(delta: float) -> void:
 func _primary_weapon_reload_message() -> String:
 	return "Primary weapon reloading; wait for source-backed reload cadence"
 
+func _player_disabled() -> bool:
+	return player_hull <= 0
+
+func _player_disabled_action_message() -> String:
+	return "Player ship disabled; reload or start a new pilot before continuing actions"
+
 func _recharge_player_shields(delta: float) -> void:
 	if player_shields >= _max_player_shields() or player_hull <= 0:
 		return
@@ -2971,6 +2989,9 @@ func _weapon_hull_damage(weapon: Dictionary) -> int:
 	return max(1, int(floor(float(mass_damage) + float(energy_damage) / 4.0)))
 
 func _spawn_primary_projectile() -> bool:
+	if _player_disabled():
+		_set_status(_player_disabled_action_message())
+		return false
 	var targets := _npc_world_offsets()
 	var weapon := _primary_weapon_stats()
 	if targets.is_empty() or weapon.is_empty():
@@ -3136,6 +3157,9 @@ func _apply_player_projectile_hit(projectile: Dictionary) -> void:
 		_set_status("Incoming hit: shield %d hull %d" % [player_shields, player_hull])
 
 func _jump() -> void:
+	if _player_disabled():
+		_set_status(_player_disabled_action_message())
+		return
 	var systems: Array = universe.get("systems", [])
 	var links: Array = current_system.get("links", [])
 	if links.is_empty() and selected_route.is_empty():
@@ -3167,6 +3191,9 @@ func _jump() -> void:
 			return
 
 func _try_land() -> void:
+	if _player_disabled():
+		_set_status(_player_disabled_action_message())
+		return
 	var nearest := _nearest_body()
 	if nearest.is_empty():
 		_set_status("No port in range; fly closer to a planet/station and slow below landing speed")

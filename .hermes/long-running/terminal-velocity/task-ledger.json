@@ -5,24 +5,24 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "combat_player_disabled_scaffold",
+  "current_milestone": "combat_player_disabled_action_guardrails",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    "progress_heartbeats": "one fallback progress heartbeat was written during verification",
+    "progress_heartbeats": "not needed; run stayed under long-run heartbeat threshold after start heartbeat",
     "start_heartbeat": "wrote .hermes/long-running/terminal-velocity/heartbeat.json because send_message tool unavailable",
     "visibility_degraded": "send_message tool unavailable; heartbeat file fallback used"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_combat_guardrail_log_contract -v -> OK (2 tests)",
-    "./run_godot.sh tv-combat-log -> TV_COMBAT_EVENT ... playerDisableRetaliationFired=true playerDisabled=true playerDisabledStatusVisible=true playerDisabledExplosion=true explosionSourceLabel=terminal-velocity-player-disabled-scaffold",
-    "./run_godot.sh tv-combat-guardrail-log -> TV_COMBAT_GUARDRAIL_EVENT firstShotSpawned=true immediateSecondShotBlocked=true cooldownFrames=146 cooldownCleared=true shotAfterCooldownSpawned=true secondaryBlocked=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-combat-log -> disabledFireBlocked=true disabledFireGuidance=true disabledJumpGuidance=true disabledLandGuidance=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (128 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "./run_godot.sh tv-combat-guardrail-log -> firstShotSpawned=true immediateSecondShotBlocked=true cooldownFrames=146 cooldownCleared=true shotAfterCooldownSpawned=true secondaryBlocked=true",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): scaffold player disabled combat state (local checkpoint commit; final SHA reported by git rev-parse after commit)"
+    "git commit -> feat(godot): block actions while player disabled (201a1cf)"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: original-runtime/resource evidence for exact combat death/destruction/reload semantics, player-visible combat recovery/reload UI, or another source-labeled mission/map/fuel/combat helper. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: original-runtime/resource evidence for exact combat death/destruction/reload semantics, player-visible reload/new-pilot recovery UI, secondary weapon implementation scaffolds, or another source-labeled mission/map/fuel/combat helper. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -97,5 +97,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T04:03:08Z"
+  "updated_at": "2026-06-04T04:07:48Z"
 }
