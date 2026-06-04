@@ -341,6 +341,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-target-selection-log', run_script)
         self.assertIn('[switch]$TargetSelectionLog', windows_script)
 
+    def test_godot_autopilot_assist_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_AUTOPILOT_EVENT',
+            '--tv-autopilot-log',
+            'func _run_autopilot_log',
+            'var autopilot_enabled := false',
+            'func _apply_autopilot_assist(delta: float) -> void:',
+            'Autopilot engaged: steering toward nearest port as a Terminal Velocity assist scaffold',
+            'Autopilot disengaged',
+            'autopilotMovedCloser=%s',
+            'autopilotSlowedForApproach=%s',
+            'sourceLabel=terminal-velocity-autopilot-assist-scaffold',
+            'oracleStatus=classic_runtime_autopilot_behavior_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-autopilot-log', run_script)
+        self.assertIn('[switch]$AutopilotLog', windows_script)
+
     def test_godot_secondary_weapon_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

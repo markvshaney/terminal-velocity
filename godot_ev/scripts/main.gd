@@ -52,6 +52,7 @@ const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
 const SECONDARY_WEAPON_EVENT_LOG_PREFIX := "TV_SECONDARY_WEAPON_EVENT"
 const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
+const AUTOPILOT_EVENT_LOG_PREFIX := "TV_AUTOPILOT_EVENT"
 const NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX := "TV_NAVIGATION_GUARDRAIL_EVENT"
 const LEGAL_STATUS_EVENT_LOG_PREFIX := "TV_LEGAL_STATUS_EVENT"
 const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
@@ -98,6 +99,7 @@ var game_state := STATE_TITLE
 var selected_link_index := 0
 var selected_route: Array = []
 var selected_target_index := 0
+var autopilot_enabled := false
 var map_visible := false
 var help_visible := false
 var mission_log_visible := false
@@ -233,6 +235,8 @@ func _ready() -> void:
 		call_deferred("_run_secondary_weapon_log")
 	if OS.get_cmdline_args().has("--tv-target-selection-log") or OS.get_cmdline_user_args().has("--tv-target-selection-log"):
 		call_deferred("_run_target_selection_log")
+	if OS.get_cmdline_args().has("--tv-autopilot-log") or OS.get_cmdline_user_args().has("--tv-autopilot-log"):
+		call_deferred("_run_autopilot_log")
 	if OS.get_cmdline_args().has("--tv-navigation-guardrail-log") or OS.get_cmdline_user_args().has("--tv-navigation-guardrail-log"):
 		call_deferred("_run_navigation_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-legal-status-log") or OS.get_cmdline_user_args().has("--tv-legal-status-log"):
@@ -480,6 +484,7 @@ func _make_stars() -> void:
 func _process(delta: float) -> void:
 	_handle_input(delta)
 	if not landed:
+		_apply_autopilot_assist(delta)
 		pos += vel * delta
 		vel *= pow(0.995, delta * 60.0)
 		_recharge_player_shields(delta)
@@ -598,6 +603,30 @@ func _run_afterburner_log() -> void:
 	var speed_boosted := afterburner_speed > normal_speed
 	var fuel_drained := fuel_after_afterburner < fuel_before_afterburner and fuel_after_normal == fuel_before_normal
 	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
+	get_tree().quit(0)
+
+func _run_autopilot_log() -> void:
+	_reset_travel_state()
+	var nearest := _nearest_body()
+	var target_body: Dictionary = nearest.get("body", {}) if not nearest.is_empty() else {}
+	var target_pos := Vector2(float(target_body.get("x", 0)), float(target_body.get("y", 0)))
+	pos = target_pos + Vector2(320.0, 0.0)
+	vel = Vector2(160.0, 0.0)
+	var distance_before := pos.distance_to(target_pos)
+	var speed_before := vel.length()
+	_toggle_autopilot()
+	var engaged := autopilot_enabled and status_messages.has("Autopilot engaged: steering toward nearest port as a Terminal Velocity assist scaffold")
+	for _i in range(90):
+		_apply_autopilot_assist(1.0 / 60.0)
+		pos += vel * (1.0 / 60.0)
+		vel *= pow(0.995, 1.0)
+	var distance_after := pos.distance_to(target_pos)
+	var speed_after := vel.length()
+	var moved_closer := distance_after < distance_before
+	var slowed_for_approach := speed_after < speed_before
+	_toggle_autopilot()
+	var disengaged := not autopilot_enabled and status_messages.has("Autopilot disengaged")
+	print("%s autopilotEngaged=%s autopilotDisengaged=%s autopilotMovedCloser=%s autopilotSlowedForApproach=%s distanceBefore=%.1f distanceAfter=%.1f speedBefore=%.1f speedAfter=%.1f targetBody=\"%s\" sourceLabel=terminal-velocity-autopilot-assist-scaffold oracleStatus=classic_runtime_autopilot_behavior_pending status=\"%s\"" % [AUTOPILOT_EVENT_LOG_PREFIX, str(engaged).to_lower(), str(disengaged).to_lower(), str(moved_closer).to_lower(), str(slowed_for_approach).to_lower(), distance_before, distance_after, speed_before, speed_after, str(target_body.get("name", "nearest port")), status_line])
 	get_tree().quit(0)
 
 func _print_movement_log(prefix: String, ticks: int) -> void:
@@ -3061,7 +3090,33 @@ func _toggle_autopilot() -> void:
 	if _player_disabled():
 		_set_status(_player_disabled_action_message())
 		return
-	status_line = "Autopilot not implemented yet"
+	if landed:
+		_set_status("Autopilot unavailable while landed; launch first")
+		return
+	autopilot_enabled = not autopilot_enabled
+	if autopilot_enabled:
+		_set_status("Autopilot engaged: steering toward nearest port as a Terminal Velocity assist scaffold")
+	else:
+		_set_status("Autopilot disengaged")
+
+func _apply_autopilot_assist(delta: float) -> void:
+	if not autopilot_enabled or landed:
+		return
+	var nearest := _nearest_body()
+	if nearest.is_empty():
+		autopilot_enabled = false
+		_set_status("Autopilot disengaged: no port in current system")
+		return
+	var body: Dictionary = nearest["body"]
+	var target_pos := Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+	var to_target := target_pos - pos
+	var distance: float = max(1.0, to_target.length())
+	var desired_speed: float = clamp((distance - float(body.get("r", 40))) * 0.7, 35.0, min(_ship_max_speed() * 0.72, 240.0))
+	var desired_velocity := to_target.normalized() * desired_speed
+	vel = vel.lerp(desired_velocity, clamp(delta * 1.8, 0.0, 0.18))
+	angle_deg = rad_to_deg(atan2(vel.x, -vel.y))
+	player_facing_index = _facing_frame_index(angle_deg, max(player_frames.size(), FRAME_COUNT))
+	turn_cell_progress = 0.0
 
 func _afterburner_active() -> bool:
 	return Input.is_key_pressed(KEY_Z)
@@ -4120,6 +4175,7 @@ func _help_overlay_lines() -> Array[String]:
 	return [
 		"Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
 		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
+		"Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.",
 		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops; Backspace/Delete clears route.",
 		"Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
 		"Mission objective marker: active mission destinations are highlighted on the map.",

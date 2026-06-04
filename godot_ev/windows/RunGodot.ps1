@@ -31,6 +31,7 @@ param(
     [switch]$CombatGuardrailLog,
     [switch]$SecondaryWeaponLog,
     [switch]$TargetSelectionLog,
+    [switch]$AutopilotLog,
     [switch]$NavigationGuardrailLog,
     [switch]$LegalStatusLog,
     [switch]$LegalServiceGateLog,
@@ -116,6 +117,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-secondary-weapon-log
 } elseif ($TargetSelectionLog) {
     & $Godot --headless --path $Project -- --tv-target-selection-log
+} elseif ($AutopilotLog) {
+    & $Godot --headless --path $Project -- --tv-autopilot-log
 } elseif ($NavigationGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-navigation-guardrail-log
 } elseif ($LegalStatusLog) {

@@ -162,6 +162,13 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract -v`; `./run_godot.sh tv-afterburner-log`.
   - Next action: capture or decode EV Classic afterburner acceleration/fuel behavior before promoting the constants beyond scaffold status.
 
+- [ ] Autopilot behavior and port approach assist
+  - Status: `implemented Terminal Velocity scaffold / needs Classic confirmation`
+  - Source: original EV Classic prefs screen proves `Autopilot: A`; exact Classic autopilot target choice, speed management, abort conditions, and landing interaction remain unconfirmed.
+  - Implementation/instrumentation: Godot now toggles an `A`-key assist that steers and slows toward the nearest port while preserving explicit `terminal-velocity-autopilot-assist-scaffold` labeling; Help documents the scaffold boundary and `./run_godot.sh tv-autopilot-log` / `RunGodot.ps1 -AutopilotLog` emits `TV_AUTOPILOT_EVENT` fields for engaged/disengaged state, approach-distance improvement, approach-speed reduction, and target body.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract -v`; `./run_godot.sh tv-autopilot-log`.
+  - Next action: capture or decode EV Classic autopilot behavior before promoting target/speed constants or UI wording beyond scaffold status.
+
 - [ ] Land/takeoff and hyperspace timing/sound/animation fidelity
   - Status: `instrumented / needs original comparison`
   - Source: baseline checklist marks landing/hyperspace loop partial or unknown; 2026-05-20 recovery/continuation passes found post-movement key automation no longer delivered visible `J`/`I`/`M`/`A` effects from the `Hyperspace / Rigel` state, even though arrow acceleration and animation still worked. User correction: the player must be far enough from the planet/system center before hyperspace can start, so jump attempts must be iterated after sustained movement rather than abandoned after one try. Follow-up iteration used multiple longer acceleration segments plus `J` retries; no successful transit or distance-failure message was captured.
