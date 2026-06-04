@@ -19,6 +19,7 @@
     "mission_destination_route_hint",
     "mission_trade_hybrid_capacity_planning",
     "mission_trade_refuel_delivery_loop",
+    "mission_trade_destination_sale_loop",
     "mission_abort_releases_reserved_cargo",
     "mission_deadline_failure_scaffold",
     "outfitter_ship_ladder_intro",
@@ -133,6 +134,10 @@
     "mission_trade_refuel_delivery_loop": {
       "purpose": "Mission/trade/refuel loop: accept an intro courier at Earth, carry one commodity lot in remaining hold space, block the delivery jump on empty fuel, refuel, then deliver while retaining trade cargo under explicit pending-Classic boundaries.",
       "surface": "mission/trade/refuel recovery scaffold"
+    },
+    "mission_trade_destination_sale_loop": {
+      "purpose": "Mission/trade destination-sale loop: accept an intro courier at Earth, carry one Sol Food lot in remaining hold space, deliver at Luna, then sell the trade lot at the destination-system market while preserving pending-Classic economy boundaries.",
+      "surface": "mission/trade destination market scaffold"
     },
     "mission_abort_releases_reserved_cargo": {
       "purpose": "Mission abort scaffold: abort an active courier contract without completion, release its reserved cargo, and keep source/oracle boundaries explicit pending Classic confirmation.",
