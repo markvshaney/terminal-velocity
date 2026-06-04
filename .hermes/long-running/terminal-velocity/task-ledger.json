@@ -1,37 +1,39 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local pirate avoidance Godot log scaffold verified and ready for local checkpoint commit; original EV Classic combat/escape evidence remains evidence-gated but does not block Terminal Velocity scaffold work",
+    "reason": "no active gate; safe-local help/tutorial scaffold code/docs/tests/commit completed; Classic pirate-avoidance/combat evidence remains evidence-gated but not blocking Terminal Velocity scaffold work",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Godot now exposes a deterministic noncombat pirate-avoidance route scaffold log that detects a pirate intercept, routes from Levo to linked safe port Sol, lands at Earth, confirms no projectile/explosion combat, and preserves terminal-velocity scaffold / pending EV Classic oracle labels.",
+  "current_milestone": "Godot F10 help now surfaces a pirate-avoidance scaffold hint that tells players to use map/route/refuel guidance to escape to a linked safe port before fighting when an intercept warning appears.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron_final_response",
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_under_10_minutes_after_start_verification",
+    "progress_heartbeat": "not_needed_under_10_minutes",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "bf62897 feat(godot): log pirate avoidance scaffold",
+  "last_commit": "8bcfa89 feat(godot): surface pirate avoidance help",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_pirate_avoidance_log_contract -v && ./run_godot.sh tv-pirate-avoidance-log -> OK; TV_PIRATE_AVOIDANCE_EVENT emitted evasionSucceeded=true landedAtSafePort=true combatExecuted=false",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v && ./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hasPirateAvoidanceHelp=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (139 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
-    "git commit -> bf62897 feat(godot): log pirate avoidance scaffold; ledger then amended with exact commit metadata"
+    "git diff --check -> OK",
+    "git commit -> 8bcfa89 feat(godot): surface pirate avoidance help",
+    "ledger/events JSONL parse -> OK after checkpoint update"
   ],
-  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice: exact Classic/source evidence for pirate escape/combat, visible tutorial/help promotion for scenario outcomes, combat death/reload, projectile/explosion timing, AI/reward/legal outcomes, or another bounded Terminal Velocity playability scaffold.",
+  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: exact Classic/source evidence for pirate avoidance/combat, combat death/reload, legal/reward consequences, or another bounded player-visible combat/navigation/tutorial scaffold.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 116,
+    "ahead": 118,
     "branch": "main",
     "dirty": false,
-    "head": "bf62897",
-    "status_short": "## main...origin/main [ahead 116]"
+    "head": "checkpoint commit; exact hash reported from git at final closeout to avoid self-referential amend churn",
+    "status_short": "## main...origin/main [ahead 118]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -104,5 +106,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T07:43:47Z"
+  "updated_at": "2026-06-04T07:48:30Z"
 }
