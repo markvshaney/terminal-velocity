@@ -45,6 +45,7 @@ SCENARIO_CURRICULUM = [
     'mission_abort_releases_reserved_cargo',
     'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
+    'repair_service_recovery_loop',
     'system_service_provisioning_scout',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
@@ -109,6 +110,7 @@ def initial_gameplay_state() -> dict[str, Any]:
         'ownedOutfits': {},
         'ownedWeapons': {},
         'maxHull': 100,
+        'currentHull': 100,
         'maxFuel': STARTING_FUEL,
         'distanceFromSystemCenter': MIN_JUMP_DISTANCE + 50,
     }
@@ -384,6 +386,32 @@ def _refuel(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str
         return False
     state['fuel'] = STARTING_FUEL
     trace.append({'type': 'refuel', 'system': state['currentSystem'], 'body': state['landedBody'], 'fuelAfter': state['fuel']})
+    return True
+
+
+def _repair_hull(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    if state['landedBody'] is None:
+        trace.append({'type': 'blocked_repair_hull', 'reason': 'not landed', 'system': state['currentSystem'], 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
+        return False
+    universe = load_universe()
+    inventory = station_inventory(universe, state['currentSystem'], state['landedBody'])
+    if 'repairs' not in inventory.get('services', []):
+        trace.append({'type': 'blocked_repair_hull', 'reason': 'repair service unavailable', 'system': state['currentSystem'], 'body': state['landedBody'], 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
+        return False
+    max_hull = int(state.get('maxHull', 100))
+    hull_before = int(state.get('currentHull', max_hull))
+    missing = max(0, max_hull - hull_before)
+    if missing <= 0:
+        trace.append({'type': 'blocked_repair_hull', 'reason': 'no repairs needed', 'system': state['currentSystem'], 'body': state['landedBody'], 'currentHull': hull_before, 'maxHull': max_hull, 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
+        return False
+    repair_price = int(outfit_manifest().get('repair', {}).get('pricePerHullPoint', 8))
+    cost = missing * repair_price
+    if int(state.get('credits', 0)) < cost:
+        trace.append({'type': 'blocked_repair_hull', 'reason': 'insufficient credits', 'system': state['currentSystem'], 'body': state['landedBody'], 'cost': cost, 'credits': state.get('credits', 0), 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
+        return False
+    state['credits'] = int(state.get('credits', 0)) - cost
+    state['currentHull'] = max_hull
+    trace.append({'type': 'repair_hull', 'system': state['currentSystem'], 'body': state['landedBody'], 'hullBefore': hull_before, 'hullAfter': state['currentHull'], 'maxHull': max_hull, 'pricePerHullPoint': repair_price, 'cost': cost, 'creditsAfter': state['credits'], 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
     return True
 
 
@@ -866,6 +894,18 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'credits': 60000}},
             {'type': 'buy_ship', 'shipId': 'light_freighter'},
         ]
+    if name == 'repair_service_recovery_loop':
+        return [
+            {'type': 'depart'},
+            {'type': 'set_state', 'values': {'currentHull': 65}},
+            {'type': 'repair_hull', 'expectBlocked': True},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'repair_hull', 'expectBlocked': True},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'repair_hull'},
+        ]
     if name == 'system_service_provisioning_scout':
         return [
             {'type': 'scan_station_services', 'system': 'Levo', 'body': 'Levo Spaceport', 'sourceLabel': 'original-runtime-observed'},
@@ -1028,6 +1068,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'upgraded_to_larger_ship': 'passed' if state.get('playerShipId') == 'light_freighter' and any(event.get('type') == 'buy_ship' and event.get('previousShipId') == 'shuttlecraft' and int(event.get('cargoCapacityAfter', 0)) > int(event.get('cargoCapacityBefore', 0)) for event in trace) else 'failed',
             'recorded_outfitter_ship_ladder_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-outfitter-ship-ladder-scaffold' and 'pending_original' in event.get('oracleStatus', '') for event in trace if event.get('type') in {'buy_outfit_or_weapon', 'buy_ship'}) else 'failed',
         })
+    elif name == 'repair_service_recovery_loop':
+        checks.update({
+            'blocked_in_space_repair': 'passed' if any(event.get('type') == 'blocked_repair_hull' and event.get('reason') == 'not landed' for event in trace) else 'failed',
+            'blocked_no_service_repair': 'passed' if any(event.get('type') == 'blocked_repair_hull' and event.get('reason') == 'repair service unavailable' and event.get('body') == START_BODY for event in trace) else 'failed',
+            'repaired_hull_at_service_port': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('currentHull') == state.get('maxHull') and any(event.get('type') == 'repair_hull' and event.get('body') == 'Earth' and event.get('hullBefore') == 65 and event.get('hullAfter') == event.get('maxHull') for event in trace) else 'failed',
+            'recorded_repair_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in trace if event.get('type') in {'blocked_repair_hull', 'repair_hull'}) else 'failed',
+        })
     elif name == 'system_service_provisioning_scout':
         scans = {(event.get('system'), event.get('body')): event for event in trace if event.get('type') == 'scan_station_services'}
         levo = scans.get(('Levo', 'Levo Spaceport'), {})
@@ -1133,6 +1180,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'land': _land,
         'depart': _depart,
         'refuel': _refuel,
+        'repair_hull': _repair_hull,
         'set_state': _set_state,
         'append_route_stop': _append_route_stop,
         'clear_route_queue': _clear_route_queue,

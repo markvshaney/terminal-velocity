@@ -27,6 +27,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_abort_releases_reserved_cargo',
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
+                'repair_service_recovery_loop',
                 'system_service_provisioning_scout',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
@@ -301,6 +302,27 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['upgraded_to_larger_ship'], 'passed')
         self.assertEqual(result['checks']['recorded_outfitter_ship_ladder_source_boundary'], 'passed')
         self.assertIn('terminal-velocity-outfitter-ship-ladder-scaffold', {event.get('sourceLabel') for event in result['trace']})
+
+    def test_repair_service_recovery_loop_repairs_hull_and_blocks_bad_contexts(self):
+        result = run_scripted_scenario('repair_service_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['currentHull'], result['state']['maxHull'])
+        self.assertEqual(result['checks']['blocked_in_space_repair'], 'passed')
+        self.assertEqual(result['checks']['blocked_no_service_repair'], 'passed')
+        self.assertEqual(result['checks']['repaired_hull_at_service_port'], 'passed')
+        self.assertEqual(result['checks']['recorded_repair_source_boundary'], 'passed')
+        events = [event for event in result['trace'] if event['type'] in {'blocked_repair_hull', 'repair_hull'}]
+        self.assertEqual(events[0]['reason'], 'not landed')
+        self.assertEqual(events[1]['reason'], 'repair service unavailable')
+        repair = [event for event in events if event['type'] == 'repair_hull'][-1]
+        self.assertEqual(repair['hullBefore'], 65)
+        self.assertEqual(repair['hullAfter'], 100)
+        self.assertEqual(repair['cost'], 280)
+        self.assertEqual(repair['sourceLabel'], 'terminal-velocity-repair-service-scaffold')
+        self.assertEqual(repair['oracleStatus'], 'repair_service_pending_ev_classic_runtime_trace')
 
     def test_system_service_provisioning_scout_records_service_matrix_boundaries(self):
         result = run_scripted_scenario('system_service_provisioning_scout')
