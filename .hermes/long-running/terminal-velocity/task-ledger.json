@@ -5,10 +5,10 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 205,
+    "ahead": 207,
     "dirty": false,
     "head": "checkpoint-self (current commit; see git log)",
-    "status_short": "## main...origin/main [ahead 205]"
+    "status_short": "## main...origin/main [ahead 207]"
   },
   "operational_owner_candidate": "loki-game",
   "status": "running",
@@ -56,27 +56,26 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_max_hold_trade_route_scout_fills_hold_and_sells_two_lots -v (RED before implementation: unknown scenario; GREEN after implementation OK)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_max_hold_trade_route_scout_fills_hold_and_sells_two_lots -v (OK)",
-    "python3 tools/run_gameplay_scenarios.py max_hold_trade_route_scout --pretty (success=true; creditsDelta=1560; cargoUsed=0; credits=11560)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (34 tests OK)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (149 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=30 total=30)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=30)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_trade_route_refuel_profit_loop_blocks_low_fuel_then_recovers -v && python3 tools/run_gameplay_scenarios.py trade_route_refuel_profit_loop --pretty (OK; success=true credits=11560)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (35 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (150 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=31 total=31)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=31)",
     "git diff --check (OK)",
-    "git commit -> 2e15570 feat(native): add max-hold trade route scenario"
+    "git commit -> 5c712bf feat(native): add refuel-aware trade route scenario"
   ],
   "last_checkpoint_commit": "checkpoint-self (current commit; see git log)",
-  "last_commit": "2e15570",
+  "last_commit": "5c712bf",
   "last_commits": [
-    "chore(runner): checkpoint max-hold trade route (current HEAD)",
+    "chore(runner): checkpoint refuel trade route (current HEAD)",
+    "5c712bf feat(native): add refuel-aware trade route scenario",
+    "789bb30 chore(runner): checkpoint max-hold trade route",
     "2e15570 feat(native): add max-hold trade route scenario",
-    "627b390 chore(runner): checkpoint cross-market trade scout",
-    "b8b7a3f feat(native): add cross-market trade scout scenario"
+    "627b390 chore(runner): checkpoint cross-market trade scout"
   ],
-  "current_milestone": "Committed max-hold trade-route scout scenario: the symbolic curriculum now fills the starting 20-ton hold with two Sol Food lots, returns to Levo, sells both lots, and records the multi-lot cross-market profit under pending-Classic source boundaries.",
-  "next_resume_action": "Inspect live backlog/checklists again and choose the next strongest safe-local Terminal Velocity slice; likely add another economy/trade edge, promote trade guidance into Godot help/probes, or gather bounded Classic evidence if source truth is needed.",
-  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after 2e15570. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "current_milestone": "Committed refuel-aware trade-route curriculum scenario: the symbolic harness now fills the hold at Sol, blocks the return profit leg on empty fuel, refuels at Earth, returns to Levo, sells both lots, and preserves pending-Classic source/oracle labels.",
+  "next_resume_action": "Inspect live backlog/checklists again and choose the next strongest safe-local Terminal Velocity slice; likely extend economy/mission/travel recovery coverage or promote a mature scaffold into Godot help/log surfaces if source boundaries stay explicit.",
+  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after 5c712bf. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "kind": "cronjob",
     "name": "Terminal Velocity continuous completion runner",
@@ -110,5 +109,5 @@
     "progress": "not needed; run stayed under about 10 minutes after start heartbeat and no long verification exceeded heartbeat interval",
     "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T11:36:53Z"
+  "updated_at": "2026-06-04T11:45:22.717289Z"
 }
