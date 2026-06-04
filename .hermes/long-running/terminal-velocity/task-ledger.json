@@ -5,29 +5,31 @@
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "Committed player-info weapon status slice; prior disabled service action guardrails also checkpointed.",
+  "current_milestone": "Committed deterministic target-selection log scaffold for N/R target behavior comparison surface.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     ".hermes/long-running/terminal-velocity/heartbeat.json": true,
+    "progress_heartbeats": "not_needed_under_10_min_after_start_slice",
     "send_message_available": false,
     "start_heartbeat": "file_fallback",
     "visibility_degraded": true
   },
-  "last_commit": "6b974f8",
+  "last_commit": "14c664f",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_player_inventory_overlay_contract -v",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_target_selection_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'",
     "python3 tools/run_gameplay_scenarios.py --all --pretty",
+    "./run_godot.sh tv-target-selection-log",
     "./run_godot.sh self-test",
     "git diff --check"
   ],
-  "next_resume_action": "Inspect live backlog and choose the next strongest safe-local playable/fidelity slice; current likely candidates remain route/fuel/hyperspace feedback, combat equipment/secondary scaffold, or original-runtime evidence only if safe and unlocked.",
+  "next_resume_action": "Inspect live backlog and implement the next strongest safe-local Terminal Velocity slice; likely candidates: original-runtime target-selection observation if host is unlocked/safe, secondary-weapon scaffold, or another bounded combat/navigation fidelity probe with docs/tests.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
     "branch": "main",
     "dirty": false,
-    "head": "6b974f8"
+    "head": "HEAD checkpoint commit; code slice commit 14c664f"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -100,5 +102,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T04:49:21.298702+00:00"
+  "updated_at": "2026-06-04T04:58:00.543938+00:00"
 }
