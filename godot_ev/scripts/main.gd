@@ -1545,6 +1545,8 @@ func _run_combat_guardrail_log() -> void:
 
 func _run_cargo_salvage_log() -> void:
 	_reset_travel_state()
+	loaded_pilot_name = "Cargo Salvage Test"
+	loaded_ship_name = "Holdover"
 	status_messages.clear()
 	pos = Vector2.ZERO
 	vel = Vector2.ZERO
@@ -1575,7 +1577,15 @@ func _run_cargo_salvage_log() -> void:
 	var full_hold_created := full_hold_pickup.size() > 0
 	_advance_cargo_salvage_pickups()
 	var full_hold_blocked := cargo_salvage_pickups.size() > 0 and status_messages.has("Cargo hold full; salvage remains in space")
-	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(_target_destroyed(target_index)).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), cargo_salvage_pickups.size(), status_line])
+	var remaining_pickups_before_save := cargo_salvage_pickups.size()
+	var save_succeeded := _save_current_pilot_file()
+	var saved_data := _read_pilot_file(loaded_pilot_file)
+	var saved_salvage: Array = saved_data.get("cargo_salvage_pickups", [])
+	var salvage_saved := save_succeeded and saved_salvage.size() == remaining_pickups_before_save and remaining_pickups_before_save > 0
+	cargo_salvage_pickups.clear()
+	_restore_cargo_salvage_pickups(saved_salvage)
+	var salvage_resume_visible := cargo_salvage_pickups.size() == remaining_pickups_before_save and not cargo_salvage_pickups.is_empty() and str(cargo_salvage_pickups[0].get("commodityId", "")) == "equipment"
+	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(_target_destroyed(target_index)).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), cargo_salvage_pickups.size(), str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_target_selection_log() -> void:
@@ -2424,6 +2434,7 @@ func _pilot_save_data(pilot_name: String, ship_name: String) -> Dictionary:
 		"failed_mission_history": failed_mission_history,
 		"story_flags": story_flags,
 		"commodity_hold": commodity_hold,
+		"cargo_salvage_pickups": _serialized_cargo_salvage_pickups(),
 		"owned_outfits": owned_outfits,
 		"owned_weapons": owned_weapons,
 		"reputation_scores": reputation_scores,
@@ -2565,6 +2576,7 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	failed_mission_history = data.get("failed_mission_history", failed_mission_history)
 	story_flags = data.get("story_flags", story_flags)
 	commodity_hold = data.get("commodity_hold", commodity_hold)
+	_restore_cargo_salvage_pickups(data.get("cargo_salvage_pickups", []))
 	owned_outfits = data.get("owned_outfits", owned_outfits)
 	owned_weapons = data.get("owned_weapons", owned_weapons)
 	reputation_scores = data.get("reputation_scores", reputation_scores)
@@ -2576,6 +2588,37 @@ func _apply_pilot_data(data: Dictionary) -> void:
 	while status_messages.size() > 6:
 		status_messages.remove_at(0)
 	turn_cell_progress = 0.0
+
+func _serialized_cargo_salvage_pickups() -> Array[Dictionary]:
+	var serialized: Array[Dictionary] = []
+	for pickup in cargo_salvage_pickups:
+		var pickup_position: Vector2 = pickup.get("position", Vector2.ZERO)
+		serialized.append({
+			"position": {"x": pickup_position.x, "y": pickup_position.y},
+			"commodityId": str(pickup.get("commodityId", "equipment")),
+			"tons": int(pickup.get("tons", 0)),
+			"targetIndex": int(pickup.get("targetIndex", -1)),
+			"sourceLabel": str(pickup.get("sourceLabel", "terminal-velocity-combat-salvage-scaffold")),
+			"oracleStatus": str(pickup.get("oracleStatus", "classic_runtime_loot_cargo_behavior_pending")),
+		})
+	return serialized
+
+func _restore_cargo_salvage_pickups(saved_pickups: Variant) -> void:
+	cargo_salvage_pickups.clear()
+	if typeof(saved_pickups) != TYPE_ARRAY:
+		return
+	for saved in saved_pickups:
+		if typeof(saved) != TYPE_DICTIONARY:
+			continue
+		var saved_position: Dictionary = saved.get("position", {})
+		cargo_salvage_pickups.append({
+			"position": Vector2(float(saved_position.get("x", 0.0)), float(saved_position.get("y", 0.0))),
+			"commodityId": str(saved.get("commodityId", "equipment")),
+			"tons": int(saved.get("tons", 0)),
+			"targetIndex": int(saved.get("targetIndex", -1)),
+			"sourceLabel": str(saved.get("sourceLabel", "terminal-velocity-combat-salvage-scaffold")),
+			"oracleStatus": str(saved.get("oracleStatus", "classic_runtime_loot_cargo_behavior_pending")),
+		})
 
 func _enter_ship_from_title() -> void:
 	if loaded_pilot_name.strip_edges() == "":
