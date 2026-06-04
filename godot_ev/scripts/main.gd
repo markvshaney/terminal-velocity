@@ -1469,6 +1469,7 @@ func _run_combat_log() -> void:
 	var combat_reward_inventory_visible := _player_inventory_lines().has(_combat_reward_inventory_line()) and _combat_reward_inventory_line().contains("Combat rewards: 1 disable(s), 25 credits")
 	var combat_reward_hud_visible := _combat_reward_hud_fragment() == "    Rewards: 1 disable(s)/25 cr"
 	var combat_reward_last_target_visible := _combat_reward_inventory_line().contains("Last reward: Contact 1, 25 credits")
+	var combat_reward_status_visible := status_messages.has("Contact 1 disabled; reward +25 cr — TV scaffold, Classic bounty pending")
 	primary_weapon_cooldown_frames = 0.0
 	var destroyed_target_blocked := not _spawn_primary_projectile()
 	var retargeted_after_destroyed := status_messages.has("Target already disabled; retargeting to next active contact")
@@ -1551,7 +1552,7 @@ func _run_combat_log() -> void:
 	var primary_sound_played := _sound_history_contains(primary_sound_id)
 	var npc_sound_played := _sound_history_contains(npc_sound_id)
 	var explosion_sound_played := _sound_history_contains(explosion_sound_id)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s combatRewardPaid=%s combatRewardAmount=%d combatRewardRecorded=%s combatRewardSaved=%s combatRewardResumeVisible=%s combatRewardInventoryVisible=%s combatRewardHudVisible=%s combatRewardLastTargetVisible=%s creditsBeforeDestroy=%d creditsAfterDestroy=%d destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s disabledMovementBlocked=%s disabledSaveBlocked=%s disabledServiceRefuelBlocked=%s disabledServiceRepairBlocked=%s disabledServiceClemencyBlocked=%s disabledMissionAcceptBlocked=%s disabledTradeBuyBlocked=%s disabledTradeSellBlocked=%s disabledOutfitBuyBlocked=%s disabledShipBuyBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(combat_reward_paid), combat_reward_amount, str(combat_reward_recorded), str(combat_reward_saved), str(combat_reward_resume_visible), str(combat_reward_inventory_visible), str(combat_reward_hud_visible), str(combat_reward_last_target_visible), credits_before_destroy, credits_after_destroy, str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(disabled_movement_blocked), str(disabled_save_blocked), str(disabled_service_refuel_blocked), str(disabled_service_repair_blocked), str(disabled_service_clemency_blocked), str(disabled_mission_accept_blocked), str(disabled_trade_buy_blocked), str(disabled_trade_sell_blocked), str(disabled_outfit_buy_blocked), str(disabled_ship_buy_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("id", "unknown")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s combatRewardPaid=%s combatRewardAmount=%d combatRewardRecorded=%s combatRewardSaved=%s combatRewardResumeVisible=%s combatRewardInventoryVisible=%s combatRewardHudVisible=%s combatRewardLastTargetVisible=%s combatRewardStatusVisible=%s creditsBeforeDestroy=%d creditsAfterDestroy=%d destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s disabledMovementBlocked=%s disabledSaveBlocked=%s disabledServiceRefuelBlocked=%s disabledServiceRepairBlocked=%s disabledServiceClemencyBlocked=%s disabledMissionAcceptBlocked=%s disabledTradeBuyBlocked=%s disabledTradeSellBlocked=%s disabledOutfitBuyBlocked=%s disabledShipBuyBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(combat_reward_paid), combat_reward_amount, str(combat_reward_recorded), str(combat_reward_saved), str(combat_reward_resume_visible), str(combat_reward_inventory_visible), str(combat_reward_hud_visible), str(combat_reward_last_target_visible), str(combat_reward_status_visible), credits_before_destroy, credits_after_destroy, str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(disabled_movement_blocked), str(disabled_save_blocked), str(disabled_service_refuel_blocked), str(disabled_service_repair_blocked), str(disabled_service_clemency_blocked), str(disabled_mission_accept_blocked), str(disabled_trade_buy_blocked), str(disabled_trade_sell_blocked), str(disabled_outfit_buy_blocked), str(disabled_ship_buy_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, int(target_shields.get(target_index, 0)), before_hull, int(target_hulls.get(target_index, 0)), before_player_shields, player_shields, before_player_hull, player_hull, primary_weapon.get("id", "unknown"), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	print("TV_SOUND_EVENT primaryWeaponSound=%s primaryWeaponSoundPlayed=%s npcWeaponSound=%s npcWeaponSoundPlayed=%s explosionSound=%s explosionSoundPlayed=%s sourceLabel=decoded-resource-backed-sound-binding oracleStatus=classic_runtime_sound_timing_pending" % [primary_sound_id, str(primary_sound_played), npc_sound_id, str(npc_sound_played), explosion_sound_id, str(explosion_sound_played)])
 	get_tree().quit(0)
 
@@ -3896,13 +3897,13 @@ func _apply_projectile_hit(projectile: Dictionary, target_index: int) -> void:
 	target_hulls[target_index] = hull
 	if _target_destroyed(target_index):
 		_record_explosion_event(target_index)
-		_award_combat_disable_reward(target_index)
+		var combat_reward_amount := _award_combat_disable_reward(target_index)
 		var government_name := _current_government_name()
 		if _legal_patrol_hostile_posture_active(government_name):
 			_apply_reputation_event("destroy_patrol", government_name)
 			_set_status(_legal_patrol_attack_message(government_name))
 		else:
-			_set_status("Contact %d disabled" % [target_index + 1])
+			_set_status("Contact %d disabled; reward +%d cr — TV scaffold, Classic bounty pending" % [target_index + 1, combat_reward_amount])
 	else:
 		_set_status("Contact %d hit: shield %d hull %d" % [target_index + 1, shields, hull])
 
@@ -3920,10 +3921,10 @@ func _record_explosion_event(target_index: int) -> void:
 	_play_sound(_sound_binding_for_combat("shipExplodes"))
 	_spawn_cargo_salvage_pickup(target_index, explosion_position)
 
-func _award_combat_disable_reward(target_index: int) -> void:
+func _award_combat_disable_reward(target_index: int) -> int:
 	for reward in combat_reward_history:
 		if int(reward.get("targetIndex", -1)) == target_index:
-			return
+			return 0
 	var reward_amount := 25
 	credits += reward_amount
 	combat_reward_history.append({
@@ -3933,6 +3934,7 @@ func _award_combat_disable_reward(target_index: int) -> void:
 		"sourceLabel": "terminal-velocity-combat-reward-scaffold",
 		"oracleStatus": "classic_runtime_combat_reward_behavior_pending",
 	})
+	return reward_amount
 
 func _spawn_cargo_salvage_pickup(target_index: int, pickup_position: Vector2) -> Dictionary:
 	var commodity_id := "equipment"
