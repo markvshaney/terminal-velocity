@@ -265,6 +265,8 @@ class NativeEvModelTests(unittest.TestCase):
             'disabledSecondaryBlocked=%s',
             'disabledChangeSecondaryBlocked=%s',
             'disabledAutopilotGuidance=%s',
+            'disabledHyperModeGuidance=%s',
+            'disabledHyperSelectGuidance=%s',
             'recoveryTriggered=%s',
             'playerRecovered=%s',
             'recoveryStatusVisible=%s',
