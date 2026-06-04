@@ -1366,6 +1366,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_autopilot_help := false
 	var has_repair_help := false
 	var has_combat_help := false
+	var has_target_detail_help := false
 	var has_combat_rewards_help := false
 	var has_salvage_help := false
 	var has_recovery_help := false
@@ -1383,6 +1384,8 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_repair_help = true
 		if str(line).contains("Combat: Tab fires primary"):
 			has_combat_help = true
+		if str(line).contains("Target scanner: selected contacts show"):
+			has_target_detail_help = true
 		if str(line).contains("Combat rewards: Player Info summarizes"):
 			has_combat_rewards_help = true
 		if str(line).contains("Salvage: fly over green salvage markers"):
@@ -1395,7 +1398,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_contraband_help = true
 		if str(line).contains("Mission deadlines: Mission Log and Player Info show"):
 			has_mission_deadline_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasMissionDeadlineHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_mission_deadline_help), str(hints[0]) if not hints.is_empty() else ""])
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasMissionDeadlineHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_mission_deadline_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
@@ -4795,6 +4798,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
 		"Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
+		"Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.",
 		"Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.",
 		"Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.",
 		"Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
