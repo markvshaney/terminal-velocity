@@ -1,6 +1,7 @@
 param(
     [switch]$SelfTest,
     [switch]$MovementLog,
+    [switch]$AfterburnerLog,
     [switch]$TravelEventLog,
     [switch]$LandedUiMatrix,
     [switch]$MapRouteLog,
@@ -54,6 +55,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project --script "res://scripts/self_test.gd"
 } elseif ($MovementLog) {
     & $Godot --headless --path $Project -- --tv-movement-log
+} elseif ($AfterburnerLog) {
+    & $Godot --headless --path $Project -- --tv-afterburner-log
 } elseif ($TravelEventLog) {
     & $Godot --headless --path $Project -- --tv-travel-event-log
 } elseif ($LandedUiMatrix) {

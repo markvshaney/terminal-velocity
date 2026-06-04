@@ -224,6 +224,8 @@ For every behavior row, record:
   - Current Shuttlecraft output shape includes `tickCount`, `facingIndex`, `angle`, `velocity`, `position`, `acceleration`, `maxSpeed`, `turning`, and `turnCellsPerSecond`.
 - [x] Deterministic turn/thrust scenarios: after N ticks of left/right/thrust/no-input.
   - Status: `terminal-velocity-observed`; covered by `RunGodot.ps1 -MovementLog` and `native_ev.tests.test_model.NativeEvModelTests.test_godot_deterministic_movement_log_contract`.
+- [x] Afterburner acceleration/fuel scaffold log.
+  - Status: `terminal-velocity-observed`; `./run_godot.sh tv-afterburner-log` / `RunGodot.ps1 -AfterburnerLog` prints normal-vs-afterburner speed, fuel drain, multiplier, fuel-use scaffold constants, and `oracleStatus=classic_runtime_afterburner_fuel_curve_pending`. EV Classic prefs prove the `Z` Afterburner key, but exact fuel curve/timing still needs original-runtime or decoded-resource confirmation before fidelity promotion.
 - [x] Event log for landing/takeoff/hyperspace transitions.
   - Status: `terminal-velocity-observed`; `godot_ev/scripts/main.gd` supports `--tv-travel-event-log`, and `godot_ev/windows/RunGodot.ps1 -TravelEventLog` runs it headlessly.
 - [x] Event log for target acquisition, weapon firing, projectile spawn, hit, and explosion.

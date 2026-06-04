@@ -155,6 +155,13 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Implementation/instrumentation: `RunGodot.ps1 -MovementLog` emits `right_turn`, `left_turn`, `thrust`, `coast`, and `thrust_right_turn` scenarios with tick count, facing index, angle, velocity, position, and selected ship physics fields.
   - Next action: capture original-runtime acceleration/max-speed/drift against the same scenario shape, then tune Terminal Velocity integration if the deterministic logs diverge.
 
+- [ ] Afterburner acceleration and fuel-use behavior
+  - Status: `implemented Terminal Velocity scaffold / needs Classic confirmation`
+  - Source: original EV Classic prefs screen proves `Afterburner: Z`; exact acceleration multiplier, fuel/energy consumption, sound, and failure behavior remain unconfirmed.
+  - Implementation/instrumentation: Godot treats `Z` as afterburner thrust, applies a Terminal Velocity scaffold multiplier/fuel drain, blocks with visible no-fuel guidance, and exposes `./run_godot.sh tv-afterburner-log` / `RunGodot.ps1 -AfterburnerLog` with `speedBoosted`, `fuelDrained`, `thrustMultiplier`, and `fuelPerSecond` fields under `sourceLabel=terminal-velocity-afterburner-scaffold` / `oracleStatus=classic_runtime_afterburner_fuel_curve_pending`.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract -v`; `./run_godot.sh tv-afterburner-log`.
+  - Next action: capture or decode EV Classic afterburner acceleration/fuel behavior before promoting the constants beyond scaffold status.
+
 - [ ] Land/takeoff and hyperspace timing/sound/animation fidelity
   - Status: `instrumented / needs original comparison`
   - Source: baseline checklist marks landing/hyperspace loop partial or unknown; 2026-05-20 recovery/continuation passes found post-movement key automation no longer delivered visible `J`/`I`/`M`/`A` effects from the `Hyperspace / Rigel` state, even though arrow acceleration and animation still worked. User correction: the player must be far enough from the planet/system center before hyperspace can start, so jump attempts must be iterated after sustained movement rather than abandoned after one try. Follow-up iteration used multiple longer acceleration segments plus `J` retries; no successful transit or distance-failure message was captured.

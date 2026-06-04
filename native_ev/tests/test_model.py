@@ -615,6 +615,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Event log for landing/takeoff/hyperspace transitions', checklist)
         self.assertIn('Full landed button/option walkthrough by port', checklist)
 
+    def test_godot_afterburner_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        checklist = (root / 'docs' / 'checklists' / 'ev-classic-behavior-baseline-checklist.md').read_text()
+        for symbol in [
+            '--tv-afterburner-log',
+            'func _run_afterburner_log',
+            'TV_AFTERBURNER_EVENT',
+            'AFTERBURNER_THRUST_MULTIPLIER',
+            'AFTERBURNER_FUEL_PER_SECOND',
+            'speedBoosted=%s',
+            'fuelDrained=%s',
+            'sourceLabel=terminal-velocity-afterburner-scaffold',
+            'oracleStatus=classic_runtime_afterburner_fuel_curve_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-afterburner-log', launcher)
+        self.assertIn('[switch]$AfterburnerLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-afterburner-log', run_script)
+        self.assertIn('Afterburner acceleration/fuel scaffold', checklist)
+
     def test_godot_map_route_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

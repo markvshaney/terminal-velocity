@@ -24,6 +24,7 @@ const MOVEMENT_LOG_LEFT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=left_turn ticks
 const MOVEMENT_LOG_THRUST_PREFIX := "TV_MOVEMENT_LOG scenario=thrust ticks=30 ship="
 const MOVEMENT_LOG_COAST_PREFIX := "TV_MOVEMENT_LOG scenario=coast ticks=30 ship="
 const MOVEMENT_LOG_THRUST_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=thrust_right_turn ticks=30 ship="
+const AFTERBURNER_EVENT_LOG_PREFIX := "TV_AFTERBURNER_EVENT"
 const TRAVEL_EVENT_LOG_PREFIX := "TV_TRAVEL_EVENT"
 const LANDED_UI_MATRIX_PREFIX := "TV_LANDED_UI_MATRIX"
 const MAP_ROUTE_EVENT_LOG_PREFIX := "TV_MAP_ROUTE_EVENT"
@@ -62,6 +63,8 @@ const CONTRABAND_RISK_EVENT_LOG_PREFIX := "TV_CONTRABAND_RISK_EVENT"
 const LEGAL_RESOURCE_SEMANTICS_SOURCE_BASIS := "sourceBasis=EV Classic Resource Bible: govt CrimeTol/penalties, interceptor scans, mission AvailRecord/ScanGovt/PayVal"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 const MIN_HYPERSPACE_DISTANCE_FROM_CENTER := 450.0
+const AFTERBURNER_THRUST_MULTIPLIER := 1.75
+const AFTERBURNER_FUEL_PER_SECOND := 2.0
 
 var repo_root := ""
 var universe := {}
@@ -144,6 +147,7 @@ var player_shields := 0
 var player_hull := 0
 var player_shield_recharge_progress := 0.0
 var primary_weapon_cooldown_frames := 0.0
+var afterburner_fuel_progress := 0.0
 var _last_contraband_scan_outcome: Dictionary = {}
 var player_ship_id := "shuttlecraft"
 var cargo_space := 20
@@ -166,6 +170,8 @@ func _ready() -> void:
 		call_deferred("_capture_prefs_screenshot_and_quit")
 	if OS.get_cmdline_args().has("--tv-movement-log") or OS.get_cmdline_user_args().has("--tv-movement-log"):
 		call_deferred("_run_deterministic_movement_log")
+	if OS.get_cmdline_args().has("--tv-afterburner-log") or OS.get_cmdline_user_args().has("--tv-afterburner-log"):
+		call_deferred("_run_afterburner_log")
 	if OS.get_cmdline_args().has("--tv-travel-event-log") or OS.get_cmdline_user_args().has("--tv-travel-event-log"):
 		call_deferred("_run_travel_event_log")
 	if OS.get_cmdline_args().has("--tv-landed-ui-matrix") or OS.get_cmdline_user_args().has("--tv-landed-ui-matrix"):
@@ -486,7 +492,8 @@ func _handle_input(delta: float) -> void:
 		turn_dir -= 1
 	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 		turn_dir += 1
-	_apply_movement_controls(delta, turn_dir, Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP) or _afterburner_active(), Input.is_key_pressed(KEY_DOWN))
+	var afterburner := _afterburner_active()
+	_apply_movement_controls(delta, turn_dir, Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP) or afterburner, Input.is_key_pressed(KEY_DOWN), afterburner)
 
 func _ship_acceleration() -> float:
 	# source-backed EV Data.rez ship physics: raw acceleration field from the
@@ -504,7 +511,7 @@ func _ship_turn_cells_per_second() -> float:
 	# facing cells/s for turning=60, so the runtime scale is 0.375.
 	return float(player_ship.get("turning", 60.0)) * 0.375
 
-func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, braking: bool) -> void:
+func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, braking: bool, afterburner := false) -> void:
 	if _disabled_player_action_blocked():
 		return
 	if turn_dir != 0 and not player_frames.is_empty():
@@ -520,13 +527,23 @@ func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, brak
 	angle_deg = _facing_degrees(player_facing_index, max(player_frames.size(), FRAME_COUNT))
 	var nose := Vector2.UP.rotated(deg_to_rad(angle_deg))
 	if thrusting:
-		vel += nose * _ship_acceleration() * delta
+		var acceleration := _ship_acceleration()
+		if afterburner:
+			if player_fuel <= 0:
+				_set_status("Afterburner unavailable: no fuel")
+			else:
+				acceleration *= AFTERBURNER_THRUST_MULTIPLIER
+				afterburner_fuel_progress += AFTERBURNER_FUEL_PER_SECOND * delta
+				while afterburner_fuel_progress >= 1.0 and player_fuel > 0:
+					player_fuel -= 1
+					afterburner_fuel_progress -= 1.0
+		vel += nose * acceleration * delta
 		vel = vel.limit_length(_ship_max_speed())
 	if braking:
 		vel *= pow(0.90, delta * 60.0)
 
-func _advance_motion_step(delta: float, turn_dir: int, thrusting: bool, braking: bool) -> void:
-	_apply_movement_controls(delta, turn_dir, thrusting, braking)
+func _advance_motion_step(delta: float, turn_dir: int, thrusting: bool, braking: bool, afterburner := false) -> void:
+	_apply_movement_controls(delta, turn_dir, thrusting, braking, afterburner)
 	if not landed:
 		pos += vel * delta
 		vel *= pow(0.995, delta * 60.0)
@@ -556,6 +573,26 @@ func _run_deterministic_movement_log() -> void:
 		for _i in range(ticks):
 			_advance_motion_step(1.0 / 60.0, int(scenario["turn_dir"]), bool(scenario["thrusting"]), bool(scenario["braking"]))
 		_print_movement_log(str(scenario["prefix"]), ticks)
+	get_tree().quit(0)
+
+func _run_afterburner_log() -> void:
+	var ticks := 60
+	_reset_travel_state()
+	var fuel_before_normal := player_fuel
+	for _i in range(ticks):
+		_advance_motion_step(1.0 / 60.0, 0, true, false, false)
+	var normal_speed := vel.length()
+	var fuel_after_normal := player_fuel
+	_reset_travel_state()
+	afterburner_fuel_progress = 0.0
+	var fuel_before_afterburner := player_fuel
+	for _i in range(ticks):
+		_advance_motion_step(1.0 / 60.0, 0, true, false, true)
+	var afterburner_speed := vel.length()
+	var fuel_after_afterburner := player_fuel
+	var speed_boosted := afterburner_speed > normal_speed
+	var fuel_drained := fuel_after_afterburner < fuel_before_afterburner and fuel_after_normal == fuel_before_normal
+	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
 	get_tree().quit(0)
 
 func _print_movement_log(prefix: String, ticks: int) -> void:
@@ -3056,6 +3093,7 @@ func _reset_player_combat_stats() -> void:
 	player_hull = _max_player_hull()
 	player_shield_recharge_progress = 0.0
 	primary_weapon_cooldown_frames = 0.0
+	afterburner_fuel_progress = 0.0
 
 func _advance_weapon_cooldowns(delta: float) -> void:
 	primary_weapon_cooldown_frames = maxf(0.0, primary_weapon_cooldown_frames - delta * 60.0)
