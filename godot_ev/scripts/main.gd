@@ -983,13 +983,19 @@ func _run_mission_route_hint_log() -> void:
 	selected_route.append("Sirius")
 	var stale_route_before_helper := selected_route.duplicate()
 	var mission_route_queued := _route_to_active_mission_destination()
+	var route_status_line := status_line
+	var route_status_has_fuel_hint := route_status_line.contains("Route fuel:")
 	var stale_route_replaced := selected_route.size() == 1 and str(selected_route[0]) == destination_system and not selected_route.has("Sirius")
 	var fuel_before_route := player_fuel
 	var route_fuel_cost := _route_fuel_cost()
 	var pre_jump_fuel_warning := _route_fuel_warning_active()
+	player_fuel = 0
+	var low_fuel_helper_requeued := _route_to_active_mission_destination()
+	var low_fuel_route_status_line := status_line
+	var low_fuel_route_warning_visible := low_fuel_helper_requeued and low_fuel_route_status_line.contains("refuel before full route")
 	var mission_route_status := "missionRouteQueued=true" if mission_route_queued else "missionRouteQueued=false"
 	var queued_route := JSON.stringify(selected_route)
-	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s staleRouteBeforeHelper=%s staleRouteReplaced=%s route=%s routeHops=%d fuelBeforeRoute=%d routeFuelCost=%d preJumpFuelWarning=%s sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, JSON.stringify(stale_route_before_helper), str(stale_route_replaced), queued_route, selected_route.size(), fuel_before_route, route_fuel_cost, str(pre_jump_fuel_warning), status_line])
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s staleRouteBeforeHelper=%s staleRouteReplaced=%s route=%s routeHops=%d fuelBeforeRoute=%d routeFuelCost=%d preJumpFuelWarning=%s routeStatusHasFuelHint=%s lowFuelRouteWarningVisible=%s sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\" routeStatus=\"%s\" lowFuelRouteStatus=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, JSON.stringify(stale_route_before_helper), str(stale_route_replaced), queued_route, selected_route.size(), fuel_before_route, route_fuel_cost, str(pre_jump_fuel_warning), str(route_status_has_fuel_hint), str(low_fuel_route_warning_visible), low_fuel_route_status_line, route_status_line, low_fuel_route_status_line])
 	get_tree().quit(0)
 
 func _route_to_active_mission_destination() -> bool:
@@ -1005,7 +1011,10 @@ func _route_to_active_mission_destination() -> bool:
 		status_line = "Active mission has no destination"
 		return false
 	selected_route.clear()
-	return _select_map_route_to_system(destination_system)
+	var route_selected := _select_map_route_to_system(destination_system)
+	if route_selected:
+		status_line = "Mission route queued to %s. %s" % [destination_system, _route_fuel_hint_line()]
+	return route_selected
 
 func _run_mission_abort_log() -> void:
 	_reset_travel_state()

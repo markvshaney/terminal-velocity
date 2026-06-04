@@ -186,6 +186,7 @@ Mission route-hint scenario contract:
   - mission acceptance and route queue booleans (`missionAccepted=true`, `missionRouteQueued=true`);
   - stale-route replacement guard (`staleRouteReplaced=true`) proving the `G` helper clears an unrelated queued/manual route before queuing the active mission destination;
   - queued route and route hop count (`route=[...]`, `routeHops`);
+  - player-visible route fuel status from the `G` helper (`routeStatusHasFuelHint=true`) and a low-fuel warning branch (`lowFuelRouteWarningVisible=true`, `refuel before full route`);
   - `sourceLabel=terminal-velocity-design-scaffold`;
   - `oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace`.
 
