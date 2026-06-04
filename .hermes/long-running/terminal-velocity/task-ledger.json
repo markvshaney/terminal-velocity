@@ -5,23 +5,22 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "player_info_repair_status",
+  "current_milestone": "profile_addressed_selftest",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    "progress_heartbeats": "wrote file progress heartbeat before first commit because send_message tool unavailable",
+    "progress_heartbeats": "not needed; run stayed under the long-run heartbeat threshold after start heartbeat",
     "start_heartbeat": "wrote .hermes/long-running/terminal-velocity/heartbeat.json because send_message tool unavailable",
     "visibility_degraded": "send_message tool unavailable; heartbeat file fallback used"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_player_inventory_overlay_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_active_mission_deadline_log_contract -v -> OK",
-    "./run_godot.sh tv-active-mission-deadline-log -> playerInfoLines include Hull: 100/100 (repair cost 0 cr), mission/deadline visible",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_prefs_screenshot_artifact -v -> OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic systems=10 ships=26 argosyFrames=36 soundsLoaded=1 gameplayScenarios=20 pictsLoaded=22 prefScreen=original-ev-classic-observed",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (127 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20 prefScreen=original-ev-classic-observed",
     "git diff --check -> OK",
-    "git commit -> feat(godot): show hull repair status in player info (cc061c7)"
+    "git commit -> test(godot): report classic profile in selftest (2e99c45)"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic Mission Computer/repair/outfitter evidence, improve route/fuel/original-runtime comparison probes, extend player-visible service/mission/shipyard helper feedback, or add another legal/map/fuel/mission guardrail with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: compare travel event logs against original-runtime captures, run/prepare bounded landed service matrix evidence, add combat target/acquire/projectile/hit/explosion event log coverage, or implement another player-visible legal/map/fuel/mission helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -96,5 +95,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T02:04:46.021942Z"
+  "updated_at": "2026-06-04T02:11:45Z"
 }
