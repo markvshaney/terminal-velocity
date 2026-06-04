@@ -225,11 +225,14 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_combat_log',
             'var projectiles: Array[Dictionary] = []',
             'var explosion_events: Array[Dictionary] = []',
+            'var primary_weapon_cooldown_frames := 0.0',
             'var target_shields: Dictionary = {}',
             'var target_hulls: Dictionary = {}',
             'func _primary_weapon_stats() -> Dictionary:',
             'func _spawn_primary_projectile() -> bool:',
             'func _advance_projectiles(delta: float) -> void:',
+            'func _advance_weapon_cooldowns(delta: float) -> void:',
+            'func _primary_weapon_reload_message() -> String:',
             'func _advance_explosion_events(delta: float) -> void:',
             'func _apply_projectile_hit(projectile: Dictionary, target_index: int) -> void:',
             'func _record_explosion_event(target_index: int) -> void:',
@@ -256,6 +259,7 @@ class NativeEvModelTests(unittest.TestCase):
             'sourceMassDmg=%d',
             'sourceEnergyDmg=%d',
             'sourceReload=%d',
+            'Primary weapon reloading; wait for source-backed reload cadence',
             'sourceCount=%d',
             'appliedShieldDamage=%d',
             'appliedHullDamage=%d',
@@ -269,6 +273,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Combat: Tab fires primary; N cycles targets; R selects closest target', main_script)
         self.assertIn('tv-combat-log', run_script)
         self.assertIn('[switch]$CombatLog', windows_script)
+
+    def test_godot_combat_guardrail_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_COMBAT_GUARDRAIL_EVENT',
+            '--tv-combat-guardrail-log',
+            'func _run_combat_guardrail_log',
+            'firstShotSpawned=%s',
+            'immediateSecondShotBlocked=%s',
+            'cooldownFrames=%d',
+            'cooldownCleared=%s',
+            'shotAfterCooldownSpawned=%s',
+            'secondaryBlocked=%s',
+            'sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold',
+            'oracleStatus=classic_runtime_weapon_timing_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-combat-guardrail-log', run_script)
+        self.assertIn('[switch]$CombatGuardrailLog', windows_script)
 
     def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
         root = Path(__file__).resolve().parents[2]

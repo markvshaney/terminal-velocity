@@ -142,6 +142,7 @@ var target_hulls: Dictionary = {}
 var player_shields := 0
 var player_hull := 0
 var player_shield_recharge_progress := 0.0
+var primary_weapon_cooldown_frames := 0.0
 var _last_contraband_scan_outcome: Dictionary = {}
 var player_ship_id := "shuttlecraft"
 var cargo_space := 20
@@ -468,6 +469,7 @@ func _process(delta: float) -> void:
 		pos += vel * delta
 		vel *= pow(0.995, delta * 60.0)
 		_recharge_player_shields(delta)
+		_advance_weapon_cooldowns(delta)
 		_advance_projectiles(delta)
 	queue_redraw()
 
@@ -1294,6 +1296,7 @@ func _run_combat_log() -> void:
 	if not _target_destroyed(target_index):
 		target_shields[target_index] = 0
 		target_hulls[target_index] = applied_hull_damage
+		primary_weapon_cooldown_frames = 0.0
 		destroy_prepared = true
 		destroy_projectile_spawned = _spawn_primary_projectile()
 		for _i in range(90):
@@ -1314,7 +1317,27 @@ func _run_combat_log() -> void:
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
-	_run_combat_log()
+	_reset_travel_state()
+	status_messages.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	_select_closest_target()
+	primary_weapon_cooldown_frames = 0.0
+	var first_shot_spawned := _spawn_primary_projectile()
+	var cooldown_after_first := primary_weapon_cooldown_frames
+	var second_shot_spawned := _spawn_primary_projectile()
+	var cooldown_blocked := not second_shot_spawned and status_messages.has(_primary_weapon_reload_message())
+	_advance_weapon_cooldowns(cooldown_after_first / 60.0)
+	var cooldown_cleared := primary_weapon_cooldown_frames <= 0.0
+	var third_shot_spawned := _spawn_primary_projectile()
+	var secondary_blocked_before := status_messages.has("Secondary weapon not loaded; primary combat scaffold available with Tab")
+	_fire_secondary_weapon()
+	var secondary_blocked := status_messages.has("Secondary weapon not loaded; primary combat scaffold available with Tab") and not secondary_blocked_before
+	var primary_weapon := _primary_weapon_stats()
+	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
+	var source_reload := int(source_fields.get("Reload", primary_weapon.get("reloadFrames", 0)))
+	print("%s firstShotSpawned=%s immediateSecondShotBlocked=%s cooldownFrames=%d cooldownCleared=%s shotAfterCooldownSpawned=%s secondaryBlocked=%s sourceReload=%d sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(first_shot_spawned), str(cooldown_blocked), int(cooldown_after_first), str(cooldown_cleared), str(third_shot_spawned), str(secondary_blocked), source_reload, status_line])
+	get_tree().quit(0)
 
 func _run_navigation_guardrail_log() -> void:
 	_reset_travel_state()
@@ -2880,6 +2903,13 @@ func _reset_player_combat_stats() -> void:
 	player_shields = _max_player_shields()
 	player_hull = _max_player_hull()
 	player_shield_recharge_progress = 0.0
+	primary_weapon_cooldown_frames = 0.0
+
+func _advance_weapon_cooldowns(delta: float) -> void:
+	primary_weapon_cooldown_frames = maxf(0.0, primary_weapon_cooldown_frames - delta * 60.0)
+
+func _primary_weapon_reload_message() -> String:
+	return "Primary weapon reloading; wait for source-backed reload cadence"
 
 func _recharge_player_shields(delta: float) -> void:
 	if player_shields >= _max_player_shields() or player_hull <= 0:
@@ -2907,6 +2937,9 @@ func _spawn_primary_projectile() -> bool:
 	var weapon := _primary_weapon_stats()
 	if targets.is_empty() or weapon.is_empty():
 		return false
+	if primary_weapon_cooldown_frames > 0.0:
+		_set_status(_primary_weapon_reload_message())
+		return false
 	var target_index := selected_target_index % targets.size()
 	if _target_destroyed(target_index):
 		_set_status("Target already disabled")
@@ -2926,6 +2959,7 @@ func _spawn_primary_projectile() -> bool:
 		"targetIndex": target_index,
 	}
 	projectiles.append(projectile)
+	primary_weapon_cooldown_frames = float(weapon.get("reloadFrames", weapon.get("sourceStockWeaponFields", {}).get("Reload", 0)))
 	_set_status("Fired %s at Contact %d" % [str(weapon.get("name", "Primary")), target_index + 1])
 	_play_sound("ui_click")
 	return true
