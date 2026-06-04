@@ -223,6 +223,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasLegalStatusHelp=%s',
             'hasMissionDeadlineHelp=%s',
             'hasTradeRouteHelp=%s',
+            'hasMapServiceHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
