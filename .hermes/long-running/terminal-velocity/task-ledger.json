@@ -5,7 +5,7 @@
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Combat cargo salvage scaffold now persists blocked in-space salvage pickups through the Godot pilot save/resume path, with deterministic cargo-salvage log coverage for save/resume visibility.",
+  "current_milestone": "Pilot save/resume now persists the selected secondary weapon index alongside ship, inventory, missions, cargo, salvage, status, and Strict Play state.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
@@ -14,23 +14,23 @@
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "aa5dc1d feat(godot): persist combat salvage pickups",
+  "last_commit": "53efda6 feat(godot): persist selected secondary weapon",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_cargo_salvage_log_contract -v -> OK",
-    "./run_godot.sh tv-cargo-salvage-log -> TV_CARGO_SALVAGE_EVENT ... salvageSaveSucceeded=true salvageSaved=true salvageResumeVisible=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_pilot_save_resume_log_contract -v -> OK",
+    "./run_godot.sh tv-pilot-save-resume-log -> TV_PILOT_SAVE_RESUME_EVENT ... selectedSecondaryRoundTrip=true",
     "python3 -m unittest native_ev.tests.test_model -q -> OK (109 tests)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): persist combat salvage pickups (aa5dc1d)"
+    "git commit -> feat(godot): persist selected secondary weapon (53efda6)"
   ],
-  "next_resume_action": "Continue with the next strongest safe-local Terminal Velocity gameplay/fidelity slice; likely candidates include Classic/resource evidence for exact loot/reward behavior, combat/explosion timing, AI retaliation cadence, secondary ammo semantics, or another bounded mission/map/fuel/combat probe.",
+  "next_resume_action": "Continue with the next strongest safe-local Terminal Velocity gameplay/fidelity slice; likely candidates include exact Classic/resource evidence for secondary weapon semantics, combat/explosion timing, AI retaliation cadence, loot/reward behavior, or another bounded mission/map/fuel/combat probe.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 87,
+    "ahead": 89,
     "branch": "main",
     "dirty": false,
-    "head": "aa5dc1d"
+    "head": "53efda6"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -103,5 +103,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T05:51:36Z"
+  "updated_at": "2026-06-04T05:56:25Z"
 }
