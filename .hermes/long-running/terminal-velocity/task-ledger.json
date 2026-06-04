@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Committed Godot F10/help-log coverage for mission/trade hybrid capacity planning guidance.",
+  "current_milestone": "Committed mission/trade hybrid and ship-ladder F10 help/log coverage for the player-strategy curriculum.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron final response",
@@ -9,27 +9,27 @@
     "start": "heartbeat.json fallback written because send_message tool unavailable in this cron surface",
     "visibility_degraded": true
   },
-  "last_commit": "1c952df",
+  "last_commit": "a72cdef",
   "last_commits": [
     "f13511f feat(godot): cover mission history help guidance"
   ],
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v (OK)",
-    "./run_godot.sh tv-gameplay-curriculum-help-log (hasMissionTradeHybridHelp=true)",
+    "./run_godot.sh tv-gameplay-curriculum-help-log (hasMissionTradeHybridHelp=true; hasShipLadderHelp=true)",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (140 tests OK)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=21 total=21)",
     "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=21)",
     "git diff --check (OK)"
   ],
-  "next_resume_action": "Inspect live backlog and choose the next source-aligned Terminal Velocity safe-local slice; likely continue promoting mission/trade/navigation curriculum outcomes into visible Godot guidance/probes or add a bounded scenario guardrail before Classic evidence-gated promotion.",
+  "next_resume_action": "Inspect live backlog and choose the next source-aligned Terminal Velocity safe-local slice; likely continue turning existing symbolic curriculum into player-visible guidance/probes, or add a bounded mission/trade/navigation/service scenario before Classic evidence-gated promotion.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 169,
+    "ahead": 171,
     "branch": "main",
     "dirty": false,
-    "head": "1c952df",
-    "status_short": "## main...origin/main [ahead 169]"
+    "head": "a72cdef",
+    "status_short": "## main...origin/main [ahead 171]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -102,5 +102,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T09:52:29.162022+00:00"
+  "updated_at": "2026-06-04T09:53:59.915862+00:00"
 }
