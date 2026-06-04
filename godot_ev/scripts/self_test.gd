@@ -123,6 +123,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"chapter_one_trade_carryover_loop",
 		"mission_trade_return_margin_guardrail",
 		"mission_abort_releases_reserved_cargo",
+		"mission_abort_reaccept_delivery_loop",
 		"mission_deadline_failure_scaffold",
 		"outfitter_ship_ladder_intro",
 		"repair_service_recovery_loop",

@@ -36,6 +36,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'chapter_one_trade_carryover_loop',
                 'mission_trade_return_margin_guardrail',
                 'mission_abort_releases_reserved_cargo',
+                'mission_abort_reaccept_delivery_loop',
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
                 'repair_service_recovery_loop',
@@ -507,6 +508,29 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(abort_event['releasedCargoTons'], 3)
         self.assertEqual(abort_event['sourceLabel'], 'terminal-velocity-mission-abort-scaffold')
         self.assertEqual(abort_event['oracleStatus'], 'mission_abort_pending_classic_runtime_or_manual_trace')
+
+    def test_mission_abort_reaccept_delivery_loop_recovers_after_abort(self):
+        result = run_scripted_scenario('mission_abort_reaccept_delivery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera'])
+        self.assertEqual(result['state']['abortedJobs'], ['intro_courier_earth_hera'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['credits'], 11800)
+        self.assertIn('story_intro_started', result['state']['storyFlags'])
+        self.assertIn('story_intro_complete', result['state']['storyFlags'])
+        self.assertEqual(result['checks']['aborted_first_attempt'], 'passed')
+        self.assertEqual(result['checks']['reaccepted_after_abort'], 'passed')
+        self.assertEqual(result['checks']['delivered_reaccepted_mission'], 'passed')
+        self.assertEqual(result['checks']['recorded_abort_reaccept_source_boundary'], 'passed')
+        accepts = [event for event in result['trace'] if event['type'] == 'accept_cargo_job' and event.get('id') == 'intro_courier_earth_hera']
+        self.assertEqual(len(accepts), 2)
+        self.assertEqual(accepts[-1]['reservedCargoTons'], 3)
+        abort = [event for event in result['trace'] if event['type'] == 'abort_mission'][-1]
+        self.assertEqual(abort['releasedCargoTons'], 3)
 
     def test_mission_deadline_failure_scaffold_releases_cargo_and_records_penalty(self):
         result = run_scripted_scenario('mission_deadline_failure_scaffold')

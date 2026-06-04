@@ -54,6 +54,7 @@ SCENARIO_CURRICULUM = [
     'chapter_one_trade_carryover_loop',
     'mission_trade_return_margin_guardrail',
     'mission_abort_releases_reserved_cargo',
+    'mission_abort_reaccept_delivery_loop',
     'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
     'repair_service_recovery_loop',
@@ -1270,6 +1271,20 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
             {'type': 'abort_active_mission', 'missionId': 'intro_courier_earth_hera'},
         ]
+    if name == 'mission_abort_reaccept_delivery_loop':
+        source_label = 'terminal-velocity-mission-abort-reaccept-scaffold'
+        oracle_status = 'mission_abort_reaccept_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'accept_cargo_job', 'id': 'intro_courier_earth_hera', 'destinationSystem': 'Centauri', 'destinationBody': 'Luna', 'tons': 3, 'pay': 1800, 'setsFlags': ['story_intro_started'], 'completionFlags': ['story_intro_complete', 'federation_trusted_courier'], 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'abort_active_mission', 'missionId': 'intro_courier_earth_hera'},
+            {'type': 'accept_cargo_job', 'id': 'intro_courier_earth_hera', 'destinationSystem': 'Centauri', 'destinationBody': 'Luna', 'tons': 3, 'pay': 1800, 'setsFlags': ['story_intro_started'], 'completionFlags': ['story_intro_complete', 'federation_trusted_courier'], 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+        ]
     if name == 'mission_deadline_failure_scaffold':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -1556,6 +1571,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'aborted_active_mission': 'passed' if any(event.get('type') == 'abort_mission' and event.get('missionId') == 'intro_courier_earth_hera' for event in trace) and not state.get('activeJobs') else 'failed',
             'released_aborted_mission_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
             'recorded_abort_source_boundary': 'passed' if any(event.get('type') == 'abort_mission' and event.get('sourceLabel') == 'terminal-velocity-mission-abort-scaffold' and 'pending_classic' in event.get('oracleStatus', '') for event in trace) else 'failed',
+        })
+    elif name == 'mission_abort_reaccept_delivery_loop':
+        mission_events = [event for event in trace if event.get('type') in {'accept_cargo_job', 'abort_mission', 'complete_cargo_job'}]
+        accepts = [event for event in trace if event.get('type') == 'accept_cargo_job' and event.get('id') == 'intro_courier_earth_hera']
+        checks.update({
+            'aborted_first_attempt': 'passed' if any(event.get('type') == 'abort_mission' and event.get('missionId') == 'intro_courier_earth_hera' and event.get('releasedCargoTons') == 3 for event in trace) and state.get('abortedJobs') == ['intro_courier_earth_hera'] else 'failed',
+            'reaccepted_after_abort': 'passed' if len(accepts) == 2 and accepts[-1].get('reservedCargoTons') == 3 else 'failed',
+            'delivered_reaccepted_mission': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['intro_courier_earth_hera'] and state.get('activeJobs') == [] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
+            'recorded_abort_reaccept_source_boundary': 'passed' if mission_events and all(event.get('sourceLabel') in {'terminal-velocity-mission-abort-reaccept-scaffold', 'terminal-velocity-mission-abort-scaffold'} and 'pending_classic' in event.get('oracleStatus', '') for event in mission_events) else 'failed',
         })
     elif name == 'mission_deadline_failure_scaffold':
         checks.update({

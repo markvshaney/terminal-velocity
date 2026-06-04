@@ -24,6 +24,7 @@
     "chapter_one_trade_carryover_loop",
     "mission_trade_return_margin_guardrail",
     "mission_abort_releases_reserved_cargo",
+    "mission_abort_reaccept_delivery_loop",
     "mission_deadline_failure_scaffold",
     "outfitter_ship_ladder_intro",
     "repair_service_recovery_loop",
@@ -157,6 +158,10 @@
     "mission_abort_releases_reserved_cargo": {
       "purpose": "Mission abort scaffold: abort an active courier contract without completion, release its reserved cargo, and keep source/oracle boundaries explicit pending Classic confirmation.",
       "surface": "mission state/recovery scaffold"
+    },
+    "mission_abort_reaccept_delivery_loop": {
+      "purpose": "Mission abort/reaccept recovery scaffold: accept the intro courier, abort and release its reserved cargo, reaccept the same Terminal Velocity scaffold mission, deliver it, and retain abort history while keeping Classic behavior confirmation pending.",
+      "surface": "mission state/reaccept recovery scaffold"
     },
     "mission_deadline_failure_scaffold": {
       "purpose": "Mission deadline/failure scaffold: accept a timed delivery, advance past the limit, release reserved cargo, set a failure flag, and apply the EV Classic Resource Bible-backed half-CompReward reputation penalty while retaining runtime-UI confirmation as pending.",

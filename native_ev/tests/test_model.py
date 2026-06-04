@@ -181,6 +181,7 @@ class NativeEvModelTests(unittest.TestCase):
         self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
 
         self.assertEqual(manifest['scenarioOrder'], available_scenarios())
+        self.assertEqual(set(manifest['scenarios']), set(manifest['scenarioOrder']))
         self.assertIn('native_ev/data/gameplay_curriculum.json', self_test_script)
         self.assertIn('gameplayScenarios=%d', self_test_script)
         self.assertIn('_verify_gameplay_curriculum', self_test_script)
