@@ -15,9 +15,16 @@ First load and follow these skills:
 - game-prototyping if building a gameplay slice
 - systematic-debugging if blocked by tool/runtime failures
 
+Mandatory long-task ledger preflight before implementation:
+- read `.hermes/long-running/terminal-velocity/task-ledger.json` with line numbers;
+- read the latest tail of `.hermes/long-running/terminal-velocity/events.jsonl`;
+- apply `mandatory_resume_first_actions`, `stopping_state_contract`, `source_artifact_policy`, and `do_not_redo` from the ledger;
+- verify live cron/watchdog state only when the task involves runner cadence or silent-stop concerns.
+
 Stored-artifact regression checklist before implementation:
 - exact artifact read with line numbers?
-- every skill named by the artifact loaded?
+- project-local long-task ledger and latest event tail read?
+- every skill named by the artifact/ledger loaded?
 - repo state inspected after artifact rules are active?
 - live backlog/docs inspected for the current slice?
 - post-slice gate check ready to run before any final report?
