@@ -209,6 +209,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.',
             'Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.',
             'Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.',
+            'Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.',
             'hasAutopilotHelp=%s',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
@@ -216,6 +217,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasSalvageHelp=%s',
             'hasPirateAvoidanceHelp=%s',
             'hasContrabandHelp=%s',
+            'hasMissionDeadlineHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
