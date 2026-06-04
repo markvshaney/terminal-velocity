@@ -8,11 +8,11 @@ from pathlib import Path
 
 DEFAULT_SOURCE = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_missions.json')
-METHOD = 'ev-classic-resource-bible-misn-field-map-v1'
+METHOD = 'ev-classic-resource-bible-misn-field-map-v2'
 
-# Field order through PayVal follows the EV Classic Resource Bible pages 11-13,
-# with one observed primitive field before PayVal retained as unknown/provenance
-# rather than silently skipped.
+# Field order follows the EV Classic Resource Bible mïsn definitions through
+# the late-added Flags word. Desc fields are resource IDs/pointers; keep them
+# compactly decoded as selectors rather than trying to expand proprietary text.
 FIELD_INDEX = {
     'availStel': 0,
     'availBitSet': 1,
@@ -40,12 +40,39 @@ FIELD_INDEX = {
     'completionGovernment': 23,
     'completionReward': 24,
     'failureBitSet': 25,
+    'briefText': 26,
+    'quickBrief': 27,
+    'loadCargoText': 28,
+    'dumpCargoText': 29,
+    'completionText': 30,
+    'failureText': 31,
+    'timeLimit': 32,
+    'canAbort': 33,
+    'unusedAfterCanAbort': 34,
+    'availBitClear': 35,
+    'auxShipCount': 36,
+    'auxShipDude': 37,
+    'auxShipSystem': 38,
+    'completionBitSet2': 39,
+    'flags': 40,
 }
 
 AVAIL_LOC = {
     0: 'missionComputer',
     1: 'bar',
     2: 'missionComputerAndBar',
+}
+
+MISSION_FLAGS = {
+    0x0001: 'autoAbortAfterAccept',
+    0x0002: 'hideRedDestinationArrowsOnMap',
+    0x0004: 'cannotRefuse',
+    0x0010: 'infiniteAuxShips',
+    0x0020: 'removePrepaidOutfitOnFailureOrAbort',
+    0x0040: 'applyFiveTimesCompletionRewardReversalOnAbort',
+    0x0080: 'globalPenaltyWhenJettisoningMissionCargoIgnored',
+    0x0100: 'showGreenArrowOnMapInInitialBriefing',
+    0x1000: 'criticalMissionOfferedBeforeOthersInBar',
 }
 
 
@@ -84,6 +111,14 @@ def _bit_selector(value: int) -> dict:
         return {'kind': 'mustBeSet', 'bit': value}
     if 1000 <= value <= 1255:
         return {'kind': 'mustBeClear', 'bit': value - 1000}
+    return {'kind': 'raw', 'value': value}
+
+
+def _bit_clear_selector(value: int) -> dict:
+    if value == -1:
+        return {'kind': 'ignored'}
+    if 0 <= value <= 255:
+        return {'kind': 'mustBeClear', 'bit': value}
     return {'kind': 'raw', 'value': value}
 
 
@@ -135,6 +170,43 @@ def _pay_value(value: int) -> dict:
     if -30255 <= value <= -30128:
         return {'kind': 'grantOutfitAtStart', 'outfitId': abs(value) - 30000}
     return {'kind': 'raw', 'value': value}
+
+
+def _desc_selector(value: int) -> dict:
+    if value == -1:
+        return {'kind': 'none'}
+    if value >= 128:
+        return {'kind': 'descResource', 'resourceId': value}
+    return {'kind': 'raw', 'value': value}
+
+
+def _time_limit(value: int) -> dict:
+    if value == -1:
+        return {'kind': 'none'}
+    if value >= 1:
+        return {'kind': 'days', 'days': value}
+    return {'kind': 'raw', 'value': value}
+
+
+def _can_abort(value: int) -> dict:
+    return {
+        'raw': value,
+        'canAbort': value != 0,
+        'sourceNote': 'CanAbort 0 requires ReturnStel cleanup; nonzero can be aborted and failed missions go inactive',
+    }
+
+
+def _mission_flags(value: int) -> dict:
+    unsigned = value & 0xffff
+    known_mask = 0
+    for bit in MISSION_FLAGS:
+        known_mask |= bit
+    return {
+        'rawSigned': value,
+        'rawUnsigned': unsigned,
+        'flagNames': [name for bit, name in MISSION_FLAGS.items() if unsigned & bit],
+        'unknownMask': unsigned & ~known_mask,
+    }
 
 
 def _dude_selector(value: int) -> dict:
@@ -226,12 +298,13 @@ def derive(source: Path) -> dict:
             'ordinal': int(record['ordinal']),
             'chunkIndex': int(record['chunkIndex']),
             'byteOffset': int(record['byteOffset']),
-            'fieldSource': 'EV Classic Resource Bible mïsn fields through FailBitSet, lines 249-439 of extracted text',
+            'fieldSource': 'EV Classic Resource Bible mïsn fields through Flags, lines 249-519 of extracted text',
             'rawFields': raw,
             'semanticFields': {
                 'availability': {
                     'stellar': _stel_selector(raw['availStel']),
                     'missionBitSet': _bit_selector(raw['availBitSet']),
+                    'missionBitClear': _bit_clear_selector(raw['availBitClear']),
                     'location': AVAIL_LOC.get(raw['availLoc'], 'raw:%s' % raw['availLoc']),
                     'legalRecord': _record_requirement(raw['availRecord']),
                     'combatRatingMinimum': None if raw['availRating'] == -1 else raw['availRating'],
@@ -258,12 +331,32 @@ def derive(source: Path) -> dict:
                     'behavior': _ship_behavior(raw['shipBehavior']),
                     'nameId': None if raw['shipNameId'] == -1 else raw['shipNameId'],
                 },
+                'auxiliaryShips': {
+                    'count': _ship_count(raw['auxShipCount']),
+                    'system': _ship_system_selector(raw['auxShipSystem']),
+                    'dude': _dude_selector(raw['auxShipDude']),
+                },
                 'completion': {
                     'bitSet': _bit_selector(raw['completionBitSet']),
+                    'bitSet2': _bit_selector(raw['completionBitSet2']),
                     'government': _completion_government(raw['completionGovernment']),
                     'reward': raw['completionReward'],
                     'failureRecordPenalty': -int(raw['completionReward'] / 2) if raw['completionGovernment'] != -1 else 0,
                     'failureBitSet': _bit_selector(raw['failureBitSet']),
+                },
+                'descriptions': {
+                    'briefText': _desc_selector(raw['briefText']),
+                    'quickBrief': _desc_selector(raw['quickBrief']),
+                    'loadCargoText': _desc_selector(raw['loadCargoText']),
+                    'dumpCargoText': _desc_selector(raw['dumpCargoText']),
+                    'completionText': _desc_selector(raw['completionText']),
+                    'failureText': _desc_selector(raw['failureText']),
+                    'wildcardSourceNote': 'Resource Bible supports <DSY>, <DST>, <RSY>, <RST>, <CT>, <CQ>, <DL>, <PN>, <PSN>, <OSN>, and <SN> substitution in mission desc text',
+                },
+                'lifecycle': {
+                    'timeLimit': _time_limit(raw['timeLimit']),
+                    'canAbort': _can_abort(raw['canAbort']),
+                    'flags': _mission_flags(raw['flags']),
                 },
             },
         })
@@ -273,8 +366,8 @@ def derive(source: Path) -> dict:
         'sourceSha256': data['sourceSha256'],
         'sourceManifest': str(source),
         'method': METHOD,
-        'sourceBasis': 'EV Classic Resource Bible mïsn field definitions plus local primitive BRGR structure decode',
-        'recordRun': {'candidateType': run['candidateType'], 'recordSize': run['recordSize'], 'count': run['count'], 'confidence': 'manual-backed-field-map-through-payval'},
+        'sourceBasis': 'EV Classic Resource Bible mïsn field definitions through Flags plus local primitive BRGR structure decode',
+        'recordRun': {'candidateType': run['candidateType'], 'recordSize': run['recordSize'], 'count': run['count'], 'confidence': 'manual-backed-field-map-through-flags'},
         'fieldIndex': FIELD_INDEX,
         'missions': missions,
     }

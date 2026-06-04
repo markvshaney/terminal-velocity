@@ -325,20 +325,20 @@ def sourced_ev_governments_manifest(path=SOURCED_EV_GOVERNMENTS_PATH):
 
 def sourced_ev_missions_manifest(path=SOURCED_EV_MISSIONS_PATH):
     data = json.loads(path.read_text())
-    if data.get('method') != 'ev-classic-resource-bible-misn-field-map-v1':
+    if data.get('method') != 'ev-classic-resource-bible-misn-field-map-v2':
         raise ValueError('sourced EV missions manifest has unexpected extraction method')
-    if data.get('sourceBasis') != 'EV Classic Resource Bible mïsn field definitions plus local primitive BRGR structure decode':
+    if data.get('sourceBasis') != 'EV Classic Resource Bible mïsn field definitions through Flags plus local primitive BRGR structure decode':
         raise ValueError('sourced EV missions manifest has unexpected source basis')
     missions = data.get('missions', [])
     if len(missions) < 100:
         raise ValueError('sourced EV missions manifest has too few missions')
     field_index = data.get('fieldIndex', {})
-    for key in ['availStel', 'availBitSet', 'availLoc', 'availRecord', 'availRating', 'availRandom', 'travelStel', 'returnStel', 'cargoType', 'cargoQuantity', 'pickupMode', 'dropOffMode', 'scanGovernment', 'failIfScanned', 'unknownFieldBeforePayValue', 'payValue', 'shipCount', 'shipSystem', 'shipDude', 'shipGoal', 'shipBehavior', 'shipNameId', 'completionBitSet', 'completionGovernment', 'completionReward', 'failureBitSet']:
+    for key in ['availStel', 'availBitSet', 'availLoc', 'availRecord', 'availRating', 'availRandom', 'travelStel', 'returnStel', 'cargoType', 'cargoQuantity', 'pickupMode', 'dropOffMode', 'scanGovernment', 'failIfScanned', 'unknownFieldBeforePayValue', 'payValue', 'shipCount', 'shipSystem', 'shipDude', 'shipGoal', 'shipBehavior', 'shipNameId', 'completionBitSet', 'completionGovernment', 'completionReward', 'failureBitSet', 'briefText', 'quickBrief', 'loadCargoText', 'dumpCargoText', 'completionText', 'failureText', 'timeLimit', 'canAbort', 'availBitClear', 'auxShipCount', 'auxShipDude', 'auxShipSystem', 'completionBitSet2', 'flags']:
         if key not in field_index:
             raise ValueError(f'sourced EV missions manifest missing field index {key}')
     for mission in missions[:10]:
         semantic = mission.get('semanticFields', {})
-        for key in ['availability', 'travel', 'cargo', 'reward', 'specialShips', 'completion']:
+        for key in ['availability', 'travel', 'cargo', 'reward', 'specialShips', 'auxiliaryShips', 'completion', 'descriptions', 'lifecycle']:
             if key not in semantic:
                 raise ValueError(f"sourced EV mission {mission.get('resourceId')} missing semantic {key}")
     first = missions[0]

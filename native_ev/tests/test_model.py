@@ -1962,14 +1962,20 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(len(data['missions']), 116)
         first = data['missions'][0]
         self.assertEqual(first['resourceId'], 128)
-        self.assertEqual(first['fieldSource'], 'EV Classic Resource Bible mïsn fields through FailBitSet, lines 249-439 of extracted text')
+        self.assertEqual(first['fieldSource'], 'EV Classic Resource Bible mïsn fields through Flags, lines 249-519 of extracted text')
         self.assertEqual(first['rawFields']['availStel'], 20002)
         self.assertEqual(first['semanticFields']['availability']['stellar'], {'kind': 'notGovernmentStellar', 'governmentIndex': 2})
+        self.assertEqual(first['semanticFields']['availability']['missionBitClear'], {'kind': 'mustBeClear', 'bit': 0})
         self.assertEqual(first['semanticFields']['availability']['location'], 'missionComputer')
         self.assertEqual(first['semanticFields']['availability']['randomPercent'], 50)
         self.assertEqual(first['semanticFields']['cargo']['type'], {'kind': 'specificCargoType', 'cargoType': 6})
         self.assertEqual(first['semanticFields']['cargo']['quantity'], {'kind': 'fixedTons', 'tons': 0})
         self.assertEqual(first['semanticFields']['reward'], {'kind': 'credits', 'credits': 10000})
+        self.assertEqual(first['semanticFields']['descriptions']['quickBrief'], {'kind': 'descResource', 'resourceId': 6000})
+        self.assertEqual(first['semanticFields']['descriptions']['completionText'], {'kind': 'descResource', 'resourceId': 7000})
+        self.assertEqual(first['semanticFields']['lifecycle']['timeLimit'], {'kind': 'none'})
+        self.assertTrue(first['semanticFields']['lifecycle']['canAbort']['canAbort'])
+        self.assertEqual(first['semanticFields']['lifecycle']['flags']['flagNames'], ['globalPenaltyWhenJettisoningMissionCargoIgnored', 'showGreenArrowOnMapInInitialBriefing'])
         self.assertTrue(any(mission['semanticFields']['reward']['kind'] == 'cleanLegalRecord' for mission in data['missions']))
         special_ship_mission = data['missions'][6]
         self.assertEqual(special_ship_mission['semanticFields']['specialShips']['count'], {'kind': 'count', 'count': 3})
@@ -1979,6 +1985,9 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(special_ship_mission['semanticFields']['completion']['government'], {'kind': 'governmentId', 'governmentId': 129, 'governmentIndex': 1})
         self.assertEqual(special_ship_mission['semanticFields']['completion']['reward'], 50)
         self.assertEqual(special_ship_mission['semanticFields']['completion']['failureRecordPenalty'], -25)
+        self.assertEqual(special_ship_mission['semanticFields']['lifecycle']['flags']['flagNames'], ['removePrepaidOutfitOnFailureOrAbort'])
+        self.assertTrue(any(not mission['semanticFields']['lifecycle']['canAbort']['canAbort'] for mission in data['missions']))
+        self.assertTrue(any('applyFiveTimesCompletionRewardReversalOnAbort' in mission['semanticFields']['lifecycle']['flags']['flagNames'] for mission in data['missions']))
 
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
