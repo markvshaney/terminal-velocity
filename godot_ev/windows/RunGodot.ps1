@@ -41,6 +41,7 @@ param(
     [switch]$AutopilotLog,
     [switch]$NavigationGuardrailLog,
     [switch]$LegalStatusLog,
+    [switch]$LegalDockingLog,
     [switch]$LegalServiceGateLog,
     [switch]$LegalPatrolPostureLog,
     [switch]$MissionLegalEligibilityLog,
@@ -144,6 +145,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-navigation-guardrail-log
 } elseif ($LegalStatusLog) {
     & $Godot --headless --path $Project -- --tv-legal-status-log
+} elseif ($LegalDockingLog) {
+    & $Godot --headless --path $Project -- --tv-legal-docking-log
 } elseif ($LegalServiceGateLog) {
     & $Godot --headless --path $Project -- --tv-legal-service-gate-log
 } elseif ($LegalPatrolPostureLog) {

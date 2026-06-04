@@ -62,6 +62,7 @@ const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
 const AUTOPILOT_EVENT_LOG_PREFIX := "TV_AUTOPILOT_EVENT"
 const NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX := "TV_NAVIGATION_GUARDRAIL_EVENT"
 const LEGAL_STATUS_EVENT_LOG_PREFIX := "TV_LEGAL_STATUS_EVENT"
+const LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_LEGAL_DOCKING_EVENT"
 const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
@@ -266,6 +267,8 @@ func _ready() -> void:
 		call_deferred("_run_navigation_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-legal-status-log") or OS.get_cmdline_user_args().has("--tv-legal-status-log"):
 		call_deferred("_run_legal_status_log")
+	if OS.get_cmdline_args().has("--tv-legal-docking-log") or OS.get_cmdline_user_args().has("--tv-legal-docking-log"):
+		call_deferred("_run_legal_docking_log")
 	if OS.get_cmdline_args().has("--tv-legal-service-gate-log") or OS.get_cmdline_user_args().has("--tv-legal-service-gate-log"):
 		call_deferred("_run_legal_service_gate_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
@@ -2050,6 +2053,23 @@ func _run_legal_status_log() -> void:
 	print("%s system=%s government=\"%s\" cleanStatus=%s penaltyStatus=%s dockAllowed=%s legalScore=%d warning=\"%s\" sourceLabel=terminal-velocity-classic-resource-legal-semantics oracleStatus=classic_runtime_thresholds_pending" % [LEGAL_STATUS_EVENT_LOG_PREFIX, start_system, start_government, start_status, penalty_status, str(dock_allowed), int(legal_records.get(start_government, 0)), warning])
 	get_tree().quit(0)
 
+func _run_legal_docking_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	var government_name := _current_government_name()
+	legal_records[government_name] = -75
+	status_messages.clear()
+	_try_land()
+	var denied_message := _legal_docking_denied_message(government_name)
+	var legal_docking_denied := status_messages.has(denied_message)
+	var patrol_hostile := _legal_patrol_hostile_posture_active(government_name)
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" legalScore=%d legalDockingDenied=%s landed=%s patrolsHostile=%s message=\"%s\" sourceLabel=terminal-velocity-legal-docking-scaffold oracleStatus=classic_runtime_docking_denial_ui_pending" % [LEGAL_DOCKING_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, int(legal_records.get(government_name, 0)), str(legal_docking_denied), str(landed), str(patrol_hostile), denied_message])
+	get_tree().quit(0)
+
 func _run_legal_service_gate_log() -> void:
 	_reset_travel_state()
 	map_visible = true
@@ -3491,6 +3511,9 @@ func _government_docking_allowed(government_name: String) -> bool:
 	var min_score := int(min_by_government.get(government_name, mechanics.get("defaultDockMinLegalScore", -60)))
 	return int(legal_records.get(government_name, 0)) >= min_score
 
+func _legal_docking_denied_message(government_name: String) -> String:
+	return "%s docking denied by %s legal status; TV scaffold, exact Classic landing denial UI pending" % [government_name, _legal_status_for_government(government_name)]
+
 func _government_crime_tolerance_score(government_name: String) -> int:
 	var mechanics: Dictionary = reputation.get("mechanics", {})
 	var tolerance_by_government: Dictionary = mechanics.get("crimeToleranceLegalScoreByGovernment", {})
@@ -4119,6 +4142,11 @@ func _try_land() -> void:
 	var nearest := _nearest_body()
 	if nearest.is_empty():
 		_set_status("No port in range; fly closer to a planet/station and slow below landing speed")
+		return
+	var government_name := _current_government_name()
+	if not _government_docking_allowed(government_name):
+		_set_status(_legal_docking_denied_message(government_name))
+		_emit_legal_patrol_warning_if_needed()
 		return
 	if nearest["distance"] < nearest["body"].get("r", 40) + 45 and vel.length() < 90:
 		landed = true
