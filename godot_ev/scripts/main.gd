@@ -31,6 +31,7 @@ const ROUTE_CLEAR_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_EVENT"
 const ROUTE_CLEAR_RESELECT_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_RESELECT_EVENT"
 const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
 const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
+const REPAIR_SERVICE_EVENT_LOG_PREFIX := "TV_REPAIR_SERVICE_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
@@ -208,6 +209,8 @@ func _ready() -> void:
 		call_deferred("_run_pilot_save_resume_log")
 	if OS.get_cmdline_args().has("--tv-outfitter-shipyard-log") or OS.get_cmdline_user_args().has("--tv-outfitter-shipyard-log"):
 		call_deferred("_run_outfitter_shipyard_log")
+	if OS.get_cmdline_args().has("--tv-repair-service-log") or OS.get_cmdline_user_args().has("--tv-repair-service-log"):
+		call_deferred("_run_repair_service_log")
 	if OS.get_cmdline_args().has("--tv-gameplay-curriculum-help-log") or OS.get_cmdline_user_args().has("--tv-gameplay-curriculum-help-log"):
 		call_deferred("_run_gameplay_curriculum_help_log")
 	if OS.get_cmdline_args().has("--tv-combat-log") or OS.get_cmdline_user_args().has("--tv-combat-log"):
@@ -758,6 +761,30 @@ func _run_route_land_refuel_log() -> void:
 	var refuel_status := "refuelAvailable=true" if refuel_available else "refuelAvailable=false"
 	var loop_status := "travelLoopComplete=true" if travel_loop_complete else "travelLoopComplete=false"
 	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s landedBody=\"%s\" %s refuelSucceeded=%s %s fuelBeforeJump=%d fuelAfterJump=%d fuelBeforeRefuel=%d fuelAfterRefuel=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_status, landing_status, str(landed_body.get("name", "None")), refuel_status, str(refuel_succeeded), loop_status, fuel_before_jump, fuel_after_jump, fuel_before_refuel, fuel_after_refuel, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _run_repair_service_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var body := _current_body()
+	var max_hull := _max_player_hull()
+	player_hull = max(1, max_hull - 25)
+	credits = 1000
+	var damaged_hull := player_hull
+	var expected_cost := _repair_cost()
+	var repair_available := _body_repair_available(body)
+	var repaired := _repair_current_hull()
+	var repaired_hull := player_hull
+	var credits_after_repair := credits
+	var repair_message_visible := status_messages.has("Repaired hull at Earth for %d credits" % expected_cost)
+	var already_full_blocked := not _repair_current_hull()
+	var already_full_message_visible := status_messages.has("Hull already fully repaired")
+	print("%s routeToSolSelected=%s system=%s body=\"%s\" repairAvailable=%s damagedHull=%d maxHull=%d expectedCost=%d repaired=%s repairedHull=%d creditsAfterRepair=%d repairMessageVisible=%s alreadyFullBlocked=%s alreadyFullMessageVisible=%s sourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=repair_service_pending_ev_classic_runtime_trace status=\"%s\"" % [REPAIR_SERVICE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), str(body.get("name", "?")), str(repair_available), damaged_hull, max_hull, expected_cost, str(repaired), repaired_hull, credits_after_repair, str(repair_message_visible), str(already_full_blocked), str(already_full_message_visible), status_line])
 	get_tree().quit(0)
 
 func _run_low_fuel_jump_log() -> void:
@@ -1694,8 +1721,19 @@ func _body_refuel_available(body: Dictionary) -> bool:
 	var services: Array = inventory.get("services", [])
 	return services.has("repairs") or inventory.get("outfitsForSale", []).has("fuel_tank")
 
+func _body_repair_available(body: Dictionary) -> bool:
+	var inventory := _station_inventory(body)
+	var services: Array = inventory.get("services", [])
+	return services.has("repairs")
+
+func _repair_price_per_hull_point() -> int:
+	return int(outfits.get("repair", {}).get("pricePerHullPoint", 8))
+
+func _repair_cost() -> int:
+	return max(0, _max_player_hull() - player_hull) * _repair_price_per_hull_point()
+
 func _max_player_fuel() -> int:
-	return int(player_ship.get("fuel", player_ship.get("sourceData", {}).get("fuel", 6)))
+	return int(player_ship.get("fuel", player_ship.get("sourceData", {}).get("fuel", 6))) + _owned_outfit_effect_total("maxFuel")
 
 func _jump_fuel_cost() -> int:
 	return 1
@@ -1738,6 +1776,26 @@ func _refuel_current_ship() -> bool:
 		return false
 	player_fuel = _max_player_fuel()
 	_set_status("Refueled at " + str(body.get("name", "port")))
+	return true
+
+func _repair_current_hull() -> bool:
+	if not landed:
+		_set_status("Cannot repair in space; land at a port with repair service")
+		return false
+	var body := _current_body()
+	if not _body_repair_available(body):
+		_set_status("Repair unavailable here; choose a port with repair service")
+		return false
+	var cost := _repair_cost()
+	if cost <= 0:
+		_set_status("Hull already fully repaired")
+		return false
+	if credits < cost:
+		_set_status("Not enough credits for repairs: need %d" % cost)
+		return false
+	credits -= cost
+	player_hull = _max_player_hull()
+	_set_status("Repaired hull at %s for %d credits" % [str(body.get("name", "port")), cost])
 	return true
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -1801,6 +1859,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				else:
 					_set_status("Cannot refuel in space")
 			KEY_F6: _save_current_pilot_file()
+			KEY_F7:
+				if landed:
+					_repair_current_hull()
+				else:
+					_set_status("Cannot repair in space")
 			KEY_C:
 				if landed:
 					_pay_legal_clemency()
@@ -2767,7 +2830,18 @@ func _max_player_shields() -> int:
 
 func _max_player_hull() -> int:
 	# EV Classic Resource Bible `shïp` Armor: armor takes damage once shields are down.
-	return int(player_ship.get("hull", player_ship.get("armor", 100)))
+	return int(player_ship.get("hull", player_ship.get("armor", 100))) + _owned_outfit_effect_total("maxHull")
+
+func _owned_outfit_effect_total(effect_name: String) -> int:
+	var total := 0
+	for outfit in outfits.get("outfits", []):
+		var outfit_id := str(outfit.get("id", ""))
+		var count := int(owned_outfits.get(outfit_id, 0))
+		if count <= 0:
+			continue
+		var effects: Dictionary = outfit.get("effects", {})
+		total += int(effects.get(effect_name, 0)) * count
+	return total
 
 func _reset_player_combat_stats() -> void:
 	player_shields = _max_player_shields()
@@ -3748,7 +3822,9 @@ func _draw_landing_panel() -> void:
 	draw_string(font, rect.position + Vector2(30, 46), port, HORIZONTAL_ALIGNMENT_LEFT, 820, 28, Color(1.0, 0.92, 0.72))
 	draw_string(font, rect.position + Vector2(30, 78), market, HORIZONTAL_ALIGNMENT_LEFT, 620, 16, Color(0.80, 0.90, 1.0))
 	var refuel_text := "Refuel: F5 available" if _body_refuel_available(body) else "Refuel: unavailable"
-	draw_string(font, rect.position + Vector2(690, 78), refuel_text, HORIZONTAL_ALIGNMENT_LEFT, 180, 16, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(650, 78), refuel_text, HORIZONTAL_ALIGNMENT_LEFT, 220, 16, Color(0.95, 0.86, 0.58))
+	var repair_text := "Repair: F7 (%d cr)" % _repair_cost() if _body_repair_available(body) else "Repair: unavailable"
+	draw_string(font, rect.position + Vector2(650, 98), repair_text, HORIZONTAL_ALIGNMENT_LEFT, 220, 14, Color(0.95, 0.76, 0.58))
 	var government_name := _current_government_name()
 	if not _legal_service_access_allowed(government_name):
 		draw_string(font, rect.position + Vector2(30, 98), _legal_service_blocked_message(government_name), HORIZONTAL_ALIGNMENT_LEFT, 820, 14, Color(1.0, 0.58, 0.42))
@@ -3762,7 +3838,7 @@ func _draw_landing_panel() -> void:
 			_draw_outfitter(rect, body)
 		3:
 			_draw_shipyard(rect, body)
-	draw_string(font, rect.position + Vector2(30, 492), "F1 Mission Computer  F2 Commodity Exchange  F5 Refuel  L Leave  ↑/↓ select", HORIZONTAL_ALIGNMENT_LEFT, 840, 16, Color(0.95, 0.86, 0.58))
+	draw_string(font, rect.position + Vector2(30, 492), "F1 Mission Computer  F2 Commodity Exchange  F5 Refuel  F7 Repair  L Leave  ↑/↓ select", HORIZONTAL_ALIGNMENT_LEFT, 840, 16, Color(0.95, 0.86, 0.58))
 
 func _ev_classic_landing_button_labels(body: Dictionary) -> Array:
 	var inventory := _station_inventory(body)
@@ -4264,6 +4340,8 @@ func _buy_selected_outfit_or_weapon() -> void:
 		owned_outfits[item_id] = int(owned_outfits.get(item_id, 0)) + 1
 		var effects: Dictionary = item.get("effects", {})
 		cargo_space += int(effects.get("cargoSpace", 0))
+		player_hull = min(_max_player_hull(), player_hull + int(effects.get("maxHull", 0)))
+		player_fuel = min(_max_player_fuel(), player_fuel + int(effects.get("maxFuel", 0)))
 	_set_status("Bought " + str(item.get("name", item_id)))
 	_play_sound("ui_click")
 

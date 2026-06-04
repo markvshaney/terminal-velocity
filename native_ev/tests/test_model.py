@@ -851,6 +851,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-outfitter-shipyard-log', run_script)
         self.assertIn('tv-outfitter-shipyard-log', wrapper)
 
+    def test_godot_repair_service_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            '--tv-repair-service-log',
+            'func _run_repair_service_log',
+            'TV_REPAIR_SERVICE_EVENT',
+            'func _repair_current_hull() -> bool:',
+            'func _repair_cost() -> int:',
+            'Repair: F7',
+            'KEY_F7:',
+            'Repaired hull at %s for %d credits',
+            'repairAvailable=%s',
+            'repaired=%s',
+            'alreadyFullBlocked=%s',
+            'sourceLabel=terminal-velocity-repair-service-scaffold',
+            'oracleStatus=repair_service_pending_ev_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$RepairServiceLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-repair-service-log', run_script)
+        self.assertIn('tv-repair-service-log', wrapper)
+
     def test_godot_pilot_save_resume_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

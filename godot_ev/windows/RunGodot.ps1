@@ -24,6 +24,7 @@ param(
     [switch]$FirstMissionDeliveryLog,
     [switch]$PilotSaveResumeLog,
     [switch]$OutfitterShipyardLog,
+    [switch]$RepairServiceLog,
     [switch]$GameplayCurriculumHelpLog,
     [switch]$CombatLog,
     [switch]$CombatGuardrailLog,
@@ -98,6 +99,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-pilot-save-resume-log
 } elseif ($OutfitterShipyardLog) {
     & $Godot --headless --path $Project -- --tv-outfitter-shipyard-log
+} elseif ($RepairServiceLog) {
+    & $Godot --headless --path $Project -- --tv-repair-service-log
 } elseif ($GameplayCurriculumHelpLog) {
     & $Godot --headless --path $Project -- --tv-gameplay-curriculum-help-log
 } elseif ($CombatLog) {
