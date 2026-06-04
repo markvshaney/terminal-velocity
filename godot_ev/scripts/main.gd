@@ -3795,6 +3795,9 @@ func _mission_offer_detail_lines(mission: Dictionary) -> Array[String]:
 	var route_hint: String = "direct linked hop" if direct_route else "route planning required"
 	lines.append("Offer route: %s / %s — %s" % [destination_system, str(mission.get("destinationBody", "?")), route_hint])
 	lines.append("Offer terms: %d cr reward, %d cargo tons reserved on accept" % [int(mission.get("reward", 0)), int(mission.get("cargoTons", 0))])
+	var deadline_text := "%d day(s) after accept" % int(mission.get("timeLimitDays", 0)) if mission.has("timeLimitDays") else "not listed in current TV mission data"
+	lines.append("Offer deadline: %s" % deadline_text)
+	lines.append("Offer story: starts=%s completes=%s next=%s" % [JSON.stringify(mission.get("setsFlags", [])), JSON.stringify(mission.get("completionFlags", [])), str(mission.get("next", "none"))])
 	lines.append("Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending")
 	return lines
 

@@ -128,7 +128,7 @@ Mission offer scan scenario contract:
   - scan system/body;
   - mission offers grouped by surface (`offersBySurface={"Mission Computer":[...]}`);
   - total offer count (`totalOffers`);
-  - selected-offer detail visibility (`selectedOfferDetailsVisible=true`) with generated Mission Computer helper lines for briefing text, destination/route hint, reward, reserved cargo, and source boundary;
+  - selected-offer detail visibility (`selectedOfferDetailsVisible=true`) with generated Mission Computer helper lines for briefing text, destination/route hint, reward, reserved cargo, offer deadline status, story start/completion/next-contract flags, and source boundary;
   - `sourceLabel=terminal-velocity-observed`;
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
   The selected-offer detail lines are Terminal Velocity helper scaffolding for player clarity; exact Classic Mission Computer detail UI remains pending original-runtime/manual evidence.

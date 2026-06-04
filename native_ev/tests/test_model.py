@@ -987,6 +987,8 @@ class NativeEvModelTests(unittest.TestCase):
             'Briefing: %s',
             'Offer route: %s / %s — %s',
             'Offer terms: %d cr reward, %d cargo tons reserved on accept',
+            'Offer deadline: %s',
+            'Offer story: starts=%s completes=%s next=%s',
             'Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending',
             'sourceLabel=terminal-velocity-observed',
             'oracleStatus=terminal_velocity_eval_pending_original_trace',
