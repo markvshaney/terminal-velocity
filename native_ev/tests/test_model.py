@@ -390,6 +390,11 @@ class NativeEvModelTests(unittest.TestCase):
             'cycledStatusHasTarget=true',
             'closestStatusHasClosest=true',
             'targetCount=%d',
+            'destroyedTargetSkippedByCycle=%s',
+            'destroyedTargetSkippedByClosest=%s',
+            'liveTargetCount=%d',
+            'func _target_selectable(target_index: int) -> bool:',
+            'No active scanner targets',
             'sourceLabel=terminal-velocity-target-selection-scaffold',
             'oracleStatus=classic_runtime_target_selection_pending',
         ]:

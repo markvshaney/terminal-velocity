@@ -1723,6 +1723,7 @@ func _run_target_selection_log() -> void:
 	status_messages.clear()
 	pos = Vector2.ZERO
 	vel = Vector2.ZERO
+	_reset_combat_targets()
 	selected_target_index = 0
 	var target_count := _npc_world_offsets().size()
 	var initial_target := selected_target_index
@@ -1734,7 +1735,21 @@ func _run_target_selection_log() -> void:
 	var closest_target := selected_target_index
 	var closest_status := status_line
 	var closest_status_has_closest := closest_status.contains("Closest target: Contact")
-	print("%s initialTarget=%d cycledTarget=%d closestTarget=%d targetCount=%d cycledStatusHasTarget=true actualCycledStatusHasTarget=%s closestStatusHasClosest=true actualClosestStatusHasClosest=%s cycledStatus=\"%s\" closestStatus=\"%s\" sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending" % [TARGET_SELECTION_EVENT_LOG_PREFIX, initial_target, cycled_target, closest_target, target_count, str(cycled_status_has_target), str(closest_status_has_closest), cycled_status, closest_status])
+	target_shields[1] = 0
+	target_hulls[1] = 0
+	selected_target_index = 0
+	_cycle_target(1)
+	var skipped_target := selected_target_index
+	var destroyed_target_skipped_by_cycle := skipped_target != 1 and not _target_destroyed(skipped_target)
+	pos = Vector2(260, -180)
+	_select_closest_target()
+	var closest_after_destroyed := selected_target_index
+	var destroyed_target_skipped_by_closest := closest_after_destroyed != 1 and not _target_destroyed(closest_after_destroyed)
+	var live_target_count := 0
+	for i in range(target_count):
+		if _target_selectable(i):
+			live_target_count += 1
+	print("%s initialTarget=%d cycledTarget=%d closestTarget=%d targetCount=%d destroyedTargetSkippedByCycle=%s destroyedTargetSkippedByClosest=%s liveTargetCount=%d cycledStatusHasTarget=true actualCycledStatusHasTarget=%s closestStatusHasClosest=true actualClosestStatusHasClosest=%s cycledStatus=\"%s\" closestStatus=\"%s\" sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending" % [TARGET_SELECTION_EVENT_LOG_PREFIX, initial_target, cycled_target, closest_target, target_count, str(destroyed_target_skipped_by_cycle), str(destroyed_target_skipped_by_closest), live_target_count, str(cycled_status_has_target), str(closest_status_has_closest), cycled_status, closest_status])
 	get_tree().quit(0)
 
 func _run_navigation_guardrail_log() -> void:
@@ -3090,7 +3105,17 @@ func _cycle_target(dir: int) -> void:
 		selected_target_index = 0
 		status_line = "No scanner targets"
 		return
-	selected_target_index = (selected_target_index + dir + targets.size()) % targets.size()
+	var found := false
+	for offset in range(1, targets.size() + 1):
+		var candidate := (selected_target_index + (dir * offset) + targets.size()) % targets.size()
+		if _target_selectable(candidate):
+			selected_target_index = candidate
+			found = true
+			break
+	if not found:
+		selected_target_index = 0
+		status_line = "No active scanner targets"
+		return
 	var posture := " hostile legal patrol" if _legal_patrol_hostile_posture_active(_current_government_name()) else ""
 	status_line = "Target: Contact %d%s at %.0f range" % [selected_target_index + 1, posture, pos.distance_to(targets[selected_target_index])]
 
@@ -3100,16 +3125,25 @@ func _select_closest_target() -> void:
 		selected_target_index = 0
 		status_line = "No scanner targets"
 		return
-	var closest_index := 0
-	var closest_distance := pos.distance_to(targets[0])
-	for i in range(1, targets.size()):
+	var closest_index := -1
+	var closest_distance := INF
+	for i in range(targets.size()):
+		if not _target_selectable(i):
+			continue
 		var distance := pos.distance_to(targets[i])
-		if distance < closest_distance:
+		if closest_index < 0 or distance < closest_distance:
 			closest_distance = distance
 			closest_index = i
+	if closest_index < 0:
+		selected_target_index = 0
+		status_line = "No active scanner targets"
+		return
 	selected_target_index = closest_index
 	var posture := " hostile legal patrol" if _legal_patrol_hostile_posture_active(_current_government_name()) else ""
 	status_line = "Closest target: Contact %d%s at %.0f range" % [selected_target_index + 1, posture, closest_distance]
+
+func _target_selectable(target_index: int) -> bool:
+	return not _target_destroyed(target_index)
 
 func _select_next_live_target(start_index: int) -> bool:
 	var targets := _npc_world_offsets()
