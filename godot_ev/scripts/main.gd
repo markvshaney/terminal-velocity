@@ -51,6 +51,7 @@ const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
 const PROJECTILE_MOTION_EVENT_LOG_PREFIX := "TV_PROJECTILE_MOTION_EVENT"
+const EXPLOSION_EVENT_LOG_PREFIX := "TV_EXPLOSION_EVENT"
 const CARGO_SALVAGE_EVENT_LOG_PREFIX := "TV_CARGO_SALVAGE_EVENT"
 const SECONDARY_WEAPON_EVENT_LOG_PREFIX := "TV_SECONDARY_WEAPON_EVENT"
 const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
@@ -237,6 +238,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-projectile-motion-log") or OS.get_cmdline_user_args().has("--tv-projectile-motion-log"):
 		call_deferred("_run_projectile_motion_log")
+	if OS.get_cmdline_args().has("--tv-explosion-log") or OS.get_cmdline_user_args().has("--tv-explosion-log"):
+		call_deferred("_run_explosion_log")
 	if OS.get_cmdline_args().has("--tv-cargo-salvage-log") or OS.get_cmdline_user_args().has("--tv-cargo-salvage-log"):
 		call_deferred("_run_cargo_salvage_log")
 	if OS.get_cmdline_args().has("--tv-secondary-weapon-log") or OS.get_cmdline_user_args().has("--tv-secondary-weapon-log"):
@@ -1611,6 +1614,32 @@ func _run_projectile_motion_log() -> void:
 		_advance_projectiles(1.0 / 60.0)
 	var projectile_expired := expiry_spawned and projectiles.is_empty()
 	print("%s projectileSpawned=%s projectileMoved=%s projectileHitTarget=%s projectileExpired=%s initialProjectileSpeed=%d sourceSpeed=%d sourceLifetime=%d sourceCount=%d targetShieldBefore=%d targetShieldAfter=%d sourceLabel=terminal-velocity-projectile-motion-scaffold oracleStatus=classic_runtime_projectile_motion_pending" % [PROJECTILE_MOTION_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(projectile_moved).to_lower(), str(hit_target).to_lower(), str(projectile_expired).to_lower(), initial_speed, source_speed, source_lifetime, source_count, shield_before_hit, shield_after_hit])
+	get_tree().quit(0)
+
+func _run_explosion_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	_select_closest_target()
+	var target_index := selected_target_index
+	var weapon := _primary_weapon_stats()
+	target_shields[target_index] = 0
+	target_hulls[target_index] = _weapon_hull_damage(weapon)
+	primary_weapon_cooldown_frames = 0.0
+	var projectile_spawned := _spawn_primary_projectile()
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+	var explosion_triggered := not explosion_events.is_empty()
+	var initial_life := float(explosion_events[0].get("life", 0.0)) if explosion_triggered else 0.0
+	var explosion_source_label := str(explosion_events[0].get("sourceLabel", "")) if explosion_triggered else ""
+	var explosion_oracle_status := str(explosion_events[0].get("oracleStatus", "")) if explosion_triggered else ""
+	_advance_explosion_events(0.5)
+	var life_after_half_second := float(explosion_events[0].get("life", 0.0)) if not explosion_events.is_empty() else 0.0
+	var explosion_animated := explosion_triggered and life_after_half_second < initial_life and life_after_half_second > 0.0
+	_advance_explosion_events(initial_life + 0.1)
+	var explosion_expired := explosion_triggered and explosion_events.is_empty()
+	print("%s projectileSpawned=%s targetDestroyed=%s explosionTriggered=%s explosionAnimated=%s explosionExpired=%s initialLife=%.2f lifeAfterHalfSecond=%.2f explosionSourceLabel=%s explosionOracleStatus=%s sourceLabel=terminal-velocity-explosion-visual-scaffold oracleStatus=classic_runtime_explosion_timing_pending" % [EXPLOSION_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(_target_destroyed(target_index)).to_lower(), str(explosion_triggered).to_lower(), str(explosion_animated).to_lower(), str(explosion_expired).to_lower(), initial_life, life_after_half_second, explosion_source_label, explosion_oracle_status])
 	get_tree().quit(0)
 
 func _run_cargo_salvage_log() -> void:

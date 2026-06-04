@@ -353,6 +353,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-projectile-motion-log', run_script)
         self.assertIn('[switch]$ProjectileMotionLog', windows_script)
 
+    def test_godot_explosion_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_EXPLOSION_EVENT',
+            '--tv-explosion-log',
+            'func _run_explosion_log() -> void:',
+            'explosionTriggered=%s',
+            'explosionAnimated=%s',
+            'explosionExpired=%s',
+            'explosionSourceLabel=%s',
+            'sourceLabel=terminal-velocity-explosion-visual-scaffold',
+            'oracleStatus=classic_runtime_explosion_timing_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-explosion-log', run_script)
+        self.assertIn('[switch]$ExplosionLog', windows_script)
+
     def test_godot_target_selection_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
