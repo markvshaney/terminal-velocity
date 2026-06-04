@@ -5,32 +5,33 @@
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Combat target destruction now awards a deterministic Terminal Velocity scaffold reward, records combat_reward_history, and verifies save/resume visibility in tv-combat-log while Classic reward behavior remains pending.",
+  "current_milestone": "Projectile motion/lifetime now has a deterministic Terminal Velocity scaffold log and wrapper/test contract; Classic projectile speed/count/lifetime semantics remain explicitly pending original-runtime confirmation.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_under_10_minutes",
+    "progress_heartbeat": "fallback_file_written",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "51e3f4c feat(godot): reward disabled combat contacts",
+  "last_commit": "666ef4a feat(godot): log projectile motion scaffold",
   "last_verified_commands": [
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (133 tests)",
-    "./run_godot.sh tv-combat-log -> TV_COMBAT_EVENT combatRewardPaid=true combatRewardAmount=25 combatRewardRecorded=true combatRewardSaved=true combatRewardResumeVisible=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_projectile_motion_log_contract -v -> OK",
+    "./run_godot.sh tv-projectile-motion-log -> TV_PROJECTILE_MOTION_EVENT projectileSpawned=true projectileMoved=true projectileHitTarget=true projectileExpired=true initialProjectileSpeed=540 sourceSpeed=0 sourceLifetime=72 sourceCount=0 oracleStatus=classic_runtime_projectile_motion_pending",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (134 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=20 failed=0 total=20",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): reward disabled combat contacts (51e3f4c)"
+    "git commit -> feat(godot): log projectile motion scaffold (666ef4a)"
   ],
-  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: bounded Classic/source evidence for combat rewards/bounties/legal effects, exact fire cadence/projectile motion/explosion timing, AI retaliation cadence, or another deterministic mission/map/fuel/combat probe.",
+  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: original-runtime/source evidence for exact projectile speed/count/lifetime and fire cadence, explosion timing, AI retaliation cadence, or combat reward/legal consequences.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 93,
+    "ahead": 95,
     "branch": "main",
     "dirty": false,
-    "head": "51e3f4c"
+    "head": "666ef4a"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -103,5 +104,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T06:16:16Z"
+  "updated_at": "2026-06-04T06:27:07Z"
 }
