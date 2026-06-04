@@ -1925,7 +1925,9 @@ func _run_target_selection_log() -> void:
 	for i in range(target_count):
 		if _target_selectable(i):
 			live_target_count += 1
-	print("%s initialTarget=%d cycledTarget=%d closestTarget=%d targetCount=%d destroyedTargetSkippedByCycle=%s destroyedTargetSkippedByClosest=%s liveTargetCount=%d cycledStatusHasTarget=true actualCycledStatusHasTarget=%s cycledStatusHasStats=%s closestStatusHasClosest=true actualClosestStatusHasClosest=%s closestStatusHasStats=%s cycledStatus=\"%s\" closestStatus=\"%s\" sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending" % [TARGET_SELECTION_EVENT_LOG_PREFIX, initial_target, cycled_target, closest_target, target_count, str(destroyed_target_skipped_by_cycle), str(destroyed_target_skipped_by_closest), live_target_count, str(cycled_status_has_target), str(cycled_status_has_stats), str(closest_status_has_closest), str(closest_status_has_stats), cycled_status, closest_status])
+	var scanner_target_detail := _scanner_target_detail_line()
+	var scanner_target_detail_visible := scanner_target_detail.contains("Scanner target: Contact") and scanner_target_detail.contains("S/H")
+	print("%s initialTarget=%d cycledTarget=%d closestTarget=%d targetCount=%d destroyedTargetSkippedByCycle=%s destroyedTargetSkippedByClosest=%s liveTargetCount=%d cycledStatusHasTarget=true actualCycledStatusHasTarget=%s cycledStatusHasStats=%s closestStatusHasClosest=true actualClosestStatusHasClosest=%s closestStatusHasStats=%s scannerTargetDetailVisible=%s scannerTargetDetail=\"%s\" cycledStatus=\"%s\" closestStatus=\"%s\" sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending" % [TARGET_SELECTION_EVENT_LOG_PREFIX, initial_target, cycled_target, closest_target, target_count, str(destroyed_target_skipped_by_cycle), str(destroyed_target_skipped_by_closest), live_target_count, str(cycled_status_has_target), str(cycled_status_has_stats), str(closest_status_has_closest), str(closest_status_has_stats), str(scanner_target_detail_visible).to_lower(), scanner_target_detail, cycled_status, closest_status])
 	get_tree().quit(0)
 
 func _run_navigation_guardrail_log() -> void:
@@ -3324,6 +3326,15 @@ func _target_selectable(target_index: int) -> bool:
 func _target_shield_hull_summary(target_index: int) -> String:
 	return "S/H %d/%d" % [int(target_shields.get(target_index, 0)), int(target_hulls.get(target_index, 0))]
 
+func _scanner_target_detail_line() -> String:
+	var targets := _npc_world_offsets()
+	if targets.is_empty():
+		return "Scanner target: none"
+	if not _target_selectable(selected_target_index):
+		return "Scanner target: no active scanner targets"
+	var target_index := selected_target_index % targets.size()
+	return "Scanner target: Contact %d — %s — %.0f range (TV target HUD scaffold; Classic scanner layout pending)" % [target_index + 1, _target_shield_hull_summary(target_index), pos.distance_to(targets[target_index])]
+
 func _select_next_live_target(start_index: int) -> bool:
 	var targets := _npc_world_offsets()
 	if targets.is_empty():
@@ -4461,7 +4472,7 @@ func _draw_hud() -> void:
 	var targets := _npc_world_offsets()
 	if not targets.is_empty():
 		target_range = pos.distance_to(targets[selected_target_index % targets.size()])
-	draw_string(font, Vector2(1024, 280), "Target: Contact %d  %.0f  %s" % [selected_target_index + 1, target_range, _target_shield_hull_summary(selected_target_index)], HORIZONTAL_ALIGNMENT_LEFT, 230, 14, Color(1.0, 0.82, 0.35))
+	draw_string(font, Vector2(1024, 280), _scanner_target_detail_line(), HORIZONTAL_ALIGNMENT_LEFT, 260, 14, Color(1.0, 0.82, 0.35))
 	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F6 save  F10 help  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
 
 func _active_mission_destination_systems() -> Array[String]:
