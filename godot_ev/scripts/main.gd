@@ -1385,6 +1385,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_player_info_help := false
 	var has_recent_messages_help := false
 	var has_blocked_action_help := false
+	var has_route_clear_help := false
 	for line in hints:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
@@ -1434,7 +1435,9 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_recent_messages_help = true
 		if str(line).contains("Blocked actions: when a jump, buy, land, fire, repair, or mission action fails"):
 			has_blocked_action_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasMissionDeadlineHelp=%s hasMissionAbortHistoryHelp=%s hasMissionTradeHybridHelp=%s hasTradeRouteHelp=%s hasMapServiceHelp=%s hasRouteRefuelHelp=%s hasShipyardDeltaHelp=%s hasShipLadderHelp=%s hasPilotPersistenceHelp=%s hasPlayerInfoHelp=%s hasRecentMessagesHelp=%s hasBlockedActionHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_mission_deadline_help), str(has_mission_abort_history_help), str(has_mission_trade_hybrid_help), str(has_trade_route_help), str(has_map_service_help), str(has_route_refuel_help), str(has_shipyard_delta_help), str(has_ship_ladder_help), str(has_pilot_persistence_help), str(has_player_info_help), str(has_recent_messages_help), str(has_blocked_action_help), str(hints[0]) if not hints.is_empty() else ""])
+		if str(line).contains("Route clearing: Backspace/Delete clears queued green routes"):
+			has_route_clear_help = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasMissionDeadlineHelp=%s hasMissionAbortHistoryHelp=%s hasMissionTradeHybridHelp=%s hasTradeRouteHelp=%s hasMapServiceHelp=%s hasRouteRefuelHelp=%s hasShipyardDeltaHelp=%s hasShipLadderHelp=%s hasPilotPersistenceHelp=%s hasPlayerInfoHelp=%s hasRecentMessagesHelp=%s hasBlockedActionHelp=%s hasRouteClearHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_mission_deadline_help), str(has_mission_abort_history_help), str(has_mission_trade_hybrid_help), str(has_trade_route_help), str(has_map_service_help), str(has_route_refuel_help), str(has_shipyard_delta_help), str(has_ship_ladder_help), str(has_pilot_persistence_help), str(has_player_info_help), str(has_recent_messages_help), str(has_blocked_action_help), str(has_route_clear_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
@@ -4830,6 +4833,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Mission objective marker: active mission destinations are highlighted on the map.",
 		"Mission route helper: G queues the active mission destination when known.",
 		"Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.",
+		"Route clearing: Backspace/Delete clears queued green routes; choose a fresh linked stop before retrying J.",
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; TV scaffold capacity-planning loop.",
 		"Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
