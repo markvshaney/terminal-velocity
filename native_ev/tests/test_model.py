@@ -341,6 +341,35 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-target-selection-log', run_script)
         self.assertIn('[switch]$TargetSelectionLog', windows_script)
 
+    def test_godot_secondary_weapon_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_SECONDARY_WEAPON_EVENT',
+            '--tv-secondary-weapon-log',
+            'func _run_secondary_weapon_log',
+            'var secondary_weapon_cooldown_frames := 0.0',
+            'var selected_secondary_weapon_index := 0',
+            'func _installed_secondary_weapon_ids() -> Array[String]:',
+            'func _secondary_weapon_stats() -> Dictionary:',
+            'func _spawn_secondary_projectile() -> bool:',
+            'func _secondary_weapon_reload_message() -> String:',
+            'secondaryUnavailableAtStart=%s',
+            'secondaryCycleSelected=%s',
+            'secondaryProjectileSpawned=%s',
+            'secondaryImmediateReloadBlocked=%s',
+            'secondaryCooldownFrames=%d',
+            'secondaryTargetDamaged=%s',
+            'sourceLabel=terminal-velocity-secondary-weapon-scaffold',
+            'oracleStatus=classic_runtime_secondary_weapon_behavior_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-secondary-weapon-log', run_script)
+        self.assertIn('[switch]$SecondaryWeaponLog', windows_script)
+
     def test_godot_combat_guardrail_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

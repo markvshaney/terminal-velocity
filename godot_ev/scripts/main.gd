@@ -50,6 +50,7 @@ const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
+const SECONDARY_WEAPON_EVENT_LOG_PREFIX := "TV_SECONDARY_WEAPON_EVENT"
 const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
 const NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX := "TV_NAVIGATION_GUARDRAIL_EVENT"
 const LEGAL_STATUS_EVENT_LOG_PREFIX := "TV_LEGAL_STATUS_EVENT"
@@ -147,6 +148,8 @@ var player_shields := 0
 var player_hull := 0
 var player_shield_recharge_progress := 0.0
 var primary_weapon_cooldown_frames := 0.0
+var secondary_weapon_cooldown_frames := 0.0
+var selected_secondary_weapon_index := 0
 var afterburner_fuel_progress := 0.0
 var _last_contraband_scan_outcome: Dictionary = {}
 var player_ship_id := "shuttlecraft"
@@ -226,6 +229,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-secondary-weapon-log") or OS.get_cmdline_user_args().has("--tv-secondary-weapon-log"):
+		call_deferred("_run_secondary_weapon_log")
 	if OS.get_cmdline_args().has("--tv-target-selection-log") or OS.get_cmdline_user_args().has("--tv-target-selection-log"):
 		call_deferred("_run_target_selection_log")
 	if OS.get_cmdline_args().has("--tv-navigation-guardrail-log") or OS.get_cmdline_user_args().has("--tv-navigation-guardrail-log"):
@@ -1424,6 +1429,53 @@ func _run_combat_log() -> void:
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
 	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s disabledMovementBlocked=%s disabledSaveBlocked=%s disabledServiceRefuelBlocked=%s disabledServiceRepairBlocked=%s disabledServiceClemencyBlocked=%s disabledMissionAcceptBlocked=%s disabledTradeBuyBlocked=%s disabledTradeSellBlocked=%s disabledOutfitBuyBlocked=%s disabledShipBuyBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(disabled_movement_blocked), str(disabled_save_blocked), str(disabled_service_refuel_blocked), str(disabled_service_repair_blocked), str(disabled_service_clemency_blocked), str(disabled_mission_accept_blocked), str(disabled_trade_buy_blocked), str(disabled_trade_sell_blocked), str(disabled_outfit_buy_blocked), str(disabled_ship_buy_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	get_tree().quit(0)
+
+
+func _run_secondary_weapon_log() -> void:
+	_reset_deterministic_motion_state()
+	_reset_combat_targets()
+	projectiles.clear()
+	status_messages.clear()
+	owned_weapons.clear()
+	selected_secondary_weapon_index = 0
+	secondary_weapon_cooldown_frames = 0.0
+	_fire_secondary_weapon()
+	var unavailable_at_start := status_messages.has("Secondary weapon not loaded; primary combat scaffold available with Tab")
+	owned_weapons["pulse_cannon"] = 1
+	_change_secondary_weapon()
+	var secondary_cycle_selected := status_messages.has("Secondary weapon selected: %s" % str(_secondary_weapon_stats().get("name", "pulse_cannon")))
+	var shield_before := int(target_shields.get(selected_target_index, 0))
+	var secondary_projectile_spawned := _spawn_secondary_projectile()
+	var secondary_cooldown_frames := int(round(secondary_weapon_cooldown_frames))
+	var immediate_projectile_count := projectiles.size()
+	var immediate_second_shot_blocked := not _spawn_secondary_projectile() and projectiles.size() == immediate_projectile_count and status_messages.has(_secondary_weapon_reload_message())
+	for _i in range(120):
+		_advance_projectiles(1.0 / 60.0)
+		_advance_explosion_events(1.0 / 60.0)
+	var shield_after := int(target_shields.get(selected_target_index, 0))
+	var target_damaged := shield_after < shield_before
+	var weapon := _secondary_weapon_stats()
+	var source_fields: Dictionary = weapon.get("sourceStockWeaponFields", {})
+	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold oracleStatus=classic_runtime_secondary_weapon_behavior_pending" % [
+		SECONDARY_WEAPON_EVENT_LOG_PREFIX,
+		str(unavailable_at_start).to_lower(),
+		str(secondary_cycle_selected).to_lower(),
+		str(secondary_projectile_spawned).to_lower(),
+		str(immediate_second_shot_blocked).to_lower(),
+		secondary_cooldown_frames,
+		str(target_damaged).to_lower(),
+		str(weapon.get("id", "")),
+		str(weapon.get("name", "")),
+		shield_before,
+		shield_after,
+		int(weapon.get("sourceResourceId", -1)),
+		str(weapon.get("sourceStockName", "")),
+		int(source_fields.get("MassDmg", weapon.get("massDamage", 0))),
+		int(source_fields.get("EnergyDmg", weapon.get("energyDamage", 0))),
+		int(source_fields.get("Reload", weapon.get("reloadFrames", 0))),
+		JSON.stringify(weapon.get("sourceAppliedFields", [])),
+	])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -3020,7 +3072,12 @@ func _fire_secondary_weapon() -> void:
 	if _player_disabled():
 		_set_status(_player_disabled_action_message())
 		return
-	_set_status("Secondary weapon not loaded; primary combat scaffold available with Tab")
+	if _spawn_secondary_projectile():
+		return
+	if _installed_secondary_weapon_ids().is_empty():
+		_set_status("Secondary weapon not loaded; primary combat scaffold available with Tab")
+	else:
+		_set_status(_secondary_weapon_reload_message())
 
 func _recover_disabled_player_scaffold() -> bool:
 	if not _player_disabled():
@@ -3038,7 +3095,30 @@ func _change_secondary_weapon() -> void:
 	if landed and landing_tab == 1:
 		_sell_selected_commodity()
 		return
-	_set_status("Secondary weapon selection: no secondary weapons installed")
+	var secondary_ids := _installed_secondary_weapon_ids()
+	if secondary_ids.is_empty():
+		_set_status("Secondary weapon selection: no secondary weapons installed")
+		return
+	selected_secondary_weapon_index = (selected_secondary_weapon_index + 1) % secondary_ids.size()
+	var weapon := _secondary_weapon_stats()
+	_set_status("Secondary weapon selected: %s" % str(weapon.get("name", secondary_ids[selected_secondary_weapon_index])))
+
+func _installed_secondary_weapon_ids() -> Array[String]:
+	var ids: Array[String] = []
+	var primary_id := str(player_ship.get("weaponId", "laser_cannon"))
+	for owned_id in owned_weapons.keys():
+		var weapon_id := str(owned_id)
+		if int(owned_weapons.get(owned_id, 0)) > 0 and weapon_id != primary_id:
+			ids.append(weapon_id)
+	ids.sort()
+	return ids
+
+func _secondary_weapon_stats() -> Dictionary:
+	var ids := _installed_secondary_weapon_ids()
+	if ids.is_empty():
+		return {}
+	var weapon_id := ids[selected_secondary_weapon_index % ids.size()]
+	return _weapon_stats_by_id(weapon_id)
 
 func _primary_weapon_stats() -> Dictionary:
 	var weapon_id := str(player_ship.get("weaponId", "laser_cannon"))
@@ -3093,13 +3173,18 @@ func _reset_player_combat_stats() -> void:
 	player_hull = _max_player_hull()
 	player_shield_recharge_progress = 0.0
 	primary_weapon_cooldown_frames = 0.0
+	secondary_weapon_cooldown_frames = 0.0
 	afterburner_fuel_progress = 0.0
 
 func _advance_weapon_cooldowns(delta: float) -> void:
 	primary_weapon_cooldown_frames = maxf(0.0, primary_weapon_cooldown_frames - delta * 60.0)
+	secondary_weapon_cooldown_frames = maxf(0.0, secondary_weapon_cooldown_frames - delta * 60.0)
 
 func _primary_weapon_reload_message() -> String:
 	return "Primary weapon reloading; wait for source-backed reload cadence"
+
+func _secondary_weapon_reload_message() -> String:
+	return "Secondary weapon reloading; wait for source-backed reload cadence"
 
 func _player_disabled() -> bool:
 	return player_hull <= 0
@@ -3172,6 +3257,46 @@ func _spawn_primary_projectile() -> bool:
 	projectiles.append(projectile)
 	primary_weapon_cooldown_frames = float(weapon.get("reloadFrames", weapon.get("sourceStockWeaponFields", {}).get("Reload", 0)))
 	_set_status("Fired %s at Contact %d" % [str(weapon.get("name", "Primary")), target_index + 1])
+	_play_sound("ui_click")
+	return true
+
+
+func _spawn_secondary_projectile() -> bool:
+	if _player_disabled():
+		_set_status(_player_disabled_action_message())
+		return false
+	var targets := _npc_world_offsets()
+	var weapon := _secondary_weapon_stats()
+	if targets.is_empty() or weapon.is_empty():
+		return false
+	if secondary_weapon_cooldown_frames > 0.0:
+		_set_status(_secondary_weapon_reload_message())
+		return false
+	var target_index := selected_target_index % targets.size()
+	if _target_destroyed(target_index):
+		if _select_next_live_target(target_index):
+			_set_status("Target already disabled; retargeting to next active contact")
+		else:
+			_set_status("Target already disabled; no active contacts")
+		return false
+	var target_pos: Vector2 = targets[target_index]
+	var direction := (target_pos - pos).normalized()
+	if direction.length() <= 0.0:
+		direction = Vector2.UP.rotated(deg_to_rad(angle_deg))
+	var projectile := {
+		"position": pos,
+		"velocity": direction * float(weapon.get("speed", 7.0)) * 60.0,
+		"life": float(weapon.get("lifetime", weapon.get("countFrames", 84))) / 60.0,
+		"shieldDamage": _weapon_shield_damage(weapon),
+		"hullDamage": _weapon_hull_damage(weapon),
+		"color": str(weapon.get("color", "DeepSkyBlue")),
+		"radius": float(weapon.get("radius", 4)),
+		"targetIndex": target_index,
+		"secondary": true,
+	}
+	projectiles.append(projectile)
+	secondary_weapon_cooldown_frames = float(weapon.get("reloadFrames", weapon.get("sourceStockWeaponFields", {}).get("Reload", 0)))
+	_set_status("Fired secondary %s at Contact %d" % [str(weapon.get("name", "Secondary")), target_index + 1])
 	_play_sound("ui_click")
 	return true
 

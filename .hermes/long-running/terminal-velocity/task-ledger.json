@@ -5,34 +5,33 @@
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "Committed afterburner acceleration/fuel scaffold with deterministic Godot log and source-fidelity backlog documentation.",
+  "current_milestone": "Implemented and verified secondary weapon selection/fire scaffold with deterministic Godot log; local commit pending final checkpoint.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     ".hermes/long-running/terminal-velocity/heartbeat.json": true,
-    "progress_heartbeats": "not needed; verification completed under long-run heartbeat threshold after start heartbeat",
+    "progress_heartbeats": "one file fallback heartbeat written while implementing RED/GREEN secondary-weapon slice",
     "send_message_available": false,
     "start_heartbeat": "file_fallback",
     "visibility_degraded": true
   },
-  "last_commit": "f0ee73a",
+  "last_commit": "e1e6d3b",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_deterministic_movement_log_contract -v",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (130 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
-    "./run_godot.sh tv-afterburner-log -> TV_AFTERBURNER_EVENT speedBoosted=true fuelDrained=true",
-    "./run_godot.sh tv-movement-log -> deterministic movement logs emitted",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v -> OK",
+    "./run_godot.sh tv-secondary-weapon-log -> TV_SECONDARY_WEAPON_EVENT secondaryUnavailableAtStart=true secondaryCycleSelected=true secondaryProjectileSpawned=true secondaryImmediateReloadBlocked=true secondaryCooldownFrames=149 secondaryTargetDamaged=true sourceResourceId=129 sourceStockName=\"Neutron Blaster\"",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (131 tests)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
-    "git diff --check -> OK",
-    "git commit -> feat(godot): add afterburner log scaffold (f0ee73a)"
+    "./run_godot.sh tv-combat-log -> TV_COMBAT_EVENT combatExecuted=true projectileSpawned=true retaliationFired=true targetDamaged=true playerDamaged=true",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "git diff --check -> OK"
   ],
-  "next_resume_action": "Inspect live backlog and choose the next strongest safe-local Terminal Velocity slice; current likely candidates: capture/decode exact EV Classic afterburner fuel/acceleration behavior, secondary-weapon scaffold, target/combat guardrails, or another bounded mission/map/fuel/combat probe with docs/tests.",
+  "next_resume_action": "Commit the verified secondary-weapon scaffold if not yet committed, then inspect live backlog for the next strongest safe-local Terminal Velocity slice; likely candidates include secondary ammo/source semantics, combat/explosion runtime evidence, AI retaliation cadence, or another bounded mission/map/fuel/combat probe with docs/tests.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 77,
+    "ahead": 78,
     "branch": "main",
-    "dirty": false,
-    "head": "f0ee73a"
+    "dirty": true,
+    "head": "e1e6d3b"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -99,11 +98,11 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "schema_version": 1,
-  "status": "checkpointed_not_scheduled",
+  "status": "running",
   "task_id": "terminal-velocity-game-development",
   "tool_caps_policy": {
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T05:06:11.687016+00:00"
+  "updated_at": "2026-06-04T05:13:32.461393+00:00"
 }
