@@ -5,10 +5,10 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 200,
+    "ahead": 202,
     "dirty": false,
-    "head": "8a1ebca",
-    "status_short": "## main...origin/main [ahead 200]"
+    "head": "b8b7a3f",
+    "status_short": "## main...origin/main [ahead 202]"
   },
   "operational_owner_candidate": "loki-game",
   "status": "running",
@@ -56,26 +56,26 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_commodity_sell_blocked_recovery_loop_labels_blockers_and_recovers -v (OK)",
-    "python3 tools/run_gameplay_scenarios.py commodity_sell_blocked_recovery_loop --pretty (success=true; blocked no-hold and in-space sells; recovered credits/cargo)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (31 tests OK)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (146 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=27 total=27)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=27)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_cross_market_trade_spread_scout_buys_sol_food_and_sells_at_levo -v (RED: unknown scenario before implementation; GREEN OK after implementation)",
+    "python3 tools/run_gameplay_scenarios.py cross_market_trade_spread_scout --pretty (success=true; Sol buy 42, Levo sell 120, creditsDelta=780)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (33 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (148 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=29 total=29)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=29)",
     "git diff --check (OK)",
-    "git commit -> 34c0a13 feat(native): add commodity sell recovery scenario"
+    "git commit -> b8b7a3f feat(native): add cross-market trade scout scenario"
   ],
-  "last_checkpoint_commit": "8a1ebca",
-  "last_commit": "34c0a13",
+  "last_checkpoint_commit": "602a1d2",
+  "last_commit": "b8b7a3f",
   "last_commits": [
-    "8a1ebca chore(runner): checkpoint commodity sell scenario",
-    "34c0a13 feat(native): add commodity sell recovery scenario",
-    "a702eef chore(runner): checkpoint Levo sellback scenario",
-    "9500489 feat(native): add Levo sellback scenario"
+    "b8b7a3f feat(native): add cross-market trade scout scenario",
+    "8a4d8bf feat(native): add commodity buy recovery scenario",
+    "602a1d2 chore(runner): checkpoint commodity sell scenario",
+    "34c0a13 feat(native): add commodity sell recovery scenario"
   ],
-  "current_milestone": "Committed commodity sell blocked/recovery symbolic scenario: sell with no held lot and sell while in space now emit labeled blockers, then landing/selling restores starting credits/cargo in the scenario curriculum.",
-  "next_resume_action": "Inspect live backlog/checklists again and choose the next strongest safe-local Terminal Velocity slice; likely add another economy edge/recovery scenario, promote existing curriculum into Godot guidance/probes, or gather bounded Classic evidence if source truth is needed.",
-  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after 34c0a13. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "current_milestone": "Committed cross-market trade spread scout scenario: the curriculum now travels Levo -> Sol, buys one scaffold Food lot at Sol, returns to Levo, sells it against Levo sell price, and records pending-Classic cross-market source boundaries.",
+  "next_resume_action": "Inspect live backlog/checklists again and choose the next strongest safe-local Terminal Velocity slice; likely extend economy/trade UI guidance or promote another source-boundary-labeled progression/recovery scenario.",
+  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after b8b7a3f. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "kind": "cronjob",
     "name": "Terminal Velocity continuous completion runner",
@@ -109,5 +109,5 @@
     "progress": "not needed; run stayed under about 10 minutes after start heartbeat and no long verification exceeded heartbeat interval",
     "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T11:18:41Z"
+  "updated_at": "2026-06-04T11:30:32Z"
 }
