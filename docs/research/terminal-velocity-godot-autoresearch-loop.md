@@ -270,6 +270,15 @@ Mission deadline completed-state scenario contract:
 - `sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold`; `oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace`.
 - This is a Terminal Velocity guardrail scaffold; exact EV Classic completed-mission cleanup/UI remains pending runtime/manual evidence.
 
+Mission deadline abort scenario contract:
+
+- `RunGodot.ps1 -MissionDeadlineAbortLog` / `--tv-mission-deadline-abort-log`
+- Exercises the Terminal Velocity timed-mission abort guardrail in the Godot fast-eval lane.
+- Seeds deterministic mission `deadline_dispatch_failure_probe`, aborts it before the deadline, advances past the former limit, then attempts the deadline-failure helper and verifies it remains blocked because the mission is no longer active.
+- Logs abort, no-late-failure, cargo-release, no-failure-flag, and reputation-preservation booleans (`deadlineMissionAborted=true`, `lateFailurePrevented=true`, `reservedCargoReleased=true`, `failureFlagPreserved=true`, `reputationPreserved=true`), aborted history count, failed history count, and latest abort record.
+- `sourceLabel=terminal-velocity-mission-deadline-abort-scaffold`; `oracleStatus=deadline_abort_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity guardrail scaffold; exact EV Classic abort/deadline interaction, UI wording, and date inclusivity remain pending runtime/manual evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`

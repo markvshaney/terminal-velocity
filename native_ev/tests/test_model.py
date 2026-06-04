@@ -1426,6 +1426,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-mission-deadline-completed-log', run_script)
         self.assertIn('tv-mission-deadline-completed-log', wrapper)
 
+    def test_godot_mission_deadline_abort_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-deadline-abort-log',
+            'func _run_mission_deadline_abort_log',
+            'TV_MISSION_DEADLINE_ABORT_EVENT',
+            'deadlineMissionAborted=true',
+            'lateFailurePrevented=true',
+            'reservedCargoReleased=true',
+            'failureFlagPreserved=true',
+            'reputationPreserved=true',
+            'abortedHistoryCount=%d',
+            'sourceLabel=terminal-velocity-mission-deadline-abort-scaffold',
+            'oracleStatus=deadline_abort_pending_classic_runtime_or_manual_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionDeadlineAbortLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-deadline-abort-log', run_script)
+        self.assertIn('tv-mission-deadline-abort-log', wrapper)
+        self.assertIn('Mission deadline abort scenario contract', plan)
+
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
