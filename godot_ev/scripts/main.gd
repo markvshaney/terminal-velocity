@@ -1855,6 +1855,7 @@ func _run_cargo_salvage_log() -> void:
 	if not cargo_salvage_pickups.is_empty() and cargo == cargo_before_destroy:
 		pos = cargo_salvage_pickups[0].get("position", pos)
 		_advance_cargo_salvage_pickups()
+	var target_destroyed := _target_destroyed(target_index)
 	var salvage_created := cargo_salvage_pickups.size() > 0 or status_messages.any(func(message): return str(message).contains("Recovered 2 tons of Equipment salvage"))
 	var salvage_scooped := int(commodity_hold.get("equipment", 0)) > equipment_before_destroy and cargo > cargo_before_destroy
 	var cargo_after_scoop := cargo
@@ -1875,7 +1876,8 @@ func _run_cargo_salvage_log() -> void:
 	cargo_salvage_pickups.clear()
 	_restore_cargo_salvage_pickups(saved_salvage)
 	var salvage_resume_visible := cargo_salvage_pickups.size() == remaining_pickups_before_save and not cargo_salvage_pickups.is_empty() and str(cargo_salvage_pickups[0].get("commodityId", "")) == "equipment"
-	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(_target_destroyed(target_index)).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), cargo_salvage_pickups.size(), str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), status_line])
+	var salvage_inventory_visible := _player_inventory_lines().has("In-space salvage: 1 pickup(s), 2 tons — TV combat-salvage scaffold; Classic loot behavior pending")
+	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s salvageInventoryVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), remaining_pickups_before_save, str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), str(salvage_inventory_visible).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_target_selection_log() -> void:
@@ -4610,9 +4612,18 @@ func _player_inventory_lines() -> Array[String]:
 		"Weapons: %s" % _inventory_dictionary_summary(owned_weapons),
 		_primary_weapon_inventory_line(),
 		_secondary_weapon_inventory_line(),
+		_salvage_pickup_inventory_line(),
 	]
 	lines.append_array(_active_mission_player_info_lines())
 	return lines
+
+func _salvage_pickup_inventory_line() -> String:
+	if cargo_salvage_pickups.is_empty():
+		return "In-space salvage: none"
+	var total_tons := 0
+	for pickup in cargo_salvage_pickups:
+		total_tons += int(pickup.get("tons", 0))
+	return "In-space salvage: %d pickup(s), %d tons — TV combat-salvage scaffold; Classic loot behavior pending" % [cargo_salvage_pickups.size(), total_tons]
 
 func _primary_weapon_inventory_line() -> String:
 	var weapon := _primary_weapon_stats()
