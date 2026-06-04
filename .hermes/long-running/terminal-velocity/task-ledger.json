@@ -5,31 +5,34 @@
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "Committed deterministic target-selection log scaffold for N/R target behavior comparison surface.",
+  "current_milestone": "Committed afterburner acceleration/fuel scaffold with deterministic Godot log and source-fidelity backlog documentation.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     ".hermes/long-running/terminal-velocity/heartbeat.json": true,
-    "progress_heartbeats": "not_needed_under_10_min_after_start_slice",
+    "progress_heartbeats": "not needed; verification completed under long-run heartbeat threshold after start heartbeat",
     "send_message_available": false,
     "start_heartbeat": "file_fallback",
     "visibility_degraded": true
   },
-  "last_commit": "14c664f",
+  "last_commit": "f0ee73a",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_target_selection_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty",
-    "./run_godot.sh tv-target-selection-log",
-    "./run_godot.sh self-test",
-    "git diff --check"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_deterministic_movement_log_contract -v",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (130 tests)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "./run_godot.sh tv-afterburner-log -> TV_AFTERBURNER_EVENT speedBoosted=true fuelDrained=true",
+    "./run_godot.sh tv-movement-log -> deterministic movement logs emitted",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
+    "git diff --check -> OK",
+    "git commit -> feat(godot): add afterburner log scaffold (f0ee73a)"
   ],
-  "next_resume_action": "Inspect live backlog and implement the next strongest safe-local Terminal Velocity slice; likely candidates: original-runtime target-selection observation if host is unlocked/safe, secondary-weapon scaffold, or another bounded combat/navigation fidelity probe with docs/tests.",
+  "next_resume_action": "Inspect live backlog and choose the next strongest safe-local Terminal Velocity slice; current likely candidates: capture/decode exact EV Classic afterburner fuel/acceleration behavior, secondary-weapon scaffold, target/combat guardrails, or another bounded mission/map/fuel/combat probe with docs/tests.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
+    "ahead": 77,
     "branch": "main",
     "dirty": false,
-    "head": "HEAD checkpoint commit; code slice commit 14c664f"
+    "head": "f0ee73a"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -102,5 +105,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T04:58:00.543938+00:00"
+  "updated_at": "2026-06-04T05:06:11.687016+00:00"
 }
