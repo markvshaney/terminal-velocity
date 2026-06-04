@@ -369,6 +369,33 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-player-disabled-log', run_script)
         self.assertIn('[switch]$PlayerDisabledLog', windows_script)
 
+    def test_godot_shield_recharge_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_SHIELD_RECHARGE_EVENT',
+            '--tv-shield-recharge-log',
+            'func _run_shield_recharge_log() -> void:',
+            'player_shield_recharge_progress',
+            'func _recharge_player_shields(delta: float) -> void:',
+            'shieldsAfterShortWait=%d',
+            'shortWaitBlocked=%s',
+            'shieldsAfterOneTick=%d',
+            'firstTickRecharged=%s',
+            'shieldsAfterMultiTick=%d',
+            'multiTickRecharged=%s',
+            'disabledRechargeBlocked=%s',
+            'sourceRechargeFrames=%d',
+            'sourceLabel=decoded-resource-backed-ship-shield-recharge-scaffold',
+            'oracleStatus=classic_runtime_shield_recharge_timing_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-shield-recharge-log', run_script)
+        self.assertIn('[switch]$ShieldRechargeLog', windows_script)
+
     def test_godot_projectile_motion_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

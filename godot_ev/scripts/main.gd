@@ -51,6 +51,7 @@ const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
 const PLAYER_DISABLED_EVENT_LOG_PREFIX := "TV_PLAYER_DISABLED_EVENT"
+const SHIELD_RECHARGE_EVENT_LOG_PREFIX := "TV_SHIELD_RECHARGE_EVENT"
 const RETALIATION_EVENT_LOG_PREFIX := "TV_RETALIATION_EVENT"
 const PROJECTILE_MOTION_EVENT_LOG_PREFIX := "TV_PROJECTILE_MOTION_EVENT"
 const EXPLOSION_EVENT_LOG_PREFIX := "TV_EXPLOSION_EVENT"
@@ -242,6 +243,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-player-disabled-log") or OS.get_cmdline_user_args().has("--tv-player-disabled-log"):
 		call_deferred("_run_player_disabled_log")
+	if OS.get_cmdline_args().has("--tv-shield-recharge-log") or OS.get_cmdline_user_args().has("--tv-shield-recharge-log"):
+		call_deferred("_run_shield_recharge_log")
 	if OS.get_cmdline_args().has("--tv-retaliation-log") or OS.get_cmdline_user_args().has("--tv-retaliation-log"):
 		call_deferred("_run_retaliation_log")
 	if OS.get_cmdline_args().has("--tv-projectile-motion-log") or OS.get_cmdline_user_args().has("--tv-projectile-motion-log"):
@@ -1638,6 +1641,45 @@ func _run_player_disabled_log() -> void:
 		shields_before,
 		player_shields,
 		str(npc_weapon.get("id", "")),
+	])
+	get_tree().quit(0)
+
+func _run_shield_recharge_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	var max_shields := _max_player_shields()
+	var source_recharge_frames := int(player_ship.get("shieldRecharge", 30))
+	player_hull = _max_player_hull()
+	player_shields = max(0, max_shields - 3)
+	player_shield_recharge_progress = 0.0
+	var shields_before := player_shields
+	var short_wait_seconds := maxf(0.0, float(source_recharge_frames - 1) / 60.0)
+	_recharge_player_shields(short_wait_seconds)
+	var shields_after_short_wait := player_shields
+	var short_wait_blocked := shields_after_short_wait == shields_before
+	_recharge_player_shields(1.0 / 60.0)
+	var shields_after_one_tick := player_shields
+	var first_tick_recharged := shields_after_one_tick == shields_before + 1
+	_recharge_player_shields(float(source_recharge_frames * 2) / 60.0)
+	var shields_after_multi_tick := player_shields
+	var multi_tick_recharged: bool = shields_after_multi_tick >= mini(max_shields, shields_before + 3)
+	player_hull = 0
+	player_shield_recharge_progress = 0.0
+	var shields_before_disabled := player_shields
+	_recharge_player_shields(float(source_recharge_frames * 2) / 60.0)
+	var disabled_recharge_blocked := player_shields == shields_before_disabled
+	print("%s shieldsBefore=%d shieldsAfterShortWait=%d shortWaitBlocked=%s shieldsAfterOneTick=%d firstTickRecharged=%s shieldsAfterMultiTick=%d multiTickRecharged=%s disabledRechargeBlocked=%s maxShields=%d sourceRechargeFrames=%d sourceLabel=decoded-resource-backed-ship-shield-recharge-scaffold oracleStatus=classic_runtime_shield_recharge_timing_pending" % [
+		SHIELD_RECHARGE_EVENT_LOG_PREFIX,
+		shields_before,
+		shields_after_short_wait,
+		str(short_wait_blocked).to_lower(),
+		shields_after_one_tick,
+		str(first_tick_recharged).to_lower(),
+		shields_after_multi_tick,
+		str(multi_tick_recharged).to_lower(),
+		str(disabled_recharge_blocked).to_lower(),
+		max_shields,
+		source_recharge_frames,
 	])
 	get_tree().quit(0)
 
