@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Godot branch-choice probe covers both Federation and Freeport alignment choices; symbolic Freeport branch scenario also committed this tick.",
+  "current_milestone": "Mission alignment offer gates now cover mutually exclusive choice, story prerequisite recovery, reputation/legal threshold recovery, and both Federation/Freeport delivery branches.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron final response",
@@ -9,36 +9,38 @@
     "start": "heartbeat.json fallback was used; no send_message tool is registered in this cron surface",
     "visibility_degraded": true
   },
-  "last_checkpoint_commit": "bde0a48",
-  "last_commit": "ce97e7d",
+  "last_checkpoint_commit": "91b58ee",
+  "last_commit": "91b58ee",
   "last_commits": [
+    "91b58ee test: cover alignment story prerequisite recovery",
+    "a8392a9 test: cover alignment offer requirement recovery",
+    "ce97e7d chore(runner): checkpoint freeport alignment slice",
     "bde0a48 chore(runner): checkpoint mission abort reaccept slice",
-    "ec51f8e test: add mission abort reaccept curriculum scenario",
-    "751b7f6 chore(runner): checkpoint federation alignment slice",
-    "a0f37ce test: add federation alignment delivery scenario",
-    "b45a4a2 chore(runner): checkpoint return margin guardrail"
+    "ec51f8e test: add mission abort reaccept curriculum scenario"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_branch_log_contract -v (OK)",
-    "./run_godot.sh tv-mission-alignment-branch-log (OK; federationBranchAccepted=true; freeportBranchHiddenAfterChoice=true; freeportBranchAccepted=true; federationBranchHiddenAfterChoice=true)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (42 tests OK)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (157 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=38 total=38)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=38)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_alignment_offer_requirement_recovery_blocks_and_restores_branch_offers -v (OK)",
+    "python3 tools/run_gameplay_scenarios.py alignment_offer_requirement_recovery --pretty (success=true)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_alignment_story_prereq_recovery_blocks_and_restores_branch_offers native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order -v (OK)",
+    "python3 tools/run_gameplay_scenarios.py alignment_story_prereq_recovery --pretty (success=true)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (44 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (159 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=40 total=40)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=40)",
     "git diff --check (OK)"
   ],
-  "next_resume_action": "Inspect live backlog/checklists and choose the next strongest safe-local Terminal Velocity slice; likely extend another noncombat mission/trade/recovery edge, promote mature scaffold guidance into Godot help/log surfaces, or gather bounded Classic evidence while preserving pending-Classic boundaries.",
+  "next_resume_action": "Inspect live backlog/checklists and choose the next strongest safe-local Terminal Velocity slice; likely mine original EV Classic/manual/resource evidence for mission abort/failure UI before changing player-facing wording, or add another deterministic noncombat mission/trade/service recovery scenario with explicit pending-Classic boundaries.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 219,
+    "ahead": 224,
     "branch": "main",
     "dirty": false,
-    "head": "bde0a48",
-    "status_short": "## main...origin/main [ahead 219]"
+    "head": "91b58ee",
+    "status_short": "## main...origin/main [ahead 224]"
   },
   "repo_state": {
-    "ahead": 221,
+    "ahead": 224,
     "branch": "main",
     "dirty": "no"
   },
@@ -114,5 +116,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T12:50:13Z"
+  "updated_at": "2026-06-04T13:01:04Z"
 }
