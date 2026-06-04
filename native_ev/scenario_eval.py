@@ -40,6 +40,7 @@ SCENARIO_CURRICULUM = [
     'commodity_buy_blocked_recovery_loop',
     'cross_market_trade_spread_scout',
     'max_hold_trade_route_scout',
+    'trade_route_refuel_profit_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -954,6 +955,44 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
                 'oracleStatus': 'classic_runtime_multi_lot_trade_spread_pending',
             },
         ]
+    if name == 'trade_route_refuel_profit_loop':
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'buy_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-refuel-trade-route-scaffold',
+                'oracleStatus': 'classic_runtime_refuel_trade_route_pending',
+            },
+            {
+                'type': 'buy_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-refuel-trade-route-scaffold',
+                'oracleStatus': 'classic_runtime_refuel_trade_route_pending',
+            },
+            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM, 'expectBlocked': True},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'refuel'},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {
+                'type': 'sell_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-refuel-trade-route-scaffold',
+                'oracleStatus': 'classic_runtime_refuel_trade_route_pending',
+            },
+            {
+                'type': 'sell_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-refuel-trade-route-scaffold',
+                'oracleStatus': 'classic_runtime_refuel_trade_route_pending',
+            },
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -1235,6 +1274,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'sold_two_lots_at_levo': 'passed' if len(sell_events) == 2 and all(event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('unitPrice') == 120 for event in sell_events) else 'failed',
             'returned_to_levo_with_full_hold_profit': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS + (2 * (120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
             'recorded_max_hold_trade_source_boundary': 'passed' if trade_events and all(event.get('sourceLabel') == 'terminal-velocity-max-hold-trade-scaffold' and event.get('oracleStatus') == 'classic_runtime_multi_lot_trade_spread_pending' for event in trade_events) else 'failed',
+        })
+    elif name == 'trade_route_refuel_profit_loop':
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        blocked_jumps = [event for event in trace if event.get('type') == 'blocked_jump']
+        checks.update({
+            'blocked_profit_route_on_low_fuel': 'passed' if any(event.get('destinationSystem') == START_SYSTEM and event.get('reason') == 'insufficient fuel' for event in blocked_jumps) else 'failed',
+            'refueled_before_return_leg': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
+            'completed_refueled_trade_profit': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS + (2 * (120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
+            'recorded_refuel_trade_source_boundary': 'passed' if trade_events and all(event.get('sourceLabel') == 'terminal-velocity-refuel-trade-route-scaffold' and event.get('oracleStatus') == 'classic_runtime_refuel_trade_route_pending' for event in trade_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

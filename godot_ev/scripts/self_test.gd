@@ -109,6 +109,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"commodity_buy_blocked_recovery_loop",
 		"cross_market_trade_spread_scout",
 		"max_hold_trade_route_scout",
+		"trade_route_refuel_profit_loop",
 		"mission_runner_first_delivery",
 		"scan_intro_mission_offers",
 		"intro_courier_mission_delivery",

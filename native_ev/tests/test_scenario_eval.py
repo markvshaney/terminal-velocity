@@ -22,6 +22,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'commodity_buy_blocked_recovery_loop',
                 'cross_market_trade_spread_scout',
                 'max_hold_trade_route_scout',
+                'trade_route_refuel_profit_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -186,6 +187,26 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual([event['cargoUsed'] for event in trade_events], [10, 20, 10, 0])
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-max-hold-trade-scaffold' for event in trade_events))
         self.assertTrue(all(event['oracleStatus'] == 'classic_runtime_multi_lot_trade_spread_pending' for event in trade_events))
+
+    def test_trade_route_refuel_profit_loop_blocks_low_fuel_then_recovers(self):
+        result = run_scripted_scenario('trade_route_refuel_profit_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['credits'], 11560)
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'].get('food', 0), 0)
+        self.assertEqual(result['checks']['blocked_profit_route_on_low_fuel'], 'passed')
+        self.assertEqual(result['checks']['refueled_before_return_leg'], 'passed')
+        self.assertEqual(result['checks']['completed_refueled_trade_profit'], 'passed')
+        self.assertEqual(result['checks']['recorded_refuel_trade_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump']
+        self.assertTrue(any(event.get('reason') == 'insufficient fuel' and event.get('destinationSystem') == 'Levo' for event in blocked))
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertEqual([event['system'] for event in trade_events], ['Sol', 'Sol', 'Levo', 'Levo'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-refuel-trade-route-scaffold' for event in trade_events))
+        self.assertTrue(all(event['oracleStatus'] == 'classic_runtime_refuel_trade_route_pending' for event in trade_events))
 
     def test_scenario_rejects_unlinked_jump_and_records_failed_check(self):
         result = run_scripted_scenario(
