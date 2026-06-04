@@ -5,22 +5,23 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "profile_addressed_selftest",
+  "current_milestone": "combat_explosion_log_scaffold",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    "progress_heartbeats": "not needed; run stayed under the long-run heartbeat threshold after start heartbeat",
+    "progress_heartbeats": "not needed; run stayed under long-run heartbeat threshold after verification",
     "start_heartbeat": "wrote .hermes/long-running/terminal-velocity/heartbeat.json because send_message tool unavailable",
     "visibility_degraded": "send_message tool unavailable; heartbeat file fallback used"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_prefs_screenshot_artifact -v -> OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic systems=10 ships=26 argosyFrames=36 soundsLoaded=1 gameplayScenarios=20 pictsLoaded=22 prefScreen=original-ev-classic-observed",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-combat-log -> TV_COMBAT_EVENT explosionTriggered=true explosionSourceLabel=terminal-velocity-explosion-visual-scaffold",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (127 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> test(godot): report classic profile in selftest (2e99c45)"
+    "git commit -> feat(godot): log combat explosions (6937bd1)"
   ],
-  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: compare travel event logs against original-runtime captures, run/prepare bounded landed service matrix evidence, add combat target/acquire/projectile/hit/explosion event log coverage, or implement another player-visible legal/map/fuel/mission helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
+  "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic combat runtime/resource evidence for exact fire cadence/projectile motion/explosion frames/rewards/legal consequences, improve route/fuel/original-runtime comparison probes, or add another player-visible legal/map/fuel/mission/combat helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": "/home/bh/workspaces/loki/terminal-velocity",
@@ -95,5 +96,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T02:11:45Z"
+  "updated_at": "2026-06-04T02:34:40Z"
 }
