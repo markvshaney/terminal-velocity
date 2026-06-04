@@ -5,14 +5,14 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 47,
+    "ahead": 1,
     "dirty": false,
-    "head": "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
-    "status_short": "## main...origin/main [ahead 47]"
+    "head": "commit containing legal clemency credit guardrail scenario; final SHA reported by git log after amend",
+    "status_short": "## main...origin/main [ahead 1]"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 47,
+    "ahead": 1,
     "dirty": "no"
   },
   "operational_owner_candidate": "loki-game",
@@ -91,31 +91,33 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Secondary weapon recovery help committed and verified",
-  "last_commit": "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
-  "last_checkpoint_commit": "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
+  "current_milestone": "Legal clemency insufficient-credit guardrail scenario committed and verified",
+  "last_commit": "commit containing legal clemency credit guardrail scenario; final SHA reported by git log after amend",
+  "last_checkpoint_commit": "commit containing legal clemency credit guardrail scenario; final SHA reported by git log after amend",
   "last_commits": [
-    "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
+    "commit containing legal clemency credit guardrail scenario; final SHA reported by git log after amend",
+    "9ac1525 Expose secondary weapon recovery help",
     "36a483d Expose afterburner recovery help",
     "8dd23e6 Expose shield recharge help",
     "3167360 Expose disabled recovery help"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasCombatHelp=true; help overlay contract includes secondary weapon recovery text via test",
-    "./run_godot.sh tv-secondary-weapon-log -> secondaryUnavailableAtStart=true, secondaryCycleSelected=true, secondaryProjectileSpawned=true, primaryWeaponPreserved=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 176 tests OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=55",
-    "git diff --check -> OK"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_legal_clemency_insufficient_credit_guardrail_blocks_then_recovers native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_cli_can_run_entire_curriculum_as_named_results -v -> OK",
+    "python3 tools/run_gameplay_scenarios.py --all -> summary passed=56 failed=0",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> Ran 60 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 177 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=56",
+    "git diff --check -> OK",
+    "git commit -m 'Add legal clemency credit guardrail scenario' -> commit created; final SHA reported by git log after amend"
   ],
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
     "start_heartbeat_fallback": ".hermes/long-running/terminal-velocity/heartbeat.json",
     "progress_heartbeats_sent": 0,
-    "note": "send_message tool unavailable in this cron surface; start heartbeat written to fallback JSON (ignored local artifact, not committed)"
+    "note": "send_message tool unavailable in this cron surface; heartbeat written to fallback JSON (ignored local artifact, not committed)"
   },
-  "next_resume_action": "Inspect live backlog and choose the next bounded source-aligned Terminal Velocity slice; strong candidates include original-runtime landed-service/store/refusal UI evidence, legal/service recovery guidance, or another verified scenario-to-help promotion with Python/Godot coverage.",
+  "next_resume_action": "Inspect live backlog and choose the next bounded source-aligned Terminal Velocity slice. Strong candidates: original-runtime landed-service/store/refusal UI evidence, legal/service recovery guidance, or a player-visible Godot probe/help surface for the newly verified legal-clemency credit guardrail without hardcoded repeated copy.",
   "resume_prompt": "Continue Terminal Velocity safe-local vertical slices from /home/bh/workspaces/loki/terminal-velocity. Read ledger/events and continuation prompt, inspect git/backlog, preserve source-boundary labels, implement one player-visible or symbolic behavior, verify with Python/Godot, update docs/ledger/events, and commit locally.",
-  "updated_at": "2026-06-04T16:28:42.188672Z"
+  "updated_at": "2026-06-04T19:39:37Z"
 }

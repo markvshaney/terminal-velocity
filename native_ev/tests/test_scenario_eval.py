@@ -69,6 +69,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'legal_docking_service_gate_recovery',
                 'weapon_reputation_gate_recovery',
                 'contraband_scan_clemency_recovery',
+                'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
                 'disposable_combat_placeholder',
             ],
@@ -1126,6 +1127,23 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(scan['sourceLabel'], 'terminal-velocity-classic-resource-smuggling-scan-semantics')
         self.assertEqual(scan['oracleStatus'], 'classic_runtime_scan_frequency_and_ui_wording_pending')
         self.assertEqual(scan['confiscated'], {'equipment': 2})
+        clemency = [event for event in result['trace'] if event['type'] == 'pay_legal_clemency'][-1]
+        self.assertEqual(clemency['sourceLabel'], 'terminal-velocity-inferred-clemency-scaffold')
+        self.assertEqual(clemency['oracleStatus'], 'approved_inference_pending_ev_classic_confirmation')
+
+    def test_legal_clemency_insufficient_credit_guardrail_blocks_then_recovers(self):
+        result = run_scripted_scenario('legal_clemency_insufficient_credit_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['blocked_clemency_one_credit_short'], 'passed')
+        self.assertEqual(result['checks']['recovered_clemency_at_exact_cost'], 'passed')
+        self.assertEqual(result['checks']['recorded_clemency_source_boundary'], 'passed')
+        self.assertEqual(result['state']['credits'], 0)
+        self.assertEqual(result['state']['legalRecords']['Federation'], -5)
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_legal_clemency'][-1]
+        self.assertEqual(blocked['reason'], 'insufficient credits')
+        self.assertEqual(blocked['cost'], 1000)
+        self.assertEqual(blocked['credits'], 999)
         clemency = [event for event in result['trace'] if event['type'] == 'pay_legal_clemency'][-1]
         self.assertEqual(clemency['sourceLabel'], 'terminal-velocity-inferred-clemency-scaffold')
         self.assertEqual(clemency['oracleStatus'], 'approved_inference_pending_ev_classic_confirmation')

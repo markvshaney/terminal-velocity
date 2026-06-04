@@ -57,6 +57,7 @@
     "legal_docking_service_gate_recovery",
     "weapon_reputation_gate_recovery",
     "contraband_scan_clemency_recovery",
+    "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
     "disposable_combat_placeholder"
   ],
@@ -100,6 +101,10 @@
     "contraband_scan_clemency_recovery": {
       "purpose": "Contraband scan/recovery loop: confiscate illegal cargo, apply a government fine/legal penalty, then pay a clemency scaffold to partially repair the legal record while preserving source boundaries.",
       "surface": "government patrol/legal recovery scaffold"
+    },
+    "legal_clemency_insufficient_credit_guardrail": {
+      "purpose": "Legal clemency credit guardrail: block a clemency payment when the pilot is one credit short, then recover when exact-cost credits are available while preserving scaffold/source-boundary labels.",
+      "surface": "government legal recovery guardrail scaffold"
     },
     "pirate_avoidance_escape_route": {
       "purpose": "Pirate-avoidance loop: detect a symbolic pirate intercept, choose a linked safe-port jump, land, and verify combat remains unexecuted while preserving scaffold/source-boundary labels.",

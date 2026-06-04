@@ -89,6 +89,7 @@ SCENARIO_CURRICULUM = [
     'legal_docking_service_gate_recovery',
     'weapon_reputation_gate_recovery',
     'contraband_scan_clemency_recovery',
+    'legal_clemency_insufficient_credit_guardrail',
     'pirate_avoidance_escape_route',
     'disposable_combat_placeholder',
 ]
@@ -1771,6 +1772,13 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'apply_contraband_scan', 'government': 'Federation'},
             {'type': 'pay_legal_clemency', 'government': 'Federation'},
         ]
+    if name == 'legal_clemency_insufficient_credit_guardrail':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'credits': 999, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
+            {'type': 'pay_legal_clemency', 'government': 'Federation', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'credits': 1000}},
+            {'type': 'pay_legal_clemency', 'government': 'Federation'},
+        ]
     if name == 'pirate_avoidance_escape_route':
         return [
             {'type': 'depart'},
@@ -2200,6 +2208,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'confiscated_federation_contraband': 'passed' if scan.get('government') == 'Federation' and scan.get('action') == 'fine' and scan.get('confiscated') == {'equipment': 2} and state.get('cargoHold') == {} and state.get('cargoUsed') == 0 else 'failed',
             'applied_federation_fine_and_legal_penalty': 'passed' if scan.get('creditsDelta') == -800 and scan.get('legalDelta') == -3 else 'failed',
             'paid_clemency_after_scan': 'passed' if clemency.get('government') == 'Federation' and clemency.get('cost') == 1000 and clemency.get('legalDelta') == 25 and state.get('credits') == 3200 and state.get('legalRecords', {}).get('Federation') == -8 else 'failed',
+        })
+    elif name == 'legal_clemency_insufficient_credit_guardrail':
+        blocked = [event for event in trace if event.get('type') == 'blocked_legal_clemency']
+        paid = [event for event in trace if event.get('type') == 'pay_legal_clemency']
+        checks.update({
+            'blocked_clemency_one_credit_short': 'passed' if blocked and blocked[-1].get('reason') == 'insufficient credits' and blocked[-1].get('cost') == 1000 and blocked[-1].get('credits') == 999 else 'failed',
+            'recovered_clemency_at_exact_cost': 'passed' if paid and paid[-1].get('cost') == 1000 and state.get('credits') == 0 and state.get('legalRecords', {}).get('Federation') == -5 else 'failed',
+            'recorded_clemency_source_boundary': 'passed' if blocked and paid and blocked[-1].get('sourceLabel') == 'terminal-velocity-inferred-clemency-scaffold' and blocked[-1].get('oracleStatus') == 'approved_inference_pending_ev_classic_confirmation' and paid[-1].get('sourceLabel') == 'terminal-velocity-inferred-clemency-scaffold' and paid[-1].get('oracleStatus') == 'approved_inference_pending_ev_classic_confirmation' else 'failed',
         })
     elif name == 'pirate_avoidance_escape_route':
         checks.update({
