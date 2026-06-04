@@ -1,38 +1,38 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local shield recharge scaffold code/docs/tests/commit completed; Classic shield recharge timing remains evidence-gated but not blocking Terminal Velocity scaffold work",
+    "reason": "no active gate; safe-local target scanner S/H HUD/status scaffold verified; exact Classic target scanner semantics remain evidence-gated but do not block Terminal Velocity scaffold work",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Player shield recharge now has a deterministic Godot probe sourced to decoded ship shieldRecharge fields, verifying cadence, multi-tick recharge, and disabled-hull blocking while keeping exact Classic runtime timing pending.",
+  "current_milestone": "Target scanner/selection now displays selected target shield/hull S/H readouts in the scanner HUD and N/R target status messages, with deterministic target-selection log fields preserving scaffold source/oracle boundaries.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
+    "final_delivery": "cron_final_response",
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "fallback_file_written_after_timeout_parse_fix",
+    "progress_heartbeat": "fallback_file_written_before_full_verification",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "2d328fd feat(godot): log shield recharge scaffold",
+  "last_commit": "feat(godot): show target shield hull readouts (current checkpoint commit; exact hash changes when ledger is amended)",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_shield_recharge_log_contract -v -> OK",
-    "./run_godot.sh tv-shield-recharge-log -> TV_SHIELD_RECHARGE_EVENT shortWaitBlocked=true firstTickRecharged=true multiTickRecharged=true disabledRechargeBlocked=true sourceRechargeFrames=42",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_target_selection_log_contract -v && ./run_godot.sh tv-target-selection-log -> OK; TV_TARGET_SELECTION_EVENT includes cycledStatusHasStats=true closestStatusHasStats=true and S/H 150/300 status strings",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (138 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> 2d328fd feat(godot): log shield recharge scaffold"
+    "git commit --amend -> feat(godot): show target shield hull readouts (exact HEAD reported in final delivery)"
   ],
-  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: exact Classic/source evidence for shield recharge visual/timing, combat death/reload, projectile/explosion timing, AI/reward/legal outcomes, or the next bounded Terminal Velocity combat/navigation/playability scaffold.",
+  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: exact Classic/source evidence for target scanner semantics, combat death/reload, projectile/explosion timing, AI/reward/legal outcomes, or another bounded Terminal Velocity combat/navigation/playability scaffold.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 114,
+    "ahead": 115,
     "branch": "main",
     "dirty": false,
     "head": "checkpoint_commit_self_referential",
-    "status_short": "## main...origin/main [ahead 114]"
+    "status_short": "## main...origin/main [ahead 115]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -105,5 +105,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T07:26:54Z"
+  "updated_at": "2026-06-04T07:35:11Z"
 }
