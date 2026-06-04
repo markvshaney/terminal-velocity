@@ -1248,11 +1248,19 @@ func _run_navigation_guardrail_log() -> void:
 	map_visible = true
 	_select_first_linked_map_route()
 	player_fuel = 0
+	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var fuel_guidance := status_messages.has("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route")
+	player_fuel = _max_player_fuel()
+	pos = Vector2.ZERO
+	_jump()
+	var too_close_guidance := status_messages.has("Can't initiate hyperspace jump - not yet far enough away from system center.")
+	var original_bodies_for_no_port: Array = current_system.get("bodies", [])
+	current_system["bodies"] = []
 	pos = Vector2(9999, 9999)
 	vel = Vector2.ZERO
 	_try_land()
+	current_system["bodies"] = original_bodies_for_no_port
 	var no_port_guidance := status_messages.has("No port in range; fly closer to a planet/station and slow below landing speed")
 	pos = Vector2(float(current_system.get("bodies", [])[0].get("x", 0)), float(current_system.get("bodies", [])[0].get("y", 0)))
 	vel = Vector2(120, 0)
@@ -1271,7 +1279,7 @@ func _run_navigation_guardrail_log() -> void:
 	_refuel_current_ship()
 	original_bodies[0] = original_body
 	var refuel_guidance := status_messages.has("Refuel unavailable here; choose a port with refuel service")
-	print("%s noRouteGuidance=%s fuelGuidance=%s noPortGuidance=%s approachGuidance=%s refuelGuidance=%s sourceLabel=terminal-velocity-navigation-guardrail-scaffold oracleStatus=navigation_blocked_feedback_pending_playtest messages=%s" % [NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX, str(no_route_guidance), str(fuel_guidance), str(no_port_guidance), str(approach_guidance), str(refuel_guidance), JSON.stringify(status_messages)])
+	print("%s noRouteGuidance=%s fuelGuidance=%s tooCloseGuidance=%s noPortGuidance=%s approachGuidance=%s refuelGuidance=%s sourceLabel=terminal-velocity-navigation-guardrail-scaffold oracleStatus=navigation_blocked_feedback_pending_playtest messages=%s" % [NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX, str(no_route_guidance), str(fuel_guidance), str(too_close_guidance), str(no_port_guidance), str(approach_guidance), str(refuel_guidance), JSON.stringify(status_messages)])
 	get_tree().quit(0)
 
 func _run_legal_status_log() -> void:

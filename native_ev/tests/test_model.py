@@ -242,6 +242,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_navigation_guardrail_log',
             'No hyperspace route selected; open map (M) or queue mission route (G)',
             'Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route',
+            'Can\'t initiate hyperspace jump - not yet far enough away from system center.',
             'No port in range; fly closer to a planet/station and slow below landing speed',
             'Approach slower/closer to land; landing needs close range and speed under 90',
             'Refuel unavailable here; choose a port with refuel service',
@@ -249,6 +250,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Route fuel: %d hop(s), cost %d, fuel %d/%d',
             ' — refuel before full route',
             'preJumpFuelWarning=%s',
+            'tooCloseGuidance=%s',
             'Route selected: %s — fuel cost %d, fuel %d/%d — press J to jump',
             'sourceLabel=terminal-velocity-navigation-guardrail-scaffold',
         ]:
