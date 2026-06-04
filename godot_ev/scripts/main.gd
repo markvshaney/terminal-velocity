@@ -2164,10 +2164,14 @@ func _run_contraband_risk_log() -> void:
 	_jump()
 	var government_name := _current_government_name()
 	var commodity_id := "equipment"
+	commodity_hold[commodity_id] = EV_CLASSIC_COMMODITY_LOT_SIZE
+	cargo = EV_CLASSIC_COMMODITY_LOT_SIZE
 	var risk_line := _commodity_legal_hint_line(commodity_id)
+	var inventory_risk_line := _contraband_inventory_line()
 	var is_contraband := _commodity_is_contraband_for_government(commodity_id, government_name)
 	var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
-	print("%s routeToSolSelected=%s system=%s government=\"%s\" commodity=%s isContraband=%s finePerTon=%d bribeAllowed=%s hint=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending" % [CONTRABAND_RISK_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, commodity_id, str(is_contraband), int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), risk_line])
+	var inventory_risk_visible := inventory_risk_line.contains("equipment x10") and inventory_risk_line.contains("fine %d cr/ton" % int(policy.get("finePerTon", 0)))
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" commodity=%s isContraband=%s finePerTon=%d bribeAllowed=%s heldContrabandInventoryVisible=%s hint=\"%s\" inventoryHint=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending" % [CONTRABAND_RISK_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, commodity_id, str(is_contraband), int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), str(inventory_risk_visible), risk_line, inventory_risk_line])
 	get_tree().quit(0)
 
 func _run_pilot_save_resume_log() -> void:
@@ -4635,6 +4639,7 @@ func _player_inventory_lines() -> Array[String]:
 		"Fuel: %d/%d" % [player_fuel, _max_player_fuel()],
 		_combat_readiness_inventory_line(),
 		"Government/legal: %s" % _legal_warning_line(_current_government_name()),
+		_contraband_inventory_line(),
 		"Reputation scores: %s" % _inventory_dictionary_summary(reputation_scores),
 		"Legal records: %s" % _inventory_dictionary_summary(legal_records),
 		"Outfits: %s" % _inventory_dictionary_summary(owned_outfits),
@@ -4649,6 +4654,21 @@ func _player_inventory_lines() -> Array[String]:
 
 func _combat_readiness_inventory_line() -> String:
 	return "Combat readiness: shields %d/%d; hull %d/%d (repair cost %d cr); shield recharge cadence source-backed scaffold" % [player_shields, _max_player_shields(), player_hull, _max_player_hull(), _repair_cost()]
+
+func _contraband_inventory_line() -> String:
+	var government_name := _current_government_name()
+	var illegal_hold := _illegal_commodity_hold(government_name)
+	if illegal_hold.is_empty():
+		return "Contraband risk: no current %s contraband in hold — TV legal-risk scaffold; Classic scan UI pending" % government_name
+	var parts: Array[String] = []
+	var total_tons := 0
+	for commodity_id in illegal_hold.keys():
+		var tons := int(illegal_hold.get(commodity_id, 0))
+		total_tons += tons
+		parts.append("%s x%d" % [str(commodity_id), tons])
+	parts.sort()
+	var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
+	return "Contraband risk: %d ton(s) flagged by %s scans (%s), fine %d cr/ton — TV legal-risk scaffold; Classic scan UI pending" % [total_tons, government_name, ", ".join(parts), int(policy.get("finePerTon", 0))]
 
 func _salvage_pickup_inventory_line() -> String:
 	if cargo_salvage_pickups.is_empty():
