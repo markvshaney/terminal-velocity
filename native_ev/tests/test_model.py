@@ -318,6 +318,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-combat-log', run_script)
         self.assertIn('[switch]$CombatLog', windows_script)
 
+    def test_godot_target_selection_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_TARGET_SELECTION_EVENT',
+            '--tv-target-selection-log',
+            'func _run_target_selection_log',
+            'initialTarget=%d',
+            'cycledTarget=%d',
+            'closestTarget=%d',
+            'cycledStatusHasTarget=true',
+            'closestStatusHasClosest=true',
+            'targetCount=%d',
+            'sourceLabel=terminal-velocity-target-selection-scaffold',
+            'oracleStatus=classic_runtime_target_selection_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-target-selection-log', run_script)
+        self.assertIn('[switch]$TargetSelectionLog', windows_script)
+
     def test_godot_combat_guardrail_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

@@ -205,10 +205,10 @@ For every behavior row, record:
   - Status: `unknown`
 
 - [ ] Target selection behavior
-  - Evidence label: `unknown`
-  - Primary evidence needed: original runtime observation.
-  - Terminal Velocity current behavior: needs Godot log/self-test coverage.
-  - Status: `unknown`
+  - Evidence label: `terminal-velocity-observed`; exact EV Classic behavior remains `unknown` pending original runtime observation.
+  - Primary evidence needed: original runtime observation of `N` Next Target and `R` Closest Target behavior, including no-target and disabled/hostile-edge cases.
+  - Terminal Velocity current behavior: `N` cycles scanner contacts, `R` selects the closest scanner contact, scanner/HUD text updates with the selected contact, and `./run_godot.sh tv-target-selection-log` emits `TV_TARGET_SELECTION_EVENT` with initial/cycled/closest target indexes, target count, and status-line confirmation under `sourceLabel=terminal-velocity-target-selection-scaffold` / `oracleStatus=classic_runtime_target_selection_pending`.
+  - Status: `instrumented scaffold`; use the log as the TV comparison surface before promoting Classic fidelity.
 
 - [ ] Explosion and sound bindings
   - Evidence label: `decoded-resource-backed` for extracted assets/sound resources; runtime behavior still needs confirmation.

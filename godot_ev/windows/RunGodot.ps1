@@ -28,6 +28,7 @@ param(
     [switch]$GameplayCurriculumHelpLog,
     [switch]$CombatLog,
     [switch]$CombatGuardrailLog,
+    [switch]$TargetSelectionLog,
     [switch]$NavigationGuardrailLog,
     [switch]$LegalStatusLog,
     [switch]$LegalServiceGateLog,
@@ -107,6 +108,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-combat-log
 } elseif ($CombatGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-combat-guardrail-log
+} elseif ($TargetSelectionLog) {
+    & $Godot --headless --path $Project -- --tv-target-selection-log
 } elseif ($NavigationGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-navigation-guardrail-log
 } elseif ($LegalStatusLog) {

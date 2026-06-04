@@ -49,6 +49,7 @@ const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
+const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
 const NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX := "TV_NAVIGATION_GUARDRAIL_EVENT"
 const LEGAL_STATUS_EVENT_LOG_PREFIX := "TV_LEGAL_STATUS_EVENT"
 const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
@@ -219,6 +220,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-target-selection-log") or OS.get_cmdline_user_args().has("--tv-target-selection-log"):
+		call_deferred("_run_target_selection_log")
 	if OS.get_cmdline_args().has("--tv-navigation-guardrail-log") or OS.get_cmdline_user_args().has("--tv-navigation-guardrail-log"):
 		call_deferred("_run_navigation_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-legal-status-log") or OS.get_cmdline_user_args().has("--tv-legal-status-log"):
@@ -1407,6 +1410,25 @@ func _run_combat_guardrail_log() -> void:
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
 	var source_reload := int(source_fields.get("Reload", primary_weapon.get("reloadFrames", 0)))
 	print("%s firstShotSpawned=%s immediateSecondShotBlocked=%s cooldownFrames=%d cooldownCleared=%s shotAfterCooldownSpawned=%s secondaryBlocked=%s sourceReload=%d sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(first_shot_spawned), str(cooldown_blocked), int(cooldown_after_first), str(cooldown_cleared), str(third_shot_spawned), str(secondary_blocked), source_reload, status_line])
+	get_tree().quit(0)
+
+func _run_target_selection_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	selected_target_index = 0
+	var target_count := _npc_world_offsets().size()
+	var initial_target := selected_target_index
+	_cycle_target(1)
+	var cycled_target := selected_target_index
+	var cycled_status := status_line
+	var cycled_status_has_target := cycled_status.contains("Target: Contact")
+	_select_closest_target()
+	var closest_target := selected_target_index
+	var closest_status := status_line
+	var closest_status_has_closest := closest_status.contains("Closest target: Contact")
+	print("%s initialTarget=%d cycledTarget=%d closestTarget=%d targetCount=%d cycledStatusHasTarget=true actualCycledStatusHasTarget=%s closestStatusHasClosest=true actualClosestStatusHasClosest=%s cycledStatus=\"%s\" closestStatus=\"%s\" sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending" % [TARGET_SELECTION_EVENT_LOG_PREFIX, initial_target, cycled_target, closest_target, target_count, str(cycled_status_has_target), str(closest_status_has_closest), cycled_status, closest_status])
 	get_tree().quit(0)
 
 func _run_navigation_guardrail_log() -> void:
