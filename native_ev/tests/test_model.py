@@ -1986,8 +1986,23 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(special_ship_mission['semanticFields']['completion']['reward'], 50)
         self.assertEqual(special_ship_mission['semanticFields']['completion']['failureRecordPenalty'], -25)
         self.assertEqual(special_ship_mission['semanticFields']['lifecycle']['flags']['flagNames'], ['removePrepaidOutfitOnFailureOrAbort'])
-        self.assertTrue(any(not mission['semanticFields']['lifecycle']['canAbort']['canAbort'] for mission in data['missions']))
-        self.assertTrue(any('applyFiveTimesCompletionRewardReversalOnAbort' in mission['semanticFields']['lifecycle']['flags']['flagNames'] for mission in data['missions']))
+        nonabortable_ids = [
+            mission['resourceId']
+            for mission in data['missions']
+            if not mission['semanticFields']['lifecycle']['canAbort']['canAbort']
+        ]
+        self.assertEqual(len(nonabortable_ids), 15)
+        self.assertEqual(nonabortable_ids[:5], [161, 164, 165, 167, 168])
+        self.assertEqual(sum(1 for mission in data['missions'] if mission['semanticFields']['lifecycle']['timeLimit']['kind'] == 'days'), 29)
+        self.assertEqual(sum(1 for mission in data['missions'] if mission['semanticFields']['lifecycle']['flags']['flagNames']), 99)
+        self.assertEqual(sum(1 for mission in data['missions'] if mission['semanticFields']['auxiliaryShips']['count']['kind'] != 'ignored'), 54)
+        flag_names = [
+            name
+            for mission in data['missions']
+            for name in mission['semanticFields']['lifecycle']['flags']['flagNames']
+        ]
+        self.assertEqual(flag_names.count('showGreenArrowOnMapInInitialBriefing'), 82)
+        self.assertEqual(flag_names.count('applyFiveTimesCompletionRewardReversalOnAbort'), 13)
 
     def test_sourced_ev_graphics_manifest_decodes_resources_and_ship_sprites(self):
         data = sourced_ev_graphics_manifest()
