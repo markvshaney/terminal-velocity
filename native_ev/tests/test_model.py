@@ -238,6 +238,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasPirateAvoidanceHelp=%s',
             'hasContrabandHelp=%s',
             'hasLegalStatusHelp=%s',
+            'hasLegalClemencyHelp=%s',
             'hasLegalDockingHelp=%s',
             'hasMissionDeadlineHelp=%s',
             'hasMissionAbortHistoryHelp=%s',
