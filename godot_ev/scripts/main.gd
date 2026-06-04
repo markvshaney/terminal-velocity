@@ -47,6 +47,7 @@ const MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_PENALTY_EVENT"
 const MISSION_AUTO_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_AUTO_ABORT_EVENT"
 const MISSION_SCAN_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_SCAN_FAILURE_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
+const MISSION_DEADLINE_LAST_DAY_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_LAST_DAY_EVENT"
 const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
 const MISSION_DEADLINE_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_ABORT_EVENT"
 const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
@@ -241,6 +242,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_scan_failure_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
 		call_deferred("_run_mission_deadline_failure_log")
+	if OS.get_cmdline_args().has("--tv-mission-deadline-last-day-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-last-day-log"):
+		call_deferred("_run_mission_deadline_last_day_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-completed-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-completed-log"):
 		call_deferred("_run_mission_deadline_completed_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-abort-log"):
@@ -1415,6 +1418,47 @@ func _run_mission_deadline_failure_log() -> void:
 	var flag_status := "failureFlagSet=true" if story_flags.has("fail_mission_bit_42") else "failureFlagSet=false"
 	var reputation_status := "reputationPenaltyApplied=true" if after_reputation == before_reputation - 3 else "reputationPenaltyApplied=false"
 	print("%s acceptedMission=%s acceptedDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterFailure=%d %s %s %s %s reputationBefore=%d reputationAfter=%d activeMissions=%s failedHistoryCount=%d latestFailure=%s sourceLabel=ev-classic-resource-bible-backed-mission-failure-scaffold oracleStatus=deadline_failure_runtime_ui_pending_classic_trace status=\"%s\"" % [MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo, failure_status, cargo_status, flag_status, reputation_status, before_reputation, after_reputation, JSON.stringify(active_missions), failed_mission_history.size(), latest_failure, status_line])
+	get_tree().quit(0)
+
+func _run_mission_deadline_last_day_log() -> void:
+	_reset_travel_state()
+	var deadline_mission := {
+		"id": "deadline_dispatch_failure_probe",
+		"title": "Deadline Dispatch Failure Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 3,
+		"reward": 1200,
+		"completionReward": 6,
+		"failureBitSet": 42,
+		"completionGovernment": "Federation",
+		"timeLimitDays": 2,
+		"sourceLabel": "terminal-velocity-mission-deadline-last-day-scaffold",
+		"oracleStatus": "deadline_last_day_delivery_pending_classic_runtime_or_manual_trace",
+	}
+	missions["missions"].append(deadline_mission)
+	var accepted_day := 0
+	current_day = 2
+	active_missions.append(str(deadline_mission.get("id")))
+	mission_acceptance_days[str(deadline_mission.get("id"))] = accepted_day
+	cargo = int(deadline_mission.get("cargoTons", 0))
+	var cargo_after_accept := cargo
+	current_system_index = _system_index_by_name("Centauri", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	pos = Vector2(-520.0, -300.0)
+	landed = true
+	var credits_before_completion := credits
+	var reputation_before_completion := int(reputation_scores.get("Federation", 0))
+	var completed_ids := _complete_arrived_missions()
+	var latest_completion := JSON.stringify(completed_mission_history[completed_mission_history.size() - 1]) if not completed_mission_history.is_empty() else "{}"
+	var late_failure_attempted := _fail_mission_deadline(deadline_mission, accepted_day, current_day)
+	var reputation_after_check := int(reputation_scores.get("Federation", 0))
+	var completed_status := "lastDayDeliveryCompleted=true" if completed_ids.has(str(deadline_mission.get("id"))) and completed_missions.has(str(deadline_mission.get("id"))) else "lastDayDeliveryCompleted=false"
+	var no_failure_status := "deadlineFailurePrevented=true" if not late_failure_attempted and failed_mission_history.is_empty() and not story_flags.has("fail_mission_bit_42") else "deadlineFailurePrevented=false"
+	var cargo_status := "reservedCargoReleased=true" if cargo == 0 else "reservedCargoReleased=false"
+	var reward_status := "rewardPaid=true" if credits == credits_before_completion + int(deadline_mission.get("reward", 0)) else "rewardPaid=false"
+	var reputation_status := "reputationPreserved=true" if reputation_after_check == reputation_before_completion else "reputationPreserved=false"
+	print("%s acceptedMission=%s acceptedDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterCompletion=%d %s %s %s %s %s creditsBeforeCompletion=%d creditsAfterCompletion=%d reputationBefore=%d reputationAfter=%d activeMissions=%s completedMissions=%s failedHistoryCount=%d latestCompletion=%s sourceLabel=terminal-velocity-mission-deadline-last-day-scaffold oracleStatus=deadline_last_day_delivery_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_DEADLINE_LAST_DAY_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo, completed_status, no_failure_status, cargo_status, reward_status, reputation_status, credits_before_completion, credits, reputation_before_completion, reputation_after_check, JSON.stringify(active_missions), JSON.stringify(completed_missions), failed_mission_history.size(), latest_completion, status_line])
 	get_tree().quit(0)
 
 func _run_mission_deadline_completed_log() -> void:

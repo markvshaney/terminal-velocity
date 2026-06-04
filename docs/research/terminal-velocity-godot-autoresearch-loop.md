@@ -270,6 +270,14 @@ Mission deadline completed-state scenario contract:
 - `sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold`; `oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace`.
 - This is a Terminal Velocity guardrail scaffold; exact EV Classic completed-mission cleanup/UI remains pending runtime/manual evidence.
 
+Mission deadline last-day delivery scenario contract:
+
+- `RunGodot.ps1 -MissionDeadlineLastDayLog` / `--tv-mission-deadline-last-day-log`
+- Exercises the current Terminal Velocity deadline-boundary scaffold through Godot: a deterministic timed mission is accepted on day 0, delivered at Luna exactly on day 2 with `timeLimitDays=2`, then the failure helper is attempted and remains blocked because the mission completed.
+- Logs last-day completion, no deadline failure, cargo release, reward payment, and reputation-preservation booleans (`lastDayDeliveryCompleted=true`, `deadlineFailurePrevented=true`, `reservedCargoReleased=true`, `rewardPaid=true`, `reputationPreserved=true`), completed mission ids, failed history count, and latest completion record.
+- `sourceLabel=terminal-velocity-mission-deadline-last-day-scaffold`; `oracleStatus=deadline_last_day_delivery_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity deadline-boundary guardrail scaffold; exact EV Classic date inclusivity, deadline UI, and failure timing remain pending runtime/manual evidence.
+
 Mission deadline abort scenario contract:
 
 - `RunGodot.ps1 -MissionDeadlineAbortLog` / `--tv-mission-deadline-abort-log`
