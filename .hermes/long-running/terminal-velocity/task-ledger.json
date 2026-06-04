@@ -1,40 +1,28 @@
 {
-  "active_gate": null,
-  "current_milestone": "Committed legal-docking recovery guidance into the F10 help surface and deterministic gameplay-curriculum help log, keeping exact Classic denial UI evidence-gated.",
-  "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
-  "heartbeat_status": {
-    "final_delivery": "cron final response",
-    "progress": "not needed; run stayed under about 10 minutes after start heartbeat",
-    "send_message_available": false,
-    "start": "heartbeat.json fallback written because send_message tool unavailable in this cron surface",
-    "visibility_degraded": true
-  },
-  "last_checkpoint_commit": "checkpoint-commit-self-referential-see-git-HEAD",
-  "last_commit": "a7b3299",
-  "last_commits": [
-    "b238463 feat(godot): gate docking by legal status",
-    "ac8b375 feat(godot): cover mission offer help guidance"
-  ],
-  "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v (OK)",
-    "./run_godot.sh tv-gameplay-curriculum-help-log (hasLegalDockingHelp=true)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (141 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=22 total=22)",
-    "./run_godot.sh tv-legal-docking-log (legalDockingDenied=true landed=false patrolsHostile=true)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=22)",
-    "git diff --check (OK)",
-    "git commit -> a7b3299 feat(godot): cover legal docking help guidance"
-  ],
-  "next_resume_action": "Inspect live backlog and choose the next strongest source-aligned Terminal Velocity safe-local slice; likely continue legal/reputation recovery, mission/story, navigation/service, combat guidance/probes, or source-mined evidence while preserving Classic evidence boundaries.",
+  "schema_version": 1,
+  "task_id": "terminal-velocity-game-development",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
-  "operational_owner_candidate": "loki-game",
+  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
-    "ahead": 186,
     "branch": "main",
+    "ahead": 187,
     "dirty": false,
-    "head": "checkpoint-commit-self-referential-see-git-HEAD",
-    "status_short": "## main...origin/main [ahead 186]"
+    "head": "9afa06f",
+    "status_short": "## main...origin/main [ahead 187]"
   },
+  "operational_owner_candidate": "loki-game",
+  "status": "running",
+  "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
+  "active_gate": null,
+  "tool_caps_policy": {
+    "rule": "Tool/time/context caps are per-run budgets, not task completion.",
+    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval"
+  },
+  "required_start_artifacts": [
+    "docs/prompts/terminal-velocity-continuation-prompt.md",
+    "docs/checklists/agent-continuation-process-failure-remediation.md",
+    "docs/checklists/long-running-game-development-harness-audit.md"
+  ],
   "required_skill_candidates": [
     "source-and-fidelity",
     "artifact-governance",
@@ -44,25 +32,62 @@
     "ev-classic-basilisk-observation",
     "terminal-velocity-provenance"
   ],
-  "required_start_artifacts": [
-    "docs/prompts/terminal-velocity-continuation-prompt.md",
-    "docs/checklists/agent-continuation-process-failure-remediation.md",
-    "docs/checklists/long-running-game-development-harness-audit.md"
+  "safe_backlog": [
+    {
+      "id": "next-source-aligned-playable-slice",
+      "description": "Each run must inspect the live backlog/repo and implement the strongest safe local Terminal Velocity gameplay/fidelity slice with tests/probes/docs before considering process-only work.",
+      "gate": "safe local code/docs/tests are approved; external push/PR/destructive original-EV actions remain gated"
+    },
+    {
+      "id": "skill-availability-audit",
+      "description": "Audit which Loki Game Terminal Velocity skills should be shared/promoted or explicitly loaded by the chosen runner profile.",
+      "gate": "broad profile/skill propagation remains approval-gated; read-only audit is safe"
+    },
+    {
+      "id": "runner-prompt-draft",
+      "description": "Draft a self-contained cron/Kanban runner prompt that reads this ledger, performs one safe local slice, verifies, checkpoints, and records gates.",
+      "gate": "scheduling/activation approval required"
+    },
+    {
+      "id": "long-task-tool-triage",
+      "description": "Inspect Hermes source/docs for the implied long_task tool and decide whether to implement/expose it or correct misleading docs.",
+      "gate": "Hermes code changes safe-local until push/restart/supervision"
+    },
+    "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit a7b3299. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v (OK)",
+    "./run_godot.sh tv-gameplay-curriculum-help-log (hasMissionObjectiveHelp=true; hasMissionRouteHelp=true)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (141 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=22 total=22)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=22)",
+    "git diff --check (OK)",
+    "git commit -> 9afa06f feat(godot): cover mission route help guidance"
+  ],
+  "last_checkpoint_commit": "9afa06f",
+  "last_commit": "9afa06f",
+  "last_commits": [
+    "9afa06f feat(godot): cover mission route help guidance",
+    "a7b3299 feat(godot): cover legal docking help guidance",
+    "b238463 feat(godot): gate docking by legal status"
+  ],
+  "current_milestone": "Committed deterministic F10 help-log coverage for mission objective marker and G mission-route helper guidance, keeping original EV Classic automatic objective UI evidence-gated.",
+  "next_resume_action": "Inspect live backlog and choose the next strongest source-aligned Terminal Velocity safe-local slice; likely continue promoting mission/story/navigation/service/combat curriculum outcomes into visible guidance/probes, or add a bounded scenario guardrail before Classic evidence-gated promotion.",
+  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit 9afa06f. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
+    "kind": "cronjob",
+    "name": "Terminal Velocity continuous completion runner",
+    "job_id": "aafb9b3eac29",
+    "profile": "loki-game",
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
+    "schedule": "every 5m",
+    "repeat": "forever",
     "deliver": "origin",
     "enabled_toolsets": [
       "file",
       "terminal",
       "session_search"
     ],
-    "job_id": "aafb9b3eac29",
-    "kind": "cronjob",
-    "name": "Terminal Velocity continuous completion runner",
-    "profile": "loki-game",
-    "repeat": "forever",
-    "schedule": "every 5m",
     "side_effect_boundaries": [
       "safe local file/test/probe/docs/commit work allowed without per-step approval",
       "push/PR/merge/rebase/destructive EV/gateway/provider/credential/publication changes gated unless explicitly approved"
@@ -73,38 +98,14 @@
     ],
     "superseded_kanban_tasks": [
       "t_5d681084"
-    ],
-    "workdir": "/home/bh/workspaces/loki/terminal-velocity"
+    ]
   },
-  "safe_backlog": [
-    {
-      "description": "Each run must inspect the live backlog/repo and implement the strongest safe local Terminal Velocity gameplay/fidelity slice with tests/probes/docs before considering process-only work.",
-      "gate": "safe local code/docs/tests are approved; external push/PR/destructive original-EV actions remain gated",
-      "id": "next-source-aligned-playable-slice"
-    },
-    {
-      "description": "Audit which Loki Game Terminal Velocity skills should be shared/promoted or explicitly loaded by the chosen runner profile.",
-      "gate": "broad profile/skill propagation remains approval-gated; read-only audit is safe",
-      "id": "skill-availability-audit"
-    },
-    {
-      "description": "Draft a self-contained cron/Kanban runner prompt that reads this ledger, performs one safe local slice, verifies, checkpoints, and records gates.",
-      "gate": "scheduling/activation approval required",
-      "id": "runner-prompt-draft"
-    },
-    {
-      "description": "Inspect Hermes source/docs for the implied long_task tool and decide whether to implement/expose it or correct misleading docs.",
-      "gate": "Hermes code changes safe-local until push/restart/supervision",
-      "id": "long-task-tool-triage"
-    },
-    "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
-  ],
-  "schema_version": 1,
-  "status": "running",
-  "task_id": "terminal-velocity-game-development",
-  "tool_caps_policy": {
-    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
-    "rule": "Tool/time/context caps are per-run budgets, not task completion."
+  "heartbeat_status": {
+    "send_message_available": false,
+    "visibility_degraded": true,
+    "start": "heartbeat.json fallback written because send_message tool unavailable in this cron surface",
+    "progress": "not needed; run stayed under about 10 minutes after start heartbeat",
+    "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T10:31:55.158275+00:00"
+  "updated_at": "2026-06-04T10:35:08Z"
 }
