@@ -29,6 +29,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'chapter_one_courier_chain',
                 'alignment_choice_guardrail',
                 'federation_alignment_delivery_loop',
+                'freeport_alignment_delivery_loop',
                 'mission_destination_route_hint',
                 'mission_trade_hybrid_capacity_planning',
                 'mission_trade_refuel_delivery_loop',
@@ -441,6 +442,30 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         blocked = [event for event in result['trace'] if event.get('type') == 'blocked_manifest_mission'][-1]
         self.assertEqual(blocked['missionId'], 'freeport_pact_smugglers')
         accept = [event for event in result['trace'] if event.get('type') == 'accept_cargo_job' and event.get('id') == 'federation_report_freeport'][-1]
+        self.assertEqual(accept['reservedCargoTons'], 2)
+        self.assertEqual(accept['sourceLabel'], 'terminal-velocity-mission-scaffold')
+        self.assertEqual(accept['oracleStatus'], 'mission_behavior_pending_classic_runtime_trace')
+
+    def test_freeport_alignment_delivery_loop_completes_branch_and_preserves_choice(self):
+        result = run_scripted_scenario('freeport_alignment_delivery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['completedJobs'], ['freeport_pact_smugglers'])
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['credits'], 13000)
+        self.assertIn('alignment_freeport', result['state']['storyFlags'])
+        self.assertIn('freeport_network_asset', result['state']['storyFlags'])
+        self.assertNotIn('alignment_federation', result['state']['storyFlags'])
+        self.assertEqual(result['checks']['completed_freeport_alignment_delivery'], 'passed')
+        self.assertEqual(result['checks']['preserved_freeport_alignment_flags'], 'passed')
+        self.assertEqual(result['checks']['blocked_federation_branch_after_freeport_completion'], 'passed')
+        self.assertEqual(result['checks']['recorded_freeport_alignment_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event.get('type') == 'blocked_manifest_mission'][-1]
+        self.assertEqual(blocked['missionId'], 'federation_report_freeport')
+        accept = [event for event in result['trace'] if event.get('type') == 'accept_cargo_job' and event.get('id') == 'freeport_pact_smugglers'][-1]
         self.assertEqual(accept['reservedCargoTons'], 2)
         self.assertEqual(accept['sourceLabel'], 'terminal-velocity-mission-scaffold')
         self.assertEqual(accept['oracleStatus'], 'mission_behavior_pending_classic_runtime_trace')
