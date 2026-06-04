@@ -5,10 +5,10 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 196,
+    "ahead": 198,
     "dirty": false,
-    "head": "968f0fb",
-    "status_short": "## main...origin/main [ahead 196]"
+    "head": "982055f",
+    "status_short": "## main...origin/main [ahead 198]"
   },
   "operational_owner_candidate": "loki-game",
   "status": "running",
@@ -56,26 +56,26 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_disabled_player_recovery_loop_blocks_actions_then_recovers -v (RED before implementation: unknown scenario; GREEN after implementation)",
-    "python3 tools/run_gameplay_scenarios.py disabled_player_recovery_loop --pretty (success=true; disabled actions blocked; recovery labels present)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (29 tests OK)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (144 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (25 results; all_success=True; disabled_success=True)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=25)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_levo_same_port_sellback_loop_restores_credits_and_cargo -v (RED before implementation: unknown scenario; GREEN after implementation OK)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (30 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (145 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py levo_same_port_sellback_loop --pretty (success=true; creditsDelta=0; restored trade state)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (26 results; failed=0 passed=26)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=26)",
     "git diff --check (OK)",
-    "git commit ef018e2 feat(native): add disabled player recovery scenario"
+    "git commit 9500489 feat(native): add Levo sellback scenario"
   ],
-  "last_checkpoint_commit": "ef018e2",
-  "last_commit": "ef018e2",
+  "last_checkpoint_commit": "982055f",
+  "last_commit": "9500489",
   "last_commits": [
-    "968f0fb chore(runner): checkpoint disabled recovery scenario",
-    "ef018e2 feat(native): add disabled player recovery scenario",
-    "77eb755 chore(runner): checkpoint repair service scenario",
-    "db8b3fe feat(native): add repair service recovery scenario"
+    "982055f chore(runner): checkpoint Levo sellback scenario",
+    "9500489 feat(native): add Levo sellback scenario",
+    "a2487d9 chore(runner): checkpoint disabled recovery scenario",
+    "ef018e2 feat(native): add disabled player recovery scenario"
   ],
-  "current_milestone": "Committed disabled-player recovery symbolic scenario: forces player-disabled state, blocks jump/fire/mission actions, then recovers through the Terminal Velocity F8 scaffold with Classic death/reload evidence boundaries.",
-  "next_resume_action": "Inspect live backlog/checklists again and choose the next strongest safe-local Terminal Velocity slice; likely promote another confusing gameplay recovery loop into scenario/help coverage or gather bounded Classic evidence if source truth is needed.",
-  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after ef018e2. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "current_milestone": "Committed source-backed Levo same-port sellback symbolic scenario: buys one observed 10-ton Food lot, sells it back at Levo, and verifies starting credits/cargo are restored with original-runtime-observed labels.",
+  "next_resume_action": "Inspect live backlog/checklists again and choose the next strongest safe-local Terminal Velocity slice; likely add another source-backed economy edge scenario, promote mission/trade/navigation guidance into Godot probes/help, or gather bounded Classic evidence if source truth is needed.",
+  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after 9500489. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "kind": "cronjob",
     "name": "Terminal Velocity continuous completion runner",
@@ -109,5 +109,5 @@
     "progress": "not needed; run stayed under about 10 minutes after start heartbeat and no long verification exceeded heartbeat interval",
     "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T11:06:14Z"
+  "updated_at": "2026-06-04T11:12:15Z"
 }
