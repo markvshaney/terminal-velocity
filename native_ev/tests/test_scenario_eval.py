@@ -52,6 +52,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_deadline_abort_prevents_failure_loop',
                 'mission_deadline_failure_recovery_loop',
                 'mission_deadline_trade_carryover_loop',
+                'mission_deadline_sequential_failures_loop',
                 'outfitter_ship_ladder_intro',
                 'outfitter_purchase_guardrail_recovery_loop',
                 'shipyard_overfull_cargo_guardrail',
@@ -844,6 +845,31 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(failure['releasedCargoTons'], 3)
         self.assertEqual(sell['unitPrice'], 120)
         self.assertEqual(sell['sourceLabel'], 'terminal-velocity-mission-deadline-trade-carryover-scaffold')
+
+    def test_mission_deadline_sequential_failures_loop_expires_multiple_active_jobs(self):
+        result = run_scripted_scenario('mission_deadline_sequential_failures_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['currentDay'], 3)
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], [])
+        self.assertEqual(result['state']['failedJobs'], ['deadline_dispatch_failure_probe', 'deadline_second_failure_probe'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['reputation']['Federation'], 0)
+        self.assertIn('fail_mission_bit_42', result['state']['storyFlags'])
+        self.assertIn('fail_mission_bit_43', result['state']['storyFlags'])
+        self.assertEqual(result['checks']['accepted_two_deadline_missions'], 'passed')
+        self.assertEqual(result['checks']['expired_both_deadline_missions'], 'passed')
+        self.assertEqual(result['checks']['released_all_reserved_deadline_cargo'], 'passed')
+        self.assertEqual(result['checks']['recorded_sequential_failure_flags_and_penalties'], 'passed')
+        self.assertEqual(result['checks']['recorded_sequential_failure_source_boundary'], 'passed')
+        failures = [event for event in result['trace'] if event.get('type') == 'mission_deadline_failure']
+        self.assertEqual([event['releasedCargoTons'] for event in failures], [3, 2])
+        self.assertEqual([event['failureFlag'] for event in failures], ['fail_mission_bit_42', 'fail_mission_bit_43'])
+        self.assertEqual([event['reputationDelta'] for event in failures], [-3, -2])
+        self.assertTrue(all(event['sourceLabel'] == 'ev-classic-resource-bible-backed-mission-failure-scaffold' for event in failures))
 
     def test_outfitter_ship_ladder_intro_buys_upgrade_weapon_and_bigger_ship(self):
         result = run_scripted_scenario('outfitter_ship_ladder_intro')

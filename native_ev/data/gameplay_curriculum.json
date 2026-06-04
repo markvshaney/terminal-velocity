@@ -40,6 +40,7 @@
     "mission_deadline_abort_prevents_failure_loop",
     "mission_deadline_failure_recovery_loop",
     "mission_deadline_trade_carryover_loop",
+    "mission_deadline_sequential_failures_loop",
     "outfitter_ship_ladder_intro",
     "outfitter_purchase_guardrail_recovery_loop",
     "shipyard_overfull_cargo_guardrail",
@@ -246,6 +247,10 @@
     "mission_deadline_trade_carryover_loop": {
       "purpose": "Mission deadline/trade carryover scaffold: accept a timed delivery, buy a trade lot with spare hold, miss the deadline, verify only mission-reserved cargo is released, then sell the preserved trade cargo while keeping exact Classic failure/trade UI behavior pending.",
       "surface": "mission state/deadline failure plus trade-cargo recovery scaffold"
+    },
+    "mission_deadline_sequential_failures_loop": {
+      "purpose": "Mission deadline sequential-failures scaffold: accept two active timed deliveries, advance past both deadlines, release each mission's reserved cargo, record distinct failure flags, and apply cumulative Resource Bible-backed reputation penalties while exact Classic multi-failure UI remains pending.",
+      "surface": "mission state/multiple deadline failures scaffold"
     },
     "outfitter_ship_ladder_intro": {
       "purpose": "Outfitter/ship-ladder intro: reach Earth, buy a cargo upgrade and weapon, then trade up to a larger ship from local manifest stock while preserving explicit scaffold/source-boundary labels.",

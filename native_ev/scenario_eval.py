@@ -72,6 +72,7 @@ SCENARIO_CURRICULUM = [
     'mission_deadline_abort_prevents_failure_loop',
     'mission_deadline_failure_recovery_loop',
     'mission_deadline_trade_carryover_loop',
+    'mission_deadline_sequential_failures_loop',
     'outfitter_ship_ladder_intro',
     'outfitter_purchase_guardrail_recovery_loop',
     'shipyard_overfull_cargo_guardrail',
@@ -1646,6 +1647,44 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': 'Levo Spaceport'},
             {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'mission_deadline_sequential_failures_loop':
+        source_label = 'terminal-velocity-mission-deadline-sequential-failures-scaffold'
+        oracle_status = 'deadline_sequential_failures_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_dispatch_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'timeLimitDays': 2,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'failureBitSet': 42,
+                'risk': 'deadline',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_second_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 2,
+                'pay': 900,
+                'timeLimitDays': 1,
+                'completionGovernment': 'Federation',
+                'completionReward': 4,
+                'failureBitSet': 43,
+                'risk': 'deadline',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'advance_days', 'days': 3},
+        ]
     if name == 'outfitter_ship_ladder_intro':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -2115,6 +2154,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'sold_trade_cargo_after_mission_failure': 'passed' if state.get('currentSystem') == 'Levo' and state.get('landedBody') == 'Levo Spaceport' and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} and any(event.get('type') == 'sell_commodity_lot' and event.get('unitPrice') == 120 for event in trace) else 'failed',
             'recorded_trade_carryover_failure_history': 'passed' if state.get('failedJobs') == ['deadline_dispatch_failure_probe'] and state.get('completedJobs') == [] and 'fail_mission_bit_42' in state.get('storyFlags', []) and state.get('reputation', {}).get('Federation') == 2 else 'failed',
             'recorded_trade_carryover_source_boundaries': 'passed' if deadline_failure and trade_events and all(event.get('sourceLabel') == 'terminal-velocity-mission-deadline-trade-carryover-scaffold' and event.get('oracleStatus') == 'deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace' for event in trade_events) else 'failed',
+        })
+    elif name == 'mission_deadline_sequential_failures_loop':
+        deadline_failures = [event for event in trace if event.get('type') == 'mission_deadline_failure']
+        checks.update({
+            'accepted_two_deadline_missions': 'passed' if len([event for event in trace if event.get('type') == 'accept_cargo_job' and event.get('timeLimitDays') is not None]) == 2 else 'failed',
+            'expired_both_deadline_missions': 'passed' if [event.get('missionId') for event in deadline_failures] == ['deadline_dispatch_failure_probe', 'deadline_second_failure_probe'] else 'failed',
+            'released_all_reserved_deadline_cargo': 'passed' if state.get('cargoUsed') == 0 and sum(int(event.get('releasedCargoTons', 0)) for event in deadline_failures) == 5 else 'failed',
+            'recorded_sequential_failure_flags_and_penalties': 'passed' if state.get('failedJobs') == ['deadline_dispatch_failure_probe', 'deadline_second_failure_probe'] and {'fail_mission_bit_42', 'fail_mission_bit_43'}.issubset(set(state.get('storyFlags', []))) and state.get('reputation', {}).get('Federation') == 0 else 'failed',
+            'recorded_sequential_failure_source_boundary': 'passed' if deadline_failures and all(event.get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-failure-scaffold' and event.get('oracleStatus') == 'deadline_failure_runtime_ui_pending_classic_trace' for event in deadline_failures) else 'failed',
         })
     elif name == 'outfitter_ship_ladder_intro':
         checks.update({
