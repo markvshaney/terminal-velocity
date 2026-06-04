@@ -1366,6 +1366,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_repair_help := false
 	var has_combat_help := false
 	var has_recovery_help := false
+	var has_pirate_avoidance_help := false
 	for line in hints:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
@@ -1377,7 +1378,9 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_combat_help = true
 		if str(line).contains("Recovery: F8 resets a disabled player ship"):
 			has_recovery_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s hasRecoveryHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(has_recovery_help), str(hints[0]) if not hints.is_empty() else ""])
+		if str(line).contains("Pirate avoidance: if an intercept warning appears"):
+			has_pirate_avoidance_help = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
@@ -4680,6 +4683,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
 		"Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
+		"Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
 		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",

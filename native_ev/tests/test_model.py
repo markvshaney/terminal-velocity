@@ -204,8 +204,10 @@ class NativeEvModelTests(unittest.TestCase):
             'pirate_avoidance_escape_route',
             'Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.',
             'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
+            'Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
+            'hasPirateAvoidanceHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
