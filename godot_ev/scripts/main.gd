@@ -1499,15 +1499,25 @@ func _run_legal_consequence_log() -> void:
 	reputation_scores["Pirate"] = 0
 	status_messages.clear()
 	_select_closest_target()
+	var target_index := selected_target_index
+	var primary_weapon := _primary_weapon_stats()
+	var final_hit_hull := _weapon_hull_damage(primary_weapon)
+	target_shields[target_index] = 0
+	target_hulls[target_index] = final_hit_hull
+	primary_weapon_cooldown_frames = 0.0
 	var before_legal := int(legal_records.get(government_name, 0))
 	var before_reputation := int(reputation_scores.get(government_name, 0))
 	var before_pirate_reputation := int(reputation_scores.get("Pirate", 0))
-	_fire_primary_weapon()
+	var projectile_spawned := _spawn_primary_projectile()
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+	var target_destroyed := _target_destroyed(target_index)
+	var explosion_triggered := not explosion_events.is_empty()
 	var after_legal := int(legal_records.get(government_name, 0))
 	var after_reputation := int(reputation_scores.get(government_name, 0))
 	var after_pirate_reputation := int(reputation_scores.get("Pirate", 0))
 	var applied := status_messages.has(_legal_patrol_attack_message(government_name))
-	print("%s routeToSolSelected=%s system=%s government=\"%s\" event=destroy_patrol manualBacked=true consequenceApplied=%s combatExecuted=false legalBefore=%d legalAfter=%d reputationBefore=%d reputationAfter=%d pirateReputationBefore=%d pirateReputationAfter=%d status=\"%s\" sourceLabel=terminal-velocity-classic-resource-govt-penalty-semantics oracleStatus=classic_runtime_combat_resolution_pending" % [LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, str(applied), before_legal, after_legal, before_reputation, after_reputation, before_pirate_reputation, after_pirate_reputation, status_line])
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" event=destroy_patrol manualBacked=true consequenceApplied=%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s explosionTriggered=%s targetIndex=%d legalBefore=%d legalAfter=%d reputationBefore=%d reputationAfter=%d pirateReputationBefore=%d pirateReputationAfter=%d status=\"%s\" sourceLabel=terminal-velocity-classic-resource-govt-penalty-semantics oracleStatus=classic_runtime_combat_resolution_pending" % [LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, str(applied), str(projectile_spawned), str(target_destroyed), str(explosion_triggered), target_index, before_legal, after_legal, before_reputation, after_reputation, before_pirate_reputation, after_pirate_reputation, status_line])
 	get_tree().quit(0)
 
 func _run_legal_clemency_log() -> void:
