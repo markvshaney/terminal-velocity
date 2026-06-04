@@ -1,38 +1,42 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local Player Info combat-readiness scaffold was implemented, verified, documented, and committed",
+    "reason": "no active gate; two safe-local combat reward/help slices were implemented, verified, documented, and committed",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Player Info now exposes current shields and hull together as combat readiness, tied to the decoded/source-backed shield recharge scaffold.",
+  "current_milestone": "Combat reward scaffold is visible in Player Info and the gameplay help/log surface while keeping Classic bounty/legal behavior marked pending evidence.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron_final_response",
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_under_10_minutes",
+    "progress_heartbeat": "fallback_file_written_once_after_10_minutes",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "0bf1286",
+  "last_commit": "c6f7217",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_shield_recharge_log_contract -v -> OK",
-    "./run_godot.sh tv-shield-recharge-log -> TV_SHIELD_RECHARGE_EVENT ... firstTickRecharged=true multiTickRecharged=true disabledRechargeBlocked=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-combat-log -> TV_COMBAT_EVENT combatRewardInventoryVisible=true combatRewardSaved=true; TV_SOUND_EVENT emitted",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (139 tests)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=20 failed=0 total=20",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasCombatRewardsHelp=true",
     "git diff --check -> OK",
-    "git commit -> 0bf1286 feat(godot): show player combat readiness"
+    "git commit -> ad20319 feat(godot): show combat rewards in player info",
+    "git commit -> c6f7217 docs(godot): surface combat rewards in help"
   ],
-  "next_resume_action": "Continue from the live backlog with the next strongest safe-local slice; likely candidates are Classic/source evidence for combat loot/rewards/death/legal timing or another bounded player-visible combat/navigation/mission feedback scaffold.",
+  "next_resume_action": "Continue from the live backlog with the next strongest safe-local slice; likely candidates are Classic/source evidence for combat loot/rewards/death/legal timing, or another bounded player-visible combat/navigation/mission feedback scaffold with deterministic Python/Godot coverage.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 127,
+    "ahead": 130,
     "branch": "main",
     "dirty": false,
-    "head": "0bf1286",
-    "status_short": "## main...origin/main [ahead 127]"
+    "head": "c6f7217",
+    "status_short": "## main...origin/main [ahead 130]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -105,5 +109,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T08:11:42.155840Z"
+  "updated_at": "2026-06-04T08:26:35.281016Z"
 }
