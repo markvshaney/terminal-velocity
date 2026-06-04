@@ -270,6 +270,15 @@ Mission deadline completed-state scenario contract:
 - `sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold`; `oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace`.
 - This is a Terminal Velocity guardrail scaffold; exact EV Classic completed-mission cleanup/UI remains pending runtime/manual evidence.
 
+Mission deadline sequential-failures scenario contract:
+
+- `RunGodot.ps1 -MissionDeadlineSequentialLog` / `--tv-mission-deadline-sequential-log`
+- Exercises the Terminal Velocity multi-deadline failure guardrail in the Godot fast-eval lane.
+- Seeds deterministic active missions `deadline_dispatch_failure_probe` and `deadline_second_failure_probe`, advances both beyond `timeLimitDays`, then verifies both fail in one deadline pass without leaving reserved cargo or active mission ids behind.
+- Logs both-failure, reserved-cargo release, two failure flags, and cumulative reputation-penalty booleans (`bothDeadlineFailuresRecorded=true`, `reservedCargoReleased=true`, `failureFlagsSet=true`, `cumulativeReputationPenaltyApplied=true`), active mission ids, failed-history count, failure ids, and latest failure records.
+- `sourceLabel=terminal-velocity-mission-deadline-sequential-failures-scaffold`; `oracleStatus=deadline_sequential_failures_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity guardrail scaffold; exact EV Classic simultaneous/multiple deadline UI, ordering, and date-display behavior remain pending runtime/manual evidence.
+
 Mission deadline last-day delivery scenario contract:
 
 - `RunGodot.ps1 -MissionDeadlineLastDayLog` / `--tv-mission-deadline-last-day-log`

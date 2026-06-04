@@ -1426,6 +1426,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-mission-deadline-completed-log', run_script)
         self.assertIn('tv-mission-deadline-completed-log', wrapper)
 
+    def test_godot_mission_deadline_sequential_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-deadline-sequential-log',
+            'func _run_mission_deadline_sequential_log',
+            'TV_MISSION_DEADLINE_SEQUENTIAL_EVENT',
+            'bothDeadlineFailuresRecorded=true',
+            'reservedCargoReleased=true',
+            'failureFlagsSet=true',
+            'cumulativeReputationPenaltyApplied=true',
+            'failedHistoryCount=%d',
+            'sourceLabel=terminal-velocity-mission-deadline-sequential-failures-scaffold',
+            'oracleStatus=deadline_sequential_failures_pending_classic_runtime_or_manual_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionDeadlineSequentialLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-deadline-sequential-log', run_script)
+        self.assertIn('tv-mission-deadline-sequential-log', wrapper)
+        self.assertIn('Mission deadline sequential-failures scenario contract', plan)
+
     def test_godot_mission_deadline_last_day_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

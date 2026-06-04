@@ -26,6 +26,7 @@ param(
     [switch]$MissionDeadlineFailureLog,
     [switch]$MissionDeadlineLastDayLog,
     [switch]$MissionDeadlineCompletedLog,
+    [switch]$MissionDeadlineSequentialLog,
     [switch]$MissionDeadlineAbortLog,
     [switch]$MissionLogHistoryLog,
     [switch]$ActiveMissionDeadlineLog,
@@ -122,6 +123,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-deadline-last-day-log
 } elseif ($MissionDeadlineCompletedLog) {
     & $Godot --headless --path $Project -- --tv-mission-deadline-completed-log
+} elseif ($MissionDeadlineSequentialLog) {
+    & $Godot --headless --path $Project -- --tv-mission-deadline-sequential-log
 } elseif ($MissionDeadlineAbortLog) {
     & $Godot --headless --path $Project -- --tv-mission-deadline-abort-log
 } elseif ($MissionLogHistoryLog) {
