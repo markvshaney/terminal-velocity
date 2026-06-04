@@ -5,10 +5,10 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 193,
+    "ahead": 196,
     "dirty": false,
-    "head": "db8b3fe",
-    "status_short": "## main...origin/main [ahead 193]"
+    "head": "968f0fb",
+    "status_short": "## main...origin/main [ahead 196]"
   },
   "operational_owner_candidate": "loki-game",
   "status": "running",
@@ -56,26 +56,26 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_repair_service_recovery_loop_repairs_hull_and_blocks_bad_contexts -v (OK)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (28 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py repair_service_recovery_loop --pretty (success=true; repair cost=280; source/oracle labels present)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (143 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (24 results; all_success=True; repair_success=True)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=24)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_disabled_player_recovery_loop_blocks_actions_then_recovers -v (RED before implementation: unknown scenario; GREEN after implementation)",
+    "python3 tools/run_gameplay_scenarios.py disabled_player_recovery_loop --pretty (success=true; disabled actions blocked; recovery labels present)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (29 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (144 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (25 results; all_success=True; disabled_success=True)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=25)",
     "git diff --check (OK)",
-    "git commit db8b3fe feat(native): add repair service recovery scenario"
+    "git commit ef018e2 feat(native): add disabled player recovery scenario"
   ],
-  "last_checkpoint_commit": "db8b3fe",
-  "last_commit": "db8b3fe",
+  "last_checkpoint_commit": "ef018e2",
+  "last_commit": "ef018e2",
   "last_commits": [
-    "db8b3fe feat(native): add repair service recovery scenario",
-    "932dc58 chore(runner): checkpoint legal clemency help slice",
-    "44e612f test(godot): expose legal clemency help coverage",
-    "bc835f4 chore(runner): checkpoint contraband recovery slice"
+    "968f0fb chore(runner): checkpoint disabled recovery scenario",
+    "ef018e2 feat(native): add disabled player recovery scenario",
+    "77eb755 chore(runner): checkpoint repair service scenario",
+    "db8b3fe feat(native): add repair service recovery scenario"
   ],
-  "current_milestone": "Committed repair-service recovery symbolic scenario: damaged hull blocks repair in space and at Levo's no-repair port, then repairs at Sol/Earth using manifest pricePerHullPoint with Classic-runtime-pending labels.",
+  "current_milestone": "Committed disabled-player recovery symbolic scenario: forces player-disabled state, blocks jump/fire/mission actions, then recovers through the Terminal Velocity F8 scaffold with Classic death/reload evidence boundaries.",
   "next_resume_action": "Inspect live backlog/checklists again and choose the next strongest safe-local Terminal Velocity slice; likely promote another confusing gameplay recovery loop into scenario/help coverage or gather bounded Classic evidence if source truth is needed.",
-  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after db8b3fe. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after ef018e2. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "kind": "cronjob",
     "name": "Terminal Velocity continuous completion runner",
@@ -109,5 +109,5 @@
     "progress": "not needed; run stayed under about 10 minutes after start heartbeat and no long verification exceeded heartbeat interval",
     "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T10:57:59Z"
+  "updated_at": "2026-06-04T11:06:14Z"
 }
