@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Committed system_service_provisioning_scout so the curriculum records Levo absent outfitter/shipyard evidence and scouts Earth/Stardock Alpha service matrices as Terminal Velocity scaffolds pending Classic confirmation.",
+  "current_milestone": "Committed service provisioning help so the F10 player guidance and deterministic help probe now surface the service/store verification loop for newly reached ports while retaining Classic evidence boundaries.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron final response",
@@ -9,26 +9,27 @@
     "start": "heartbeat.json fallback written because send_message tool unavailable in this cron surface",
     "visibility_degraded": true
   },
-  "last_commit": "f3613b1",
+  "last_commit": "18336bd",
   "last_commits": [
-    "f3613b1 feat(native): add service provisioning scout scenario"
+    "18336bd feat(godot): cover service provisioning help"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_system_service_provisioning_scout_records_service_matrix_boundaries native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order -v (2 tests OK)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v (OK)",
+    "./run_godot.sh tv-gameplay-curriculum-help-log (hasServiceProvisioningHelp=true)",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (141 tests OK)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=22 total=22)",
     "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=22)",
     "git diff --check (OK)"
   ],
-  "next_resume_action": "Inspect live backlog and choose the next strongest source-aligned Terminal Velocity safe-local slice; likely gather/encode another bounded service, mission, navigation, or help/probe behavior while keeping Classic evidence boundaries explicit.",
+  "next_resume_action": "Inspect live backlog and choose the next strongest source-aligned Terminal Velocity safe-local slice; likely continue promoting mission/trade/navigation/service/combat curriculum outcomes into visible guidance/probes or add a bounded scenario guardrail before Classic evidence-gated promotion.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 177,
+    "ahead": 179,
     "branch": "main",
     "dirty": false,
-    "head": "f3613b1",
-    "status_short": "## main...origin/main [ahead 177]"
+    "head": "18336bd",
+    "status_short": "## main...origin/main [ahead 179]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -44,7 +45,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit f3613b1. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit 18336bd. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -101,5 +102,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T10:11:14.980090+00:00"
+  "updated_at": "2026-06-04T10:14:49.859690+00:00"
 }
