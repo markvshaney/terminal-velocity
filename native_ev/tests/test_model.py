@@ -132,9 +132,19 @@ class NativeEvModelTests(unittest.TestCase):
             'Cancel',
             'OK',
             'Backslash',
-            'Closest Targ:',
+            'Closest Target:',
         ]:
             self.assertIn(symbol, text)
+        for label, expected_key in [
+            ('Fire Primary:', 'Tab'),
+            ('Fire Secondary:', 'Space'),
+            ('Change Secondary:', 'S'),
+            ('Next Target:', 'N'),
+            ('Closest Target:', 'R'),
+        ]:
+            self.assertIn(f'_draw_key_binding(Vector2(550, ', text)
+            self.assertIn(f'"{label}", "{expected_key}"', text)
+        self.assertNotIn('"Target Select:", "Tab"', text)
         self.assertIn('load_prefs', text)
 
     def test_godot_self_test_covers_prefs_screenshot_artifact(self):

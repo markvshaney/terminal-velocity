@@ -130,9 +130,11 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: observe additional ports or decode commodity/economy resources before changing global formula assumptions.
 
 - [ ] EV Classic prefs screen fidelity
-  - Status: `implemented`
+  - Status: `implemented / regression tightened`
   - Source: original EV prefs screen visual observation and current Godot selftest output reports `prefScreen=original-ev-classic-observed`.
+  - 2026-06-03 correction: the Godot prefs modal weapon-control rows now match the observed EV Classic keybinding labels/keys (`Fire Primary: Tab`, `Fire Secondary: Space`, `Change Secondary: S`, `Next Target: N`, `Closest Target: R`) instead of the earlier mismatched scaffold labels.
   - Strict Play caveat: observed Set Prefs does not include `Strict Play`; do not add it to this prefs modal without direct new-pilot UI evidence.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_prefs_modal_matches_original_ev_classic_observation -v`; `./run_godot.sh self-test`.
   - Next action: keep as regression surface in Godot selftest; add new items here if another prefs control needs exact behavior beyond visual layout.
 
 - [x] EV Classic Strict Play / permadeath pilot option

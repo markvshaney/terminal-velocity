@@ -3157,12 +3157,11 @@ func _draw_prefs_modal(rect: Rect2, font: Font) -> void:
 	_draw_key_binding(Vector2(550, 244), "Hold Pos:", "D", font, 105, 120)
 
 	_draw_pref_group(Rect2(542, 295, 245, 230), "Weapon Controls:", font)
-	_draw_key_binding(Vector2(550, 351), "Fire Primary:", "Space", font, 105, 120)
-	_draw_key_binding(Vector2(550, 388), "Fire\nSecondary:", "Shift", font, 105, 120)
-	_draw_key_binding(Vector2(550, 425), "Select\nSecondary:", "W", font, 105, 120)
-	_draw_key_binding(Vector2(550, 462), "Weap. Safety:", "S", font, 105, 120)
-	_draw_key_binding(Vector2(550, 499), "Target Select:", "Tab", font, 105, 120)
-	_draw_key_binding(Vector2(550, 536), "Closest Targ:", "R", font, 105, 120)
+	_draw_key_binding(Vector2(550, 351), "Fire Primary:", "Tab", font, 105, 120)
+	_draw_key_binding(Vector2(550, 388), "Fire Secondary:", "Space", font, 105, 120)
+	_draw_key_binding(Vector2(550, 425), "Change Secondary:", "S", font, 105, 120)
+	_draw_key_binding(Vector2(550, 462), "Next Target:", "N", font, 105, 120)
+	_draw_key_binding(Vector2(550, 499), "Closest Target:", "R", font, 105, 120)
 
 	_draw_pref_group(Rect2(798, 114, 246, 454), "Misc. Controls:", font)
 	_draw_key_binding(Vector2(808, 170), "Pause:", "Escape", font, 105, 120)

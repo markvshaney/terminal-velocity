@@ -60,9 +60,9 @@ For every behavior row, record:
 - [x] Title preferences screen visual/wording pass
   - Evidence label: `original-runtime-observed` with archive-sourced ROM/boot-disk provenance caveat.
   - Primary evidence: original EV Classic running in Basilisk II; local-only capture path `C:\Games\BasiliskII\ev-prefs-correct-coords-2.png`.
-  - Observed visible groups/controls: `Navigation Controls:`, `Escort Controls:`, `Weapon Controls:`, `Misc. Controls:`, `Sound Volume: Quiet`, `Intro Music`, `Game Speed...`, `Cancel`, `OK`.
+  - Observed visible groups/controls: `Navigation Controls:`, `Escort Controls:`, `Weapon Controls:`, `Misc. Controls:`, `Sound Volume: Quiet`, `Intro Music`, `Game Speed...`, `Cancel`, `OK`. Keybinding rows include `Fire Primary: Tab`, `Fire Secondary: Space`, `Change Secondary: S`, `Next Target: N`, and `Closest Target: R`.
   - Strict Play note: the observed Set Prefs screen does not show a `Strict Play` control; 2026-05-20 external/pilot-file evidence indicates Strict Play is per-pilot state, so its UI should be investigated in the new-pilot flow rather than added to Set Prefs.
-  - Terminal Velocity current behavior: 2026-05-19 Godot modal in `godot_ev/scripts/main.gd` copies the observed prefs layout/wording and keeps saved mappings for Intro Music, Sound Volume, and Game Speed; self-test emits `prefScreen=original-ev-classic-observed` plus `user://selftest/title_prefs.png`.
+  - Terminal Velocity current behavior: 2026-05-19 Godot modal in `godot_ev/scripts/main.gd` copies the observed prefs layout/wording and keeps saved mappings for Intro Music, Sound Volume, and Game Speed; the weapon-control rows now match the observed Classic labels/keys for primary/secondary fire, secondary selection, and target selection; self-test emits `prefScreen=original-ev-classic-observed` plus `user://selftest/title_prefs.png`.
   - Status: `match` for visible prefs screen wording/layout target; confidence `medium` because the raw screenshot remains local-only and font/spacing are approximated in Godot.
 
 - [x] Strict Play / permadeath pilot option
