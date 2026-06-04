@@ -1,35 +1,34 @@
 {
   "active_gate": null,
-  "current_milestone": "Committed F10 route-clearing guidance so players know Backspace/Delete clears queued green routes and that J requires selecting a fresh linked stop afterward.",
+  "current_milestone": "Committed system_service_provisioning_scout so the curriculum records Levo absent outfitter/shipyard evidence and scouts Earth/Stardock Alpha service matrices as Terminal Velocity scaffolds pending Classic confirmation.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron final response",
-    "progress": "not needed; run stayed under 10 minutes after start heartbeat",
+    "progress": "not needed; run stayed under about 10 minutes after start heartbeat",
     "send_message_available": false,
     "start": "heartbeat.json fallback written because send_message tool unavailable in this cron surface",
     "visibility_degraded": true
   },
-  "last_commit": "7012368",
+  "last_commit": "f3613b1",
   "last_commits": [
-    "7012368 feat(godot): cover route clearing help guidance"
+    "f3613b1 feat(native): add service provisioning scout scenario"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v (RED before implementation, then OK)",
-    "./run_godot.sh tv-gameplay-curriculum-help-log (hasRouteClearHelp=true plus existing help flags true)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (140 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=21 total=21)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=21)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_system_service_provisioning_scout_records_service_matrix_boundaries native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order -v (2 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (141 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=22 total=22)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=22)",
     "git diff --check (OK)"
   ],
-  "next_resume_action": "Inspect live backlog and choose the next source-aligned Terminal Velocity safe-local slice; likely continue promoting navigation/mission/trade/service/combat curriculum outcomes into visible guidance/probes, or add a bounded scenario guardrail before Classic evidence-gated promotion.",
+  "next_resume_action": "Inspect live backlog and choose the next strongest source-aligned Terminal Velocity safe-local slice; likely gather/encode another bounded service, mission, navigation, or help/probe behavior while keeping Classic evidence boundaries explicit.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 175,
+    "ahead": 177,
     "branch": "main",
     "dirty": false,
-    "head": "7012368",
-    "status_short": "## main...origin/main [ahead 175]"
+    "head": "f3613b1",
+    "status_short": "## main...origin/main [ahead 177]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -45,7 +44,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit 7012368. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit f3613b1. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -102,5 +101,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T10:02:17.981329+00:00"
+  "updated_at": "2026-06-04T10:11:14.980090+00:00"
 }
