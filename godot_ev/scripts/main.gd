@@ -3863,9 +3863,20 @@ func _player_inventory_lines() -> Array[String]:
 		"Legal records: %s" % _inventory_dictionary_summary(legal_records),
 		"Outfits: %s" % _inventory_dictionary_summary(owned_outfits),
 		"Weapons: %s" % _inventory_dictionary_summary(owned_weapons),
+		_primary_weapon_inventory_line(),
+		_secondary_weapon_inventory_line(),
 	]
 	lines.append_array(_active_mission_player_info_lines())
 	return lines
+
+func _primary_weapon_inventory_line() -> String:
+	var weapon := _primary_weapon_stats()
+	var weapon_name := str(weapon.get("name", weapon.get("id", "Unknown")))
+	var source_name := str(weapon.get("sourceStockName", weapon_name))
+	return "Primary weapon: %s — source %s; exact Classic cadence pending" % [weapon_name, source_name]
+
+func _secondary_weapon_inventory_line() -> String:
+	return "Secondary weapon: No Secondary Weapon — original-runtime-observed starting HUD; secondary firing scaffold pending"
 
 func _active_mission_player_info_lines() -> Array[String]:
 	var lines: Array[String] = []

@@ -1029,6 +1029,10 @@ class NativeEvModelTests(unittest.TestCase):
             'repair cost',
             'Outfits:',
             'Weapons:',
+            'Primary weapon: %s — source %s; exact Classic cadence pending',
+            'Secondary weapon: No Secondary Weapon — original-runtime-observed starting HUD; secondary firing scaffold pending',
+            'func _primary_weapon_inventory_line() -> String:',
+            'func _secondary_weapon_inventory_line() -> String:',
             'P toggles player info',
         ]:
             self.assertIn(symbol, main_script)
