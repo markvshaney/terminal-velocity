@@ -5,10 +5,10 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 213,
+    "ahead": 214,
     "dirty": false,
-    "head": "runner checkpoint commit containing this ledger update (see git log)",
-    "status_short": "## main...origin/main [ahead 213]"
+    "head": "610bdf3",
+    "status_short": "## main...origin/main [ahead 214]"
   },
   "operational_owner_candidate": "loki-game",
   "status": "running",
@@ -56,26 +56,24 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (38 tests OK)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (153 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=34 total=34)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=34)",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v (OK)",
-    "./run_godot.sh tv-gameplay-curriculum-help-log (hasMissionTradeHybridHelp=true; hintCount=35)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (39 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (154 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=35 total=35)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=35)",
     "git diff --check (OK)",
-    "git commit 60314e0 test: add chapter one trade carryover scenario",
-    "git commit 1835dba feat: surface mission trade carryover help"
+    "git commit 610bdf3 test: add return margin guardrail scenario"
   ],
-  "last_checkpoint_commit": "runner checkpoint commit containing this ledger update (see git log)",
-  "last_commit": "runner checkpoint commit containing this ledger update (see git log)",
+  "last_checkpoint_commit": "610bdf3",
+  "last_commit": "610bdf3",
   "last_commits": [
-    "HEAD chore(runner): checkpoint trade carryover slices",
+    "610bdf3 test: add return margin guardrail scenario",
+    "51b1f2f chore(runner): checkpoint trade carryover slices",
     "1835dba feat: surface mission trade carryover help",
     "60314e0 test: add chapter one trade carryover scenario"
   ],
-  "current_milestone": "Committed chapter-one mission/trade carryover and player help slice: native curriculum now carries Sol Food through two noncombat story deliveries before selling at Sirius Station with pending-Classic source/oracle labels; Godot F10/help-log guidance now tells players to carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.",
-  "next_resume_action": "Inspect live backlog/checklists and choose the next strongest safe-local Terminal Velocity slice; likely continue noncombat mission/trade/story-chain scaffolds, service/economy evidence prep, or bounded help/probe surfaces while preserving pending-Classic boundaries.",
-  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after commits 60314e0 and 1835dba. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "current_milestone": "Committed mission_trade_return_margin_guardrail: the native curriculum now evaluates an unprofitable Sirius Equipment return-cargo candidate for the Sol return leg, records a skip decision with pending-Classic source/oracle labels, then completes the third chapter-one return courier contract without cargo-hold contamination.",
+  "next_resume_action": "Inspect live backlog/checklists and choose the next strongest safe-local Terminal Velocity slice; likely continue noncombat mission/trade/story-chain scaffolds into source-bound player help/probes or prepare original-runtime evidence for economy/story-chain behavior while preserving pending-Classic boundaries.",
+  "resume_prompt": "Continue Terminal Velocity autonomous completion from clean main after commit 610bdf3. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "kind": "cronjob",
     "name": "Terminal Velocity continuous completion runner",
@@ -109,5 +107,5 @@
     "progress": "not needed; run stayed under about 10 minutes after start heartbeat and no long verification exceeded heartbeat interval",
     "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T12:12:44.112024Z"
+  "updated_at": "2026-06-04T12:20:54.726182Z"
 }
