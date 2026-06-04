@@ -5,23 +5,22 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "combat_player_disabled_recovery_scaffold",
+  "current_milestone": "combat_player_disabled_change_secondary_guardrail",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    "progress_heartbeats": "wrote progress heartbeat before full verification because send_message tool unavailable",
+    "progress_heartbeats": "not needed; run stayed under long-run heartbeat threshold after start heartbeat",
     "start_heartbeat": "wrote .hermes/long-running/terminal-velocity/heartbeat.json because send_message tool unavailable",
     "visibility_degraded": "send_message tool unavailable; heartbeat file fallback used"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-combat-log -> recoveryTriggered=true playerRecovered=true recoveryStatusVisible=true plus disabled fire/secondary/jump/land guardrails",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasRecoveryHelp=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-combat-log -> disabledChangeSecondaryBlocked=true plus existing disabled fire/secondary/jump/land/recovery guardrails",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (128 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh tv-combat-guardrail-log -> firstShotSpawned=true immediateSecondShotBlocked=true cooldownFrames=146 cooldownCleared=true shotAfterCooldownSpawned=true secondaryBlocked=true",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): add disabled-player recovery scaffold (7d91106)"
+    "git commit -> feat(godot): block secondary selection while disabled (0abb141)"
   ],
   "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: original-runtime/resource evidence for exact combat death/destruction/reload semantics, secondary weapon implementation scaffolds, combat target/AI guardrails, or another source-labeled mission/map/fuel/combat helper. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
@@ -98,5 +97,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T04:17:40.745359Z"
+  "updated_at": "2026-06-04T04:23:36Z"
 }
