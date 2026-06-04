@@ -207,11 +207,13 @@ class NativeEvModelTests(unittest.TestCase):
             'Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.',
             'Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.',
             'Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.',
+            'Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
             'hasCombatRewardsHelp=%s',
             'hasSalvageHelp=%s',
             'hasPirateAvoidanceHelp=%s',
+            'hasContrabandHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:

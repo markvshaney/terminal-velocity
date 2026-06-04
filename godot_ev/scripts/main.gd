@@ -1369,6 +1369,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_salvage_help := false
 	var has_recovery_help := false
 	var has_pirate_avoidance_help := false
+	var has_contraband_help := false
 	for line in hints:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
@@ -1386,7 +1387,9 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_recovery_help = true
 		if str(line).contains("Pirate avoidance: if an intercept warning appears"):
 			has_pirate_avoidance_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(hints[0]) if not hints.is_empty() else ""])
+		if str(line).contains("Contraband: Player Info and map commodity hints flag"):
+			has_contraband_help = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
@@ -4788,6 +4791,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.",
 		"Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.",
 		"Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
+		"Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
 		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
