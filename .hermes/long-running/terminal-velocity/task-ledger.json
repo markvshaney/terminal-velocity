@@ -1,30 +1,27 @@
 {
   "active_gate": {
-    "reason": null,
-    "resume_after": null,
-    "type": null,
+    "reason": "no active gate; safe-local code/docs/tests/commit completed",
+    "resume_after": "next cron tick",
+    "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Committed secondary weapon selection/fire scaffold with deterministic Godot log and source-fidelity backlog documentation.",
+  "current_milestone": "Secondary weapon scaffold now exposes Player Info empty/loaded status and Space/S help text with deterministic Godot log coverage.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    ".hermes/long-running/terminal-velocity/heartbeat.json": true,
-    "progress_heartbeats": "one file fallback heartbeat written while implementing RED/GREEN secondary-weapon slice",
+    "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
     "send_message_available": false,
-    "start_heartbeat": "file_fallback",
-    "visibility_degraded": true
+    "start_heartbeat": "fallback_file_written"
   },
-  "last_commit": "90b8d44",
+  "last_commit": "b617c4e feat: surface secondary weapon inventory status",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v -> OK",
-    "./run_godot.sh tv-secondary-weapon-log -> TV_SECONDARY_WEAPON_EVENT secondaryUnavailableAtStart=true secondaryCycleSelected=true secondaryProjectileSpawned=true secondaryImmediateReloadBlocked=true secondaryCooldownFrames=149 secondaryTargetDamaged=true sourceResourceId=129 sourceStockName=\"Neutron Blaster\"",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (131 tests)",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
-    "./run_godot.sh tv-combat-log -> TV_COMBAT_EVENT combatExecuted=true projectileSpawned=true retaliationFired=true targetDamaged=true playerDamaged=true",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
-    "git diff --check -> OK"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v",
+    "./run_godot.sh tv-secondary-weapon-log",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty",
+    "./run_godot.sh self-test",
+    "git diff --check"
   ],
-  "next_resume_action": "Inspect live backlog and choose the next strongest safe-local Terminal Velocity slice; likely candidates include secondary ammo/source semantics, combat/explosion runtime evidence, AI retaliation cadence, legal/reward combat consequences, or another bounded mission/map/fuel/combat probe with docs/tests.",
+  "next_resume_action": "Continue with the next strongest safe-local Terminal Velocity gameplay/fidelity slice; current branch is ahead locally and clean after commit b617c4e.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
@@ -47,7 +44,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Resume Terminal Velocity continuous autonomous development. Do not stop after one verified slice; treat slices as checkpoints. Avoid unnecessary approvals: safe local file edits, tests, probes, docs, and coherent local commits are preapproved. Gate only push/PR/merge/rebase, destructive original-EV/Strict Play, credentials/providers/supervision/gateway, publication, or other real external/account-impacting actions unless explicitly approved.",
+  "resume_prompt": "Read this ledger, events tail, continuation prompt, git status/log, and backlog; preserve one-writer discipline; choose the next source-aligned playable/fidelity slice; verify and commit locally; update ledger/events.",
   "runner": {
     "deliver": "origin",
     "enabled_toolsets": [
@@ -98,11 +95,11 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "schema_version": 1,
-  "status": "checkpointed_not_scheduled",
+  "status": "running",
   "task_id": "terminal-velocity-game-development",
   "tool_caps_policy": {
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T05:14:38.452966+00:00"
+  "updated_at": "2026-06-04T01:20:31.689577-04:00"
 }
