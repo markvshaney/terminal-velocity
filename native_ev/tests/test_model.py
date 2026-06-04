@@ -203,7 +203,9 @@ class NativeEvModelTests(unittest.TestCase):
             'Terminal Velocity curriculum hints — scaffold',
             'pirate_avoidance_escape_route',
             'Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.',
+            'Combat: Tab fires primary; N cycles targets; R selects closest target; exact Classic cadence/effects still pending.',
             'hasRepairHelp=%s',
+            'hasCombatHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
@@ -264,6 +266,7 @@ class NativeEvModelTests(unittest.TestCase):
             'oracleStatus=classic_runtime_weapon_timing_pending',
         ]:
             self.assertIn(symbol, main_script)
+        self.assertIn('Combat: Tab fires primary; N cycles targets; R selects closest target', main_script)
         self.assertIn('tv-combat-log', run_script)
         self.assertIn('[switch]$CombatLog', windows_script)
 

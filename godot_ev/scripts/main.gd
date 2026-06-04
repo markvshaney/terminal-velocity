@@ -1247,6 +1247,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var hints := _gameplay_curriculum_hint_lines()
 	var has_pirate_hint := false
 	var has_repair_help := false
+	var has_combat_help := false
 	for line in hints:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
@@ -1254,7 +1255,9 @@ func _run_gameplay_curriculum_help_log() -> void:
 	for line in help_lines:
 		if str(line).contains("Repair: landed ports with repair service show F7"):
 			has_repair_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(hints[0]) if not hints.is_empty() else ""])
+		if str(line).contains("Combat: Tab fires primary; N cycles targets; R selects closest target"):
+			has_combat_help = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_combat_log() -> void:
@@ -3708,6 +3711,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
+		"Combat: Tab fires primary; N cycles targets; R selects closest target; exact Classic cadence/effects still pending.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Player info: P toggles player info with ship, cargo, fuel, outfits, and weapons.",
