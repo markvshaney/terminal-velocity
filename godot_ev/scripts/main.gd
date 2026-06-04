@@ -3599,6 +3599,7 @@ func _player_inventory_lines() -> Array[String]:
 		"Credits: %d" % credits,
 		"Cargo: %d/%d (%d mission, %d free)" % [cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons()],
 		"Fuel: %d/%d" % [player_fuel, _max_player_fuel()],
+		"Hull: %d/%d (repair cost %d cr)" % [player_hull, _max_player_hull(), _repair_cost()],
 		"Government/legal: %s" % _legal_warning_line(_current_government_name()),
 		"Reputation scores: %s" % _inventory_dictionary_summary(reputation_scores),
 		"Legal records: %s" % _inventory_dictionary_summary(legal_records),

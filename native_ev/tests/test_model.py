@@ -938,6 +938,8 @@ class NativeEvModelTests(unittest.TestCase):
             'Credits:',
             'Cargo:',
             'Fuel:',
+            'Hull:',
+            'repair cost',
             'Outfits:',
             'Weapons:',
             'P toggles player info',
