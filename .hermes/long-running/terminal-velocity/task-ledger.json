@@ -5,10 +5,10 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 187,
+    "ahead": 190,
     "dirty": false,
-    "head": "9afa06f",
-    "status_short": "## main...origin/main [ahead 187]"
+    "head": "2a02e11",
+    "status_short": "## main...origin/main [ahead 190]"
   },
   "operational_owner_candidate": "loki-game",
   "status": "running",
@@ -56,24 +56,24 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v (OK)",
-    "./run_godot.sh tv-gameplay-curriculum-help-log (hasMissionObjectiveHelp=true; hasMissionRouteHelp=true)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (141 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=22 total=22)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=22)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v (27 tests OK)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (142 tests OK)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=23 total=23)",
+    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=23)",
+    "./run_godot.sh tv-gameplay-curriculum-help-log (hasContrabandHelp=true; help log OK)",
     "git diff --check (OK)",
-    "git commit -> 9afa06f feat(godot): cover mission route help guidance"
+    "git commit -> 16c2468 feat(native): add contraband recovery scenario; runner checkpoint commit -> 2a02e11"
   ],
-  "last_checkpoint_commit": "9afa06f",
-  "last_commit": "9afa06f",
+  "last_checkpoint_commit": "16c2468",
+  "last_commit": "2a02e11",
   "last_commits": [
-    "9afa06f feat(godot): cover mission route help guidance",
-    "a7b3299 feat(godot): cover legal docking help guidance",
-    "b238463 feat(godot): gate docking by legal status"
+    "2a02e11 chore(runner): checkpoint contraband recovery slice",
+    "16c2468 feat(native): add contraband recovery scenario",
+    "3e1fc38 chore(runner): checkpoint mission route help slice"
   ],
-  "current_milestone": "Committed deterministic F10 help-log coverage for mission objective marker and G mission-route helper guidance, keeping original EV Classic automatic objective UI evidence-gated.",
-  "next_resume_action": "Inspect live backlog and choose the next strongest source-aligned Terminal Velocity safe-local slice; likely continue promoting mission/story/navigation/service/combat curriculum outcomes into visible guidance/probes, or add a bounded scenario guardrail before Classic evidence-gated promotion.",
-  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit 9afa06f. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
+  "current_milestone": "Committed a source-labeled symbolic contraband scan/legal clemency recovery scenario; curriculum and Godot self-test now cover 23 gameplay scenarios.",
+  "next_resume_action": "Inspect live backlog and choose the next strongest safe-local Terminal Velocity slice, likely promoting another legal/reputation, mission, route, service, or help/probe behavior with tests and Godot verification.",
+  "resume_prompt": "Continue the Terminal Velocity autonomous completion tick from clean main after commit 16c2468. Read ledger/events, inspect backlog/checklists, preserve one-writer discipline, then implement and verify the next source-aligned safe-local slice.",
   "runner": {
     "kind": "cronjob",
     "name": "Terminal Velocity continuous completion runner",
@@ -107,5 +107,5 @@
     "progress": "not needed; run stayed under about 10 minutes after start heartbeat",
     "final_delivery": "cron final response"
   },
-  "updated_at": "2026-06-04T10:35:08Z"
+  "updated_at": "2026-06-04T10:46:59Z"
 }
