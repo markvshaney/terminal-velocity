@@ -1440,10 +1440,12 @@ func _run_secondary_weapon_log() -> void:
 	owned_weapons.clear()
 	selected_secondary_weapon_index = 0
 	secondary_weapon_cooldown_frames = 0.0
+	var secondary_empty_line := _secondary_weapon_inventory_line()
 	_fire_secondary_weapon()
 	var unavailable_at_start := status_messages.has("Secondary weapon not loaded; primary combat scaffold available with Tab")
 	owned_weapons["pulse_cannon"] = 1
 	_change_secondary_weapon()
+	var secondary_loaded_line := _secondary_weapon_inventory_line()
 	var secondary_cycle_selected := status_messages.has("Secondary weapon selected: %s" % str(_secondary_weapon_stats().get("name", "pulse_cannon")))
 	var shield_before := int(target_shields.get(selected_target_index, 0))
 	var secondary_projectile_spawned := _spawn_secondary_projectile()
@@ -1457,7 +1459,9 @@ func _run_secondary_weapon_log() -> void:
 	var target_damaged := shield_after < shield_before
 	var weapon := _secondary_weapon_stats()
 	var source_fields: Dictionary = weapon.get("sourceStockWeaponFields", {})
-	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold oracleStatus=classic_runtime_secondary_weapon_behavior_pending" % [
+	var secondary_inventory_empty_visible := secondary_empty_line.contains("No Secondary Weapon")
+	var secondary_inventory_loaded_visible := secondary_loaded_line.contains(str(weapon.get("name", ""))) and secondary_loaded_line.contains(str(weapon.get("sourceStockName", "")))
+	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s secondaryInventoryEmptyVisible=%s secondaryInventoryLoadedVisible=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold oracleStatus=classic_runtime_secondary_weapon_behavior_pending" % [
 		SECONDARY_WEAPON_EVENT_LOG_PREFIX,
 		str(unavailable_at_start).to_lower(),
 		str(secondary_cycle_selected).to_lower(),
@@ -1465,6 +1469,8 @@ func _run_secondary_weapon_log() -> void:
 		str(immediate_second_shot_blocked).to_lower(),
 		secondary_cooldown_frames,
 		str(target_damaged).to_lower(),
+		str(secondary_inventory_empty_visible).to_lower(),
+		str(secondary_inventory_loaded_visible).to_lower(),
 		str(weapon.get("id", "")),
 		str(weapon.get("name", "")),
 		shield_before,
@@ -4061,7 +4067,12 @@ func _primary_weapon_inventory_line() -> String:
 	return "Primary weapon: %s — source %s; exact Classic cadence pending" % [weapon_name, source_name]
 
 func _secondary_weapon_inventory_line() -> String:
-	return "Secondary weapon: No Secondary Weapon — original-runtime-observed starting HUD; secondary firing scaffold pending"
+	var weapon := _secondary_weapon_stats()
+	if weapon.is_empty():
+		return "Secondary weapon: No Secondary Weapon — original-runtime-observed starting HUD; install/cycle with S before Space fires"
+	var weapon_name := str(weapon.get("name", weapon.get("id", "Unknown")))
+	var source_name := str(weapon.get("sourceStockName", weapon_name))
+	return "Secondary weapon: %s — selected; source %s; exact Classic secondary behavior pending" % [weapon_name, source_name]
 
 func _active_mission_player_info_lines() -> Array[String]:
 	var lines: Array[String] = []
@@ -4116,7 +4127,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
-		"Combat: Tab fires primary; N cycles targets; R selects closest target; exact Classic cadence/effects still pending.",
+		"Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; exact Classic cadence/effects still pending.",
 		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
