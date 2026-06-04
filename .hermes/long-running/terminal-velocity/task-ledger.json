@@ -5,22 +5,21 @@
     "type": "risk_gate_only",
     "withheld_action": "none for safe-local continuation; external publication/push remains withheld"
   },
-  "current_milestone": "navigation_guardrail_center_distance_guidance_verified",
+  "current_milestone": "mission_route_helper_replaces_stale_route_verified",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
-    "progress_heartbeats": "wrote file progress heartbeat before full verification because send_message tool unavailable",
+    "progress_heartbeats": "not needed; run stayed under the long-run heartbeat threshold after start heartbeat",
     "start_heartbeat": "wrote .hermes/long-running/terminal-velocity/heartbeat.json because send_message tool unavailable",
     "visibility_degraded": "send_message tool unavailable; heartbeat file fallback used"
   },
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_navigation_blocked_reasons_are_player_guidance_contract -v -> OK",
-    "./run_godot.sh tv-navigation-guardrail-log -> noRouteGuidance=true fuelGuidance=true tooCloseGuidance=true noPortGuidance=true approachGuidance=true refuelGuidance=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK",
+    "./run_godot.sh tv-mission-route-hint-log -> missionRouteQueued=true staleRouteBeforeHelper=[\"Sirius\"] staleRouteReplaced=true route=[\"Centauri\"]",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (125 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=20",
-    "./run_godot.sh tv-near-center-jump-log -> jumpBlocked=true blockReason=too_close_to_system_center fuel preserved",
     "git diff --check -> OK",
-    "git commit -> feat(godot): include center-distance jump guidance (e90304b)"
+    "git commit -> feat(godot): replace stale mission helper routes (44f7411)"
   ],
   "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic Mission Computer evidence for exact branch/abort/failure UI, improve route/fuel/original-runtime comparison probes, or add another player-visible legal/map/fuel/mission helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
@@ -97,5 +96,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T00:44:23Z"
+  "updated_at": "2026-06-04T00:53:44Z"
 }
