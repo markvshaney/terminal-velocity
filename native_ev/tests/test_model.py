@@ -202,6 +202,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _gameplay_curriculum_hint_lines',
             'Terminal Velocity curriculum hints — scaffold',
             'pirate_avoidance_escape_route',
+            'Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.',
             'Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.',
             'Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.',
             'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
@@ -224,6 +225,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasMissionDeadlineHelp=%s',
             'hasTradeRouteHelp=%s',
             'hasMapServiceHelp=%s',
+            'hasRouteRefuelHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
