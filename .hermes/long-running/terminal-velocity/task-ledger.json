@@ -19,7 +19,8 @@
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh tv-combat-guardrail-log -> firstShotSpawned=true immediateSecondShotBlocked=true cooldownFrames=146 cooldownCleared=true shotAfterCooldownSpawned=true secondaryBlocked=true",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
-    "git diff --check -> OK"
+    "git diff --check -> OK",
+    "git commit -> feat(godot): block secondary fire while disabled (45808a4)"
   ],
   "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: original-runtime/resource evidence for exact combat death/destruction/reload semantics, player-visible reload/new-pilot recovery UI, secondary weapon implementation scaffolds, or another source-labeled mission/map/fuel/combat helper. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
@@ -96,5 +97,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T04:12:00Z"
+  "updated_at": "2026-06-04T04:12:24Z"
 }
