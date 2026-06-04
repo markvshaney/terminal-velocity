@@ -938,8 +938,8 @@ func _run_mission_alignment_branch_log() -> void:
 	var branch_choice_groups := []
 	for mission in branch_offers:
 		branch_offer_ids.append(str(mission.get("id", "")))
-		var choice_group := str(mission.get("choiceGroup", ""))
-		if choice_group != "" and not branch_choice_groups.has(choice_group):
+		var choice_group := _mission_optional_field(mission, "choiceGroup")
+		if choice_group != "none" and not branch_choice_groups.has(choice_group):
 			branch_choice_groups.append(choice_group)
 	var federation_visible := branch_offer_ids.has("federation_report_freeport")
 	var freeport_visible := branch_offer_ids.has("freeport_pact_smugglers")

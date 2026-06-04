@@ -1042,6 +1042,8 @@ class NativeEvModelTests(unittest.TestCase):
             'federationBranchAccepted=%s',
             'freeportBranchHiddenAfterChoice=%s',
             'offersAfterChoice=%s',
+            'var choice_group := _mission_optional_field(mission, "choiceGroup")',
+            'if choice_group != "none" and not branch_choice_groups.has(choice_group):',
             'choiceBoundary=terminal_velocity_choice_group_scaffold_exact_classic_branch_ui_pending',
             'reputation_event_id',
             '_apply_reputation_event(reputation_event_id',
