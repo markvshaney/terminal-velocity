@@ -50,6 +50,7 @@ const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
+const PROJECTILE_MOTION_EVENT_LOG_PREFIX := "TV_PROJECTILE_MOTION_EVENT"
 const CARGO_SALVAGE_EVENT_LOG_PREFIX := "TV_CARGO_SALVAGE_EVENT"
 const SECONDARY_WEAPON_EVENT_LOG_PREFIX := "TV_SECONDARY_WEAPON_EVENT"
 const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
@@ -234,6 +235,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-projectile-motion-log") or OS.get_cmdline_user_args().has("--tv-projectile-motion-log"):
+		call_deferred("_run_projectile_motion_log")
 	if OS.get_cmdline_args().has("--tv-cargo-salvage-log") or OS.get_cmdline_user_args().has("--tv-cargo-salvage-log"):
 		call_deferred("_run_cargo_salvage_log")
 	if OS.get_cmdline_args().has("--tv-secondary-weapon-log") or OS.get_cmdline_user_args().has("--tv-secondary-weapon-log"):
@@ -1564,6 +1567,50 @@ func _run_combat_guardrail_log() -> void:
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
 	var source_reload := int(source_fields.get("Reload", primary_weapon.get("reloadFrames", 0)))
 	print("%s firstShotSpawned=%s immediateSecondShotBlocked=%s cooldownFrames=%d cooldownCleared=%s shotAfterCooldownSpawned=%s secondaryBlocked=%s sourceReload=%d sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(first_shot_spawned), str(cooldown_blocked), int(cooldown_after_first), str(cooldown_cleared), str(third_shot_spawned), str(secondary_blocked), source_reload, status_line])
+	get_tree().quit(0)
+
+func _run_projectile_motion_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	_select_closest_target()
+	primary_weapon_cooldown_frames = 0.0
+	var target_index := selected_target_index
+	var weapon := _primary_weapon_stats()
+	var source_fields: Dictionary = weapon.get("sourceStockWeaponFields", {})
+	var source_speed := int(source_fields.get("Speed", weapon.get("speed", 0)))
+	var source_lifetime := int(weapon.get("lifetime", source_fields.get("Count", 0)))
+	var source_count := int(source_fields.get("Count", weapon.get("countFrames", 0)))
+	var projectile_spawned := _spawn_primary_projectile()
+	var initial_position := Vector2.ZERO
+	var initial_speed := 0
+	if projectile_spawned and not projectiles.is_empty():
+		initial_position = projectiles[0].get("position", Vector2.ZERO)
+		initial_speed = int(round(projectiles[0].get("velocity", Vector2.ZERO).length()))
+	for _i in range(5):
+		_advance_projectiles(1.0 / 60.0)
+	var moved_position: Vector2 = projectiles[0].get("position", initial_position) if not projectiles.is_empty() else initial_position
+	var projectile_moved: bool = moved_position.distance_to(initial_position) > 0.0
+	var shield_before_hit := int(target_shields.get(target_index, 0))
+	var hit_target := false
+	for _i in range(180):
+		_advance_projectiles(1.0 / 60.0)
+		if int(target_shields.get(target_index, 0)) < shield_before_hit:
+			hit_target = true
+			break
+	var shield_after_hit := int(target_shields.get(target_index, 0))
+	projectiles.clear()
+	primary_weapon_cooldown_frames = 0.0
+	var expiry_spawned := _spawn_primary_projectile()
+	if expiry_spawned and not projectiles.is_empty():
+		projectiles[0]["targetIndex"] = -99
+		projectiles[0]["position"] = Vector2(-9999, -9999)
+		projectiles[0]["velocity"] = Vector2.RIGHT * float(weapon.get("speed", 9.0)) * 60.0
+	for _i in range(source_lifetime + 5):
+		_advance_projectiles(1.0 / 60.0)
+	var projectile_expired := expiry_spawned and projectiles.is_empty()
+	print("%s projectileSpawned=%s projectileMoved=%s projectileHitTarget=%s projectileExpired=%s initialProjectileSpeed=%d sourceSpeed=%d sourceLifetime=%d sourceCount=%d targetShieldBefore=%d targetShieldAfter=%d sourceLabel=terminal-velocity-projectile-motion-scaffold oracleStatus=classic_runtime_projectile_motion_pending" % [PROJECTILE_MOTION_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(projectile_moved).to_lower(), str(hit_target).to_lower(), str(projectile_expired).to_lower(), initial_speed, source_speed, source_lifetime, source_count, shield_before_hit, shield_after_hit])
 	get_tree().quit(0)
 
 func _run_cargo_salvage_log() -> void:
