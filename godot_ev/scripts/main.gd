@@ -1250,6 +1250,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_pirate_hint := false
 	var has_repair_help := false
 	var has_combat_help := false
+	var has_recovery_help := false
 	for line in hints:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
@@ -1259,7 +1260,9 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_repair_help = true
 		if str(line).contains("Combat: Tab fires primary; N cycles targets; R selects closest target"):
 			has_combat_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(hints[0]) if not hints.is_empty() else ""])
+		if str(line).contains("Recovery: F8 resets a disabled player ship"):
+			has_recovery_help = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s hasRecoveryHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(has_recovery_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_combat_log() -> void:
@@ -1329,6 +1332,9 @@ func _run_combat_log() -> void:
 	var disabled_jump_guidance := status_messages.has(_player_disabled_action_message())
 	_try_land()
 	var disabled_land_guidance := status_messages.has(_player_disabled_action_message())
+	var recovery_triggered := _recover_disabled_player_scaffold()
+	var player_recovered := not _player_disabled() and player_hull == _max_player_hull() and player_shields == _max_player_shields()
+	var recovery_status_visible := status_messages.has(_player_recovery_message())
 	var explosion_triggered := not explosion_events.is_empty()
 	var latest_explosion_source := str(explosion_events[-1].get("sourceLabel", "")) if explosion_triggered else ""
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
@@ -1340,7 +1346,7 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -1957,6 +1963,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_F6: _save_current_pilot_file()
 			KEY_F7:
 				_repair_current_hull()
+			KEY_F8:
+				_recover_disabled_player_scaffold()
 			KEY_C:
 				if landed:
 					_pay_legal_clemency()
@@ -2900,6 +2908,15 @@ func _fire_secondary_weapon() -> void:
 		return
 	_set_status("Secondary weapon not loaded; primary combat scaffold available with Tab")
 
+func _recover_disabled_player_scaffold() -> bool:
+	if not _player_disabled():
+		_set_status("Recovery unavailable: player ship is still operational")
+		return false
+	_reset_player_combat_stats()
+	projectiles.clear()
+	_set_status(_player_recovery_message())
+	return true
+
 func _change_secondary_weapon() -> void:
 	if landed and landing_tab == 1:
 		_sell_selected_commodity()
@@ -2971,6 +2988,9 @@ func _player_disabled() -> bool:
 
 func _player_disabled_action_message() -> String:
 	return "Player ship disabled; reload or start a new pilot before continuing actions"
+
+func _player_recovery_message() -> String:
+	return "Recovered disabled player ship; Terminal Velocity reload/new-pilot recovery scaffold"
 
 func _recharge_player_shields(delta: float) -> void:
 	if player_shields >= _max_player_shields() or player_hull <= 0:
@@ -3837,6 +3857,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
 		"Combat: Tab fires primary; N cycles targets; R selects closest target; exact Classic cadence/effects still pending.",
+		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
 		"Player info: P toggles player info with ship, cargo, fuel, outfits, and weapons.",

@@ -263,11 +263,16 @@ class NativeEvModelTests(unittest.TestCase):
             'playerDisabledExplosion=%s',
             'disabledFireBlocked=%s',
             'disabledSecondaryBlocked=%s',
+            'recoveryTriggered=%s',
+            'playerRecovered=%s',
+            'recoveryStatusVisible=%s',
             'disabledJumpGuidance=%s',
             'disabledLandGuidance=%s',
             'func _player_disabled() -> bool:',
             'Player ship disabled; Terminal Velocity reload/new-pilot recovery scaffold',
             'Player ship disabled; reload or start a new pilot before continuing actions',
+            'func _recover_disabled_player_scaffold() -> bool:',
+            'Recovered disabled player ship; Terminal Velocity reload/new-pilot recovery scaffold',
             'func _fire_secondary_weapon() -> void:',
             'terminal-velocity-player-disabled-scaffold',
             'classic_runtime_player_death_pending_strict_play_safe_trace',
@@ -292,6 +297,7 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('Combat: Tab fires primary; N cycles targets; R selects closest target', main_script)
+        self.assertIn('Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold', main_script)
         self.assertIn('tv-combat-log', run_script)
         self.assertIn('[switch]$CombatLog', windows_script)
 
