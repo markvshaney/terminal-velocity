@@ -136,6 +136,7 @@ var owned_weapons: Dictionary = {}
 var reputation_scores: Dictionary = {}
 var legal_records: Dictionary = {}
 var projectiles: Array[Dictionary] = []
+var explosion_events: Array[Dictionary] = []
 var target_shields: Dictionary = {}
 var target_hulls: Dictionary = {}
 var player_shields := 0
@@ -577,6 +578,7 @@ func _reset_travel_state() -> void:
 	commodity_hold.clear()
 	cargo = 0
 	projectiles.clear()
+	explosion_events.clear()
 	_reset_player_combat_stats()
 	_reset_combat_targets()
 
@@ -1279,8 +1281,23 @@ func _run_combat_log() -> void:
 	var after_player_hull := player_hull
 	var target_damaged := after_shields < before_shields or after_hull < before_hull
 	var player_damaged := after_player_shields < before_player_shields or after_player_hull < before_player_hull
-	var target_destroyed := _target_destroyed(target_index)
 	var primary_weapon := _primary_weapon_stats()
+	var applied_hull_damage := _weapon_hull_damage(primary_weapon)
+	# Deterministic destroy/explosion coverage uses a prepared final-hit state so
+	# the combat probe exercises target acquisition, projectile spawn, hit, kill,
+	# and explosion signaling without needing a long multi-shot runtime loop.
+	var destroy_prepared := false
+	var destroy_projectile_spawned := false
+	if not _target_destroyed(target_index):
+		target_shields[target_index] = 0
+		target_hulls[target_index] = applied_hull_damage
+		destroy_prepared = true
+		destroy_projectile_spawned = _spawn_primary_projectile()
+		for _i in range(90):
+			_advance_projectiles(1.0 / 60.0)
+	var target_destroyed := _target_destroyed(target_index)
+	var explosion_triggered := not explosion_events.is_empty()
+	var latest_explosion_source := str(explosion_events[-1].get("sourceLabel", "")) if explosion_triggered else ""
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
 	var source_resource_id := int(primary_weapon.get("sourceResourceId", -1))
 	var source_stock_name := str(primary_weapon.get("sourceStockName", primary_weapon.get("name", "Primary")))
@@ -1290,8 +1307,7 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
-	var applied_hull_damage := _weapon_hull_damage(primary_weapon)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s targetDestroyed=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(target_destroyed), projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -2946,6 +2962,7 @@ func _weapon_stats_by_id(weapon_id: String) -> Dictionary:
 	return {}
 
 func _advance_projectiles(delta: float) -> void:
+	_advance_explosion_events(delta)
 	if projectiles.is_empty():
 		return
 	var survivors: Array[Dictionary] = []
@@ -2972,6 +2989,16 @@ func _advance_projectiles(delta: float) -> void:
 			survivors.append(projectile)
 	projectiles = survivors
 
+func _advance_explosion_events(delta: float) -> void:
+	if explosion_events.is_empty():
+		return
+	var survivors: Array[Dictionary] = []
+	for explosion in explosion_events:
+		explosion["life"] = float(explosion.get("life", 0.0)) - delta
+		if float(explosion.get("life", 0.0)) > 0.0:
+			survivors.append(explosion)
+	explosion_events = survivors
+
 func _apply_projectile_hit(projectile: Dictionary, target_index: int) -> void:
 	var shields := int(target_shields.get(target_index, 0))
 	var hull := int(target_hulls.get(target_index, 0))
@@ -2982,6 +3009,7 @@ func _apply_projectile_hit(projectile: Dictionary, target_index: int) -> void:
 	target_shields[target_index] = shields
 	target_hulls[target_index] = hull
 	if _target_destroyed(target_index):
+		_record_explosion_event(target_index)
 		var government_name := _current_government_name()
 		if _legal_patrol_hostile_posture_active(government_name):
 			_apply_reputation_event("destroy_patrol", government_name)
@@ -2990,6 +3018,19 @@ func _apply_projectile_hit(projectile: Dictionary, target_index: int) -> void:
 			_set_status("Contact %d disabled" % [target_index + 1])
 	else:
 		_set_status("Contact %d hit: shield %d hull %d" % [target_index + 1, shields, hull])
+
+func _record_explosion_event(target_index: int) -> void:
+	var targets := _npc_world_offsets()
+	var explosion_position := targets[target_index] if target_index >= 0 and target_index < targets.size() else pos
+	explosion_events.append({
+		"position": explosion_position,
+		"life": 2.0,
+		"radius": 8.0,
+		"targetIndex": target_index,
+		"sourceLabel": "terminal-velocity-explosion-visual-scaffold",
+		"oracleStatus": "classic_runtime_explosion_timing_pending",
+	})
+	_play_sound("ui_click")
 
 func _apply_player_projectile_hit(projectile: Dictionary) -> void:
 	if player_shields > 0:
@@ -3373,6 +3414,11 @@ func _draw_projectiles(center: Vector2) -> void:
 	for projectile in projectiles:
 		var screen: Vector2 = center + (projectile.get("position", Vector2.ZERO) - pos) * WORLD_SCALE
 		draw_circle(screen, float(projectile.get("radius", 3.0)), _named_color(str(projectile.get("color", "OrangeRed"))))
+	for explosion in explosion_events:
+		var screen: Vector2 = center + (explosion.get("position", Vector2.ZERO) - pos) * WORLD_SCALE
+		var life := clampf(float(explosion.get("life", 0.0)) / 2.0, 0.0, 1.0)
+		draw_arc(screen, float(explosion.get("radius", 8.0)) * (1.0 + (1.0 - life) * 2.2), 0, TAU, 24, Color(1.0, 0.48, 0.12, life), 2.0)
+		draw_circle(screen, 3.0 + (1.0 - life) * 5.0, Color(1.0, 0.82, 0.24, life * 0.8))
 
 func _draw_player(center: Vector2) -> void:
 	if player_frames.is_empty():

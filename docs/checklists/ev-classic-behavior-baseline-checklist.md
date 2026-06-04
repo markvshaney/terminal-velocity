@@ -226,7 +226,8 @@ For every behavior row, record:
   - Status: `terminal-velocity-observed`; covered by `RunGodot.ps1 -MovementLog` and `native_ev.tests.test_model.NativeEvModelTests.test_godot_deterministic_movement_log_contract`.
 - [x] Event log for landing/takeoff/hyperspace transitions.
   - Status: `terminal-velocity-observed`; `godot_ev/scripts/main.gd` supports `--tv-travel-event-log`, and `godot_ev/windows/RunGodot.ps1 -TravelEventLog` runs it headlessly.
-- [ ] Event log for target acquisition, weapon firing, projectile spawn, hit, and explosion.
+- [x] Event log for target acquisition, weapon firing, projectile spawn, hit, and explosion.
+  - Status: `terminal-velocity-observed`; `./run_godot.sh tv-combat-log` prints target selection, player/NPC projectile spawning, hit/damage fields, a deterministic final-hit destruction setup, and `explosionTriggered=true` with `explosionSourceLabel=terminal-velocity-explosion-visual-scaffold`. Exact Classic combat timing, reward, legal consequence, and explosion-frame fidelity remain pending original-runtime/resource comparison.
 - [x] Self-test output includes selected profile: `profile=classic`.
   - Status: `terminal-velocity-observed`; 2026-06-04 Godot self-test prints `profile=classic` so profile-addressed logs can be distinguished from future EV-family profiles.
 - [x] Landed service matrix log for non-mutating before/after planning.
