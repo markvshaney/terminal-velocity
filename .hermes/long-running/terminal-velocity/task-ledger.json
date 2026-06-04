@@ -1,37 +1,39 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local target selection code/docs/tests/commit completed",
+    "reason": "no active gate; safe-local code/docs/tests/commits completed",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Target selection now skips disabled/destroyed combat contacts for next-target cycling and closest-target selection, with deterministic Godot log coverage and backlog source-boundary notes.",
+  "current_milestone": "Combat audio binding coverage extended across primary fire, NPC/explosion combat log, secondary fire, and primary reload guardrail probes with decoded/source-backed sound IDs and pending Classic timing/mix labels.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_under_10_minutes",
+    "progress_heartbeat": "fallback_file_written_before_full_verification",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "9ef6fd4 feat(godot): skip disabled combat targets; checkpoint ec3d6f2",
+  "last_commit": "0480c2e test(godot): verify primary sound cooldown guardrail; 0d53237 test(godot): log secondary weapon sound binding; cdfb84b feat(godot): play combat sound bindings",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_target_selection_log_contract -v -> OK",
-    "./run_godot.sh tv-target-selection-log -> TV_TARGET_SELECTION_EVENT ... destroyedTargetSkippedByCycle=true destroyedTargetSkippedByClosest=true liveTargetCount=3 sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v && ./run_godot.sh tv-combat-log -> OK; TV_SOUND_EVENT primaryWeaponSound=weapon_laser npcWeaponSound=weapon_cannon explosionSound=ship_explodes all played=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (136 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
+    "./run_godot.sh tv-secondary-weapon-log -> OK; secondaryWeaponSound=weapon_cannon secondaryWeaponSoundPlayed=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_combat_guardrail_log_contract -v && ./run_godot.sh tv-combat-guardrail-log -> OK; primaryWeaponSoundPlayCount=2 primaryWeaponSoundPlayedForValidShots=true",
     "git diff --check -> OK",
-    "git commit -> feat(godot): skip disabled combat targets (9ef6fd4)"
+    "git commit -> cdfb84b, 0d53237, 0480c2e"
   ],
-  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: original-runtime/source evidence for exact target retarget semantics, combat AI/fire cadence/projectile/explosion timing, legal/reward consequences, or the next bounded player-visible combat/navigation scenario scaffold.",
+  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: exact Classic/source evidence for combat sound timing/mix/cadence, projectile/explosion timing, AI/legal/reward consequences, or another bounded player-visible combat/navigation scenario scaffold.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 104,
+    "ahead": 107,
     "branch": "main",
-    "dirty": false,
-    "head": "ec3d6f2 checkpoint commit; code slice 9ef6fd4"
+    "dirty": true,
+    "head": "0480c2e",
+    "status_short": "## main...origin/main [ahead 107]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -104,5 +106,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T06:51:54Z"
+  "updated_at": "2026-06-04T07:02:48Z"
 }
