@@ -41,6 +41,7 @@ SCENARIO_CURRICULUM = [
     'mission_abort_releases_reserved_cargo',
     'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
+    'system_service_provisioning_scout',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
     'route_queue_clear_guardrail',
@@ -181,6 +182,35 @@ def _clear_route_queue(state: dict[str, Any], action: dict[str, Any], trace: lis
         'routeQueue': [],
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-guardrail'),
         'oracleStatus': action.get('oracleStatus', 'route_clear_pending_ev_classic_trace'),
+    })
+    return True
+
+
+def _scan_station_services(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    universe = load_universe()
+    system_name = str(action.get('system', state['currentSystem']))
+    body_name = str(action.get('body', state.get('landedBody') or ''))
+    if not body_name:
+        trace.append({'type': 'blocked_scan_station_services', 'reason': 'no body selected', 'system': system_name})
+        return False
+    inventory = station_inventory(universe, system_name, body_name)
+    services = list(inventory.get('services', []))
+    trace.append({
+        'type': 'scan_station_services',
+        'system': system_name,
+        'body': body_name,
+        'services': services,
+        'hasCommodities': 'commodities' in services,
+        'hasMissionComputer': 'missions' in services,
+        'hasOutfitter': 'outfitter' in services,
+        'hasShipyard': 'shipyard' in services,
+        'hasWeapons': 'weapons' in services,
+        'hasRepairs': 'repairs' in services,
+        'outfitsForSale': list(inventory.get('outfitsForSale', [])),
+        'shipsForSale': list(inventory.get('shipsForSale', [])),
+        'weaponsForSale': list(inventory.get('weaponsForSale', [])),
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-service-provisioning-scaffold'),
+        'oracleStatus': action.get('oracleStatus', 'classic_runtime_service_matrix_pending'),
     })
     return True
 
@@ -749,6 +779,14 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'credits': 60000}},
             {'type': 'buy_ship', 'shipId': 'light_freighter'},
         ]
+    if name == 'system_service_provisioning_scout':
+        return [
+            {'type': 'scan_station_services', 'system': 'Levo', 'body': 'Levo Spaceport', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'scan_station_services', 'system': 'Sol', 'body': 'Earth'},
+            {'type': 'scan_station_services', 'system': 'Sol', 'body': 'Stardock Alpha'},
+        ]
     if name == 'shift_click_multi_stop_route_queue':
         return [
             {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
@@ -897,6 +935,17 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'upgraded_to_larger_ship': 'passed' if state.get('playerShipId') == 'light_freighter' and any(event.get('type') == 'buy_ship' and event.get('previousShipId') == 'shuttlecraft' and int(event.get('cargoCapacityAfter', 0)) > int(event.get('cargoCapacityBefore', 0)) for event in trace) else 'failed',
             'recorded_outfitter_ship_ladder_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-outfitter-ship-ladder-scaffold' and 'pending_original' in event.get('oracleStatus', '') for event in trace if event.get('type') in {'buy_outfit_or_weapon', 'buy_ship'}) else 'failed',
         })
+    elif name == 'system_service_provisioning_scout':
+        scans = {(event.get('system'), event.get('body')): event for event in trace if event.get('type') == 'scan_station_services'}
+        levo = scans.get(('Levo', 'Levo Spaceport'), {})
+        earth = scans.get(('Sol', 'Earth'), {})
+        stardock = scans.get(('Sol', 'Stardock Alpha'), {})
+        checks.update({
+            'confirmed_levo_original_service_boundary': 'passed' if levo.get('hasCommodities') is True and levo.get('hasMissionComputer') is True and levo.get('hasOutfitter') is False and levo.get('hasShipyard') is False and levo.get('sourceLabel') == 'original-runtime-observed' else 'failed',
+            'scouted_earth_full_service_scaffold': 'passed' if earth.get('hasRepairs') is True and earth.get('hasOutfitter') is True and earth.get('hasShipyard') is True and earth.get('hasWeapons') is True and bool(earth.get('shipsForSale')) else 'failed',
+            'scouted_station_without_shipyard': 'passed' if stardock.get('hasOutfitter') is True and stardock.get('hasWeapons') is True and stardock.get('hasShipyard') is False else 'failed',
+            'recorded_service_matrix_source_boundary': 'passed' if all(event.get('sourceLabel') in {'original-runtime-observed', 'terminal-velocity-service-provisioning-scaffold'} and 'pending' in event.get('oracleStatus', '') for event in trace if event.get('type') == 'scan_station_services') else 'failed',
+        })
     elif name == 'shift_click_multi_stop_route_queue':
         appended_paths = [event.get('greenRoutePath') for event in trace if event.get('type') == 'append_route_stop']
         checks.update({
@@ -986,6 +1035,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'set_state': _set_state,
         'append_route_stop': _append_route_stop,
         'clear_route_queue': _clear_route_queue,
+        'scan_station_services': _scan_station_services,
         'route_to_active_mission_destination': _route_to_active_mission_destination,
         'scan_mission_offers': _scan_mission_offers,
         'accept_manifest_mission': _accept_manifest_mission,

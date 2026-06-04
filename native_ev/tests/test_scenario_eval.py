@@ -27,6 +27,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_abort_releases_reserved_cargo',
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
+                'system_service_provisioning_scout',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
                 'route_queue_clear_guardrail',
@@ -299,6 +300,24 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['upgraded_to_larger_ship'], 'passed')
         self.assertEqual(result['checks']['recorded_outfitter_ship_ladder_source_boundary'], 'passed')
         self.assertIn('terminal-velocity-outfitter-ship-ladder-scaffold', {event.get('sourceLabel') for event in result['trace']})
+
+    def test_system_service_provisioning_scout_records_service_matrix_boundaries(self):
+        result = run_scripted_scenario('system_service_provisioning_scout')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['checks']['confirmed_levo_original_service_boundary'], 'passed')
+        self.assertEqual(result['checks']['scouted_earth_full_service_scaffold'], 'passed')
+        self.assertEqual(result['checks']['scouted_station_without_shipyard'], 'passed')
+        self.assertEqual(result['checks']['recorded_service_matrix_source_boundary'], 'passed')
+        scans = {(event['system'], event['body']): event for event in result['trace'] if event['type'] == 'scan_station_services'}
+        self.assertFalse(scans[('Levo', 'Levo Spaceport')]['hasOutfitter'])
+        self.assertFalse(scans[('Levo', 'Levo Spaceport')]['hasShipyard'])
+        self.assertTrue(scans[('Sol', 'Earth')]['hasShipyard'])
+        self.assertIn('light_freighter', scans[('Sol', 'Earth')]['shipsForSale'])
+        self.assertFalse(scans[('Sol', 'Stardock Alpha')]['hasShipyard'])
+        self.assertEqual(scans[('Sol', 'Stardock Alpha')]['sourceLabel'], 'terminal-velocity-service-provisioning-scaffold')
 
     def test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg(self):
         result = run_scripted_scenario('shift_click_multi_stop_route_queue')
