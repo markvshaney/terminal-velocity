@@ -225,6 +225,17 @@ Mission abort reputation-penalty scenario contract:
   - `oracleStatus=classic_runtime_abort_penalty_ui_pending`.
 - This is a decoded-resource-backed Terminal Velocity guardrail for reputation state; exact EV Classic player-facing abort dialog/status remains gated on original-runtime/manual evidence.
 
+Mission auto-abort completion-bit scenario contract:
+
+- `RunGodot.ps1 -MissionAutoAbortLog` / `--tv-mission-auto-abort-log`
+- Exercises the EV Classic Resource Bible-backed mission flag `0x0001` auto-abort contract in the Godot fast-eval lane while keeping exact Classic runtime timing and UI wording pending.
+- Seeds deterministic active mission `auto_abort_completion_bit_probe` with `autoAbort=true`, `completionFlags=["auto_abort_completion_bit_77"]`, and `cargoTons=2`; applies the auto-abort transition immediately after acceptance; and logs:
+  - `autoAbortedAfterAcceptance=true` and `reservedCargoReleased=true`;
+  - `completionFlagsApplied=true`, active mission ids, abort-history count, and latest abort record;
+  - `sourceLabel=ev-classic-resource-bible-backed-auto-abort-guardrail`;
+  - `oracleStatus=classic_runtime_auto_abort_ui_pending`.
+- This is a decoded-resource-backed Terminal Velocity guardrail for mission state/flag cleanup; exact EV Classic auto-abort dialog/status/timing remains gated on original-runtime/manual evidence.
+
 Mission scan-failure scenario contract:
 
 - `RunGodot.ps1 -MissionScanFailureLog` / `--tv-mission-scan-failure-log`

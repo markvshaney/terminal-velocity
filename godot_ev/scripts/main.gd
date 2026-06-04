@@ -44,6 +44,7 @@ const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
 const MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_PENALTY_EVENT"
+const MISSION_AUTO_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_AUTO_ABORT_EVENT"
 const MISSION_SCAN_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_SCAN_FAILURE_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
 const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
@@ -233,6 +234,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_abort_forbidden_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-penalty-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-penalty-log"):
 		call_deferred("_run_mission_abort_penalty_log")
+	if OS.get_cmdline_args().has("--tv-mission-auto-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-auto-abort-log"):
+		call_deferred("_run_mission_auto_abort_log")
 	if OS.get_cmdline_args().has("--tv-mission-scan-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-scan-failure-log"):
 		call_deferred("_run_mission_scan_failure_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
@@ -1323,6 +1326,32 @@ func _run_mission_abort_penalty_log() -> void:
 	var cargo_released_status := "reservedCargoReleased=true" if cargo == cargo_before_abort - int(probe_mission.get("cargoTons", 0)) else "reservedCargoReleased=false"
 	var reputation_status := "reputationPenaltyApplied=true" if actual_delta == expected_delta and reputation_after_abort == reputation_before_abort + expected_delta else "reputationPenaltyApplied=false"
 	print("%s acceptedMission=%s %s cargoBeforeAbort=%d cargoAfterAbort=%d %s reputationBeforeAbort=%d reputationAfterAbort=%d reputationDelta=%d expectedReputationDelta=%d %s activeMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=ev-classic-resource-bible-backed-mission-abort-penalty-scaffold oracleStatus=classic_runtime_abort_penalty_ui_pending status=\"%s\"" % [MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX, str(probe_mission.get("id")), abort_status, cargo_before_abort, cargo, cargo_released_status, reputation_before_abort, reputation_after_abort, actual_delta, expected_delta, reputation_status, JSON.stringify(active_missions), aborted_mission_history.size(), JSON.stringify(latest_abort), status_line])
+	get_tree().quit(0)
+
+func _run_mission_auto_abort_log() -> void:
+	_reset_travel_state()
+	var probe_mission := {
+		"id": "auto_abort_completion_bit_probe",
+		"title": "Auto Abort Completion Bit Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 2,
+		"autoAbort": true,
+		"completionFlags": ["auto_abort_completion_bit_77"],
+		"sourceLabel": "ev-classic-resource-bible-backed-auto-abort-guardrail",
+		"oracleStatus": "classic_runtime_auto_abort_ui_pending",
+	}
+	missions["missions"].append(probe_mission)
+	active_missions.append(str(probe_mission.get("id")))
+	mission_acceptance_days[str(probe_mission.get("id"))] = current_day
+	cargo = int(probe_mission.get("cargoTons", 0))
+	var cargo_after_accept := cargo
+	var auto_abort_triggered := _auto_abort_active_mission(probe_mission)
+	var latest_abort: Dictionary = aborted_mission_history[aborted_mission_history.size() - 1] if not aborted_mission_history.is_empty() else {}
+	var abort_status := "autoAbortedAfterAcceptance=true" if auto_abort_triggered and not active_missions.has(str(probe_mission.get("id"))) else "autoAbortedAfterAcceptance=false"
+	var cargo_status := "reservedCargoReleased=true" if cargo == 0 else "reservedCargoReleased=false"
+	var flag_status := "completionFlagsApplied=true" if story_flags.has("auto_abort_completion_bit_77") else "completionFlagsApplied=false"
+	print("%s acceptedMission=%s autoAbort=true cargoAfterAccept=%d cargoAfterAutoAbort=%d %s %s %s activeMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=ev-classic-resource-bible-backed-auto-abort-guardrail oracleStatus=classic_runtime_auto_abort_ui_pending status=\"%s\"" % [MISSION_AUTO_ABORT_EVENT_LOG_PREFIX, str(probe_mission.get("id")), cargo_after_accept, cargo, abort_status, cargo_status, flag_status, JSON.stringify(active_missions), aborted_mission_history.size(), JSON.stringify(latest_abort), status_line])
 	get_tree().quit(0)
 
 func _run_mission_scan_failure_log() -> void:
@@ -2533,6 +2562,26 @@ func _complete_arrived_missions() -> Array:
 		completed_now.append(mission_id)
 	status_line = "Completed missions: " + ", ".join(completed_now) if not completed_now.is_empty() else "No missions completed"
 	return completed_now
+
+func _auto_abort_active_mission(mission: Dictionary) -> bool:
+	var mission_id := str(mission.get("id", ""))
+	if mission_id == "" or not active_missions.has(mission_id):
+		_set_status("Auto-abort mission is not active")
+		return false
+	var cargo_released := int(mission.get("cargoTons", 0))
+	active_missions.erase(mission_id)
+	mission_acceptance_days.erase(mission_id)
+	cargo = max(0, cargo - cargo_released)
+	for flag in mission.get("completionFlags", []):
+		if not story_flags.has(flag):
+			story_flags.append(flag)
+	var record := _mission_abort_record(mission, mission_id, cargo_released)
+	record["completion_flags_applied"] = mission.get("completionFlags", [])
+	record["sourceLabel"] = "ev-classic-resource-bible-backed-auto-abort-guardrail"
+	record["oracleStatus"] = "classic_runtime_auto_abort_ui_pending"
+	aborted_mission_history.append(record)
+	_set_status("Auto-aborted mission: %s; released %d cargo tons" % [str(mission.get("title", mission_id)), cargo_released])
+	return true
 
 func _abort_active_mission(mission_id := "") -> bool:
 	if active_missions.is_empty():

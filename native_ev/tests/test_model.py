@@ -1331,6 +1331,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-mission-abort-penalty-log', wrapper)
         self.assertIn('Mission abort reputation-penalty scenario contract', plan)
 
+    def test_godot_mission_auto_abort_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-auto-abort-log',
+            'func _run_mission_auto_abort_log',
+            'TV_MISSION_AUTO_ABORT_EVENT',
+            'autoAbort=true',
+            'autoAbortedAfterAcceptance=true',
+            'reservedCargoReleased=true',
+            'completionFlagsApplied=true',
+            'sourceLabel=ev-classic-resource-bible-backed-auto-abort-guardrail',
+            'oracleStatus=classic_runtime_auto_abort_ui_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAutoAbortLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-auto-abort-log', run_script)
+        self.assertIn('tv-mission-auto-abort-log', wrapper)
+        self.assertIn('Mission auto-abort completion-bit scenario contract', plan)
+
     def test_godot_mission_scan_failure_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
