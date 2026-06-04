@@ -50,6 +50,7 @@ SCENARIO_CURRICULUM = [
     'alignment_offer_requirement_recovery',
     'federation_alignment_delivery_loop',
     'freeport_alignment_delivery_loop',
+    'alignment_completion_offer_scan_guardrail',
     'mission_destination_route_hint',
     'mission_trade_hybrid_capacity_planning',
     'mission_trade_refuel_delivery_loop',
@@ -1132,6 +1133,13 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station'}},
             {'type': 'accept_manifest_mission', 'missionId': 'federation_report_freeport'},
         ]
+    if name == 'alignment_completion_offer_scan_guardrail':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'completedJobs': ['federation_report_freeport'], 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_federation', 'federation_intel_asset'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
+            {'type': 'scan_mission_offers'},
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'completedJobs': ['freeport_pact_smugglers'], 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_freeport', 'freeport_network_asset'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
+            {'type': 'scan_mission_offers'},
+        ]
     if name == 'mission_destination_route_hint':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -1574,6 +1582,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'preserved_freeport_alignment_flags': 'passed' if {'frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_freeport', 'freeport_network_asset'}.issubset(set(state.get('storyFlags', []))) and 'alignment_federation' not in state.get('storyFlags', []) else 'failed',
             'blocked_federation_branch_after_freeport_completion': 'passed' if any(event.get('type') == 'blocked_manifest_mission' and event.get('missionId') == 'federation_report_freeport' for event in trace) else 'failed',
             'recorded_freeport_alignment_source_boundary': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'freeport_pact_smugglers' and event.get('sourceLabel') == 'terminal-velocity-mission-scaffold' and event.get('oracleStatus') == 'mission_behavior_pending_classic_runtime_trace' for event in trace) else 'failed',
+        })
+    elif name == 'alignment_completion_offer_scan_guardrail':
+        scans = [event for event in trace if event.get('type') == 'scan_mission_offers']
+        fed_offers = scans[0].get('offersBySurface', {}).get('Mission Computer', []) if len(scans) >= 1 else []
+        freeport_offers = scans[1].get('offersBySurface', {}).get('Mission Computer', []) if len(scans) >= 2 else []
+        checks.update({
+            'fed_completion_hides_alignment_offers': 'passed' if 'federation_report_freeport' not in fed_offers and 'freeport_pact_smugglers' not in fed_offers else 'failed',
+            'freeport_completion_hides_alignment_offers': 'passed' if 'federation_report_freeport' not in freeport_offers and 'freeport_pact_smugglers' not in freeport_offers else 'failed',
+            'recorded_completion_scan_source_boundary': 'passed' if len(scans) == 2 and all(event.get('sourceLabel') == 'terminal-velocity-observed' and event.get('oracleStatus') == 'terminal_velocity_eval_pending_original_trace' for event in scans) else 'failed',
         })
     elif name == 'mission_destination_route_hint':
         checks.update({

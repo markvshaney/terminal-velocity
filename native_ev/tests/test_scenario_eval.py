@@ -32,6 +32,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'alignment_offer_requirement_recovery',
                 'federation_alignment_delivery_loop',
                 'freeport_alignment_delivery_loop',
+                'alignment_completion_offer_scan_guardrail',
                 'mission_destination_route_hint',
                 'mission_trade_hybrid_capacity_planning',
                 'mission_trade_refuel_delivery_loop',
@@ -496,6 +497,25 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(accept['reservedCargoTons'], 2)
         self.assertEqual(accept['sourceLabel'], 'terminal-velocity-mission-scaffold')
         self.assertEqual(accept['oracleStatus'], 'mission_behavior_pending_classic_runtime_trace')
+
+    def test_alignment_completion_offer_scan_hides_closed_branch_offers(self):
+        result = run_scripted_scenario('alignment_completion_offer_scan_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['checks']['fed_completion_hides_alignment_offers'], 'passed')
+        self.assertEqual(result['checks']['freeport_completion_hides_alignment_offers'], 'passed')
+        self.assertEqual(result['checks']['recorded_completion_scan_source_boundary'], 'passed')
+        scans = [event for event in result['trace'] if event['type'] == 'scan_mission_offers']
+        self.assertEqual(len(scans), 2)
+        for scan in scans:
+            mission_offers = scan['offersBySurface']['Mission Computer']
+            self.assertNotIn('federation_report_freeport', mission_offers)
+            self.assertNotIn('freeport_pact_smugglers', mission_offers)
+            self.assertEqual(mission_offers, ['freeport_return_earth'])
+        self.assertEqual(scans[0]['sourceLabel'], 'terminal-velocity-observed')
+        self.assertEqual(scans[0]['oracleStatus'], 'terminal_velocity_eval_pending_original_trace')
 
     def test_mission_destination_route_hint_sets_route_to_active_contract_destination(self):
         result = run_scripted_scenario('mission_destination_route_hint')
