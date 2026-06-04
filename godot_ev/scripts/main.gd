@@ -784,7 +784,16 @@ func _run_repair_service_log() -> void:
 	var repair_message_visible := status_messages.has("Repaired hull at Earth for %d credits" % expected_cost)
 	var already_full_blocked := not _repair_current_hull()
 	var already_full_message_visible := status_messages.has("Hull already fully repaired")
-	print("%s routeToSolSelected=%s system=%s body=\"%s\" repairAvailable=%s damagedHull=%d maxHull=%d expectedCost=%d repaired=%s repairedHull=%d creditsAfterRepair=%d repairMessageVisible=%s alreadyFullBlocked=%s alreadyFullMessageVisible=%s sourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=repair_service_pending_ev_classic_runtime_trace status=\"%s\"" % [REPAIR_SERVICE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), str(body.get("name", "?")), str(repair_available), damaged_hull, max_hull, expected_cost, str(repaired), repaired_hull, credits_after_repair, str(repair_message_visible), str(already_full_blocked), str(already_full_message_visible), status_line])
+	player_hull = max(1, max_hull - 25)
+	var insufficient_cost := _repair_cost()
+	credits = max(0, insufficient_cost - 1)
+	var credits_before_insufficient := credits
+	var hull_before_insufficient := player_hull
+	var insufficient_blocked := not _repair_current_hull()
+	var credits_after_insufficient := credits
+	var hull_after_insufficient := player_hull
+	var insufficient_message_visible := status_messages.has("Not enough credits for repairs: need %d" % insufficient_cost)
+	print("%s routeToSolSelected=%s system=%s body=\"%s\" repairAvailable=%s damagedHull=%d maxHull=%d expectedCost=%d repaired=%s repairedHull=%d creditsAfterRepair=%d repairMessageVisible=%s alreadyFullBlocked=%s alreadyFullMessageVisible=%s insufficientCost=%d creditsBeforeInsufficient=%d insufficientBlocked=%s insufficientMessageVisible=%s creditsAfterInsufficient=%d hullBeforeInsufficient=%d hullAfterInsufficient=%d sourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=repair_service_pending_ev_classic_runtime_trace status=\"%s\"" % [REPAIR_SERVICE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), str(body.get("name", "?")), str(repair_available), damaged_hull, max_hull, expected_cost, str(repaired), repaired_hull, credits_after_repair, str(repair_message_visible), str(already_full_blocked), str(already_full_message_visible), insufficient_cost, credits_before_insufficient, str(insufficient_blocked), str(insufficient_message_visible), credits_after_insufficient, hull_before_insufficient, hull_after_insufficient, status_line])
 	get_tree().quit(0)
 
 func _run_low_fuel_jump_log() -> void:

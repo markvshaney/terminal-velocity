@@ -868,6 +868,9 @@ class NativeEvModelTests(unittest.TestCase):
             'repairAvailable=%s',
             'repaired=%s',
             'alreadyFullBlocked=%s',
+            'insufficientBlocked=%s',
+            'insufficientMessageVisible=%s',
+            'Not enough credits for repairs: need %d',
             'sourceLabel=terminal-velocity-repair-service-scaffold',
             'oracleStatus=repair_service_pending_ev_classic_runtime_trace',
         ]:
