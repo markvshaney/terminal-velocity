@@ -106,6 +106,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"levo_merchant_first_hop",
 		"levo_same_port_sellback_loop",
 		"commodity_sell_blocked_recovery_loop",
+		"commodity_buy_blocked_recovery_loop",
 		"mission_runner_first_delivery",
 		"scan_intro_mission_offers",
 		"intro_courier_mission_delivery",

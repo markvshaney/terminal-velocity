@@ -7,6 +7,7 @@
     "levo_merchant_first_hop",
     "levo_same_port_sellback_loop",
     "commodity_sell_blocked_recovery_loop",
+    "commodity_buy_blocked_recovery_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -139,6 +140,10 @@
     },
     "commodity_sell_blocked_recovery_loop": {
       "purpose": "Commodity sell guardrail/recovery loop: block selling a lot when no cargo is held, buy a Levo lot, block selling while in space, then land and sell to restore starting credits/cargo while preserving Terminal Velocity scaffold/source-boundary labels.",
+      "surface": "commodity exchange/blocker recovery scaffold"
+    },
+    "commodity_buy_blocked_recovery_loop": {
+      "purpose": "Commodity buy guardrail/recovery loop: block buying while in space, without credits, and without capacity, then recover by landing and buying one Levo lot while preserving Terminal Velocity scaffold/source-boundary labels.",
       "surface": "commodity exchange/blocker recovery scaffold"
     }
   }

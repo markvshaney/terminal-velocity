@@ -19,6 +19,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'levo_merchant_first_hop',
                 'levo_same_port_sellback_loop',
                 'commodity_sell_blocked_recovery_loop',
+                'commodity_buy_blocked_recovery_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -125,6 +126,25 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual([event['reason'] for event in blocked], ['insufficient commodity in hold', 'not landed'])
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-trade-scaffold' for event in blocked))
         self.assertTrue(all(event['oracleStatus'] == 'commodity_sell_guardrail_pending_original_runtime_trace' for event in blocked))
+
+    def test_commodity_buy_blocked_recovery_loop_labels_blockers_and_recovers(self):
+        result = run_scripted_scenario('commodity_buy_blocked_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['credits'], 8800)
+        self.assertEqual(result['state']['cargoUsed'], 10)
+        self.assertEqual(result['state']['cargoHold'].get('food', 0), 10)
+        self.assertEqual(result['checks']['blocked_buy_while_in_space'], 'passed')
+        self.assertEqual(result['checks']['blocked_buy_without_credits'], 'passed')
+        self.assertEqual(result['checks']['blocked_buy_without_capacity'], 'passed')
+        self.assertEqual(result['checks']['recovered_by_landing_and_buying'], 'passed')
+        self.assertEqual(result['checks']['recorded_buy_guardrail_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_buy_commodity_lot']
+        self.assertEqual([event['reason'] for event in blocked], ['not landed', 'insufficient credits', 'insufficient cargo space'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-trade-scaffold' for event in blocked))
+        self.assertTrue(all(event['oracleStatus'] == 'commodity_buy_guardrail_pending_original_runtime_trace' for event in blocked))
 
     def test_scenario_rejects_unlinked_jump_and_records_failed_check(self):
         result = run_scripted_scenario(
