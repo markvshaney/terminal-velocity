@@ -38,6 +38,12 @@ This ledger is not an implementation backlog by itself. It is a review surface f
 4. Later EV-family fixes are evidence of intended design, not automatic authority. Record them for review.
 5. Platform/emulator artifacts should usually be `fix-bug` or `intentional-divergence`, not fidelity targets.
 
+## Default handling policy
+
+- Harmful, invisible, crashy, save-corrupting, misleading, implementation-artifact-only, or platform/emulator-specific Classic defects are not default fidelity targets. Prefer clean Terminal Velocity behavior, with the entry classified as `fix-bug` or `intentional-divergence` after review.
+- If a suspected Classic defect affects old plug-in/data compatibility, model the compatibility need explicitly. Prefer an optional compatibility path or migration shim over making the defect the main Terminal Velocity behavior, unless Classic runtime/resource evidence and user review classify it as part of the player-visible compatibility contract.
+- EV Override/Nova preserving or fixing a Classic behavior increases review confidence but does not by itself prove Classic intent. Record the later-family evidence and keep the Classic claim labeled until original runtime, decoded original resources, or Classic manuals/Bibles support it.
+
 ## Pending review
 
 No entries yet. Add new candidate quirks/bugs here as they are discovered.

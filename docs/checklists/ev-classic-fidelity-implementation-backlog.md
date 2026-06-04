@@ -36,7 +36,7 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Status: `verified workflow rule`
   - Source: user guidance on 2026-06-04: mulvray wants to review discovered quirks and decide whether they are bugs.
   - Rule: newly discovered odd/surprising/exploitable/inconsistent/later-fixed Classic behavior must be logged in `docs/research/ev-classic-quirk-review-ledger.md` with evidence, candidate classification, why-it-might-be-a-quirk, why-it-might-be-a-bug, recommended Terminal Velocity handling, and `User decision: pending` before it becomes an intentional fidelity target.
-  - Default handling: preserve intentional mechanics and player-legible quirks; fix destructive/inconsistent/platform-artifact bugs; treat later EV-family fixes as review evidence, not automatic authority.
+  - Default handling: preserve intentional mechanics and player-legible quirks; fix destructive/inconsistent/platform-artifact bugs; treat later EV-family fixes as review evidence, not automatic authority. Harmful, invisible, crashy, save-corrupting, misleading, implementation-artifact-only, or platform/emulator-specific defects should become clean Terminal Velocity behavior unless user review classifies them as part of the compatibility contract. Plug-in/data compatibility defects should be modeled as optional compatibility paths or migration shims before they become default runtime behavior.
 
 ## Source-backed implementations already integrated
 

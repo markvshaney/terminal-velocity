@@ -37,3 +37,9 @@ When implementing Terminal Velocity behavior from these references:
 2. Use Override/Nova Bibles as EV-family structured guidance when Classic evidence is missing.
 3. Label inferred mechanics as `Terminal Velocity scaffold` or `approved inference pending EV Classic confirmation` until runtime/resource evidence confirms exact Classic behavior.
 4. Cross-link implemented slices back to `docs/checklists/ev-classic-fidelity-implementation-backlog.md`.
+
+## Later-family bug/fix handling
+
+- Override/Nova behavior is not automatic proof that a Classic quirk or bug should be recreated. Treat it as EV-family evidence to record in `docs/research/ev-classic-quirk-review-ledger.md`.
+- Prefer clean Terminal Velocity behavior for harmful, invisible, crashy, save-corrupting, misleading, implementation-artifact-only, or platform/emulator-specific defects unless user review classifies the behavior as an intentional Classic compatibility target.
+- If old plug-in/data compatibility depends on a defect, prefer an explicit compatibility mode or migration shim over making the defect the default behavior.
