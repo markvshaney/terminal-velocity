@@ -1362,7 +1362,10 @@ func _run_mission_legal_eligibility_log() -> void:
 	var blocked_reasons := _blocked_mission_reasons(body)
 	var blocked_reason := _mission_legal_requirement_block_reason(test_mission)
 	var visible_blocked_reason := not blocked_reasons.is_empty()
-	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" cleanAvailable=%s blockedAvailable=%s visibleBlockedReason=%s legalScore=%d blockedReason=\"%s\" sourceLabel=terminal-velocity-classic-resource-mission-availability oracleStatus=classic_runtime_ui_wording_pending" % [MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body.get("name", "?"), government_name, str(clean_available), str(blocked_available), str(visible_blocked_reason), int(legal_records.get(government_name, 0)), blocked_reason])
+	var blocked_title_visible := blocked_reasons.any(func(reason): return str(reason).contains("Clean Legal Standing Contract"))
+	var blocked_source_line := _blocked_mission_source_boundary_line()
+	var blocked_source_visible := blocked_source_line.contains("Terminal Velocity") and blocked_source_line.contains("Classic")
+	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" cleanAvailable=%s blockedAvailable=%s visibleBlockedReason=%s blockedTitleVisible=%s blockedSourceVisible=%s legalScore=%d blockedReason=\"%s\" blockedReasons=%s blockedSourceLine=\"%s\" sourceLabel=terminal-velocity-classic-resource-mission-availability oracleStatus=classic_runtime_ui_wording_pending" % [MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body.get("name", "?"), government_name, str(clean_available), str(blocked_available), str(visible_blocked_reason), str(blocked_title_visible), str(blocked_source_visible), int(legal_records.get(government_name, 0)), blocked_reason, JSON.stringify(blocked_reasons), blocked_source_line])
 	get_tree().quit(0)
 
 func _run_legal_consequence_log() -> void:
@@ -3806,6 +3809,10 @@ func _draw_blocked_mission_reasons(rect: Rect2, body: Dictionary, y_start: float
 	for reason in reasons.slice(0, min(3, reasons.size())):
 		draw_string(font, rect.position + Vector2(52, y), "• " + str(reason), HORIZONTAL_ALIGNMENT_LEFT, 780, 13, Color(0.95, 0.70, 0.58))
 		y += 20.0
+	draw_string(font, rect.position + Vector2(52, y), _blocked_mission_source_boundary_line(), HORIZONTAL_ALIGNMENT_LEFT, 780, 12, Color(0.58, 0.70, 0.86))
+
+func _blocked_mission_source_boundary_line() -> String:
+	return "Blocked-offer details are Terminal Velocity helper scaffolds; exact Classic hidden/disabled Mission Computer behavior pending original/resource evidence"
 
 func _draw_commodity_exchange(rect: Rect2) -> void:
 	var font := ThemeDB.fallback_font
