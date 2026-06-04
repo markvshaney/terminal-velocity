@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Committed verified F10 pilot persistence help guidance slice.",
+  "current_milestone": "Committed verified F10 player-info and recent-message help guidance slices.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron_final_response",
@@ -10,28 +10,30 @@
     "send_message_available": false,
     "visibility_degraded": true
   },
-  "last_commit": "1313dc4 feat(godot): cover pilot persistence help",
+  "last_commit": "921da09",
   "last_commits": [
-    "1313dc4 feat(godot): cover pilot persistence help"
+    "7af0792 feat(godot): cover player info help guidance",
+    "921da09 feat(godot): cover recent messages help"
   ],
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasPilotPersistenceHelp=true plus existing help flags true",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasPlayerInfoHelp=true and hasRecentMessagesHelp=true plus existing help flags true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (139 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> 1313dc4 feat(godot): cover pilot persistence help"
+    "git commit -> 7af0792 feat(godot): cover player info help guidance",
+    "git commit -> 921da09 feat(godot): cover recent messages help"
   ],
-  "next_resume_action": "Inspect live backlog for the next bounded source-aligned playability/fidelity slice; likely continue strengthening helper-covered save/resume, mission, combat, navigation, or service surfaces or add deterministic probes before Classic evidence-gated promotion.",
+  "next_resume_action": "Inspect live backlog for the next bounded source-aligned playability/fidelity slice; likely continue strengthening helper-covered mission/combat/navigation/service surfaces or add deterministic probes before Classic evidence-gated promotion.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 160,
+    "ahead": 163,
     "branch": "main",
     "dirty": false,
-    "head": "1313dc4",
-    "status_short": "## main...origin/main [ahead 160]"
+    "head": "921da09",
+    "status_short": "## main...origin/main [ahead 163]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -104,5 +106,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T09:33:40.058615Z"
+  "updated_at": "2026-06-04T09:37:55.687547Z"
 }
