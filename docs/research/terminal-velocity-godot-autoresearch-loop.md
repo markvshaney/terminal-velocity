@@ -194,6 +194,7 @@ Mission abort scenario contract:
 - `RunGodot.ps1 -MissionAbortLog` / `--tv-mission-abort-log`
 - Exercises active mission abort and reserved cargo release in the Godot fast-eval lane.
 - Resets to Levo, route-selects Sol, moves to scripted hyperspace distance, jumps and lands at Earth, accepts `intro_courier_earth_hera`, aborts it without completion, and logs:
+  - blocked abort guidance before any mission is active (`noActiveAbortBlocked=true`, `noActiveAbortStatusVisible=true`, `historyBeforeAccept=0`), and blocked repeat-abort guidance after the mission has already been removed (`repeatAbortBlocked=true`, `repeatAbortStatusVisible=true`);
   - whether route selection, mission acceptance, and mission abort succeeded;
   - cargo before accept, after accept, and after abort (`cargoBeforeAccept`, `cargoAfterAccept`, `cargoAfterAbort`);
   - active/completed mission ids plus `abortedHistoryCount` and latest abort record;

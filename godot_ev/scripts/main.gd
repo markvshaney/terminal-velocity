@@ -1009,6 +1009,9 @@ func _route_to_active_mission_destination() -> bool:
 
 func _run_mission_abort_log() -> void:
 	_reset_travel_state()
+	var no_active_abort_blocked := not _abort_active_mission()
+	var no_active_abort_status_visible := status_messages.has("No active mission to abort")
+	var history_before_accept := aborted_mission_history.size()
 	map_visible = true
 	var route_to_sol_selected := _select_map_route_to_system("Sol")
 	_move_to_scripted_hyperspace_distance()
@@ -1023,11 +1026,13 @@ func _run_mission_abort_log() -> void:
 	var mission_accepted := active_missions.has(accepted_mission_id)
 	var abort_succeeded := _abort_active_mission(accepted_mission_id)
 	var cargo_after_abort := cargo
+	var repeat_abort_blocked := not _abort_active_mission(accepted_mission_id)
+	var repeat_abort_status_visible := status_messages.has("No active mission to abort")
 	var latest_abort := JSON.stringify(aborted_mission_history[aborted_mission_history.size() - 1]) if not aborted_mission_history.is_empty() else "{}"
 	var accepted_status := "missionAccepted=true" if mission_accepted else "missionAccepted=false"
 	var abort_status := "missionAborted=true" if abort_succeeded else "missionAborted=false"
 	var cargo_released_status := "reservedCargoReleased=true" if cargo_after_abort == cargo_before_accept else "reservedCargoReleased=false"
-	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterAbort=%d activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=terminal-velocity-mission-abort-scaffold oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_ABORT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, accepted_status, abort_status, cargo_released_status, cargo_before_accept, cargo_after_accept, cargo_after_abort, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_abort, status_line])
+	print("%s startSystem=Levo routeToSolSelected=%s noActiveAbortBlocked=%s noActiveAbortStatusVisible=%s historyBeforeAccept=%d acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s repeatAbortBlocked=%s repeatAbortStatusVisible=%s cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterAbort=%d activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=terminal-velocity-mission-abort-scaffold oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_ABORT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(no_active_abort_blocked), str(no_active_abort_status_visible), history_before_accept, str(accepted_body.get("name", "None")), accepted_mission_id, accepted_status, abort_status, cargo_released_status, str(repeat_abort_blocked), str(repeat_abort_status_visible), cargo_before_accept, cargo_after_accept, cargo_after_abort, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_abort, status_line])
 	get_tree().quit(0)
 
 func _run_mission_deadline_failure_log() -> void:
