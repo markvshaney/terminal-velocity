@@ -216,6 +216,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
             'Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.',
             'Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.',
+            'Messages: recent success and blocked-reason feedback appears under the HUD.',
             'hasAutopilotHelp=%s',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
@@ -232,6 +233,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasShipyardDeltaHelp=%s',
             'hasPilotPersistenceHelp=%s',
             'hasPlayerInfoHelp=%s',
+            'hasRecentMessagesHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:

@@ -1380,6 +1380,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	var has_shipyard_delta_help := false
 	var has_pilot_persistence_help := false
 	var has_player_info_help := false
+	var has_recent_messages_help := false
 	for line in hints:
 		if str(line).contains("pirate_avoidance_escape_route"):
 			has_pirate_hint = true
@@ -1419,7 +1420,9 @@ func _run_gameplay_curriculum_help_log() -> void:
 			has_pilot_persistence_help = true
 		if str(line).contains("Player info: P toggles player info"):
 			has_player_info_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasMissionDeadlineHelp=%s hasTradeRouteHelp=%s hasMapServiceHelp=%s hasRouteRefuelHelp=%s hasShipyardDeltaHelp=%s hasPilotPersistenceHelp=%s hasPlayerInfoHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_mission_deadline_help), str(has_trade_route_help), str(has_map_service_help), str(has_route_refuel_help), str(has_shipyard_delta_help), str(has_pilot_persistence_help), str(has_player_info_help), str(hints[0]) if not hints.is_empty() else ""])
+		if str(line).contains("Messages: recent success and blocked-reason feedback appears under the HUD"):
+			has_recent_messages_help = true
+	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasMissionDeadlineHelp=%s hasTradeRouteHelp=%s hasMapServiceHelp=%s hasRouteRefuelHelp=%s hasShipyardDeltaHelp=%s hasPilotPersistenceHelp=%s hasPlayerInfoHelp=%s hasRecentMessagesHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_mission_deadline_help), str(has_trade_route_help), str(has_map_service_help), str(has_route_refuel_help), str(has_shipyard_delta_help), str(has_pilot_persistence_help), str(has_player_info_help), str(has_recent_messages_help), str(hints[0]) if not hints.is_empty() else ""])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
