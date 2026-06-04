@@ -1665,13 +1665,16 @@ func _run_mission_log_history_log() -> void:
 	aborted_mission_history.append(_mission_abort_record({"id": "history_aborted_probe", "title": "Aborted History Probe"}, "history_aborted_probe", 2))
 	failed_mission_history.append(_mission_deadline_failure_record({"id": "history_failed_probe", "title": "Failed History Probe", "timeLimitDays": 2}, 0, 3, 4, "fail_mission_bit_43", -5, "Federation"))
 	var lines := _mission_log_detail_lines()
+	var player_info_lines := _player_inventory_lines()
 	var no_active_visible := lines.has("No active missions.")
 	var completed_visible := lines.has("Completed mission history")
 	var aborted_visible := lines.has("Aborted mission history")
 	var failed_visible := lines.has("Failed mission history")
 	var failed_deadline_visible := lines.has("Deadline: accepted day 0, failed day 3, limit 2 day(s)")
 	var failed_source_visible := lines.has("Failure source: ev-classic-resource-bible-backed-mission-failure-scaffold; exact Classic UI pending")
-	print("%s noActiveVisible=%s completedHistoryVisible=%s abortedHistoryVisible=%s failedHistoryVisible=%s failedDeadlineVisible=%s failedSourceVisible=%s lineCount=%d lines=%s sourceLabel=terminal-velocity-mission-log-history-scaffold oracleStatus=mission_history_ui_pending_classic_runtime_trace" % [MISSION_LOG_HISTORY_EVENT_LOG_PREFIX, str(no_active_visible), str(completed_visible), str(aborted_visible), str(failed_visible), str(failed_deadline_visible), str(failed_source_visible), lines.size(), JSON.stringify(lines)])
+	var player_info_history_visible := player_info_lines.has("Mission history: 1 completed, 1 aborted, 1 failed — TV mission-history scaffold; Classic Player Info behavior pending")
+	var player_info_failure_visible := player_info_lines.has("Latest failed mission: Failed History Probe; reputation Federation -5; exact Classic failure/history UI pending")
+	print("%s noActiveVisible=%s completedHistoryVisible=%s abortedHistoryVisible=%s failedHistoryVisible=%s failedDeadlineVisible=%s failedSourceVisible=%s playerInfoHistoryVisible=%s playerInfoFailureVisible=%s lineCount=%d lines=%s playerInfoLines=%s sourceLabel=terminal-velocity-mission-log-history-scaffold oracleStatus=mission_history_ui_pending_classic_runtime_trace" % [MISSION_LOG_HISTORY_EVENT_LOG_PREFIX, str(no_active_visible), str(completed_visible), str(aborted_visible), str(failed_visible), str(failed_deadline_visible), str(failed_source_visible), str(player_info_history_visible), str(player_info_failure_visible), lines.size(), JSON.stringify(lines), JSON.stringify(player_info_lines)])
 	get_tree().quit(0)
 
 func _run_active_mission_deadline_log() -> void:
@@ -5176,6 +5179,7 @@ func _player_inventory_lines() -> Array[String]:
 		_salvage_pickup_inventory_line(),
 	]
 	lines.append_array(_active_mission_player_info_lines())
+	lines.append_array(_mission_history_player_info_lines())
 	return lines
 
 func _combat_readiness_inventory_line() -> String:
@@ -5274,6 +5278,21 @@ func _active_mission_player_info_lines() -> Array[String]:
 		lines.append("Active mission deadline: %d day(s) remaining; exact Classic Player Info behavior pending" % remaining_days)
 	lines.append("Active mission cargo/reward: %d tons / %d credits" % [int(mission.get("cargoTons", 0)), int(mission.get("reward", 0))])
 	lines.append("Active mission source: terminal-velocity-player-info-mission-scaffold; exact Classic Player Info behavior pending")
+	return lines
+
+func _mission_history_player_info_lines() -> Array[String]:
+	var history_count := completed_mission_history.size() + aborted_mission_history.size() + failed_mission_history.size()
+	if history_count <= 0:
+		return ["Mission history: none"]
+	var lines: Array[String] = ["Mission history: %d completed, %d aborted, %d failed — TV mission-history scaffold; Classic Player Info behavior pending" % [completed_mission_history.size(), aborted_mission_history.size(), failed_mission_history.size()]]
+	if not failed_mission_history.is_empty():
+		var latest_failure: Dictionary = failed_mission_history[-1]
+		var reputation_delta := int(latest_failure.get("reputation_delta", 0))
+		var failure_government := str(latest_failure.get("reputation_government", ""))
+		var reputation_summary := ""
+		if failure_government != "" and reputation_delta != 0:
+			reputation_summary = "; reputation %s %+d" % [failure_government, reputation_delta]
+		lines.append("Latest failed mission: %s%s; exact Classic failure/history UI pending" % [str(latest_failure.get("title", latest_failure.get("id", "Mission"))), reputation_summary])
 	return lines
 
 func _inventory_dictionary_summary(items: Dictionary) -> String:

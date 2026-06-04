@@ -309,6 +309,7 @@ Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`
 - Verifies the Terminal Velocity mission log helper remains useful after mission state transitions leave no active mission.
+- Also verifies Player Info mirrors compact mission-history counts and the latest failed mission/reputation delta so a pilot can recover context without reopening the Mission Log.
 - Seeds completed, aborted, and failed mission-history records with no active missions, then logs `noActiveVisible=true`, `completedHistoryVisible=true`, `abortedHistoryVisible=true`, and `failedHistoryVisible=true` plus the generated line list.
 - Failed mission history lines include the scaffolded deadline counters (`accepted day`, `failed day`, `limit`) and source-boundary line (`Failure source: ev-classic-resource-bible-backed-mission-failure-scaffold; exact Classic UI pending`) so the player can see why the job failed without treating the wording/date display as Classic-confirmed.
 - `sourceLabel=terminal-velocity-mission-log-history-scaffold`; `oracleStatus=mission_history_ui_pending_classic_runtime_trace`.
