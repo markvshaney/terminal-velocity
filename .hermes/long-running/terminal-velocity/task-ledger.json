@@ -1,33 +1,34 @@
 {
   "active_gate": null,
-  "current_milestone": "Committed verified held-contraband Player Info risk surface and deterministic contraband-risk log contract.",
+  "current_milestone": "Committed verified contraband playability guidance in F10 help after held-contraband Player Info risk surface.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "heartbeat_file": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "last_start_heartbeat": "file fallback at run start; send_message unavailable",
+    "last_start_heartbeat": "file fallback; send_message unavailable",
     "send_message_available": false,
     "visibility_degraded": true
   },
-  "last_commit": "74714f8 feat(godot): surface held contraband risk",
+  "last_commit": "787dad8 feat(godot): add contraband help guidance",
   "last_commits": [
-    "74714f8 feat(godot): surface held contraband risk"
+    "74714f8 feat(godot): surface held contraband risk",
+    "787dad8 feat(godot): add contraband help guidance"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_risk_surface_contract -v && ./run_godot.sh tv-contraband-risk-log",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (139 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (summary: total=20 passed=20 failed=0)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v",
+    "./run_godot.sh tv-gameplay-curriculum-help-log (hasContrabandHelp=true)",
     "./run_godot.sh self-test (GODOT SELFTEST OK profile=classic gameplayScenarios=20)",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (139 tests OK)",
     "git diff --check"
   ],
-  "next_resume_action": "Inspect the EV Classic fidelity backlog and implement the next bounded source-aligned Terminal Velocity playable/scenario slice; legal/contraband scaffolds must retain TV source labels until Classic scan UI/frequency evidence exists.",
+  "next_resume_action": "Inspect live backlog for the next bounded source-aligned playability/fidelity slice; continue preferring helper-labeled legal/mission/trade/combat guidance or deterministic scenario probes until a real Classic evidence gate is reached.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 140,
+    "ahead": 142,
     "branch": "main",
     "dirty": false,
-    "head": "74714f8",
-    "status_short": "## main...origin/main [ahead 140]"
+    "head": "787dad8",
+    "status_short": "## main...origin/main [ahead 142]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -100,5 +101,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T04:57:44-04:00"
+  "updated_at": "2026-06-04T05:00:06-04:00"
 }
