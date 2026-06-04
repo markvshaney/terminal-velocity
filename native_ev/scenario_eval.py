@@ -66,6 +66,7 @@ SCENARIO_CURRICULUM = [
     'mission_abort_forbidden_return_gate',
     'mission_abort_forbidden_return_completion_loop',
     'mission_abort_reputation_penalty_guardrail',
+    'mission_auto_abort_completion_flags_guardrail',
     'mission_deadline_failure_scaffold',
     'mission_deadline_last_day_delivery_loop',
     'mission_deadline_completed_no_late_failure_loop',
@@ -358,6 +359,7 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         'failIfScanned': bool(action.get('failIfScanned', False)),
         'canAbort': action.get('canAbort', True),
         'abortReputationMultiplier': action.get('abortReputationMultiplier'),
+        'autoAbort': bool(action.get('autoAbort', False)),
         'setsFlags': list(action.get('setsFlags', [])),
         'completionFlags': list(action.get('completionFlags', [])),
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-mission-scaffold'),
@@ -369,7 +371,38 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         if flag not in state['storyFlags']:
             state['storyFlags'].append(flag)
     trace.append({'type': 'accept_cargo_job', **job, 'cargoUsed': state['cargoUsed']})
+    if job.get('autoAbort') is True:
+        _auto_abort_accepted_mission(state, job, trace)
     return True
+
+
+def _auto_abort_accepted_mission(state: dict[str, Any], job: dict[str, Any], trace: list[dict[str, Any]]) -> None:
+    """Apply the Resource Bible 0x0001 auto-abort contract after mission acceptance.
+
+    The EV Classic Resource Bible says flag 0x0001 marks a mission as auto-aborting and
+    sets any completion bits when it aborts. The exact Classic runtime UI/timing remains
+    pending, so this symbolic harness records the state transition explicitly.
+    """
+    state['activeJobs'] = [candidate for candidate in state.get('activeJobs', []) if candidate.get('id') != job.get('id')]
+    released = int(job.get('reservedCargoTons', job.get('tons', 0)))
+    state['cargoUsed'] = max(0, int(state.get('cargoUsed', 0)) - released)
+    state.setdefault('abortedJobs', []).append(job.get('id'))
+    applied_flags: list[str] = []
+    for flag in job.get('completionFlags', []):
+        if flag not in state.setdefault('storyFlags', []):
+            state['storyFlags'].append(flag)
+        applied_flags.append(flag)
+    trace.append({
+        'type': 'mission_auto_abort',
+        'missionId': job.get('id'),
+        'releasedCargoTons': released,
+        'cargoUsed': state['cargoUsed'],
+        'activeJobs': [candidate.get('id') for candidate in state.get('activeJobs', [])],
+        'abortedJobs': list(state.get('abortedJobs', [])),
+        'completionFlagsApplied': applied_flags,
+        'sourceLabel': 'ev-classic-resource-bible-backed-auto-abort-guardrail',
+        'oracleStatus': 'classic_runtime_auto_abort_ui_pending',
+    })
 
 
 def _mission_failure_flag(failure_bit: Any) -> str | None:
@@ -1543,6 +1576,23 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             },
             {'type': 'abort_active_mission', 'missionId': 'abort_penalty_probe'},
         ]
+    if name == 'mission_auto_abort_completion_flags_guardrail':
+        source_label = 'ev-classic-resource-bible-backed-auto-abort-guardrail'
+        oracle_status = 'classic_runtime_auto_abort_ui_pending'
+        return [
+            {
+                'type': 'accept_cargo_job',
+                'id': 'auto_abort_completion_bit_probe',
+                'destinationSystem': 'Sol',
+                'destinationBody': 'Earth',
+                'tons': 2,
+                'pay': 0,
+                'autoAbort': True,
+                'completionFlags': ['auto_abort_completion_bit_77'],
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+        ]
     if name == 'mission_deadline_failure_scaffold':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -2175,6 +2225,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'released_abort_penalty_cargo': 'passed' if state.get('cargoUsed') == 0 else 'failed',
             'applied_abort_reputation_reversal': 'passed' if state.get('reputation', {}).get('Federation') == -25 and aborts and aborts[-1].get('reputationDelta') == -30 and aborts[-1].get('abortReputationMultiplier') == 5 else 'failed',
             'recorded_abort_penalty_source_boundary': 'passed' if aborts and aborts[-1].get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-abort-penalty-scaffold' and aborts[-1].get('oracleStatus') == 'classic_runtime_abort_penalty_ui_pending' else 'failed',
+        })
+    elif name == 'mission_auto_abort_completion_flags_guardrail':
+        auto_aborts = [event for event in trace if event.get('type') == 'mission_auto_abort' and event.get('missionId') == 'auto_abort_completion_bit_probe']
+        checks.update({
+            'accepted_auto_abort_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'auto_abort_completion_bit_probe' and event.get('autoAbort') is True for event in trace) else 'failed',
+            'auto_aborted_after_acceptance': 'passed' if auto_aborts and state.get('activeJobs') == [] and state.get('abortedJobs') == ['auto_abort_completion_bit_probe'] else 'failed',
+            'released_auto_abort_cargo': 'passed' if auto_aborts and auto_aborts[-1].get('releasedCargoTons') == 2 and state.get('cargoUsed') == 0 else 'failed',
+            'applied_auto_abort_completion_flags': 'passed' if 'auto_abort_completion_bit_77' in state.get('storyFlags', []) and auto_aborts and auto_aborts[-1].get('completionFlagsApplied') == ['auto_abort_completion_bit_77'] else 'failed',
+            'recorded_auto_abort_source_boundary': 'passed' if auto_aborts and auto_aborts[-1].get('sourceLabel') == 'ev-classic-resource-bible-backed-auto-abort-guardrail' and auto_aborts[-1].get('oracleStatus') == 'classic_runtime_auto_abort_ui_pending' else 'failed',
         })
     elif name == 'mission_deadline_failure_scaffold':
         checks.update({

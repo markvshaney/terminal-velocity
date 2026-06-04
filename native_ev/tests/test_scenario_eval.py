@@ -46,6 +46,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_abort_forbidden_return_gate',
                 'mission_abort_forbidden_return_completion_loop',
                 'mission_abort_reputation_penalty_guardrail',
+                'mission_auto_abort_completion_flags_guardrail',
                 'mission_deadline_failure_scaffold',
                 'mission_deadline_last_day_delivery_loop',
                 'mission_deadline_completed_no_late_failure_loop',
@@ -718,6 +719,28 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(abort['reputationDelta'], -30)
         self.assertEqual(abort['sourceLabel'], 'ev-classic-resource-bible-backed-mission-abort-penalty-scaffold')
         self.assertEqual(abort['oracleStatus'], 'classic_runtime_abort_penalty_ui_pending')
+
+    def test_mission_auto_abort_completion_flags_guardrail_applies_resource_bible_contract(self):
+        result = run_scripted_scenario('mission_auto_abort_completion_flags_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['accepted_auto_abort_mission'], 'passed')
+        self.assertEqual(result['checks']['auto_aborted_after_acceptance'], 'passed')
+        self.assertEqual(result['checks']['released_auto_abort_cargo'], 'passed')
+        self.assertEqual(result['checks']['applied_auto_abort_completion_flags'], 'passed')
+        self.assertEqual(result['checks']['recorded_auto_abort_source_boundary'], 'passed')
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['abortedJobs'], ['auto_abort_completion_bit_probe'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertIn('auto_abort_completion_bit_77', result['state']['storyFlags'])
+        events = [event for event in result['trace'] if event.get('type') in {'accept_cargo_job', 'mission_auto_abort'}]
+        self.assertEqual([event['type'] for event in events], ['accept_cargo_job', 'mission_auto_abort'])
+        auto_abort = events[-1]
+        self.assertEqual(auto_abort['missionId'], 'auto_abort_completion_bit_probe')
+        self.assertEqual(auto_abort['releasedCargoTons'], 2)
+        self.assertEqual(auto_abort['completionFlagsApplied'], ['auto_abort_completion_bit_77'])
+        self.assertEqual(auto_abort['sourceLabel'], 'ev-classic-resource-bible-backed-auto-abort-guardrail')
+        self.assertEqual(auto_abort['oracleStatus'], 'classic_runtime_auto_abort_ui_pending')
 
     def test_mission_deadline_failure_scaffold_releases_cargo_and_records_penalty(self):
         result = run_scripted_scenario('mission_deadline_failure_scaffold')

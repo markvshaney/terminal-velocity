@@ -34,6 +34,7 @@
     "mission_abort_forbidden_return_gate",
     "mission_abort_forbidden_return_completion_loop",
     "mission_abort_reputation_penalty_guardrail",
+    "mission_auto_abort_completion_flags_guardrail",
     "mission_deadline_failure_scaffold",
     "mission_deadline_last_day_delivery_loop",
     "mission_deadline_completed_no_late_failure_loop",
@@ -224,6 +225,10 @@
     "mission_abort_reputation_penalty_guardrail": {
       "purpose": "Mission abort reputation-penalty guardrail: abort a source-backed penalty probe, release reserved cargo, and apply the Resource Bible 0x0040-style -5x completion-reward reputation reversal while exact Classic abort UI remains pending.",
       "surface": "mission state/EV Classic Resource Bible-backed abort penalty scaffold"
+    },
+    "mission_auto_abort_completion_flags_guardrail": {
+      "purpose": "Mission auto-abort guardrail: accept a source-backed 0x0001 auto-abort probe, immediately abort it after acceptance, release reserved cargo, and set completion flags while exact Classic runtime UI/timing remains pending.",
+      "surface": "mission state/EV Classic Resource Bible-backed auto-abort scaffold"
     },
     "mission_deadline_failure_scaffold": {
       "purpose": "Mission deadline/failure scaffold: accept a timed delivery, advance past the limit, release reserved cargo, set a failure flag, and apply the EV Classic Resource Bible-backed half-CompReward reputation penalty while retaining runtime-UI confirmation as pending.",
