@@ -17,6 +17,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             available_scenarios(),
             [
                 'levo_merchant_first_hop',
+                'levo_same_port_sellback_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -85,6 +86,26 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'complete_cargo_job',
             ],
         )
+
+    def test_levo_same_port_sellback_loop_restores_credits_and_cargo(self):
+        result = run_scripted_scenario('levo_same_port_sellback_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['credits'], 10000)
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'].get('food', 0), 0)
+        self.assertEqual(result['checks']['bought_original_observed_levo_lot'], 'passed')
+        self.assertEqual(result['checks']['sold_same_port_lot_back'], 'passed')
+        self.assertEqual(result['checks']['restored_starting_trade_state'], 'passed')
+        sell = [event for event in result['trace'] if event['type'] == 'sell_commodity_lot'][-1]
+        self.assertEqual(sell['commodity'], 'food')
+        self.assertEqual(sell['tons'], 10)
+        self.assertEqual(sell['unitPrice'], 120)
+        self.assertEqual(sell['creditsAfter'], 10000)
+        self.assertEqual(sell['sourceLabel'], 'original-runtime-observed')
+        self.assertEqual(sell['oracleStatus'], 'levo_same_port_sellback_observed')
 
     def test_scenario_rejects_unlinked_jump_and_records_failed_check(self):
         result = run_scripted_scenario(

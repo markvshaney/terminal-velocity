@@ -35,6 +35,7 @@ START_BODY = 'Levo Spaceport'
 MIN_JUMP_DISTANCE = 450
 SCENARIO_CURRICULUM = [
     'levo_merchant_first_hop',
+    'levo_same_port_sellback_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -145,6 +146,40 @@ def _buy_commodity_lot(state: dict[str, Any], action: dict[str, Any], trace: lis
         'unitPrice': price,
         'creditsAfter': state['credits'],
         'cargoUsed': state['cargoUsed'],
+    })
+    return True
+
+
+def _sell_commodity_lot(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    commodity = action['commodity']
+    system_name = state['currentSystem']
+    economy = economy_manifest()
+    price = int(economy['markets'][system_name][commodity]['sell'])
+    held = int(state['cargoHold'].get(commodity, 0))
+    if state['landedBody'] is None:
+        trace.append({'type': 'blocked_sell_commodity_lot', 'reason': 'not landed', 'commodity': commodity})
+        return False
+    if held < COMMODITY_LOT_SIZE:
+        trace.append({'type': 'blocked_sell_commodity_lot', 'reason': 'insufficient commodity in hold', 'commodity': commodity, 'held': held})
+        return False
+    state['credits'] += price * COMMODITY_LOT_SIZE
+    state['cargoUsed'] = max(0, int(state['cargoUsed']) - COMMODITY_LOT_SIZE)
+    remaining = held - COMMODITY_LOT_SIZE
+    if remaining:
+        state['cargoHold'][commodity] = remaining
+    else:
+        state['cargoHold'].pop(commodity, None)
+    trace.append({
+        'type': 'sell_commodity_lot',
+        'system': system_name,
+        'body': state['landedBody'],
+        'commodity': commodity,
+        'tons': COMMODITY_LOT_SIZE,
+        'unitPrice': price,
+        'creditsAfter': state['credits'],
+        'cargoUsed': state['cargoUsed'],
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-trade-scaffold'),
+        'oracleStatus': action.get('oracleStatus', 'same_port_sellback_pending_original_runtime_trace'),
     })
     return True
 
@@ -824,6 +859,16 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': 'Earth'},
             {'type': 'complete_cargo_jobs'},
         ]
+    if name == 'levo_same_port_sellback_loop':
+        return [
+            {'type': 'buy_commodity_lot', 'commodity': 'food'},
+            {
+                'type': 'sell_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'original-runtime-observed',
+                'oracleStatus': 'levo_same_port_sellback_observed',
+            },
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -1063,6 +1108,12 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'reached_neighbor_and_landed': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' else 'failed',
             'completed_safe_cargo_job': 'passed' if 'complete_cargo_job' in event_types and not state.get('activeJobs') else 'failed',
         })
+    elif name == 'levo_same_port_sellback_loop':
+        checks.update({
+            'bought_original_observed_levo_lot': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('tons') == COMMODITY_LOT_SIZE and event.get('unitPrice') == 120 for event in trace) else 'failed',
+            'sold_same_port_lot_back': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('tons') == COMMODITY_LOT_SIZE and event.get('unitPrice') == 120 and event.get('sourceLabel') == 'original-runtime-observed' for event in trace) else 'failed',
+            'restored_starting_trade_state': 'passed' if state.get('credits') == STARTING_CREDITS and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
+        })
     elif name == 'mission_runner_first_delivery':
         checks.update({
             'accepted_reserved_cargo_job': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('reservedCargoTons') == 8 for event in trace) else 'failed',
@@ -1241,6 +1292,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
     }]
     handlers = {
         'buy_commodity_lot': _buy_commodity_lot,
+        'sell_commodity_lot': _sell_commodity_lot,
         'accept_cargo_job': _accept_cargo_job,
         'jump': _jump,
         'land': _land,

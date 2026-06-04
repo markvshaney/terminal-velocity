@@ -104,6 +104,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 	var scenarios: Dictionary = curriculum.get("scenarios", {})
 	var required := [
 		"levo_merchant_first_hop",
+		"levo_same_port_sellback_loop",
 		"mission_runner_first_delivery",
 		"scan_intro_mission_offers",
 		"intro_courier_mission_delivery",

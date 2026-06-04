@@ -113,11 +113,12 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Source: first HUD proves `No Secondary Weapon`, `No Target`, full shield/fuel, and `Free: 20`; it does not prove full primary weapon/outfit inventory.
   - Next action: open a player/ship info screen or an outfitter/status screen at a port that exposes one, without changing inventory.
 
-- [x] EV Classic commodity transaction granularity
-  - Status: `implemented`
-  - Source: Levo buy/sell observation showed `Buy` purchases 10 tons at a time from the starting shuttle state.
-  - Implementation: `godot_ev/scripts/main.gd` now uses `EV_CLASSIC_COMMODITY_LOT_SIZE := 10` for commodity buy/sell actions, bounded by free cargo, credits, and held quantity.
-  - Verification: `native_ev/tests/test_model.py` asserts the ten-ton lot implementation. Full partial-capacity original-runtime behavior remains an edge-case observation candidate if exact EV behavior matters.
+- [x] EV Classic commodity transaction granularity and Levo same-port sellback
+  - Status: `implemented / source-backed scenario coverage added`
+  - Source: Levo buy/sell observation showed `Buy` purchases 10 tons at a time from the starting shuttle state, and same-port sellback restores starting credits/cargo for observed Levo lots.
+  - Implementation: `godot_ev/scripts/main.gd` uses `EV_CLASSIC_COMMODITY_LOT_SIZE := 10` for commodity buy/sell actions, bounded by free cargo, credits, and held quantity. Symbolic scenario `levo_same_port_sellback_loop` now buys one 10-ton Levo Food lot, sells it back at Levo, and verifies credits/cargo return to the starting state with `sourceLabel=original-runtime-observed` / `oracleStatus=levo_same_port_sellback_observed`.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_levo_same_port_sellback_loop_restores_credits_and_cargo -v`; `python3 tools/run_gameplay_scenarios.py levo_same_port_sellback_loop --pretty`; broader native/Godot verification in the 2026-06-04 sellback scenario slice.
+  - Caveat: full partial-capacity original-runtime behavior and non-Levo economy spreads remain edge-case observation candidates if exact EV behavior matters.
 
 - [ ] System-by-system original service/store provisioning
   - Status: `needs evidence / Terminal Velocity scouting scaffold added`
