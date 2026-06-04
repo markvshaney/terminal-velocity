@@ -1881,7 +1881,8 @@ func _run_cargo_salvage_log() -> void:
 	var salvage_resume_visible := cargo_salvage_pickups.size() == remaining_pickups_before_save and not cargo_salvage_pickups.is_empty() and str(cargo_salvage_pickups[0].get("commodityId", "")) == "equipment"
 	var salvage_inventory_visible := _player_inventory_lines().has("In-space salvage: 1 pickup(s), 2 tons — TV combat-salvage scaffold; Classic loot behavior pending")
 	var salvage_hud_visible := _salvage_hud_fragment() == "    Salvage: 1 pickup(s)/2 tons"
-	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s salvageInventoryVisible=%s salvageHudVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), remaining_pickups_before_save, str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), str(salvage_inventory_visible).to_lower(), str(salvage_hud_visible).to_lower(), status_line])
+	var salvage_scanner_visible := _salvage_scanner_blip_count() == remaining_pickups_before_save and remaining_pickups_before_save > 0
+	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s salvageInventoryVisible=%s salvageHudVisible=%s salvageScannerVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), remaining_pickups_before_save, str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), str(salvage_inventory_visible).to_lower(), str(salvage_hud_visible).to_lower(), str(salvage_scanner_visible).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_target_selection_log() -> void:
@@ -4637,6 +4638,9 @@ func _salvage_hud_fragment() -> String:
 		total_tons += int(pickup.get("tons", 0))
 	return "    Salvage: %d pickup(s)/%d tons" % [cargo_salvage_pickups.size(), total_tons]
 
+func _salvage_scanner_blip_count() -> int:
+	return cargo_salvage_pickups.size()
+
 func _primary_weapon_inventory_line() -> String:
 	var weapon := _primary_weapon_stats()
 	var weapon_name := str(weapon.get("name", weapon.get("id", "Unknown")))
@@ -4743,6 +4747,16 @@ func _draw_scanner_blips(scanner_center: Vector2, scanner_radius: float) -> void
 		var legal_hostile := _legal_patrol_hostile_posture_active(_current_government_name())
 		var color := Color(1.0, 0.24, 0.18) if legal_hostile else (Color(1.0, 0.78, 0.20) if i == selected_target_index else Color(0.30, 0.85, 1.0))
 		draw_circle(blip, 4.0 if i == selected_target_index else 2.5, color)
+	_draw_scanner_salvage_blips(scanner_center, scanner_radius)
+
+func _draw_scanner_salvage_blips(scanner_center: Vector2, scanner_radius: float) -> void:
+	for pickup in cargo_salvage_pickups:
+		var relative: Vector2 = (pickup.get("position", Vector2.ZERO) - pos) / 8.0
+		if relative.length() > scanner_radius - 8.0:
+			relative = relative.normalized() * (scanner_radius - 8.0)
+		var blip := scanner_center + relative
+		draw_rect(Rect2(blip - Vector2(3, 3), Vector2(6, 6)), Color(0.72, 1.0, 0.35, 0.95), true)
+		draw_arc(blip, 6.0, 0, TAU, 16, Color(0.80, 1.0, 0.55, 0.75), 1.0)
 
 func _map_legal_risk_line(system_name: String) -> String:
 	if system_name == "None" or system_name == "":
