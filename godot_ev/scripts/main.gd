@@ -3797,9 +3797,34 @@ func _mission_offer_detail_lines(mission: Dictionary) -> Array[String]:
 	lines.append("Offer terms: %d cr reward, %d cargo tons reserved on accept" % [int(mission.get("reward", 0)), int(mission.get("cargoTons", 0))])
 	var deadline_text := "%d day(s) after accept" % int(mission.get("timeLimitDays", 0)) if mission.has("timeLimitDays") else "not listed in current TV mission data"
 	lines.append("Offer deadline: %s" % deadline_text)
-	lines.append("Offer story: starts=%s completes=%s next=%s" % [JSON.stringify(mission.get("setsFlags", [])), JSON.stringify(mission.get("completionFlags", [])), str(mission.get("next", "none"))])
+	lines.append("Offer requirements: %s" % _mission_offer_requirements_line(mission))
+	lines.append("Offer story: starts=%s completes=%s next=%s choiceGroup=%s reputationEvent=%s" % [JSON.stringify(mission.get("setsFlags", [])), JSON.stringify(mission.get("completionFlags", [])), _mission_optional_field(mission, "next"), _mission_optional_field(mission, "choiceGroup"), _mission_optional_field(mission, "reputationEvent")])
 	lines.append("Offer detail source: terminal-velocity-mission-offer-helper; exact Classic Mission Computer detail UI pending")
 	return lines
+
+func _mission_optional_field(mission: Dictionary, key: String) -> String:
+	var value = mission.get(key, null)
+	if value == null:
+		return "none"
+	var text := str(value)
+	return "none" if text == "" else text
+
+func _mission_offer_requirements_line(mission: Dictionary) -> String:
+	var parts: Array[String] = []
+	var requires_flags: Array = mission.get("requiresFlags", [])
+	var excludes_flags: Array = mission.get("excludesFlags", [])
+	var requirements: Dictionary = mission.get("requirements", {})
+	if not requires_flags.is_empty():
+		parts.append("requiresFlags=%s" % JSON.stringify(requires_flags))
+	if not excludes_flags.is_empty():
+		parts.append("excludesFlags=%s" % JSON.stringify(excludes_flags))
+	for key in ["reputationMin", "legalMin", "legalMax"]:
+		var score_requirements: Dictionary = requirements.get(key, {})
+		if not score_requirements.is_empty():
+			parts.append("%s=%s" % [key, JSON.stringify(score_requirements)])
+	if parts.is_empty():
+		return "none listed in current TV mission data"
+	return "; ".join(parts)
 
 func _draw_blocked_mission_reasons(rect: Rect2, body: Dictionary, y_start: float) -> void:
 	var reasons := _blocked_mission_reasons(body)
