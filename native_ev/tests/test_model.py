@@ -268,6 +268,7 @@ class NativeEvModelTests(unittest.TestCase):
             'disabledHyperModeGuidance=%s',
             'disabledHyperSelectGuidance=%s',
             'disabledMovementBlocked=%s',
+            'disabledSaveBlocked=%s',
             'func _disabled_player_action_blocked() -> bool:',
             'recoveryTriggered=%s',
             'playerRecovered=%s',
