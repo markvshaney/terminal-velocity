@@ -502,6 +502,8 @@ func _ship_turn_cells_per_second() -> float:
 	return float(player_ship.get("turning", 60.0)) * 0.375
 
 func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, braking: bool) -> void:
+	if _disabled_player_action_blocked():
+		return
 	if turn_dir != 0 and not player_frames.is_empty():
 		turn_cell_progress += float(turn_dir) * _ship_turn_cells_per_second() * delta
 		while turn_cell_progress >= 1.0:
@@ -1340,6 +1342,11 @@ func _run_combat_log() -> void:
 	var disabled_jump_guidance := status_messages.has(_player_disabled_action_message())
 	_try_land()
 	var disabled_land_guidance := status_messages.has(_player_disabled_action_message())
+	var disabled_movement_pos_before := pos
+	var disabled_movement_vel_before := vel
+	var disabled_movement_facing_before := player_facing_index
+	_apply_movement_controls(1.0 / 60.0, 1, true, false)
+	var disabled_movement_blocked := status_messages.has(_player_disabled_action_message()) and pos == disabled_movement_pos_before and vel == disabled_movement_vel_before and player_facing_index == disabled_movement_facing_before
 	var recovery_triggered := _recover_disabled_player_scaffold()
 	var player_recovered := not _player_disabled() and player_hull == _max_player_hull() and player_shields == _max_player_shields()
 	var recovery_status_visible := status_messages.has(_player_recovery_message())
@@ -1354,7 +1361,7 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
-	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s disabledMovementBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(disabled_movement_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, str(primary_weapon.get("name", "Primary")), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
 	get_tree().quit(0)
 
 func _run_combat_guardrail_log() -> void:
@@ -3008,6 +3015,12 @@ func _player_disabled() -> bool:
 
 func _player_disabled_action_message() -> String:
 	return "Player ship disabled; reload or start a new pilot before continuing actions"
+
+func _disabled_player_action_blocked() -> bool:
+	if not _player_disabled():
+		return false
+	_set_status(_player_disabled_action_message())
+	return true
 
 func _player_recovery_message() -> String:
 	return "Recovered disabled player ship; Terminal Velocity reload/new-pilot recovery scaffold"

@@ -267,6 +267,8 @@ class NativeEvModelTests(unittest.TestCase):
             'disabledAutopilotGuidance=%s',
             'disabledHyperModeGuidance=%s',
             'disabledHyperSelectGuidance=%s',
+            'disabledMovementBlocked=%s',
+            'func _disabled_player_action_blocked() -> bool:',
             'recoveryTriggered=%s',
             'playerRecovered=%s',
             'recoveryStatusVisible=%s',
