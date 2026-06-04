@@ -188,6 +188,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('blocked_reason_curriculum', manifest['scenarioOrder'])
         self.assertIn('mission_deadline_failure_scaffold', manifest['scenarioOrder'])
         self.assertIn('mission_trade_hybrid_capacity_planning', manifest['scenarioOrder'])
+        self.assertIn('disabled_player_recovery_loop', manifest['scenarioOrder'])
         self.assertIn('pirate_avoidance_escape_route', manifest['scenarioOrder'])
         self.assertIn('disposable_combat_placeholder', manifest['scenarioOrder'])
 

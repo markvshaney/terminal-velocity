@@ -46,6 +46,7 @@ SCENARIO_CURRICULUM = [
     'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
     'repair_service_recovery_loop',
+    'disabled_player_recovery_loop',
     'system_service_provisioning_scout',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
@@ -111,6 +112,7 @@ def initial_gameplay_state() -> dict[str, Any]:
         'ownedWeapons': {},
         'maxHull': 100,
         'currentHull': 100,
+        'playerDisabled': False,
         'maxFuel': STARTING_FUEL,
         'distanceFromSystemCenter': MIN_JUMP_DISTANCE + 50,
     }
@@ -412,6 +414,53 @@ def _repair_hull(state: dict[str, Any], _action: dict[str, Any], trace: list[dic
     state['credits'] = int(state.get('credits', 0)) - cost
     state['currentHull'] = max_hull
     trace.append({'type': 'repair_hull', 'system': state['currentSystem'], 'body': state['landedBody'], 'hullBefore': hull_before, 'hullAfter': state['currentHull'], 'maxHull': max_hull, 'pricePerHullPoint': repair_price, 'cost': cost, 'creditsAfter': state['credits'], 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
+    return True
+
+
+def _disable_player(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    state['currentHull'] = 0
+    state['playerDisabled'] = True
+    trace.append({
+        'type': 'disable_player',
+        'currentHull': state['currentHull'],
+        'playerDisabled': state['playerDisabled'],
+        'sourceLabel': 'terminal-velocity-player-disabled-scaffold',
+        'oracleStatus': 'classic_runtime_player_death_pending_strict_play_safe_trace',
+    })
+    return True
+
+
+def _attempt_disabled_action(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    attempted = action.get('action', 'unknown')
+    if state.get('playerDisabled') is True:
+        trace.append({
+            'type': 'blocked_disabled_action',
+            'action': attempted,
+            'reason': 'player ship disabled',
+            'sourceLabel': 'terminal-velocity-player-disabled-scaffold',
+            'oracleStatus': 'classic_runtime_player_death_pending_strict_play_safe_trace',
+        })
+        return False
+    trace.append({'type': 'disabled_action_not_blocked', 'action': attempted})
+    return True
+
+
+def _recover_disabled_player(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    if state.get('playerDisabled') is not True:
+        trace.append({'type': 'blocked_disabled_recovery', 'reason': 'player not disabled'})
+        return False
+    max_hull = int(state.get('maxHull', 100))
+    hull_before = int(state.get('currentHull', 0))
+    state['currentHull'] = max_hull
+    state['playerDisabled'] = False
+    trace.append({
+        'type': 'recover_disabled_player',
+        'hullBefore': hull_before,
+        'hullAfter': state['currentHull'],
+        'playerDisabled': state['playerDisabled'],
+        'sourceLabel': 'terminal-velocity-player-disabled-scaffold',
+        'oracleStatus': 'classic_runtime_player_death_pending_strict_play_safe_trace',
+    })
     return True
 
 
@@ -906,6 +955,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': 'Earth'},
             {'type': 'repair_hull'},
         ]
+    if name == 'disabled_player_recovery_loop':
+        return [
+            {'type': 'depart'},
+            {'type': 'disable_player'},
+            {'type': 'attempt_disabled_action', 'action': 'jump', 'expectBlocked': True},
+            {'type': 'attempt_disabled_action', 'action': 'fire_primary', 'expectBlocked': True},
+            {'type': 'attempt_disabled_action', 'action': 'accept_mission', 'expectBlocked': True},
+            {'type': 'recover_disabled_player'},
+        ]
     if name == 'system_service_provisioning_scout':
         return [
             {'type': 'scan_station_services', 'system': 'Levo', 'body': 'Levo Spaceport', 'sourceLabel': 'original-runtime-observed'},
@@ -1075,6 +1133,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'repaired_hull_at_service_port': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('currentHull') == state.get('maxHull') and any(event.get('type') == 'repair_hull' and event.get('body') == 'Earth' and event.get('hullBefore') == 65 and event.get('hullAfter') == event.get('maxHull') for event in trace) else 'failed',
             'recorded_repair_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in trace if event.get('type') in {'blocked_repair_hull', 'repair_hull'}) else 'failed',
         })
+    elif name == 'disabled_player_recovery_loop':
+        disabled_events = [event for event in trace if event.get('type') in {'disable_player', 'blocked_disabled_action', 'recover_disabled_player'}]
+        checks.update({
+            'disabled_player_recorded': 'passed' if any(event.get('type') == 'disable_player' and event.get('currentHull') == 0 and event.get('playerDisabled') is True for event in trace) else 'failed',
+            'blocked_disabled_actions': 'passed' if [event.get('action') for event in trace if event.get('type') == 'blocked_disabled_action'] == ['jump', 'fire_primary', 'accept_mission'] else 'failed',
+            'recovered_player_scaffold': 'passed' if state.get('playerDisabled') is False and state.get('currentHull') == state.get('maxHull') and any(event.get('type') == 'recover_disabled_player' and event.get('hullAfter') == state.get('maxHull') for event in trace) else 'failed',
+            'recorded_disabled_recovery_source_boundary': 'passed' if disabled_events and all(event.get('sourceLabel') == 'terminal-velocity-player-disabled-scaffold' and event.get('oracleStatus') == 'classic_runtime_player_death_pending_strict_play_safe_trace' for event in disabled_events) else 'failed',
+        })
     elif name == 'system_service_provisioning_scout':
         scans = {(event.get('system'), event.get('body')): event for event in trace if event.get('type') == 'scan_station_services'}
         levo = scans.get(('Levo', 'Levo Spaceport'), {})
@@ -1181,6 +1247,9 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'depart': _depart,
         'refuel': _refuel,
         'repair_hull': _repair_hull,
+        'disable_player': _disable_player,
+        'attempt_disabled_action': _attempt_disabled_action,
+        'recover_disabled_player': _recover_disabled_player,
         'set_state': _set_state,
         'append_route_stop': _append_route_stop,
         'clear_route_queue': _clear_route_queue,

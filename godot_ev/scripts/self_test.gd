@@ -115,6 +115,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"mission_deadline_failure_scaffold",
 		"outfitter_ship_ladder_intro",
 		"repair_service_recovery_loop",
+		"disabled_player_recovery_loop",
 		"system_service_provisioning_scout",
 		"shift_click_multi_stop_route_queue",
 		"route_queue_invalid_stop_guardrail",

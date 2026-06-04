@@ -28,6 +28,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
                 'repair_service_recovery_loop',
+                'disabled_player_recovery_loop',
                 'system_service_provisioning_scout',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
@@ -323,6 +324,23 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(repair['cost'], 280)
         self.assertEqual(repair['sourceLabel'], 'terminal-velocity-repair-service-scaffold')
         self.assertEqual(repair['oracleStatus'], 'repair_service_pending_ev_classic_runtime_trace')
+
+    def test_disabled_player_recovery_loop_blocks_actions_then_recovers(self):
+        result = run_scripted_scenario('disabled_player_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['disabled_player_recorded'], 'passed')
+        self.assertEqual(result['checks']['blocked_disabled_actions'], 'passed')
+        self.assertEqual(result['checks']['recovered_player_scaffold'], 'passed')
+        self.assertEqual(result['checks']['recorded_disabled_recovery_source_boundary'], 'passed')
+        self.assertFalse(result['state']['playerDisabled'])
+        self.assertEqual(result['state']['currentHull'], result['state']['maxHull'])
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_disabled_action']
+        self.assertEqual([event['action'] for event in blocked], ['jump', 'fire_primary', 'accept_mission'])
+        recovery = [event for event in result['trace'] if event['type'] == 'recover_disabled_player'][-1]
+        self.assertEqual(recovery['hullAfter'], 100)
+        self.assertEqual(recovery['sourceLabel'], 'terminal-velocity-player-disabled-scaffold')
+        self.assertEqual(recovery['oracleStatus'], 'classic_runtime_player_death_pending_strict_play_safe_trace')
 
     def test_system_service_provisioning_scout_records_service_matrix_boundaries(self):
         result = run_scripted_scenario('system_service_provisioning_scout')
