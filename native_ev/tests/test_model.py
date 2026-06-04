@@ -213,6 +213,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-gameplay-curriculum-help-log', run_script)
         self.assertIn('[switch]$GameplayCurriculumHelpLog', windows_script)
 
+    def test_godot_pirate_avoidance_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_PIRATE_AVOIDANCE_EVENT',
+            '--tv-pirate-avoidance-log',
+            'func _run_pirate_avoidance_log() -> void:',
+            'Pirate intercept detected; avoiding combat by routing to nearest safe linked port (TV scaffold)',
+            'threat=pirate_intercept',
+            'landedAtSafePort=%s',
+            'combatExecuted=%s',
+            'evasionSucceeded=%s',
+            'decision=jump_to_linked_safe_port',
+            'sourceLabel=terminal-velocity-pirate-avoidance-scaffold',
+            'oracleStatus=pirate_avoidance_pending_ev_classic_combat_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-pirate-avoidance-log', run_script)
+        self.assertIn('[switch]$PirateAvoidanceLog', windows_script)
+
     def test_godot_primary_combat_is_playable_scaffold_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

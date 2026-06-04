@@ -38,6 +38,7 @@ Modes:
   tv-outfitter-shipyard-log Run outfitter/shipyard purchase progression log
   tv-repair-service-log Run landed repair service/hull restoration log
   tv-gameplay-curriculum-help-log Run gameplay curriculum help/hint log
+  tv-pirate-avoidance-log Run noncombat pirate-avoidance route scaffold log
   tv-combat-log          Run primary weapon combat scaffold log
   tv-combat-guardrail-log Run primary weapon cooldown/blocking guardrail log
   tv-player-disabled-log Run disabled-player guardrail/recovery scaffold log
@@ -69,7 +70,7 @@ case "$mode" in
     self-test)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' --script 'res://scripts/self_test.gd'"
         ;;
-    tv-movement-log|tv-afterburner-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-invalid-log|tv-route-clear-log|tv-route-clear-reselect-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log|tv-near-center-jump-log|tv-commodity-trade-log|tv-mission-offer-scan-log|tv-mission-chain-offer-log|tv-mission-chain-lock-log|tv-mission-alignment-branch-log|tv-mission-route-hint-log|tv-mission-abort-log|tv-mission-deadline-failure-log|tv-mission-log-history-log|tv-active-mission-deadline-log|tv-first-mission-delivery-log|tv-pilot-save-resume-log|tv-outfitter-shipyard-log|tv-repair-service-log|tv-gameplay-curriculum-help-log|tv-combat-log|tv-combat-guardrail-log|tv-player-disabled-log|tv-shield-recharge-log|tv-retaliation-log|tv-projectile-motion-log|tv-explosion-log|tv-cargo-salvage-log|tv-secondary-weapon-log|tv-target-selection-log|tv-autopilot-log|tv-navigation-guardrail-log|tv-legal-status-log|tv-legal-service-gate-log|tv-legal-patrol-posture-log|tv-mission-legal-eligibility-log|tv-legal-consequence-log|tv-legal-clemency-log|tv-contraband-scan-log|tv-contraband-risk-log)
+    tv-movement-log|tv-afterburner-log|tv-travel-event-log|tv-landed-ui-matrix|tv-map-route-log|tv-route-invalid-log|tv-route-clear-log|tv-route-clear-reselect-log|tv-route-jump-log|tv-route-land-refuel-log|tv-low-fuel-jump-log|tv-near-center-jump-log|tv-commodity-trade-log|tv-mission-offer-scan-log|tv-mission-chain-offer-log|tv-mission-chain-lock-log|tv-mission-alignment-branch-log|tv-mission-route-hint-log|tv-mission-abort-log|tv-mission-deadline-failure-log|tv-mission-log-history-log|tv-active-mission-deadline-log|tv-first-mission-delivery-log|tv-pilot-save-resume-log|tv-outfitter-shipyard-log|tv-repair-service-log|tv-gameplay-curriculum-help-log|tv-pirate-avoidance-log|tv-combat-log|tv-combat-guardrail-log|tv-player-disabled-log|tv-shield-recharge-log|tv-retaliation-log|tv-projectile-motion-log|tv-explosion-log|tv-cargo-salvage-log|tv-secondary-weapon-log|tv-target-selection-log|tv-autopilot-log|tv-navigation-guardrail-log|tv-legal-status-log|tv-legal-service-gate-log|tv-legal-patrol-posture-log|tv-mission-legal-eligibility-log|tv-legal-consequence-log|tv-legal-clemency-log|tv-contraband-scan-log|tv-contraband-risk-log)
         powershell.exe -NoProfile -Command "& '$GODOT_EXE' --headless --path '$PROJECT_DIR' -- --$mode"
         ;;
     -h|--help|help)

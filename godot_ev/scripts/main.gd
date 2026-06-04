@@ -48,6 +48,7 @@ const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVEN
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
+const PIRATE_AVOIDANCE_EVENT_LOG_PREFIX := "TV_PIRATE_AVOIDANCE_EVENT"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
 const PLAYER_DISABLED_EVENT_LOG_PREFIX := "TV_PLAYER_DISABLED_EVENT"
@@ -237,6 +238,8 @@ func _ready() -> void:
 		call_deferred("_run_repair_service_log")
 	if OS.get_cmdline_args().has("--tv-gameplay-curriculum-help-log") or OS.get_cmdline_user_args().has("--tv-gameplay-curriculum-help-log"):
 		call_deferred("_run_gameplay_curriculum_help_log")
+	if OS.get_cmdline_args().has("--tv-pirate-avoidance-log") or OS.get_cmdline_user_args().has("--tv-pirate-avoidance-log"):
+		call_deferred("_run_pirate_avoidance_log")
 	if OS.get_cmdline_args().has("--tv-combat-log") or OS.get_cmdline_user_args().has("--tv-combat-log"):
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
@@ -1375,6 +1378,27 @@ func _run_gameplay_curriculum_help_log() -> void:
 		if str(line).contains("Recovery: F8 resets a disabled player ship"):
 			has_recovery_help = true
 	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasRepairHelp=%s hasCombatHelp=%s hasRecoveryHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_repair_help), str(has_combat_help), str(has_recovery_help), str(hints[0]) if not hints.is_empty() else ""])
+	get_tree().quit(0)
+
+func _run_pirate_avoidance_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var threat_detected := true
+	_set_status("Pirate intercept detected; avoiding combat by routing to nearest safe linked port (TV scaffold)")
+	var threat_message_visible := status_messages.has("Pirate intercept detected; avoiding combat by routing to nearest safe linked port (TV scaffold)")
+	var route_selected := _select_map_route_to_system("Sol")
+	var destination := _selected_destination_name()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var final_system := str(current_system.get("name", "?"))
+	_position_at_body("Earth")
+	_try_land()
+	var landed_body := _current_body()
+	var landed_at_safe_port := landed and final_system == "Sol" and str(landed_body.get("name", "")) == "Earth"
+	var combat_executed := not projectiles.is_empty() or not explosion_events.is_empty()
+	var evasion_succeeded := threat_detected and route_selected and final_system == destination and landed_at_safe_port and not combat_executed
+	print("%s startSystem=%s threat=pirate_intercept threatDetected=%s threatMessageVisible=%s routeSelected=%s destination=%s finalSystem=%s landedAtSafePort=%s landedBody=\"%s\" combatExecuted=%s evasionSucceeded=%s decision=jump_to_linked_safe_port sourceLabel=terminal-velocity-pirate-avoidance-scaffold oracleStatus=pirate_avoidance_pending_ev_classic_combat_trace status=\"%s\"" % [PIRATE_AVOIDANCE_EVENT_LOG_PREFIX, start_system, str(threat_detected).to_lower(), str(threat_message_visible).to_lower(), str(route_selected).to_lower(), destination, final_system, str(landed_at_safe_port).to_lower(), str(landed_body.get("name", "None")), str(combat_executed).to_lower(), str(evasion_succeeded).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_combat_log() -> void:

@@ -27,6 +27,7 @@ param(
     [switch]$OutfitterShipyardLog,
     [switch]$RepairServiceLog,
     [switch]$GameplayCurriculumHelpLog,
+    [switch]$PirateAvoidanceLog,
     [switch]$CombatLog,
     [switch]$CombatGuardrailLog,
     [switch]$PlayerDisabledLog,
@@ -115,6 +116,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-repair-service-log
 } elseif ($GameplayCurriculumHelpLog) {
     & $Godot --headless --path $Project -- --tv-gameplay-curriculum-help-log
+} elseif ($PirateAvoidanceLog) {
+    & $Godot --headless --path $Project -- --tv-pirate-avoidance-log
 } elseif ($CombatLog) {
     & $Godot --headless --path $Project -- --tv-combat-log
 } elseif ($CombatGuardrailLog) {
