@@ -5,30 +5,33 @@
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Secondary weapon scaffold now exposes Player Info empty/loaded status and Space/S help text with deterministic Godot log coverage.",
+  "current_milestone": "Autopilot assist scaffold now turns EV Classic A-key baseline into a playable Terminal Velocity approach assist with deterministic Godot log coverage.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
+    "progress_heartbeat": "fallback_file_written before full verification",
     "send_message_available": false,
-    "start_heartbeat": "fallback_file_written"
+    "start_heartbeat": "fallback_file_written",
+    "visibility_degraded": true
   },
-  "last_commit": "b617c4e feat: surface secondary weapon inventory status",
+  "last_commit": "11b13a0 feat(godot): add autopilot assist scaffold",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v",
-    "./run_godot.sh tv-secondary-weapon-log",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty",
-    "./run_godot.sh self-test",
-    "git diff --check"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract -v -> OK",
+    "./run_godot.sh tv-autopilot-log -> TV_AUTOPILOT_EVENT autopilotEngaged=true autopilotDisengaged=true autopilotMovedCloser=true autopilotSlowedForApproach=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
+    "git diff --check -> OK",
+    "git commit -> feat(godot): add autopilot assist scaffold (11b13a0)"
   ],
-  "next_resume_action": "Continue with the next strongest safe-local Terminal Velocity gameplay/fidelity slice; current branch is ahead locally and clean after commit b617c4e.",
+  "next_resume_action": "Continue with the next strongest safe-local Terminal Velocity gameplay/fidelity slice; candidates include Classic/resource evidence for exact autopilot behavior, combat/explosion/runtime legal consequences, secondary ammo semantics, AI retaliation cadence, or another bounded mission/map/fuel/combat probe.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 79,
+    "ahead": 83,
     "branch": "main",
     "dirty": false,
-    "head": "90b8d44"
+    "head": "11b13a0"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -101,5 +104,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T01:20:31.689577-04:00"
+  "updated_at": "2026-06-04T05:36:07.196968+00:00"
 }
