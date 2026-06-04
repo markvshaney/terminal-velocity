@@ -227,7 +227,8 @@ For every behavior row, record:
 - [x] Event log for landing/takeoff/hyperspace transitions.
   - Status: `terminal-velocity-observed`; `godot_ev/scripts/main.gd` supports `--tv-travel-event-log`, and `godot_ev/windows/RunGodot.ps1 -TravelEventLog` runs it headlessly.
 - [ ] Event log for target acquisition, weapon firing, projectile spawn, hit, and explosion.
-- [ ] Self-test output should include selected profile once profile loading exists: `profile=classic`.
+- [x] Self-test output includes selected profile: `profile=classic`.
+  - Status: `terminal-velocity-observed`; 2026-06-04 Godot self-test prints `profile=classic` so profile-addressed logs can be distinguished from future EV-family profiles.
 - [x] Landed service matrix log for non-mutating before/after planning.
   - Status: `terminal-velocity-observed`; `--tv-landed-ui-matrix` / `RunGodot.ps1 -LandedUiMatrix` prints visible buttons/services and flags mutating actions before live original-EV click-through.
 
@@ -250,8 +251,7 @@ Primary-source verification needed: <what would confirm/refute it>
 2. Create the local-only emulator workspace outside the repo.
 3. Locate/provide authorized Classic Mac ROM and compatible Mac OS install/media.
 4. Finish profile descriptor work so future behavior logs are profile-addressed.
-5. Add `profile=classic` to Godot self-test output.
-6. Compare `RunGodot.ps1 -TravelEventLog` against original-runtime travel captures.
-7. Run original EV landed service/button click-through with before/after captures, using the `RunGodot.ps1 -LandedUiMatrix` output as the TV comparison matrix.
-8. Add event logs for combat targeting, firing, projectile spawn, hit, and explosion.
+5. Compare `RunGodot.ps1 -TravelEventLog` against original-runtime travel captures.
+6. Run original EV landed service/button click-through with before/after captures, using the `RunGodot.ps1 -LandedUiMatrix` output as the TV comparison matrix.
+7. Add event logs for combat targeting, firing, projectile spawn, hit, and explosion.
 9. Populate this checklist only with evidence-labeled behavior claims; avoid using adaptation observations as truth.

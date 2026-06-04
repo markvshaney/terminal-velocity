@@ -168,6 +168,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('prefScreen=original-ev-classic-observed', text)
         self.assertIn('prefsScreenshot=', text)
         self.assertIn('strictPlay=off-by-default', text)
+        self.assertIn('profile=classic', text)
         self.assertIn('user://selftest/title_prefs.png', text)
         self.assertIn('_write_prefs_screenshot_artifact', text)
 
