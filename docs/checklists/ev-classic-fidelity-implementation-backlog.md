@@ -128,8 +128,10 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: for each newly reached landable body, capture in-space/landed planet graphics plus landed services and all visible store/weapon/outfitter/shipyard/equipment surfaces before buying/selling; compare against Terminal Velocity active data; provision only bounded source-backed data and otherwise record `missing`, `scaffold`, `needs evidence`, or `not present in original`.
 
 - [ ] Economy-wide buy/sell display and spread rules
-  - Status: `candidate`
+  - Status: `candidate / Terminal Velocity cross-market scaffold added`
   - Source: Levo sell-back proves same-port sell equals visible buy price for Levo, but not a universal rule.
+  - Implementation scaffold: symbolic scenario `cross_market_trade_spread_scout` now exercises one active Terminal Velocity cross-market trade loop: travel from Levo to Sol, buy one 10-ton Food lot at Sol's scaffold buy price (`42`), return to Levo, sell against Levo's observed/source-backed Food sell price (`120`), and end back at Levo with cargo cleared and `780` credits profit. The trade events are explicitly labeled `sourceLabel=terminal-velocity-cross-market-trade-scaffold` / `oracleStatus=classic_runtime_cross_market_spread_pending` so this remains a market-spread scouting scaffold, not an EV Classic global economy claim.
+  - Verification: `python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_cross_market_trade_spread_scout_buys_sol_food_and_sells_at_levo -v`; `python3 tools/run_gameplay_scenarios.py cross_market_trade_spread_scout --pretty`.
   - Next action: observe additional ports or decode commodity/economy resources before changing global formula assumptions.
 
 - [ ] EV Classic prefs screen fidelity

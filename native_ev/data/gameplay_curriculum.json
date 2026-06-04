@@ -8,6 +8,7 @@
     "levo_same_port_sellback_loop",
     "commodity_sell_blocked_recovery_loop",
     "commodity_buy_blocked_recovery_loop",
+    "cross_market_trade_spread_scout",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -41,6 +42,10 @@
     "levo_same_port_sellback_loop": {
       "purpose": "Source-backed Levo trade loop: buy one observed 10-ton Food lot, sell it back at the same port, and verify credits/cargo return to the starting state.",
       "surface": "commodity exchange/source-backed sellback"
+    },
+    "cross_market_trade_spread_scout": {
+      "purpose": "Cross-market trade spread scout: travel to Sol, buy a lower-priced Food lot, return to Levo, and sell against the active Terminal Velocity market spread while retaining explicit pending-Classic source boundaries.",
+      "surface": "commodity exchange/cross-market trade scaffold"
     },
     "mission_runner_first_delivery": {
       "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",

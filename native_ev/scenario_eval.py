@@ -38,6 +38,7 @@ SCENARIO_CURRICULUM = [
     'levo_same_port_sellback_loop',
     'commodity_sell_blocked_recovery_loop',
     'commodity_buy_blocked_recovery_loop',
+    'cross_market_trade_spread_scout',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -150,6 +151,8 @@ def _buy_commodity_lot(state: dict[str, Any], action: dict[str, Any], trace: lis
         'unitPrice': price,
         'creditsAfter': state['credits'],
         'cargoUsed': state['cargoUsed'],
+        'sourceLabel': source_label,
+        'oracleStatus': oracle_status,
     })
     return True
 
@@ -896,6 +899,27 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'cargoUsed': 0}},
             {'type': 'buy_commodity_lot', 'commodity': 'food'},
         ]
+    if name == 'cross_market_trade_spread_scout':
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'buy_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-cross-market-trade-scaffold',
+                'oracleStatus': 'classic_runtime_cross_market_spread_pending',
+            },
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {
+                'type': 'sell_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-cross-market-trade-scaffold',
+                'oracleStatus': 'classic_runtime_cross_market_spread_pending',
+            },
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -1159,6 +1183,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_buy_without_capacity': 'passed' if 'insufficient cargo space' in blocked_reasons else 'failed',
             'recovered_by_landing_and_buying': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('commodity') == 'food' and event.get('tons') == COMMODITY_LOT_SIZE for event in trace) and state.get('credits') == STARTING_CREDITS - (120 * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == COMMODITY_LOT_SIZE and int(state.get('cargoHold', {}).get('food', 0)) == COMMODITY_LOT_SIZE else 'failed',
             'recorded_buy_guardrail_source_boundary': 'passed' if blocked_buy_events and all(event.get('sourceLabel') == 'terminal-velocity-trade-scaffold' and event.get('oracleStatus') == 'commodity_buy_guardrail_pending_original_runtime_trace' for event in blocked_buy_events) else 'failed',
+        })
+    elif name == 'cross_market_trade_spread_scout':
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        checks.update({
+            'bought_low_at_sol': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('commodity') == 'food' and event.get('unitPrice') == 42 for event in trade_events) else 'failed',
+            'sold_high_at_levo': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('unitPrice') == 120 for event in trade_events) else 'failed',
+            'returned_to_levo_with_profit': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS + ((120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
+            'recorded_cross_market_source_boundary': 'passed' if trade_events and all(event.get('sourceLabel') == 'terminal-velocity-cross-market-trade-scaffold' and event.get('oracleStatus') == 'classic_runtime_cross_market_spread_pending' for event in trade_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({
