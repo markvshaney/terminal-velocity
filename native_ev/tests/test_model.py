@@ -147,6 +147,21 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('"Target Select:", "Tab"', text)
         self.assertIn('load_prefs', text)
 
+    def test_godot_runtime_weapon_keybindings_match_original_ev_classic_observation(self):
+        source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd'
+        text = source.read_text()
+        observed_runtime_bindings = {
+            'KEY_TAB': '_fire_primary_weapon()',
+            'KEY_SPACE': '_fire_secondary_weapon()',
+            'KEY_S': '_change_secondary_weapon()',
+            'KEY_N': '_cycle_target(1)',
+            'KEY_R': '_select_closest_target()',
+        }
+        for keycode, handler in observed_runtime_bindings.items():
+            self.assertRegex(text, rf'{keycode}:\s*{re.escape(handler)}')
+        self.assertNotRegex(text, r'KEY_SPACE:\s*_fire_primary_weapon\(\)')
+        self.assertNotRegex(text, r'KEY_TAB:\s*_cycle_target\(1\)')
+
     def test_godot_self_test_covers_prefs_screenshot_artifact(self):
         source = Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'self_test.gd'
         text = source.read_text()
