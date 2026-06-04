@@ -1637,6 +1637,8 @@ class NativeEvModelTests(unittest.TestCase):
             'chapter_one_alignment',
             'federationBranchAccepted=%s',
             'freeportBranchHiddenAfterChoice=%s',
+            'freeportBranchAccepted=%s',
+            'federationBranchHiddenAfterChoice=%s',
             'offersAfterChoice=%s',
             'selectedBranchOfferDetailsVisible=%s',
             'selectedBranchOfferDetails=%s',
