@@ -215,6 +215,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.',
             'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
             'Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.',
+            'Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.',
             'hasAutopilotHelp=%s',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
@@ -230,6 +231,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasRouteRefuelHelp=%s',
             'hasShipyardDeltaHelp=%s',
             'hasPilotPersistenceHelp=%s',
+            'hasPlayerInfoHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
