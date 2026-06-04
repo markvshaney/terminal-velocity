@@ -20,7 +20,7 @@
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20 prefScreen=original-ev-classic-observed",
     "git diff --check -> OK",
-    "git commit -> feat(godot): enforce primary weapon reload (5b39bfb)"
+    "git commit -> feat(godot): enforce primary weapon reload (57213f0)"
   ],
   "next_resume_action": "Inspect git status/log, ledger/events, continuation prompt, and live backlog; continue with the strongest safe local Terminal Velocity slice. Strong candidates: capture/mine Classic combat runtime/resource evidence for projectile motion/explosion frames/rewards/legal consequences, improve combat target/AI retaliation guardrails, or add another player-visible legal/map/fuel/mission/combat helper with explicit source-boundary labels. Do not push/PR/merge/rebase or perform destructive original-EV/Strict Play/gateway/provider/credential actions without approval.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
