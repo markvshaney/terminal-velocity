@@ -55,6 +55,14 @@ from native_ev.model import (
 
 
 
+def _godot_contract_text(root: Path) -> str:
+    """Godot script plus data-driven UI contract manifests."""
+    main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+    help_overlay_path = root / 'native_ev' / 'data' / 'help_overlay.json'
+    help_overlay_text = help_overlay_path.read_text() if help_overlay_path.exists() else ''
+    return main_script + '\n' + help_overlay_text
+
+
 def _png_alpha_pixel_count(path: Path) -> int:
     data = path.read_bytes()
     assert data[:8] == b'\x89PNG\r\n\x1a\n'
@@ -196,80 +204,92 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_help_exposes_gameplay_curriculum_hints_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        help_manifest = json.loads((root / 'native_ev' / 'data' / 'help_overlay.json').read_text())
+        help_lines = help_manifest['lines']
+        help_probes = {probe['flag']: probe for probe in help_manifest['logProbes']}
 
         for symbol in [
             'var gameplay_curriculum := {}',
+            'var help_overlay := {}',
             'native_ev/data/gameplay_curriculum.json',
+            'native_ev/data/help_overlay.json',
             'func _gameplay_curriculum_hint_lines',
+            'func _help_overlay_lines',
+            'func _help_overlay_log_probes',
             'Terminal Velocity curriculum hints — scaffold',
-            'pirate_avoidance_escape_route',
-            'Map service/legal summary: selected systems show',
+            'TV_GAMEPLAY_CURRICULUM_HELP',
+            '--tv-gameplay-curriculum-help-log',
+        ]:
+            self.assertIn(symbol, main_script)
+        for expected_line in [
+            'Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.',
             'Service provisioning scout: newly reached ports need service/store checks before buying; Levo no-outfitter evidence is Classic-observed, other service matrices stay TV scaffold until confirmed.',
             'Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.',
             'Route clearing: Backspace/Delete clears queued green routes; choose a fresh linked stop before retrying J.',
             'Mission objective marker: active mission destinations are highlighted on the map.',
             'Mission route helper: G queues the active mission destination when known.',
-            'Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.',
-            'Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.',
+            'Afterburner: Z gives a Terminal Velocity thrust boost and drains fuel; if it is blocked, refuel at a landed service port before retrying. Exact Classic curve pending.',
             'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
-            'Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.',
-            'Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.',
-            'Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.',
-            'Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.',
-            'Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.',
-            'Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.',
-            'Legal docking: low legal standing can deny landing at governed ports; check Player Info/legal messages and seek clemency or a safer port. Exact Classic denial UI pending.',
-            'Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.',
-            'Mission abort/history: X aborts active TV scaffold missions; Mission Log preserves completed, aborted, and failed histories.',
-            'Mission offers: Mission Computer detail lines show destination, cargo, deadline, story/legal/reputation gates, and branch-choice boundaries as TV helper scaffolds pending Classic UI evidence.',
-            'Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.',
-            'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
-            'Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots before trading up; TV scaffold pending Classic store/stat trace.',
-            'Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.',
-            'Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.',
-            'Messages: recent success and blocked-reason feedback appears under the HUD.',
+            'Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.',
             'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
-            'hasAutopilotHelp=%s',
-            'hasRepairHelp=%s',
-            'hasCombatHelp=%s',
-            'hasTargetDetailHelp=%s',
-            'hasCombatRewardsHelp=%s',
-            'hasSalvageHelp=%s',
-            'hasPirateAvoidanceHelp=%s',
-            'hasContrabandHelp=%s',
-            'hasLegalStatusHelp=%s',
-            'hasLegalClemencyHelp=%s',
-            'hasLegalDockingHelp=%s',
-            'hasMissionDeadlineHelp=%s',
-            'hasMissionAbortHistoryHelp=%s',
-            'hasMissionOfferHelp=%s',
-            'hasMissionObjectiveHelp=%s',
-            'hasMissionRouteHelp=%s',
-            'hasMissionTradeHybridHelp=%s',
-            'hasTradeRouteHelp=%s',
-            'hasMapServiceHelp=%s',
-            'hasServiceProvisioningHelp=%s',
-            'hasRouteRefuelHelp=%s',
-            'hasShipyardDeltaHelp=%s',
-            'hasShipLadderHelp=%s',
-            'hasPilotPersistenceHelp=%s',
-            'hasPlayerInfoHelp=%s',
-            'hasRecentMessagesHelp=%s',
-            'hasBlockedActionHelp=%s',
-            'hasRouteClearHelp=%s',
-            'TV_GAMEPLAY_CURRICULUM_HELP',
-            '--tv-gameplay-curriculum-help-log',
         ]:
-            self.assertIn(symbol, main_script)
+            self.assertIn(expected_line, help_lines)
+        for flag in [
+            'hasAfterburnerHelp',
+            'hasAutopilotHelp',
+            'hasRepairHelp',
+            'hasRepairRecoveryHelp',
+            'hasCombatHelp',
+            'hasTargetDetailHelp',
+            'hasCombatRewardsHelp',
+            'hasSalvageHelp',
+            'hasShieldRechargeHelp',
+            'hasRecoveryHelp',
+            'hasDisabledRecoveryHelp',
+            'hasPirateAvoidanceHelp',
+            'hasContrabandHelp',
+            'hasLegalStatusHelp',
+            'hasLegalClemencyHelp',
+            'hasLegalDockingHelp',
+            'hasLegalServiceHelp',
+            'hasWeaponReputationHelp',
+            'hasAlignmentGateHelp',
+            'hasAlignmentReturnHelp',
+            'hasMissionDeadlineHelp',
+            'hasMissionDeadlineRecoveryHelp',
+            'hasMissionAbortHistoryHelp',
+            'hasCanAbortReturnHelp',
+            'hasMissionOfferHelp',
+            'hasMissionObjectiveHelp',
+            'hasMissionRouteHelp',
+            'hasMissionTradeHybridHelp',
+            'hasCommodityRecoveryHelp',
+            'hasTradeRouteHelp',
+            'hasMapServiceHelp',
+            'hasServiceProvisioningHelp',
+            'hasRouteRefuelHelp',
+            'hasShipyardDeltaHelp',
+            'hasOutfitterGuardrailHelp',
+            'hasShipyardCargoTransferHelp',
+            'hasShipLadderHelp',
+            'hasPilotPersistenceHelp',
+            'hasPlayerInfoHelp',
+            'hasRecentMessagesHelp',
+            'hasBlockedActionHelp',
+            'hasRouteClearHelp',
+        ]:
+            self.assertIn(flag, help_probes)
+        self.assertEqual(help_probes['hasPirateAvoidanceHint']['source'], 'curriculum')
+        self.assertEqual(help_probes['hasAfterburnerHelp']['source'], 'help')
         self.assertIn('tv-gameplay-curriculum-help-log', run_script)
         self.assertIn('[switch]$GameplayCurriculumHelpLog', windows_script)
 
     def test_godot_pirate_avoidance_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -292,7 +312,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_primary_combat_is_playable_scaffold_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -432,7 +452,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_player_disabled_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -460,7 +480,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_shield_recharge_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -489,7 +509,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_projectile_motion_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -513,7 +533,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_explosion_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -534,7 +554,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_target_selection_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -569,7 +589,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_autopilot_assist_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -592,7 +612,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_secondary_weapon_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -638,7 +658,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_combat_guardrail_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -666,7 +686,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_retaliation_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -691,7 +711,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_cargo_salvage_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -731,7 +751,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
 
@@ -759,7 +779,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_legal_status_surface_is_scaffold_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'run_godot.sh').read_text()
         windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         for symbol in [
@@ -867,7 +887,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_contraband_risk_surface_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'TV_CONTRABAND_RISK_EVENT',
             '--tv-contraband-risk-log',
@@ -889,7 +909,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_outfitter_shipyard_purchases_feed_recent_messages_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             '_set_status(_legal_service_blocked_message(government_name))',
             '_set_status("No outfitter stock")',
@@ -935,7 +955,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_deterministic_movement_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         checklist = (root / 'docs' / 'checklists' / 'ev-classic-behavior-baseline-checklist.md').read_text()
@@ -967,7 +987,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_travel_and_landed_ui_logs_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         checklist = (root / 'docs' / 'checklists' / 'ev-classic-behavior-baseline-checklist.md').read_text()
         for symbol in [
@@ -998,7 +1018,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_afterburner_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         launcher = (root / 'run_godot.sh').read_text()
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         checklist = (root / 'docs' / 'checklists' / 'ev-classic-behavior-baseline-checklist.md').read_text()
@@ -1021,7 +1041,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_map_route_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
         for symbol in [
@@ -1081,7 +1101,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_route_jump_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
         for symbol in [
@@ -1102,7 +1122,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_route_jump_land_refuel_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
         for symbol in [
@@ -1133,7 +1153,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_low_fuel_jump_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
         for symbol in [
@@ -1159,7 +1179,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_destination_route_hint_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1193,7 +1213,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_abort_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1223,9 +1243,35 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission abort scenario contract', plan)
         self.assertIn('reserved cargo release', plan)
 
+    def test_godot_mission_abort_forbidden_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-abort-forbidden-log',
+            'func _run_mission_abort_forbidden_log',
+            'TV_MISSION_ABORT_FORBIDDEN_EVENT',
+            'canAbort=false',
+            'Mission cannot abort before return/cleanup',
+            'blockedAbort=%s',
+            'reservedCargoPreservedAfterBlockedAbort=true',
+            'completedNonAbortableMission=true',
+            'reservedCargoReleasedAfterCompletion=true',
+            'rewardPaidAfterCompletion=true',
+            'sourceLabel=ev-classic-resource-bible-backed-canabort-guardrail',
+            'oracleStatus=classic_runtime_canabort_return_cleanup_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAbortForbiddenLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-abort-forbidden-log', run_script)
+        self.assertIn('tv-mission-abort-forbidden-log', wrapper)
+        self.assertIn('Mission abort-forbidden return-cleanup scenario contract', plan)
+
     def test_godot_mission_deadline_failure_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         for symbol in [
@@ -1247,9 +1293,32 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-mission-deadline-failure-log', run_script)
         self.assertIn('tv-mission-deadline-failure-log', wrapper)
 
+    def test_godot_mission_deadline_completed_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            '--tv-mission-deadline-completed-log',
+            'func _run_mission_deadline_completed_log',
+            'TV_MISSION_DEADLINE_COMPLETED_EVENT',
+            'deadlineMissionCompleted=true',
+            'lateFailurePrevented=true',
+            'reservedCargoReleased=true',
+            'rewardPreserved=true',
+            'reputationPreserved=true',
+            'failedHistoryCount=%d',
+            'sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold',
+            'oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionDeadlineCompletedLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-deadline-completed-log', run_script)
+        self.assertIn('tv-mission-deadline-completed-log', wrapper)
+
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         for symbol in [
@@ -1279,7 +1348,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_active_mission_deadline_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1318,7 +1387,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_chain_lock_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1343,7 +1412,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_outfitter_shipyard_progression_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         for symbol in [
@@ -1355,6 +1424,12 @@ class NativeEvModelTests(unittest.TestCase):
             'boughtLightFreighter=true',
             'cargoSpaceIncreased=true',
             'shipyardArtLoaded=true',
+            'overfullShipyardBlocked=%s',
+            'overfullCargoPreserved=%s',
+            'overfullRecoveryBoughtSmallerShip=%s',
+            'Cannot buy %s: cargo %d exceeds target capacity %d',
+            'cargoGuardrailSourceLabel=terminal-velocity-shipyard-cargo-guardrail-scaffold',
+            'cargoGuardrailOracleStatus=shipyard_cargo_transfer_pending_ev_classic_runtime_trace',
             'sourceLabel=terminal-velocity-outfitter-shipyard-scaffold',
             'oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace',
             'func _outfit_source_summary',
@@ -1369,7 +1444,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_repair_service_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         for symbol in [
@@ -1400,7 +1475,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_pilot_save_resume_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         wrapper = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1444,7 +1519,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_player_inventory_overlay_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'var player_info_visible := false',
             'func _draw_player_info_overlay',
@@ -1470,7 +1545,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_open_pilot_list_shows_resume_context_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'func _open_pilot_row_text(entry: Dictionary) -> String:',
             'System: %s',
@@ -1490,7 +1565,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_map_service_summary_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'func _system_service_summary(system_name: String) -> String:',
             'Services: %s',
@@ -1506,7 +1581,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_map_mission_destination_marker_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'func _active_mission_destination_systems() -> Array[String]:',
             'Mission destination:',
@@ -1519,7 +1594,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_log_overlay_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'var mission_log_visible := false',
             'func _draw_mission_log_overlay',
@@ -1536,7 +1611,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_log_route_progress_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'Progress:',
             'Route hint:',
@@ -1551,7 +1626,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_completion_history_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'var completed_mission_history: Array = []',
             'func _mission_completion_history_lines',
@@ -1567,7 +1642,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_offer_scan_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         launcher = (root / 'run_godot.sh').read_text()
         for symbol in [
@@ -1599,7 +1674,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_chain_offer_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         launcher = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1623,7 +1698,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_mission_alignment_branch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         launcher = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1660,7 +1735,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_first_mission_delivery_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         launcher = (root / 'run_godot.sh').read_text()
         plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
@@ -1721,7 +1796,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tiny but neutral Levo Spaceport', levo_body['sourceEvidence'])
         self.assertIn('Levo', economy['markets'])
         self.assertEqual(governments['systems']['Levo']['government'], 'Independent')
-        main_script = (Path(__file__).resolve().parents[2] / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(Path(__file__).resolve().parents[2])
         self.assertIn('const START_SYSTEM_NAME := "Levo"', main_script)
         self.assertIn('_system_index_by_name(START_SYSTEM_NAME, 0)', main_script)
 
@@ -2614,7 +2689,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_landing_ui_exposes_core_ev_panels_from_file_backed_manifests(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for data_file in [
             'native_ev/data/missions.json',
             'native_ev/data/economy.json',
@@ -2634,7 +2709,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_landing_panels_are_actionable(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for function_name in [
             '_accept_selected_mission',
             '_buy_selected_commodity',
@@ -2693,7 +2768,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_commodity_trade_uses_ev_classic_ten_ton_lots(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         self.assertIn('const EV_CLASSIC_COMMODITY_LOT_SIZE := 10', main_script)
         self.assertIn('min(EV_CLASSIC_COMMODITY_LOT_SIZE, free_space, affordable_tons)', main_script)
         self.assertIn('price * tons', main_script)
@@ -2702,7 +2777,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_commodity_buy_sell_affordance_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
         launcher = (root / 'run_godot.sh').read_text()
         for symbol in [
@@ -2726,7 +2801,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_commodity_route_hint_contract(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'func _commodity_trade_hint_line(commodity_id: String) -> String:',
             'Best linked sell:',
@@ -2739,7 +2814,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_click_sound_is_wired_to_landing_actions(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'AudioStreamPlayer',
             '_load_sound_stream',
@@ -2772,7 +2847,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_title_stubs_are_real_modals(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'title_modal = "about"',
             'func _draw_about_modal',
@@ -2792,7 +2867,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_shipyard_loads_source_backed_pict_art(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         self_test_script = (root / 'godot_ev' / 'scripts' / 'self_test.gd').read_text()
         for symbol in [
             'shipyardPictAssetFile',
@@ -2811,7 +2886,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_scanner_has_target_lock_feedback(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'selected_target_index',
             '_cycle_target',
@@ -2823,7 +2898,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_defaults_to_observed_ev_classic_keybindings(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'KEY_L: _ev_land_or_launch()',
             'KEY_J: _jump()',
@@ -2845,7 +2920,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_universe_map_screen_is_actionable(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'map_visible',
             'KEY_M',
@@ -2864,7 +2939,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_universe_map_shift_click_sets_green_route(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'event.shift_pressed',
             '_select_map_route_at_position(event.position)',
@@ -2882,7 +2957,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_godot_ship_sprites_use_center_registered_fixed_cells(self):
         root = Path(__file__).resolve().parents[2]
-        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        main_script = _godot_contract_text(root)
         for symbol in [
             'cell-center registration',
             'player_facing_index',

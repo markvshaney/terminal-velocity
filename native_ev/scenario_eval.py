@@ -12,6 +12,8 @@ from typing import Any
 
 from native_ev.model import (
     available_mission_ids,
+    available_station_services,
+    can_dock_with_government,
     clemency_offer,
     economy_manifest,
     enforcement_outcome,
@@ -51,6 +53,7 @@ SCENARIO_CURRICULUM = [
     'federation_alignment_delivery_loop',
     'freeport_alignment_delivery_loop',
     'alignment_completion_offer_scan_guardrail',
+    'alignment_return_contract_offer_timing_guardrail',
     'alignment_completion_return_contract_loop',
     'mission_destination_route_hint',
     'mission_trade_hybrid_capacity_planning',
@@ -60,9 +63,19 @@ SCENARIO_CURRICULUM = [
     'mission_trade_return_margin_guardrail',
     'mission_abort_releases_reserved_cargo',
     'mission_abort_reaccept_delivery_loop',
+    'mission_abort_forbidden_return_gate',
+    'mission_abort_forbidden_return_completion_loop',
     'mission_deadline_failure_scaffold',
+    'mission_deadline_last_day_delivery_loop',
+    'mission_deadline_completed_no_late_failure_loop',
+    'mission_deadline_abort_prevents_failure_loop',
+    'mission_deadline_failure_recovery_loop',
+    'mission_deadline_trade_carryover_loop',
     'outfitter_ship_ladder_intro',
+    'outfitter_purchase_guardrail_recovery_loop',
+    'shipyard_overfull_cargo_guardrail',
     'repair_service_recovery_loop',
+    'repair_insufficient_credit_guardrail',
     'disabled_player_recovery_loop',
     'system_service_provisioning_scout',
     'shift_click_multi_stop_route_queue',
@@ -73,6 +86,8 @@ SCENARIO_CURRICULUM = [
     'route_planner_refuel_loop',
     'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
+    'legal_docking_service_gate_recovery',
+    'weapon_reputation_gate_recovery',
     'contraband_scan_clemency_recovery',
     'pirate_avoidance_escape_route',
     'disposable_combat_placeholder',
@@ -335,6 +350,7 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         'completionGovernment': action.get('completionGovernment'),
         'completionReward': action.get('completionReward'),
         'failureBitSet': action.get('failureBitSet'),
+        'canAbort': action.get('canAbort', True),
         'setsFlags': list(action.get('setsFlags', [])),
         'completionFlags': list(action.get('completionFlags', [])),
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-mission-scaffold'),
@@ -453,6 +469,19 @@ def _land(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, A
     universe = load_universe()
     body_name = action['body']
     _body(universe, state['currentSystem'], body_name)
+    government = _current_government_name(state)
+    if not can_dock_with_government(reputation_manifest(), state.get('legalRecords', {}), government):
+        trace.append({
+            'type': 'blocked_land',
+            'reason': 'legal docking denied',
+            'system': state['currentSystem'],
+            'body': body_name,
+            'government': government,
+            'legal': int(state.get('legalRecords', {}).get(government, 0)),
+            'sourceLabel': 'terminal-velocity-legal-docking-scaffold',
+            'oracleStatus': 'classic_runtime_docking_denial_ui_pending',
+        })
+        return False
     state['landedBody'] = body_name
     trace.append({'type': 'land', 'system': state['currentSystem'], 'body': body_name})
     return True
@@ -638,8 +667,10 @@ def _accept_manifest_mission(state: dict[str, Any], action: dict[str, Any], trac
 
 
 def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    source_label = str(action.get('sourceLabel', 'terminal-velocity-outfitter-ship-ladder-scaffold'))
+    oracle_status = str(action.get('oracleStatus', 'manifest_scaffold_pending_original_outfitter_trace'))
     if state['landedBody'] is None:
-        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'not landed', 'system': state['currentSystem']})
+        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'not landed', 'system': state['currentSystem'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     universe = load_universe()
     inventory = station_inventory(universe, state['currentSystem'], state['landedBody'])
@@ -647,23 +678,30 @@ def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: 
     outfit_by_id = {item['id']: item for item in outfit_manifest().get('outfits', [])}
     weapon_by_id = {item['id']: item for item in weapon_manifest().get('weapons', [])}
     if item_id in outfit_by_id:
+        service_type = 'outfitter'
         if item_id not in inventory.get('outfitsForSale', []):
-            trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'outfit not for sale here', 'itemId': item_id, 'system': state['currentSystem'], 'body': state['landedBody']})
+            trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'outfit not for sale here', 'itemId': item_id, 'system': state['currentSystem'], 'body': state['landedBody'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
             return False
         item = outfit_by_id[item_id]
         sale_type = 'outfit'
     elif item_id in weapon_by_id:
+        service_type = 'weapons'
         if item_id not in inventory.get('weaponsForSale', []):
-            trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'weapon not for sale here', 'itemId': item_id, 'system': state['currentSystem'], 'body': state['landedBody']})
+            trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'weapon not for sale here', 'itemId': item_id, 'system': state['currentSystem'], 'body': state['landedBody'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
             return False
         item = weapon_by_id[item_id]
         sale_type = 'weapon'
     else:
-        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'unknown item', 'itemId': item_id})
+        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'unknown item', 'itemId': item_id, 'sourceLabel': source_label, 'oracleStatus': oracle_status})
+        return False
+    government = _current_government_name(state)
+    legal_services = available_station_services(inventory, reputation_manifest(), state.get('reputation', {}), state.get('legalRecords', {}), government)
+    if service_type not in legal_services:
+        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'legal/reputation service restricted', 'service': service_type, 'itemId': item_id, 'system': state['currentSystem'], 'body': state['landedBody'], 'government': government, 'legal': int(state.get('legalRecords', {}).get(government, 0)), 'sourceLabel': 'terminal-velocity-legal-service-gate-scaffold', 'oracleStatus': 'classic_runtime_service_refusal_ui_pending'})
         return False
     price = int(item.get('price', 0))
     if state['credits'] < price:
-        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'insufficient credits', 'itemId': item_id, 'price': price, 'credits': state['credits']})
+        trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'insufficient credits', 'itemId': item_id, 'price': price, 'credits': state['credits'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     state['credits'] -= price
     if sale_type == 'weapon':
@@ -684,15 +722,17 @@ def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: 
         'cargoCapacity': state['cargoCapacity'],
         'maxHull': state['maxHull'],
         'maxFuel': state['maxFuel'],
-        'sourceLabel': 'terminal-velocity-outfitter-ship-ladder-scaffold',
-        'oracleStatus': 'manifest_scaffold_pending_original_outfitter_trace',
+        'sourceLabel': source_label,
+        'oracleStatus': oracle_status,
     })
     return True
 
 
 def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    source_label = str(action.get('sourceLabel', 'terminal-velocity-outfitter-ship-ladder-scaffold'))
+    oracle_status = str(action.get('oracleStatus', 'manifest_scaffold_pending_original_shipyard_trace'))
     if state['landedBody'] is None:
-        trace.append({'type': 'blocked_buy_ship', 'reason': 'not landed', 'system': state['currentSystem']})
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'not landed', 'system': state['currentSystem'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     universe = load_universe()
     inventory = station_inventory(universe, state['currentSystem'], state['landedBody'])
@@ -700,22 +740,39 @@ def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[st
     listings = {item['shipId']: item for item in outfit_manifest().get('shipyard', [])}
     ships = {item['id']: item for item in ship_manifest().get('ships', [])}
     if ship_id not in inventory.get('shipsForSale', []):
-        trace.append({'type': 'blocked_buy_ship', 'reason': 'ship not for sale here', 'shipId': ship_id, 'system': state['currentSystem'], 'body': state['landedBody']})
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'ship not for sale here', 'shipId': ship_id, 'system': state['currentSystem'], 'body': state['landedBody'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
+        return False
+    government = _current_government_name(state)
+    legal_services = available_station_services(inventory, reputation_manifest(), state.get('reputation', {}), state.get('legalRecords', {}), government)
+    if 'shipyard' not in legal_services:
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'legal/reputation service restricted', 'service': 'shipyard', 'shipId': ship_id, 'system': state['currentSystem'], 'body': state['landedBody'], 'government': government, 'legal': int(state.get('legalRecords', {}).get(government, 0)), 'sourceLabel': 'terminal-velocity-legal-service-gate-scaffold', 'oracleStatus': 'classic_runtime_service_refusal_ui_pending'})
         return False
     if ship_id not in listings or ship_id not in ships:
-        trace.append({'type': 'blocked_buy_ship', 'reason': 'ship manifest missing', 'shipId': ship_id})
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'ship manifest missing', 'shipId': ship_id, 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     listing = listings[ship_id]
     price = int(listing.get('price', 0))
     if state['credits'] < price:
-        trace.append({'type': 'blocked_buy_ship', 'reason': 'insufficient credits', 'shipId': ship_id, 'price': price, 'credits': state['credits']})
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'insufficient credits', 'shipId': ship_id, 'price': price, 'credits': state['credits'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
+        return False
+    ship = ships[ship_id]
+    new_cargo_capacity = int(ship.get('cargoSpace', state['cargoCapacity']))
+    if int(state.get('cargoUsed', 0)) > new_cargo_capacity:
+        trace.append({
+            'type': 'blocked_buy_ship',
+            'reason': 'cargo exceeds target ship capacity',
+            'shipId': ship_id,
+            'cargoUsed': int(state.get('cargoUsed', 0)),
+            'targetCargoCapacity': new_cargo_capacity,
+            'sourceLabel': source_label,
+            'oracleStatus': oracle_status,
+        })
         return False
     previous_ship = state['playerShipId']
     previous_cargo = state['cargoCapacity']
-    ship = ships[ship_id]
     state['credits'] -= price
     state['playerShipId'] = ship_id
-    state['cargoCapacity'] = int(ship.get('cargoSpace', state['cargoCapacity']))
+    state['cargoCapacity'] = new_cargo_capacity
     state['cargoUsed'] = min(int(state['cargoUsed']), int(state['cargoCapacity']))
     state['maxHull'] = int(ship.get('hull', state.get('maxHull', 100)))
     state['maxFuel'] = int(ship.get('fuel', state.get('maxFuel', STARTING_FUEL)))
@@ -727,8 +784,8 @@ def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[st
         'creditsAfter': state['credits'],
         'cargoCapacityBefore': previous_cargo,
         'cargoCapacityAfter': state['cargoCapacity'],
-        'sourceLabel': 'terminal-velocity-outfitter-ship-ladder-scaffold',
-        'oracleStatus': 'manifest_scaffold_pending_original_shipyard_trace',
+        'sourceLabel': source_label,
+        'oracleStatus': oracle_status,
     })
     return True
 
@@ -882,6 +939,17 @@ def _abort_active_mission(state: dict[str, Any], action: dict[str, Any], trace: 
             break
     if job is None:
         trace.append({'type': 'blocked_abort_mission', 'missionId': mission_id, 'reason': 'mission not active', 'sourceLabel': 'terminal-velocity-mission-abort-scaffold', 'oracleStatus': 'mission_abort_pending_classic_runtime_or_manual_trace'})
+        return False
+    if job.get('canAbort') is False:
+        trace.append({
+            'type': 'blocked_abort_mission',
+            'missionId': job.get('id'),
+            'reason': 'mission cannot abort before return/cleanup',
+            'cargoUsed': state.get('cargoUsed', 0),
+            'activeJobs': [candidate.get('id') for candidate in active_jobs],
+            'sourceLabel': 'ev-classic-resource-bible-backed-canabort-guardrail',
+            'oracleStatus': 'classic_runtime_canabort_ui_pending',
+        })
         return False
     state['activeJobs'] = [candidate for candidate in active_jobs if candidate.get('id') != job.get('id')]
     released = int(job.get('reservedCargoTons', job.get('tons', 0)))
@@ -1141,6 +1209,13 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'completedJobs': ['freeport_pact_smugglers'], 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_freeport', 'freeport_network_asset'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
             {'type': 'scan_mission_offers'},
         ]
+    if name == 'alignment_return_contract_offer_timing_guardrail':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'completedJobs': ['frontier_sample_hera_freeport'], 'storyFlags': ['frontier_samples_delivered'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
+            {'type': 'scan_mission_offers'},
+            {'type': 'set_state', 'values': {'completedJobs': ['frontier_sample_hera_freeport', 'federation_report_freeport'], 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_federation', 'federation_intel_asset']}},
+            {'type': 'scan_mission_offers'},
+        ]
     if name == 'alignment_completion_return_contract_loop':
         return [
             {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'completedJobs': ['federation_report_freeport'], 'storyFlags': ['frontier_samples_delivered', 'chapter_one_choice_seen', 'alignment_federation', 'federation_intel_asset'], 'reputation': {'Federation': 5, 'Independent': 7}, 'legalRecords': {'Federation': -20, 'Independent': -90}}},
@@ -1337,6 +1412,48 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': 'Luna'},
             {'type': 'complete_cargo_jobs'},
         ]
+    if name == 'mission_abort_forbidden_return_gate':
+        source_label = 'ev-classic-resource-bible-backed-canabort-guardrail'
+        oracle_status = 'classic_runtime_canabort_ui_pending'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'canabort_return_gate_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'canAbort': False,
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'abort_active_mission', 'missionId': 'canabort_return_gate_probe', 'expectBlocked': True},
+        ]
+    if name == 'mission_abort_forbidden_return_completion_loop':
+        source_label = 'ev-classic-resource-bible-backed-canabort-guardrail'
+        oracle_status = 'classic_runtime_canabort_return_cleanup_pending'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'canabort_return_gate_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'canAbort': False,
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'abort_active_mission', 'missionId': 'canabort_return_gate_probe', 'expectBlocked': True},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+        ]
     if name == 'mission_deadline_failure_scaffold':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -1356,6 +1473,140 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             },
             {'type': 'advance_days', 'days': 3},
         ]
+    if name == 'mission_deadline_last_day_delivery_loop':
+        source_label = 'terminal-velocity-mission-deadline-last-day-scaffold'
+        oracle_status = 'deadline_last_day_delivery_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_dispatch_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'timeLimitDays': 2,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'failureBitSet': 42,
+                'risk': 'deadline',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'advance_days', 'days': 2},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+        ]
+    if name == 'mission_deadline_completed_no_late_failure_loop':
+        source_label = 'terminal-velocity-mission-deadline-completed-no-late-failure-scaffold'
+        oracle_status = 'deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_dispatch_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'timeLimitDays': 2,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'failureBitSet': 42,
+                'risk': 'deadline',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'advance_days', 'days': 3},
+        ]
+    if name == 'mission_deadline_abort_prevents_failure_loop':
+        source_label = 'terminal-velocity-mission-deadline-abort-scaffold'
+        oracle_status = 'deadline_abort_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_dispatch_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'timeLimitDays': 2,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'failureBitSet': 42,
+                'risk': 'deadline',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'abort_active_mission', 'missionId': 'deadline_dispatch_failure_probe'},
+            {'type': 'advance_days', 'days': 3},
+        ]
+    if name == 'mission_deadline_failure_recovery_loop':
+        source_label = 'terminal-velocity-mission-deadline-recovery-scaffold'
+        oracle_status = 'deadline_failure_recovery_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_dispatch_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'timeLimitDays': 2,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'failureBitSet': 42,
+                'risk': 'deadline',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'advance_days', 'days': 3},
+            {'type': 'accept_cargo_job', 'id': 'deadline_recovery_followup', 'destinationSystem': 'Centauri', 'destinationBody': 'Luna', 'tons': 2, 'pay': 900, 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+        ]
+    if name == 'mission_deadline_trade_carryover_loop':
+        source_label = 'terminal-velocity-mission-deadline-trade-carryover-scaffold'
+        oracle_status = 'deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'deadline_dispatch_failure_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'timeLimitDays': 2,
+                'completionGovernment': 'Federation',
+                'completionReward': 6,
+                'failureBitSet': 42,
+                'risk': 'deadline',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'advance_days', 'days': 3},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Levo'},
+            {'type': 'land', 'body': 'Levo Spaceport'},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'outfitter_ship_ladder_intro':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -1364,6 +1615,36 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'buy_outfit_or_weapon', 'itemId': 'laser_cannon'},
             {'type': 'set_state', 'values': {'credits': 60000}},
             {'type': 'buy_ship', 'shipId': 'light_freighter'},
+        ]
+    if name == 'outfitter_purchase_guardrail_recovery_loop':
+        source_label = 'terminal-velocity-outfitter-purchase-guardrail-scaffold'
+        outfit_oracle_status = 'outfitter_purchase_guardrail_pending_original_runtime_trace'
+        ship_oracle_status = 'shipyard_purchase_guardrail_pending_original_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod', 'expectBlocked': True, 'sourceLabel': source_label, 'oracleStatus': outfit_oracle_status},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod', 'expectBlocked': True, 'sourceLabel': source_label, 'oracleStatus': outfit_oracle_status},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'credits': 0}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod', 'expectBlocked': True, 'sourceLabel': source_label, 'oracleStatus': outfit_oracle_status},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'expectBlocked': True, 'sourceLabel': source_label, 'oracleStatus': ship_oracle_status},
+            {'type': 'set_state', 'values': {'credits': STARTING_CREDITS}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod', 'sourceLabel': source_label, 'oracleStatus': outfit_oracle_status},
+            {'type': 'set_state', 'values': {'credits': 60000}},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': ship_oracle_status},
+        ]
+    if name == 'shipyard_overfull_cargo_guardrail':
+        source_label = 'terminal-velocity-shipyard-cargo-guardrail-scaffold'
+        oracle_status = 'shipyard_cargo_transfer_pending_ev_classic_runtime_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'credits': 60000, 'playerShipId': 'light_freighter', 'cargoCapacity': 58, 'cargoUsed': 30, 'cargoHold': {'food': 30}}},
+            {'type': 'buy_ship', 'shipId': 'shuttlecraft', 'expectBlocked': True, 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'set_state', 'values': {'cargoUsed': 10, 'cargoHold': {'food': 10}}},
+            {'type': 'buy_ship', 'shipId': 'shuttlecraft', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
     if name == 'repair_service_recovery_loop':
         return [
@@ -1375,6 +1656,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'depart'},
             {'type': 'jump', 'destinationSystem': 'Sol'},
             {'type': 'land', 'body': 'Earth'},
+            {'type': 'repair_hull'},
+        ]
+    if name == 'repair_insufficient_credit_guardrail':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'currentHull': 75, 'credits': 199}},
+            {'type': 'repair_hull', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'credits': 200}},
             {'type': 'repair_hull'},
         ]
     if name == 'disabled_player_recovery_loop':
@@ -1454,6 +1744,26 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'credits': STARTING_CREDITS}},
             {'type': 'jump', 'destinationSystem': 'Antares', 'expectBlocked': True},
             {'type': 'complete_cargo_jobs', 'expectBlocked': True},
+        ]
+    if name == 'legal_docking_service_gate_recovery':
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'set_state', 'values': {'legalRecords': {'Federation': -70, 'Independent': 0}, 'reputation': {'Federation': 12, 'Independent': 7}, 'credits': STARTING_CREDITS}},
+            {'type': 'land', 'body': 'Earth', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'landedBody': 'Earth'}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod', 'expectBlocked': True},
+            {'type': 'pay_legal_clemency', 'government': 'Federation'},
+            {'type': 'set_state', 'values': {'landedBody': None}},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod'},
+        ]
+    if name == 'weapon_reputation_gate_recovery':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'reputation': {'Federation': 5, 'Independent': 5}, 'legalRecords': {'Federation': 0, 'Independent': 0}, 'credits': STARTING_CREDITS}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'reputation': {'Federation': 5, 'Independent': 6}}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': 'terminal-velocity-weapon-reputation-gate-scaffold', 'oracleStatus': 'classic_runtime_weapon_service_reputation_gate_pending'},
         ]
     if name == 'contraband_scan_clemency_recovery':
         return [
@@ -1608,6 +1918,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'freeport_completion_hides_alignment_offers': 'passed' if 'federation_report_freeport' not in freeport_offers and 'freeport_pact_smugglers' not in freeport_offers else 'failed',
             'recorded_completion_scan_source_boundary': 'passed' if len(scans) == 2 and all(event.get('sourceLabel') == 'terminal-velocity-observed' and event.get('oracleStatus') == 'terminal_velocity_eval_pending_original_trace' for event in scans) else 'failed',
         })
+    elif name == 'alignment_return_contract_offer_timing_guardrail':
+        scans = [event for event in trace if event.get('type') == 'scan_mission_offers']
+        pre_completion_offers = scans[0].get('offersBySurface', {}).get('Mission Computer', []) if len(scans) >= 1 else []
+        post_completion_offers = scans[1].get('offersBySurface', {}).get('Mission Computer', []) if len(scans) >= 2 else []
+        checks.update({
+            'return_contract_visible_with_alignment_offers': 'passed' if pre_completion_offers == ['freeport_return_earth', 'federation_report_freeport', 'freeport_pact_smugglers'] else 'failed',
+            'return_contract_visible_after_alignment_completion': 'passed' if post_completion_offers == ['freeport_return_earth'] else 'failed',
+            'recorded_return_offer_timing_source_boundary': 'passed' if len(scans) == 2 and all(event.get('sourceLabel') == 'terminal-velocity-observed' and event.get('oracleStatus') == 'terminal_velocity_eval_pending_original_trace' for event in scans) else 'failed',
+        })
     elif name == 'alignment_completion_return_contract_loop':
         accepts = [event for event in trace if event.get('type') == 'accept_cargo_job' and event.get('id') == 'freeport_return_earth']
         completions = [event for event in trace if event.get('type') == 'complete_cargo_job' and event.get('id') == 'freeport_return_earth']
@@ -1675,6 +1994,23 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'delivered_reaccepted_mission': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['intro_courier_earth_hera'] and state.get('activeJobs') == [] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
             'recorded_abort_reaccept_source_boundary': 'passed' if mission_events and all(event.get('sourceLabel') in {'terminal-velocity-mission-abort-reaccept-scaffold', 'terminal-velocity-mission-abort-scaffold'} and 'pending_classic' in event.get('oracleStatus', '') for event in mission_events) else 'failed',
         })
+    elif name == 'mission_abort_forbidden_return_gate':
+        blocked_abort = [event for event in trace if event.get('type') == 'blocked_abort_mission' and event.get('missionId') == 'canabort_return_gate_probe']
+        checks.update({
+            'accepted_non_abortable_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'canabort_return_gate_probe' and event.get('canAbort') is False for event in trace) else 'failed',
+            'blocked_abort_for_return_gated_mission': 'passed' if blocked_abort and blocked_abort[-1].get('reason') == 'mission cannot abort before return/cleanup' else 'failed',
+            'preserved_active_job_and_reserved_cargo': 'passed' if [job.get('id') for job in state.get('activeJobs', [])] == ['canabort_return_gate_probe'] and state.get('cargoUsed') == 3 and state.get('abortedJobs', []) == [] else 'failed',
+            'recorded_canabort_source_boundary': 'passed' if blocked_abort and blocked_abort[-1].get('sourceLabel') == 'ev-classic-resource-bible-backed-canabort-guardrail' and blocked_abort[-1].get('oracleStatus') == 'classic_runtime_canabort_ui_pending' else 'failed',
+        })
+    elif name == 'mission_abort_forbidden_return_completion_loop':
+        blocked_abort = [event for event in trace if event.get('type') == 'blocked_abort_mission' and event.get('missionId') == 'canabort_return_gate_probe']
+        completions = [event for event in trace if event.get('type') == 'complete_cargo_job' and event.get('id') == 'canabort_return_gate_probe']
+        checks.update({
+            'blocked_abort_before_return': 'passed' if blocked_abort and blocked_abort[-1].get('reason') == 'mission cannot abort before return/cleanup' else 'failed',
+            'completed_non_abortable_return_job': 'passed' if completions and state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('activeJobs') == [] and state.get('completedJobs') == ['canabort_return_gate_probe'] else 'failed',
+            'released_return_gate_cargo_and_reward': 'passed' if state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 and state.get('abortedJobs', []) == [] else 'failed',
+            'recorded_canabort_return_cleanup_boundary': 'passed' if completions and all(event.get('sourceLabel') == 'ev-classic-resource-bible-backed-canabort-guardrail' and event.get('oracleStatus') == 'classic_runtime_canabort_return_cleanup_pending' for event in completions) else 'failed',
+        })
     elif name == 'mission_deadline_failure_scaffold':
         checks.update({
             'accepted_deadline_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'deadline_dispatch_failure_probe' and event.get('timeLimitDays') == 2 for event in trace) else 'failed',
@@ -1682,6 +2018,49 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'released_failed_mission_cargo': 'passed' if state.get('cargoUsed') == 0 and not state.get('activeJobs') else 'failed',
             'recorded_failure_bit_and_reputation_penalty': 'passed' if 'fail_mission_bit_42' in state.get('storyFlags', []) and state.get('reputation', {}).get('Federation') == 2 else 'failed',
             'recorded_deadline_source_boundary': 'passed' if any(event.get('type') == 'mission_deadline_failure' and event.get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-failure-scaffold' and event.get('oracleStatus') == 'deadline_failure_runtime_ui_pending_classic_trace' for event in trace) else 'failed',
+        })
+    elif name == 'mission_deadline_last_day_delivery_loop':
+        completions = [event for event in trace if event.get('type') == 'complete_cargo_job' and event.get('id') == 'deadline_dispatch_failure_probe']
+        checks.update({
+            'advanced_to_last_allowed_day': 'passed' if state.get('currentDay') == 2 and any(event.get('type') == 'advance_days' and event.get('currentDay') == 2 for event in trace) else 'failed',
+            'delivered_before_failure_on_limit_day': 'passed' if completions and state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['deadline_dispatch_failure_probe'] and state.get('activeJobs') == [] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
+            'no_deadline_failure_or_penalty_on_limit_day': 'passed' if not any(event.get('type') == 'mission_deadline_failure' for event in trace) and state.get('failedJobs', []) == [] and 'fail_mission_bit_42' not in state.get('storyFlags', []) and state.get('reputation', {}).get('Federation') == 5 else 'failed',
+            'recorded_last_day_delivery_source_boundary': 'passed' if completions and all(event.get('sourceLabel') == 'terminal-velocity-mission-deadline-last-day-scaffold' and event.get('oracleStatus') == 'deadline_last_day_delivery_pending_classic_runtime_or_manual_trace' for event in completions) else 'failed',
+        })
+    elif name == 'mission_deadline_completed_no_late_failure_loop':
+        completions = [event for event in trace if event.get('type') == 'complete_cargo_job' and event.get('id') == 'deadline_dispatch_failure_probe']
+        checks.update({
+            'completed_deadline_mission_before_late_advance': 'passed' if completions and state.get('completedJobs') == ['deadline_dispatch_failure_probe'] and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
+            'advanced_after_completion_without_late_failure': 'passed' if state.get('currentDay') == 3 and not any(event.get('type') == 'mission_deadline_failure' for event in trace) and state.get('failedJobs', []) == [] and state.get('activeJobs') == [] else 'failed',
+            'preserved_completion_rewards_and_reputation': 'passed' if state.get('cargoUsed') == 0 and 'fail_mission_bit_42' not in state.get('storyFlags', []) and state.get('reputation', {}).get('Federation') == 5 else 'failed',
+            'recorded_completed_no_late_failure_source_boundary': 'passed' if completions and all(event.get('sourceLabel') == 'terminal-velocity-mission-deadline-completed-no-late-failure-scaffold' and event.get('oracleStatus') == 'deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace' for event in completions) else 'failed',
+        })
+    elif name == 'mission_deadline_abort_prevents_failure_loop':
+        accepts = [event for event in trace if event.get('type') == 'accept_cargo_job' and event.get('id') == 'deadline_dispatch_failure_probe']
+        aborts = [event for event in trace if event.get('type') == 'abort_mission' and event.get('missionId') == 'deadline_dispatch_failure_probe']
+        checks.update({
+            'aborted_deadline_mission_before_expiry': 'passed' if accepts and aborts and aborts[-1].get('releasedCargoTons') == 3 and state.get('abortedJobs') == ['deadline_dispatch_failure_probe'] else 'failed',
+            'advanced_beyond_deadline_without_failure': 'passed' if state.get('currentDay') == 3 and not any(event.get('type') == 'mission_deadline_failure' for event in trace) and state.get('failedJobs', []) == [] and 'fail_mission_bit_42' not in state.get('storyFlags', []) else 'failed',
+            'released_abort_cargo_without_penalty': 'passed' if state.get('cargoUsed') == 0 and state.get('activeJobs') == [] and state.get('reputation', {}).get('Federation') == 5 else 'failed',
+            'recorded_deadline_abort_source_boundary': 'passed' if accepts and all(event.get('sourceLabel') == 'terminal-velocity-mission-deadline-abort-scaffold' and event.get('oracleStatus') == 'deadline_abort_pending_classic_runtime_or_manual_trace' for event in accepts) and aborts and all(event.get('sourceLabel') == 'terminal-velocity-mission-abort-scaffold' and event.get('oracleStatus') == 'mission_abort_pending_classic_runtime_or_manual_trace' for event in aborts) else 'failed',
+        })
+    elif name == 'mission_deadline_failure_recovery_loop':
+        deadline_failure = [event for event in trace if event.get('type') == 'mission_deadline_failure' and event.get('missionId') == 'deadline_dispatch_failure_probe']
+        recovery_events = [event for event in trace if event.get('type') in {'accept_cargo_job', 'complete_cargo_job'} and event.get('id') == 'deadline_recovery_followup']
+        checks.update({
+            'failed_first_deadline_mission': 'passed' if deadline_failure and state.get('failedJobs') == ['deadline_dispatch_failure_probe'] and 'fail_mission_bit_42' in state.get('storyFlags', []) else 'failed',
+            'accepted_followup_after_failure': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'deadline_recovery_followup' and event.get('reservedCargoTons') == 2 for event in trace) else 'failed',
+            'delivered_followup_after_failure': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['deadline_recovery_followup'] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 900 else 'failed',
+            'preserved_failure_history_and_source_boundaries': 'passed' if deadline_failure and recovery_events and all(event.get('sourceLabel') == 'terminal-velocity-mission-deadline-recovery-scaffold' and event.get('oracleStatus') == 'deadline_failure_recovery_pending_classic_runtime_or_manual_trace' for event in recovery_events) else 'failed',
+        })
+    elif name == 'mission_deadline_trade_carryover_loop':
+        deadline_failure = [event for event in trace if event.get('type') == 'mission_deadline_failure' and event.get('missionId') == 'deadline_dispatch_failure_probe']
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'} and event.get('commodity') == 'food']
+        checks.update({
+            'failed_deadline_mission_preserved_trade_cargo': 'passed' if deadline_failure and any(event.get('type') == 'buy_commodity_lot' and event.get('cargoUsed') == 13 for event in trace) and any(event.get('type') == 'mission_deadline_failure' and event.get('releasedCargoTons') == 3 for event in trace) else 'failed',
+            'sold_trade_cargo_after_mission_failure': 'passed' if state.get('currentSystem') == 'Levo' and state.get('landedBody') == 'Levo Spaceport' and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} and any(event.get('type') == 'sell_commodity_lot' and event.get('unitPrice') == 120 for event in trace) else 'failed',
+            'recorded_trade_carryover_failure_history': 'passed' if state.get('failedJobs') == ['deadline_dispatch_failure_probe'] and state.get('completedJobs') == [] and 'fail_mission_bit_42' in state.get('storyFlags', []) and state.get('reputation', {}).get('Federation') == 2 else 'failed',
+            'recorded_trade_carryover_source_boundaries': 'passed' if deadline_failure and trade_events and all(event.get('sourceLabel') == 'terminal-velocity-mission-deadline-trade-carryover-scaffold' and event.get('oracleStatus') == 'deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace' for event in trade_events) else 'failed',
         })
     elif name == 'outfitter_ship_ladder_intro':
         checks.update({
@@ -1696,6 +2075,37 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_no_service_repair': 'passed' if any(event.get('type') == 'blocked_repair_hull' and event.get('reason') == 'repair service unavailable' and event.get('body') == START_BODY for event in trace) else 'failed',
             'repaired_hull_at_service_port': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('currentHull') == state.get('maxHull') and any(event.get('type') == 'repair_hull' and event.get('body') == 'Earth' and event.get('hullBefore') == 65 and event.get('hullAfter') == event.get('maxHull') for event in trace) else 'failed',
             'recorded_repair_source_boundary': 'passed' if all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in trace if event.get('type') in {'blocked_repair_hull', 'repair_hull'}) else 'failed',
+        })
+    elif name == 'repair_insufficient_credit_guardrail':
+        blocked_repairs = [event for event in trace if event.get('type') == 'blocked_repair_hull']
+        repairs = [event for event in trace if event.get('type') == 'repair_hull']
+        checks.update({
+            'blocked_repair_without_enough_credits': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('cost') == 200 and event.get('credits') == 199 for event in blocked_repairs) else 'failed',
+            'preserved_damage_after_credit_block': 'passed' if any(event.get('reason') == 'insufficient credits' for event in blocked_repairs) and any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('credits') == 200 for event in trace) else 'failed',
+            'recovered_after_earning_repair_cost': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('currentHull') == state.get('maxHull') and state.get('credits') == 0 and any(event.get('hullBefore') == 75 and event.get('cost') == 200 and event.get('creditsAfter') == 0 for event in repairs) else 'failed',
+            'recorded_repair_credit_source_boundary': 'passed' if blocked_repairs and repairs and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in blocked_repairs + repairs) else 'failed',
+        })
+    elif name == 'outfitter_purchase_guardrail_recovery_loop':
+        blocked_outfits = [event for event in trace if event.get('type') == 'blocked_buy_outfit_or_weapon']
+        blocked_ships = [event for event in trace if event.get('type') == 'blocked_buy_ship']
+        bought_outfits = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon']
+        bought_ships = [event for event in trace if event.get('type') == 'buy_ship']
+        checks.update({
+            'blocked_outfit_not_landed': 'passed' if any(event.get('reason') == 'not landed' for event in blocked_outfits) else 'failed',
+            'blocked_outfit_no_service': 'passed' if any(event.get('reason') == 'outfit not for sale here' and event.get('body') == START_BODY for event in blocked_outfits) else 'failed',
+            'blocked_outfit_insufficient_credits': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('itemId') == 'cargo_pod' for event in blocked_outfits) else 'failed',
+            'blocked_ship_insufficient_credits': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('shipId') == 'light_freighter' for event in blocked_ships) else 'failed',
+            'recovered_by_buying_outfit_and_ship': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('ownedOutfits', {}).get('cargo_pod') == 1 and state.get('playerShipId') == 'light_freighter' and bought_outfits and bought_ships else 'failed',
+            'recorded_outfitter_guardrail_source_boundary': 'passed' if blocked_outfits and blocked_ships and all(event.get('sourceLabel') == 'terminal-velocity-outfitter-purchase-guardrail-scaffold' for event in blocked_outfits + blocked_ships + bought_outfits + bought_ships) else 'failed',
+        })
+    elif name == 'shipyard_overfull_cargo_guardrail':
+        blocked_ships = [event for event in trace if event.get('type') == 'blocked_buy_ship']
+        bought_ships = [event for event in trace if event.get('type') == 'buy_ship']
+        checks.update({
+            'blocked_overfull_ship_transfer': 'passed' if any(event.get('reason') == 'cargo exceeds target ship capacity' and event.get('shipId') == 'shuttlecraft' and event.get('cargoUsed') == 30 and event.get('targetCargoCapacity') == 20 for event in blocked_ships) else 'failed',
+            'preserved_overfull_cargo_before_recovery': 'passed' if any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('cargoUsed') == 30 for event in trace) and blocked_ships else 'failed',
+            'recovered_after_freeing_cargo': 'passed' if state.get('playerShipId') == 'shuttlecraft' and state.get('cargoCapacity') == 20 and state.get('cargoUsed') == 10 and bought_ships else 'failed',
+            'recorded_shipyard_cargo_guardrail_source_boundary': 'passed' if blocked_ships and bought_ships and all(event.get('sourceLabel') == 'terminal-velocity-shipyard-cargo-guardrail-scaffold' and event.get('oracleStatus') == 'shipyard_cargo_transfer_pending_ev_classic_runtime_trace' for event in blocked_ships + bought_ships) else 'failed',
         })
     elif name == 'disabled_player_recovery_loop':
         disabled_events = [event for event in trace if event.get('type') in {'disable_player', 'blocked_disabled_action', 'recover_disabled_player'}]
@@ -1767,6 +2177,21 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_insufficient_credits': 'passed' if any(event.get('type') == 'blocked_buy_commodity_lot' and event.get('reason') == 'insufficient credits' for event in trace) else 'failed',
             'recorded_invalid_destination': 'passed' if any(event.get('type') == 'blocked_jump' and 'not linked' in event.get('reason', '') for event in trace) else 'failed',
             'recorded_no_deliverable_job': 'passed' if any(event.get('type') == 'blocked_complete_cargo_job' and event.get('reason') == 'no deliverable job at current landing' for event in trace) else 'failed',
+        })
+    elif name == 'legal_docking_service_gate_recovery':
+        checks.update({
+            'blocked_fugitive_docking': 'passed' if any(event.get('type') == 'blocked_land' and event.get('reason') == 'legal docking denied' and event.get('government') == 'Federation' and event.get('legal') == -70 for event in trace) else 'failed',
+            'blocked_legal_service_access': 'passed' if any(event.get('type') == 'blocked_buy_outfit_or_weapon' and event.get('reason') == 'legal/reputation service restricted' and event.get('service') == 'outfitter' and event.get('legal') == -70 for event in trace) else 'failed',
+            'clemency_restored_dock_and_outfitter_access': 'passed' if any(event.get('type') == 'pay_legal_clemency' and event.get('legalAfter') == -45 for event in trace) and any(event.get('type') == 'land' and event.get('body') == 'Earth' for event in trace) and any(event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'cargo_pod' for event in trace) else 'failed',
+            'recorded_legal_gate_source_boundary': 'passed' if any(event.get('sourceLabel') == 'terminal-velocity-legal-docking-scaffold' for event in trace) and any(event.get('sourceLabel') == 'terminal-velocity-legal-service-gate-scaffold' for event in trace) else 'failed',
+        })
+    elif name == 'weapon_reputation_gate_recovery':
+        blocked = [event for event in trace if event.get('type') == 'blocked_buy_outfit_or_weapon' and event.get('itemId') == 'pulse_cannon']
+        bought = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'pulse_cannon']
+        checks.update({
+            'blocked_weapon_service_below_reputation': 'passed' if blocked and blocked[-1].get('reason') == 'legal/reputation service restricted' and blocked[-1].get('service') == 'weapons' and blocked[-1].get('government') == 'Independent' else 'failed',
+            'recovered_weapon_purchase_at_reputation_threshold': 'passed' if bought and state.get('ownedWeapons', {}).get('pulse_cannon') == 1 and state.get('reputation', {}).get('Independent') == 6 else 'failed',
+            'recorded_weapon_gate_source_boundary': 'passed' if blocked and bought and blocked[-1].get('sourceLabel') == 'terminal-velocity-legal-service-gate-scaffold' and blocked[-1].get('oracleStatus') == 'classic_runtime_service_refusal_ui_pending' and bought[-1].get('sourceLabel') == 'terminal-velocity-weapon-reputation-gate-scaffold' and bought[-1].get('oracleStatus') == 'classic_runtime_weapon_service_reputation_gate_pending' else 'failed',
         })
     elif name == 'contraband_scan_clemency_recovery':
         scan = next((event for event in trace if event.get('type') == 'contraband_scan'), {})

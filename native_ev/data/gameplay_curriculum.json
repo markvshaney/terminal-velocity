@@ -21,6 +21,7 @@
     "federation_alignment_delivery_loop",
     "freeport_alignment_delivery_loop",
     "alignment_completion_offer_scan_guardrail",
+    "alignment_return_contract_offer_timing_guardrail",
     "alignment_completion_return_contract_loop",
     "mission_destination_route_hint",
     "mission_trade_hybrid_capacity_planning",
@@ -30,9 +31,19 @@
     "mission_trade_return_margin_guardrail",
     "mission_abort_releases_reserved_cargo",
     "mission_abort_reaccept_delivery_loop",
+    "mission_abort_forbidden_return_gate",
+    "mission_abort_forbidden_return_completion_loop",
     "mission_deadline_failure_scaffold",
+    "mission_deadline_last_day_delivery_loop",
+    "mission_deadline_completed_no_late_failure_loop",
+    "mission_deadline_abort_prevents_failure_loop",
+    "mission_deadline_failure_recovery_loop",
+    "mission_deadline_trade_carryover_loop",
     "outfitter_ship_ladder_intro",
+    "outfitter_purchase_guardrail_recovery_loop",
+    "shipyard_overfull_cargo_guardrail",
     "repair_service_recovery_loop",
+    "repair_insufficient_credit_guardrail",
     "disabled_player_recovery_loop",
     "system_service_provisioning_scout",
     "shift_click_multi_stop_route_queue",
@@ -43,6 +54,8 @@
     "route_planner_refuel_loop",
     "low_fuel_jump_recovery",
     "blocked_reason_curriculum",
+    "legal_docking_service_gate_recovery",
+    "weapon_reputation_gate_recovery",
     "contraband_scan_clemency_recovery",
     "pirate_avoidance_escape_route",
     "disposable_combat_placeholder"
@@ -132,6 +145,10 @@
       "purpose": "Alignment completion offer-scan guardrail: from each completed chapter-one alignment branch state, scan Sirius Station offers and verify the closed choice group no longer presents either branch while preserving pending-Classic UI boundaries.",
       "surface": "mission offer discovery/faction alignment completion guardrail"
     },
+    "alignment_return_contract_offer_timing_guardrail": {
+      "purpose": "Alignment return-contract offer timing guardrail: verify Sirius Station presents the non-branch return contract alongside open alignment branch offers, then preserves only the return contract after branch completion while keeping pending-Classic UI boundaries explicit.",
+      "surface": "mission offer discovery/faction alignment return-contract timing guardrail"
+    },
     "alignment_completion_return_contract_loop": {
       "purpose": "Alignment completion return-contract loop: after each completed chapter-one alignment branch state, accept and deliver the non-branch return contract to verify story-chain recovery remains available under pending-Classic mission-behavior boundaries.",
       "surface": "mission delivery/faction alignment completion recovery scaffold"
@@ -188,17 +205,57 @@
       "purpose": "Mission abort/reaccept recovery scaffold: accept the intro courier, abort and release its reserved cargo, reaccept the same Terminal Velocity scaffold mission, deliver it, and retain abort history while keeping Classic behavior confirmation pending.",
       "surface": "mission state/reaccept recovery scaffold"
     },
+    "mission_abort_forbidden_return_gate": {
+      "purpose": "Mission CanAbort guardrail: accept a source-backed non-abortable probe, block player abort, and preserve the active job/reserved cargo while exact Classic return/UI handling remains pending.",
+      "surface": "mission state/EV Classic Resource Bible-backed abort gate scaffold"
+    },
+    "mission_abort_forbidden_return_completion_loop": {
+      "purpose": "Mission CanAbort return-cleanup guardrail: after abort is blocked for a non-abortable probe, travel to the return/destination body, complete the job, release reserved cargo, and preserve pending-Classic UI wording boundaries.",
+      "surface": "mission state/EV Classic Resource Bible-backed return cleanup scaffold"
+    },
     "mission_deadline_failure_scaffold": {
       "purpose": "Mission deadline/failure scaffold: accept a timed delivery, advance past the limit, release reserved cargo, set a failure flag, and apply the EV Classic Resource Bible-backed half-CompReward reputation penalty while retaining runtime-UI confirmation as pending.",
       "surface": "mission state/failure recovery scaffold"
+    },
+    "mission_deadline_last_day_delivery_loop": {
+      "purpose": "Mission deadline last-day delivery scaffold: accept a timed delivery, advance to the current Terminal Velocity limit day, deliver successfully, and verify no failure flag, failed-job history, or reputation penalty is recorded while exact Classic deadline inclusivity remains pending.",
+      "surface": "mission state/deadline boundary delivery scaffold"
+    },
+    "mission_deadline_completed_no_late_failure_loop": {
+      "purpose": "Mission deadline completed-state guardrail: accept and deliver a timed dispatch before expiry, then advance past the former deadline and verify the completed job never receives a late failure flag, penalty, or cargo leak while Classic completed-mission deadline cleanup remains pending.",
+      "surface": "mission state/deadline completed-state guardrail scaffold"
+    },
+    "mission_deadline_abort_prevents_failure_loop": {
+      "purpose": "Mission deadline/abort guardrail: accept a timed delivery, abort it before expiry, advance beyond the deadline, and verify the abort releases cargo without recording deadline failure flags or penalties while Classic CanAbort behavior remains pending.",
+      "surface": "mission state/deadline abort guardrail scaffold"
+    },
+    "mission_deadline_failure_recovery_loop": {
+      "purpose": "Mission deadline failure recovery scaffold: miss a timed delivery, preserve the failure flag/history and reputation penalty, then accept and complete a follow-up courier loop while keeping exact Classic reoffer/UI behavior pending.",
+      "surface": "mission state/deadline failure recovery scaffold"
+    },
+    "mission_deadline_trade_carryover_loop": {
+      "purpose": "Mission deadline/trade carryover scaffold: accept a timed delivery, buy a trade lot with spare hold, miss the deadline, verify only mission-reserved cargo is released, then sell the preserved trade cargo while keeping exact Classic failure/trade UI behavior pending.",
+      "surface": "mission state/deadline failure plus trade-cargo recovery scaffold"
     },
     "outfitter_ship_ladder_intro": {
       "purpose": "Outfitter/ship-ladder intro: reach Earth, buy a cargo upgrade and weapon, then trade up to a larger ship from local manifest stock while preserving explicit scaffold/source-boundary labels.",
       "surface": "outfitter/shipyard progression planning scaffold"
     },
+    "outfitter_purchase_guardrail_recovery_loop": {
+      "purpose": "Outfitter purchase guardrail/recovery loop: block purchases while in space, at a port without the item service, and without credits, then recover by buying a cargo outfit and larger ship while preserving Classic-runtime-pending labels.",
+      "surface": "outfitter/shipyard purchase guardrail scaffold"
+    },
+    "shipyard_overfull_cargo_guardrail": {
+      "purpose": "Shipyard cargo-transfer guardrail: block downsizing into a ship whose hold cannot fit current cargo, preserve the overfull state, then recover after freeing cargo while keeping exact Classic ship-transfer UI pending.",
+      "surface": "shipyard/cargo-capacity transfer guardrail scaffold"
+    },
     "repair_service_recovery_loop": {
       "purpose": "Repair-service recovery loop: damage hull, verify repair blocks in space and at a no-repair port, then repair at a service port using the manifest price-per-hull-point while preserving explicit Classic-runtime-pending labels.",
       "surface": "landed repair service/recovery scaffold"
+    },
+    "repair_insufficient_credit_guardrail": {
+      "purpose": "Repair-service credit guardrail: block a damaged-hull repair when credits are one short of the calculated service cost, preserve damage and credits, then recover after earning the exact repair cost while preserving Classic-runtime-pending labels.",
+      "surface": "landed repair service/credit recovery guardrail scaffold"
     },
     "disabled_player_recovery_loop": {
       "purpose": "Disabled-player recovery loop: force the player ship disabled, verify movement/combat/mission actions block behind the disabled state, then recover through the Terminal Velocity F8 scaffold while preserving Classic death/reload evidence boundaries.",
@@ -215,6 +272,14 @@
     "commodity_buy_blocked_recovery_loop": {
       "purpose": "Commodity buy guardrail/recovery loop: block buying while in space, without credits, and without capacity, then recover by landing and buying one Levo lot while preserving Terminal Velocity scaffold/source-boundary labels.",
       "surface": "commodity exchange/blocker recovery scaffold"
+    },
+    "legal_docking_service_gate_recovery": {
+      "purpose": "Legal docking/service recovery loop: with a hostile Federation legal record, block docking and landed outfitter access, then pay clemency and verify docking plus outfitter purchase recover under explicit pending-Classic source boundaries.",
+      "surface": "government legal docking/service gate scaffold"
+    },
+    "weapon_reputation_gate_recovery": {
+      "purpose": "Weapon-service reputation gate loop: at Sirius Station, block Pulse Cannon purchase below the Independent weapons-service reputation threshold, then raise reputation to the threshold and verify purchase recovery while preserving exact Classic service-refusal UI as pending.",
+      "surface": "government reputation-gated weapons service scaffold"
     }
   }
 }

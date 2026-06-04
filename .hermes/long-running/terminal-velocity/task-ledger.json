@@ -1,77 +1,35 @@
 {
-  "active_gate": null,
-  "current_milestone": "Mission alignment offer gates now cover mutually exclusive choice, story prerequisite recovery, reputation/legal threshold recovery, and both Federation/Freeport delivery branches.",
-  "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
-  "heartbeat_status": {
-    "final_delivery": "cron final response",
-    "progress": "heartbeat.json updated before full native/Godot verification",
-    "send_message_available": false,
-    "start": "heartbeat.json fallback was used; no send_message tool is registered in this cron surface",
-    "visibility_degraded": true
-  },
-  "last_checkpoint_commit": "91b58ee",
-  "last_commit": "91b58ee",
-  "last_commits": [
-    "91b58ee test: cover alignment story prerequisite recovery",
-    "a8392a9 test: cover alignment offer requirement recovery",
-    "ce97e7d chore(runner): checkpoint freeport alignment slice",
-    "bde0a48 chore(runner): checkpoint mission abort reaccept slice",
-    "ec51f8e test: add mission abort reaccept curriculum scenario"
-  ],
-  "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_alignment_offer_requirement_recovery_blocks_and_restores_branch_offers -v (OK)",
-    "python3 tools/run_gameplay_scenarios.py alignment_offer_requirement_recovery --pretty (success=true)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_alignment_story_prereq_recovery_blocks_and_restores_branch_offers native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order -v (OK)",
-    "python3 tools/run_gameplay_scenarios.py alignment_story_prereq_recovery --pretty (success=true)",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v (44 tests OK)",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' (159 tests OK)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty (failed=0 passed=40 total=40)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK gameplayScenarios=40)",
-    "git diff --check (OK)"
-  ],
-  "next_resume_action": "Inspect live backlog/checklists and choose the next strongest safe-local Terminal Velocity slice; likely mine original EV Classic/manual/resource evidence for mission abort/failure UI before changing player-facing wording, or add another deterministic noncombat mission/trade/service recovery scenario with explicit pending-Classic boundaries.",
+  "schema_version": 1,
+  "task_id": "terminal-velocity-game-development",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
-  "operational_owner_candidate": "loki-game",
+  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
-    "ahead": 224,
     "branch": "main",
+    "ahead": 47,
     "dirty": false,
-    "head": "91b58ee",
-    "status_short": "## main...origin/main [ahead 224]"
+    "head": "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
+    "status_short": "## main...origin/main [ahead 47]"
   },
   "repo_state": {
-    "ahead": 224,
     "branch": "main",
+    "ahead": 47,
     "dirty": "no"
   },
-  "required_skill_candidates": [
-    "source-and-fidelity",
-    "artifact-governance",
-    "bounded-autoresearch",
-    "game-prototyping",
-    "ev-terminal-velocity-play",
-    "ev-classic-basilisk-observation",
-    "terminal-velocity-provenance"
-  ],
-  "required_start_artifacts": [
-    "docs/prompts/terminal-velocity-continuation-prompt.md",
-    "docs/checklists/agent-continuation-process-failure-remediation.md",
-    "docs/checklists/long-running-game-development-harness-audit.md"
-  ],
-  "resume_prompt": "Continue the Terminal Velocity autonomous runner from /home/bh/workspaces/loki/terminal-velocity. Read the ledger/events, inspect git/backlog, preserve one-writer discipline, implement and verify the next source-aligned safe-local gameplay/fidelity slice, commit locally, then checkpoint ledger/events. Do not push or mutate gated external/supervision surfaces.",
+  "operational_owner_candidate": "loki-game",
   "runner": {
+    "kind": "cronjob",
+    "name": "Terminal Velocity continuous completion runner",
+    "job_id": "aafb9b3eac29",
+    "profile": "loki-game",
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
+    "schedule": "every 5m",
+    "repeat": "forever",
     "deliver": "origin",
     "enabled_toolsets": [
       "file",
       "terminal",
       "session_search"
     ],
-    "job_id": "aafb9b3eac29",
-    "kind": "cronjob",
-    "name": "Terminal Velocity continuous completion runner",
-    "profile": "loki-game",
-    "repeat": "forever",
-    "schedule": "every 5m",
     "side_effect_boundaries": [
       "safe local file/test/probe/docs/commit work allowed without per-step approval",
       "push/PR/merge/rebase/destructive EV/gateway/provider/credential/publication changes gated unless explicitly approved"
@@ -82,39 +40,82 @@
     ],
     "superseded_kanban_tasks": [
       "t_5d681084"
-    ],
-    "workdir": "/home/bh/workspaces/loki/terminal-velocity"
+    ]
   },
+  "status": "running",
+  "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
+  "active_gate": {
+    "type": null,
+    "reason": null,
+    "withheld_action": null,
+    "resume_after": null
+  },
+  "tool_caps_policy": {
+    "rule": "Tool/time/context caps are per-run budgets, not task completion.",
+    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval"
+  },
+  "required_start_artifacts": [
+    "docs/prompts/terminal-velocity-continuation-prompt.md",
+    "docs/checklists/agent-continuation-process-failure-remediation.md",
+    "docs/checklists/long-running-game-development-harness-audit.md"
+  ],
+  "required_skill_candidates": [
+    "source-and-fidelity",
+    "artifact-governance",
+    "bounded-autoresearch",
+    "game-prototyping",
+    "ev-terminal-velocity-play",
+    "ev-classic-basilisk-observation",
+    "terminal-velocity-provenance"
+  ],
   "safe_backlog": [
     {
+      "id": "next-source-aligned-playable-slice",
       "description": "Each run must inspect the live backlog/repo and implement the strongest safe local Terminal Velocity gameplay/fidelity slice with tests/probes/docs before considering process-only work.",
-      "gate": "safe local code/docs/tests are approved; external push/PR/destructive original-EV actions remain gated",
-      "id": "next-source-aligned-playable-slice"
+      "gate": "safe local code/docs/tests are approved; external push/PR/destructive original-EV actions remain gated"
     },
     {
+      "id": "skill-availability-audit",
       "description": "Audit which Loki Game Terminal Velocity skills should be shared/promoted or explicitly loaded by the chosen runner profile.",
-      "gate": "broad profile/skill propagation remains approval-gated; read-only audit is safe",
-      "id": "skill-availability-audit"
+      "gate": "broad profile/skill propagation remains approval-gated; read-only audit is safe"
     },
     {
+      "id": "runner-prompt-draft",
       "description": "Draft a self-contained cron/Kanban runner prompt that reads this ledger, performs one safe local slice, verifies, checkpoints, and records gates.",
-      "gate": "scheduling/activation approval required",
-      "id": "runner-prompt-draft"
+      "gate": "scheduling/activation approval required"
     },
     {
+      "id": "long-task-tool-triage",
       "description": "Inspect Hermes source/docs for the implied long_task tool and decide whether to implement/expose it or correct misleading docs.",
-      "gate": "Hermes code changes safe-local until push/restart/supervision",
-      "id": "long-task-tool-triage"
+      "gate": "Hermes code changes safe-local until push/restart/supervision"
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "schema_version": 1,
-  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
-  "status": "running",
-  "task_id": "terminal-velocity-game-development",
-  "tool_caps_policy": {
-    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
-    "rule": "Tool/time/context caps are per-run budgets, not task completion."
+  "current_milestone": "Secondary weapon recovery help committed and verified",
+  "last_commit": "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
+  "last_checkpoint_commit": "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
+  "last_commits": [
+    "commit containing secondary weapon recovery help checkpoint; final SHA reported by git log after amend",
+    "36a483d Expose afterburner recovery help",
+    "8dd23e6 Expose shield recharge help",
+    "3167360 Expose disabled recovery help"
+  ],
+  "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasCombatHelp=true; help overlay contract includes secondary weapon recovery text via test",
+    "./run_godot.sh tv-secondary-weapon-log -> secondaryUnavailableAtStart=true, secondaryCycleSelected=true, secondaryProjectileSpawned=true, primaryWeaponPreserved=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 176 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=55",
+    "git diff --check -> OK"
+  ],
+  "heartbeat_status": {
+    "send_message_available": false,
+    "visibility_degraded": true,
+    "start_heartbeat_fallback": ".hermes/long-running/terminal-velocity/heartbeat.json",
+    "progress_heartbeats_sent": 0,
+    "note": "send_message tool unavailable in this cron surface; start heartbeat written to fallback JSON (ignored local artifact, not committed)"
   },
-  "updated_at": "2026-06-04T13:01:04Z"
+  "next_resume_action": "Inspect live backlog and choose the next bounded source-aligned Terminal Velocity slice; strong candidates include original-runtime landed-service/store/refusal UI evidence, legal/service recovery guidance, or another verified scenario-to-help promotion with Python/Godot coverage.",
+  "resume_prompt": "Continue Terminal Velocity safe-local vertical slices from /home/bh/workspaces/loki/terminal-velocity. Read ledger/events and continuation prompt, inspect git/backlog, preserve source-boundary labels, implement one player-visible or symbolic behavior, verify with Python/Godot, update docs/ledger/events, and commit locally.",
+  "updated_at": "2026-06-04T16:28:42.188672Z"
 }

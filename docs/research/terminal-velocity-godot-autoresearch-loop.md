@@ -204,6 +204,14 @@ Mission abort scenario contract:
   - `oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace`.
   This is a Terminal Velocity mission-state scaffold, not an EV Classic abort-semantics fidelity claim.
 
+Mission abort-forbidden return-cleanup scenario contract:
+
+- `RunGodot.ps1 -MissionAbortForbiddenLog` / `--tv-mission-abort-forbidden-log`
+- Exercises the EV Classic Resource Bible-backed `CanAbort=0` guardrail in the Godot fast-eval lane while keeping exact Classic UI wording pending.
+- Seeds deterministic active mission `canabort_return_gate_probe` with `canAbort=false`, `destinationSystem=Centauri`, `destinationBody=Luna`, `cargoTons=3`, and `reward=1800`; attempts abort; then moves to Luna and completes it.
+- Logs blocked abort, preserved reserved cargo after the blocked abort, completion at return/destination body, cargo release, reward payment, active/completed/aborted history, `sourceLabel=ev-classic-resource-bible-backed-canabort-guardrail`, and `oracleStatus=classic_runtime_canabort_return_cleanup_pending`.
+- This is a source-backed Terminal Velocity guardrail for mission state cleanup; exact EV Classic runtime dialog/status text remains gated on original-runtime/manual evidence.
+
 Mission deadline failure scenario contract:
 
 - `RunGodot.ps1 -MissionDeadlineFailureLog` / `--tv-mission-deadline-failure-log`
@@ -216,6 +224,15 @@ Mission deadline failure scenario contract:
   - `sourceLabel=ev-classic-resource-bible-backed-mission-failure-scaffold`;
   - `oracleStatus=deadline_failure_runtime_ui_pending_classic_trace`.
   This remains a scaffold for exact EV Classic runtime/UI timing until a Basilisk/manual trace confirms player-facing wording and date behavior.
+
+Mission deadline completed-state scenario contract:
+
+- `RunGodot.ps1 -MissionDeadlineCompletedLog` / `--tv-mission-deadline-completed-log`
+- Exercises the Terminal Velocity completed-mission deadline guardrail in the Godot fast-eval lane.
+- Seeds deterministic mission `deadline_dispatch_completed_probe`, completes it at Luna before the limit, advances to day 3, then attempts the deadline-failure helper and verifies it remains blocked because the mission is no longer active.
+- Logs completion, no-late-failure, cargo-release, reward, and reputation booleans (`deadlineMissionCompleted=true`, `lateFailurePrevented=true`, `reservedCargoReleased=true`, `rewardPreserved=true`, `reputationPreserved=true`), completed mission ids, failed-history count, and latest completion record.
+- `sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold`; `oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity guardrail scaffold; exact EV Classic completed-mission cleanup/UI remains pending runtime/manual evidence.
 
 Mission log history scenario contract:
 

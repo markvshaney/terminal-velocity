@@ -19,7 +19,9 @@ param(
     [switch]$MissionAlignmentBranchLog,
     [switch]$MissionRouteHintLog,
     [switch]$MissionAbortLog,
+    [switch]$MissionAbortForbiddenLog,
     [switch]$MissionDeadlineFailureLog,
+    [switch]$MissionDeadlineCompletedLog,
     [switch]$MissionLogHistoryLog,
     [switch]$ActiveMissionDeadlineLog,
     [switch]$FirstMissionDeliveryLog,
@@ -101,8 +103,12 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-route-hint-log
 } elseif ($MissionAbortLog) {
     & $Godot --headless --path $Project -- --tv-mission-abort-log
+} elseif ($MissionAbortForbiddenLog) {
+    & $Godot --headless --path $Project -- --tv-mission-abort-forbidden-log
 } elseif ($MissionDeadlineFailureLog) {
     & $Godot --headless --path $Project -- --tv-mission-deadline-failure-log
+} elseif ($MissionDeadlineCompletedLog) {
+    & $Godot --headless --path $Project -- --tv-mission-deadline-completed-log
 } elseif ($MissionLogHistoryLog) {
     & $Godot --headless --path $Project -- --tv-mission-log-history-log
 } elseif ($ActiveMissionDeadlineLog) {

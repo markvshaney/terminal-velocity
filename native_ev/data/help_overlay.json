@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "method": "terminal-velocity-help-overlay-v1",
+  "source": "native_ev/data/help_overlay.json",
+  "fidelityBoundary": "Terminal Velocity helper/scaffold copy; not an EV Classic fidelity claim unless each line explicitly names source-backed evidence.",
+  "lines": [
+    "Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
+    "Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
+    "Afterburner: Z gives a Terminal Velocity thrust boost and drains fuel; if it is blocked, refuel at a landed service port before retrying. Exact Classic curve pending.",
+    "Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.",
+    "Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops; Backspace/Delete clears route.",
+    "Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
+    "Mission objective marker: active mission destinations are highlighted on the map.",
+    "Mission route helper: G queues the active mission destination when known.",
+    "Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.",
+    "Route clearing: Backspace/Delete clears queued green routes; choose a fresh linked stop before retrying J.",
+    "Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
+    "Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.",
+    "Commodity recovery: if Buy/Sell is blocked, check free hold, selected commodity, credits, and same-port sellback before changing route.",
+    "Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
+    "Deadline recovery: failed timed TV missions release reserved cargo but can preserve trade cargo; sell recoverable cargo or scan for follow-up contracts before abandoning the route. Classic failure UI pending.",
+    "Mission abort/history: X aborts active TV scaffold missions; Mission Log preserves completed, aborted, and failed histories.",
+    "CanAbort return gates: some missions cannot be aborted; follow the Mission Log destination/return cleanup instead of repeatedly pressing X. Resource Bible-backed guardrail, exact Classic UI pending.",
+    "Mission offers: Mission Computer detail lines show destination, cargo, deadline, story/legal/reputation gates, and branch-choice boundaries as TV helper scaffolds pending Classic UI evidence.",
+    "Refuel: landed ports show F5 availability; F5 refuels when service exists.",
+    "Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
+    "Repair recovery: if F7 is blocked, check that you are landed at a repair-service port, hull is damaged, and credits cover the repair quote before retrying.",
+    "Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
+    "Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.",
+    "Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.",
+    "Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.",
+    "Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.",
+    "Shield recharge: Player Info shows combat readiness with shield/hull state and source-backed recharge-cadence scaffold; exact Classic timing pending.",
+    "Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
+    "Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
+    "Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
+    "Disabled recovery: while disabled, flight/combat/service/trade/mission actions stay blocked until F8 recovery; TV scaffold pending Classic death/reload evidence.",
+    "Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.",
+    "Legal docking: low legal standing can deny landing at governed ports; check Player Info/legal messages and seek clemency or a safer port. Exact Classic denial UI pending.",
+    "Legal service gates: poor standing can block outfitter/shipyard buying even at a landed port; improve legal standing or use an eligible port before retrying. Exact Classic refusal UI pending.",
+    "Weapon reputation gates: some weapon purchases require local government reputation; build standing or buy a lower-gate weapon before retrying. Exact Classic weapon-service thresholds/UI pending.",
+    "Alignment gates: story offers may require prior flags, local reputation, legal standing, or an open branch choice; scan Mission Computer details before hauling cargo. Exact Classic offer UI pending.",
+    "Alignment return contracts: after choosing a chapter branch, scan Mission Computer for remaining non-branch return contracts before assuming the story chain is complete. TV timing scaffold pending Classic UI evidence.",
+    "Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
+    "Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.",
+    "Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
+    "Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
+    "Trade route helper: linked-market profit hints are Terminal Velocity scaffold.",
+    "Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
+    "Outfitter/shipyard recovery: if B is blocked, check landed service, selected listing, credits, reputation/legal gates, and cargo transfer limits before retrying.",
+    "Shipyard cargo transfer: if trading down is blocked, sell or deliver cargo until the target hull capacity fits before retrying; exact Classic transfer UI pending.",
+    "Service provisioning scout: newly reached ports need service/store checks before buying; Levo no-outfitter evidence is Classic-observed, other service matrices stay TV scaffold until confirmed.",
+    "Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots before trading up; TV scaffold pending Classic store/stat trace.",
+    "Messages: recent success and blocked-reason feedback appears under the HUD.",
+    "Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.",
+    "F10 closes this help overlay. Exact Classic behavior still needs source/runtime evidence."
+  ],
+  "logProbes": [
+    {
+      "flag": "hasPirateAvoidanceHint",
+      "source": "curriculum",
+      "contains": "pirate_avoidance_escape_route"
+    },
+    {
+      "flag": "hasAfterburnerHelp",
+      "source": "help",
+      "contains": "Afterburner: Z gives a Terminal Velocity thrust boost"
+    },
+    {
+      "flag": "hasAutopilotHelp",
+      "source": "help",
+      "contains": "Autopilot: A toggles a Terminal Velocity assist"
+    },
+    {
+      "flag": "hasRepairHelp",
+      "source": "help",
+      "contains": "Repair: landed ports with repair service show F7"
+    },
+    {
+      "flag": "hasRepairRecoveryHelp",
+      "source": "help",
+      "contains": "Repair recovery: if F7 is blocked"
+    },
+    {
+      "flag": "hasCombatHelp",
+      "source": "help",
+      "contains": "Combat: Tab fires primary"
+    },
+    {
+      "flag": "hasTargetDetailHelp",
+      "source": "help",
+      "contains": "Target scanner: selected contacts show"
+    },
+    {
+      "flag": "hasCombatRewardsHelp",
+      "source": "help",
+      "contains": "Combat rewards: Player Info summarizes"
+    },
+    {
+      "flag": "hasSalvageHelp",
+      "source": "help",
+      "contains": "Salvage: fly over green salvage markers"
+    },
+    {
+      "flag": "hasShieldRechargeHelp",
+      "source": "help",
+      "contains": "Shield recharge: Player Info shows combat readiness"
+    },
+    {
+      "flag": "hasRecoveryHelp",
+      "source": "help",
+      "contains": "Recovery: F8 resets a disabled player ship"
+    },
+    {
+      "flag": "hasDisabledRecoveryHelp",
+      "source": "help",
+      "contains": "Disabled recovery: while disabled"
+    },
+    {
+      "flag": "hasPirateAvoidanceHelp",
+      "source": "help",
+      "contains": "Pirate avoidance: if an intercept warning appears"
+    },
+    {
+      "flag": "hasContrabandHelp",
+      "source": "help",
+      "contains": "Contraband: Player Info and map commodity hints flag"
+    },
+    {
+      "flag": "hasLegalStatusHelp",
+      "source": "help",
+      "contains": "Legal status: Player Info shows current government/legal stance"
+    },
+    {
+      "flag": "hasLegalClemencyHelp",
+      "source": "help",
+      "contains": "landed C buys clemency when eligible"
+    },
+    {
+      "flag": "hasLegalDockingHelp",
+      "source": "help",
+      "contains": "Legal docking: low legal standing can deny landing"
+    },
+    {
+      "flag": "hasLegalServiceHelp",
+      "source": "help",
+      "contains": "Legal service gates: poor standing can block outfitter/shipyard buying"
+    },
+    {
+      "flag": "hasWeaponReputationHelp",
+      "source": "help",
+      "contains": "Weapon reputation gates: some weapon purchases require local government reputation"
+    },
+    {
+      "flag": "hasAlignmentGateHelp",
+      "source": "help",
+      "contains": "Alignment gates: story offers may require prior flags"
+    },
+    {
+      "flag": "hasAlignmentReturnHelp",
+      "source": "help",
+      "contains": "Alignment return contracts: after choosing a chapter branch"
+    },
+    {
+      "flag": "hasMissionDeadlineHelp",
+      "source": "help",
+      "contains": "Mission deadlines: Mission Log and Player Info show"
+    },
+    {
+      "flag": "hasMissionDeadlineRecoveryHelp",
+      "source": "help",
+      "contains": "Deadline recovery: failed timed TV missions release reserved cargo"
+    },
+    {
+      "flag": "hasMissionAbortHistoryHelp",
+      "source": "help",
+      "contains": "Mission abort/history: X aborts active TV scaffold missions"
+    },
+    {
+      "flag": "hasCanAbortReturnHelp",
+      "source": "help",
+      "contains": "CanAbort return gates: some missions cannot be aborted"
+    },
+    {
+      "flag": "hasMissionOfferHelp",
+      "source": "help",
+      "contains": "Mission offers: Mission Computer detail lines show"
+    },
+    {
+      "flag": "hasMissionObjectiveHelp",
+      "source": "help",
+      "contains": "Mission objective marker: active mission destinations are highlighted"
+    },
+    {
+      "flag": "hasMissionRouteHelp",
+      "source": "help",
+      "contains": "Mission route helper: G queues the active mission destination"
+    },
+    {
+      "flag": "hasMissionTradeHybridHelp",
+      "source": "help",
+      "contains": "Mission/trade hybrid: accept cargo jobs first"
+    },
+    {
+      "flag": "hasCommodityRecoveryHelp",
+      "source": "help",
+      "contains": "Commodity recovery: if Buy/Sell is blocked"
+    },
+    {
+      "flag": "hasTradeRouteHelp",
+      "source": "help",
+      "contains": "Trade route helper: linked-market profit hints"
+    },
+    {
+      "flag": "hasMapServiceHelp",
+      "source": "help",
+      "contains": "Map service/legal summary: selected systems show"
+    },
+    {
+      "flag": "hasServiceProvisioningHelp",
+      "source": "help",
+      "contains": "Service provisioning scout: newly reached ports need"
+    },
+    {
+      "flag": "hasRouteRefuelHelp",
+      "source": "help",
+      "contains": "Route/fuel planning: G and Shift-click route status show"
+    },
+    {
+      "flag": "hasShipyardDeltaHelp",
+      "source": "help",
+      "contains": "Shipyard/outfitter: listings show local manifest deltas/effects before buying"
+    },
+    {
+      "flag": "hasOutfitterGuardrailHelp",
+      "source": "help",
+      "contains": "Outfitter/shipyard recovery: if B is blocked"
+    },
+    {
+      "flag": "hasShipyardCargoTransferHelp",
+      "source": "help",
+      "contains": "Shipyard cargo transfer: if trading down is blocked"
+    },
+    {
+      "flag": "hasShipLadderHelp",
+      "source": "help",
+      "contains": "Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots"
+    },
+    {
+      "flag": "hasPilotPersistenceHelp",
+      "source": "help",
+      "contains": "Pilot persistence: F6 saves current pilot progress"
+    },
+    {
+      "flag": "hasPlayerInfoHelp",
+      "source": "help",
+      "contains": "Player info: P toggles player info"
+    },
+    {
+      "flag": "hasRecentMessagesHelp",
+      "source": "help",
+      "contains": "Messages: recent success and blocked-reason feedback appears under the HUD"
+    },
+    {
+      "flag": "hasBlockedActionHelp",
+      "source": "help",
+      "contains": "Blocked actions: when a jump, buy, land, fire, repair, or mission action fails"
+    },
+    {
+      "flag": "hasRouteClearHelp",
+      "source": "help",
+      "contains": "Route clearing: Backspace/Delete clears queued green routes"
+    }
+  ]
+}

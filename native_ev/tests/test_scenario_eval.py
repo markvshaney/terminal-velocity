@@ -33,6 +33,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'federation_alignment_delivery_loop',
                 'freeport_alignment_delivery_loop',
                 'alignment_completion_offer_scan_guardrail',
+                'alignment_return_contract_offer_timing_guardrail',
                 'alignment_completion_return_contract_loop',
                 'mission_destination_route_hint',
                 'mission_trade_hybrid_capacity_planning',
@@ -42,9 +43,19 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_trade_return_margin_guardrail',
                 'mission_abort_releases_reserved_cargo',
                 'mission_abort_reaccept_delivery_loop',
+                'mission_abort_forbidden_return_gate',
+                'mission_abort_forbidden_return_completion_loop',
                 'mission_deadline_failure_scaffold',
+                'mission_deadline_last_day_delivery_loop',
+                'mission_deadline_completed_no_late_failure_loop',
+                'mission_deadline_abort_prevents_failure_loop',
+                'mission_deadline_failure_recovery_loop',
+                'mission_deadline_trade_carryover_loop',
                 'outfitter_ship_ladder_intro',
+                'outfitter_purchase_guardrail_recovery_loop',
+                'shipyard_overfull_cargo_guardrail',
                 'repair_service_recovery_loop',
+                'repair_insufficient_credit_guardrail',
                 'disabled_player_recovery_loop',
                 'system_service_provisioning_scout',
                 'shift_click_multi_stop_route_queue',
@@ -55,6 +66,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'route_planner_refuel_loop',
                 'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
+                'legal_docking_service_gate_recovery',
+                'weapon_reputation_gate_recovery',
                 'contraband_scan_clemency_recovery',
                 'pirate_avoidance_escape_route',
                 'disposable_combat_placeholder',
@@ -518,6 +531,24 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(scans[0]['sourceLabel'], 'terminal-velocity-observed')
         self.assertEqual(scans[0]['oracleStatus'], 'terminal_velocity_eval_pending_original_trace')
 
+    def test_alignment_return_contract_offer_timing_guardrail_spans_branch_states(self):
+        result = run_scripted_scenario('alignment_return_contract_offer_timing_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['checks']['return_contract_visible_with_alignment_offers'], 'passed')
+        self.assertEqual(result['checks']['return_contract_visible_after_alignment_completion'], 'passed')
+        self.assertEqual(result['checks']['recorded_return_offer_timing_source_boundary'], 'passed')
+        scans = [event for event in result['trace'] if event['type'] == 'scan_mission_offers']
+        self.assertEqual(len(scans), 2)
+        self.assertEqual(
+            scans[0]['offersBySurface']['Mission Computer'],
+            ['freeport_return_earth', 'federation_report_freeport', 'freeport_pact_smugglers'],
+        )
+        self.assertEqual(scans[1]['offersBySurface']['Mission Computer'], ['freeport_return_earth'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-observed' for event in scans))
+
     def test_alignment_completion_return_contract_accepts_after_either_branch(self):
         result = run_scripted_scenario('alignment_completion_return_contract_loop')
 
@@ -622,6 +653,48 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         abort = [event for event in result['trace'] if event['type'] == 'abort_mission'][-1]
         self.assertEqual(abort['releasedCargoTons'], 3)
 
+    def test_mission_abort_forbidden_return_gate_preserves_active_job(self):
+        result = run_scripted_scenario('mission_abort_forbidden_return_gate')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual([job['id'] for job in result['state']['activeJobs']], ['canabort_return_gate_probe'])
+        self.assertEqual(result['state']['cargoUsed'], 3)
+        self.assertEqual(result['state'].get('abortedJobs', []), [])
+        self.assertEqual(result['checks']['accepted_non_abortable_mission'], 'passed')
+        self.assertEqual(result['checks']['blocked_abort_for_return_gated_mission'], 'passed')
+        self.assertEqual(result['checks']['preserved_active_job_and_reserved_cargo'], 'passed')
+        self.assertEqual(result['checks']['recorded_canabort_source_boundary'], 'passed')
+        blocked_abort = [event for event in result['trace'] if event.get('type') == 'blocked_abort_mission'][-1]
+        self.assertEqual(blocked_abort['missionId'], 'canabort_return_gate_probe')
+        self.assertEqual(blocked_abort['reason'], 'mission cannot abort before return/cleanup')
+        self.assertEqual(blocked_abort['sourceLabel'], 'ev-classic-resource-bible-backed-canabort-guardrail')
+        self.assertEqual(blocked_abort['oracleStatus'], 'classic_runtime_canabort_ui_pending')
+
+    def test_mission_abort_forbidden_return_completion_loop_completes_after_blocked_abort(self):
+        result = run_scripted_scenario('mission_abort_forbidden_return_completion_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], ['canabort_return_gate_probe'])
+        self.assertEqual(result['state'].get('abortedJobs', []), [])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['credits'], 11800)
+        self.assertEqual(result['checks']['blocked_abort_before_return'], 'passed')
+        self.assertEqual(result['checks']['completed_non_abortable_return_job'], 'passed')
+        self.assertEqual(result['checks']['released_return_gate_cargo_and_reward'], 'passed')
+        self.assertEqual(result['checks']['recorded_canabort_return_cleanup_boundary'], 'passed')
+        blocked_abort = [event for event in result['trace'] if event.get('type') == 'blocked_abort_mission'][-1]
+        self.assertEqual(blocked_abort['reason'], 'mission cannot abort before return/cleanup')
+        completion = [event for event in result['trace'] if event.get('type') == 'complete_cargo_job'][-1]
+        self.assertEqual(completion['id'], 'canabort_return_gate_probe')
+        self.assertEqual(completion['reservedCargoTons'], 3)
+        self.assertEqual(completion['sourceLabel'], 'ev-classic-resource-bible-backed-canabort-guardrail')
+        self.assertEqual(completion['oracleStatus'], 'classic_runtime_canabort_return_cleanup_pending')
+
     def test_mission_deadline_failure_scaffold_releases_cargo_and_records_penalty(self):
         result = run_scripted_scenario('mission_deadline_failure_scaffold')
 
@@ -643,6 +716,113 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(failure['sourceLabel'], 'ev-classic-resource-bible-backed-mission-failure-scaffold')
         self.assertEqual(failure['oracleStatus'], 'deadline_failure_runtime_ui_pending_classic_trace')
 
+    def test_mission_deadline_last_day_delivery_loop_completes_without_failure(self):
+        result = run_scripted_scenario('mission_deadline_last_day_delivery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['advanced_to_last_allowed_day'], 'passed')
+        self.assertEqual(result['checks']['delivered_before_failure_on_limit_day'], 'passed')
+        self.assertEqual(result['checks']['no_deadline_failure_or_penalty_on_limit_day'], 'passed')
+        self.assertEqual(result['checks']['recorded_last_day_delivery_source_boundary'], 'passed')
+        self.assertEqual(result['state']['completedJobs'], ['deadline_dispatch_failure_probe'])
+        self.assertEqual(result['state'].get('failedJobs', []), [])
+        self.assertNotIn('fail_mission_bit_42', result['state']['storyFlags'])
+        completion = [event for event in result['trace'] if event.get('type') == 'complete_cargo_job'][-1]
+        self.assertEqual(completion['acceptedDay'], 0)
+        self.assertEqual(completion['timeLimitDays'], 2)
+        self.assertEqual(completion['sourceLabel'], 'terminal-velocity-mission-deadline-last-day-scaffold')
+        self.assertEqual(completion['oracleStatus'], 'deadline_last_day_delivery_pending_classic_runtime_or_manual_trace')
+
+    def test_mission_deadline_completed_no_late_failure_loop_stays_completed_after_deadline(self):
+        result = run_scripted_scenario('mission_deadline_completed_no_late_failure_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['completed_deadline_mission_before_late_advance'], 'passed')
+        self.assertEqual(result['checks']['advanced_after_completion_without_late_failure'], 'passed')
+        self.assertEqual(result['checks']['preserved_completion_rewards_and_reputation'], 'passed')
+        self.assertEqual(result['checks']['recorded_completed_no_late_failure_source_boundary'], 'passed')
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['currentDay'], 3)
+        self.assertEqual(result['state']['completedJobs'], ['deadline_dispatch_failure_probe'])
+        self.assertEqual(result['state'].get('failedJobs', []), [])
+        self.assertNotIn('fail_mission_bit_42', result['state']['storyFlags'])
+        self.assertFalse(any(event.get('type') == 'mission_deadline_failure' for event in result['trace']))
+        completion = [event for event in result['trace'] if event.get('type') == 'complete_cargo_job'][-1]
+        self.assertEqual(completion['sourceLabel'], 'terminal-velocity-mission-deadline-completed-no-late-failure-scaffold')
+        self.assertEqual(completion['oracleStatus'], 'deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace')
+
+    def test_mission_deadline_abort_prevents_failure_loop_releases_cargo_without_penalty(self):
+        result = run_scripted_scenario('mission_deadline_abort_prevents_failure_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['currentDay'], 3)
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], [])
+        self.assertEqual(result['state'].get('failedJobs', []), [])
+        self.assertEqual(result['state']['abortedJobs'], ['deadline_dispatch_failure_probe'])
+        self.assertNotIn('fail_mission_bit_42', result['state']['storyFlags'])
+        self.assertEqual(result['state']['reputation']['Federation'], 5)
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['checks']['aborted_deadline_mission_before_expiry'], 'passed')
+        self.assertEqual(result['checks']['advanced_beyond_deadline_without_failure'], 'passed')
+        self.assertEqual(result['checks']['released_abort_cargo_without_penalty'], 'passed')
+        self.assertEqual(result['checks']['recorded_deadline_abort_source_boundary'], 'passed')
+        abort = [event for event in result['trace'] if event.get('type') == 'abort_mission'][-1]
+        self.assertEqual(abort['missionId'], 'deadline_dispatch_failure_probe')
+        self.assertEqual(abort['releasedCargoTons'], 3)
+        self.assertEqual(abort['sourceLabel'], 'terminal-velocity-mission-abort-scaffold')
+        self.assertEqual(abort['oracleStatus'], 'mission_abort_pending_classic_runtime_or_manual_trace')
+        self.assertFalse(any(event.get('type') == 'mission_deadline_failure' for event in result['trace']))
+
+    def test_mission_deadline_failure_recovery_loop_fails_then_completes_followup(self):
+        result = run_scripted_scenario('mission_deadline_failure_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], ['deadline_recovery_followup'])
+        self.assertEqual(result['state']['failedJobs'], ['deadline_dispatch_failure_probe'])
+        self.assertIn('fail_mission_bit_42', result['state']['storyFlags'])
+        self.assertEqual(result['state']['reputation']['Federation'], 2)
+        self.assertEqual(result['state']['credits'], 10900)
+        self.assertEqual(result['checks']['failed_first_deadline_mission'], 'passed')
+        self.assertEqual(result['checks']['accepted_followup_after_failure'], 'passed')
+        self.assertEqual(result['checks']['delivered_followup_after_failure'], 'passed')
+        self.assertEqual(result['checks']['preserved_failure_history_and_source_boundaries'], 'passed')
+        mission_events = [event for event in result['trace'] if event.get('type') in {'mission_deadline_failure', 'accept_cargo_job', 'complete_cargo_job'}]
+        self.assertTrue(any(event.get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-failure-scaffold' for event in mission_events))
+        self.assertTrue(any(event.get('sourceLabel') == 'terminal-velocity-mission-deadline-recovery-scaffold' for event in mission_events))
+
+    def test_mission_deadline_trade_carryover_loop_sells_trade_after_failure(self):
+        result = run_scripted_scenario('mission_deadline_trade_carryover_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['completedJobs'], [])
+        self.assertEqual(result['state']['failedJobs'], ['deadline_dispatch_failure_probe'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['credits'], 10780)
+        self.assertEqual(result['state']['reputation']['Federation'], 2)
+        self.assertEqual(result['checks']['failed_deadline_mission_preserved_trade_cargo'], 'passed')
+        self.assertEqual(result['checks']['sold_trade_cargo_after_mission_failure'], 'passed')
+        self.assertEqual(result['checks']['recorded_trade_carryover_failure_history'], 'passed')
+        self.assertEqual(result['checks']['recorded_trade_carryover_source_boundaries'], 'passed')
+        buy = [event for event in result['trace'] if event.get('type') == 'buy_commodity_lot'][-1]
+        failure = [event for event in result['trace'] if event.get('type') == 'mission_deadline_failure'][-1]
+        sell = [event for event in result['trace'] if event.get('type') == 'sell_commodity_lot'][-1]
+        self.assertEqual(buy['cargoUsed'], 13)
+        self.assertEqual(failure['releasedCargoTons'], 3)
+        self.assertEqual(sell['unitPrice'], 120)
+        self.assertEqual(sell['sourceLabel'], 'terminal-velocity-mission-deadline-trade-carryover-scaffold')
+
     def test_outfitter_ship_ladder_intro_buys_upgrade_weapon_and_bigger_ship(self):
         result = run_scripted_scenario('outfitter_ship_ladder_intro')
 
@@ -658,6 +838,42 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['upgraded_to_larger_ship'], 'passed')
         self.assertEqual(result['checks']['recorded_outfitter_ship_ladder_source_boundary'], 'passed')
         self.assertIn('terminal-velocity-outfitter-ship-ladder-scaffold', {event.get('sourceLabel') for event in result['trace']})
+
+    def test_outfitter_purchase_guardrail_recovery_loop_blocks_then_buys(self):
+        result = run_scripted_scenario('outfitter_purchase_guardrail_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['ownedOutfits']['cargo_pod'], 1)
+        self.assertEqual(result['state']['playerShipId'], 'light_freighter')
+        self.assertEqual(result['checks']['blocked_outfit_not_landed'], 'passed')
+        self.assertEqual(result['checks']['blocked_outfit_no_service'], 'passed')
+        self.assertEqual(result['checks']['blocked_outfit_insufficient_credits'], 'passed')
+        self.assertEqual(result['checks']['blocked_ship_insufficient_credits'], 'passed')
+        self.assertEqual(result['checks']['recovered_by_buying_outfit_and_ship'], 'passed')
+        self.assertEqual(result['checks']['recorded_outfitter_guardrail_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] in {'blocked_buy_outfit_or_weapon', 'blocked_buy_ship'}]
+        self.assertEqual([event['reason'] for event in blocked], ['not landed', 'outfit not for sale here', 'insufficient credits', 'insufficient credits'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-outfitter-purchase-guardrail-scaffold' for event in blocked))
+
+    def test_shipyard_overfull_cargo_guardrail_blocks_downsize_until_cargo_fits(self):
+        result = run_scripted_scenario('shipyard_overfull_cargo_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['checks']['blocked_overfull_ship_transfer'], 'passed')
+        self.assertEqual(result['checks']['preserved_overfull_cargo_before_recovery'], 'passed')
+        self.assertEqual(result['checks']['recovered_after_freeing_cargo'], 'passed')
+        self.assertEqual(result['checks']['recorded_shipyard_cargo_guardrail_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_buy_ship'][-1]
+        self.assertEqual(blocked['reason'], 'cargo exceeds target ship capacity')
+        self.assertEqual(blocked['cargoUsed'], 30)
+        self.assertEqual(blocked['targetCargoCapacity'], 20)
+        self.assertEqual(result['state']['playerShipId'], 'shuttlecraft')
+        self.assertEqual(result['state']['cargoUsed'], 10)
+        self.assertEqual(result['state']['cargoHold']['food'], 10)
 
     def test_repair_service_recovery_loop_repairs_hull_and_blocks_bad_contexts(self):
         result = run_scripted_scenario('repair_service_recovery_loop')
@@ -677,6 +893,29 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(repair['hullBefore'], 65)
         self.assertEqual(repair['hullAfter'], 100)
         self.assertEqual(repair['cost'], 280)
+        self.assertEqual(repair['sourceLabel'], 'terminal-velocity-repair-service-scaffold')
+        self.assertEqual(repair['oracleStatus'], 'repair_service_pending_ev_classic_runtime_trace')
+
+    def test_repair_insufficient_credit_guardrail_preserves_damage_then_recovers(self):
+        result = run_scripted_scenario('repair_insufficient_credit_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['currentHull'], result['state']['maxHull'])
+        self.assertEqual(result['state']['credits'], 0)
+        self.assertEqual(result['checks']['blocked_repair_without_enough_credits'], 'passed')
+        self.assertEqual(result['checks']['preserved_damage_after_credit_block'], 'passed')
+        self.assertEqual(result['checks']['recovered_after_earning_repair_cost'], 'passed')
+        self.assertEqual(result['checks']['recorded_repair_credit_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_repair_hull'][-1]
+        self.assertEqual(blocked['reason'], 'insufficient credits')
+        self.assertEqual(blocked['cost'], 200)
+        self.assertEqual(blocked['credits'], 199)
+        repair = [event for event in result['trace'] if event['type'] == 'repair_hull'][-1]
+        self.assertEqual(repair['hullBefore'], 75)
+        self.assertEqual(repair['hullAfter'], 100)
+        self.assertEqual(repair['creditsAfter'], 0)
         self.assertEqual(repair['sourceLabel'], 'terminal-velocity-repair-service-scaffold')
         self.assertEqual(repair['oracleStatus'], 'repair_service_pending_ev_classic_runtime_trace')
 
@@ -833,6 +1072,44 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['recorded_insufficient_credits'], 'passed')
         self.assertEqual(result['checks']['recorded_invalid_destination'], 'passed')
         self.assertEqual(result['checks']['recorded_no_deliverable_job'], 'passed')
+
+    def test_legal_docking_service_gate_recovery_blocks_then_recovers_with_clemency(self):
+        result = run_scripted_scenario('legal_docking_service_gate_recovery')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['blocked_fugitive_docking'], 'passed')
+        self.assertEqual(result['checks']['blocked_legal_service_access'], 'passed')
+        self.assertEqual(result['checks']['clemency_restored_dock_and_outfitter_access'], 'passed')
+        self.assertEqual(result['checks']['recorded_legal_gate_source_boundary'], 'passed')
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['legalRecords']['Federation'], -45)
+        self.assertEqual(result['state']['ownedOutfits']['cargo_pod'], 1)
+        blocked_landing = [event for event in result['trace'] if event['type'] == 'blocked_land'][-1]
+        self.assertEqual(blocked_landing['reason'], 'legal docking denied')
+        self.assertEqual(blocked_landing['sourceLabel'], 'terminal-velocity-legal-docking-scaffold')
+        service_block = [event for event in result['trace'] if event['type'] == 'blocked_buy_outfit_or_weapon'][-1]
+        self.assertEqual(service_block['reason'], 'legal/reputation service restricted')
+        self.assertEqual(service_block['sourceLabel'], 'terminal-velocity-legal-service-gate-scaffold')
+
+    def test_weapon_reputation_gate_recovery_blocks_then_buys_at_threshold(self):
+        result = run_scripted_scenario('weapon_reputation_gate_recovery')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['reputation']['Independent'], 6)
+        self.assertEqual(result['state']['ownedWeapons']['pulse_cannon'], 1)
+        self.assertEqual(result['checks']['blocked_weapon_service_below_reputation'], 'passed')
+        self.assertEqual(result['checks']['recovered_weapon_purchase_at_reputation_threshold'], 'passed')
+        self.assertEqual(result['checks']['recorded_weapon_gate_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_buy_outfit_or_weapon'][-1]
+        self.assertEqual(blocked['service'], 'weapons')
+        self.assertEqual(blocked['government'], 'Independent')
+        self.assertEqual(blocked['sourceLabel'], 'terminal-velocity-legal-service-gate-scaffold')
+        bought = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon'][-1]
+        self.assertEqual(bought['saleType'], 'weapon')
+        self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-reputation-gate-scaffold')
 
     def test_contraband_scan_clemency_recovery_confiscates_and_repairs_legal_record(self):
         result = run_scripted_scenario('contraband_scan_clemency_recovery')

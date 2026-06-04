@@ -42,7 +42,9 @@ const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
 const MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_BRANCH_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
+const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
+const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
 const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
@@ -87,6 +89,7 @@ var governments := {}
 var reputation := {}
 var sounds := {}
 var gameplay_curriculum := {}
+var help_overlay := {}
 var sound_players: Dictionary = {}
 var sound_event_history: Array[String] = []
 var shipyard_pict_textures: Dictionary = {}
@@ -223,8 +226,12 @@ func _ready() -> void:
 		call_deferred("_run_mission_route_hint_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
 		call_deferred("_run_mission_abort_log")
+	if OS.get_cmdline_args().has("--tv-mission-abort-forbidden-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-forbidden-log"):
+		call_deferred("_run_mission_abort_forbidden_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
 		call_deferred("_run_mission_deadline_failure_log")
+	if OS.get_cmdline_args().has("--tv-mission-deadline-completed-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-completed-log"):
+		call_deferred("_run_mission_deadline_completed_log")
 	if OS.get_cmdline_args().has("--tv-mission-log-history-log") or OS.get_cmdline_user_args().has("--tv-mission-log-history-log"):
 		call_deferred("_run_mission_log_history_log")
 	if OS.get_cmdline_args().has("--tv-active-mission-deadline-log") or OS.get_cmdline_user_args().has("--tv-active-mission-deadline-log"):
@@ -346,6 +353,7 @@ func _load_data() -> void:
 	reputation = _json(repo_root + "/native_ev/data/reputation.json")
 	sounds = _json(repo_root + "/native_ev/data/sounds.json")
 	gameplay_curriculum = _json(repo_root + "/native_ev/data/gameplay_curriculum.json")
+	help_overlay = _json(repo_root + "/native_ev/data/help_overlay.json")
 	current_system_index = _system_index_by_name(START_SYSTEM_NAME, 0)
 	current_system = universe.get("systems", [])[current_system_index]
 	var initial_player_ship_id := "shuttlecraft"
@@ -1236,6 +1244,43 @@ func _run_mission_abort_log() -> void:
 	print("%s startSystem=Levo routeToSolSelected=%s noActiveAbortBlocked=%s noActiveAbortStatusVisible=%s historyBeforeAccept=%d acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s repeatAbortBlocked=%s repeatAbortStatusVisible=%s cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterAbort=%d activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=terminal-velocity-mission-abort-scaffold oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_ABORT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(no_active_abort_blocked), str(no_active_abort_status_visible), history_before_accept, str(accepted_body.get("name", "None")), accepted_mission_id, accepted_status, abort_status, cargo_released_status, str(repeat_abort_blocked), str(repeat_abort_status_visible), cargo_before_accept, cargo_after_accept, cargo_after_abort, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_abort, status_line])
 	get_tree().quit(0)
 
+func _run_mission_abort_forbidden_log() -> void:
+	_reset_travel_state()
+	var probe_mission := {
+		"id": "canabort_return_gate_probe",
+		"title": "CanAbort Return Gate Probe",
+		"originSystem": "Sol",
+		"originBody": "Earth",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 3,
+		"reward": 1800,
+		"canAbort": false,
+		"sourceLabel": "ev-classic-resource-bible-backed-canabort-guardrail",
+		"oracleStatus": "classic_runtime_canabort_return_cleanup_pending",
+	}
+	missions["missions"].append(probe_mission)
+	active_missions.append(str(probe_mission.get("id")))
+	mission_acceptance_days[str(probe_mission.get("id"))] = current_day
+	cargo = int(probe_mission.get("cargoTons", 0))
+	var cargo_after_accept := cargo
+	var blocked_abort := not _abort_active_mission(str(probe_mission.get("id")))
+	var cargo_after_blocked_abort := cargo
+	var blocked_reason_visible := status_messages.has("Mission cannot abort before return/cleanup")
+	current_system_index = _system_index_by_name("Centauri", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	pos = Vector2(-520.0, -300.0)
+	landed = true
+	var credits_before_completion := credits
+	var completed_ids := _complete_arrived_missions()
+	var latest_completion := JSON.stringify(completed_mission_history[completed_mission_history.size() - 1]) if not completed_mission_history.is_empty() else "{}"
+	var completed_status := "completedNonAbortableMission=true" if completed_ids.has(str(probe_mission.get("id"))) and completed_missions.has(str(probe_mission.get("id"))) else "completedNonAbortableMission=false"
+	var preserved_status := "reservedCargoPreservedAfterBlockedAbort=true" if cargo_after_blocked_abort == cargo_after_accept else "reservedCargoPreservedAfterBlockedAbort=false"
+	var released_status := "reservedCargoReleasedAfterCompletion=true" if cargo == 0 else "reservedCargoReleasedAfterCompletion=false"
+	var reward_status := "rewardPaidAfterCompletion=true" if credits == credits_before_completion + int(probe_mission.get("reward", 0)) else "rewardPaidAfterCompletion=false"
+	print("%s acceptedMission=%s canAbort=false cargoAfterAccept=%d blockedAbort=%s blockedReasonVisible=%s cargoAfterBlockedAbort=%d %s %s %s %s activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestCompletion=%s sourceLabel=ev-classic-resource-bible-backed-canabort-guardrail oracleStatus=classic_runtime_canabort_return_cleanup_pending status=\"%s\"" % [MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX, str(probe_mission.get("id")), cargo_after_accept, str(blocked_abort), str(blocked_reason_visible), cargo_after_blocked_abort, preserved_status, completed_status, released_status, reward_status, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_completion, status_line])
+	get_tree().quit(0)
+
 func _run_mission_deadline_failure_log() -> void:
 	_reset_travel_state()
 	var deadline_mission := {
@@ -1264,6 +1309,48 @@ func _run_mission_deadline_failure_log() -> void:
 	var flag_status := "failureFlagSet=true" if story_flags.has("fail_mission_bit_42") else "failureFlagSet=false"
 	var reputation_status := "reputationPenaltyApplied=true" if after_reputation == before_reputation - 3 else "reputationPenaltyApplied=false"
 	print("%s acceptedMission=%s acceptedDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterFailure=%d %s %s %s %s reputationBefore=%d reputationAfter=%d activeMissions=%s failedHistoryCount=%d latestFailure=%s sourceLabel=ev-classic-resource-bible-backed-mission-failure-scaffold oracleStatus=deadline_failure_runtime_ui_pending_classic_trace status=\"%s\"" % [MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo, failure_status, cargo_status, flag_status, reputation_status, before_reputation, after_reputation, JSON.stringify(active_missions), failed_mission_history.size(), latest_failure, status_line])
+	get_tree().quit(0)
+
+func _run_mission_deadline_completed_log() -> void:
+	_reset_travel_state()
+	var deadline_mission := {
+		"id": "deadline_dispatch_completed_probe",
+		"title": "Deadline Dispatch Completed Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 3,
+		"reward": 1800,
+		"completionReward": 6,
+		"failureBitSet": 42,
+		"completionGovernment": "Federation",
+		"timeLimitDays": 2,
+		"sourceLabel": "terminal-velocity-mission-deadline-completed-no-late-failure-scaffold",
+		"oracleStatus": "deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace",
+	}
+	missions["missions"].append(deadline_mission)
+	var accepted_day := 0
+	active_missions.append(str(deadline_mission.get("id")))
+	mission_acceptance_days[str(deadline_mission.get("id"))] = accepted_day
+	cargo = int(deadline_mission.get("cargoTons", 0))
+	var cargo_after_accept := cargo
+	current_system_index = _system_index_by_name("Centauri", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	pos = Vector2(-520.0, -300.0)
+	landed = true
+	var credits_before_completion := credits
+	var reputation_before_completion := int(reputation_scores.get("Federation", 0))
+	var completed_ids := _complete_arrived_missions()
+	var completion_day := current_day
+	current_day = 3
+	var late_failure_attempted := _fail_mission_deadline(deadline_mission, accepted_day, current_day)
+	var reputation_after_late_check := int(reputation_scores.get("Federation", 0))
+	var latest_completion := JSON.stringify(completed_mission_history[completed_mission_history.size() - 1]) if not completed_mission_history.is_empty() else "{}"
+	var completed_status := "deadlineMissionCompleted=true" if completed_ids.has(str(deadline_mission.get("id"))) and completed_missions.has(str(deadline_mission.get("id"))) else "deadlineMissionCompleted=false"
+	var no_late_failure_status := "lateFailurePrevented=true" if not late_failure_attempted and failed_mission_history.is_empty() and not story_flags.has("fail_mission_bit_42") else "lateFailurePrevented=false"
+	var cargo_status := "reservedCargoReleased=true" if cargo == 0 else "reservedCargoReleased=false"
+	var reward_status := "rewardPreserved=true" if credits == credits_before_completion + int(deadline_mission.get("reward", 0)) else "rewardPreserved=false"
+	var reputation_status := "reputationPreserved=true" if reputation_after_late_check == reputation_before_completion else "reputationPreserved=false"
+	print("%s acceptedMission=%s acceptedDay=%d completionDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterCompletion=%d %s %s %s %s %s creditsBeforeCompletion=%d creditsAfterLateCheck=%d reputationBefore=%d reputationAfter=%d activeMissions=%s completedMissions=%s failedHistoryCount=%d latestCompletion=%s sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, completion_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo, completed_status, no_late_failure_status, cargo_status, reward_status, reputation_status, credits_before_completion, credits, reputation_before_completion, reputation_after_late_check, JSON.stringify(active_missions), JSON.stringify(completed_missions), failed_mission_history.size(), latest_completion, status_line])
 	get_tree().quit(0)
 
 func _run_mission_log_history_log() -> void:
@@ -1386,110 +1473,51 @@ func _run_outfitter_shipyard_log() -> void:
 	_buy_selected_ship()
 	var bought_light_freighter := player_ship_id == "light_freighter"
 	var cargo_space_increased := cargo_space_after_outfit > starting_cargo_space and cargo_space > starting_cargo_space
+	var ship_before_overfull_probe := player_ship_id
+	var cargo_space_before_overfull_probe := cargo_space
+	cargo = cargo_space + 5
+	selected_landing_item = 0
+	_buy_selected_ship()
+	var overfull_block_status := status_line
+	var overfull_shipyard_blocked := player_ship_id == ship_before_overfull_probe and cargo_space == cargo_space_before_overfull_probe and overfull_block_status.begins_with("Cannot buy shuttlecraft: cargo ") and overfull_block_status.ends_with(" exceeds target capacity 20")
+	var overfull_cargo_preserved := cargo == cargo_space_before_overfull_probe + 5
+	cargo = 10
+	_buy_selected_ship()
+	var overfull_recovery_bought_smaller_ship := player_ship_id == "shuttlecraft" and cargo_space == 20 and cargo == 10
 	var cargo_pod_status := "boughtCargoPod=true" if bought_cargo_pod else "boughtCargoPod=false"
 	var laser_status := "boughtLaser=true" if bought_laser else "boughtLaser=false"
 	var light_freighter_status := "boughtLightFreighter=true" if bought_light_freighter else "boughtLightFreighter=false"
 	var cargo_space_status := "cargoSpaceIncreased=true" if cargo_space_increased else "cargoSpaceIncreased=false"
 	var shipyard_art_status := "shipyardArtLoaded=true" if shipyard_art_loaded else "shipyardArtLoaded=false"
-	print("%s routeToSolSelected=%s system=%s body=%s %s %s %s %s %s startingCargoSpace=%d cargoAfterOutfit=%d finalCargoSpace=%d creditsAfter=%d sourceLabel=terminal-velocity-outfitter-shipyard-scaffold oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace status=\"%s\"" % [OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), landed_body, cargo_pod_status, laser_status, light_freighter_status, cargo_space_status, shipyard_art_status, starting_cargo_space, cargo_space_after_outfit, cargo_space, credits, status_line])
+	print("%s routeToSolSelected=%s system=%s body=%s %s %s %s %s %s overfullShipyardBlocked=%s overfullCargoPreserved=%s overfullRecoveryBoughtSmallerShip=%s startingCargoSpace=%d cargoAfterOutfit=%d finalCargoSpace=%d cargoAfterOverfullRecovery=%d creditsAfter=%d sourceLabel=terminal-velocity-outfitter-shipyard-scaffold cargoGuardrailSourceLabel=terminal-velocity-shipyard-cargo-guardrail-scaffold oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace cargoGuardrailOracleStatus=shipyard_cargo_transfer_pending_ev_classic_runtime_trace status=\"%s\"" % [OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), landed_body, cargo_pod_status, laser_status, light_freighter_status, cargo_space_status, shipyard_art_status, str(overfull_shipyard_blocked), str(overfull_cargo_preserved), str(overfull_recovery_bought_smaller_ship), starting_cargo_space, cargo_space_after_outfit, cargo_space, cargo, credits, status_line])
 	get_tree().quit(0)
 
 func _run_gameplay_curriculum_help_log() -> void:
 	var hints := _gameplay_curriculum_hint_lines()
-	var has_pirate_hint := false
-	var has_autopilot_help := false
-	var has_repair_help := false
-	var has_combat_help := false
-	var has_target_detail_help := false
-	var has_combat_rewards_help := false
-	var has_salvage_help := false
-	var has_recovery_help := false
-	var has_pirate_avoidance_help := false
-	var has_contraband_help := false
-	var has_legal_status_help := false
-	var has_legal_clemency_help := false
-	var has_legal_docking_help := false
-	var has_mission_deadline_help := false
-	var has_mission_abort_history_help := false
-	var has_mission_offer_help := false
-	var has_mission_objective_help := false
-	var has_mission_route_help := false
-	var has_mission_trade_hybrid_help := false
-	var has_trade_route_help := false
-	var has_map_service_help := false
-	var has_service_provisioning_help := false
-	var has_route_refuel_help := false
-	var has_shipyard_delta_help := false
-	var has_ship_ladder_help := false
-	var has_pilot_persistence_help := false
-	var has_player_info_help := false
-	var has_recent_messages_help := false
-	var has_blocked_action_help := false
-	var has_route_clear_help := false
-	for line in hints:
-		if str(line).contains("pirate_avoidance_escape_route"):
-			has_pirate_hint = true
 	var help_lines := _help_overlay_lines()
-	for line in help_lines:
-		if str(line).contains("Autopilot: A toggles a Terminal Velocity assist"):
-			has_autopilot_help = true
-		if str(line).contains("Repair: landed ports with repair service show F7"):
-			has_repair_help = true
-		if str(line).contains("Combat: Tab fires primary"):
-			has_combat_help = true
-		if str(line).contains("Target scanner: selected contacts show"):
-			has_target_detail_help = true
-		if str(line).contains("Combat rewards: Player Info summarizes"):
-			has_combat_rewards_help = true
-		if str(line).contains("Salvage: fly over green salvage markers"):
-			has_salvage_help = true
-		if str(line).contains("Recovery: F8 resets a disabled player ship"):
-			has_recovery_help = true
-		if str(line).contains("Pirate avoidance: if an intercept warning appears"):
-			has_pirate_avoidance_help = true
-		if str(line).contains("Contraband: Player Info and map commodity hints flag"):
-			has_contraband_help = true
-		if str(line).contains("Legal status: Player Info shows current government/legal stance"):
-			has_legal_status_help = true
-		if str(line).contains("landed C buys clemency when eligible"):
-			has_legal_clemency_help = true
-		if str(line).contains("Legal docking: low legal standing can deny landing"):
-			has_legal_docking_help = true
-		if str(line).contains("Mission deadlines: Mission Log and Player Info show"):
-			has_mission_deadline_help = true
-		if str(line).contains("Mission abort/history: X aborts active TV scaffold missions"):
-			has_mission_abort_history_help = true
-		if str(line).contains("Mission offers: Mission Computer detail lines show"):
-			has_mission_offer_help = true
-		if str(line).contains("Mission objective marker: active mission destinations are highlighted"):
-			has_mission_objective_help = true
-		if str(line).contains("Mission route helper: G queues the active mission destination"):
-			has_mission_route_help = true
-		if str(line).contains("Mission/trade hybrid: accept cargo jobs first"):
-			has_mission_trade_hybrid_help = true
-		if str(line).contains("Trade route helper: linked-market profit hints"):
-			has_trade_route_help = true
-		if str(line).contains("Map service/legal summary: selected systems show"):
-			has_map_service_help = true
-		if str(line).contains("Service provisioning scout: newly reached ports need"):
-			has_service_provisioning_help = true
-		if str(line).contains("Route/fuel planning: G and Shift-click route status show"):
-			has_route_refuel_help = true
-		if str(line).contains("Shipyard/outfitter: listings show local manifest deltas/effects before buying"):
-			has_shipyard_delta_help = true
-		if str(line).contains("Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots"):
-			has_ship_ladder_help = true
-		if str(line).contains("Pilot persistence: F6 saves current pilot progress"):
-			has_pilot_persistence_help = true
-		if str(line).contains("Player info: P toggles player info"):
-			has_player_info_help = true
-		if str(line).contains("Messages: recent success and blocked-reason feedback appears under the HUD"):
-			has_recent_messages_help = true
-		if str(line).contains("Blocked actions: when a jump, buy, land, fire, repair, or mission action fails"):
-			has_blocked_action_help = true
-		if str(line).contains("Route clearing: Backspace/Delete clears queued green routes"):
-			has_route_clear_help = true
-	print("%s hintCount=%d hasPirateAvoidanceHint=%s hasAutopilotHelp=%s hasRepairHelp=%s hasCombatHelp=%s hasTargetDetailHelp=%s hasCombatRewardsHelp=%s hasSalvageHelp=%s hasRecoveryHelp=%s hasPirateAvoidanceHelp=%s hasContrabandHelp=%s hasLegalStatusHelp=%s hasLegalClemencyHelp=%s hasLegalDockingHelp=%s hasMissionDeadlineHelp=%s hasMissionAbortHistoryHelp=%s hasMissionOfferHelp=%s hasMissionObjectiveHelp=%s hasMissionRouteHelp=%s hasMissionTradeHybridHelp=%s hasTradeRouteHelp=%s hasMapServiceHelp=%s hasServiceProvisioningHelp=%s hasRouteRefuelHelp=%s hasShipyardDeltaHelp=%s hasShipLadderHelp=%s hasPilotPersistenceHelp=%s hasPlayerInfoHelp=%s hasRecentMessagesHelp=%s hasBlockedActionHelp=%s hasRouteClearHelp=%s sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest firstHint=\"%s\"" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size(), str(has_pirate_hint), str(has_autopilot_help), str(has_repair_help), str(has_combat_help), str(has_target_detail_help), str(has_combat_rewards_help), str(has_salvage_help), str(has_recovery_help), str(has_pirate_avoidance_help), str(has_contraband_help), str(has_legal_status_help), str(has_legal_clemency_help), str(has_legal_docking_help), str(has_mission_deadline_help), str(has_mission_abort_history_help), str(has_mission_offer_help), str(has_mission_objective_help), str(has_mission_route_help), str(has_mission_trade_hybrid_help), str(has_trade_route_help), str(has_map_service_help), str(has_service_provisioning_help), str(has_route_refuel_help), str(has_shipyard_delta_help), str(has_ship_ladder_help), str(has_pilot_persistence_help), str(has_player_info_help), str(has_recent_messages_help), str(has_blocked_action_help), str(has_route_clear_help), str(hints[0]) if not hints.is_empty() else ""])
+	var probe_results: Dictionary = {}
+	for probe in _help_overlay_log_probes():
+		var flag := str(probe.get("flag", ""))
+		var needle := str(probe.get("contains", ""))
+		var source := str(probe.get("source", "help"))
+		if flag == "" or needle == "":
+			continue
+		var found := false
+		var scan_lines := hints if source == "curriculum" else help_lines
+		for line in scan_lines:
+			if str(line).contains(needle):
+				found = true
+				break
+		probe_results[flag] = found
+	var parts: Array[String] = ["%s hintCount=%d" % [GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX, hints.size()]]
+	for probe in _help_overlay_log_probes():
+		var flag := str(probe.get("flag", ""))
+		if flag != "":
+			parts.append("%s=%s" % [flag, str(probe_results.get(flag, false)).to_lower()])
+	parts.append("sourceLabel=terminal-velocity-curriculum-scaffold")
+	parts.append("oracleStatus=help_surface_pending_playtest")
+	parts.append("firstHint=\"%s\"" % (hints[0] if not hints.is_empty() else ""))
+	print(" ".join(parts))
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:
@@ -2443,6 +2471,9 @@ func _abort_active_mission(mission_id := "") -> bool:
 		_set_status("Mission not active: " + selected_id)
 		return false
 	var mission := _mission_by_id(selected_id)
+	if not mission.is_empty() and mission.has("canAbort") and not bool(mission.get("canAbort", true)):
+		_set_status("Mission cannot abort before return/cleanup")
+		return false
 	var cargo_released := int(mission.get("cargoTons", 0)) if not mission.is_empty() else 0
 	active_missions.erase(selected_id)
 	mission_acceptance_days.erase(str(selected_id))
@@ -4723,6 +4754,10 @@ func _mission_deadline_lines(mission: Dictionary) -> Array[String]:
 func _mission_abort_hint_lines(mission: Dictionary) -> Array[String]:
 	var lines: Array[String] = []
 	var cargo_tons := int(mission.get("cargoTons", 0))
+	if mission.has("canAbort") and not bool(mission.get("canAbort", true)):
+		lines.append("Abort: unavailable for this contract until return/cleanup; reserved cargo remains committed")
+		lines.append("Abort source: ev-classic-resource-bible-backed-canabort-guardrail; exact Classic UI pending")
+		return lines
 	lines.append("Abort: press X to abort; TV scaffold releases %d reserved cargo tons" % cargo_tons)
 	lines.append("Abort source: terminal-velocity-mission-abort-scaffold; Classic CanAbort/UI pending")
 	return lines
@@ -4901,44 +4936,15 @@ func _draw_help_overlay() -> void:
 		y += 28.0
 
 func _help_overlay_lines() -> Array[String]:
-	return [
-		"Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
-		"Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
-		"Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.",
-		"Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops; Backspace/Delete clears route.",
-		"Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
-		"Mission objective marker: active mission destinations are highlighted on the map.",
-		"Mission route helper: G queues the active mission destination when known.",
-		"Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.",
-		"Route clearing: Backspace/Delete clears queued green routes; choose a fresh linked stop before retrying J.",
-		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
-		"Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.",
-		"Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
-		"Mission abort/history: X aborts active TV scaffold missions; Mission Log preserves completed, aborted, and failed histories.",
-		"Mission offers: Mission Computer detail lines show destination, cargo, deadline, story/legal/reputation gates, and branch-choice boundaries as TV helper scaffolds pending Classic UI evidence.",
-		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
-		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
-		"Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
-		"Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.",
-		"Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.",
-		"Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.",
-		"Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
-		"Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
-		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
-		"Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.",
-		"Legal docking: low legal standing can deny landing at governed ports; check Player Info/legal messages and seek clemency or a safer port. Exact Classic denial UI pending.",
-		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
-		"Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.",
-		"Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
-		"Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
-		"Trade route helper: linked-market profit hints are Terminal Velocity scaffold.",
-		"Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
-		"Service provisioning scout: newly reached ports need service/store checks before buying; Levo no-outfitter evidence is Classic-observed, other service matrices stay TV scaffold until confirmed.",
-		"Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots before trading up; TV scaffold pending Classic store/stat trace.",
-		"Messages: recent success and blocked-reason feedback appears under the HUD.",
-		"Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.",
-		"F10 closes this help overlay. Exact Classic behavior still needs source/runtime evidence."
-	]
+	var lines: Array[String] = []
+	for line in help_overlay.get("lines", []):
+		lines.append(str(line))
+	if lines.is_empty():
+		lines.append("Terminal Velocity helper/scaffold — help_overlay.json missing or empty.")
+	return lines
+
+func _help_overlay_log_probes() -> Array:
+	return help_overlay.get("logProbes", [])
 
 func _gameplay_curriculum_hint_lines() -> Array[String]:
 	var lines: Array[String] = ["Terminal Velocity curriculum hints — scaffold from native_ev/data/gameplay_curriculum.json"]
@@ -5707,6 +5713,10 @@ func _buy_selected_ship() -> void:
 	var new_ship := _ship_by_id(ship_id)
 	if new_ship.is_empty():
 		_set_status("Ship manifest missing " + ship_id)
+		return
+	var new_cargo_space := int(new_ship.get("cargoSpace", cargo_space))
+	if cargo > new_cargo_space:
+		_set_status("Cannot buy %s: cargo %d exceeds target capacity %d" % [ship_id, cargo, new_cargo_space])
 		return
 	credits -= price
 	player_ship = new_ship
