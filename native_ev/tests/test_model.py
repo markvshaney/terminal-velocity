@@ -220,6 +220,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasPirateAvoidanceHelp=%s',
             'hasContrabandHelp=%s',
             'hasMissionDeadlineHelp=%s',
+            'hasTradeRouteHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
