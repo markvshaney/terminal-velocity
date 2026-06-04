@@ -5,15 +5,15 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
   "repo": {
     "branch": "main",
-    "ahead": 23,
+    "ahead": 25,
     "behind": 0,
     "dirty": false,
     "head": "inspect current SHA with git log --oneline -1",
-    "status_short": "## main...origin/main [ahead 23] after mission deadline trade-carryover Godot log checkpoint"
+    "status_short": "## main...origin/main [ahead 25] after mission history Player Info checkpoint and ledger gate update"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 23,
+    "ahead": 25,
     "dirty": "no"
   },
   "operational_owner_candidate": "loki-game",
@@ -49,13 +49,13 @@
     "verified_at": "2026-06-04T22:45:54Z",
     "prompt_updated_at": "2026-06-04T22:45:54Z"
   },
-  "status": "checkpointed_near_cap",
+  "status": "waiting_gate",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
-    "type": null,
-    "reason": null,
-    "withheld_action": null,
-    "resume_after": null
+    "type": "git_train_review",
+    "reason": "main is now at the 25-local-commit review threshold after the verified mission history Player Info slice plus this process checkpoint; push/PR/rebase/squash remain approval-gated, and additional local train growth should pause for review to avoid noisy repeated-pattern debt.",
+    "withheld_action": "additional local commit-train growth plus any push/PR/rebase/squash/publication action",
+    "resume_after": "human review/approval for push/squash/rebase strategy, or explicit instruction to continue accumulating local-only commits beyond the 25-commit review threshold"
   },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -98,23 +98,28 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Godot fast-eval lane now exposes mission deadline trade-carryover cleanup guardrail.",
+  "current_milestone": "Player Info now mirrors compact mission-history counts and latest failed-mission reputation delta.",
   "last_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_commits": [
+    "local checkpoint: feat(godot): surface mission history in player info",
+    "local checkpoint: feat(godot): expose mission deadline trade carryover log",
+    "local checkpoint: feat(godot): expose sequential deadline failure log",
+    "local checkpoint: feat(godot): expose mission deadline last-day log",
+    "local checkpoint: feat(godot): expose mission deadline abort log",
     "local checkpoint: feat(godot): expose mission deadline trade carryover log",
     "local checkpoint: feat(godot): expose sequential deadline failure log",
     "local checkpoint: feat(godot): expose mission deadline last-day log",
     "local checkpoint: Expose mission deadline abort Godot log",
     "local checkpoint: Expose mission auto-abort Godot log",
-    "local checkpoint: Add mission auto-abort completion flag guardrail",
-    "39802d2 feat(godot): expose mission scan failure log",
-    "20b4070 Harden Terminal Velocity continuation ledger",
-    "0ab7f65 Add mission scan failure guardrail scenario",
-    "3c57622 Route Godot self-test data through Classic profile",
-    "21448e2 Route Godot data loading through Classic profile"
+    "local checkpoint: Add mission auto-abort completion flag guardrail"
   ],
   "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_log_history_log_contract -v -> OK",
+    "./run_godot.sh tv-mission-log-history-log -> OK; emitted TV_MISSION_LOG_HISTORY_EVENT with playerInfoHistoryVisible=true and playerInfoFailureVisible=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 190 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=60",
+    "git diff --check -> OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_trade_carryover_log_contract -v -> OK",
     "./run_godot.sh tv-mission-deadline-trade-carryover-log -> OK; emitted TV_MISSION_DEADLINE_TRADE_CARRYOVER_EVENT with deadlineFailureRecorded=true missionCargoReleased=true tradeCargoPreserved=true tradeCargoSold=true failureFlagSet=true reputationPenaltyApplied=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 190 tests OK",
@@ -122,12 +127,7 @@
     "git diff --check -> OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_sequential_log_contract native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_deadline_sequential_failures_loop_expires_multiple_active_jobs -v && ./run_godot.sh tv-mission-deadline-sequential-log -> OK; emitted TV_MISSION_DEADLINE_SEQUENTIAL_EVENT with bothDeadlineFailuresRecorded=true reservedCargoReleased=true failureFlagsSet=true cumulativeReputationPenaltyApplied=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 189 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all -> summary passed=60 failed=0 total=60",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=60",
-    "git diff --check -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_last_day_log_contract native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_deadline_last_day_delivery_loop_completes_without_failure -v -> Ran 2 tests OK",
-    "./run_godot.sh tv-mission-deadline-last-day-log -> OK; emitted TV_MISSION_DEADLINE_LAST_DAY_EVENT with lastDayDeliveryCompleted=true deadlineFailurePrevented=true reservedCargoReleased=true rewardPaid=true reputationPreserved=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 188 tests OK"
+    "python3 tools/run_gameplay_scenarios.py --all -> summary passed=60 failed=0 total=60"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +136,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON available; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Inspect git status/ledger/events, then continue the next strongest safe-local Terminal Velocity gameplay/fidelity slice. Branch is ahead 23; keep repeated-pattern train review note active, and if local train reaches a much larger/noisy repeated pattern, record waiting_gate for review/squash instead of push/rebase/squash.",
-  "resume_prompt": "Resume Terminal Velocity continuous runner in /home/bh/workspaces/loki/terminal-velocity. First read .hermes/long-running/terminal-velocity/task-ledger.json, tail events.jsonl, docs/prompts/terminal-velocity-continuation-prompt.md, and git status/diff. Load required TV/source/artifact skills, finish any dirty current slice, then implement and verify the next strongest safe-local gameplay/fidelity slice. Record source/fidelity labels in repo docs/backlog, update ledger/events/do-not-redo as needed, and continue until one of waiting_gate/checkpointed_near_cap/blocked/complete applies. Do not push/rebase/squash/destructively mutate original EV/gateway/provider/credentials without approval.",
-  "updated_at": "2026-06-04T23:52:15Z",
+  "next_resume_action": "Resolve the 25-commit local git-train review gate (review/squash/push strategy approval or explicit continue-local-only instruction) before adding more local commits; if approved, continue the next strongest safe-local Terminal Velocity gameplay/fidelity slice from the live backlog.",
+  "resume_prompt": "Resume Terminal Velocity continuous runner in /home/bh/workspaces/loki/terminal-velocity. First read ledger/events/prompt and git status. Current expected stop state is waiting_gate for the 25-commit local train review; do not add further commits, push, squash, rebase, PR, or publish until review/approval or explicit continue-local-only instruction. If the gate is resolved, continue source-aligned safe-local slices with tests/probes/docs.",
+  "updated_at": "2026-06-04T23:57:31Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
