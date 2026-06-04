@@ -167,6 +167,7 @@ Mission alignment branch scenario contract:
   - Sirius Station scan system/body;
   - branch-offer visibility (`branchOffersVisible=true`) for both `federation_report_freeport` and `freeport_pact_smugglers`;
   - shared choice group (`chapter_one_alignment`);
+  - selected Federation branch helper details (`selectedBranchOfferDetailsVisible=true`) including route/terms/deadline/requirements/story/source-boundary lines before accepting the branch;
   - `federationBranchAccepted=true` and `freeportBranchHiddenAfterChoice=true`;
   - `choiceBoundary=terminal_velocity_choice_group_scaffold_exact_classic_branch_ui_pending`;
   - reputation snapshot needed by the current Terminal Velocity legal/reputation gates;
