@@ -203,7 +203,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Terminal Velocity curriculum hints — scaffold',
             'pirate_avoidance_escape_route',
             'Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.',
-            'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; exact Classic cadence/effects still pending.',
+            'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
@@ -313,7 +313,7 @@ class NativeEvModelTests(unittest.TestCase):
             'oracleStatus=classic_runtime_weapon_timing_pending',
         ]:
             self.assertIn(symbol, main_script)
-        self.assertIn('Combat: Tab fires primary; N cycles targets; R selects closest target', main_script)
+        self.assertIn('Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts', main_script)
         self.assertIn('Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold', main_script)
         self.assertIn('tv-combat-log', run_script)
         self.assertIn('[switch]$CombatLog', windows_script)
@@ -390,7 +390,7 @@ class NativeEvModelTests(unittest.TestCase):
             'secondaryInventoryLoadedVisible=%s',
             'Secondary weapon: %s — selected; source %s; exact Classic secondary behavior pending',
             'Secondary weapon: No Secondary Weapon — original-runtime-observed starting HUD; install/cycle with S before Space fires',
-            'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; exact Classic cadence/effects still pending.',
+            'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
             'sourceLabel=terminal-velocity-secondary-weapon-scaffold',
             'oracleStatus=classic_runtime_secondary_weapon_behavior_pending',
         ]:
@@ -420,6 +420,31 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertIn(symbol, main_script)
         self.assertIn('tv-combat-guardrail-log', run_script)
         self.assertIn('[switch]$CombatGuardrailLog', windows_script)
+
+    def test_godot_cargo_salvage_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_CARGO_SALVAGE_EVENT',
+            '--tv-cargo-salvage-log',
+            'func _run_cargo_salvage_log',
+            'var cargo_salvage_pickups: Array[Dictionary] = []',
+            'func _spawn_cargo_salvage_pickup(target_index: int, pickup_position: Vector2) -> Dictionary:',
+            'func _advance_cargo_salvage_pickups() -> void:',
+            'Recovered %d tons of %s salvage (TV scaffold; Classic loot behavior pending)',
+            'Cargo hold full; salvage remains in space',
+            'salvageCreated=%s',
+            'salvageScooped=%s',
+            'fullHoldBlocked=%s',
+            'sourceLabel=terminal-velocity-combat-salvage-scaffold',
+            'oracleStatus=classic_runtime_loot_cargo_behavior_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-cargo-salvage-log', run_script)
+        self.assertIn('[switch]$CargoSalvageLog', windows_script)
 
     def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
         root = Path(__file__).resolve().parents[2]

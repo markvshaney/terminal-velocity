@@ -50,6 +50,7 @@ const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
+const CARGO_SALVAGE_EVENT_LOG_PREFIX := "TV_CARGO_SALVAGE_EVENT"
 const SECONDARY_WEAPON_EVENT_LOG_PREFIX := "TV_SECONDARY_WEAPON_EVENT"
 const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
 const AUTOPILOT_EVENT_LOG_PREFIX := "TV_AUTOPILOT_EVENT"
@@ -144,6 +145,7 @@ var reputation_scores: Dictionary = {}
 var legal_records: Dictionary = {}
 var projectiles: Array[Dictionary] = []
 var explosion_events: Array[Dictionary] = []
+var cargo_salvage_pickups: Array[Dictionary] = []
 var target_shields: Dictionary = {}
 var target_hulls: Dictionary = {}
 var player_shields := 0
@@ -231,6 +233,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-cargo-salvage-log") or OS.get_cmdline_user_args().has("--tv-cargo-salvage-log"):
+		call_deferred("_run_cargo_salvage_log")
 	if OS.get_cmdline_args().has("--tv-secondary-weapon-log") or OS.get_cmdline_user_args().has("--tv-secondary-weapon-log"):
 		call_deferred("_run_secondary_weapon_log")
 	if OS.get_cmdline_args().has("--tv-target-selection-log") or OS.get_cmdline_user_args().has("--tv-target-selection-log"):
@@ -487,9 +491,11 @@ func _process(delta: float) -> void:
 		_apply_autopilot_assist(delta)
 		pos += vel * delta
 		vel *= pow(0.995, delta * 60.0)
-		_recharge_player_shields(delta)
-		_advance_weapon_cooldowns(delta)
 		_advance_projectiles(delta)
+		_advance_weapon_cooldowns(delta)
+		_recharge_player_shields(delta)
+		_advance_cargo_salvage_pickups()
+		_advance_explosion_events(delta)
 	queue_redraw()
 
 func _handle_input(delta: float) -> void:
@@ -657,6 +663,7 @@ func _reset_travel_state() -> void:
 	cargo = 0
 	projectiles.clear()
 	explosion_events.clear()
+	cargo_salvage_pickups.clear()
 	_reset_player_combat_stats()
 	_reset_combat_targets()
 
@@ -1334,7 +1341,7 @@ func _run_gameplay_curriculum_help_log() -> void:
 	for line in help_lines:
 		if str(line).contains("Repair: landed ports with repair service show F7"):
 			has_repair_help = true
-		if str(line).contains("Combat: Tab fires primary; N cycles targets; R selects closest target"):
+		if str(line).contains("Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts"):
 			has_combat_help = true
 		if str(line).contains("Recovery: F8 resets a disabled player ship"):
 			has_recovery_help = true
@@ -1534,6 +1541,41 @@ func _run_combat_guardrail_log() -> void:
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
 	var source_reload := int(source_fields.get("Reload", primary_weapon.get("reloadFrames", 0)))
 	print("%s firstShotSpawned=%s immediateSecondShotBlocked=%s cooldownFrames=%d cooldownCleared=%s shotAfterCooldownSpawned=%s secondaryBlocked=%s sourceReload=%d sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(first_shot_spawned), str(cooldown_blocked), int(cooldown_after_first), str(cooldown_cleared), str(third_shot_spawned), str(secondary_blocked), source_reload, status_line])
+	get_tree().quit(0)
+
+func _run_cargo_salvage_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	_select_closest_target()
+	var target_index := selected_target_index
+	var primary_weapon := _primary_weapon_stats()
+	target_shields[target_index] = 0
+	target_hulls[target_index] = _weapon_hull_damage(primary_weapon)
+	primary_weapon_cooldown_frames = 0.0
+	var cargo_before_destroy := cargo
+	var equipment_before_destroy := int(commodity_hold.get("equipment", 0))
+	var projectile_spawned := _spawn_primary_projectile()
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+		_advance_cargo_salvage_pickups()
+	if not cargo_salvage_pickups.is_empty() and cargo == cargo_before_destroy:
+		pos = cargo_salvage_pickups[0].get("position", pos)
+		_advance_cargo_salvage_pickups()
+	var salvage_created := cargo_salvage_pickups.size() > 0 or status_messages.any(func(message): return str(message).contains("Recovered 2 tons of Equipment salvage"))
+	var salvage_scooped := int(commodity_hold.get("equipment", 0)) > equipment_before_destroy and cargo > cargo_before_destroy
+	var cargo_after_scoop := cargo
+	var equipment_after_scoop := int(commodity_hold.get("equipment", 0))
+	# Full-hold guardrail: a second dropped pickup remains in space when the hold
+	# is full, instead of silently deleting spoils or overfilling cargo.
+	cargo = cargo_space
+	pos = Vector2.ZERO
+	var full_hold_pickup := _spawn_cargo_salvage_pickup(target_index, Vector2.ZERO)
+	var full_hold_created := full_hold_pickup.size() > 0
+	_advance_cargo_salvage_pickups()
+	var full_hold_blocked := cargo_salvage_pickups.size() > 0 and status_messages.has("Cargo hold full; salvage remains in space")
+	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(_target_destroyed(target_index)).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), cargo_salvage_pickups.size(), status_line])
 	get_tree().quit(0)
 
 func _run_target_selection_log() -> void:
@@ -3465,6 +3507,48 @@ func _record_explosion_event(target_index: int) -> void:
 		"oracleStatus": "classic_runtime_explosion_timing_pending",
 	})
 	_play_sound("ui_click")
+	_spawn_cargo_salvage_pickup(target_index, explosion_position)
+
+func _spawn_cargo_salvage_pickup(target_index: int, pickup_position: Vector2) -> Dictionary:
+	var commodity_id := "equipment"
+	var tons := 2
+	var pickup := {
+		"position": pickup_position,
+		"commodityId": commodity_id,
+		"tons": tons,
+		"targetIndex": target_index,
+		"sourceLabel": "terminal-velocity-combat-salvage-scaffold",
+		"oracleStatus": "classic_runtime_loot_cargo_behavior_pending",
+	}
+	cargo_salvage_pickups.append(pickup)
+	return pickup
+
+func _advance_cargo_salvage_pickups() -> void:
+	if cargo_salvage_pickups.is_empty():
+		return
+	var remaining: Array[Dictionary] = []
+	for pickup in cargo_salvage_pickups:
+		var pickup_position: Vector2 = pickup.get("position", Vector2.ZERO)
+		if pos.distance_to(pickup_position) > 44.0:
+			remaining.append(pickup)
+			continue
+		var tons := int(pickup.get("tons", 0))
+		var commodity_id := str(pickup.get("commodityId", "equipment"))
+		var available := _cargo_available_tons()
+		if available < tons:
+			remaining.append(pickup)
+			_set_status("Cargo hold full; salvage remains in space")
+			continue
+		cargo += tons
+		commodity_hold[commodity_id] = int(commodity_hold.get(commodity_id, 0)) + tons
+		_set_status("Recovered %d tons of %s salvage (TV scaffold; Classic loot behavior pending)" % [tons, _commodity_display_name(commodity_id)])
+	cargo_salvage_pickups = remaining
+
+func _commodity_display_name(commodity_id: String) -> String:
+	for commodity in economy.get("commodities", []):
+		if str(commodity.get("id", "")) == commodity_id:
+			return str(commodity.get("name", commodity_id.capitalize()))
+	return commodity_id.capitalize()
 
 func _player_disabled_message() -> String:
 	return "Player ship disabled; Terminal Velocity reload/new-pilot recovery scaffold (Strict Play death semantics pending Classic confirmation)"
@@ -3872,6 +3956,10 @@ func _draw_projectiles(center: Vector2) -> void:
 	for projectile in projectiles:
 		var screen: Vector2 = center + (projectile.get("position", Vector2.ZERO) - pos) * WORLD_SCALE
 		draw_circle(screen, float(projectile.get("radius", 3.0)), _named_color(str(projectile.get("color", "OrangeRed"))))
+	for pickup in cargo_salvage_pickups:
+		var pickup_screen: Vector2 = center + (pickup.get("position", Vector2.ZERO) - pos) * WORLD_SCALE
+		draw_rect(Rect2(pickup_screen - Vector2(5, 5), Vector2(10, 10)), Color(0.72, 0.95, 0.35, 0.95), true)
+		draw_arc(pickup_screen, 10.0, 0, TAU, 16, Color(0.80, 1.0, 0.55, 0.75), 1.0)
 	for explosion in explosion_events:
 		var screen: Vector2 = center + (explosion.get("position", Vector2.ZERO) - pos) * WORLD_SCALE
 		var life := clampf(float(explosion.get("life", 0.0)) / 2.0, 0.0, 1.0)
@@ -4183,7 +4271,7 @@ func _help_overlay_lines() -> Array[String]:
 		"Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
 		"Refuel: landed ports show F5 availability; F5 refuels when service exists.",
 		"Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
-		"Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; exact Classic cadence/effects still pending.",
+		"Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
 		"Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
 		"Legal inference: hostile patrol fire worsens legal/reputation scaffold state; landed C buys clemency when eligible.",
 		"Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
