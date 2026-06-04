@@ -493,8 +493,13 @@ class NativeEvModelTests(unittest.TestCase):
             'cooldownCleared=%s',
             'shotAfterCooldownSpawned=%s',
             'secondaryBlocked=%s',
+            'primaryWeaponSound=%s',
+            'primaryWeaponSoundPlayCount=%d',
+            'primaryWeaponSoundPlayedForValidShots=%s',
             'sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold',
+            'soundSourceLabel=decoded-resource-backed-sound-binding',
             'oracleStatus=classic_runtime_weapon_timing_pending',
+            'soundOracleStatus=classic_runtime_sound_timing_pending',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('tv-combat-guardrail-log', run_script)

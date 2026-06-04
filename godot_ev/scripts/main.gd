@@ -1595,7 +1595,10 @@ func _run_combat_guardrail_log() -> void:
 	var primary_weapon := _primary_weapon_stats()
 	var source_fields: Dictionary = primary_weapon.get("sourceStockWeaponFields", {})
 	var source_reload := int(source_fields.get("Reload", primary_weapon.get("reloadFrames", 0)))
-	print("%s firstShotSpawned=%s immediateSecondShotBlocked=%s cooldownFrames=%d cooldownCleared=%s shotAfterCooldownSpawned=%s secondaryBlocked=%s sourceReload=%d sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(first_shot_spawned), str(cooldown_blocked), int(cooldown_after_first), str(cooldown_cleared), str(third_shot_spawned), str(secondary_blocked), source_reload, status_line])
+	var primary_sound_id := _sound_binding_for_weapon(str(primary_weapon.get("id", "")))
+	var primary_sound_play_count := sound_event_history.count(primary_sound_id)
+	var primary_sound_played_for_valid_shots := primary_sound_play_count == 2 and first_shot_spawned and third_shot_spawned and not second_shot_spawned
+	print("%s firstShotSpawned=%s immediateSecondShotBlocked=%s cooldownFrames=%d cooldownCleared=%s shotAfterCooldownSpawned=%s secondaryBlocked=%s primaryWeaponSound=%s primaryWeaponSoundPlayCount=%d primaryWeaponSoundPlayedForValidShots=%s sourceReload=%d sourceLabel=terminal-velocity-source-mined-combat-guardrail-scaffold soundSourceLabel=decoded-resource-backed-sound-binding oracleStatus=classic_runtime_weapon_timing_pending soundOracleStatus=classic_runtime_sound_timing_pending status=\"%s\"" % [COMBAT_GUARDRAIL_EVENT_LOG_PREFIX, str(first_shot_spawned), str(cooldown_blocked), int(cooldown_after_first), str(cooldown_cleared), str(third_shot_spawned), str(secondary_blocked), primary_sound_id, primary_sound_play_count, str(primary_sound_played_for_valid_shots), source_reload, status_line])
 	get_tree().quit(0)
 
 func _run_retaliation_log() -> void:
