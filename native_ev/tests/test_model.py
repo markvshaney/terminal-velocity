@@ -639,9 +639,12 @@ class NativeEvModelTests(unittest.TestCase):
             'salvageSaved=%s',
             'salvageResumeVisible=%s',
             'salvageInventoryVisible=%s',
+            'salvageHudVisible=%s',
             'func _salvage_pickup_inventory_line() -> String:',
+            'func _salvage_hud_fragment() -> String:',
             'In-space salvage: none',
             'In-space salvage: %d pickup(s), %d tons — TV combat-salvage scaffold; Classic loot behavior pending',
+            'Salvage: %d pickup(s)/%d tons',
             'sourceLabel=terminal-velocity-combat-salvage-scaffold',
             'oracleStatus=classic_runtime_loot_cargo_behavior_pending',
         ]:

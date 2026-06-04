@@ -1877,7 +1877,8 @@ func _run_cargo_salvage_log() -> void:
 	_restore_cargo_salvage_pickups(saved_salvage)
 	var salvage_resume_visible := cargo_salvage_pickups.size() == remaining_pickups_before_save and not cargo_salvage_pickups.is_empty() and str(cargo_salvage_pickups[0].get("commodityId", "")) == "equipment"
 	var salvage_inventory_visible := _player_inventory_lines().has("In-space salvage: 1 pickup(s), 2 tons — TV combat-salvage scaffold; Classic loot behavior pending")
-	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s salvageInventoryVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), remaining_pickups_before_save, str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), str(salvage_inventory_visible).to_lower(), status_line])
+	var salvage_hud_visible := _salvage_hud_fragment() == "    Salvage: 1 pickup(s)/2 tons"
+	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s salvageInventoryVisible=%s salvageHudVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), remaining_pickups_before_save, str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), str(salvage_inventory_visible).to_lower(), str(salvage_hud_visible).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_target_selection_log() -> void:
@@ -4427,7 +4428,7 @@ func _draw_hud() -> void:
 	draw_string(font, Vector2(20, 28), "Terminal Velocity / Godot frontend", HORIZONTAL_ALIGNMENT_LEFT, 500, 20, Color(0.9, 0.95, 1.0))
 	var government_name := _current_government_name()
 	var legal_status := _legal_status_for_government(government_name)
-	draw_string(font, Vector2(20, 56), "System: %s (%s: %s)    Destination: %s    Credits: %d    Fuel: %d/%d    Shields: %d/%d    Hull: %d/%d    Cargo: %d/%d (%d mission, %d free)    Ship: %s" % [current_system.get("name", "?"), government_name, legal_status, destination, credits, player_fuel, _max_player_fuel(), player_shields, _max_player_shields(), player_hull, _max_player_hull(), cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), player_ship_id], HORIZONTAL_ALIGNMENT_LEFT, 1220, 16, Color(0.70, 0.86, 1.0))
+	draw_string(font, Vector2(20, 56), "System: %s (%s: %s)    Destination: %s    Credits: %d    Fuel: %d/%d    Shields: %d/%d    Hull: %d/%d    Cargo: %d/%d (%d mission, %d free)%s    Ship: %s" % [current_system.get("name", "?"), government_name, legal_status, destination, credits, player_fuel, _max_player_fuel(), player_shields, _max_player_shields(), player_hull, _max_player_hull(), cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons(), _salvage_hud_fragment(), player_ship_id], HORIZONTAL_ALIGNMENT_LEFT, 1220, 16, Color(0.70, 0.86, 1.0))
 	if not status_messages.is_empty():
 		draw_rect(Rect2(20, 92, 430, 62), Color(0.02, 0.035, 0.06, 0.84), true)
 		draw_string(font, Vector2(32, 114), "Messages:", HORIZONTAL_ALIGNMENT_LEFT, 160, 14, Color(0.95, 0.86, 0.58))
@@ -4624,6 +4625,14 @@ func _salvage_pickup_inventory_line() -> String:
 	for pickup in cargo_salvage_pickups:
 		total_tons += int(pickup.get("tons", 0))
 	return "In-space salvage: %d pickup(s), %d tons — TV combat-salvage scaffold; Classic loot behavior pending" % [cargo_salvage_pickups.size(), total_tons]
+
+func _salvage_hud_fragment() -> String:
+	if cargo_salvage_pickups.is_empty():
+		return ""
+	var total_tons := 0
+	for pickup in cargo_salvage_pickups:
+		total_tons += int(pickup.get("tons", 0))
+	return "    Salvage: %d pickup(s)/%d tons" % [cargo_salvage_pickups.size(), total_tons]
 
 func _primary_weapon_inventory_line() -> String:
 	var weapon := _primary_weapon_stats()
