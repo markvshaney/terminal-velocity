@@ -1,11 +1,11 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local scanner salvage visibility scaffold code/docs/tests/commit completed; Classic combat loot/salvage evidence remains evidence-gated but not blocking Terminal Velocity scaffold work",
+    "reason": "no active gate; safe-local Player Info combat-readiness scaffold was implemented, verified, documented, and committed",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Scanner now draws green in-space salvage blips for pending combat-salvage pickups, matching the HUD/Player Info recoverability surface.",
+  "current_milestone": "Player Info now exposes current shields and hull together as combat readiness, tied to the decoded/source-backed shield recharge scaffold.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron_final_response",
@@ -15,25 +15,24 @@
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "03f8253",
+  "last_commit": "0bf1286",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_cargo_salvage_log_contract -v -> OK",
-    "./run_godot.sh tv-cargo-salvage-log -> salvageScannerVisible=true salvageHudVisible=true salvageInventoryVisible=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_shield_recharge_log_contract -v -> OK",
+    "./run_godot.sh tv-shield-recharge-log -> TV_SHIELD_RECHARGE_EVENT ... firstTickRecharged=true multiTickRecharged=true disabledRechargeBlocked=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (139 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> 03f8253 feat(godot): show salvage on scanner"
+    "git commit -> 0bf1286 feat(godot): show player combat readiness"
   ],
-  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: exact Classic/source evidence for combat loot/salvage, pirate avoidance/combat, combat death/reload, legal/reward consequences, or another bounded player-visible combat/navigation/tutorial scaffold.",
+  "next_resume_action": "Continue from the live backlog with the next strongest safe-local slice; likely candidates are Classic/source evidence for combat loot/rewards/death/legal timing or another bounded player-visible combat/navigation/mission feedback scaffold.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 125,
+    "ahead": 127,
     "branch": "main",
     "dirty": false,
-    "head": "03f8253",
-    "status_short": "## main...origin/main [ahead 125]"
+    "head": "0bf1286",
+    "status_short": "## main...origin/main [ahead 127]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -106,5 +105,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T08:07:51.184925Z"
+  "updated_at": "2026-06-04T08:11:42.155840Z"
 }
