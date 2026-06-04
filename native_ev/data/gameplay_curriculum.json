@@ -6,6 +6,7 @@
   "scenarioOrder": [
     "levo_merchant_first_hop",
     "levo_same_port_sellback_loop",
+    "commodity_sell_blocked_recovery_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -135,6 +136,10 @@
     "system_service_provisioning_scout": {
       "purpose": "System-service scouting loop: record Levo's original-runtime-observed absence of outfitter/shipyard, then compare Earth and Stardock Alpha service/store matrices as Terminal Velocity provisioning scaffolds pending Classic confirmation.",
       "surface": "system provisioning/service matrix scout"
+    },
+    "commodity_sell_blocked_recovery_loop": {
+      "purpose": "Commodity sell guardrail/recovery loop: block selling a lot when no cargo is held, buy a Levo lot, block selling while in space, then land and sell to restore starting credits/cargo while preserving Terminal Velocity scaffold/source-boundary labels.",
+      "surface": "commodity exchange/blocker recovery scaffold"
     }
   }
 }

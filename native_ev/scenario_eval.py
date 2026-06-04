@@ -36,6 +36,7 @@ MIN_JUMP_DISTANCE = 450
 SCENARIO_CURRICULUM = [
     'levo_merchant_first_hop',
     'levo_same_port_sellback_loop',
+    'commodity_sell_blocked_recovery_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -156,11 +157,13 @@ def _sell_commodity_lot(state: dict[str, Any], action: dict[str, Any], trace: li
     economy = economy_manifest()
     price = int(economy['markets'][system_name][commodity]['sell'])
     held = int(state['cargoHold'].get(commodity, 0))
+    source_label = action.get('sourceLabel', 'terminal-velocity-trade-scaffold')
+    oracle_status = action.get('oracleStatus', 'commodity_sell_guardrail_pending_original_runtime_trace')
     if state['landedBody'] is None:
-        trace.append({'type': 'blocked_sell_commodity_lot', 'reason': 'not landed', 'commodity': commodity})
+        trace.append({'type': 'blocked_sell_commodity_lot', 'reason': 'not landed', 'commodity': commodity, 'held': held, 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     if held < COMMODITY_LOT_SIZE:
-        trace.append({'type': 'blocked_sell_commodity_lot', 'reason': 'insufficient commodity in hold', 'commodity': commodity, 'held': held})
+        trace.append({'type': 'blocked_sell_commodity_lot', 'reason': 'insufficient commodity in hold', 'commodity': commodity, 'held': held, 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     state['credits'] += price * COMMODITY_LOT_SIZE
     state['cargoUsed'] = max(0, int(state['cargoUsed']) - COMMODITY_LOT_SIZE)
@@ -178,7 +181,7 @@ def _sell_commodity_lot(state: dict[str, Any], action: dict[str, Any], trace: li
         'unitPrice': price,
         'creditsAfter': state['credits'],
         'cargoUsed': state['cargoUsed'],
-        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-trade-scaffold'),
+        'sourceLabel': source_label,
         'oracleStatus': action.get('oracleStatus', 'same_port_sellback_pending_original_runtime_trace'),
     })
     return True
@@ -869,6 +872,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
                 'oracleStatus': 'levo_same_port_sellback_observed',
             },
         ]
+    if name == 'commodity_sell_blocked_recovery_loop':
+        return [
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'expectBlocked': True},
+            {'type': 'buy_commodity_lot', 'commodity': 'food'},
+            {'type': 'depart'},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'expectBlocked': True},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'sell_commodity_lot', 'commodity': 'food'},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -1113,6 +1125,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_original_observed_levo_lot': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('tons') == COMMODITY_LOT_SIZE and event.get('unitPrice') == 120 for event in trace) else 'failed',
             'sold_same_port_lot_back': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('tons') == COMMODITY_LOT_SIZE and event.get('unitPrice') == 120 and event.get('sourceLabel') == 'original-runtime-observed' for event in trace) else 'failed',
             'restored_starting_trade_state': 'passed' if state.get('credits') == STARTING_CREDITS and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
+        })
+    elif name == 'commodity_sell_blocked_recovery_loop':
+        blocked_reasons = [event.get('reason') for event in trace if event.get('type') == 'blocked_sell_commodity_lot']
+        blocked_sell_events = [event for event in trace if event.get('type') == 'blocked_sell_commodity_lot']
+        checks.update({
+            'blocked_sell_without_hold': 'passed' if 'insufficient commodity in hold' in blocked_reasons else 'failed',
+            'blocked_sell_while_in_space': 'passed' if 'not landed' in blocked_reasons else 'failed',
+            'recovered_by_landing_and_selling': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('commodity') == 'food' and event.get('tons') == COMMODITY_LOT_SIZE for event in trace) and state.get('credits') == STARTING_CREDITS and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
+            'recorded_sell_guardrail_source_boundary': 'passed' if blocked_sell_events and all(event.get('sourceLabel') == 'terminal-velocity-trade-scaffold' and event.get('oracleStatus') == 'commodity_sell_guardrail_pending_original_runtime_trace' for event in blocked_sell_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({
