@@ -1331,6 +1331,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-mission-abort-penalty-log', wrapper)
         self.assertIn('Mission abort reputation-penalty scenario contract', plan)
 
+    def test_godot_mission_scan_failure_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-scan-failure-log',
+            'func _run_mission_scan_failure_log',
+            'TV_MISSION_SCAN_FAILURE_EVENT',
+            'scanGovernment',
+            'failIfScanned',
+            'nonmatchingScanPreservedMission=true',
+            'matchingScanFailedMission=true',
+            'reservedCargoReleased=true',
+            'failureFlagSet=true',
+            'sourceLabel=ev-classic-resource-bible-backed-mission-scan-failure-scaffold',
+            'oracleStatus=classic_runtime_scan_failure_ui_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionScanFailureLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-scan-failure-log', run_script)
+        self.assertIn('tv-mission-scan-failure-log', wrapper)
+        self.assertIn('Mission scan-failure scenario contract', plan)
+
     def test_godot_mission_deadline_failure_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

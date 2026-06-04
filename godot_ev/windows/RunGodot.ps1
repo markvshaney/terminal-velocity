@@ -21,6 +21,7 @@ param(
     [switch]$MissionAbortLog,
     [switch]$MissionAbortForbiddenLog,
     [switch]$MissionAbortPenaltyLog,
+    [switch]$MissionScanFailureLog,
     [switch]$MissionDeadlineFailureLog,
     [switch]$MissionDeadlineCompletedLog,
     [switch]$MissionLogHistoryLog,
@@ -108,6 +109,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-abort-forbidden-log
 } elseif ($MissionAbortPenaltyLog) {
     & $Godot --headless --path $Project -- --tv-mission-abort-penalty-log
+} elseif ($MissionScanFailureLog) {
+    & $Godot --headless --path $Project -- --tv-mission-scan-failure-log
 } elseif ($MissionDeadlineFailureLog) {
     & $Godot --headless --path $Project -- --tv-mission-deadline-failure-log
 } elseif ($MissionDeadlineCompletedLog) {

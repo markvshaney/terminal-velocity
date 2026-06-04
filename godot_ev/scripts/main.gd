@@ -44,6 +44,7 @@ const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
 const MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_PENALTY_EVENT"
+const MISSION_SCAN_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_SCAN_FAILURE_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
 const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
 const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
@@ -232,6 +233,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_abort_forbidden_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-penalty-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-penalty-log"):
 		call_deferred("_run_mission_abort_penalty_log")
+	if OS.get_cmdline_args().has("--tv-mission-scan-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-scan-failure-log"):
+		call_deferred("_run_mission_scan_failure_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
 		call_deferred("_run_mission_deadline_failure_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-completed-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-completed-log"):
@@ -1320,6 +1323,36 @@ func _run_mission_abort_penalty_log() -> void:
 	var cargo_released_status := "reservedCargoReleased=true" if cargo == cargo_before_abort - int(probe_mission.get("cargoTons", 0)) else "reservedCargoReleased=false"
 	var reputation_status := "reputationPenaltyApplied=true" if actual_delta == expected_delta and reputation_after_abort == reputation_before_abort + expected_delta else "reputationPenaltyApplied=false"
 	print("%s acceptedMission=%s %s cargoBeforeAbort=%d cargoAfterAbort=%d %s reputationBeforeAbort=%d reputationAfterAbort=%d reputationDelta=%d expectedReputationDelta=%d %s activeMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=ev-classic-resource-bible-backed-mission-abort-penalty-scaffold oracleStatus=classic_runtime_abort_penalty_ui_pending status=\"%s\"" % [MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX, str(probe_mission.get("id")), abort_status, cargo_before_abort, cargo, cargo_released_status, reputation_before_abort, reputation_after_abort, actual_delta, expected_delta, reputation_status, JSON.stringify(active_missions), aborted_mission_history.size(), JSON.stringify(latest_abort), status_line])
+	get_tree().quit(0)
+
+func _run_mission_scan_failure_log() -> void:
+	_reset_travel_state()
+	var probe_mission := {
+		"id": "scan_failure_probe",
+		"title": "Scan Failure Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 4,
+		"scanGovernment": "Federation",
+		"failIfScanned": true,
+		"failureBitSet": 44,
+		"sourceLabel": "ev-classic-resource-bible-backed-mission-scan-failure-scaffold",
+		"oracleStatus": "classic_runtime_scan_failure_ui_pending",
+	}
+	missions["missions"].append(probe_mission)
+	active_missions.append(str(probe_mission.get("id")))
+	mission_acceptance_days[str(probe_mission.get("id"))] = current_day
+	cargo = int(probe_mission.get("cargoTons", 0))
+	var cargo_after_accept := cargo
+	var clear_scan := _apply_mission_cargo_scan("Independent")
+	var cargo_after_clear_scan := cargo
+	var failure_scan := _apply_mission_cargo_scan("Federation")
+	var latest_failure: Dictionary = failed_mission_history[failed_mission_history.size() - 1] if not failed_mission_history.is_empty() else {}
+	var clear_status := "nonmatchingScanPreservedMission=true" if bool(clear_scan.get("preserved", false)) else "nonmatchingScanPreservedMission=false"
+	var failure_status := "matchingScanFailedMission=true" if bool(failure_scan.get("failed", false)) and not active_missions.has(str(probe_mission.get("id"))) else "matchingScanFailedMission=false"
+	var cargo_released_status := "reservedCargoReleased=true" if cargo == 0 else "reservedCargoReleased=false"
+	var flag_status := "failureFlagSet=true" if story_flags.has("fail_mission_bit_44") else "failureFlagSet=false"
+	print("%s acceptedMission=%s scanGovernment=%s failIfScanned=%s cargoAfterAccept=%d clearScanGovernment=Independent cargoAfterClearScan=%d %s matchingScanGovernment=Federation cargoAfterFailureScan=%d %s %s %s activeMissions=%s failedHistoryCount=%d latestFailure=%s sourceLabel=ev-classic-resource-bible-backed-mission-scan-failure-scaffold oracleStatus=classic_runtime_scan_failure_ui_pending status=\"%s\"" % [MISSION_SCAN_FAILURE_EVENT_LOG_PREFIX, str(probe_mission.get("id")), str(probe_mission.get("scanGovernment", "")), str(probe_mission.get("failIfScanned", false)), cargo_after_accept, cargo_after_clear_scan, clear_status, cargo, failure_status, cargo_released_status, flag_status, JSON.stringify(active_missions), failed_mission_history.size(), JSON.stringify(latest_failure), status_line])
 	get_tree().quit(0)
 
 func _run_mission_deadline_failure_log() -> void:
@@ -2549,6 +2582,35 @@ func _mission_abort_record(mission: Dictionary, mission_id: String, cargo_releas
 		"sourceLabel": source_label,
 		"oracleStatus": oracle_status,
 	}
+
+func _apply_mission_cargo_scan(government_name: String) -> Dictionary:
+	for mission_id in active_missions.duplicate():
+		var mission := _mission_by_id(str(mission_id))
+		if mission.is_empty():
+			continue
+		var scan_government := str(mission.get("scanGovernment", ""))
+		if not bool(mission.get("failIfScanned", false)) or scan_government != government_name:
+			continue
+		var cargo_released := int(mission.get("cargoTons", 0))
+		var failure_flag := "fail_mission_bit_%d" % int(mission.get("failureBitSet", 0))
+		active_missions.erase(str(mission_id))
+		mission_acceptance_days.erase(str(mission_id))
+		cargo = max(0, cargo - cargo_released)
+		if not story_flags.has(failure_flag):
+			story_flags.append(failure_flag)
+		failed_mission_history.append({
+			"id": str(mission_id),
+			"title": str(mission.get("title", mission_id)),
+			"scan_government": government_name,
+			"cargo_released": cargo_released,
+			"failure_flag": failure_flag,
+			"sourceLabel": "ev-classic-resource-bible-backed-mission-scan-failure-scaffold",
+			"oracleStatus": "classic_runtime_scan_failure_ui_pending",
+		})
+		_set_status("Mission cargo scan failed: %s; released %d cargo tons" % [str(mission.get("title", mission_id)), cargo_released])
+		return {"failed": true, "missionId": str(mission_id), "cargoReleased": cargo_released, "scanGovernment": government_name}
+	_set_status("Mission cargo scan clear: " + government_name)
+	return {"failed": false, "preserved": true, "scanGovernment": government_name}
 
 func _fail_mission_deadline(mission: Dictionary, accepted_day: int, current_day: int) -> bool:
 	var mission_id := str(mission.get("id", ""))

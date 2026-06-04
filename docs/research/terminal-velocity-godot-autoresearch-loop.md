@@ -225,6 +225,18 @@ Mission abort reputation-penalty scenario contract:
   - `oracleStatus=classic_runtime_abort_penalty_ui_pending`.
 - This is a decoded-resource-backed Terminal Velocity guardrail for reputation state; exact EV Classic player-facing abort dialog/status remains gated on original-runtime/manual evidence.
 
+Mission scan-failure scenario contract:
+
+- `RunGodot.ps1 -MissionScanFailureLog` / `--tv-mission-scan-failure-log`
+- Exercises the EV Classic Resource Bible-backed `ScanGovt` / `FailIfScanned` mission-cargo contract in the Godot fast-eval lane while keeping exact Classic scan frequency and UI wording pending.
+- Seeds deterministic active mission `scan_failure_probe` with `scanGovernment=Federation`, `failIfScanned=true`, `failureBitSet=44`, and `cargoTons=4`; applies a nonmatching `Independent` scan and then a matching `Federation` scan; and logs:
+  - `nonmatchingScanPreservedMission=true` and `matchingScanFailedMission=true`;
+  - reserved cargo before/after scan and `reservedCargoReleased=true`;
+  - `failureFlagSet=true`, active mission ids, failed-history count, and latest failure record;
+  - `sourceLabel=ev-classic-resource-bible-backed-mission-scan-failure-scaffold`;
+  - `oracleStatus=classic_runtime_scan_failure_ui_pending`.
+- This is a decoded-resource-backed Terminal Velocity guardrail for mission scan state; exact EV Classic scan cadence, dialog/status text, and stock mission mapping remain gated on original-runtime/resource evidence.
+
 Mission deadline failure scenario contract:
 
 - `RunGodot.ps1 -MissionDeadlineFailureLog` / `--tv-mission-deadline-failure-log`
