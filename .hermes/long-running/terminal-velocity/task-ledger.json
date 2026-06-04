@@ -5,32 +5,33 @@
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Disabled-player combat guardrails now have an independent deterministic Godot probe covering disable signaling, explosion/sound evidence, blocked fire/jump/movement, and F8 recovery scaffold while retaining Classic death/Strict Play oracle-gate labels.",
+  "current_milestone": "Disabled-player guardrails now prevent launch/takeoff as well as fire, jump, movement, services, trade, missions, outfitting, and ship purchase while retaining F8 recovery as a Terminal Velocity scaffold pending Classic death evidence.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_run_under_10_minutes_after_available_context",
+    "progress_heartbeat": "not_needed_under_10_minutes",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "fb09495 test(godot): log player disabled recovery scaffold",
+  "last_commit": "d3baadf fix(godot): block disabled player launch",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_player_disabled_log_contract -v -> OK",
-    "./run_godot.sh tv-player-disabled-log -> TV_PLAYER_DISABLED_EVENT playerDisabled=true disabledStatusVisible=true disabledExplosionVisible=true disabledExplosionSound=true disabledFireBlocked=true disabledJumpBlocked=true disabledMovementBlocked=true recoveryTriggered=true playerRecovered=true recoveryStatusVisible=true hullAfterDisable=0 hullAfterRecovery=100 shieldsAfterRecovery=180",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
+    "./run_godot.sh tv-player-disabled-log -> disabledLaunchBlocked=true plus disabled fire/jump/movement and F8 recovery true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (137 tests)",
-    "git commit -> fb09495"
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
+    "git diff --check -> OK",
+    "git commit -> d3baadf fix(godot): block disabled player launch"
   ],
-  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: mine/capture Classic evidence for combat death/reload, projectile/explosion timing, AI/reward/legal outcomes, or add the next bounded Terminal Velocity playable/eval scaffold if original-runtime evidence remains gated by input stability.",
+  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: exact Classic/source evidence for combat death/reload, projectile/explosion timing, AI/reward/legal outcomes, or the next bounded Terminal Velocity combat/navigation/playability scaffold.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 109,
+    "ahead": 112,
     "branch": "main",
     "dirty": false,
-    "head": "fb09495",
-    "status_short": "## main...origin/main [ahead 109]"
+    "head": "checkpoint_commit_self_referential",
+    "status_short": "## main...origin/main [ahead 112]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -103,5 +104,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T07:11:09.084245Z"
+  "updated_at": "2026-06-04T07:16:05Z"
 }
