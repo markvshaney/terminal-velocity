@@ -84,6 +84,7 @@ var reputation := {}
 var sounds := {}
 var gameplay_curriculum := {}
 var sound_players: Dictionary = {}
+var sound_event_history: Array[String] = []
 var shipyard_pict_textures: Dictionary = {}
 var current_system_index := 0
 var current_system := {}
@@ -412,8 +413,18 @@ func _play_sound(sound_id: String) -> void:
 	var player: AudioStreamPlayer = sound_players.get(sound_id, null)
 	if player == null:
 		return
+	sound_event_history.append(sound_id)
 	player.stop()
 	player.play()
+
+func _sound_binding_for_weapon(weapon_id: String) -> String:
+	return str(sounds.get("bindings", {}).get("weapons", {}).get(weapon_id, "ui_click"))
+
+func _sound_binding_for_combat(binding_id: String) -> String:
+	return str(sounds.get("bindings", {}).get("combat", {}).get(binding_id, "ui_click"))
+
+func _sound_history_contains(sound_id: String) -> bool:
+	return sound_event_history.has(sound_id)
 
 func _load_sound_stream(sound: Dictionary) -> AudioStreamWAV:
 	var asset_file := str(sound.get("assetFile", DEFAULT_CLICK_SOUND_ASSET))
@@ -1492,7 +1503,14 @@ func _run_combat_log() -> void:
 	var source_count := int(source_fields.get("Count", primary_weapon.get("countFrames", 0)))
 	var source_applied_fields := ",".join(primary_weapon.get("sourceAppliedFields", []))
 	var applied_shield_damage := _weapon_shield_damage(primary_weapon)
+	var primary_sound_id := _sound_binding_for_weapon(str(primary_weapon.get("id", "")))
+	var npc_sound_id := _sound_binding_for_weapon(str(npc_weapon.get("id", "")))
+	var explosion_sound_id := _sound_binding_for_combat("shipExplodes")
+	var primary_sound_played := _sound_history_contains(primary_sound_id)
+	var npc_sound_played := _sound_history_contains(npc_sound_id)
+	var explosion_sound_played := _sound_history_contains(explosion_sound_id)
 	print("%s combatExecuted=true projectileSpawned=%s retaliationFired=%s targetIndex=%d targetDamaged=%s playerDamaged=%s destroyScenarioPrepared=%s destroyProjectileSpawned=%s targetDestroyed=%s combatRewardPaid=%s combatRewardAmount=%d combatRewardRecorded=%s combatRewardSaved=%s combatRewardResumeVisible=%s creditsBeforeDestroy=%d creditsAfterDestroy=%d destroyedTargetBlocked=%s retargetedAfterDestroyed=%s retargetedTargetIndex=%d playerDisableRetaliationFired=%s playerDisabled=%s playerDisabledStatusVisible=%s playerDisabledExplosion=%s disabledFireBlocked=%s disabledFireGuidance=%s disabledSecondaryBlocked=%s disabledChangeSecondaryBlocked=%s disabledAutopilotGuidance=%s disabledHyperModeGuidance=%s disabledHyperSelectGuidance=%s disabledMovementBlocked=%s disabledSaveBlocked=%s disabledServiceRefuelBlocked=%s disabledServiceRepairBlocked=%s disabledServiceClemencyBlocked=%s disabledMissionAcceptBlocked=%s disabledTradeBuyBlocked=%s disabledTradeSellBlocked=%s disabledOutfitBuyBlocked=%s disabledShipBuyBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s disabledJumpGuidance=%s disabledLandGuidance=%s explosionTriggered=%s explosionSourceLabel=%s projectilesRemaining=%d beforeShield=%d afterShield=%d beforeHull=%d afterHull=%d playerShieldBefore=%d playerShieldAfter=%d playerHullBefore=%d playerHullAfter=%d weapon=%s sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceCount=%d appliedShieldDamage=%d appliedHullDamage=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-source-mined-combat-scaffold oracleStatus=classic_runtime_weapon_timing_pending status=\"%s\"" % [COMBAT_EVENT_LOG_PREFIX, str(spawned), str(retaliation_fired), target_index, str(target_damaged), str(player_damaged), str(destroy_prepared), str(destroy_projectile_spawned), str(target_destroyed), str(combat_reward_paid), combat_reward_amount, str(combat_reward_recorded), str(combat_reward_saved), str(combat_reward_resume_visible), credits_before_destroy, credits_after_destroy, str(destroyed_target_blocked), str(retargeted_after_destroyed), retargeted_target_index, str(player_disable_retaliation_fired), str(player_disabled), str(player_disabled_status_visible), str(player_disabled_explosion), str(disabled_fire_blocked), str(disabled_fire_guidance), str(disabled_secondary_blocked), str(disabled_change_secondary_blocked), str(disabled_autopilot_guidance), str(disabled_hyper_mode_guidance), str(disabled_hyper_select_guidance), str(disabled_movement_blocked), str(disabled_save_blocked), str(disabled_service_refuel_blocked), str(disabled_service_repair_blocked), str(disabled_service_clemency_blocked), str(disabled_mission_accept_blocked), str(disabled_trade_buy_blocked), str(disabled_trade_sell_blocked), str(disabled_outfit_buy_blocked), str(disabled_ship_buy_blocked), str(recovery_triggered), str(player_recovered), str(recovery_status_visible), str(disabled_jump_guidance), str(disabled_land_guidance), str(explosion_triggered), latest_explosion_source, projectiles.size(), before_shields, after_shields, before_hull, after_hull, before_player_shields, after_player_shields, before_player_hull, after_player_hull, primary_weapon.get("name", "Primary"), source_resource_id, source_stock_name, source_mass_damage, source_energy_damage, source_reload, source_count, applied_shield_damage, applied_hull_damage, source_applied_fields, status_line])
+	print("TV_SOUND_EVENT primaryWeaponSound=%s primaryWeaponSoundPlayed=%s npcWeaponSound=%s npcWeaponSoundPlayed=%s explosionSound=%s explosionSoundPlayed=%s sourceLabel=decoded-resource-backed-sound-binding oracleStatus=classic_runtime_sound_timing_pending" % [primary_sound_id, str(primary_sound_played), npc_sound_id, str(npc_sound_played), explosion_sound_id, str(explosion_sound_played)])
 	get_tree().quit(0)
 
 
@@ -3584,7 +3602,7 @@ func _spawn_primary_projectile() -> bool:
 	projectiles.append(projectile)
 	primary_weapon_cooldown_frames = float(weapon.get("reloadFrames", weapon.get("sourceStockWeaponFields", {}).get("Reload", 0)))
 	_set_status("Fired %s at Contact %d" % [str(weapon.get("name", "Primary")), target_index + 1])
-	_play_sound("ui_click")
+	_play_sound(_sound_binding_for_weapon(str(weapon.get("id", ""))))
 	return true
 
 
@@ -3624,7 +3642,7 @@ func _spawn_secondary_projectile() -> bool:
 	projectiles.append(projectile)
 	secondary_weapon_cooldown_frames = float(weapon.get("reloadFrames", weapon.get("sourceStockWeaponFields", {}).get("Reload", 0)))
 	_set_status("Fired secondary %s at Contact %d" % [str(weapon.get("name", "Secondary")), target_index + 1])
-	_play_sound("ui_click")
+	_play_sound(_sound_binding_for_weapon(str(weapon.get("id", ""))))
 	return true
 
 func _spawn_npc_retaliation_projectile(target_index: int) -> bool:
@@ -3657,6 +3675,7 @@ func _spawn_npc_retaliation_projectile(target_index: int) -> bool:
 		"firedBy": "npc",
 	})
 	npc_retaliation_cooldowns[target_index] = float(weapon.get("reloadFrames", weapon.get("sourceStockWeaponFields", {}).get("Reload", 0)))
+	_play_sound(_sound_binding_for_weapon(weapon_id))
 	return true
 
 func _weapon_stats_by_id(weapon_id: String) -> Dictionary:
@@ -3735,7 +3754,7 @@ func _record_explosion_event(target_index: int) -> void:
 		"sourceLabel": "terminal-velocity-explosion-visual-scaffold",
 		"oracleStatus": "classic_runtime_explosion_timing_pending",
 	})
-	_play_sound("ui_click")
+	_play_sound(_sound_binding_for_combat("shipExplodes"))
 	_spawn_cargo_salvage_pickup(target_index, explosion_position)
 
 func _award_combat_disable_reward(target_index: int) -> void:
@@ -3804,7 +3823,7 @@ func _record_player_disabled_event() -> void:
 		"sourceLabel": "terminal-velocity-player-disabled-scaffold",
 		"oracleStatus": "classic_runtime_player_death_pending_strict_play_safe_trace",
 	})
-	_play_sound("ui_click")
+	_play_sound(_sound_binding_for_combat("shipExplodes"))
 
 func _apply_player_projectile_hit(projectile: Dictionary) -> void:
 	if player_shields > 0:
