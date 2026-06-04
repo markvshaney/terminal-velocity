@@ -213,6 +213,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.',
             'Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.',
             'Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.',
+            'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
             'hasAutopilotHelp=%s',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
@@ -226,6 +227,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasTradeRouteHelp=%s',
             'hasMapServiceHelp=%s',
             'hasRouteRefuelHelp=%s',
+            'hasShipyardDeltaHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
