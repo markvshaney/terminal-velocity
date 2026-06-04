@@ -1544,9 +1544,11 @@ func _run_secondary_weapon_log() -> void:
 	var target_damaged := shield_after < shield_before
 	var weapon := _secondary_weapon_stats()
 	var source_fields: Dictionary = weapon.get("sourceStockWeaponFields", {})
+	var secondary_sound_id := _sound_binding_for_weapon(str(weapon.get("id", "")))
+	var secondary_sound_played := _sound_history_contains(secondary_sound_id)
 	var secondary_inventory_empty_visible := secondary_empty_line.contains("No Secondary Weapon")
 	var secondary_inventory_loaded_visible := secondary_loaded_line.contains(str(weapon.get("name", ""))) and secondary_loaded_line.contains(str(weapon.get("sourceStockName", "")))
-	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s secondaryInventoryEmptyVisible=%s secondaryInventoryLoadedVisible=%s primaryWeaponPreserved=%s sourcePrimaryId=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold oracleStatus=classic_runtime_secondary_weapon_behavior_pending" % [
+	print("%s secondaryUnavailableAtStart=%s secondaryCycleSelected=%s secondaryProjectileSpawned=%s secondaryImmediateReloadBlocked=%s secondaryCooldownFrames=%d secondaryTargetDamaged=%s secondaryInventoryEmptyVisible=%s secondaryInventoryLoadedVisible=%s primaryWeaponPreserved=%s sourcePrimaryId=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" secondaryWeaponSound=%s secondaryWeaponSoundPlayed=%s targetShieldBefore=%d targetShieldAfter=%d sourceResourceId=%d sourceStockName=\"%s\" sourceMassDmg=%d sourceEnergyDmg=%d sourceReload=%d sourceAppliedFields=%s sourceLabel=terminal-velocity-secondary-weapon-scaffold soundSourceLabel=decoded-resource-backed-sound-binding oracleStatus=classic_runtime_secondary_weapon_behavior_pending soundOracleStatus=classic_runtime_sound_timing_pending" % [
 		SECONDARY_WEAPON_EVENT_LOG_PREFIX,
 		str(unavailable_at_start).to_lower(),
 		str(secondary_cycle_selected).to_lower(),
@@ -1560,6 +1562,8 @@ func _run_secondary_weapon_log() -> void:
 		source_primary_id,
 		str(weapon.get("id", "")),
 		str(weapon.get("name", "")),
+		secondary_sound_id,
+		str(secondary_sound_played).to_lower(),
 		shield_before,
 		shield_after,
 		int(weapon.get("sourceResourceId", -1)),
