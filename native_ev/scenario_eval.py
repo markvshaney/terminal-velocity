@@ -73,6 +73,7 @@ SCENARIO_CURRICULUM = [
     'mission_deadline_failure_recovery_loop',
     'mission_deadline_trade_carryover_loop',
     'mission_deadline_sequential_failures_loop',
+    'mission_scan_failure_guardrail',
     'outfitter_ship_ladder_intro',
     'outfitter_purchase_guardrail_recovery_loop',
     'shipyard_overfull_cargo_guardrail',
@@ -353,6 +354,8 @@ def _accept_cargo_job(state: dict[str, Any], action: dict[str, Any], trace: list
         'completionGovernment': action.get('completionGovernment'),
         'completionReward': action.get('completionReward'),
         'failureBitSet': action.get('failureBitSet'),
+        'scanGovernment': action.get('scanGovernment'),
+        'failIfScanned': bool(action.get('failIfScanned', False)),
         'canAbort': action.get('canAbort', True),
         'abortReputationMultiplier': action.get('abortReputationMultiplier'),
         'setsFlags': list(action.get('setsFlags', [])),
@@ -876,6 +879,52 @@ def _apply_contraband_scan(state: dict[str, Any], action: dict[str, Any], trace:
         'sourceLabel': 'terminal-velocity-classic-resource-smuggling-scan-semantics',
         'oracleStatus': 'classic_runtime_scan_frequency_and_ui_wording_pending',
     })
+    return True
+
+
+def _apply_mission_cargo_scan(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    """Apply a mission-specific scan/failure guardrail from decoded Classic mïsn fields.
+
+    This is a symbolic Terminal Velocity scaffold for the EV Classic Resource Bible
+    ScanGovt/FailIfScan contract; exact scan frequency and runtime UI remain pending.
+    """
+    government = str(action.get('government') or _current_government_name(state))
+    remaining_jobs = []
+    failed_jobs = []
+    for job in state.get('activeJobs', []):
+        scan_government = job.get('scanGovernment')
+        scan_matches = scan_government in {government, 'any', True}
+        if job.get('failIfScanned') is True and scan_matches:
+            released = int(job.get('reservedCargoTons', job.get('tons', 0)))
+            state['cargoUsed'] = max(0, int(state.get('cargoUsed', 0)) - released)
+            mission_id = job.get('id')
+            state.setdefault('failedJobs', []).append(mission_id)
+            failed_jobs.append(mission_id)
+            failure_flag = _mission_failure_flag(job.get('failureBitSet'))
+            if failure_flag and failure_flag not in state.get('storyFlags', []):
+                state.setdefault('storyFlags', []).append(failure_flag)
+            trace.append({
+                'type': 'mission_scan_failure',
+                'missionId': mission_id,
+                'government': government,
+                'scanGovernment': scan_government,
+                'failIfScanned': True,
+                'releasedCargoTons': released,
+                'failureFlag': failure_flag,
+                'sourceLabel': 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold',
+                'oracleStatus': 'classic_runtime_scan_failure_ui_pending',
+            })
+        else:
+            remaining_jobs.append(job)
+    state['activeJobs'] = remaining_jobs
+    if not failed_jobs:
+        trace.append({
+            'type': 'mission_scan_clear',
+            'government': government,
+            'activeJobs': [job.get('id') for job in state.get('activeJobs', [])],
+            'sourceLabel': 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold',
+            'oracleStatus': 'classic_runtime_scan_failure_ui_pending',
+        })
     return True
 
 
@@ -1685,6 +1734,29 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             },
             {'type': 'advance_days', 'days': 3},
         ]
+    if name == 'mission_scan_failure_guardrail':
+        source_label = 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold'
+        oracle_status = 'classic_runtime_scan_failure_ui_pending'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'scan_sensitive_dispatch_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 4,
+                'pay': 1200,
+                'scanGovernment': 'Federation',
+                'failIfScanned': True,
+                'failureBitSet': 44,
+                'risk': 'scan-sensitive cargo',
+                'sourceLabel': source_label,
+                'oracleStatus': oracle_status,
+            },
+            {'type': 'apply_mission_cargo_scan', 'government': 'Independent'},
+            {'type': 'apply_mission_cargo_scan', 'government': 'Federation'},
+        ]
     if name == 'outfitter_ship_ladder_intro':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -2164,6 +2236,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_sequential_failure_flags_and_penalties': 'passed' if state.get('failedJobs') == ['deadline_dispatch_failure_probe', 'deadline_second_failure_probe'] and {'fail_mission_bit_42', 'fail_mission_bit_43'}.issubset(set(state.get('storyFlags', []))) and state.get('reputation', {}).get('Federation') == 0 else 'failed',
             'recorded_sequential_failure_source_boundary': 'passed' if deadline_failures and all(event.get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-failure-scaffold' and event.get('oracleStatus') == 'deadline_failure_runtime_ui_pending_classic_trace' for event in deadline_failures) else 'failed',
         })
+    elif name == 'mission_scan_failure_guardrail':
+        scan_failures = [event for event in trace if event.get('type') == 'mission_scan_failure']
+        scan_clears = [event for event in trace if event.get('type') == 'mission_scan_clear']
+        checks.update({
+            'preserved_job_after_nonmatching_scan': 'passed' if scan_clears and scan_clears[-1].get('government') == 'Independent' and scan_clears[-1].get('activeJobs') == ['scan_sensitive_dispatch_probe'] else 'failed',
+            'failed_job_after_matching_scan': 'passed' if state.get('failedJobs') == ['scan_sensitive_dispatch_probe'] and not state.get('activeJobs') else 'failed',
+            'released_scan_sensitive_cargo': 'passed' if state.get('cargoUsed') == 0 and any(event.get('releasedCargoTons') == 4 for event in scan_failures) else 'failed',
+            'recorded_scan_failure_flag_and_boundary': 'passed' if 'fail_mission_bit_44' in state.get('storyFlags', []) and scan_failures and all(event.get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold' and event.get('oracleStatus') == 'classic_runtime_scan_failure_ui_pending' for event in scan_failures + scan_clears) else 'failed',
+        })
     elif name == 'outfitter_ship_ladder_intro':
         checks.update({
             'bought_first_outfit': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and any(event.get('type') == 'buy_outfit_or_weapon' and event.get('saleType') == 'outfit' and event.get('itemId') == 'cargo_pod' for event in trace) else 'failed',
@@ -2366,6 +2447,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'abort_active_mission': _abort_active_mission,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
         'apply_contraband_scan': _apply_contraband_scan,
+        'apply_mission_cargo_scan': _apply_mission_cargo_scan,
         'pay_legal_clemency': _pay_legal_clemency,
     }
     all_actions_valid = True

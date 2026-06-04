@@ -53,6 +53,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_deadline_failure_recovery_loop',
                 'mission_deadline_trade_carryover_loop',
                 'mission_deadline_sequential_failures_loop',
+                'mission_scan_failure_guardrail',
                 'outfitter_ship_ladder_intro',
                 'outfitter_purchase_guardrail_recovery_loop',
                 'shipyard_overfull_cargo_guardrail',
@@ -870,6 +871,27 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual([event['failureFlag'] for event in failures], ['fail_mission_bit_42', 'fail_mission_bit_43'])
         self.assertEqual([event['reputationDelta'] for event in failures], [-3, -2])
         self.assertTrue(all(event['sourceLabel'] == 'ev-classic-resource-bible-backed-mission-failure-scaffold' for event in failures))
+
+    def test_mission_scan_failure_guardrail_fails_only_on_matching_government_scan(self):
+        result = run_scripted_scenario('mission_scan_failure_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['failedJobs'], ['scan_sensitive_dispatch_probe'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertIn('fail_mission_bit_44', result['state']['storyFlags'])
+        self.assertEqual(result['checks']['preserved_job_after_nonmatching_scan'], 'passed')
+        self.assertEqual(result['checks']['failed_job_after_matching_scan'], 'passed')
+        self.assertEqual(result['checks']['released_scan_sensitive_cargo'], 'passed')
+        self.assertEqual(result['checks']['recorded_scan_failure_flag_and_boundary'], 'passed')
+        scans = [event for event in result['trace'] if event['type'] in {'mission_scan_clear', 'mission_scan_failure'}]
+        self.assertEqual([event['type'] for event in scans], ['mission_scan_clear', 'mission_scan_failure'])
+        self.assertEqual(scans[0]['government'], 'Independent')
+        self.assertEqual(scans[1]['government'], 'Federation')
+        self.assertEqual(scans[1]['releasedCargoTons'], 4)
+        self.assertTrue(all(event['sourceLabel'] == 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold' for event in scans))
 
     def test_outfitter_ship_ladder_intro_buys_upgrade_weapon_and_bigger_ship(self):
         result = run_scripted_scenario('outfitter_ship_ladder_intro')
