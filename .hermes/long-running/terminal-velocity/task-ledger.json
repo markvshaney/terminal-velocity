@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Committed verified F10 gameplay-curriculum legal-status help slice.",
+  "current_milestone": "Committed verified F10 gameplay-curriculum map service/legal summary help slice.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron_final_response",
@@ -10,30 +10,30 @@
     "send_message_available": false,
     "visibility_degraded": true
   },
-  "last_commit": "f87acd3 feat(godot): surface legal status help",
+  "last_commit": "ad01fae feat(godot): cover map service help guidance",
   "last_commits": [
-    "1cd1c58 feat(godot): cover target scanner help guidance",
-    "d84b2e6 feat(godot): cover trade route help guidance",
-    "f87acd3 feat(godot): surface legal status help"
+    "f87acd3 feat(godot): surface legal status help",
+    "dcfd7e5 chore(runner): checkpoint legal status help slice",
+    "ad01fae feat(godot): cover map service help guidance"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasLegalStatusHelp=true plus existing help flags true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMapServiceHelp=true plus existing help flags true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (139 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> f87acd3 feat(godot): surface legal status help"
+    "git commit -> ad01fae feat(godot): cover map service help guidance"
   ],
-  "next_resume_action": "Inspect live backlog for the next bounded source-aligned playability/fidelity slice; likely continue strengthening helper-covered legal/combat/mission/navigation surfaces or add deterministic probes before any Classic evidence-gated promotion.",
+  "next_resume_action": "Inspect live backlog for the next bounded source-aligned playability/fidelity slice; likely continue strengthening helper-covered navigation/mission/combat/service surfaces or add deterministic probes before any Classic evidence-gated promotion.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 153,
+    "ahead": 154,
     "branch": "main",
     "dirty": false,
-    "head": "6e93afd",
-    "status_short": "## main...origin/main [ahead 153]"
+    "head": "ad01fae",
+    "status_short": "## main...origin/main [ahead 154]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -106,5 +106,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T05:16:44-04:00"
+  "updated_at": "2026-06-04T05:20:01-04:00"
 }
