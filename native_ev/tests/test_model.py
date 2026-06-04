@@ -221,6 +221,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.',
             'Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.',
             'Messages: recent success and blocked-reason feedback appears under the HUD.',
+            'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
             'hasAutopilotHelp=%s',
             'hasRepairHelp=%s',
             'hasCombatHelp=%s',
@@ -241,6 +242,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasPilotPersistenceHelp=%s',
             'hasPlayerInfoHelp=%s',
             'hasRecentMessagesHelp=%s',
+            'hasBlockedActionHelp=%s',
             'TV_GAMEPLAY_CURRICULUM_HELP',
             '--tv-gameplay-curriculum-help-log',
         ]:
