@@ -1,39 +1,36 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local code/docs/tests/commits completed",
+    "reason": "no active gate; safe-local code/docs/tests/commit completed; Classic death/Strict Play fidelity promotion remains evidence-gated but not blocking Terminal Velocity scaffold work",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Combat audio binding coverage extended across primary fire, NPC/explosion combat log, secondary fire, and primary reload guardrail probes with decoded/source-backed sound IDs and pending Classic timing/mix labels.",
+  "current_milestone": "Disabled-player combat guardrails now have an independent deterministic Godot probe covering disable signaling, explosion/sound evidence, blocked fire/jump/movement, and F8 recovery scaffold while retaining Classic death/Strict Play oracle-gate labels.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "fallback_file_written_before_full_verification",
+    "progress_heartbeat": "not_needed_run_under_10_minutes_after_available_context",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "0480c2e test(godot): verify primary sound cooldown guardrail; 0d53237 test(godot): log secondary weapon sound binding; cdfb84b feat(godot): play combat sound bindings",
+  "last_commit": "fb09495 test(godot): log player disabled recovery scaffold",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v && ./run_godot.sh tv-combat-log -> OK; TV_SOUND_EVENT primaryWeaponSound=weapon_laser npcWeaponSound=weapon_cannon explosionSound=ship_explodes all played=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (136 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_player_disabled_log_contract -v -> OK",
+    "./run_godot.sh tv-player-disabled-log -> TV_PLAYER_DISABLED_EVENT playerDisabled=true disabledStatusVisible=true disabledExplosionVisible=true disabledExplosionSound=true disabledFireBlocked=true disabledJumpBlocked=true disabledMovementBlocked=true recoveryTriggered=true playerRecovered=true recoveryStatusVisible=true hullAfterDisable=0 hullAfterRecovery=100 shieldsAfterRecovery=180",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
-    "./run_godot.sh tv-secondary-weapon-log -> OK; secondaryWeaponSound=weapon_cannon secondaryWeaponSoundPlayed=true",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_combat_guardrail_log_contract -v && ./run_godot.sh tv-combat-guardrail-log -> OK; primaryWeaponSoundPlayCount=2 primaryWeaponSoundPlayedForValidShots=true",
-    "git diff --check -> OK",
-    "git commit -> cdfb84b, 0d53237, 0480c2e"
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (137 tests)",
+    "git commit -> fb09495"
   ],
-  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: exact Classic/source evidence for combat sound timing/mix/cadence, projectile/explosion timing, AI/legal/reward consequences, or another bounded player-visible combat/navigation scenario scaffold.",
+  "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: mine/capture Classic evidence for combat death/reload, projectile/explosion timing, AI/reward/legal outcomes, or add the next bounded Terminal Velocity playable/eval scaffold if original-runtime evidence remains gated by input stability.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 107,
+    "ahead": 109,
     "branch": "main",
-    "dirty": true,
-    "head": "0480c2e",
-    "status_short": "## main...origin/main [ahead 107]"
+    "dirty": false,
+    "head": "fb09495",
+    "status_short": "## main...origin/main [ahead 109]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -106,5 +103,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T07:02:48Z"
+  "updated_at": "2026-06-04T07:11:09.084245Z"
 }
