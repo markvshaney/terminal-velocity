@@ -30,6 +30,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'alignment_choice_guardrail',
                 'mission_destination_route_hint',
                 'mission_trade_hybrid_capacity_planning',
+                'mission_trade_refuel_delivery_loop',
                 'mission_abort_releases_reserved_cargo',
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
@@ -370,6 +371,28 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['completedJobs'], ['levo_trade_aligned_courier'])
         self.assertEqual(result['state']['cargoHold']['food'], 10)
         self.assertEqual(result['state']['cargoUsed'], 10)
+
+    def test_mission_trade_refuel_delivery_loop_blocks_low_fuel_then_delivers_with_trade_cargo(self):
+        result = run_scripted_scenario('mission_trade_refuel_delivery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['accepted_intro_mission_and_trade_lot'], 'passed')
+        self.assertEqual(result['checks']['blocked_delivery_leg_on_low_fuel'], 'passed')
+        self.assertEqual(result['checks']['refueled_before_delivery_leg'], 'passed')
+        self.assertEqual(result['checks']['completed_delivery_with_trade_cargo_held'], 'passed')
+        self.assertEqual(result['checks']['recorded_mission_trade_refuel_source_boundary'], 'passed')
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera'])
+        self.assertEqual(result['state']['cargoHold']['food'], COMMODITY_LOT_SIZE)
+        self.assertEqual(result['state']['cargoUsed'], COMMODITY_LOT_SIZE)
+        self.assertEqual(result['state']['credits'], 11380)
+        blocked = [event for event in result['trace'] if event.get('type') == 'blocked_jump'][-1]
+        self.assertEqual(blocked['reason'], 'insufficient fuel')
+        self.assertEqual(blocked['destinationSystem'], 'Centauri')
+        labeled_events = [event for event in result['trace'] if event.get('type') in {'buy_commodity_lot', 'complete_cargo_job'}]
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-mission-trade-refuel-scaffold' for event in labeled_events))
+        self.assertTrue(all(event['oracleStatus'] == 'mission_trade_refuel_pending_classic_runtime_trace' for event in labeled_events))
 
     def test_mission_abort_releases_reserved_cargo_without_completion(self):
         result = run_scripted_scenario('mission_abort_releases_reserved_cargo')
