@@ -341,6 +341,33 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-combat-log', run_script)
         self.assertIn('[switch]$CombatLog', windows_script)
 
+    def test_godot_player_disabled_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_PLAYER_DISABLED_EVENT',
+            '--tv-player-disabled-log',
+            'func _run_player_disabled_log() -> void:',
+            'playerDisabled=%s',
+            'disabledStatusVisible=%s',
+            'disabledExplosionVisible=%s',
+            'disabledExplosionSound=%s',
+            'disabledFireBlocked=%s',
+            'disabledJumpBlocked=%s',
+            'disabledMovementBlocked=%s',
+            'recoveryTriggered=%s',
+            'playerRecovered=%s',
+            'recoveryStatusVisible=%s',
+            'sourceLabel=terminal-velocity-player-disabled-scaffold',
+            'oracleStatus=classic_runtime_player_death_pending_strict_play_safe_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-player-disabled-log', run_script)
+        self.assertIn('[switch]$PlayerDisabledLog', windows_script)
+
     def test_godot_projectile_motion_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = (root / 'godot_ev' / 'scripts' / 'main.gd').read_text()

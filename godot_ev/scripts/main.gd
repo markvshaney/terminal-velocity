@@ -50,6 +50,7 @@ const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
+const PLAYER_DISABLED_EVENT_LOG_PREFIX := "TV_PLAYER_DISABLED_EVENT"
 const RETALIATION_EVENT_LOG_PREFIX := "TV_RETALIATION_EVENT"
 const PROJECTILE_MOTION_EVENT_LOG_PREFIX := "TV_PROJECTILE_MOTION_EVENT"
 const EXPLOSION_EVENT_LOG_PREFIX := "TV_EXPLOSION_EVENT"
@@ -239,6 +240,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
+	if OS.get_cmdline_args().has("--tv-player-disabled-log") or OS.get_cmdline_user_args().has("--tv-player-disabled-log"):
+		call_deferred("_run_player_disabled_log")
 	if OS.get_cmdline_args().has("--tv-retaliation-log") or OS.get_cmdline_user_args().has("--tv-retaliation-log"):
 		call_deferred("_run_retaliation_log")
 	if OS.get_cmdline_args().has("--tv-projectile-motion-log") or OS.get_cmdline_user_args().has("--tv-projectile-motion-log"):
@@ -1572,6 +1575,65 @@ func _run_secondary_weapon_log() -> void:
 		int(source_fields.get("EnergyDmg", weapon.get("energyDamage", 0))),
 		int(source_fields.get("Reload", weapon.get("reloadFrames", 0))),
 		JSON.stringify(weapon.get("sourceAppliedFields", [])),
+	])
+	get_tree().quit(0)
+
+func _run_player_disabled_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	projectiles.clear()
+	explosion_events.clear()
+	sound_event_history.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	var npc_weapon := _weapon_stats_by_id(str(_npc_ship_stats().get("weaponId", "pulse_cannon")))
+	if npc_weapon.is_empty():
+		npc_weapon = _primary_weapon_stats()
+	var incoming_hit := {
+		"shieldDamage": _max_player_shields(),
+		"hullDamage": _max_player_hull(),
+	}
+	var hull_before := player_hull
+	var shields_before := player_shields
+	player_shields = 0
+	_apply_player_projectile_hit(incoming_hit)
+	var player_disabled := _player_disabled()
+	var hull_after_disable := player_hull
+	var disabled_status_visible := status_messages.has(_player_disabled_message())
+	var disabled_explosion_visible := explosion_events.any(func(explosion): return str(explosion.get("sourceLabel", "")) == "terminal-velocity-player-disabled-scaffold")
+	var disabled_explosion_sound := _sound_history_contains(_sound_binding_for_combat("shipExplodes"))
+	primary_weapon_cooldown_frames = 0.0
+	var disabled_fire_blocked := not _spawn_primary_projectile() and status_messages.has(_player_disabled_action_message())
+	selected_route = [str(current_system.get("links", [])[0]) if not current_system.get("links", []).is_empty() else "Rigel"]
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var disabled_jump_blocked := status_messages.has(_player_disabled_action_message())
+	var movement_pos_before := pos
+	var movement_vel_before := vel
+	var movement_facing_before := player_facing_index
+	_apply_movement_controls(1.0 / 60.0, 1, true, false)
+	var disabled_movement_blocked := status_messages.has(_player_disabled_action_message()) and pos == movement_pos_before and vel == movement_vel_before and player_facing_index == movement_facing_before
+	var recovery_triggered := _recover_disabled_player_scaffold()
+	var player_recovered := not _player_disabled() and player_hull == _max_player_hull() and player_shields == _max_player_shields()
+	var recovery_status_visible := status_messages.has(_player_recovery_message())
+	print("%s playerDisabled=%s disabledStatusVisible=%s disabledExplosionVisible=%s disabledExplosionSound=%s disabledFireBlocked=%s disabledJumpBlocked=%s disabledMovementBlocked=%s recoveryTriggered=%s playerRecovered=%s recoveryStatusVisible=%s hullBefore=%d hullAfterDisable=%d hullAfterRecovery=%d shieldsBefore=%d shieldsAfterRecovery=%d npcWeapon=%s sourceLabel=terminal-velocity-player-disabled-scaffold oracleStatus=classic_runtime_player_death_pending_strict_play_safe_trace" % [
+		PLAYER_DISABLED_EVENT_LOG_PREFIX,
+		str(player_disabled).to_lower(),
+		str(disabled_status_visible).to_lower(),
+		str(disabled_explosion_visible).to_lower(),
+		str(disabled_explosion_sound).to_lower(),
+		str(disabled_fire_blocked).to_lower(),
+		str(disabled_jump_blocked).to_lower(),
+		str(disabled_movement_blocked).to_lower(),
+		str(recovery_triggered).to_lower(),
+		str(player_recovered).to_lower(),
+		str(recovery_status_visible).to_lower(),
+		hull_before,
+		hull_after_disable,
+		player_hull,
+		shields_before,
+		player_shields,
+		str(npc_weapon.get("id", "")),
 	])
 	get_tree().quit(0)
 
