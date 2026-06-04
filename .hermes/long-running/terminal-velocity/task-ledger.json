@@ -1,11 +1,11 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local combat reward target-label scaffold code/docs/tests/commit completed; Classic bounty/legal behavior remains evidence-gated but not blocking Terminal Velocity scaffold work",
+    "reason": "no active gate; safe-local combat reward status feedback scaffold code/docs/tests/commit completed; Classic bounty/legal behavior remains evidence-gated but not blocking Terminal Velocity scaffold work",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Combat reward history now preserves and displays the last rewarded contact label in Player Info while HUD reward totals remain compact and Classic bounty/legal behavior remains evidence-gated.",
+  "current_milestone": "Combat reward scaffold now gives immediate in-flight disable feedback with the local credit reward while retaining HUD/Player Info reward history and Classic bounty/legal evidence gates.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "final_delivery": "cron_final_response",
@@ -15,25 +15,25 @@
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "8186bda (slice); checkpoint commit follows",
+  "last_commit": "d338f78 feat(godot): show combat reward status feedback",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_primary_combat_is_playable_scaffold_contract -v -> OK",
-    "./run_godot.sh tv-combat-log -> combatRewardLastTargetVisible=true plus reward save/resume/HUD/Player Info true",
+    "./run_godot.sh tv-combat-log -> combatRewardStatusVisible=true plus reward persistence/HUD/Player Info true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (139 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 passed)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> 8186bda feat(godot): label combat reward targets; checkpoint commit -> ffcd634 then amended metadata"
+    "git commit -> d338f78 feat(godot): show combat reward status feedback"
   ],
   "next_resume_action": "Continue from the live backlog with the strongest safe-local source-aligned slice. Good next candidates: exact Classic/source evidence for combat rewards/legal/death timing, or another bounded player-visible combat/navigation/mission feedback scaffold.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 134,
+    "ahead": 135,
     "branch": "main",
     "dirty": false,
-    "head": "checkpoint_commit_after_8186bda",
-    "status_short": "## main...origin/main [ahead 134]"
+    "head": "d338f78",
+    "status_short": "## main...origin/main [ahead 135]"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -106,5 +106,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T08:34:36Z"
+  "updated_at": "2026-06-04T08:40:17.681876Z"
 }
