@@ -1,38 +1,37 @@
 {
   "active_gate": {
-    "reason": "no active gate; safe-local explosion log scaffold code/docs/tests/commit completed",
+    "reason": "no active gate; safe-local NPC retaliation cadence scaffold code/docs/tests/commit completed",
     "resume_after": "next cron tick",
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Explosion visual lifetime now has a deterministic Terminal Velocity scaffold log and wrapper/test contract; Classic explosion frames, duration, sound, and death/reload semantics remain explicitly pending original-runtime/source confirmation.",
+  "current_milestone": "NPC retaliation cadence now has a deterministic Terminal Velocity scaffold log and wrapper/test contract; Classic AI firing/retaliation cadence remains explicitly pending original-runtime/source confirmation.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_under_10_minutes; final fallback heartbeat file updated",
+    "progress_heartbeat": "fallback_file_written_before_full_verification",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "checkpoint commit contains this ledger; code slice a3161ac feat(godot): log explosion visual scaffold",
+  "last_commit": "checkpoint commit contains this ledger; code slice ebaf4ee feat(godot): log npc retaliation cadence scaffold",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_explosion_log_contract -v -> OK",
-    "./run_godot.sh tv-explosion-log -> TV_EXPLOSION_EVENT projectileSpawned=true targetDestroyed=true explosionTriggered=true explosionAnimated=true explosionExpired=true initialLife=1.03 lifeAfterHalfSecond=0.53 explosionSourceLabel=terminal-velocity-explosion-visual-scaffold explosionOracleStatus=classic_runtime_explosion_timing_pending",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_projectile_motion_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_explosion_log_contract -v -> OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (135 tests)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_retaliation_log_contract -v -> OK",
+    "./run_godot.sh tv-retaliation-log -> TV_RETALIATION_EVENT firstRetaliationFired=true immediateSecondRetaliationBlocked=true npcCooldownFrames=149 npcCooldownCleared=true retaliationAfterCooldownFired=true playerDamagedByRetaliation=true sourceReload=149 sourceLabel=terminal-velocity-npc-retaliation-scaffold oracleStatus=classic_runtime_ai_retaliation_cadence_pending",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (136 tests)",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> OK (20/20 scenarios)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): log explosion visual scaffold (a3161ac)",
-    "git commit -> chore(long-running): checkpoint explosion scaffold slice (exact hash in git log)"
+    "git commit -> feat(godot): log npc retaliation cadence scaffold (ebaf4ee)"
   ],
-  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: original-runtime/source evidence for exact combat fire cadence/projectile/explosion timing, AI retaliation cadence, reward/legal consequences, or the next bounded player-visible combat/navigation scenario scaffold.",
+  "next_resume_action": "Continue the continuous safe-local loop from the live backlog. Strong next candidates: original-runtime/source evidence for exact combat AI retaliation/fire cadence, rewards/legal consequences, or the next bounded player-visible combat/navigation scenario scaffold.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 98,
+    "ahead": 100,
     "branch": "main",
     "dirty": false,
-    "head": "checkpoint_commit_contains_this_ledger; see git log for exact hash"
+    "head": "checkpoint_commit_contains_this_ledger; code slice ebaf4ee"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -105,5 +104,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T06:34:37Z"
+  "updated_at": "2026-06-04T06:43:50Z"
 }
