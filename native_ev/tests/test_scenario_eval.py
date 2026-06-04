@@ -32,6 +32,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_trade_hybrid_capacity_planning',
                 'mission_trade_refuel_delivery_loop',
                 'mission_trade_destination_sale_loop',
+                'chapter_one_trade_carryover_loop',
                 'mission_abort_releases_reserved_cargo',
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
@@ -230,6 +231,29 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual([event['unitPrice'] for event in trade_events], [42, 49])
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-mission-trade-destination-sale-scaffold' for event in trade_events))
         self.assertTrue(all(event['oracleStatus'] == 'mission_trade_destination_sale_pending_classic_runtime_trace' for event in trade_events))
+
+    def test_chapter_one_trade_carryover_loop_sells_cargo_after_second_delivery(self):
+        result = run_scripted_scenario('chapter_one_trade_carryover_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera', 'frontier_sample_hera_freeport'])
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'].get('food', 0), 0)
+        self.assertEqual(result['state']['credits'], 14400)
+        self.assertEqual(result['checks']['completed_two_missions_with_trade_cargo_reserved_alongside'], 'passed')
+        self.assertEqual(result['checks']['carried_trade_lot_across_story_chain'], 'passed')
+        self.assertEqual(result['checks']['sold_carried_trade_cargo_after_second_delivery'], 'passed')
+        self.assertEqual(result['checks']['recorded_chapter_trade_carryover_source_boundary'], 'passed')
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertEqual([event['system'] for event in trade_events], ['Sol', 'Sirius'])
+        self.assertEqual([event['unitPrice'] for event in trade_events], [42, 62])
+        frontier_accept = [event for event in result['trace'] if event['type'] == 'accept_cargo_job' and event['id'] == 'frontier_sample_hera_freeport'][-1]
+        self.assertEqual(frontier_accept['cargoUsed'], 14)
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-chapter-one-trade-carryover-scaffold' for event in result['trace'] if event['type'] in {'accept_cargo_job', 'buy_commodity_lot', 'sell_commodity_lot', 'complete_cargo_job'}))
+        self.assertTrue(all(event['oracleStatus'] == 'chapter_one_trade_carryover_pending_classic_runtime_trace' for event in result['trace'] if event['type'] in {'accept_cargo_job', 'buy_commodity_lot', 'sell_commodity_lot', 'complete_cargo_job'}))
 
     def test_scenario_rejects_unlinked_jump_and_records_failed_check(self):
         result = run_scripted_scenario(

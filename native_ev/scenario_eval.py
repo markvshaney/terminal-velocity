@@ -50,6 +50,7 @@ SCENARIO_CURRICULUM = [
     'mission_trade_hybrid_capacity_planning',
     'mission_trade_refuel_delivery_loop',
     'mission_trade_destination_sale_loop',
+    'chapter_one_trade_carryover_loop',
     'mission_abort_releases_reserved_cargo',
     'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
@@ -1148,6 +1149,56 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
                 'oracleStatus': 'mission_trade_destination_sale_pending_classic_runtime_trace',
             },
         ]
+    if name == 'chapter_one_trade_carryover_loop':
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'intro_courier_earth_hera',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 3,
+                'pay': 1800,
+                'setsFlags': ['story_intro_started'],
+                'completionFlags': ['story_intro_complete', 'federation_trusted_courier'],
+                'sourceLabel': 'terminal-velocity-chapter-one-trade-carryover-scaffold',
+                'oracleStatus': 'chapter_one_trade_carryover_pending_classic_runtime_trace',
+            },
+            {
+                'type': 'buy_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-chapter-one-trade-carryover-scaffold',
+                'oracleStatus': 'chapter_one_trade_carryover_pending_classic_runtime_trace',
+            },
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'frontier_sample_hera_freeport',
+                'destinationSystem': 'Sirius',
+                'destinationBody': 'Sirius Station',
+                'tons': 4,
+                'pay': 2400,
+                'setsFlags': ['frontier_chain_started'],
+                'completionFlags': ['frontier_samples_delivered', 'reputation_independent_positive'],
+                'sourceLabel': 'terminal-velocity-chapter-one-trade-carryover-scaffold',
+                'oracleStatus': 'chapter_one_trade_carryover_pending_classic_runtime_trace',
+            },
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sirius'},
+            {'type': 'land', 'body': 'Sirius Station'},
+            {'type': 'complete_cargo_jobs'},
+            {
+                'type': 'sell_commodity_lot',
+                'commodity': 'food',
+                'sourceLabel': 'terminal-velocity-chapter-one-trade-carryover-scaffold',
+                'oracleStatus': 'chapter_one_trade_carryover_pending_classic_runtime_trace',
+            },
+        ]
     if name == 'mission_abort_releases_reserved_cargo':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -1412,6 +1463,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'delivered_mission_before_trade_sale': 'passed' if any(event.get('type') == 'complete_cargo_job' and event.get('id') == 'intro_courier_earth_hera' for event in trace) and state.get('completedJobs') == ['intro_courier_earth_hera'] else 'failed',
             'sold_trade_cargo_at_destination_market': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('system') == 'Centauri' and event.get('body') == 'Luna' and event.get('commodity') == 'food' and event.get('unitPrice') == 49 and event.get('cargoUsed') == 0 for event in trace) and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 and state.get('credits') == STARTING_CREDITS - (42 * COMMODITY_LOT_SIZE) + 1800 + (49 * COMMODITY_LOT_SIZE) else 'failed',
             'recorded_destination_sale_source_boundary': 'passed' if mission_trade_events and all(event.get('sourceLabel') == 'terminal-velocity-mission-trade-destination-sale-scaffold' and event.get('oracleStatus') == 'mission_trade_destination_sale_pending_classic_runtime_trace' for event in mission_trade_events) else 'failed',
+        })
+    elif name == 'chapter_one_trade_carryover_loop':
+        mission_trade_events = [event for event in trace if event.get('type') in {'accept_cargo_job', 'buy_commodity_lot', 'sell_commodity_lot', 'complete_cargo_job'}]
+        checks.update({
+            'completed_two_missions_with_trade_cargo_reserved_alongside': 'passed' if state.get('completedJobs') == ['intro_courier_earth_hera', 'frontier_sample_hera_freeport'] and any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'frontier_sample_hera_freeport' and event.get('cargoUsed') == 14 for event in trace) else 'failed',
+            'carried_trade_lot_across_story_chain': 'passed' if any(event.get('type') == 'complete_cargo_job' and event.get('id') == 'frontier_sample_hera_freeport' for event in trace) and any(event.get('type') == 'sell_commodity_lot' and event.get('system') == 'Sirius' and event.get('body') == 'Sirius Station' and event.get('commodity') == 'food' and event.get('unitPrice') == 62 for event in trace) else 'failed',
+            'sold_carried_trade_cargo_after_second_delivery': 'passed' if state.get('currentSystem') == 'Sirius' and state.get('landedBody') == 'Sirius Station' and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 and state.get('credits') == STARTING_CREDITS - (42 * COMMODITY_LOT_SIZE) + 1800 + 2400 + (62 * COMMODITY_LOT_SIZE) else 'failed',
+            'recorded_chapter_trade_carryover_source_boundary': 'passed' if mission_trade_events and all(event.get('sourceLabel') == 'terminal-velocity-chapter-one-trade-carryover-scaffold' and event.get('oracleStatus') == 'chapter_one_trade_carryover_pending_classic_runtime_trace' for event in mission_trade_events) else 'failed',
         })
     elif name == 'mission_abort_releases_reserved_cargo':
         checks.update({
