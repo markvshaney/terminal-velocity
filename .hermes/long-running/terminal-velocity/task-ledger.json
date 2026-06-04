@@ -5,33 +5,32 @@
     "type": "none",
     "withheld_action": null
   },
-  "current_milestone": "Combat cargo salvage scaffold now drops visible TV-scaffold cargo from disabled contacts, scoops it into commodity hold when capacity allows, blocks visibly when full, and has deterministic Godot log coverage.",
+  "current_milestone": "Combat cargo salvage scaffold now persists blocked in-space salvage pickups through the Godot pilot save/resume path, with deterministic cargo-salvage log coverage for save/resume visibility.",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes the target.",
   "heartbeat_status": {
     "path": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "progress_heartbeat": "not_needed_under_10_minutes_after_context_resume",
+    "progress_heartbeat": "not_needed_under_10_minutes",
     "send_message_available": false,
     "start_heartbeat": "fallback_file_written",
     "visibility_degraded": true
   },
-  "last_commit": "116172f feat(godot): add combat cargo salvage scaffold",
+  "last_commit": "aa5dc1d feat(godot): persist combat salvage pickups",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_secondary_weapon_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_cargo_salvage_log_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasCombatHelp=true",
-    "./run_godot.sh tv-cargo-salvage-log -> TV_CARGO_SALVAGE_EVENT combatExecuted=true projectileSpawned=true targetDestroyed=true salvageCreated=true salvageScooped=true cargoAfterScoop=2 equipmentAfter=2 fullHoldBlocked=true",
-    "python3 -m unittest native_ev.tests.test_model -> OK (109 tests)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_cargo_salvage_log_contract -v -> OK",
+    "./run_godot.sh tv-cargo-salvage-log -> TV_CARGO_SALVAGE_EVENT ... salvageSaveSucceeded=true salvageSaved=true salvageResumeVisible=true",
+    "python3 -m unittest native_ev.tests.test_model -q -> OK (109 tests)",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=20",
     "git diff --check -> OK",
-    "git commit -> feat(godot): add combat cargo salvage scaffold (116172f)"
+    "git commit -> feat(godot): persist combat salvage pickups (aa5dc1d)"
   ],
   "next_resume_action": "Continue with the next strongest safe-local Terminal Velocity gameplay/fidelity slice; likely candidates include Classic/resource evidence for exact loot/reward behavior, combat/explosion timing, AI retaliation cadence, secondary ammo semantics, or another bounded mission/map/fuel/combat probe.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "loki-game",
   "repo": {
-    "ahead": 85,
+    "ahead": 87,
     "branch": "main",
     "dirty": false,
-    "head": "116172f"
+    "head": "aa5dc1d"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -104,5 +103,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-04T05:47:02.716983+00:00"
+  "updated_at": "2026-06-04T05:51:36Z"
 }
