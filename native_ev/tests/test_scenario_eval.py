@@ -33,6 +33,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_trade_refuel_delivery_loop',
                 'mission_trade_destination_sale_loop',
                 'chapter_one_trade_carryover_loop',
+                'mission_trade_return_margin_guardrail',
                 'mission_abort_releases_reserved_cargo',
                 'mission_deadline_failure_scaffold',
                 'outfitter_ship_ladder_intro',
@@ -254,6 +255,31 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(frontier_accept['cargoUsed'], 14)
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-chapter-one-trade-carryover-scaffold' for event in result['trace'] if event['type'] in {'accept_cargo_job', 'buy_commodity_lot', 'sell_commodity_lot', 'complete_cargo_job'}))
         self.assertTrue(all(event['oracleStatus'] == 'chapter_one_trade_carryover_pending_classic_runtime_trace' for event in result['trace'] if event['type'] in {'accept_cargo_job', 'buy_commodity_lot', 'sell_commodity_lot', 'complete_cargo_job'}))
+
+    def test_mission_trade_return_margin_guardrail_skips_bad_return_cargo_and_finishes_chain(self):
+        result = run_scripted_scenario('mission_trade_return_margin_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera', 'frontier_sample_hera_freeport', 'freeport_return_earth'])
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['credits'], 17600)
+        self.assertIn('chapter_one_complete', result['state']['storyFlags'])
+        self.assertEqual(result['checks']['completed_return_contract_after_trade_sale'], 'passed')
+        self.assertEqual(result['checks']['blocked_negative_margin_return_trade'], 'passed')
+        self.assertEqual(result['checks']['recorded_return_margin_source_boundary'], 'passed')
+        rejected = [event for event in result['trace'] if event['type'] == 'trade_margin_decision' and event['decision'] == 'skip'][-1]
+        self.assertEqual(rejected['commodity'], 'equipment')
+        self.assertEqual(rejected['originSystem'], 'Sirius')
+        self.assertEqual(rejected['destinationSystem'], 'Sol')
+        self.assertEqual(rejected['buyPrice'], 160)
+        self.assertEqual(rejected['sellPrice'], 150)
+        self.assertEqual(rejected['marginPerTon'], -10)
+        self.assertEqual(rejected['sourceLabel'], 'terminal-velocity-mission-trade-return-margin-scaffold')
+        self.assertEqual(rejected['oracleStatus'], 'chapter_one_return_trade_margin_pending_classic_runtime_trace')
 
     def test_scenario_rejects_unlinked_jump_and_records_failed_check(self):
         result = run_scripted_scenario(

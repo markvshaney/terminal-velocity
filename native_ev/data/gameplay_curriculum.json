@@ -21,6 +21,7 @@
     "mission_trade_refuel_delivery_loop",
     "mission_trade_destination_sale_loop",
     "chapter_one_trade_carryover_loop",
+    "mission_trade_return_margin_guardrail",
     "mission_abort_releases_reserved_cargo",
     "mission_deadline_failure_scaffold",
     "outfitter_ship_ladder_intro",
@@ -143,6 +144,10 @@
     "chapter_one_trade_carryover_loop": {
       "purpose": "Chapter-one trade-carryover loop: carry a Sol Food lot through two noncombat story deliveries, reserve mission cargo alongside held trade cargo, then sell the lot at Sirius Station while preserving pending-Classic economy/story-chain boundaries.",
       "surface": "multi-mission story progression / mission-trade carryover scaffold"
+    },
+    "mission_trade_return_margin_guardrail": {
+      "purpose": "Chapter-one return margin guardrail: after selling carried cargo at Sirius Station, evaluate an unprofitable return cargo candidate, skip it, then finish the return courier contract with explicit pending-Classic economy/story-chain boundaries.",
+      "surface": "multi-mission story progression / trade-margin decision scaffold"
     },
     "mission_abort_releases_reserved_cargo": {
       "purpose": "Mission abort scaffold: abort an active courier contract without completion, release its reserved cargo, and keep source/oracle boundaries explicit pending Classic confirmation.",

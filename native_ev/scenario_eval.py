@@ -51,6 +51,7 @@ SCENARIO_CURRICULUM = [
     'mission_trade_refuel_delivery_loop',
     'mission_trade_destination_sale_loop',
     'chapter_one_trade_carryover_loop',
+    'mission_trade_return_margin_guardrail',
     'mission_abort_releases_reserved_cargo',
     'mission_deadline_failure_scaffold',
     'outfitter_ship_ladder_intro',
@@ -194,6 +195,31 @@ def _sell_commodity_lot(state: dict[str, Any], action: dict[str, Any], trace: li
         'cargoUsed': state['cargoUsed'],
         'sourceLabel': source_label,
         'oracleStatus': action.get('oracleStatus', 'same_port_sellback_pending_original_runtime_trace'),
+    })
+    return True
+
+
+def _evaluate_trade_margin(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    commodity = str(action['commodity'])
+    origin = str(action.get('originSystem', state['currentSystem']))
+    destination = str(action['destinationSystem'])
+    economy = economy_manifest()
+    buy_price = int(economy['markets'][origin][commodity]['buy'])
+    sell_price = int(economy['markets'][destination][commodity]['sell'])
+    margin = sell_price - buy_price
+    decision = 'carry' if margin > 0 else 'skip'
+    trace.append({
+        'type': 'trade_margin_decision',
+        'commodity': commodity,
+        'originSystem': origin,
+        'destinationSystem': destination,
+        'buyPrice': buy_price,
+        'sellPrice': sell_price,
+        'marginPerTon': margin,
+        'decision': decision,
+        'reason': 'positive margin' if margin > 0 else 'non-positive margin',
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-trade-margin-scaffold'),
+        'oracleStatus': action.get('oracleStatus', 'trade_margin_pending_classic_runtime_trace'),
     })
     return True
 
@@ -1199,6 +1225,32 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
                 'oracleStatus': 'chapter_one_trade_carryover_pending_classic_runtime_trace',
             },
         ]
+    if name == 'mission_trade_return_margin_guardrail':
+        source_label = 'terminal-velocity-mission-trade-return-margin-scaffold'
+        oracle_status = 'chapter_one_return_trade_margin_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'accept_cargo_job', 'id': 'intro_courier_earth_hera', 'destinationSystem': 'Centauri', 'destinationBody': 'Luna', 'tons': 3, 'pay': 1800, 'setsFlags': ['story_intro_started'], 'completionFlags': ['story_intro_complete', 'federation_trusted_courier'], 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'accept_cargo_job', 'id': 'frontier_sample_hera_freeport', 'destinationSystem': 'Sirius', 'destinationBody': 'Sirius Station', 'tons': 4, 'pay': 2400, 'setsFlags': ['frontier_chain_started'], 'completionFlags': ['frontier_samples_delivered', 'reputation_independent_positive'], 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sirius'},
+            {'type': 'land', 'body': 'Sirius Station'},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'evaluate_trade_margin', 'commodity': 'equipment', 'destinationSystem': 'Sol', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'accept_cargo_job', 'id': 'freeport_return_earth', 'destinationSystem': 'Sol', 'destinationBody': 'Earth', 'tons': 5, 'pay': 3200, 'setsFlags': ['return_contract_started'], 'completionFlags': ['chapter_one_complete', 'federation_independent_bridge'], 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'complete_cargo_jobs'},
+        ]
     if name == 'mission_abort_releases_reserved_cargo':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -1472,6 +1524,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'sold_carried_trade_cargo_after_second_delivery': 'passed' if state.get('currentSystem') == 'Sirius' and state.get('landedBody') == 'Sirius Station' and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 and state.get('credits') == STARTING_CREDITS - (42 * COMMODITY_LOT_SIZE) + 1800 + 2400 + (62 * COMMODITY_LOT_SIZE) else 'failed',
             'recorded_chapter_trade_carryover_source_boundary': 'passed' if mission_trade_events and all(event.get('sourceLabel') == 'terminal-velocity-chapter-one-trade-carryover-scaffold' and event.get('oracleStatus') == 'chapter_one_trade_carryover_pending_classic_runtime_trace' for event in mission_trade_events) else 'failed',
         })
+    elif name == 'mission_trade_return_margin_guardrail':
+        source_events = [event for event in trace if event.get('type') in {'accept_cargo_job', 'buy_commodity_lot', 'sell_commodity_lot', 'complete_cargo_job', 'trade_margin_decision'}]
+        checks.update({
+            'completed_return_contract_after_trade_sale': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('completedJobs') == ['intro_courier_earth_hera', 'frontier_sample_hera_freeport', 'freeport_return_earth'] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS - (42 * COMMODITY_LOT_SIZE) + 1800 + 2400 + (62 * COMMODITY_LOT_SIZE) + 3200 else 'failed',
+            'blocked_negative_margin_return_trade': 'passed' if any(event.get('type') == 'trade_margin_decision' and event.get('commodity') == 'equipment' and event.get('originSystem') == 'Sirius' and event.get('destinationSystem') == 'Sol' and event.get('marginPerTon') == -10 and event.get('decision') == 'skip' for event in trace) else 'failed',
+            'recorded_return_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-mission-trade-return-margin-scaffold' and event.get('oracleStatus') == 'chapter_one_return_trade_margin_pending_classic_runtime_trace' for event in source_events) else 'failed',
+        })
     elif name == 'mission_abort_releases_reserved_cargo':
         checks.update({
             'accepted_abort_test_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'intro_courier_earth_hera' and event.get('reservedCargoTons') == 3 for event in trace) else 'failed',
@@ -1610,6 +1669,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
     handlers = {
         'buy_commodity_lot': _buy_commodity_lot,
         'sell_commodity_lot': _sell_commodity_lot,
+        'evaluate_trade_margin': _evaluate_trade_margin,
         'accept_cargo_job': _accept_cargo_job,
         'jump': _jump,
         'land': _land,
