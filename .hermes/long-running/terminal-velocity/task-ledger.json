@@ -25,7 +25,7 @@
     "active_task_id": "t_c1dbbe7c",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "mission_scan_failure_recovery_help_broad_verified_pending_checkpoint",
+    "status": "mission_scan_failure_recovery_help_bundle_pushed_verified_sha_neutral_checkpoint",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:43:59Z",
+    "updated_at": "2026-06-05T16:44:56Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Mission scan-failure recovery help slice passed targeted and broad native/Godot verification; checkpoint commit/push pending.",
+  "current_milestone": "Mission scan-failure recovery help bundle pushed and remote-verified; SHA-neutral checkpoint avoids stale self-reference and watchdog/coordinator can continue from the next natural safe-local slice.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -127,7 +127,8 @@
     "git diff --check -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
-    "events.jsonl parse -> OK lines=552"
+    "events.jsonl parse -> OK lines=552",
+    "HOME=/home/bh git push origin main && git fetch origin main && HEAD == origin/main after feature commit"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +137,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After broader verification, diff/no-secret checks, commit/push this mission scan-failure recovery help slice and verify origin/main HEAD equality; then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary bundling.",
+  "next_resume_action": "Continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep mission scan-failure recovery labeled Resource Bible-backed scaffold pending exact Classic scan UI/runtime evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T16:43:59Z",
+  "updated_at": "2026-06-05T16:44:56Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
