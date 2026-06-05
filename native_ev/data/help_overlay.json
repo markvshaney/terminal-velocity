@@ -25,6 +25,7 @@
     "Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.",
     "Mission route trade sale: after delivering a mission with preserved trade cargo, check the destination market and sell recoverable cargo before leaving the route. TV scaffold; Classic behavior pending.",
     "Mission scan failure recovery: scan-sensitive cargo missions can fail when the matching government scans you; watch Mission Log/Player Info failure history, free released cargo, and seek follow-up contracts. Resource Bible-backed scaffold; exact Classic scan UI pending.",
+    "Mission story-gate recovery: if a chain offer is locked or excluded, read the Mission Computer reason for missing story flags or active exclusions before hauling more cargo. TV scaffold; exact Classic offer visibility pending.",
     "Mission abort penalty recovery: aborting some cargo missions can apply Resource Bible-backed reputation reversal; check Player Info abort history/legal standing, rebuild reputation, and re-scan Mission Computer gates before retrying. Exact Classic abort UI pending.",
     "Mission auto-abort recovery: some Resource Bible-backed auto-abort probes remove themselves immediately after acceptance and may set completion flags; check Mission Log/Player Info history before assuming cargo is still active. Exact Classic auto-abort UI pending.",
     "Sequential deadline recovery: if multiple timed missions expire together, Mission Log/Player Info failure history should show each released-cargo job and reputation penalty before you re-plan cargo or follow-up contracts. Resource Bible-backed scaffold; exact Classic multi-failure UI pending.",
@@ -310,6 +311,11 @@
       "flag": "hasMissionScanFailureRecoveryHelp",
       "source": "help",
       "contains": "Mission scan failure recovery: scan-sensitive cargo missions can fail"
+    },
+    {
+      "flag": "hasMissionStoryGateRecoveryHelp",
+      "source": "help",
+      "contains": "Mission story-gate recovery: if a chain offer is locked or excluded"
     },
     {
       "flag": "hasMissionAbortPenaltyRecoveryHelp",
