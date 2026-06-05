@@ -719,7 +719,13 @@ func _run_autopilot_log() -> void:
 	player_hull = 0
 	_toggle_autopilot()
 	var disabled_blocked := (not autopilot_enabled) and status_messages.has(_player_disabled_action_message())
-	print("%s autopilotEngaged=%s autopilotDisengaged=%s autopilotMovedCloser=%s autopilotSlowedForApproach=%s autopilotLandedBlocked=%s autopilotDisabledBlocked=%s distanceBefore=%.1f distanceAfter=%.1f speedBefore=%.1f speedAfter=%.1f targetBody=\"%s\" sourceLabel=terminal-velocity-autopilot-assist-scaffold oracleStatus=classic_runtime_autopilot_behavior_pending status=\"%s\"" % [AUTOPILOT_EVENT_LOG_PREFIX, str(engaged).to_lower(), str(disengaged).to_lower(), str(moved_closer).to_lower(), str(slowed_for_approach).to_lower(), str(landed_blocked).to_lower(), str(disabled_blocked).to_lower(), distance_before, distance_after, speed_before, speed_after, str(target_body.get("name", "nearest port")), status_line])
+	_reset_player_combat_stats()
+	status_messages.clear()
+	autopilot_enabled = true
+	player_hull = 0
+	_apply_autopilot_assist(1.0 / 60.0)
+	var disabled_disengaged := (not autopilot_enabled) and status_messages.has("Autopilot disengaged: player ship disabled")
+	print("%s autopilotEngaged=%s autopilotDisengaged=%s autopilotMovedCloser=%s autopilotSlowedForApproach=%s autopilotLandedBlocked=%s autopilotDisabledBlocked=%s autopilotDisabledDisengaged=%s distanceBefore=%.1f distanceAfter=%.1f speedBefore=%.1f speedAfter=%.1f targetBody=\"%s\" sourceLabel=terminal-velocity-autopilot-assist-scaffold oracleStatus=classic_runtime_autopilot_behavior_pending status=\"%s\"" % [AUTOPILOT_EVENT_LOG_PREFIX, str(engaged).to_lower(), str(disengaged).to_lower(), str(moved_closer).to_lower(), str(slowed_for_approach).to_lower(), str(landed_blocked).to_lower(), str(disabled_blocked).to_lower(), str(disabled_disengaged).to_lower(), distance_before, distance_after, speed_before, speed_after, str(target_body.get("name", "nearest port")), status_line])
 	get_tree().quit(0)
 
 func _print_movement_log(prefix: String, ticks: int) -> void:
@@ -4206,6 +4212,10 @@ func _toggle_autopilot() -> void:
 
 func _apply_autopilot_assist(delta: float) -> void:
 	if not autopilot_enabled or landed:
+		return
+	if _player_disabled():
+		autopilot_enabled = false
+		_set_status("Autopilot disengaged: player ship disabled")
 		return
 	var nearest := _nearest_body()
 	if nearest.is_empty():
