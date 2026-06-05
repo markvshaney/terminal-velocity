@@ -5,18 +5,18 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
-    "dirty": "yes: combat cadence help slice verified locally; commit/push pending",
-    "head": "8f8d35a369fb4d5a4fa1b95c8eaa563dc75256b5",
-    "status_short": "## main...origin/main with docs/checklists/ev-classic-fidelity-implementation-backlog.md, native_ev/data/help_overlay.json, native_ev/tests/test_model.py modified",
+    "dirty": "no: combat cadence help feature commit created; runner checkpoint commit/push pending",
+    "head": "df89b82db5578f633dc0b9f6e7b15e7832269f88",
+    "status_short": "## main...origin/main [ahead 1]",
     "origin_main": "8f8d35a369fb4d5a4fa1b95c8eaa563dc75256b5"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
-    "dirty": "yes: combat cadence help slice verified locally; commit/push pending"
+    "dirty": "no: combat cadence help feature commit created; runner checkpoint commit/push pending"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_8231a6eb",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "combat_cadence_help_verified_pending_commit_push",
+    "status": "combat_cadence_help_feature_commit_pending_checkpoint_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:17:35Z",
+    "updated_at": "2026-06-05T16:18:19Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -107,8 +107,8 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "current_milestone": "F10 help surfaces combat cadence recovery: immediate source-mined reload-blocked fire attempts should be recovered by waiting for the HUD/cooldown before treating weapons as broken; exact Classic weapon timing remains pending.",
-  "last_commit": "e337191 feat(godot): guard combat sound prefs",
-  "last_checkpoint_commit": "e337191a5c67cd65a4ae249b4350ee89f5a198d6",
+  "last_commit": "df89b82 feat(godot): surface combat cadence help",
+  "last_checkpoint_commit": "df89b82db5578f633dc0b9f6e7b15e7832269f88",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -140,9 +140,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this combat-cadence help slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep combat cadence/reload timing labeled pending Classic runtime comparison.",
+  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep combat cadence/reload timing labeled pending Classic runtime comparison.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the combat-cadence help checkpoint. Read ledger/events/prompt/backlog, inspect git state, choose one source-aligned safe local slice, verify, checkpoint, commit, normal push, fetch, verify HEAD == origin/main, and create exactly one successor task unless a real gate/blocker remains.",
-  "updated_at": "2026-06-05T16:17:35Z",
+  "updated_at": "2026-06-05T16:18:19Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
