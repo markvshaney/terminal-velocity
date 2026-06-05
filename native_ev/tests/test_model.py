@@ -1072,6 +1072,8 @@ class NativeEvModelTests(unittest.TestCase):
             'AFTERBURNER_FUEL_PER_SECOND',
             'speedBoosted=%s',
             'fuelDrained=%s',
+            'noFuelBlocked=%s',
+            'Afterburner unavailable: no fuel',
             'sourceLabel=terminal-velocity-afterburner-scaffold',
             'oracleStatus=classic_runtime_afterburner_fuel_curve_pending',
         ]:

@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_fcdd0565",
+    "active_task_id": "t_4560aa1f",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "ready_for_successor_after_return_trade_margin_help",
+    "status": "ready_for_checkpoint_after_afterburner_no_fuel_probe",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T06:42:17Z",
+    "updated_at": "2026-06-05T06:45:53Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "F10 help/curriculum coverage now includes a Terminal Velocity scaffold reminder to compare return-leg trade margins, skip negative-margin cargo, and finish the contract chain.",
+  "current_milestone": "Afterburner deterministic Godot probe now verifies the Terminal Velocity no-fuel blocked guidance path in addition to speed boost and fuel drain scaffold fields.",
   "last_commit": "35f8be0 feat(godot): surface return trade margin help",
   "last_checkpoint_commit": "35f8be0cb16c96b60c056a5b350bcb3f5f04a291",
   "last_commits": [
@@ -123,6 +123,12 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract -v -> RED missing noFuelBlocked, then OK",
+    "./run_godot.sh tv-afterburner-log -> speedBoosted=true fuelDrained=true noFuelBlocked=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> 2 tests OK",
+    "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
+    "git diff --check -> OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing hasMissionTradeReturnMarginHelp, then OK",
     "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionTradeReturnMarginHelp=true",
     "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_trade_return_margin_guardrail_skips_bad_return_cargo_and_finishes_chain native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> 2 tests OK",
@@ -157,9 +163,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep mission/trade return-margin behavior labeled as Terminal Velocity scaffold pending Classic runtime evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the mission return trade-margin help surface slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T06:42:17Z",
+  "next_resume_action": "After committing/pushing this afterburner no-fuel probe slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep afterburner constants and no-fuel behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the afterburner no-fuel probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
+  "updated_at": "2026-06-05T06:45:53Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

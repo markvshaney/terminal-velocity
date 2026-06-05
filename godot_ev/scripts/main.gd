@@ -680,7 +680,13 @@ func _run_afterburner_log() -> void:
 	var fuel_after_afterburner := player_fuel
 	var speed_boosted := afterburner_speed > normal_speed
 	var fuel_drained := fuel_after_afterburner < fuel_before_afterburner and fuel_after_normal == fuel_before_normal
-	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
+	_reset_travel_state()
+	player_fuel = 0
+	status_messages.clear()
+	afterburner_fuel_progress = 0.0
+	_advance_motion_step(1.0 / 60.0, 0, true, false, true)
+	var no_fuel_blocked := status_messages.has("Afterburner unavailable: no fuel") and player_fuel == 0
+	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s noFuelBlocked=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), str(no_fuel_blocked), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
 	get_tree().quit(0)
 
 func _run_autopilot_log() -> void:
