@@ -25,7 +25,7 @@
     "active_task_id": "t_d7a6d16b",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "mission_abort_penalty_auto_abort_recovery_help_bundle_broad_verified_pre_commit",
+    "status": "mission_abort_penalty_auto_abort_recovery_help_bundle_pushed_verified_sha_neutral_checkpoint",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:50:11Z",
+    "updated_at": "2026-06-05T16:50:48Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Mission abort penalty and auto-abort recovery help slice passed targeted and broad verification before commit/push.",
+  "current_milestone": "Mission abort penalty and auto-abort recovery help bundle pushed and remote-verified; SHA-neutral checkpoint avoids stale self-reference and watchdog/coordinator can continue from the next natural safe-local slice.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -137,9 +137,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this abort penalty and auto-abort recovery help slice and verifying origin/main HEAD equality, continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep abort penalty and auto-abort guidance labeled Resource Bible-backed scaffolds pending exact Classic runtime UI/timing evidence.",
+  "next_resume_action": "Continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep abort penalty and auto-abort guidance labeled Resource Bible-backed scaffolds pending exact Classic runtime UI/timing evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T16:50:11Z",
+  "updated_at": "2026-06-05T16:50:48Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -192,7 +192,7 @@
     "6_source_artifacts_separate_from_chat": "recorded in source_artifact_policy and existing TV docs/checklists",
     "7_do_not_redo": "recorded in do_not_redo"
   },
-  "last_process_checkpoint_commit": "final checkpoint commit pending; inspect current SHA with git log --oneline -1 after rebase/push",
+  "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_process_checkpoint": "Surface mission abort penalty and auto-abort recovery help",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording so the commit containing this checkpoint does not stale its own metadata."
 }
