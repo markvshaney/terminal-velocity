@@ -647,9 +647,11 @@ class NativeEvModelTests(unittest.TestCase):
             'autopilotLandedBlocked=%s',
             'autopilotDisabledBlocked=%s',
             'autopilotDisabledDisengaged=%s',
+            'autopilotNoPortDisengaged=%s',
             'Autopilot unavailable while landed; launch first',
             'Player ship disabled; reload or start a new pilot before continuing actions',
             'Autopilot disengaged: player ship disabled',
+            'Autopilot disengaged: no port in current system',
             'sourceLabel=terminal-velocity-autopilot-assist-scaffold',
             'oracleStatus=classic_runtime_autopilot_behavior_pending',
         ]:

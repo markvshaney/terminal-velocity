@@ -725,7 +725,13 @@ func _run_autopilot_log() -> void:
 	player_hull = 0
 	_apply_autopilot_assist(1.0 / 60.0)
 	var disabled_disengaged := (not autopilot_enabled) and status_messages.has("Autopilot disengaged: player ship disabled")
-	print("%s autopilotEngaged=%s autopilotDisengaged=%s autopilotMovedCloser=%s autopilotSlowedForApproach=%s autopilotLandedBlocked=%s autopilotDisabledBlocked=%s autopilotDisabledDisengaged=%s distanceBefore=%.1f distanceAfter=%.1f speedBefore=%.1f speedAfter=%.1f targetBody=\"%s\" sourceLabel=terminal-velocity-autopilot-assist-scaffold oracleStatus=classic_runtime_autopilot_behavior_pending status=\"%s\"" % [AUTOPILOT_EVENT_LOG_PREFIX, str(engaged).to_lower(), str(disengaged).to_lower(), str(moved_closer).to_lower(), str(slowed_for_approach).to_lower(), str(landed_blocked).to_lower(), str(disabled_blocked).to_lower(), str(disabled_disengaged).to_lower(), distance_before, distance_after, speed_before, speed_after, str(target_body.get("name", "nearest port")), status_line])
+	_reset_player_combat_stats()
+	status_messages.clear()
+	autopilot_enabled = true
+	current_system = {"name": "Empty Autopilot Probe", "bodies": []}
+	_apply_autopilot_assist(1.0 / 60.0)
+	var no_port_disengaged := (not autopilot_enabled) and status_messages.has("Autopilot disengaged: no port in current system")
+	print("%s autopilotEngaged=%s autopilotDisengaged=%s autopilotMovedCloser=%s autopilotSlowedForApproach=%s autopilotLandedBlocked=%s autopilotDisabledBlocked=%s autopilotDisabledDisengaged=%s autopilotNoPortDisengaged=%s distanceBefore=%.1f distanceAfter=%.1f speedBefore=%.1f speedAfter=%.1f targetBody=\"%s\" sourceLabel=terminal-velocity-autopilot-assist-scaffold oracleStatus=classic_runtime_autopilot_behavior_pending status=\"%s\"" % [AUTOPILOT_EVENT_LOG_PREFIX, str(engaged).to_lower(), str(disengaged).to_lower(), str(moved_closer).to_lower(), str(slowed_for_approach).to_lower(), str(landed_blocked).to_lower(), str(disabled_blocked).to_lower(), str(disabled_disengaged).to_lower(), str(no_port_disengaged).to_lower(), distance_before, distance_after, speed_before, speed_after, str(target_body.get("name", "nearest port")), status_line])
 	get_tree().quit(0)
 
 func _print_movement_log(prefix: String, ticks: int) -> void:

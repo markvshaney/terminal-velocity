@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Autopilot deterministic Godot probe verifies mid-assist disabled-player auto-disengage alongside engage/disengage, moved-closer, slowed-for-approach, landed-blocked, and disabled-toggle-blocked behavior under Terminal Velocity scaffold labels.",
+  "current_milestone": "Autopilot deterministic Godot probe verifies no-port auto-disengage alongside engage/disengage, moved-closer, slowed-for-approach, landed-blocked, disabled-toggle-blocked, and disabled mid-assist auto-disengage behavior under Terminal Velocity scaffold labels.",
   "last_commit": "ec2d872 feat(godot): disengage autopilot when player disabled",
   "last_checkpoint_commit": "ec2d87214eb802ded3f7836c9dbd1c1534bdea47",
   "last_commits": [
@@ -123,8 +123,8 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract -v -> RED missing autopilotDisabledDisengaged, then OK",
-    "./run_godot.sh tv-autopilot-log -> autopilotEngaged=true autopilotDisengaged=true autopilotMovedCloser=true autopilotSlowedForApproach=true autopilotLandedBlocked=true autopilotDisabledBlocked=true autopilotDisabledDisengaged=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract -v -> RED missing autopilotNoPortDisengaged, then OK",
+    "./run_godot.sh tv-autopilot-log -> autopilotEngaged=true autopilotDisengaged=true autopilotMovedCloser=true autopilotSlowedForApproach=true autopilotLandedBlocked=true autopilotDisabledBlocked=true autopilotDisabledDisengaged=true autopilotNoPortDisengaged=true",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> 2 tests OK",
     "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
     "./run_godot.sh tv-gameplay-curriculum-help-log -> hasAutopilotHelp=true hasDisabledRecoveryHelp=true",
@@ -138,9 +138,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot disabled-player blocked probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T07:00:47Z",
+  "next_resume_action": "After committing/pushing this autopilot no-port auto-disengage probe slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled/no-port behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot no-port auto-disengage probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
+  "updated_at": "2026-06-05T07:05:49Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
