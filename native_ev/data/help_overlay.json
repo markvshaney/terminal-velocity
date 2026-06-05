@@ -67,6 +67,7 @@
     "Disabled recovery: while disabled, flight/combat/service/trade/mission actions stay blocked until F8 recovery; TV scaffold pending Classic death/reload evidence.",
     "Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.",
     "Legal consequence recovery: after destroying a hostile patrol or other government target, check Player Info legal/reputation deltas, route to a safer port, and use clemency only when eligible. TV scaffold; exact Classic combat/legal resolution pending.",
+    "Legal patrol posture recovery: if scanner or target status marks patrols hostile, legal standing is below the CrimeTol-style TV scaffold; route to a safer government or repair legal standing before fighting. Exact Classic patrol AI/UI pending.",
     "Legal clemency recovery: if C is blocked, verify you are landed, your government reputation meets the TV scaffold threshold, legal standing is low enough, and credits cover the clemency cost before retrying. Exact Classic bribe/clemency UI pending.",
     "Legal docking: low legal standing can deny landing at governed ports; check Player Info/legal messages and seek clemency or a safer port. Exact Classic denial UI pending.",
     "Legal service gates: poor standing can block outfitter/shipyard buying even at a landed port; improve legal standing or use an eligible port before retrying. Exact Classic refusal UI pending.",
@@ -257,6 +258,11 @@
       "flag": "hasLegalConsequenceRecoveryHelp",
       "source": "help",
       "contains": "Legal consequence recovery: after destroying a hostile patrol"
+    },
+    {
+      "flag": "hasLegalPatrolPostureRecoveryHelp",
+      "source": "help",
+      "contains": "Legal patrol posture recovery: if scanner or target status marks patrols hostile"
     },
     {
       "flag": "hasLegalClemencyRecoveryHelp",
