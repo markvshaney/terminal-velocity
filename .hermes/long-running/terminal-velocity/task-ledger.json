@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: shield recharge recovery help/probe visibility slice verified and ready for coherent bundle commit/push",
-    "head": "d1f0d88ddf823b896d47a7b7ae2fbe27e3d1fd8d",
-    "status_short": "## main...origin/main\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M godot_ev/scripts/main.gd\n M native_ev/data/help_overlay.json\n M native_ev/tests/test_model.py",
-    "origin_main": "d1f0d88ddf823b896d47a7b7ae2fbe27e3d1fd8d"
+    "dirty": "no",
+    "head": "22eb62f9832c0c88576a9de6dd2fc518771d11ae",
+    "status_short": "## main...origin/main",
+    "origin_main": "22eb62f9832c0c88576a9de6dd2fc518771d11ae"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: shield recharge recovery help/probe visibility slice verified and ready for coherent bundle commit/push"
+    "dirty": "no"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_e3e34d83",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "shield_recharge_recovery_slice_verified_pending_commit_push",
+    "status": "shield_recharge_recovery_bundle_pushed_verified",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:29:08Z",
+    "updated_at": "2026-06-05T16:29:50Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,9 +100,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Shield recharge recovery help/probe visibility slice verified; next action is commit/push as a coherent bundle, then resume Kanban watchdog/coordinator.",
-  "last_commit": "850a929 chore: finalize NPC retaliation checkpoint",
-  "last_checkpoint_commit": "850a929af1e9d8a966e332ffebe91b663ea7f132",
+  "current_milestone": "Shield recharge recovery help/probe bundle pushed and remote-verified; watchdog/coordinator can resume continuation work at natural bundle boundaries.",
+  "last_commit": "22eb62f feat(godot): surface shield recharge recovery",
+  "last_checkpoint_commit": "22eb62f9832c0c88576a9de6dd2fc518771d11ae",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -135,9 +135,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this shield recharge recovery help/probe slice and verifying origin/main HEAD equality, resume the Terminal Velocity Kanban watchdog/coordinator and continue the next strongest source-aligned safe local gameplay/fidelity slice with natural-boundary commit/push bundling.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity after the shield recharge recovery help/probe bundle is pushed. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T16:29:08Z",
+  "next_resume_action": "Resume the Terminal Velocity Kanban watchdog/coordinator and continue the next strongest source-aligned safe local gameplay/fidelity slice with natural-boundary commit/push bundling; avoid finalizer-only pushes unless checkpoint/handoff/dirty-state risk would otherwise stale the runner ledger.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from pushed HEAD 22eb62f. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
+  "updated_at": "2026-06-05T16:29:50Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
