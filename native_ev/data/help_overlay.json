@@ -27,6 +27,7 @@
     "Mission scan failure recovery: scan-sensitive cargo missions can fail when the matching government scans you; watch Mission Log/Player Info failure history, free released cargo, and seek follow-up contracts. Resource Bible-backed scaffold; exact Classic scan UI pending.",
     "Mission abort penalty recovery: aborting some cargo missions can apply Resource Bible-backed reputation reversal; check Player Info abort history/legal standing, rebuild reputation, and re-scan Mission Computer gates before retrying. Exact Classic abort UI pending.",
     "Mission auto-abort recovery: some Resource Bible-backed auto-abort probes remove themselves immediately after acceptance and may set completion flags; check Mission Log/Player Info history before assuming cargo is still active. Exact Classic auto-abort UI pending.",
+    "Sequential deadline recovery: if multiple timed missions expire together, Mission Log/Player Info failure history should show each released-cargo job and reputation penalty before you re-plan cargo or follow-up contracts. Resource Bible-backed scaffold; exact Classic multi-failure UI pending.",
     "Mission return trade margin: before buying return-leg cargo after a delivery, compare destination and linked-market prices; skip negative-margin cargo and finish the contract chain. TV scaffold; Classic behavior pending.",
     "Commodity recovery: if Buy/Sell is blocked, check free hold, selected commodity, credits, and same-port sellback before changing route.",
     "Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
@@ -298,6 +299,11 @@
       "flag": "hasMissionAutoAbortRecoveryHelp",
       "source": "help",
       "contains": "Mission auto-abort recovery: some Resource Bible-backed auto-abort probes"
+    },
+    {
+      "flag": "hasMissionSequentialDeadlineRecoveryHelp",
+      "source": "help",
+      "contains": "Sequential deadline recovery: if multiple timed missions expire together"
     },
     {
       "flag": "hasMissionTradeReturnMarginHelp",

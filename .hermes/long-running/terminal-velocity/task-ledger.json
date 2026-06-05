@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_c93054c6",
+    "active_task_id": "t_c479cbae",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "near_center_hyperspace_recovery_help_pushed_verified_sha_neutral_checkpoint",
+    "status": "sequential_deadline_recovery_help_verified_before_checkpoint_commit",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T17:32:46Z",
+    "updated_at": "2026-06-05T17:36:19Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Near-center hyperspace recovery help slice pushed and remote-verified; F10 help tells players to keep the selected route, fly outward, and retry J after the original-runtime-observed near-center jump guardrail blocks travel.",
+  "current_milestone": "Sequential deadline recovery help slice verified; F10 help tells players to check Mission Log/Player Info for each released-cargo timed job and cumulative reputation penalty when multiple deadline missions expire together.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -117,17 +117,17 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing near-center recovery help, then OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasNearCenterJumpRecoveryHelp=true",
-    "./run_godot.sh tv-near-center-jump-log -> jumpBlocked=true blockReason=too_close_to_system_center",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing sequential deadline recovery help, then OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_sequential_log_contract -v -> 2 OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionSequentialDeadlineRecoveryHelp=true",
+    "./run_godot.sh tv-mission-deadline-sequential-log -> bothDeadlineFailuresRecorded=true reservedCargoReleased=true failureFlagsSet=true cumulativeReputationPenaltyApplied=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
-    "events.jsonl parse -> OK lines=558 before remote verification checkpoint",
-    "HOME=/home/bh git push origin main; git fetch origin main; HEAD == origin/main after feature commit"
+    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
+    "events.jsonl parse -> OK before event append"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +136,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep near-center hyperspace recovery labeled original-runtime-observed with exact Classic distance pending.",
+  "next_resume_action": "After committing/pushing this sequential deadline recovery help slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep multi-deadline failure UI/timing labeled pending Classic runtime/manual evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T17:32:46Z",
+  "updated_at": "2026-06-05T17:36:19Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -192,6 +192,6 @@
     "7_do_not_redo": "recorded in do_not_redo"
   },
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-  "last_process_checkpoint": "Surface near-center hyperspace recovery help",
+  "last_process_checkpoint": "Surface sequential deadline recovery help",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording so the commit containing this checkpoint does not stale its own metadata."
 }
