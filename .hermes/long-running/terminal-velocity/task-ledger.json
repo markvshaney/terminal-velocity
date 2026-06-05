@@ -25,7 +25,7 @@
     "active_task_id": "t_acb85f24",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "mission_story_gate_help_broad_verified_pending_commit_push",
+    "status": "mission_story_gate_help_pushed_verified_pending_successor_task",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T18:26:43Z",
+    "updated_at": "2026-06-05T18:27:13Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Mission story-gate recovery help slice broad-verified; F10 help tells players to read Mission Computer missing-story-flag/exclusion reasons before hauling more cargo for locked chain offers.",
+  "current_milestone": "Mission story-gate recovery help slice committed, pushed, and remote-verified; F10 help tells players to read Mission Computer missing-story-flag/exclusion reasons before hauling more cargo for locked chain offers.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -127,7 +127,10 @@
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
     "events.jsonl parse -> OK lines=574",
-    "added-lines secret scan -> NONE"
+    "added-lines secret scan -> NONE",
+    "HOME=/home/bh git push origin main -> pushed mission story-gate help commit",
+    "git fetch origin main; HEAD == origin/main == 04a2471e72b3b106e171266ddeb01b289991f8b6",
+    "git status --short --branch -> ## main...origin/main"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +139,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After diff/no-secret checks, commit/push this mission story-gate recovery help slice and verify origin/main HEAD equality; then create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
+  "next_resume_action": "Create exactly one successor Kanban continuation task from the pushed HEAD, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T18:26:43Z",
+  "updated_at": "2026-06-05T18:27:13Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
