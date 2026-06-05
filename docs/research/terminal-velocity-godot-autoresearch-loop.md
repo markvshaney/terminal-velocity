@@ -270,6 +270,15 @@ Mission deadline completed-state scenario contract:
 - `sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold`; `oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace`.
 - This is a Terminal Velocity guardrail scaffold; exact EV Classic completed-mission cleanup/UI remains pending runtime/manual evidence.
 
+Mission deadline recovery scenario contract:
+
+- `RunGodot.ps1 -MissionDeadlineRecoveryLog` / `--tv-mission-deadline-recovery-log`
+- Exercises the Terminal Velocity post-deadline recovery guardrail in the Godot fast-eval lane.
+- Seeds deterministic active mission `deadline_dispatch_failure_probe`, advances beyond `timeLimitDays`, records the failure, releases reserved cargo, then accepts and delivers follow-up mission `deadline_recovery_followup`.
+- Logs failure, cargo-release, follow-up acceptance, follow-up delivery, and failed-history preservation booleans (`deadlineFailureRecorded=true`, `reservedCargoReleased=true`, `followupAccepted=true`, `followupDelivered=true`, `failedHistoryPreserved=true`), mission ids, cargo/credit counters, and latest failure/completion records.
+- `sourceLabel=terminal-velocity-mission-deadline-recovery-scaffold`; `oracleStatus=deadline_failure_recovery_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity recovery scaffold; exact EV Classic post-failure mission UI, offer refresh timing, and date wording remain pending runtime/manual evidence.
+
 Mission deadline sequential-failures scenario contract:
 
 - `RunGodot.ps1 -MissionDeadlineSequentialLog` / `--tv-mission-deadline-sequential-log`

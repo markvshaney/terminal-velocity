@@ -49,6 +49,7 @@ const MISSION_SCAN_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_SCAN_FAILURE_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
 const MISSION_DEADLINE_LAST_DAY_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_LAST_DAY_EVENT"
 const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
+const MISSION_DEADLINE_RECOVERY_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_RECOVERY_EVENT"
 const MISSION_DEADLINE_SEQUENTIAL_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_SEQUENTIAL_EVENT"
 const MISSION_DEADLINE_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_ABORT_EVENT"
 const MISSION_DEADLINE_TRADE_CARRYOVER_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_TRADE_CARRYOVER_EVENT"
@@ -248,6 +249,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_deadline_last_day_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-completed-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-completed-log"):
 		call_deferred("_run_mission_deadline_completed_log")
+	if OS.get_cmdline_args().has("--tv-mission-deadline-recovery-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-recovery-log"):
+		call_deferred("_run_mission_deadline_recovery_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-sequential-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-sequential-log"):
 		call_deferred("_run_mission_deadline_sequential_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-abort-log"):
@@ -1507,6 +1510,61 @@ func _run_mission_deadline_completed_log() -> void:
 	var reward_status := "rewardPreserved=true" if credits == credits_before_completion + int(deadline_mission.get("reward", 0)) else "rewardPreserved=false"
 	var reputation_status := "reputationPreserved=true" if reputation_after_late_check == reputation_before_completion else "reputationPreserved=false"
 	print("%s acceptedMission=%s acceptedDay=%d completionDay=%d currentDay=%d timeLimitDays=%d cargoAfterAccept=%d cargoAfterCompletion=%d %s %s %s %s %s creditsBeforeCompletion=%d creditsAfterLateCheck=%d reputationBefore=%d reputationAfter=%d activeMissions=%s completedMissions=%s failedHistoryCount=%d latestCompletion=%s sourceLabel=terminal-velocity-mission-deadline-completed-no-late-failure-scaffold oracleStatus=deadline_completed_no_late_failure_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX, str(deadline_mission.get("id")), accepted_day, completion_day, current_day, int(deadline_mission.get("timeLimitDays", 0)), cargo_after_accept, cargo, completed_status, no_late_failure_status, cargo_status, reward_status, reputation_status, credits_before_completion, credits, reputation_before_completion, reputation_after_late_check, JSON.stringify(active_missions), JSON.stringify(completed_missions), failed_mission_history.size(), latest_completion, status_line])
+	get_tree().quit(0)
+
+func _run_mission_deadline_recovery_log() -> void:
+	_reset_travel_state()
+	var failed_mission := {
+		"id": "deadline_dispatch_failure_probe",
+		"title": "Deadline Dispatch Failure Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 3,
+		"reward": 1200,
+		"completionReward": 6,
+		"failureBitSet": 42,
+		"completionGovernment": "Federation",
+		"timeLimitDays": 2,
+	}
+	var followup_mission := {
+		"id": "deadline_recovery_followup",
+		"title": "Deadline Recovery Followup",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 2,
+		"reward": 900,
+		"sourceLabel": "terminal-velocity-mission-deadline-recovery-scaffold",
+		"oracleStatus": "deadline_failure_recovery_pending_classic_runtime_or_manual_trace",
+	}
+	missions["missions"].append(followup_mission)
+	var accepted_day := 0
+	current_day = 3
+	active_missions.append(str(failed_mission.get("id")))
+	mission_acceptance_days[str(failed_mission.get("id"))] = accepted_day
+	cargo = int(failed_mission.get("cargoTons", 0))
+	var cargo_after_failed_accept := cargo
+	var reputation_before_failure := int(reputation_scores.get("Federation", 0))
+	var failure_succeeded := _fail_mission_deadline(failed_mission, accepted_day, current_day)
+	var cargo_after_failure := cargo
+	var reputation_after_failure := int(reputation_scores.get("Federation", 0))
+	active_missions.append(str(followup_mission.get("id")))
+	mission_acceptance_days[str(followup_mission.get("id"))] = current_day
+	cargo += int(followup_mission.get("cargoTons", 0))
+	var cargo_after_followup_accept := cargo
+	current_system_index = _system_index_by_name("Centauri", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	pos = Vector2(-520.0, -300.0)
+	landed = true
+	var credits_before_followup := credits
+	var completed_ids := _complete_arrived_missions()
+	var latest_failure := JSON.stringify(failed_mission_history[failed_mission_history.size() - 1]) if not failed_mission_history.is_empty() else "{}"
+	var latest_completion := JSON.stringify(completed_mission_history[completed_mission_history.size() - 1]) if not completed_mission_history.is_empty() else "{}"
+	var failure_status := "deadlineFailureRecorded=true" if failure_succeeded and failed_mission_history.size() == 1 and story_flags.has("fail_mission_bit_42") else "deadlineFailureRecorded=false"
+	var cargo_release_status := "reservedCargoReleased=true" if cargo_after_failure == 0 and cargo == 0 else "reservedCargoReleased=false"
+	var followup_accept_status := "followupAccepted=true" if cargo_after_followup_accept == int(followup_mission.get("cargoTons", 0)) else "followupAccepted=false"
+	var followup_delivered_status := "followupDelivered=true" if completed_ids.has(str(followup_mission.get("id"))) and completed_missions.has(str(followup_mission.get("id"))) and credits == credits_before_followup + int(followup_mission.get("reward", 0)) else "followupDelivered=false"
+	var failed_history_status := "failedHistoryPreserved=true" if failed_mission_history.size() == 1 and str(failed_mission_history[0].get("id", "")) == str(failed_mission.get("id")) else "failedHistoryPreserved=false"
+	print("%s failedMission=%s followupMission=%s acceptedDay=%d currentDay=%d timeLimitDays=%d cargoAfterFailedAccept=%d cargoAfterFailure=%d cargoAfterFollowupAccept=%d cargoAfterFollowupDelivery=%d %s %s %s %s %s reputationBeforeFailure=%d reputationAfterFailure=%d creditsBeforeFollowup=%d creditsAfterFollowup=%d activeMissions=%s failedHistoryCount=%d completedMissions=%s latestFailure=%s latestCompletion=%s sourceLabel=terminal-velocity-mission-deadline-recovery-scaffold oracleStatus=deadline_failure_recovery_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_DEADLINE_RECOVERY_EVENT_LOG_PREFIX, str(failed_mission.get("id")), str(followup_mission.get("id")), accepted_day, current_day, int(failed_mission.get("timeLimitDays", 0)), cargo_after_failed_accept, cargo_after_failure, cargo_after_followup_accept, cargo, failure_status, cargo_release_status, followup_accept_status, followup_delivered_status, failed_history_status, reputation_before_failure, reputation_after_failure, credits_before_followup, credits, JSON.stringify(active_missions), failed_mission_history.size(), JSON.stringify(completed_missions), latest_failure, latest_completion, status_line])
 	get_tree().quit(0)
 
 func _run_mission_deadline_sequential_log() -> void:
