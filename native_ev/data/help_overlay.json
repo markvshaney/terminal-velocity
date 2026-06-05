@@ -9,6 +9,7 @@
     "Afterburner: Z gives a Terminal Velocity thrust boost and drains fuel; if it is blocked, refuel at a landed service port before retrying. Exact Classic curve pending.",
     "Afterburner launch recovery: if Z is blocked while landed, launch first with L, then boost only after clearing port; TV scaffold, exact Classic landed afterburner behavior pending.",
     "Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.",
+    "Autopilot no-port recovery: if A disengages with no port in the current system, pick a linked system with landable services on the map before retrying; TV scaffold, exact Classic target selection pending.",
     "Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops; Backspace/Delete clears route.",
     "Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
     "Mission objective marker: active mission destinations are highlighted on the map.",
@@ -78,6 +79,11 @@
       "flag": "hasAutopilotHelp",
       "source": "help",
       "contains": "Autopilot: A toggles a Terminal Velocity assist"
+    },
+    {
+      "flag": "hasAutopilotNoPortRecoveryHelp",
+      "source": "help",
+      "contains": "Autopilot no-port recovery: if A disengages with no port"
     },
     {
       "flag": "hasRepairHelp",
