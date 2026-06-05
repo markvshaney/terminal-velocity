@@ -1223,9 +1223,26 @@ func _run_mission_route_hint_log() -> void:
 	var low_fuel_helper_requeued := _route_to_active_mission_destination()
 	var low_fuel_route_status_line := status_line
 	var low_fuel_route_warning_visible := low_fuel_helper_requeued and low_fuel_route_status_line.contains("refuel before full route")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var low_fuel_jump_blocked: bool = str(current_system.get("name", "?")) == "Sol" and status_line.contains("Insufficient fuel")
+	var low_fuel_jump_status := status_line
+	_position_at_body("Earth")
+	_try_land()
+	var landed_for_refuel := landed and str(_current_body().get("name", "")) == "Earth"
+	var refuel_succeeded := _refuel_current_ship()
+	var fuel_after_refuel := player_fuel
+	_ev_land_or_launch()
+	_move_to_scripted_hyperspace_distance()
+	var route_before_delivery_jump := selected_route.duplicate()
+	_jump()
+	_position_at_body("Luna")
+	_try_land()
+	var completed_ids := _complete_arrived_missions()
+	var delivered_after_refuel: bool = str(current_system.get("name", "?")) == destination_system and completed_ids.has(accepted_mission_id) and active_missions.is_empty()
 	var mission_route_status := "missionRouteQueued=true" if mission_route_queued else "missionRouteQueued=false"
 	var queued_route := JSON.stringify(selected_route)
-	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s staleRouteBeforeHelper=%s staleRouteReplaced=%s route=%s routeHops=%d fuelBeforeRoute=%d routeFuelCost=%d preJumpFuelWarning=%s routeStatusHasFuelHint=%s lowFuelRouteWarningVisible=%s sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\" routeStatus=\"%s\" lowFuelRouteStatus=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, JSON.stringify(stale_route_before_helper), str(stale_route_replaced), queued_route, selected_route.size(), fuel_before_route, route_fuel_cost, str(pre_jump_fuel_warning), str(route_status_has_fuel_hint), str(low_fuel_route_warning_visible), low_fuel_route_status_line, route_status_line, low_fuel_route_status_line])
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s staleRouteBeforeHelper=%s staleRouteReplaced=%s route=%s routeHops=%d fuelBeforeRoute=%d routeFuelCost=%d preJumpFuelWarning=%s routeStatusHasFuelHint=%s lowFuelRouteWarningVisible=%s lowFuelJumpBlocked=%s landedForRefuel=%s refuelSucceeded=%s fuelAfterRefuel=%d routeBeforeDeliveryJump=%s deliveredAfterRefuel=%s completedMissions=%s sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\" routeStatus=\"%s\" lowFuelRouteStatus=\"%s\" lowFuelJumpStatus=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, JSON.stringify(stale_route_before_helper), str(stale_route_replaced), queued_route, selected_route.size(), fuel_before_route, route_fuel_cost, str(pre_jump_fuel_warning), str(route_status_has_fuel_hint), str(low_fuel_route_warning_visible), str(low_fuel_jump_blocked), str(landed_for_refuel), str(refuel_succeeded), fuel_after_refuel, JSON.stringify(route_before_delivery_jump), str(delivered_after_refuel), JSON.stringify(completed_missions), status_line, route_status_line, low_fuel_route_status_line, low_fuel_jump_status])
 	get_tree().quit(0)
 
 func _route_to_active_mission_destination() -> bool:

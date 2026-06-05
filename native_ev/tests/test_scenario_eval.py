@@ -37,6 +37,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'alignment_completion_return_contract_loop',
                 'mission_destination_route_hint',
                 'mission_destination_low_fuel_route_hint',
+                'mission_route_refuel_delivery_loop',
                 'mission_trade_hybrid_capacity_planning',
                 'mission_trade_refuel_delivery_loop',
                 'mission_trade_destination_sale_loop',
@@ -602,6 +603,28 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(route_event['refuelRecoveryBody'], 'Earth')
         self.assertIn('refuel before full route; nearest refuel: Earth', route_event['objectiveHint'])
         self.assertEqual(route_event['sourceLabel'], 'terminal-velocity-design-scaffold')
+
+    def test_mission_route_refuel_delivery_loop_recovers_and_delivers(self):
+        result = run_scripted_scenario('mission_route_refuel_delivery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['queued_active_mission_destination'], 'passed')
+        self.assertEqual(result['checks']['warned_low_fuel_before_mission_route'], 'passed')
+        self.assertEqual(result['checks']['blocked_jump_before_refuel'], 'passed')
+        self.assertEqual(result['checks']['refueled_at_recovery_body'], 'passed')
+        self.assertEqual(result['checks']['delivered_mission_after_route_refuel'], 'passed')
+        self.assertEqual(result['checks']['recorded_route_refuel_source_boundary'], 'passed')
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera'])
+        self.assertEqual(result['state']['routeQueue'], [])
+        self.assertEqual(result['state']['credits'], 11800)
+        self.assertTrue(any(event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel' for event in result['trace']))
+        self.assertTrue(any(event.get('type') == 'refuel' and event.get('body') == 'Earth' for event in result['trace']))
+        route_events = [event for event in result['trace'] if event.get('type') == 'route_to_active_mission_destination']
+        self.assertTrue(route_events)
+        self.assertEqual(route_events[-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
+        self.assertEqual(route_events[-1]['oracleStatus'], 'mission_objective_hint_pending_ev_classic_ui_trace')
 
     def test_mission_trade_hybrid_capacity_planning_preserves_trade_cargo(self):
         result = run_scripted_scenario('mission_trade_hybrid_capacity_planning')

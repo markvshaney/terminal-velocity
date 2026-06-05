@@ -25,6 +25,7 @@
     "alignment_completion_return_contract_loop",
     "mission_destination_route_hint",
     "mission_destination_low_fuel_route_hint",
+    "mission_route_refuel_delivery_loop",
     "mission_trade_hybrid_capacity_planning",
     "mission_trade_refuel_delivery_loop",
     "mission_trade_destination_sale_loop",
@@ -190,6 +191,10 @@
     "mission_destination_low_fuel_route_hint": {
       "purpose": "Low-fuel mission objective route hint: queue the active contract destination while fuel is empty, surface the fuel warning, and name the current-system refuel recovery body before the player tries to jump.",
       "surface": "mission objective/map route/refuel recovery design scaffold"
+    },
+    "mission_route_refuel_delivery_loop": {
+      "purpose": "Mission route/refuel delivery loop: accept the intro courier, queue the active destination at empty fuel, block the jump, land/refuel at the named recovery body, then deliver at Luna.",
+      "surface": "mission objective route/refuel/delivery recovery scaffold"
     },
     "mission_trade_hybrid_capacity_planning": {
       "purpose": "Mission-trader hybrid loop: accept an 8-ton courier job, use the remaining capacity for one commodity lot, block a second lot for capacity, then complete the mission while retaining trade cargo.",

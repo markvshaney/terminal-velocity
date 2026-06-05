@@ -57,6 +57,7 @@ SCENARIO_CURRICULUM = [
     'alignment_completion_return_contract_loop',
     'mission_destination_route_hint',
     'mission_destination_low_fuel_route_hint',
+    'mission_route_refuel_delivery_loop',
     'mission_trade_hybrid_capacity_planning',
     'mission_trade_refuel_delivery_loop',
     'mission_trade_destination_sale_loop',
@@ -1382,6 +1383,22 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'depart'},
             {'type': 'route_to_active_mission_destination'},
         ]
+    if name == 'mission_route_refuel_delivery_loop':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
+            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'depart'},
+            {'type': 'route_to_active_mission_destination'},
+            {'type': 'jump', 'expectBlocked': True},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'refuel'},
+            {'type': 'depart'},
+            {'type': 'jump'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+        ]
     if name == 'mission_trade_hybrid_capacity_planning':
         return [
             {'type': 'accept_cargo_job', 'id': 'levo_trade_aligned_courier', 'destinationSystem': 'Sol', 'destinationBody': 'Earth', 'tons': 8, 'pay': 900, 'risk': 'safe'},
@@ -2184,15 +2201,26 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'completed_return_contract_after_each_alignment': 'passed' if len(completions) == 2 and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('cargoUsed') == 0 else 'failed',
             'recorded_return_contract_source_boundary': 'passed' if len(accepts) == 2 and all(event.get('sourceLabel') == 'terminal-velocity-mission-scaffold' and event.get('oracleStatus') == 'mission_behavior_pending_classic_runtime_trace' for event in accepts) else 'failed',
         })
-    elif name in {'mission_destination_route_hint', 'mission_destination_low_fuel_route_hint'}:
+    elif name in {'mission_destination_route_hint', 'mission_destination_low_fuel_route_hint', 'mission_route_refuel_delivery_loop'}:
         route_events = [event for event in trace if event.get('type') == 'route_to_active_mission_destination']
         latest_route = route_events[-1] if route_events else {}
         checks.update({
-            'queued_active_mission_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] and latest_route.get('missionId') == 'intro_courier_earth_hera' and latest_route.get('destinationSystem') == 'Centauri' and latest_route.get('routeQueued') else 'failed',
+            'queued_active_mission_destination': 'passed' if latest_route.get('missionId') == 'intro_courier_earth_hera' and latest_route.get('destinationSystem') == 'Centauri' and latest_route.get('routeQueued') else 'failed',
         })
-        if name == 'mission_destination_low_fuel_route_hint':
+        if name == 'mission_destination_route_hint':
+            checks.update({
+                'route_queue_still_points_to_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] else 'failed',
+            })
+        if name in {'mission_destination_low_fuel_route_hint', 'mission_route_refuel_delivery_loop'}:
             checks.update({
                 'warned_low_fuel_before_mission_route': 'passed' if latest_route.get('fuelWarning') is True and latest_route.get('fuelAvailable') == 0 and latest_route.get('refuelRecoveryBody') == 'Earth' and 'nearest refuel: Earth' in latest_route.get('objectiveHint', '') else 'failed',
+            })
+        if name == 'mission_route_refuel_delivery_loop':
+            checks.update({
+                'blocked_jump_before_refuel': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('destinationSystem') == 'Centauri' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
+                'refueled_at_recovery_body': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
+                'delivered_mission_after_route_refuel': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['intro_courier_earth_hera'] and state.get('routeQueue') == [] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
+                'recorded_route_refuel_source_boundary': 'passed' if latest_route.get('sourceLabel') == 'terminal-velocity-design-scaffold' and latest_route.get('oracleStatus') == 'mission_objective_hint_pending_ev_classic_ui_trace' else 'failed',
             })
     elif name == 'mission_trade_hybrid_capacity_planning':
         checks.update({

@@ -7,21 +7,21 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "low-fuel mission route/refuel recovery hint slice verified; commit/push in progress",
+    "dirty": "low-fuel mission route/refuel delivery loop slice verified locally; review/checkpoint pending",
     "head": "4fed244",
-    "status_short": "## main...origin/main\n M godot_ev/scripts/main.gd\n M godot_ev/scripts/self_test.gd\n M native_ev/data/gameplay_curriculum.json\n M native_ev/scenario_eval.py\n M native_ev/tests/test_model.py\n M native_ev/tests/test_scenario_eval.py"
+    "status_short": "## main...origin/main\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M godot_ev/scripts/main.gd\n M godot_ev/scripts/self_test.gd\n M native_ev/data/gameplay_curriculum.json\n M native_ev/scenario_eval.py\n M native_ev/tests/test_model.py\n M native_ev/tests/test_scenario_eval.py"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "low-fuel mission route/refuel recovery hint slice verified; commit/push in progress"
+    "dirty": "low-fuel mission route/refuel delivery loop slice verified locally; review/checkpoint pending"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_4ec608d9",
+    "active_task_id": "t_ccf60270",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "ready_for_successor_after_policy_validation",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T03:08:00Z",
+    "updated_at": "2026-06-05T03:57:47Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -105,7 +105,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Low-fuel mission route/refuel recovery hint slice verified locally; Godot self-test updated to include the 61-scenario curriculum and passes.",
+  "current_milestone": "Low-fuel mission route/refuel delivery loop verified locally: symbolic scenario, Godot mission route log, gameplay curriculum/self-test, and backlog documentation now cover blocked low-fuel jump -> Earth refuel -> Luna delivery completion.",
   "last_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_commits": [
@@ -122,12 +122,15 @@
     "local checkpoint: Add mission auto-abort completion flag guardrail"
   ],
   "last_verified_commands": [
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_route_refuel_delivery_loop_recovers_and_delivers native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> 2 tests OK",
+    "python3 tools/run_gameplay_scenarios.py mission_route_refuel_delivery_loop --pretty -> success with all route/refuel/delivery checks passed, final Centauri/Luna, credits 11800, routeQueue []",
+    "./run_godot.sh tv-mission-route-hint-log -> emitted lowFuelJumpBlocked=true, landedForRefuel=true, refuelSucceeded=true, deliveredAfterRefuel=true, completedMissions=[\"intro_courier_earth_hera\"]",
     "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_destination_low_fuel_route_hint_names_refuel_recovery_body native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_navigation_blocked_reasons_are_player_guidance_contract -v -> 3 tests OK",
     "python3 -m unittest native_ev.tests.test_scenario_eval native_ev.tests.test_model -v -> 192 tests OK",
     "python3 tools/run_gameplay_scenarios.py mission_destination_low_fuel_route_hint --pretty -> success with refuelRecoveryBody=Earth and nearest refuel objective hint",
     "./run_godot.sh tv-mission-route-hint-log -> status includes refuel before full route at Earth",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=61",
-    "python3 -m json.tool native_ev/data/gameplay_curriculum.json -> OK"
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=61"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +139,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After normal push/remote verification, create or unblock one Kanban successor to continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not stop for normal push or branch-ahead state.",
-  "resume_prompt": "Resume Terminal Velocity through Kanban in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog, inspect git status/remotes/branch/log, finish any dirty slice first, and continue one source-aligned safe-local gameplay/fidelity slice. Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after checks and remote HEAD equality verification; report after push verification; keep legacy LLM cron runner superseded.",
-  "updated_at": "2026-06-05T03:44:14Z",
+  "next_resume_action": "Review/checkpoint the verified low-fuel mission route/refuel delivery loop slice, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; preserve scaffold/source labels and do not claim EV Classic auto-route behavior without stronger runtime evidence.",
+  "resume_prompt": "Resume Terminal Velocity through Kanban in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog, inspect git status/remotes/branch/log, finish any dirty slice first, and continue one source-aligned safe-local gameplay/fidelity slice. Current dirty slice is the verified mission_route_refuel_delivery_loop coverage plus backlog update; run targeted tests/Godot log if needed, then checkpoint/review according to board policy.",
+  "updated_at": "2026-06-05T03:57:47Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
