@@ -8,9 +8,9 @@
     "ahead": 0,
     "behind": 0,
     "dirty": "yes: runner checkpoint pending",
-    "head": "a470370",
+    "head": "35731a0",
     "status_short": "## main...origin/main",
-    "origin_main": "a470370972750bcbb572264ab473b0bd860f3c1f"
+    "origin_main": "35731a004cd2e37e2e6755f2025faf11e641dae3"
   },
   "repo_state": {
     "branch": "main",
@@ -25,7 +25,7 @@
     "active_task_id": "t_6d6d3024",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "ready_for_successor_after_autopilot_disabled_blocked_probe_pending_push",
+    "status": "ready_for_successor_after_autopilot_disabled_blocked_probe",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T06:55:03Z",
+    "updated_at": "2026-06-05T06:56:04Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -107,8 +107,8 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "current_milestone": "Autopilot deterministic Godot probe verifies disabled-player blocked guidance alongside engage/disengage, moved-closer, slowed-for-approach, and landed-blocked behavior under Terminal Velocity scaffold labels.",
-  "last_commit": "pending: feat(godot): verify autopilot disabled guidance",
-  "last_checkpoint_commit": "pending after normal push",
+  "last_commit": "35731a0 feat(godot): verify autopilot disabled guidance",
+  "last_checkpoint_commit": "35731a004cd2e37e2e6755f2025faf11e641dae3",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -138,9 +138,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this autopilot disabled-player blocked probe slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot disabled-player blocked guidance probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T06:55:03Z",
+  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot disabled-player blocked probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
+  "updated_at": "2026-06-05T06:56:04Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
