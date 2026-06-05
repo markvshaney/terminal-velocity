@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_344ec1cb",
+    "active_task_id": "t_743aba2b",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "projectile_explosion_help_pushed_verified_sha_neutral_checkpoint",
+    "status": "contraband_recovery_help_broad_verified_pending_commit_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T18:03:29Z",
+    "updated_at": "2026-06-05T18:20:03Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Projectile/explosion timing recovery help slice pushed and remote-verified; F10 help tells players to keep targets selected through source-mined projectile travel/lifetime and wait for the short TV explosion/HUD update before retargeting.",
+  "current_milestone": "Contraband recovery help slice broad-verified: F10 help tells players to respond to Player Info legal-risk cargo before scans or budget clemency after confiscation; exact Classic scan/bribe UI remains pending.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -117,20 +117,16 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "HOME=/home/bh git push origin main -> pushed 5f8b4e8",
-    "git fetch origin main; HEAD == origin/main == 5f8b4e8cae6493a18d0566f5aac28137280d26f5",
-    "git status --short --branch -> ## main...origin/main",
-    "staged added-line secret scan produced only false positives from ledger/event words (secret/check); no credentials found",
-    "git diff --cached --check -> OK before feature commit",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_projectile_motion_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_explosion_log_contract -v -> 3 OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasProjectileMotionHelp=true hasExplosionTimingHelp=true",
-    "./run_godot.sh tv-projectile-motion-log -> projectileSpawned=true projectileMoved=true projectileHitTarget=true projectileExpired=true sourceLabel=terminal-velocity-projectile-motion-scaffold oracleStatus=classic_runtime_projectile_motion_pending",
-    "./run_godot.sh tv-explosion-log -> targetDestroyed=true explosionTriggered=true explosionAnimated=true explosionExpired=true sourceLabel=terminal-velocity-explosion-visual-scaffold oracleStatus=classic_runtime_explosion_timing_pending",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_risk_surface_contract -v -> 2 OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasContrabandRecoveryHelp=true",
+    "./run_godot.sh tv-contraband-risk-log -> heldContrabandInventoryVisible=true finePerTon=400 sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK",
-    "json parses for help_overlay/task-ledger/events"
+    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
+    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
+    "events.jsonl parse -> OK lines=571"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -139,9 +135,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep exact Classic projectile motion and explosion timing labeled pending original-runtime/source evidence.",
+  "next_resume_action": "After diff/no-secret checks, commit/push this contraband recovery help slice and verify origin/main HEAD equality; then create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T18:03:29Z",
+  "updated_at": "2026-06-05T18:20:03Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
