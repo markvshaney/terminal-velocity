@@ -644,6 +644,8 @@ class NativeEvModelTests(unittest.TestCase):
             'Autopilot disengaged',
             'autopilotMovedCloser=%s',
             'autopilotSlowedForApproach=%s',
+            'autopilotLandedBlocked=%s',
+            'Autopilot unavailable while landed; launch first',
             'sourceLabel=terminal-velocity-autopilot-assist-scaffold',
             'oracleStatus=classic_runtime_autopilot_behavior_pending',
         ]:
