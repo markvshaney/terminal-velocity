@@ -55,6 +55,7 @@
     "Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.",
     "Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.",
     "Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.",
+    "Combat reward recovery: after a target is disabled, verify Player Info/HUD reward history and legal deltas before assuming a Classic bounty payout. TV scaffold; exact Classic bounty behavior pending.",
     "Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.",
     "Salvage recovery: if the hold is full when a green salvage marker appears, sell or deliver cargo, then return to the HUD/Player Info marker before leaving the system. TV scaffold; Classic loot behavior pending.",
     "Shield recharge: Player Info shows combat readiness with shield/hull state and source-backed recharge-cadence scaffold; exact Classic timing pending.",
@@ -190,6 +191,11 @@
       "flag": "hasCombatRewardsHelp",
       "source": "help",
       "contains": "Combat rewards: Player Info summarizes"
+    },
+    {
+      "flag": "hasCombatRewardRecoveryHelp",
+      "source": "help",
+      "contains": "Combat reward recovery: after a target is disabled"
     },
     {
       "flag": "hasSalvageHelp",

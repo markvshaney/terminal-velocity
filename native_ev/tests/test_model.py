@@ -301,6 +301,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.',
             'Starting equipment uncertainty: original EV Classic HUD proves No Secondary Weapon, No Target, full shield/fuel, and Free: 20; check Player Info or an outfitter/status screen before treating primary weapons/outfits as exact Classic data.',
             'Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.',
+            'Combat reward recovery: after a target is disabled, verify Player Info/HUD reward history and legal deltas before assuming a Classic bounty payout. TV scaffold; exact Classic bounty behavior pending.',
             'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
         ]:
             self.assertIn(expected_line, help_lines)
@@ -325,6 +326,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasTargetDetailHelp',
             'hasTargetRetargetRecoveryHelp',
             'hasCombatRewardsHelp',
+            'hasCombatRewardRecoveryHelp',
             'hasSalvageHelp',
             'hasSalvageRecoveryHelp',
             'hasShieldRechargeHelp',

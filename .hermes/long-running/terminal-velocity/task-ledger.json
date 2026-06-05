@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_8c619732",
+    "active_task_id": "t_f2d74e27",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "starting_equipment_uncertainty_help_pushed_verified_pending_successor_task",
+    "status": "combat_reward_recovery_help_verified_pending_commit_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T18:48:03Z",
+    "updated_at": "2026-06-05T18:51:38Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Starting-equipment uncertainty help slice committed, pushed, and remote-verified; F10 help separates observed original starting HUD facts from unconfirmed primary weapon/outfit inventory.",
+  "current_milestone": "Combat-reward recovery help slice verified; F10 help now tells players to verify Player Info/HUD reward history and legal deltas before assuming a Classic bounty payout.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -117,20 +117,13 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing starting-equipment uncertainty help, then OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasStartingEquipmentUncertaintyHelp=true hintCount=63",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing combat reward recovery help, then OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasCombatRewardRecoveryHelp=true hintCount=63",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK lines=583 before event append",
-    "added-lines refined secret scan -> NONE",
-    "HOME=/home/bh git push origin main -> pushed starting-equipment uncertainty help commit",
-    "git fetch origin main",
-    "HEAD == origin/main == f0ad32e0041b1ef7983595f67cb22fcf4ea0f71f",
-    "git status --short --branch -> ## main...origin/main"
+    "python3 -m json.tool native_ev/data/help_overlay.json -> OK"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -139,9 +132,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create exactly one successor Kanban continuation task from the pushed HEAD, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
+  "next_resume_action": "After diff/no-secret checks, commit/push this combat-reward recovery help slice and verify origin/main HEAD equality; then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T18:48:03Z",
+  "updated_at": "2026-06-05T18:51:38Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
