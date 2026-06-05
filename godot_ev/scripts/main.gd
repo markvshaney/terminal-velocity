@@ -602,6 +602,9 @@ func _ship_turn_cells_per_second() -> float:
 func _apply_movement_controls(delta: float, turn_dir: int, thrusting: bool, braking: bool, afterburner := false) -> void:
 	if _disabled_player_action_blocked():
 		return
+	if afterburner and landed:
+		_set_status("Afterburner unavailable while landed; launch first")
+		return
 	if turn_dir != 0 and not player_frames.is_empty():
 		turn_cell_progress += float(turn_dir) * _ship_turn_cells_per_second() * delta
 		while turn_cell_progress >= 1.0:
@@ -686,7 +689,14 @@ func _run_afterburner_log() -> void:
 	afterburner_fuel_progress = 0.0
 	_advance_motion_step(1.0 / 60.0, 0, true, false, true)
 	var no_fuel_blocked := status_messages.has("Afterburner unavailable: no fuel") and player_fuel == 0
-	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s noFuelBlocked=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), str(no_fuel_blocked), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
+	_reset_travel_state()
+	landed = true
+	status_messages.clear()
+	afterburner_fuel_progress = 0.0
+	var fuel_before_landed := player_fuel
+	_advance_motion_step(1.0 / 60.0, 0, true, false, true)
+	var landed_blocked := status_messages.has("Afterburner unavailable while landed; launch first") and player_fuel == fuel_before_landed
+	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s noFuelBlocked=%s landedBlocked=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), str(no_fuel_blocked), str(landed_blocked), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
 	get_tree().quit(0)
 
 func _run_autopilot_log() -> void:
