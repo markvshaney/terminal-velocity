@@ -696,7 +696,14 @@ func _run_afterburner_log() -> void:
 	var fuel_before_landed := player_fuel
 	_advance_motion_step(1.0 / 60.0, 0, true, false, true)
 	var landed_blocked := status_messages.has("Afterburner unavailable while landed; launch first") and player_fuel == fuel_before_landed
-	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s noFuelBlocked=%s landedBlocked=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), str(no_fuel_blocked), str(landed_blocked), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
+	_reset_travel_state()
+	player_hull = 0
+	status_messages.clear()
+	afterburner_fuel_progress = 0.0
+	var fuel_before_disabled := player_fuel
+	_advance_motion_step(1.0 / 60.0, 0, true, false, true)
+	var disabled_blocked := status_messages.has(_player_disabled_action_message()) and player_fuel == fuel_before_disabled
+	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s noFuelBlocked=%s landedBlocked=%s disabledBlocked=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), str(no_fuel_blocked), str(landed_blocked), str(disabled_blocked), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
 	get_tree().quit(0)
 
 func _run_autopilot_log() -> void:
