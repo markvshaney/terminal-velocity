@@ -2731,16 +2731,25 @@ func _run_legal_clemency_log() -> void:
 	_jump()
 	_try_land()
 	var government_name := _current_government_name()
+	var mechanics: Dictionary = reputation.get("mechanics", {})
+	var clemency_cost := int(mechanics.get("clemencyCost", 1000))
 	legal_records[government_name] = -45
-	reputation_scores[government_name] = int(reputation.get("mechanics", {}).get("clemencyMinReputation", 10))
-	credits = int(reputation.get("mechanics", {}).get("clemencyCost", 1000)) + 500
+	reputation_scores[government_name] = int(mechanics.get("clemencyMinReputation", 10))
+	credits = max(0, clemency_cost - 1)
 	var before_legal := int(legal_records.get(government_name, 0))
+	var insufficient_credits_before := credits
+	status_messages.clear()
+	var insufficient_paid := _pay_legal_clemency()
+	var insufficient_status := status_line
+	var clemency_insufficient_credit_blocked := not insufficient_paid and insufficient_status.contains("insufficient funds") and int(legal_records.get(government_name, 0)) == before_legal and credits == insufficient_credits_before
+	credits = clemency_cost + 500
 	var before_credits := credits
 	status_messages.clear()
 	var paid := _pay_legal_clemency()
 	var after_legal := int(legal_records.get(government_name, 0))
 	var after_credits := credits
-	print("%s routeToSolSelected=%s system=%s government=\"%s\" paid=%s legalBefore=%d legalAfter=%d creditsBefore=%d creditsAfter=%d status=\"%s\" sourceLabel=terminal-velocity-inferred-clemency-scaffold oracleStatus=approved_inference_pending_ev_classic_confirmation" % [LEGAL_CLEMENCY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, str(paid), before_legal, after_legal, before_credits, after_credits, status_line])
+	var clemency_recovered_after_credits := paid and after_legal > before_legal and after_credits == before_credits - clemency_cost
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" paid=%s clemencyInsufficientCreditBlocked=%s clemencyRecoveredAfterCredits=%s legalBefore=%d legalAfter=%d insufficientCreditsBefore=%d creditsBefore=%d creditsAfter=%d insufficientStatus=\"%s\" status=\"%s\" sourceLabel=terminal-velocity-inferred-clemency-scaffold oracleStatus=approved_inference_pending_ev_classic_confirmation" % [LEGAL_CLEMENCY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, str(paid), str(clemency_insufficient_credit_blocked), str(clemency_recovered_after_credits), before_legal, after_legal, insufficient_credits_before, before_credits, after_credits, insufficient_status, status_line])
 	get_tree().quit(0)
 
 func _run_contraband_scan_log() -> void:
