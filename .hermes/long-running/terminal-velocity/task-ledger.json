@@ -7,9 +7,9 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "low-fuel mission route/refuel delivery loop slice verified locally; review/checkpoint pending",
-    "head": "4fed244",
-    "status_short": "## main...origin/main\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M godot_ev/scripts/main.gd\n M godot_ev/scripts/self_test.gd\n M native_ev/data/gameplay_curriculum.json\n M native_ev/scenario_eval.py\n M native_ev/tests/test_model.py\n M native_ev/tests/test_scenario_eval.py"
+    "dirty": "mission route hint Godot probe extended with mission/trade refuel cargo preservation; verification passed; commit/push pending",
+    "head": "c619218",
+    "status_short": "## main...origin/main\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M godot_ev/scripts/main.gd\n M native_ev/tests/test_model.py"
   },
   "repo_state": {
     "branch": "main",
@@ -105,7 +105,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Low-fuel mission route/refuel delivery loop verified locally: symbolic scenario, Godot mission route log, gameplay curriculum/self-test, and backlog documentation now cover blocked low-fuel jump -> Earth refuel -> Luna delivery completion.",
+  "current_milestone": "Godot mission route hint probe now carries an opportunistic 10-ton Food cargo lot through G-helper route queue, low-fuel block, Earth refuel, Centauri/Luna delivery, and preserves trade cargo under mission/trade refuel scaffold labels.",
   "last_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_commits": [
@@ -122,6 +122,12 @@
     "local checkpoint: Add mission auto-abort completion flag guardrail"
   ],
   "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK after RED missing tradeBoughtBeforeRoute field",
+    "./run_godot.sh tv-mission-route-hint-log -> emitted tradeBoughtBeforeRoute=true, tradeCargoPreservedAfterDelivery=true, heldTradeCargoAfterDelivery=10, cargoUsedAfterDelivery=10, deliveredAfterRefuel=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_trade_refuel_delivery_loop_blocks_low_fuel_then_delivers_with_trade_cargo native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_route_refuel_delivery_loop_recovers_and_delivers -v -> 3 tests OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval native_ev.tests.test_model -v -> 193 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
+    "git diff --check -> OK",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
     "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_route_refuel_delivery_loop_recovers_and_delivers native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> 2 tests OK",
     "python3 tools/run_gameplay_scenarios.py mission_route_refuel_delivery_loop --pretty -> success with all route/refuel/delivery checks passed, final Centauri/Luna, credits 11800, routeQueue []",
@@ -139,9 +145,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review/checkpoint the verified low-fuel mission route/refuel delivery loop slice, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; preserve scaffold/source labels and do not claim EV Classic auto-route behavior without stronger runtime evidence.",
+  "next_resume_action": "Review/checkpoint the verified mission route/trade/refuel Godot probe, then continue the next strongest source-aligned safe local gameplay/fidelity slice from the live backlog; preserve scaffold/source labels and do not claim EV Classic auto-route/trade-carryover UI fidelity without stronger runtime evidence.",
   "resume_prompt": "Resume Terminal Velocity through Kanban in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog, inspect git status/remotes/branch/log, finish any dirty slice first, and continue one source-aligned safe-local gameplay/fidelity slice. Current dirty slice is the verified mission_route_refuel_delivery_loop coverage plus backlog update; run targeted tests/Godot log if needed, then checkpoint/review according to board policy.",
-  "updated_at": "2026-06-05T03:57:47Z",
+  "updated_at": "2026-06-05T06:24:49Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

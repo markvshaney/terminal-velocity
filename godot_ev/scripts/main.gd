@@ -1208,6 +1208,13 @@ func _run_mission_route_hint_log() -> void:
 	var destination_system := str(mission_before_accept.get("destinationSystem", "?"))
 	_accept_selected_mission()
 	var mission_accepted := active_missions.has(accepted_mission_id)
+	landing_tab = 1
+	selected_landing_item = 0
+	var trade_commodity := "food"
+	var cargo_before_trade_buy := cargo
+	_buy_selected_commodity()
+	var trade_cargo_after_buy := int(commodity_hold.get(trade_commodity, 0))
+	var trade_bought_before_route := trade_cargo_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo == cargo_before_trade_buy + EV_CLASSIC_COMMODITY_LOT_SIZE
 	_ev_land_or_launch()
 	selected_route.clear()
 	selected_route.append("Sirius")
@@ -1239,10 +1246,13 @@ func _run_mission_route_hint_log() -> void:
 	_position_at_body("Luna")
 	_try_land()
 	var completed_ids := _complete_arrived_missions()
+	var held_trade_cargo_after_delivery := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_used_after_delivery := cargo
 	var delivered_after_refuel: bool = str(current_system.get("name", "?")) == destination_system and completed_ids.has(accepted_mission_id) and active_missions.is_empty()
+	var trade_cargo_preserved_after_delivery := delivered_after_refuel and held_trade_cargo_after_delivery == trade_cargo_after_buy and cargo_used_after_delivery == trade_cargo_after_buy
 	var mission_route_status := "missionRouteQueued=true" if mission_route_queued else "missionRouteQueued=false"
 	var queued_route := JSON.stringify(selected_route)
-	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s staleRouteBeforeHelper=%s staleRouteReplaced=%s route=%s routeHops=%d fuelBeforeRoute=%d routeFuelCost=%d preJumpFuelWarning=%s routeStatusHasFuelHint=%s lowFuelRouteWarningVisible=%s lowFuelJumpBlocked=%s landedForRefuel=%s refuelSucceeded=%s fuelAfterRefuel=%d routeBeforeDeliveryJump=%s deliveredAfterRefuel=%s completedMissions=%s sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace status=\"%s\" routeStatus=\"%s\" lowFuelRouteStatus=\"%s\" lowFuelJumpStatus=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, JSON.stringify(stale_route_before_helper), str(stale_route_replaced), queued_route, selected_route.size(), fuel_before_route, route_fuel_cost, str(pre_jump_fuel_warning), str(route_status_has_fuel_hint), str(low_fuel_route_warning_visible), str(low_fuel_jump_blocked), str(landed_for_refuel), str(refuel_succeeded), fuel_after_refuel, JSON.stringify(route_before_delivery_jump), str(delivered_after_refuel), JSON.stringify(completed_missions), status_line, route_status_line, low_fuel_route_status_line, low_fuel_jump_status])
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s missionAccepted=%s destinationSystem=%s %s staleRouteBeforeHelper=%s staleRouteReplaced=%s route=%s routeHops=%d fuelBeforeRoute=%d routeFuelCost=%d preJumpFuelWarning=%s routeStatusHasFuelHint=%s lowFuelRouteWarningVisible=%s lowFuelJumpBlocked=%s landedForRefuel=%s refuelSucceeded=%s fuelAfterRefuel=%d routeBeforeDeliveryJump=%s deliveredAfterRefuel=%s tradeBoughtBeforeRoute=%s tradeCargoPreservedAfterDelivery=%s heldTradeCargoAfterDelivery=%d cargoUsedAfterDelivery=%d completedMissions=%s sourceLabel=terminal-velocity-design-scaffold oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace missionTradeRouteSourceLabel=terminal-velocity-mission-trade-refuel-scaffold missionTradeRouteOracleStatus=mission_trade_refuel_pending_classic_runtime_trace status=\"%s\" routeStatus=\"%s\" lowFuelRouteStatus=\"%s\" lowFuelJumpStatus=\"%s\"" % [MISSION_ROUTE_HINT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, str(mission_accepted), destination_system, mission_route_status, JSON.stringify(stale_route_before_helper), str(stale_route_replaced), queued_route, selected_route.size(), fuel_before_route, route_fuel_cost, str(pre_jump_fuel_warning), str(route_status_has_fuel_hint), str(low_fuel_route_warning_visible), str(low_fuel_jump_blocked), str(landed_for_refuel), str(refuel_succeeded), fuel_after_refuel, JSON.stringify(route_before_delivery_jump), str(delivered_after_refuel), str(trade_bought_before_route), str(trade_cargo_preserved_after_delivery), held_trade_cargo_after_delivery, cargo_used_after_delivery, JSON.stringify(completed_missions), status_line, route_status_line, low_fuel_route_status_line, low_fuel_jump_status])
 	get_tree().quit(0)
 
 func _route_to_active_mission_destination() -> bool:
