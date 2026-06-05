@@ -271,6 +271,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Mission route helper: G queues the active mission destination when known.',
             'Mission route trade sale: after delivering a mission with preserved trade cargo, check the destination market and sell recoverable cargo before leaving the route. TV scaffold; Classic behavior pending.',
             'Afterburner: Z gives a Terminal Velocity thrust boost and drains fuel; if it is blocked, refuel at a landed service port before retrying. Exact Classic curve pending.',
+            'Afterburner launch recovery: if Z is blocked while landed, launch first with L, then boost only after clearing port; TV scaffold, exact Classic landed afterburner behavior pending.',
             'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
             'Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.',
             'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
@@ -278,6 +279,7 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertIn(expected_line, help_lines)
         for flag in [
             'hasAfterburnerHelp',
+            'hasAfterburnerLaunchRecoveryHelp',
             'hasAutopilotHelp',
             'hasRepairHelp',
             'hasRepairRecoveryHelp',
