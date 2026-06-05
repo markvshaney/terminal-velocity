@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no: combat sound preference checkpoint pushed and remote verified before this ledger-finalization commit",
-    "head": "e337191a5c67cd65a4ae249b4350ee89f5a198d6",
-    "status_short": "## main...origin/main",
-    "origin_main": "e337191a5c67cd65a4ae249b4350ee89f5a198d6"
+    "dirty": "yes: combat cadence help slice verified locally; commit/push pending",
+    "head": "8f8d35a369fb4d5a4fa1b95c8eaa563dc75256b5",
+    "status_short": "## main...origin/main with docs/checklists/ev-classic-fidelity-implementation-backlog.md, native_ev/data/help_overlay.json, native_ev/tests/test_model.py modified",
+    "origin_main": "8f8d35a369fb4d5a4fa1b95c8eaa563dc75256b5"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no: combat sound preference checkpoint pushed and remote verified before this ledger-finalization commit"
+    "dirty": "yes: combat cadence help slice verified locally; commit/push pending"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_75318839",
+    "active_task_id": "t_8231a6eb",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "combat_sound_pref_guardrail_pushed_remote_verified",
+    "status": "combat_cadence_help_verified_pending_commit_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:13:57Z",
+    "updated_at": "2026-06-05T16:17:35Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Combat guardrail verifies Set Prefs sound preference suppresses decoded weapon sounds while valid shots still spawn; F10 help exposes combat-silent recovery without claiming exact Classic volume semantics.",
+  "current_milestone": "F10 help surfaces combat cadence recovery: immediate source-mined reload-blocked fire attempts should be recovered by waiting for the HUD/cooldown before treating weapons as broken; exact Classic weapon timing remains pending.",
   "last_commit": "e337191 feat(godot): guard combat sound prefs",
   "last_checkpoint_commit": "e337191a5c67cd65a4ae249b4350ee89f5a198d6",
   "last_commits": [
@@ -123,9 +123,10 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_combat_guardrail_log_contract -v -> Ran 2 tests OK",
-    "./run_godot.sh tv-combat-guardrail-log -> soundPreferenceMuted=true mutedSoundEventCount=0 soundPreferenceSuppressesCombatSound=true",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasCombatSoundPrefsHelp=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing combat cadence help, then OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasCombatCadenceHelp=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_combat_guardrail_log_contract -v -> 2 OK",
+    "./run_godot.sh tv-combat-guardrail-log -> immediateSecondShotBlocked=true cooldownCleared=true soundPreferenceSuppressesCombatSound=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
@@ -139,9 +140,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create exactly one successor Kanban continuation task from the final pushed checkpoint, then continue with the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep combat sound-volume semantics labeled pending exact Classic evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the combat-sound-pref guardrail checkpoint. Read ledger/events/prompt/backlog, inspect git state, choose one source-aligned safe local slice, verify, checkpoint, commit, normal push, fetch, verify HEAD == origin/main, and create exactly one successor task unless a real gate/blocker remains.",
-  "updated_at": "2026-06-05T16:13:57Z",
+  "next_resume_action": "After committing/pushing this combat-cadence help slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep combat cadence/reload timing labeled pending Classic runtime comparison.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the combat-cadence help checkpoint. Read ledger/events/prompt/backlog, inspect git state, choose one source-aligned safe local slice, verify, checkpoint, commit, normal push, fetch, verify HEAD == origin/main, and create exactly one successor task unless a real gate/blocker remains.",
+  "updated_at": "2026-06-05T16:17:35Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
