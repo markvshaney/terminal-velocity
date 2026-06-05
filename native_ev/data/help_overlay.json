@@ -34,6 +34,7 @@
     "Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
     "Repair recovery: if F7 is blocked, check that you are landed at a repair-service port, hull is damaged, and credits cover the repair quote before retrying.",
     "Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
+    "Combat sound prefs: Set Prefs Sound Volume gates decoded combat sounds; if combat is silent, reopen Set Prefs before treating weapons as broken. Exact Classic volume behavior pending.",
     "Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.",
     "Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.",
     "Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.",
@@ -124,6 +125,11 @@
       "flag": "hasCombatHelp",
       "source": "help",
       "contains": "Combat: Tab fires primary"
+    },
+    {
+      "flag": "hasCombatSoundPrefsHelp",
+      "source": "help",
+      "contains": "Combat sound prefs: Set Prefs Sound Volume gates decoded combat sounds"
     },
     {
       "flag": "hasTargetDetailHelp",
