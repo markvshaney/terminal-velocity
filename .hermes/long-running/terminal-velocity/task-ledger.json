@@ -2,30 +2,30 @@
   "schema_version": 1,
   "task_id": "terminal-velocity-game-development",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
-  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
+  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no: NPC retaliation recovery help checkpoint pushed and remote verified before this ledger-finalization commit",
-    "head": "7e5128197cf038f7354369c825bf19d19a7c745c",
-    "status_short": "## main...origin/main",
-    "origin_main": "7e5128197cf038f7354369c825bf19d19a7c745c"
+    "dirty": "yes: prompt/ledger updated to clarify reasonable push bundling; successor Kanban task parked scheduled until this correction is committed/pushed",
+    "head": "850a929af1e9d8a966e332ffebe91b663ea7f132",
+    "status_short": "## main...origin/main\n M docs/prompts/terminal-velocity-continuation-prompt.md\n M native_ev/tests/test_model.py",
+    "origin_main": "850a929af1e9d8a966e332ffebe91b663ea7f132"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no: NPC retaliation recovery help checkpoint pushed and remote verified before this ledger-finalization commit"
+    "dirty": "yes: prompt/ledger updated to clarify reasonable push bundling; successor Kanban task parked scheduled until this correction is committed/pushed"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_51d80718",
+    "active_task_id": "t_e3e34d83",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "npc_retaliation_recovery_help_pushed_remote_verified",
+    "status": "successor_scheduled_pending_reasonable_bundle_policy_fix",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:24:27Z",
+    "updated_at": "2026-06-05T16:26:54Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -55,15 +55,15 @@
     ],
     "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
     "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
-    "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved; legacy LLM cron runner remains superseded"
+    "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved, but should be bundled at natural boundaries; avoid one-commit micro-pushes and separate finalizer-only pushes unless a checkpoint/handoff/tool-cap risk makes the remote anchor valuable"
   },
   "status": "running",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
-    "type": "none_for_normal_push",
-    "reason": "The worker push blocker was resolved by using the real OS home credential store for the preapproved normal non-force push; HEAD was fetched and verified equal to origin/main.",
-    "withheld_action": "history rewrite/force-push, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts changes, non-TV repos, destructive/social actions, unsafe dirty state that cannot be separated, or unsupported fidelity claims",
-    "resume_after": "Continue through Kanban with one source-aligned gameplay/fidelity slice per worker run; push coherent bundles normally after standard checks and remote HEAD equality verification."
+    "type": "temporary_scheduled_process_correction",
+    "reason": "User corrected that pushes were expected to be bundled reasonably; successor Kanban task is parked until prompt/ledger policy clarification is committed and verified.",
+    "withheld_action": "dispatching the next Kanban worker with ambiguous micro-push policy; history rewrite/force-push and other real gates remain unchanged",
+    "resume_after": "After this bundling-policy correction is committed and pushed as a coherent process bundle, promote t_e3e34d83 and continue safe local slices with natural-boundary push bundling."
   },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -106,9 +106,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "NPC retaliation recovery help is verified locally: F10 tells players that hostile contacts can fire back after source-mined cooldowns, to watch Player Info shields/hull, break off to repair, and reserve F8 for disabled-player recovery; exact Classic AI cadence remains pending.",
-  "last_commit": "7e51281 chore: checkpoint NPC retaliation help",
-  "last_checkpoint_commit": "7e5128197cf038f7354369c825bf19d19a7c745c",
+  "current_milestone": "NPC retaliation recovery help has been pushed and remote-verified; runner prompt/ledger now being corrected so future normal pushes are bundled at natural boundaries instead of micro-pushed.",
+  "last_commit": "850a929 chore: finalize NPC retaliation checkpoint",
+  "last_checkpoint_commit": "850a929af1e9d8a966e332ffebe91b663ea7f132",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -142,9 +142,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create exactly one successor Kanban continuation task from the final pushed checkpoint, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep NPC retaliation cadence labeled pending Classic runtime comparison.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the NPC-retaliation recovery help checkpoint. Read ledger/events/prompt/backlog, inspect git state, choose one source-aligned safe local slice, verify, checkpoint, commit, normal push, fetch, verify HEAD == origin/main, and create exactly one successor task unless a real gate/blocker remains.",
-  "updated_at": "2026-06-05T16:24:27Z",
+  "next_resume_action": "Commit and push the reasonable-bundle policy correction, then promote t_e3e34d83 and continue the next source-aligned safe local Terminal Velocity slice; future pushes should bundle related feature/docs/ledger commits at natural boundaries.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity after the reasonable-bundle policy correction. Read ledger/events/prompt/backlog, inspect git state, promote/continue the scheduled successor only after this correction is committed, choose one source-aligned safe local slice, verify, checkpoint, and push only at natural coherent bundle boundaries unless a handoff/tool-cap checkpoint requires a remote anchor.",
+  "updated_at": "2026-06-05T16:26:54Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -182,6 +182,7 @@
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
     "Do not treat normal coherent non-force pushes to markvshaney/terminal-velocity as a human gate; run the standard checks, push, fetch, verify HEAD == origin/main, and continue/report afterward.",
+    "Do not micro-push every tiny slice or separate finalizer-only checkpoint; use normal non-force pushes at natural coherent bundle boundaries after standard checks, unless handoff/tool-cap/dirty-state risk makes an immediate remote checkpoint valuable.",
     "Do not use PATH-only Godot checks; run repo-local ./run_godot.sh for TV verification.",
     "Do not treat EV adaptations/Godot logs as Classic truth; label them as hypothesis or Terminal Velocity evidence until original/resource/manual support exists.",
     "Do not repeat broad source mining when the next_resume_action names a bounded source-aligned slice; inspect the live backlog and choose the strongest adjacent slice.",
