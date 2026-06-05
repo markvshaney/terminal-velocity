@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: coherent autopilot no-port recovery help slice pending commit",
-    "head": "c11f3cc",
-    "status_short": "## main...origin/main\n M .hermes/long-running/terminal-velocity/events.jsonl\n M .hermes/long-running/terminal-velocity/task-ledger.json\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M native_ev/data/help_overlay.json\n M native_ev/tests/test_model.py",
-    "origin_main": "c11f3cc1e0e6e53b6cb67f69930f2924742fb873"
+    "dirty": "no",
+    "head": "1ca2492eb697029542b456b65525313243a03615",
+    "status_short": "## main...origin/main",
+    "origin_main": "1ca2492eb697029542b456b65525313243a03615"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: coherent autopilot no-port recovery help slice pending commit"
+    "dirty": "no"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_67edb73e",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "ready_for_checkpoint_after_autopilot_no_port_recovery_help_slice",
+    "status": "remote_verified_after_autopilot_no_port_recovery_help_slice",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T07:20:42Z",
+    "updated_at": "2026-06-05T07:21:57Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -107,8 +107,8 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "current_milestone": "F10 help now surfaces the autopilot no-port recovery path under Terminal Velocity scaffold labels.",
-  "last_commit": "b29a750 feat(godot): block landed afterburner",
-  "last_checkpoint_commit": "b29a75052f06f83c0794133a913fe06b1da0f2a9",
+  "last_commit": "1ca2492 feat(godot): surface autopilot no-port help",
+  "last_checkpoint_commit": "1ca2492eb697029542b456b65525313243a03615",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -130,7 +130,8 @@
     "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK",
-    "native_ev/data/help_overlay.json and task-ledger.json parse OK; events.jsonl parses OK through 510 lines"
+    "native_ev/data/help_overlay.json and task-ledger.json parse OK; events.jsonl parses OK through 510 lines",
+    "HOME=/home/bh git push origin main && git fetch origin main && HEAD == origin/main == 1ca2492eb697029542b456b65525313243a03615"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -139,9 +140,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this autopilot no-port recovery help slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled/no-port behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "next_resume_action": "Create successor Kanban continuation from pushed HEAD 1ca2492, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled/no-port behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot no-port recovery help surface slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T07:20:42Z",
+  "updated_at": "2026-06-05T07:21:57Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
