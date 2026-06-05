@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": "yes: runner checkpoint pending commit",
-    "head": "5fca524981c9b32ea869dae61cfa88f78472400f",
-    "status_short": "## main...origin/main [ahead 1]",
-    "origin_main": "5c5bfe8a62cd8b3ea5dffefd947c9a6454c4d1d2"
+    "head": "1c65f73db7aaa5852d052c68b07bf67c5183d77d",
+    "status_short": "## main...origin/main",
+    "origin_main": "1c65f73db7aaa5852d052c68b07bf67c5183d77d"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": "yes: runner checkpoint pending commit"
   },
@@ -25,7 +25,7 @@
     "active_task_id": "t_673cc089",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "feature_commit_autopilot_launch_recovery_help_pending_checkpoint",
+    "status": "runner_checkpoint_autopilot_launch_recovery_help_pending_commit",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T07:31:53Z",
+    "updated_at": "2026-06-05T07:32:39Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,9 +106,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "F10 help now surfaces autopilot launch-first recovery guidance under Terminal Velocity scaffold labels.",
-  "last_commit": "5fca524 feat(godot): surface autopilot disabled recovery help",
-  "last_checkpoint_commit": "5fca524981c9b32ea869dae61cfa88f78472400f",
+  "current_milestone": "F10 help surfaces landed autopilot launch-first recovery guidance; feature commit pushed and verified at origin/main.",
+  "last_commit": "1c65f73 feat(godot): surface autopilot launch recovery help",
+  "last_checkpoint_commit": "1c65f73db7aaa5852d052c68b07bf67c5183d77d",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -138,9 +138,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this autopilot landed launch-recovery help slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled/no-port behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled/no-port behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot launch recovery help surface slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T07:31:53Z",
+  "updated_at": "2026-06-05T07:32:39Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
