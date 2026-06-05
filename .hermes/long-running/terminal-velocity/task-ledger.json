@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_7a80e05d",
+    "active_task_id": "t_ee574cae",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "runner_checkpoint_afterburner_disabled_recovery_pending_commit",
+    "status": "afterburner_hud_key_visibility_verified_pending_commit_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T07:41:51Z",
+    "updated_at": "2026-06-05T13:34:09Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -61,7 +61,7 @@
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
     "type": "none_for_normal_push",
-    "reason": "Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after standard checks; the prior review-required Kanban state was not a policy gate and this slice has local verification.",
+    "reason": "User explicitly requested long-running TV continuation; coherent normal non-force pushes are preapproved after standard checks.",
     "withheld_action": "history rewrite/force-push, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts changes, non-TV repos, destructive/social actions, unsafe dirty state that cannot be separated, or unsupported fidelity claims",
     "resume_after": "Continue through Kanban/source-aligned slices; push coherent normal bundles after checks and remote HEAD equality verification."
   },
@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "F10 help and the deterministic afterburner probe surface disabled-player recovery guidance for the afterburner scaffold; feature commit created locally.",
+  "current_milestone": "Afterburner HUD/log contract exposes Z afterburner in the HUD footer and afterburnerKeyHudVisible=true in TV_AFTERBURNER_EVENT.",
   "last_commit": "9270ea2 feat(godot): surface afterburner disabled recovery",
   "last_checkpoint_commit": "9270ea2e8074b8baeaf5b092ad67f157651281de",
   "last_commits": [
@@ -123,14 +123,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract -v -> RED missing disabledBlocked, then OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing hasAfterburnerDisabledRecoveryHelp, then OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasAfterburnerDisabledRecoveryHelp=true",
-    "./run_godot.sh tv-afterburner-log -> speedBoosted=true fuelDrained=true noFuelBlocked=true landedBlocked=true disabledBlocked=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract -v -> OK",
+    "./run_godot.sh tv-afterburner-log -> afterburnerKeyHudVisible=true speedBoosted=true fuelDrained=true noFuelBlocked=true landedBlocked=true disabledBlocked=true",
     "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
-    "git diff --check -> OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK"
+    "git diff --check -> OK"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -139,9 +136,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep afterburner disabled/death behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the afterburner disabled-player recovery help/probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T07:41:51Z",
+  "next_resume_action": "After committing/pushing this afterburner HUD key visibility slice and verifying origin/main HEAD equality, unblock/complete Kanban task t_ee574cae and create exactly one successor continuation task from pushed HEAD to continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after afterburner HUD key visibility; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
+  "updated_at": "2026-06-05T13:34:09Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

@@ -1095,6 +1095,8 @@ class NativeEvModelTests(unittest.TestCase):
             'noFuelBlocked=%s',
             'landedBlocked=%s',
             'disabledBlocked=%s',
+            'afterburnerKeyHudVisible=%s',
+            'Z afterburner',
             'Afterburner unavailable: no fuel',
             'Afterburner unavailable while landed; launch first',
             'sourceLabel=terminal-velocity-afterburner-scaffold',

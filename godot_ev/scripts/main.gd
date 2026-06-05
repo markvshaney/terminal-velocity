@@ -703,7 +703,8 @@ func _run_afterburner_log() -> void:
 	var fuel_before_disabled := player_fuel
 	_advance_motion_step(1.0 / 60.0, 0, true, false, true)
 	var disabled_blocked := status_messages.has(_player_disabled_action_message()) and player_fuel == fuel_before_disabled
-	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s noFuelBlocked=%s landedBlocked=%s disabledBlocked=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), str(no_fuel_blocked), str(landed_blocked), str(disabled_blocked), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
+	var afterburner_key_hud_visible := _hud_key_line().contains("Z afterburner")
+	print("%s ticks=%d normalSpeed=%.3f afterburnerSpeed=%.3f speedBoosted=%s fuelBefore=%d fuelAfter=%d fuelDrained=%s noFuelBlocked=%s landedBlocked=%s disabledBlocked=%s afterburnerKeyHudVisible=%s thrustMultiplier=%.2f fuelPerSecond=%.2f sourceLabel=terminal-velocity-afterburner-scaffold oracleStatus=classic_runtime_afterburner_fuel_curve_pending" % [AFTERBURNER_EVENT_LOG_PREFIX, ticks, normal_speed, afterburner_speed, str(speed_boosted), fuel_before_afterburner, fuel_after_afterburner, str(fuel_drained), str(no_fuel_blocked), str(landed_blocked), str(disabled_blocked), str(afterburner_key_hud_visible).to_lower(), AFTERBURNER_THRUST_MULTIPLIER, AFTERBURNER_FUEL_PER_SECOND])
 	get_tree().quit(0)
 
 func _run_autopilot_log() -> void:
@@ -5158,7 +5159,10 @@ func _draw_hud() -> void:
 	if not targets.is_empty():
 		target_range = pos.distance_to(targets[selected_target_index % targets.size()])
 	draw_string(font, Vector2(1024, 280), _scanner_target_detail_line(), HORIZONTAL_ALIGNMENT_LEFT, 260, 14, Color(1.0, 0.82, 0.35))
-	draw_string(font, Vector2(20, 785), "EV keys: Arrows move  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F6 save  F10 help  P/I info  Esc quit  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+	draw_string(font, Vector2(20, 785), _hud_key_line() + "  |  " + status_line, HORIZONTAL_ALIGNMENT_LEFT, 1230, 15, Color(0.82, 0.88, 0.95))
+
+func _hud_key_line() -> String:
+	return "EV keys: Arrows move  Z afterburner  L land/launch  N next target  R closest target  \\ hyper select  H hyper mode  J jump  M map  G mission route  F6 save  F10 help  P/I info  Esc quit"
 
 func _active_mission_destination_systems() -> Array[String]:
 	var destinations: Array[String] = []
