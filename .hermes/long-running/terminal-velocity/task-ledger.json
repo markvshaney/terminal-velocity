@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": "no",
     "head": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-    "status_short": "## main...origin/main",
+    "status_short": "## main...origin/main [ahead 1]",
     "origin_main": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": "no"
   },
@@ -25,7 +25,7 @@
     "active_task_id": "t_d4b99539",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "legal_patrol_posture_recovery_help_verified_pending_commit_push",
+    "status": "legal_patrol_posture_recovery_help_committed_push_blocked_auth",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T19:03:16Z",
+    "updated_at": "2026-06-05T19:06:11Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -57,7 +57,7 @@
     "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
     "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved, but should be bundled at natural boundaries; avoid one-commit micro-pushes and separate finalizer-only pushes unless a checkpoint/handoff/tool-cap risk makes the remote anchor valuable"
   },
-  "status": "running",
+  "status": "waiting_gate",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Legal-patrol posture recovery help slice target- and broad-verified; F10 help now tells players that scanner/target hostile-patrol status means legal standing is below the CrimeTol-style TV scaffold and to route away or repair standing before fighting.",
+  "current_milestone": "Legal-patrol posture recovery help slice committed locally at 4008289 after target/broad verification, but push to origin/main is blocked because GitHub credentials are unavailable in this runner.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -126,8 +126,19 @@
     "git diff --check -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK before event append"
+    "events.jsonl parse -> OK before event append",
+    "added-lines high-signal secret scan -> NONE",
+    "git diff --cached --check -> OK",
+    "git commit -m \"Add legal patrol posture recovery help\" -> 400828982c48bb4d969db24acf8e0234e7130ace",
+    "git push origin main -> blocked: fatal could not read Username for https://github.com; gh auth status reports not logged in; SSH git@github.com permission denied publickey",
+    "local HEAD 400828982c48bb4d969db24acf8e0234e7130ace; origin/main remains 50d5c7872604b5e2756aab4655a7f33adbad3213"
   ],
+  "active_gate": {
+    "type": "credentials/auth",
+    "reason": "Normal non-force push to origin/main was attempted, but this runner has no usable GitHub HTTPS credentials, gh login, or SSH authorization.",
+    "withheld_action": "Push local commit 400828982c48bb4d969db24acf8e0234e7130ace to origin/main and verify HEAD == origin/main.",
+    "resume_after": "Operator provides/restores GitHub auth for this runner or pushes the local commit externally and unblocks the Kanban task."
+  },
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
@@ -135,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After precommit hygiene, commit/push this legal-patrol posture recovery help slice and verify origin/main HEAD equality; then create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
+  "next_resume_action": "After GitHub auth is restored, run git status --short --branch, push local commit 400828982c48bb4d969db24acf8e0234e7130ace to origin/main, fetch origin main, verify HEAD == origin/main, update ledger/events to pushed_verified, then create exactly one successor Kanban continuation task from pushed HEAD.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T19:03:16Z",
+  "updated_at": "2026-06-05T19:06:11Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
