@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_c479cbae",
+    "active_task_id": "t_61fa003b",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "sequential_deadline_recovery_help_pushed_verified_sha_neutral_checkpoint",
+    "status": "timed_abort_recovery_help_target_verified_broad_verified_pending_commit",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T17:37:26Z",
+    "updated_at": "2026-06-05T17:40:18Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Sequential deadline recovery help slice pushed and remote-verified; F10 help tells players to check Mission Log/Player Info for each released-cargo timed job and cumulative reputation penalty when multiple deadline missions expire together.",
+  "current_milestone": "Timed deadline-abort recovery help target/broad verification passed locally; F10 help now tells players aborting a timed TV mission before expiry should release reserved cargo and prevent late failure flags/reputation penalties, with Mission Log/Player Info verification before follow-ups.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -117,20 +117,17 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing sequential deadline recovery help, then OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_sequential_log_contract -v -> 2 OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionSequentialDeadlineRecoveryHelp=true",
-    "./run_godot.sh tv-mission-deadline-sequential-log -> bothDeadlineFailuresRecorded=true reservedCargoReleased=true failureFlagsSet=true cumulativeReputationPenaltyApplied=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing timed abort recovery help, then OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionTimedAbortRecoveryHelp=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_abort_log_contract -v -> 2 OK",
+    "./run_godot.sh tv-mission-deadline-abort-log -> deadlineMissionAborted=true reservedCargoReleased=true lateFailurePrevented=true failureFlagPreserved=true reputationPreserved=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK before event append",
-    "HOME=/home/bh git push origin main -> pushed 05d34e5",
-    "git fetch origin main; HEAD == origin/main == 05d34e5541974ad08e33d748cd42b61d941e50db",
-    "git status --short --branch -> ## main...origin/main"
+    "events.jsonl parse -> OK before event append lines=561"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -139,9 +136,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep multi-deadline failure UI/timing labeled pending Classic runtime/manual evidence.",
+  "next_resume_action": "After committing/pushing the timed deadline-abort recovery help slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; keep exact Classic abort/deadline UI/timing labeled pending original-runtime/manual evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T17:37:26Z",
+  "updated_at": "2026-06-05T17:40:18Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -195,6 +192,6 @@
     "7_do_not_redo": "recorded in do_not_redo"
   },
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-  "last_process_checkpoint": "Surface sequential deadline recovery help",
+  "last_process_checkpoint": "Surface timed deadline-abort recovery help",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording so the commit containing this checkpoint does not stale its own metadata."
 }
