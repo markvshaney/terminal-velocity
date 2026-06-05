@@ -5,27 +5,27 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
-    "dirty": "yes: runner push-verification checkpoint pending commit",
-    "head": "d75c14dac728be61ecb35de3c910581771543dc2",
-    "status_short": "## main...origin/main",
+    "dirty": "no: committed locally, push blocked by missing GitHub credentials",
+    "head": "local HEAD commit for feat(godot): clarify afterburner recovery guidance; run git rev-parse HEAD after checkout/resume because this checkpoint is embedded in that commit",
+    "status_short": "## main...origin/main [ahead 1]",
     "origin_main": "d75c14dac728be61ecb35de3c910581771543dc2"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
-    "dirty": "yes: runner push-verification checkpoint pending commit"
+    "dirty": "no: committed locally, push blocked by missing GitHub credentials"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_ee574cae",
+    "active_task_id": "t_3bbdaabb",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "afterburner_hud_key_visibility_pushed_pending_successor_task",
+    "status": "push_blocked_missing_github_credentials",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T13:34:56Z",
+    "updated_at": "2026-06-05T13:44:35Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -57,13 +57,13 @@
     "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
     "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved; legacy LLM cron runner remains superseded"
   },
-  "status": "running",
+  "status": "waiting_gate",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
-    "type": "none_for_normal_push",
-    "reason": "User explicitly requested long-running TV continuation; coherent normal non-force pushes are preapproved after standard checks.",
-    "withheld_action": "history rewrite/force-push, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts changes, non-TV repos, destructive/social actions, unsafe dirty state that cannot be separated, or unsupported fidelity claims",
-    "resume_after": "Continue through Kanban/source-aligned slices; push coherent normal bundles after checks and remote HEAD equality verification."
+    "type": "credentials",
+    "reason": "git push origin main failed: fatal: could not read Username for 'https://github.com': No such device or address; gh auth status reports no GitHub login.",
+    "withheld_action": "normal push to origin/main and successor Kanban task creation from pushed HEAD",
+    "resume_after": "GitHub credentials are restored for this environment or a human pushes the current local HEAD commit feat(godot): clarify afterburner recovery guidance, then fetch/verify HEAD == origin/main and create exactly one successor continuation task."
   },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Afterburner HUD/log contract exposes Z afterburner in the HUD footer and afterburnerKeyHudVisible=true in TV_AFTERBURNER_EVENT.",
+  "current_milestone": "Afterburner and disabled-player blocked-action guidance now names concrete recovery affordances: F5 refuel for empty-fuel afterburner blocks, L launch for landed afterburner blocks, and F8 recovery for disabled-player blocks.",
   "last_commit": "d75c14d feat(godot): surface afterburner HUD key hint",
   "last_checkpoint_commit": "d75c14dac728be61ecb35de3c910581771543dc2",
   "last_commits": [
@@ -123,11 +123,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract -v -> OK",
-    "./run_godot.sh tv-afterburner-log -> afterburnerKeyHudVisible=true speedBoosted=true fuelDrained=true noFuelBlocked=true landedBlocked=true disabledBlocked=true",
-    "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
+    "python3 -m unittest native_ev.tests.test_model -v -> Ran 127 tests, OK",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
-    "git diff --check -> OK"
+    "git diff --check -> OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +136,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Complete Kanban task t_ee574cae and create exactly one successor continuation task from pushed HEAD d75c14d to continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after afterburner HUD key visibility; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T13:34:56Z",
+  "next_resume_action": "Resolve GitHub authentication for /home/bh/workspaces/loki/terminal-velocity, then run git rev-parse HEAD; git push origin main; git fetch origin main; verify git rev-parse HEAD equals git rev-parse origin/main; after successful remote verification, create exactly one successor Terminal Velocity continuation Kanban task from the pushed HEAD.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. A verified local commit feat(godot): clarify afterburner recovery guidance exists and branch main is ahead of origin/main by 1. Do not redo the slice. Resolve/confirm GitHub auth, push origin main, fetch, verify HEAD == origin/main, then create exactly one successor continuation task unless a real gate/blocker remains.",
+  "updated_at": "2026-06-05T13:44:35Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
