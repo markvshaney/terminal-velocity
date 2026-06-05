@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: runner checkpoint pending commit",
-    "head": "1c65f73db7aaa5852d052c68b07bf67c5183d77d",
+    "dirty": "yes: afterburner fuel recovery help slice pending commit",
+    "head": "36675574d85f5658bdae1fdc90ea6113575c570f",
     "status_short": "## main...origin/main",
-    "origin_main": "1c65f73db7aaa5852d052c68b07bf67c5183d77d"
+    "origin_main": "36675574d85f5658bdae1fdc90ea6113575c570f"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: runner checkpoint pending commit"
+    "dirty": "yes: afterburner fuel recovery help slice pending commit"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_673cc089",
+    "active_task_id": "t_6bd5d3c1",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "runner_checkpoint_autopilot_launch_recovery_help_pending_commit",
+    "status": "runner_checkpoint_afterburner_fuel_recovery_help_pending_commit",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T07:32:39Z",
+    "updated_at": "2026-06-05T07:35:50Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "F10 help surfaces landed autopilot launch-first recovery guidance; feature commit pushed and verified at origin/main.",
+  "current_milestone": "F10 help surfaces afterburner no-fuel refuel recovery guidance; feature slice verified locally and pending commit/push.",
   "last_commit": "1c65f73 feat(godot): surface autopilot launch recovery help",
   "last_checkpoint_commit": "1c65f73db7aaa5852d052c68b07bf67c5183d77d",
   "last_commits": [
@@ -123,13 +123,14 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing autopilot launch recovery help line, then OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasAutopilotLaunchRecoveryHelp=true",
-    "./run_godot.sh tv-autopilot-log -> autopilotLandedBlocked=true, autopilotDisabledBlocked=true, autopilotDisabledDisengaged=true, autopilotNoPortDisengaged=true",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> 2 tests OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing afterburner fuel recovery help line, then OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_afterburner_log_contract -v -> 2 tests OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasAfterburnerFuelRecoveryHelp=true",
+    "./run_godot.sh tv-afterburner-log -> speedBoosted=true fuelDrained=true noFuelBlocked=true landedBlocked=true",
     "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
-    "git diff --check -> OK"
+    "git diff --check -> OK",
+    "python3 -m json.tool native_ev/data/help_overlay.json -> OK"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -138,9 +139,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled/no-port behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot launch recovery help surface slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T07:32:39Z",
+  "next_resume_action": "After committing/pushing this afterburner fuel-recovery help slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep afterburner constants/no-fuel/landed behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the afterburner fuel recovery help surface slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
+  "updated_at": "2026-06-05T07:35:50Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

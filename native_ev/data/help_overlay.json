@@ -7,6 +7,7 @@
     "Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.",
     "Flight: Arrows/WASD thrust and turn; L lands or launches; J jumps to the selected route.",
     "Afterburner: Z gives a Terminal Velocity thrust boost and drains fuel; if it is blocked, refuel at a landed service port before retrying. Exact Classic curve pending.",
+    "Afterburner fuel recovery: if Z is blocked for empty fuel, land at a service port and refuel with F5 before retrying; TV scaffold, exact Classic fuel thresholds pending.",
     "Afterburner launch recovery: if Z is blocked while landed, launch first with L, then boost only after clearing port; TV scaffold, exact Classic landed afterburner behavior pending.",
     "Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.",
     "Autopilot launch recovery: if A is blocked while landed, launch first with L before retrying the port-assist scaffold; exact Classic landed autopilot behavior pending.",
@@ -71,6 +72,11 @@
       "flag": "hasAfterburnerHelp",
       "source": "help",
       "contains": "Afterburner: Z gives a Terminal Velocity thrust boost"
+    },
+    {
+      "flag": "hasAfterburnerFuelRecoveryHelp",
+      "source": "help",
+      "contains": "Afterburner fuel recovery: if Z is blocked for empty fuel"
     },
     {
       "flag": "hasAfterburnerLaunchRecoveryHelp",

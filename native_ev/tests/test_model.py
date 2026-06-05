@@ -271,6 +271,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Mission route helper: G queues the active mission destination when known.',
             'Mission route trade sale: after delivering a mission with preserved trade cargo, check the destination market and sell recoverable cargo before leaving the route. TV scaffold; Classic behavior pending.',
             'Afterburner: Z gives a Terminal Velocity thrust boost and drains fuel; if it is blocked, refuel at a landed service port before retrying. Exact Classic curve pending.',
+            'Afterburner fuel recovery: if Z is blocked for empty fuel, land at a service port and refuel with F5 before retrying; TV scaffold, exact Classic fuel thresholds pending.',
             'Afterburner launch recovery: if Z is blocked while landed, launch first with L, then boost only after clearing port; TV scaffold, exact Classic landed afterburner behavior pending.',
             'Autopilot launch recovery: if A is blocked while landed, launch first with L before retrying the port-assist scaffold; exact Classic landed autopilot behavior pending.',
             'Autopilot no-port recovery: if A disengages with no port in the current system, pick a linked system with landable services on the map before retrying; TV scaffold, exact Classic target selection pending.',
@@ -282,6 +283,7 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertIn(expected_line, help_lines)
         for flag in [
             'hasAfterburnerHelp',
+            'hasAfterburnerFuelRecoveryHelp',
             'hasAfterburnerLaunchRecoveryHelp',
             'hasAutopilotHelp',
             'hasAutopilotLaunchRecoveryHelp',
