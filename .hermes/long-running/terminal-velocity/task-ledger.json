@@ -7,7 +7,7 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no before runner checkpoint update",
+    "dirty": "yes: coherent mission-route trade-sale help slice pending commit",
     "head": "c216df5",
     "status_short": "## main...origin/main",
     "origin_main": "c216df54edf6d9fdc5ce58b4834183e755752cf0"
@@ -16,16 +16,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no before runner checkpoint update"
+    "dirty": "yes: coherent mission-route trade-sale help slice pending commit"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_ccf60270",
+    "active_task_id": "t_e16a4d6f",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "ready_for_successor_after_policy_validation",
+    "status": "running_mission_route_trade_sale_help_slice",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T03:57:47Z",
+    "updated_at": "2026-06-05T06:36:52Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Pushed Godot mission route hint probe destination-sale cleanup: preserved Food trade cargo is sold after mission delivery and credit/cargo cleanup fields are logged under Terminal Velocity scaffold labels.",
+  "current_milestone": "Added F10 help/curriculum coverage for selling preserved trade cargo at the mission-route destination market after delivery, keeping the behavior labeled as a Terminal Velocity scaffold pending Classic evidence.",
   "last_commit": "c216df5 feat(godot): sell trade cargo after mission route delivery",
   "last_checkpoint_commit": "c216df54edf6d9fdc5ce58b4834183e755752cf0",
   "last_commits": [
@@ -123,6 +123,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK after RED missing mission route trade-sale help line",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> emitted hasMissionRouteTradeSaleHelp=true",
+    "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
+    "git diff --check -> OK",
     "HOME=/home/bh git push origin main && git fetch origin main && HEAD == origin/main == c216df54edf6d9fdc5ce58b4834183e755752cf0",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK after RED missing tradeCargoSoldAfterDelivery field",
     "./run_godot.sh tv-mission-route-hint-log -> emitted tradeCargoSoldAfterDelivery=true, heldTradeCargoAfterSale=0, cargoUsedAfterSale=0, creditsAfterDelivery=11380, creditsAfterTradeSale=11870",
@@ -149,9 +154,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create successor Kanban continuation from pushed HEAD c216df5 after the runner checkpoint commit lands, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep mission route/trade sale behavior labeled as Terminal Velocity scaffold pending Classic runtime evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the mission route destination-sale cleanup slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T06:33:17Z",
+  "next_resume_action": "After committing/pushing this mission-route trade-sale help surface slice and verifying origin/main HEAD equality, create a successor Kanban continuation and continue the next strongest source-aligned safe local gameplay/fidelity slice from the live backlog; keep mission route/trade sale behavior labeled as Terminal Velocity scaffold pending Classic runtime evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the mission-route trade-sale help surface slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
+  "updated_at": "2026-06-05T06:36:52Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
