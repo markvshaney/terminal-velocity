@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: target retarget recovery slice pending commit",
-    "head": "6539d1b4b257a02e57b1b0991c15dc42c8299345",
-    "status_short": "## main...origin/main\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M godot_ev/scripts/main.gd\n M native_ev/data/help_overlay.json\n M native_ev/tests/test_model.py",
-    "origin_main": "6539d1b4b257a02e57b1b0991c15dc42c8299345"
+    "dirty": "yes: runner checkpoint after target retarget recovery push",
+    "head": "d6abe3daf0fff0c0b74b2b6b3df10542018c90c0",
+    "status_short": "## main...origin/main",
+    "origin_main": "d6abe3daf0fff0c0b74b2b6b3df10542018c90c0"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: target retarget recovery slice pending commit"
+    "dirty": "yes: runner checkpoint after target retarget recovery push"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_bb668db0",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "target_retarget_recovery_slice_verified_pending_commit_push",
+    "status": "target_retarget_recovery_pushed_pending_successor_task",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:03:53Z",
+    "updated_at": "2026-06-05T16:04:40Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -107,8 +107,8 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "current_milestone": "Target selection help/probe now names the no-active-scanner-target recovery path: disabled/destroyed contacts are skipped and players should find live contacts or leave the route before retrying N/R.",
-  "last_commit": "784ee22 feat(godot): clarify afterburner recovery guidance",
-  "last_checkpoint_commit": "784ee22f577621d537cd0635fb00123922e842ec",
+  "last_commit": "d6abe3d feat(godot): surface target retarget recovery",
+  "last_checkpoint_commit": "d6abe3daf0fff0c0b74b2b6b3df10542018c90c0",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -140,9 +140,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this target retarget recovery guidance/probe slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep target retarget/no-active-scanner behavior labeled as Terminal Velocity scaffold pending Classic runtime target-selection evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Finish the current target retarget recovery slice if still dirty: commit/push the verified help/probe/backlog/ledger bundle, fetch, verify HEAD == origin/main, then create exactly one successor continuation task unless a real gate/blocker remains.",
-  "updated_at": "2026-06-05T16:03:53Z",
+  "next_resume_action": "Create exactly one successor Kanban continuation task from pushed HEAD d6abe3d, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep target retarget/no-active-scanner behavior labeled as Terminal Velocity scaffold pending Classic runtime target-selection evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from pushed HEAD d6abe3d. Read ledger/events/prompt/backlog, inspect git state, choose the next strongest source-aligned safe playable/fidelity slice, verify, checkpoint, commit, normal push, fetch, verify HEAD == origin/main, and create exactly one successor task unless a real gate/blocker remains.",
+  "updated_at": "2026-06-05T16:04:40Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
