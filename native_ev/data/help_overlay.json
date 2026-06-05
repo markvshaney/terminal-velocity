@@ -19,6 +19,7 @@
     "Mission objective marker: active mission destinations are highlighted on the map.",
     "Mission route helper: G queues the active mission destination when known.",
     "Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.",
+    "Navigation guardrail recovery: if J/L/F5 blocks, read the HUD reason for no route, low fuel, too-close hyperspace, no nearby port, fast approach, or missing refuel service before changing destinations. TV scaffold; Classic wording pending.",
     "Hyperspace distance recovery: if J reports you are not far enough away from the system center, keep your route selected, fly outward, then retry J before changing destination. Original-runtime-observed guardrail; exact Classic distance pending.",
     "Route clearing: Backspace/Delete clears queued green routes; choose a fresh linked stop before retrying J.",
     "Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
@@ -382,6 +383,11 @@
       "flag": "hasRouteRefuelHelp",
       "source": "help",
       "contains": "Route/fuel planning: G and Shift-click route status show"
+    },
+    {
+      "flag": "hasNavigationGuardrailRecoveryHelp",
+      "source": "help",
+      "contains": "Navigation guardrail recovery: if J/L/F5 blocks"
     },
     {
       "flag": "hasNearCenterJumpRecoveryHelp",
