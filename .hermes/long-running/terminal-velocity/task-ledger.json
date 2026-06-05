@@ -5,27 +5,27 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
-    "dirty": "no",
-    "head": "22eb62f9832c0c88576a9de6dd2fc518771d11ae",
-    "status_short": "## main...origin/main",
-    "origin_main": "22eb62f9832c0c88576a9de6dd2fc518771d11ae"
+    "dirty": "yes",
+    "head": "295d55bda28e7c7a49343f4f97ce7f6f8c4c1213",
+    "status_short": "## main...origin/main [ahead 1]",
+    "origin_main": "b7222bbc756b748a6faca78f65388e0fdfff3b8b"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
-    "dirty": "no"
+    "dirty": "yes"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_e3e34d83",
+    "active_task_id": "t_f410a452",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "shield_recharge_recovery_bundle_pushed_verified",
+    "status": "salvage_recovery_help_checkpoint_commit_created_pending_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:29:50Z",
+    "updated_at": "2026-06-05T16:35:26Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,9 +100,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Shield recharge recovery help/probe bundle pushed and remote-verified; watchdog/coordinator can resume continuation work at natural bundle boundaries.",
-  "last_commit": "22eb62f feat(godot): surface shield recharge recovery",
-  "last_checkpoint_commit": "22eb62f9832c0c88576a9de6dd2fc518771d11ae",
+  "current_milestone": "Salvage recovery help slice committed locally; pending normal push and remote verification.",
+  "last_commit": "295d55b feat(godot): surface salvage recovery help",
+  "last_checkpoint_commit": "295d55bda28e7c7a49343f4f97ce7f6f8c4c1213",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -117,16 +117,14 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_shield_recharge_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> 2 OK",
-    "./run_godot.sh tv-shield-recharge-log -> combatReadinessVisible=true with sourceLabel=decoded-resource-backed-ship-shield-recharge-scaffold oracleStatus=classic_runtime_shield_recharge_timing_pending",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasShieldRechargeRecoveryHelp=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> Ran 193 tests OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasSalvageRecoveryHelp=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK lines=542 before event append"
+    "task-ledger.json/events.jsonl parse -> OK"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -135,9 +133,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Resume the Terminal Velocity Kanban watchdog/coordinator and continue the next strongest source-aligned safe local gameplay/fidelity slice with natural-boundary commit/push bundling; avoid finalizer-only pushes unless checkpoint/handoff/dirty-state risk would otherwise stale the runner ledger.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from pushed HEAD 22eb62f. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T16:29:50Z",
+  "next_resume_action": "After committing/pushing this salvage recovery help slice and verifying origin/main HEAD equality, keep the Terminal Velocity Kanban watchdog/coordinator scheduled and continue the next strongest source-aligned safe local gameplay/fidelity slice with natural-boundary bundling.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
+  "updated_at": "2026-06-05T16:35:26Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -191,6 +189,6 @@
     "7_do_not_redo": "recorded in do_not_redo"
   },
   "last_process_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
-  "last_process_checkpoint": "Expose mission auto-abort Godot log",
+  "last_process_checkpoint": "Surface salvage recovery help",
   "last_checkpoint_commit_note": "Feature/checkpoint commits were pushed and verified equal to origin/main before this final ledger checkpoint commit; inspect current SHA after final checkpoint push."
 }
