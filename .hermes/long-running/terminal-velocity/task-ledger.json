@@ -25,7 +25,7 @@
     "active_task_id": "t_68b503fb",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "last_day_delivery_recovery_help_verified_pending_commit_push",
+    "status": "last_day_delivery_recovery_help_pushed_verified_sha_neutral_checkpoint",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T17:46:40Z",
+    "updated_at": "2026-06-05T17:50:03Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Last-day delivery recovery help slice verified locally; F10 help now tells players timed TV missions can still deliver on the scaffold deadline day and should verify Mission Log/Player Info reward, cargo release, and no failure flag before waiting longer.",
+  "current_milestone": "Last-day delivery recovery help slice pushed and remote-verified; F10 help tells players timed TV missions can still complete on the scaffold deadline day and should verify Mission Log/Player Info reward, cargo release, and no failure flag before waiting longer.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -117,6 +117,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
+    "HOME=/home/bh git push origin main -> pushed de2bf60",
+    "git fetch origin main; HEAD == origin/main == de2bf60260347034a1282a04febe1679c2c8f444",
+    "git status --short --branch -> ## main...origin/main",
+    "refined added-line credential scan -> OK (task-ledger false positive excluded by length-bound key pattern)",
+    "git diff --cached --check -> OK before feature commit",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> RED missing last-day delivery recovery help, then OK",
     "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionLastDayDeliveryRecoveryHelp=true",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_last_day_log_contract -v -> OK",
@@ -124,10 +129,7 @@
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
-    "git diff --check -> OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK before event append lines=563"
+    "git diff --check -> OK"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +138,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing the last-day delivery recovery help slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; keep exact Classic deadline inclusivity/date UI labeled pending original-runtime/manual evidence.",
+  "next_resume_action": "Continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep exact Classic deadline inclusivity/date UI labeled pending original-runtime/manual evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T17:46:40Z",
+  "updated_at": "2026-06-05T17:50:03Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -192,6 +194,6 @@
     "7_do_not_redo": "recorded in do_not_redo"
   },
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-  "last_process_checkpoint": "Surface last-day delivery recovery help",
+  "last_process_checkpoint": "Surface last-day delivery recovery help remote checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording so the commit containing this checkpoint does not stale its own metadata."
 }
