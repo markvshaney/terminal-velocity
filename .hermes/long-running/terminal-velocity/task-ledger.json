@@ -5,15 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": "inspect live with git status before final push",
-    "behind": "inspect live with git status before final push",
-    "dirty": "route-hint symbolic fuel/objective-hint slice plus Kanban normal-push policy docs/ledger/events updates",
-    "head": "inspect current SHA with git log --oneline -1",
-    "status_short": "inspect with git status --short --branch"
+    "ahead": 27,
+    "behind": 0,
+    "dirty": "push-auth-blocker ledger/event checkpoint pending commit",
+    "head": "2b0c3fd feat(native): expose mission route fuel hint fields",
+    "status_short": "main ahead 27 after local route-hint commit; push failed due missing GitHub auth"
   },
   "repo_state": {
     "branch": "main",
-    "dirty": "route-hint symbolic fuel/objective-hint slice pending commit/push"
+    "ahead": 27,
+    "dirty": "ledger/event checkpoint for push auth blocker"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -54,13 +55,13 @@
     "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
     "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved; legacy LLM cron runner remains superseded"
   },
-  "status": "running",
+  "status": "waiting_gate",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
-    "type": "none_for_normal_push",
-    "reason": "Current Kanban task explicitly preapproves coherent normal non-force pushes to markvshaney/terminal-velocity after inspection, verification, no-secrets/unrelated-file check, push, fetch, and remote HEAD equality check.",
-    "withheld_action": "force-push/history rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, unsafe dirty state that cannot be separated, or unsupported fidelity claims",
-    "resume_after": "Continue through Kanban after each verified bundle; create exactly one successor task at closeout if no real gate remains."
+    "type": "github_auth_credentials",
+    "reason": "Normal push is preapproved by task policy, but this WSL/session has no GitHub credentials: git push over HTTPS failed because it could not read a username; gh auth status reports not logged in. Credentials/accounts changes are still gated.",
+    "withheld_action": "GitHub login/credential setup and remote push verification",
+    "resume_after": "human provides/configures GitHub credentials or runs an authenticated push; then fetch and verify HEAD equals origin/main, or respawn a worker in an authenticated profile/session"
   },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -124,7 +125,10 @@
     "python3 tools/run_gameplay_scenarios.py mission_destination_route_hint --pretty -> success; route_to_active_mission_destination includes fuelRequired=1 fuelAvailable=5 fuelWarning=false objectiveHint",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 191 tests OK",
     "./run_godot.sh tv-mission-route-hint-log -> emitted mission route/fuel hint log; low-fuel route warning visible",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=60"
+    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=60",
+    "git commit route-hint bundle -> 2b0c3fd",
+    "git push origin main -> failed: missing HTTPS username in noninteractive session",
+    "gh auth status -> not logged into any GitHub hosts"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -133,9 +137,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After this bundle is committed, pushed normally, fetched, and origin/main HEAD equality is verified, continue through a successor Kanban task from the live backlog. Strong next safe slice: keep improving helper-labeled route/fuel/hyperspace feedback or pick the strongest source-backed playable scaffold from docs/checklists/ev-classic-fidelity-implementation-backlog.md.",
+  "next_resume_action": "Resolve GitHub auth for markvshaney/terminal-velocity, then push local main normally, run git fetch origin main, and verify git rev-parse HEAD equals git rev-parse origin/main. After remote verification, create/continue exactly one Kanban successor for the next source-aligned gameplay/fidelity slice.",
   "resume_prompt": "Resume Terminal Velocity through Kanban in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog, inspect git status/remotes/branch/log, then perform one source-aligned safe-local gameplay/fidelity slice. Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after verification and remote HEAD equality check; keep legacy LLM cron runner superseded.",
-  "updated_at": "2026-06-05T03:29:48Z",
+  "updated_at": "2026-06-05T03:31:08Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
