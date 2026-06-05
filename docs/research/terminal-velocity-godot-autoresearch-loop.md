@@ -180,13 +180,14 @@ Mission route-hint scenario contract:
 
 - `RunGodot.ps1 -MissionRouteHintLog` / `--tv-mission-route-hint-log`
 - Exercises active mission destination → queued route leg in the Godot fast-eval lane.
-- Resets to Levo, route-selects Sol, jumps and lands at Earth, accepts `intro_courier_earth_hera`, launches, clears prior map route state, calls `_route_to_active_mission_destination()`, and logs:
+- Resets to Levo, route-selects Sol, jumps and lands at Earth, accepts `intro_courier_earth_hera`, buys one 10-ton Food trade lot, launches, clears prior map route state, calls `_route_to_active_mission_destination()`, follows the low-fuel/refuel route through Luna delivery, sells the preserved Food lot at the destination market, and logs:
   - whether the Sol route selection succeeded;
   - accepted mission id and destination system;
   - mission acceptance and route queue booleans (`missionAccepted=true`, `missionRouteQueued=true`);
   - stale-route replacement guard (`staleRouteReplaced=true`) proving the `G` helper clears an unrelated queued/manual route before queuing the active mission destination;
   - queued route and route hop count (`route=[...]`, `routeHops`);
   - player-visible route fuel status from the `G` helper (`routeStatusHasFuelHint=true`) and a low-fuel warning branch (`lowFuelRouteWarningVisible=true`, `refuel before full route`);
+  - mission/trade cleanup booleans and counters (`tradeBoughtBeforeRoute=true`, `tradeCargoPreservedAfterDelivery=true`, `tradeCargoSoldAfterDelivery=true`, `heldTradeCargoAfterSale=0`, `cargoUsedAfterSale=0`, destination-sale credit increase);
   - `sourceLabel=terminal-velocity-design-scaffold`;
   - `oracleStatus=mission_objective_hint_pending_ev_classic_ui_trace`.
 
