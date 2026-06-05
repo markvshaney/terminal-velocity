@@ -62,6 +62,7 @@
     "Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
     "Disabled recovery: while disabled, flight/combat/service/trade/mission actions stay blocked until F8 recovery; TV scaffold pending Classic death/reload evidence.",
     "Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.",
+    "Legal consequence recovery: after destroying a hostile patrol or other government target, check Player Info legal/reputation deltas, route to a safer port, and use clemency only when eligible. TV scaffold; exact Classic combat/legal resolution pending.",
     "Legal docking: low legal standing can deny landing at governed ports; check Player Info/legal messages and seek clemency or a safer port. Exact Classic denial UI pending.",
     "Legal service gates: poor standing can block outfitter/shipyard buying even at a landed port; improve legal standing or use an eligible port before retrying. Exact Classic refusal UI pending.",
     "Weapon reputation gates: some weapon purchases require local government reputation; build standing or buy a lower-gate weapon before retrying. Exact Classic weapon-service thresholds/UI pending.",
@@ -236,6 +237,11 @@
       "flag": "hasLegalClemencyHelp",
       "source": "help",
       "contains": "landed C buys clemency when eligible"
+    },
+    {
+      "flag": "hasLegalConsequenceRecoveryHelp",
+      "source": "help",
+      "contains": "Legal consequence recovery: after destroying a hostile patrol"
     },
     {
       "flag": "hasLegalDockingHelp",
