@@ -50,7 +50,7 @@ Hard requirements:
    - explicit source/fidelity labels,
    - docs/backlog update when future behavior is affected.
 
-4. Do not stop at recommendations or at a completed slice. Pick the strongest safe local next slice from the live backlog and repo state, implement it, verify it, update docs/checklists, then continue to the next safe slice until a real gate is reached **and no other safe local slice remains available**. A push/PR/publication gate on the just-finished commit is not normally a blocker to starting the next local slice; keep the unpushed commit local and continue from the backlog unless the worktree state itself prevents safe continuation. Exception: if the durable ledger records a commit-train review gate that explicitly withholds additional local commit growth, do not start another implementation slice or create more commits until the gate is resolved or the user explicitly authorizes continued local-only growth.
+4. Do not stop at recommendations or at a completed slice. Pick the strongest safe local next slice from the live backlog and repo state, implement it, verify it, update docs/checklists, then continue to the next safe slice until a real gate is reached **and no other safe local slice remains available**. A normal coherent non-force push to `markvshaney/terminal-velocity` is preapproved after status/remotes/branch inspection, intended-only staging, relevant verification, a no-secrets/proprietary/unrelated-file check, push, fetch, and `HEAD == origin/main` verification; report the concise bundle summary after remote verification. Commit count alone is not a stop condition. If a train is noisy, misleading, unsafe, or entangled, audit and consolidate locally before publication; gate only history rewrite/force-push, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, non-TV repos, destructive/social actions, missing source evidence needed for a fidelity claim, or unsafe dirty state that cannot be separated.
 
 5. Use Basilisk II only for bounded original-runtime questions:
    - local root: C:\Games\BasiliskII\
@@ -106,7 +106,7 @@ Current durable context to respect:
 - If the repo has uncommitted work, finish/cohere/verify that current slice before choosing a fresh one.
 
 Post-slice gate template before using the closeout block:
-- real gate? (Strict Play/destructive original-EV test/credentials/account/provider/gateway/external publication/push/PR/live-browser mutation/irreversible or social side effect, or a ledger-recorded commit-train review gate withholding more local commit growth)
+- real gate? (Strict Play/destructive original-EV test/history rewrite/force-push/deletion/merge/release/settings/public-state change beyond normal push/credentials/account/provider/gateway/non-TV repo/live-browser mutation/irreversible or social side effect, missing source evidence needed for a fidelity claim, or unsafe dirty state that cannot be separated)
 - hard tool/time/budget cap?
 - unsafe dirty worktree that must be stabilized first?
 - no safe backlog/docs slice remains after inspection?
