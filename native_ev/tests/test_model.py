@@ -305,6 +305,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasMissionObjectiveHelp',
             'hasMissionRouteHelp',
             'hasMissionRouteTradeSaleHelp',
+            'hasMissionTradeReturnMarginHelp',
             'hasMissionTradeHybridHelp',
             'hasCommodityRecoveryHelp',
             'hasTradeRouteHelp',
