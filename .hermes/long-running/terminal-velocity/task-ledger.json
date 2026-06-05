@@ -25,7 +25,7 @@
     "active_task_id": "t_61fa003b",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "timed_abort_recovery_help_target_verified_broad_verified_pending_commit",
+    "status": "timed_abort_recovery_help_pushed_verified_sha_neutral_checkpoint",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T17:40:18Z",
+    "updated_at": "2026-06-05T17:42:43Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -100,7 +100,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Timed deadline-abort recovery help target/broad verification passed locally; F10 help now tells players aborting a timed TV mission before expiry should release reserved cargo and prevent late failure flags/reputation penalties, with Mission Log/Player Info verification before follow-ups.",
+  "current_milestone": "Timed deadline-abort recovery help slice pushed and remote-verified; F10 help tells players aborting a timed TV mission before expiry should release reserved cargo and prevent late failure flags/reputation penalties, with Mission Log/Player Info verification before accepting follow-ups.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -127,7 +127,10 @@
     "git diff --check -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK before event append lines=561"
+    "events.jsonl parse -> OK before event append lines=561",
+    "HOME=/home/bh git push origin main -> pushed e590fa0",
+    "git fetch origin main; HEAD == origin/main == e590fa0ff82b72c5ece128a6409551f788330a3e",
+    "git status --short --branch -> ## main...origin/main"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -136,9 +139,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing the timed deadline-abort recovery help slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; keep exact Classic abort/deadline UI/timing labeled pending original-runtime/manual evidence.",
+  "next_resume_action": "Continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice with natural-boundary commit/push bundling; keep exact Classic abort/deadline UI/timing labeled pending original-runtime/manual evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the latest pushed HEAD. Read ledger/events/prompt/backlog, inspect git state, keep normal pushes bundled at natural coherent boundaries, and continue the next source-aligned safe local slice with tests/probes/docs.",
-  "updated_at": "2026-06-05T17:40:18Z",
+  "updated_at": "2026-06-05T17:42:43Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
