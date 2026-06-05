@@ -44,6 +44,8 @@
     "Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
     "Combat cadence recovery: immediate fire attempts can be blocked by source-mined reload timing; wait for the HUD message/cooldown before treating weapons as broken. Classic timing pending.",
     "NPC retaliation recovery: hostile contacts can fire back under source-mined reload cadence; watch Player Info shields/hull, break off to repair, and use F8 only if disabled. Classic AI cadence pending.",
+    "Projectile motion: fired weapons travel with source-mined Speed/Count/lifetime scaffolds; keep target selected and watch scanner damage before firing again. Exact Classic projectile timing pending.",
+    "Explosion timing: disabled contacts show a short TV explosion scaffold before cleanup/reward; wait for scanner/HUD update before retargeting. Exact Classic explosion frames pending.",
     "Combat sound prefs: Set Prefs Sound Volume gates decoded combat sounds; if combat is silent, reopen Set Prefs before treating weapons as broken. Exact Classic volume behavior pending.",
     "Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.",
     "Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.",
@@ -147,6 +149,16 @@
       "flag": "hasNpcRetaliationRecoveryHelp",
       "source": "help",
       "contains": "NPC retaliation recovery: hostile contacts can fire back"
+    },
+    {
+      "flag": "hasProjectileMotionHelp",
+      "source": "help",
+      "contains": "Projectile motion: fired weapons travel with source-mined Speed/Count/lifetime scaffolds"
+    },
+    {
+      "flag": "hasExplosionTimingHelp",
+      "source": "help",
+      "contains": "Explosion timing: disabled contacts show a short TV explosion scaffold"
     },
     {
       "flag": "hasCombatSoundPrefsHelp",
