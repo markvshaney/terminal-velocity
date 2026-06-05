@@ -5,18 +5,18 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
-    "dirty": "no: checkpoint commit created locally, push pending",
-    "head": "local checkpoint commit; inspect current SHA with git rev-parse HEAD",
-    "status_short": "## main...origin/main [ahead 1]",
-    "origin_main": "797dc26430af1c38d14bd931af6d3857daebc08d"
+    "dirty": "no: combat sound preference checkpoint pushed and remote verified before this ledger-finalization commit",
+    "head": "e337191a5c67cd65a4ae249b4350ee89f5a198d6",
+    "status_short": "## main...origin/main",
+    "origin_main": "e337191a5c67cd65a4ae249b4350ee89f5a198d6"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
-    "dirty": "no: checkpoint commit created locally, push pending"
+    "dirty": "no: combat sound preference checkpoint pushed and remote verified before this ledger-finalization commit"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_75318839",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "combat_sound_pref_guardrail_committed_pending_push",
+    "status": "combat_sound_pref_guardrail_pushed_remote_verified",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:12:49Z",
+    "updated_at": "2026-06-05T16:13:57Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,9 +106,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Combat guardrail now verifies Set Prefs sound preference suppresses decoded weapon sounds while valid shots still spawn; F10 help exposes combat-silent recovery without claiming exact Classic volume semantics.",
-  "last_commit": "17cef83 feat(godot): guard combat sound prefs (pre-amend short; inspect current SHA with git log --oneline -1)",
-  "last_checkpoint_commit": "local checkpoint created; inspect current SHA with git rev-parse HEAD",
+  "current_milestone": "Combat guardrail verifies Set Prefs sound preference suppresses decoded weapon sounds while valid shots still spawn; F10 help exposes combat-silent recovery without claiming exact Classic volume semantics.",
+  "last_commit": "e337191 feat(godot): guard combat sound prefs",
+  "last_checkpoint_commit": "e337191a5c67cd65a4ae249b4350ee89f5a198d6",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -139,9 +139,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue from the combat-sound-pref guardrail checkpoint; inspect live backlog and choose the next strongest source-aligned safe local gameplay/fidelity slice, keeping sound-volume behavior labeled pending exact Classic evidence.",
+  "next_resume_action": "Create exactly one successor Kanban continuation task from the final pushed checkpoint, then continue with the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep combat sound-volume semantics labeled pending exact Classic evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the combat-sound-pref guardrail checkpoint. Read ledger/events/prompt/backlog, inspect git state, choose one source-aligned safe local slice, verify, checkpoint, commit, normal push, fetch, verify HEAD == origin/main, and create exactly one successor task unless a real gate/blocker remains.",
-  "updated_at": "2026-06-05T16:12:49Z",
+  "updated_at": "2026-06-05T16:13:57Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -195,5 +195,5 @@
   },
   "last_process_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_process_checkpoint": "Expose mission auto-abort Godot log",
-  "last_checkpoint_commit_note": "Commit includes this ledger, so its own final SHA is intentionally not embedded; verify with git rev-parse HEAD after commit/amend/push."
+  "last_checkpoint_commit_note": "Code/docs/checkpoint commit was pushed and verified equal to origin/main before this final ledger checkpoint commit; inspect current SHA after final checkpoint push."
 }
