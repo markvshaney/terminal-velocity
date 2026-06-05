@@ -280,6 +280,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
             'Combat cadence recovery: immediate fire attempts can be blocked by source-mined reload timing; wait for the HUD message/cooldown before treating weapons as broken. Classic timing pending.',
             'NPC retaliation recovery: hostile contacts can fire back under source-mined reload cadence; watch Player Info shields/hull, break off to repair, and use F8 only if disabled. Classic AI cadence pending.',
+            'Shield recharge recovery: after taking retaliation damage, break off and wait for the Player Info shield-recharge cadence before re-engaging; disabled hulls still need F8 recovery. Classic timing pending.',
             'Combat sound prefs: Set Prefs Sound Volume gates decoded combat sounds; if combat is silent, reopen Set Prefs before treating weapons as broken. Exact Classic volume behavior pending.',
             'Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.',
             'Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.',
@@ -306,6 +307,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasCombatRewardsHelp',
             'hasSalvageHelp',
             'hasShieldRechargeHelp',
+            'hasShieldRechargeRecoveryHelp',
             'hasRecoveryHelp',
             'hasDisabledRecoveryHelp',
             'hasPirateAvoidanceHelp',
@@ -561,6 +563,7 @@ class NativeEvModelTests(unittest.TestCase):
             'multiTickRecharged=%s',
             'disabledRechargeBlocked=%s',
             'sourceRechargeFrames=%d',
+            'combatReadinessVisible=%s',
             'sourceLabel=decoded-resource-backed-ship-shield-recharge-scaffold',
             'oracleStatus=classic_runtime_shield_recharge_timing_pending',
         ]:

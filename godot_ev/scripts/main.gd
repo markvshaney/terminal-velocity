@@ -2281,7 +2281,8 @@ func _run_shield_recharge_log() -> void:
 	var shields_before_disabled := player_shields
 	_recharge_player_shields(float(source_recharge_frames * 2) / 60.0)
 	var disabled_recharge_blocked := player_shields == shields_before_disabled
-	print("%s shieldsBefore=%d shieldsAfterShortWait=%d shortWaitBlocked=%s shieldsAfterOneTick=%d firstTickRecharged=%s shieldsAfterMultiTick=%d multiTickRecharged=%s disabledRechargeBlocked=%s maxShields=%d sourceRechargeFrames=%d sourceLabel=decoded-resource-backed-ship-shield-recharge-scaffold oracleStatus=classic_runtime_shield_recharge_timing_pending" % [
+	var combat_readiness_visible := _combat_readiness_inventory_line().contains("shield recharge cadence source-backed scaffold")
+	print("%s shieldsBefore=%d shieldsAfterShortWait=%d shortWaitBlocked=%s shieldsAfterOneTick=%d firstTickRecharged=%s shieldsAfterMultiTick=%d multiTickRecharged=%s disabledRechargeBlocked=%s maxShields=%d sourceRechargeFrames=%d combatReadinessVisible=%s sourceLabel=decoded-resource-backed-ship-shield-recharge-scaffold oracleStatus=classic_runtime_shield_recharge_timing_pending" % [
 		SHIELD_RECHARGE_EVENT_LOG_PREFIX,
 		shields_before,
 		shields_after_short_wait,
@@ -2293,6 +2294,7 @@ func _run_shield_recharge_log() -> void:
 		str(disabled_recharge_blocked).to_lower(),
 		max_shields,
 		source_recharge_frames,
+		str(combat_readiness_visible).to_lower(),
 	])
 	get_tree().quit(0)
 

@@ -43,6 +43,7 @@
     "Combat rewards: Player Info summarizes Terminal Velocity disable-credit scaffolds; exact Classic bounty/legal behavior still pending.",
     "Salvage: fly over green salvage markers to recover cargo when hold space is free; full-hold salvage remains in space and is shown on HUD/Player Info.",
     "Shield recharge: Player Info shows combat readiness with shield/hull state and source-backed recharge-cadence scaffold; exact Classic timing pending.",
+    "Shield recharge recovery: after taking retaliation damage, break off and wait for the Player Info shield-recharge cadence before re-engaging; disabled hulls still need F8 recovery. Classic timing pending.",
     "Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
     "Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
     "Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
@@ -167,6 +168,11 @@
       "flag": "hasShieldRechargeHelp",
       "source": "help",
       "contains": "Shield recharge: Player Info shows combat readiness"
+    },
+    {
+      "flag": "hasShieldRechargeRecoveryHelp",
+      "source": "help",
+      "contains": "Shield recharge recovery: after taking retaliation damage"
     },
     {
       "flag": "hasRecoveryHelp",
