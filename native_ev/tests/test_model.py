@@ -299,6 +299,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Legal consequence recovery: after destroying a hostile patrol or other government target, check Player Info legal/reputation deltas, route to a safer port, and use clemency only when eligible. TV scaffold; exact Classic combat/legal resolution pending.',
             'Combat sound prefs: Set Prefs Sound Volume gates decoded combat sounds; if combat is silent, reopen Set Prefs before treating weapons as broken. Exact Classic volume behavior pending.',
             'Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.',
+            'Starting equipment uncertainty: original EV Classic HUD proves No Secondary Weapon, No Target, full shield/fuel, and Free: 20; check Player Info or an outfitter/status screen before treating primary weapons/outfits as exact Classic data.',
             'Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.',
             'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
         ]:
@@ -320,6 +321,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasProjectileMotionHelp',
             'hasExplosionTimingHelp',
             'hasCombatSoundPrefsHelp',
+            'hasStartingEquipmentUncertaintyHelp',
             'hasTargetDetailHelp',
             'hasTargetRetargetRecoveryHelp',
             'hasCombatRewardsHelp',

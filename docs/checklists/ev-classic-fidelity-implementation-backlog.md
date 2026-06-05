@@ -120,8 +120,9 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: measure exact original EV Classic distance/wording if a later Basilisk probe can capture the transition point cleanly.
 
 - [ ] Exact starting primary weapons/outfits
-  - Status: `needs evidence`
+  - Status: `needs evidence / player-facing uncertainty helper added`
   - Source: first HUD proves `No Secondary Weapon`, `No Target`, full shield/fuel, and `Free: 20`; it does not prove full primary weapon/outfit inventory.
+  - Implementation addendum: F10 help now surfaces this evidence boundary as a starting-equipment uncertainty reminder: players can rely on the original-runtime-observed `No Secondary Weapon`, `No Target`, full shield/fuel, and `Free: 20` HUD facts, but should check Player Info or a non-mutating outfitter/status surface before treating primary weapons/outfits as exact Classic data. `./run_godot.sh tv-gameplay-curriculum-help-log` verifies `hasStartingEquipmentUncertaintyHelp=true` under the existing help-surface pending-playtest boundary.
   - Next action: open a player/ship info screen or an outfitter/status screen at a port that exposes one, without changing inventory.
 
 - [x] EV Classic commodity transaction granularity and Levo same-port sellback
