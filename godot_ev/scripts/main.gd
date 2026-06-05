@@ -714,7 +714,12 @@ func _run_autopilot_log() -> void:
 	status_messages.clear()
 	_toggle_autopilot()
 	var landed_blocked := (not autopilot_enabled) and status_messages.has("Autopilot unavailable while landed; launch first")
-	print("%s autopilotEngaged=%s autopilotDisengaged=%s autopilotMovedCloser=%s autopilotSlowedForApproach=%s autopilotLandedBlocked=%s distanceBefore=%.1f distanceAfter=%.1f speedBefore=%.1f speedAfter=%.1f targetBody=\"%s\" sourceLabel=terminal-velocity-autopilot-assist-scaffold oracleStatus=classic_runtime_autopilot_behavior_pending status=\"%s\"" % [AUTOPILOT_EVENT_LOG_PREFIX, str(engaged).to_lower(), str(disengaged).to_lower(), str(moved_closer).to_lower(), str(slowed_for_approach).to_lower(), str(landed_blocked).to_lower(), distance_before, distance_after, speed_before, speed_after, str(target_body.get("name", "nearest port")), status_line])
+	landed = false
+	status_messages.clear()
+	player_hull = 0
+	_toggle_autopilot()
+	var disabled_blocked := (not autopilot_enabled) and status_messages.has(_player_disabled_action_message())
+	print("%s autopilotEngaged=%s autopilotDisengaged=%s autopilotMovedCloser=%s autopilotSlowedForApproach=%s autopilotLandedBlocked=%s autopilotDisabledBlocked=%s distanceBefore=%.1f distanceAfter=%.1f speedBefore=%.1f speedAfter=%.1f targetBody=\"%s\" sourceLabel=terminal-velocity-autopilot-assist-scaffold oracleStatus=classic_runtime_autopilot_behavior_pending status=\"%s\"" % [AUTOPILOT_EVENT_LOG_PREFIX, str(engaged).to_lower(), str(disengaged).to_lower(), str(moved_closer).to_lower(), str(slowed_for_approach).to_lower(), str(landed_blocked).to_lower(), str(disabled_blocked).to_lower(), distance_before, distance_after, speed_before, speed_after, str(target_body.get("name", "nearest port")), status_line])
 	get_tree().quit(0)
 
 func _print_movement_log(prefix: String, ticks: int) -> void:

@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_9dbab7c2",
+    "active_task_id": "t_6d6d3024",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "ready_for_successor_after_autopilot_landed_blocked_probe",
+    "status": "ready_for_successor_after_autopilot_disabled_blocked_probe_pending_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T06:51:11Z",
+    "updated_at": "2026-06-05T06:55:03Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,9 +106,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Autopilot deterministic Godot probe verifies landed blocked guidance alongside engage/disengage, approach-distance improvement, and approach-speed reduction under Terminal Velocity scaffold labels.",
-  "last_commit": "a470370 feat(godot): verify autopilot landed guidance",
-  "last_checkpoint_commit": "a470370972750bcbb572264ab473b0bd860f3c1f",
+  "current_milestone": "Autopilot deterministic Godot probe verifies disabled-player blocked guidance alongside engage/disengage, moved-closer, slowed-for-approach, and landed-blocked behavior under Terminal Velocity scaffold labels.",
+  "last_commit": "pending: feat(godot): verify autopilot disabled guidance",
+  "last_checkpoint_commit": "pending after normal push",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -123,11 +123,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract -v -> RED missing autopilotLandedBlocked, then OK",
-    "./run_godot.sh tv-autopilot-log -> autopilotEngaged=true autopilotDisengaged=true autopilotMovedCloser=true autopilotSlowedForApproach=true autopilotLandedBlocked=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract -v -> RED missing autopilotDisabledBlocked, then OK",
+    "./run_godot.sh tv-autopilot-log -> autopilotEngaged=true autopilotDisengaged=true autopilotMovedCloser=true autopilotSlowedForApproach=true autopilotLandedBlocked=true autopilotDisabledBlocked=true",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_autopilot_assist_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> 2 tests OK",
     "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasAutopilotHelp=true",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasAutopilotHelp=true hasDisabledRecoveryHelp=true",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK"
   ],
@@ -138,9 +138,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot landed-blocked probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T06:51:11Z",
+  "next_resume_action": "After committing/pushing this autopilot disabled-player blocked probe slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep autopilot target/speed/landed/disabled behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the autopilot disabled-player blocked guidance probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
+  "updated_at": "2026-06-05T06:55:03Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
