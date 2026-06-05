@@ -10,6 +10,7 @@
     "Afterburner launch recovery: if Z is blocked while landed, launch first with L, then boost only after clearing port; TV scaffold, exact Classic landed afterburner behavior pending.",
     "Autopilot: A toggles a Terminal Velocity assist that steers/slows toward the nearest port; Classic behavior still pending.",
     "Autopilot no-port recovery: if A disengages with no port in the current system, pick a linked system with landable services on the map before retrying; TV scaffold, exact Classic target selection pending.",
+    "Autopilot disabled recovery: if A blocks or disengages because the player ship is disabled, use F8 recovery before retrying autopilot; TV scaffold, exact Classic death/autopilot behavior pending.",
     "Map: M opens map; \\ cycles linked systems; Shift-click queues linked route stops; Backspace/Delete clears route.",
     "Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
     "Mission objective marker: active mission destinations are highlighted on the map.",
@@ -84,6 +85,11 @@
       "flag": "hasAutopilotNoPortRecoveryHelp",
       "source": "help",
       "contains": "Autopilot no-port recovery: if A disengages with no port"
+    },
+    {
+      "flag": "hasAutopilotDisabledRecoveryHelp",
+      "source": "help",
+      "contains": "Autopilot disabled recovery: if A blocks or disengages"
     },
     {
       "flag": "hasRepairHelp",
