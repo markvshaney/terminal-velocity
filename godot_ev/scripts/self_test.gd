@@ -153,6 +153,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"alignment_return_contract_offer_timing_guardrail",
 		"alignment_completion_return_contract_loop",
 		"mission_destination_route_hint",
+		"mission_destination_low_fuel_route_hint",
 		"mission_trade_hybrid_capacity_planning",
 		"mission_trade_refuel_delivery_loop",
 		"mission_trade_destination_sale_loop",

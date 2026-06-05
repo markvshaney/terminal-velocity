@@ -36,6 +36,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'alignment_return_contract_offer_timing_guardrail',
                 'alignment_completion_return_contract_loop',
                 'mission_destination_route_hint',
+                'mission_destination_low_fuel_route_hint',
                 'mission_trade_hybrid_capacity_planning',
                 'mission_trade_refuel_delivery_loop',
                 'mission_trade_destination_sale_loop',
@@ -583,7 +584,24 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['trace'][-1]['fuelAvailable'], 5)
         self.assertFalse(result['trace'][-1]['fuelWarning'])
         self.assertIn('1 jump(s), fuel 5/6', result['trace'][-1]['objectiveHint'])
+        self.assertIsNone(result['trace'][-1]['refuelRecoveryBody'])
         self.assertEqual(result['trace'][-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
+
+    def test_mission_destination_low_fuel_route_hint_names_refuel_recovery_body(self):
+        result = run_scripted_scenario('mission_destination_low_fuel_route_hint')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['routeQueue'], ['Centauri'])
+        self.assertEqual(result['checks']['queued_active_mission_destination'], 'passed')
+        self.assertEqual(result['checks']['warned_low_fuel_before_mission_route'], 'passed')
+        route_event = result['trace'][-1]
+        self.assertEqual(route_event['fuelRequired'], 1)
+        self.assertEqual(route_event['fuelAvailable'], 0)
+        self.assertTrue(route_event['fuelWarning'])
+        self.assertEqual(route_event['refuelRecoveryBody'], 'Earth')
+        self.assertIn('refuel before full route; nearest refuel: Earth', route_event['objectiveHint'])
+        self.assertEqual(route_event['sourceLabel'], 'terminal-velocity-design-scaffold')
 
     def test_mission_trade_hybrid_capacity_planning_preserves_trade_cargo(self):
         result = run_scripted_scenario('mission_trade_hybrid_capacity_planning')

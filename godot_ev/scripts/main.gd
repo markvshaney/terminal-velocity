@@ -3013,8 +3013,19 @@ func _route_fuel_warning_active(route_hops := -1) -> bool:
 func _route_fuel_hint_line(route_hops := -1) -> String:
 	var hops := _queued_route_hops() if route_hops < 0 else route_hops
 	var cost := _route_fuel_cost(hops)
-	var warning := " — refuel before full route" if cost > player_fuel else ""
+	var warning := ""
+	if cost > player_fuel:
+		warning = " — refuel before full route"
+		var refuel_body := _nearest_refuel_body_name()
+		if refuel_body != "":
+			warning += " at " + refuel_body
 	return "Route fuel: %d hop(s), cost %d, fuel %d/%d%s" % [hops, cost, player_fuel, _max_player_fuel(), warning]
+
+func _nearest_refuel_body_name() -> String:
+	for body in current_system.get("bodies", []):
+		if _body_refuel_available(body):
+			return str(body.get("name", ""))
+	return ""
 
 func _refuel_current_ship() -> bool:
 	if _disabled_player_action_blocked():

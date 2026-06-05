@@ -56,6 +56,7 @@ SCENARIO_CURRICULUM = [
     'alignment_return_contract_offer_timing_guardrail',
     'alignment_completion_return_contract_loop',
     'mission_destination_route_hint',
+    'mission_destination_low_fuel_route_hint',
     'mission_trade_hybrid_capacity_planning',
     'mission_trade_refuel_delivery_loop',
     'mission_trade_destination_sale_loop',
@@ -544,6 +545,23 @@ def _refuel(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str
     return True
 
 
+def _body_refuel_available_for_scenario(body: dict[str, Any]) -> bool:
+    inventory = body.get('inventory', {})
+    services = inventory.get('services', [])
+    return 'repairs' in services or 'fuel_tank' in inventory.get('outfitsForSale', [])
+
+
+def _nearest_refuel_body_name(state: dict[str, Any]) -> str | None:
+    universe = load_universe()
+    for system in universe.get('systems', []):
+        if system.get('name') != state.get('currentSystem'):
+            continue
+        for body in system.get('bodies', []):
+            if _body_refuel_available_for_scenario(body):
+                return str(body.get('name', ''))
+    return None
+
+
 def _repair_hull(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     if state['landedBody'] is None:
         trace.append({'type': 'blocked_repair_hull', 'reason': 'not landed', 'system': state['currentSystem'], 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
@@ -637,7 +655,10 @@ def _route_to_active_mission_destination(state: dict[str, Any], _action: dict[st
     fuel_available = int(state.get('fuel', 0))
     max_fuel = int(state.get('maxFuel', STARTING_FUEL))
     fuel_warning = fuel_required > fuel_available
+    refuel_body = _nearest_refuel_body_name(state) if fuel_warning else None
     refuel_hint = '; refuel before full route' if fuel_warning else ''
+    if refuel_body:
+        refuel_hint += f'; nearest refuel: {refuel_body}'
     objective_hint = f"Mission route queued to {destination}: {fuel_required} jump(s), fuel {fuel_available}/{max_fuel}{refuel_hint}"
     trace.append({
         'type': 'route_to_active_mission_destination',
@@ -648,6 +669,7 @@ def _route_to_active_mission_destination(state: dict[str, Any], _action: dict[st
         'fuelRequired': fuel_required,
         'fuelAvailable': fuel_available,
         'fuelWarning': fuel_warning,
+        'refuelRecoveryBody': refuel_body,
         'objectiveHint': objective_hint,
         'sourceLabel': 'terminal-velocity-design-scaffold',
         'oracleStatus': 'mission_objective_hint_pending_ev_classic_ui_trace',
@@ -1348,6 +1370,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Sol'},
             {'type': 'land', 'body': 'Earth'},
             {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
+            {'type': 'depart'},
+            {'type': 'route_to_active_mission_destination'},
+        ]
+    if name == 'mission_destination_low_fuel_route_hint':
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'accept_manifest_mission', 'missionId': 'intro_courier_earth_hera'},
+            {'type': 'set_state', 'values': {'fuel': 0}},
             {'type': 'depart'},
             {'type': 'route_to_active_mission_destination'},
         ]
@@ -2153,10 +2184,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'completed_return_contract_after_each_alignment': 'passed' if len(completions) == 2 and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('cargoUsed') == 0 else 'failed',
             'recorded_return_contract_source_boundary': 'passed' if len(accepts) == 2 and all(event.get('sourceLabel') == 'terminal-velocity-mission-scaffold' and event.get('oracleStatus') == 'mission_behavior_pending_classic_runtime_trace' for event in accepts) else 'failed',
         })
-    elif name == 'mission_destination_route_hint':
+    elif name in {'mission_destination_route_hint', 'mission_destination_low_fuel_route_hint'}:
+        route_events = [event for event in trace if event.get('type') == 'route_to_active_mission_destination']
+        latest_route = route_events[-1] if route_events else {}
         checks.update({
-            'queued_active_mission_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] and any(event.get('type') == 'route_to_active_mission_destination' and event.get('missionId') == 'intro_courier_earth_hera' and event.get('destinationSystem') == 'Centauri' and event.get('routeQueued') for event in trace) else 'failed',
+            'queued_active_mission_destination': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Centauri'] and latest_route.get('missionId') == 'intro_courier_earth_hera' and latest_route.get('destinationSystem') == 'Centauri' and latest_route.get('routeQueued') else 'failed',
         })
+        if name == 'mission_destination_low_fuel_route_hint':
+            checks.update({
+                'warned_low_fuel_before_mission_route': 'passed' if latest_route.get('fuelWarning') is True and latest_route.get('fuelAvailable') == 0 and latest_route.get('refuelRecoveryBody') == 'Earth' and 'nearest refuel: Earth' in latest_route.get('objectiveHint', '') else 'failed',
+            })
     elif name == 'mission_trade_hybrid_capacity_planning':
         checks.update({
             'accepted_trade_aligned_mission': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'levo_trade_aligned_courier' and event.get('reservedCargoTons') == 8 for event in trace) else 'failed',

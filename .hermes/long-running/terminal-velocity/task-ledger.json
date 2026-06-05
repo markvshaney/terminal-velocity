@@ -7,15 +7,15 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "normal-push-policy validation docs/ledger update in progress",
-    "head": "c28cfac",
-    "status_short": "## main...origin/main\n M docs/prompts/terminal-velocity-continuation-prompt.md"
+    "dirty": "low-fuel mission route/refuel recovery hint slice verified; commit/push in progress",
+    "head": "4fed244",
+    "status_short": "## main...origin/main\n M godot_ev/scripts/main.gd\n M godot_ev/scripts/self_test.gd\n M native_ev/data/gameplay_curriculum.json\n M native_ev/scenario_eval.py\n M native_ev/tests/test_model.py\n M native_ev/tests/test_scenario_eval.py"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "normal-push-policy validation docs/ledger update in progress"
+    "dirty": "low-fuel mission route/refuel recovery hint slice verified; commit/push in progress"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -60,9 +60,9 @@
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
     "type": "none_for_normal_push",
-    "reason": "The prior GitHub auth blocker was resolved by using the real OS home credential store for the preapproved normal non-force push; HEAD was fetched and verified equal to origin/main. Normal coherent TV pushes are not a human gate.",
+    "reason": "Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after standard checks; the prior review-required Kanban state was not a policy gate and this slice has local verification.",
     "withheld_action": "history rewrite/force-push, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts changes, non-TV repos, destructive/social actions, unsafe dirty state that cannot be separated, or unsupported fidelity claims",
-    "resume_after": "Continue through Kanban with one source-aligned gameplay/fidelity slice per worker run; push coherent bundles normally after standard checks and report after remote verification."
+    "resume_after": "Continue through Kanban/source-aligned slices; push coherent normal bundles after checks and remote HEAD equality verification."
   },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -86,7 +86,7 @@
     {
       "id": "next-source-aligned-playable-slice",
       "description": "Each run must inspect the live backlog/repo and implement the strongest safe local Terminal Velocity gameplay/fidelity slice with tests/probes/docs before considering process-only work.",
-      "gate": "safe local code/docs/tests are approved; external push/PR/destructive original-EV actions remain gated"
+      "gate": "safe local code/docs/tests plus coherent normal non-force push to markvshaney/terminal-velocity are approved after standard checks; destructive original-EV actions and actual public-state changes beyond normal push remain gated"
     },
     {
       "id": "skill-availability-audit",
@@ -105,7 +105,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Normal push policy validated against live GitHub remote; route fuel hint bundle pushed and remote HEAD equality verified; continuation prompt/ledger are being aligned to the narrowed gate policy.",
+  "current_milestone": "Low-fuel mission route/refuel recovery hint slice verified locally; Godot self-test updated to include the 61-scenario curriculum and passes.",
   "last_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_commits": [
@@ -122,10 +122,12 @@
     "local checkpoint: Add mission auto-abort completion flag guardrail"
   ],
   "last_verified_commands": [
-    "HOME=/home/bh git push origin main -> pushed c28cfac to markvshaney/terminal-velocity main",
-    "git fetch origin main -> ok",
-    "git rev-parse HEAD == git rev-parse origin/main -> c28cfac8fb95391a670ca156f5d45cf61eab1439",
-    "git status --short --branch -> ## main...origin/main before policy-alignment edits"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_destination_low_fuel_route_hint_names_refuel_recovery_body native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_navigation_blocked_reasons_are_player_guidance_contract -v -> 3 tests OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval native_ev.tests.test_model -v -> 192 tests OK",
+    "python3 tools/run_gameplay_scenarios.py mission_destination_low_fuel_route_hint --pretty -> success with refuelRecoveryBody=Earth and nearest refuel objective hint",
+    "./run_godot.sh tv-mission-route-hint-log -> status includes refuel before full route at Earth",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=61",
+    "python3 -m json.tool native_ev/data/gameplay_curriculum.json -> OK"
   ],
   "heartbeat_status": {
     "send_message_available": false,
@@ -134,9 +136,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue through exactly one Kanban successor task from the live backlog. Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after standard checks and remote HEAD equality verification; report the bundle after the push.",
-  "resume_prompt": "Resume Terminal Velocity through Kanban in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog, inspect git status/remotes/branch/log, then perform one source-aligned safe-local gameplay/fidelity slice. Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after standard checks and remote HEAD equality verification; report after push verification; keep legacy LLM cron runner superseded.",
-  "updated_at": "2026-06-05T03:33:19Z",
+  "next_resume_action": "After normal push/remote verification, create or unblock one Kanban successor to continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not stop for normal push or branch-ahead state.",
+  "resume_prompt": "Resume Terminal Velocity through Kanban in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog, inspect git status/remotes/branch/log, finish any dirty slice first, and continue one source-aligned safe-local gameplay/fidelity slice. Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after checks and remote HEAD equality verification; report after push verification; keep legacy LLM cron runner superseded.",
+  "updated_at": "2026-06-05T03:44:14Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -173,7 +175,7 @@
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
-    "Do not treat push/PR/rebase/squash as required before continuing safe local work; those remain gated while local slices may proceed.",
+    "Do not treat normal coherent non-force pushes to markvshaney/terminal-velocity as a human gate; run the standard checks, push, fetch, verify HEAD == origin/main, and continue/report afterward.",
     "Do not use PATH-only Godot checks; run repo-local ./run_godot.sh for TV verification.",
     "Do not treat EV adaptations/Godot logs as Classic truth; label them as hypothesis or Terminal Velocity evidence until original/resource/manual support exists.",
     "Do not repeat broad source mining when the next_resume_action names a bounded source-aligned slice; inspect the live backlog and choose the strongest adjacent slice.",
