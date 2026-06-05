@@ -2,60 +2,65 @@
   "schema_version": 1,
   "task_id": "terminal-velocity-game-development",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
-  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; local commits allowed, push/PR/merge/rebase and external/destructive actions gated.",
+  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 26,
-    "behind": 0,
-    "dirty": false,
+    "ahead": "inspect live with git status before final push",
+    "behind": "inspect live with git status before final push",
+    "dirty": "route-hint symbolic fuel/objective-hint slice plus Kanban normal-push policy docs/ledger/events updates",
     "head": "inspect current SHA with git log --oneline -1",
-    "status_short": "## main...origin/main [ahead 26] after local checkpoint commit for verified mission deadline recovery log slice"
+    "status_short": "inspect with git status --short --branch"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 26,
-    "dirty": "no after checkpoint commit"
+    "dirty": "route-hint symbolic fuel/objective-hint slice pending commit/push"
   },
-  "operational_owner_candidate": "loki-game",
+  "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
-    "kind": "cronjob",
-    "name": "Terminal Velocity continuous completion runner",
-    "job_id": "aafb9b3eac29",
-    "profile": "loki-game",
-    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
-    "schedule": "every 1m",
-    "repeat": "forever",
-    "deliver": "origin",
-    "enabled_toolsets": [
-      "file",
-      "terminal",
-      "session_search",
-      "messaging"
-    ],
+    "kind": "kanban",
+    "board": "terminal-velocity",
+    "active_task_id": "t_4ec608d9",
+    "assignee": "terminal-velocity",
+    "workspace": "/home/bh/workspaces/loki/terminal-velocity",
+    "status": "running_slice",
+    "cron_role": "script-only watchdog/coordinator; no repo implementation",
+    "watchdog_job_id": "72e736287129",
+    "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
+    "watchdog_schedule": "every 5m",
+    "legacy_llm_runner_job_id": "aafb9b3eac29",
+    "legacy_llm_runner_state": "paused/superseded; do not resume while Kanban owns implementation",
+    "one_writer_rule": "Only the Kanban terminal-velocity worker may edit /home/bh/workspaces/loki/terminal-velocity for continuation slices; cron may inspect/dispatch/alert only.",
     "side_effect_boundaries": [
-      "safe local file/test/probe/docs/commit work allowed without per-step approval",
-      "push/PR/merge/rebase/destructive EV/gateway/provider/credential/publication changes gated unless explicitly approved"
+      "safe local file/test/probe/docs work plus coherent normal non-force push to markvshaney/terminal-velocity preapproved after verification",
+      "force-push/history rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, unsafe dirty state, and missing source evidence for fidelity claims remain gated"
     ],
     "superseded_jobs": [
       "f31074cbec03",
-      "e12f13d4b75e"
+      "e12f13d4b75e",
+      "aafb9b3eac29"
     ],
     "superseded_kanban_tasks": [
-      "t_5d681084"
+      "t_f853333b",
+      "t_5d681084",
+      "t_6aedca1b"
     ],
-    "enabled": true,
-    "watchdog_job_id": "72e736287129",
-    "watchdog_schedule": "every 5m",
-    "verified_at": "2026-06-04T22:45:54Z",
-    "prompt_updated_at": "2026-06-04T22:45:54Z"
+    "updated_at": "2026-06-05T03:08:00Z",
+    "worker_forced_skills": [
+      "long-running-task-harness",
+      "source-and-fidelity",
+      "artifact-governance"
+    ],
+    "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
+    "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
+    "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved; legacy LLM cron runner remains superseded"
   },
-  "status": "waiting_gate",
+  "status": "running",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
-    "type": "git_train_review",
-    "reason": "main has reached/exceeded the 25-local-commit review threshold; the mission-deadline probe train is coherent and verified, but further local commit growth risks noisy repeated-pattern debt. Push/PR/rebase/squash/publication remain approval-gated.",
-    "withheld_action": "additional local commit-train growth plus any push/PR/rebase/squash/publication action",
-    "resume_after": "human review/approval for push/squash/rebase/commit-train strategy, or explicit instruction to continue accumulating local-only commits beyond the 26-commit review threshold"
+    "type": "none_for_normal_push",
+    "reason": "Current Kanban task explicitly preapproves coherent normal non-force pushes to markvshaney/terminal-velocity after inspection, verification, no-secrets/unrelated-file check, push, fetch, and remote HEAD equality check.",
+    "withheld_action": "force-push/history rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, unsafe dirty state that cannot be separated, or unsupported fidelity claims",
+    "resume_after": "Continue through Kanban after each verified bundle; create exactly one successor task at closeout if no real gate remains."
   },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -98,7 +103,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Mission deadline recovery Godot log slice implemented, verified, and committed as a coherent local checkpoint; subsequent local train growth is paused at git-train review gate.",
+  "current_milestone": "Symbolic mission route hint now emits structured route fuel/objective-hint fields; normal push policy reflected in continuation docs/ledger for Kanban-centered development.",
   "last_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_commits": [
@@ -115,12 +120,10 @@
     "local checkpoint: Add mission auto-abort completion flag guardrail"
   ],
   "last_verified_commands": [
-    "git status --short --branch -> ## main...origin/main [ahead 25] with dirty recovery slice before commit",
-    "ledger JSON parses; events JSONL parses",
-    "git diff --check -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_deadline_recovery_log_contract -v -> OK",
-    "./run_godot.sh tv-mission-deadline-recovery-log -> OK; emitted TV_MISSION_DEADLINE_RECOVERY_EVENT with deadlineFailureRecorded=true reservedCargoReleased=true followupAccepted=true followupDelivered=true failedHistoryPreserved=true",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_destination_route_hint_sets_route_to_active_contract_destination -v -> OK after RED KeyError fuelRequired",
+    "python3 tools/run_gameplay_scenarios.py mission_destination_route_hint --pretty -> success; route_to_active_mission_destination includes fuelRequired=1 fuelAvailable=5 fuelWarning=false objectiveHint",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 191 tests OK",
+    "./run_godot.sh tv-mission-route-hint-log -> emitted mission route/fuel hint log; low-fuel route warning visible",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=60"
   ],
   "heartbeat_status": {
@@ -128,11 +131,11 @@
     "visibility_degraded": true,
     "start_heartbeat_fallback": ".hermes/long-running/terminal-velocity/heartbeat.json",
     "progress_heartbeats_sent": 0,
-    "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON available; run ended before 10-minute progress heartbeat threshold"
+    "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Resolve the 26-commit local git-train review gate before starting another local slice. Safe next action after approval is to audit origin/main..HEAD for repeated mission-deadline probe patterns and decide push/squash/continue-local-only strategy; push, PR, rebase, squash, and publication remain gated.",
-  "resume_prompt": "Resume Terminal Velocity continuous runner in /home/bh/workspaces/loki/terminal-velocity. First read ledger/events/prompt and git status. Current state is waiting_gate for the 26-commit local train review after the mission deadline recovery log checkpoint. Do not push, PR, rebase, squash, publish, or start another local slice until review/approval or explicit continue-local-only instruction. After approval, audit origin/main..HEAD for repeated probe patterns and continue source-aligned safe-local slices.",
-  "updated_at": "2026-06-05T01:07:49Z",
+  "next_resume_action": "After this bundle is committed, pushed normally, fetched, and origin/main HEAD equality is verified, continue through a successor Kanban task from the live backlog. Strong next safe slice: keep improving helper-labeled route/fuel/hyperspace feedback or pick the strongest source-backed playable scaffold from docs/checklists/ev-classic-fidelity-implementation-backlog.md.",
+  "resume_prompt": "Resume Terminal Velocity through Kanban in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog, inspect git status/remotes/branch/log, then perform one source-aligned safe-local gameplay/fidelity slice. Normal coherent non-force pushes to markvshaney/terminal-velocity are preapproved after verification and remote HEAD equality check; keep legacy LLM cron runner superseded.",
+  "updated_at": "2026-06-05T03:29:48Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -180,7 +183,7 @@
     "2_resume_prompt": "embedded in ledger.resume_prompt and docs/prompts/terminal-velocity-continuation-prompt.md",
     "3_deterministic_first_actions": "recorded in mandatory_resume_first_actions",
     "4_four_stop_states": "recorded in stopping_state_contract",
-    "5_cron_wakeup": "active cron runner aafb9b3eac29 every 1m plus watchdog 72e736287129 every 5m, verified by cronjob list",
+    "5_cron_wakeup": "replaced by Kanban-centered continuation task t_6aedca1b plus script-only cron watchdog/coordinator 72e736287129; legacy LLM runner aafb9b3eac29 is paused/superseded",
     "6_source_artifacts_separate_from_chat": "recorded in source_artifact_policy and existing TV docs/checklists",
     "7_do_not_redo": "recorded in do_not_redo"
   },

@@ -632,12 +632,23 @@ def _route_to_active_mission_destination(state: dict[str, Any], _action: dict[st
     destination = str(job.get('destinationSystem', ''))
     before_size = len(state.get('routeQueue', []))
     appended = _append_route_stop(state, {'destinationSystem': destination, 'sourceLabel': 'terminal-velocity-design-scaffold', 'oracleStatus': 'mission_objective_hint_pending_ev_classic_ui_trace'}, trace)
+    route_queue = list(state.get('routeQueue', []))
+    fuel_required = len(route_queue)
+    fuel_available = int(state.get('fuel', 0))
+    max_fuel = int(state.get('maxFuel', STARTING_FUEL))
+    fuel_warning = fuel_required > fuel_available
+    refuel_hint = '; refuel before full route' if fuel_warning else ''
+    objective_hint = f"Mission route queued to {destination}: {fuel_required} jump(s), fuel {fuel_available}/{max_fuel}{refuel_hint}"
     trace.append({
         'type': 'route_to_active_mission_destination',
         'missionId': job.get('id'),
         'destinationSystem': destination,
-        'routeQueued': appended and len(state.get('routeQueue', [])) > before_size,
-        'routeQueue': list(state.get('routeQueue', [])),
+        'routeQueued': appended and len(route_queue) > before_size,
+        'routeQueue': route_queue,
+        'fuelRequired': fuel_required,
+        'fuelAvailable': fuel_available,
+        'fuelWarning': fuel_warning,
+        'objectiveHint': objective_hint,
         'sourceLabel': 'terminal-velocity-design-scaffold',
         'oracleStatus': 'mission_objective_hint_pending_ev_classic_ui_trace',
     })

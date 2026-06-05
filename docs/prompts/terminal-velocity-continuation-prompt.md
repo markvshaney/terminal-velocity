@@ -8,7 +8,7 @@ Resume Terminal Velocity development in the Loki Game profile.
 Project: /home/bh/workspaces/loki/terminal-velocity
 Goal: drive Terminal Velocity toward a playable, source-aligned Escape Velocity Classic reimplementation, using the gathered EV Classic/Basilisk observations, decoded resources, manuals/Bibles, and existing docs/checklists as the working source base.
 
-First load and follow these skills:
+First load and follow these skills when available in the active profile (do not fail startup solely because a profile lacks one; fall back to repo docs/checklists and source/fidelity rules):
 - source-and-fidelity
 - ev-classic-basilisk-observation
 - ev-terminal-velocity-play
@@ -19,7 +19,7 @@ Mandatory long-task ledger preflight before implementation:
 - read `.hermes/long-running/terminal-velocity/task-ledger.json` with line numbers;
 - read the latest tail of `.hermes/long-running/terminal-velocity/events.jsonl`;
 - apply `mandatory_resume_first_actions`, `stopping_state_contract`, `source_artifact_policy`, and `do_not_redo` from the ledger;
-- verify live cron/watchdog state only when the task involves runner cadence or silent-stop concerns.
+- verify live Kanban/cron-watchdog state only when the task involves runner ownership, cadence, dispatch, or silent-stop concerns; Kanban owns implementation work and script-only cron may only watch/dispatch.
 
 Stored-artifact regression checklist before implementation:
 - exact artifact read with line numbers?
@@ -50,7 +50,7 @@ Hard requirements:
    - explicit source/fidelity labels,
    - docs/backlog update when future behavior is affected.
 
-4. Do not stop at recommendations or at a completed slice. Pick the strongest safe local next slice from the live backlog and repo state, implement it, verify it, update docs/checklists, then continue to the next safe slice until a real gate is reached **and no other safe local slice remains available**. A push/PR/publication gate on the just-finished commit is not a blocker to starting the next local slice; keep the unpushed commit local and continue from the backlog unless the worktree state itself prevents safe continuation.
+4. Do not stop at recommendations or at a completed slice. Pick the strongest safe local next slice from the live backlog and repo state, implement it, verify it, update docs/checklists, then continue to the next safe slice until a real gate is reached **and no other safe local slice remains available**. A push/PR/publication gate on the just-finished commit is not normally a blocker to starting the next local slice; keep the unpushed commit local and continue from the backlog unless the worktree state itself prevents safe continuation. Exception: if the durable ledger records a commit-train review gate that explicitly withholds additional local commit growth, do not start another implementation slice or create more commits until the gate is resolved or the user explicitly authorizes continued local-only growth.
 
 5. Use Basilisk II only for bounded original-runtime questions:
    - local root: C:\Games\BasiliskII\
@@ -94,7 +94,7 @@ Hard requirements:
    - run broader cheap verification,
    - update docs/checklists,
    - repeat.
-   Ask only for real gates: external actions, destructive original-EV tests, Strict Play/death tests, publication, credentials/accounts, live repo pushes/PRs, or risky host/system changes.
+   Ask only for real gates: history rewrite/force-push, deletion, merge/release/settings/public-state changes beyond a normal coherent push, credentials/accounts, non-Terminal-Velocity repos, destructive original-EV tests, Strict Play/death tests, publication/social side effects, risky host/system changes, unsafe dirty state that cannot be separated, or missing source evidence needed for a fidelity claim. Normal non-force pushes to `markvshaney/terminal-velocity` are preapproved after git/remotes/branch/status inspection, intended-file staging, verification, no-secrets/unrelated-file check, push, fetch, and remote HEAD verification.
 
 11. Treat tool caps as per-run budgets, not task completion or task failure. Batch file inspection, edits, and verification where safe; prefer one compound terminal verification command over many separate probe calls; avoid rereading large unchanged files; and reserve the final few tool calls before cap for docs/backlog completion, git status/diff inspection, and a commit-shaped checkpoint. If the cap is approaching while a slice is only target-verified, stop starting new behavior and stabilize the current slice first. For work that may outlive the current turn or cap, use the durable long-task/checkpoint surface when available: record tool caps, current state, remaining verification, next wakeup/resume action, and continue in a fresh run instead of sending a vague out-of-budget status.
 
@@ -106,7 +106,7 @@ Current durable context to respect:
 - If the repo has uncommitted work, finish/cohere/verify that current slice before choosing a fresh one.
 
 Post-slice gate template before using the closeout block:
-- real gate? (Strict Play/destructive original-EV test/credentials/account/provider/gateway/external publication/push/PR/live-browser mutation/irreversible or social side effect)
+- real gate? (Strict Play/destructive original-EV test/credentials/account/provider/gateway/external publication/push/PR/live-browser mutation/irreversible or social side effect, or a ledger-recorded commit-train review gate withholding more local commit growth)
 - hard tool/time/budget cap?
 - unsafe dirty worktree that must be stabilized first?
 - no safe backlog/docs slice remains after inspection?

@@ -579,6 +579,10 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['routeQueue'], ['Centauri'])
         self.assertEqual(result['checks']['queued_active_mission_destination'], 'passed')
         self.assertEqual(result['trace'][-1]['destinationSystem'], 'Centauri')
+        self.assertEqual(result['trace'][-1]['fuelRequired'], 1)
+        self.assertEqual(result['trace'][-1]['fuelAvailable'], 5)
+        self.assertFalse(result['trace'][-1]['fuelWarning'])
+        self.assertIn('1 jump(s), fuel 5/6', result['trace'][-1]['objectiveHint'])
         self.assertEqual(result['trace'][-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
 
     def test_mission_trade_hybrid_capacity_planning_preserves_trade_cargo(self):
