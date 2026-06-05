@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": "yes: runner checkpoint pending",
-    "head": "35f8be0",
-    "status_short": "## main...origin/main [ahead 1]",
-    "origin_main": "8706edcea9a2198953f3e1d09510a17d8f71afd3"
+    "head": "06e66cf",
+    "status_short": "## main...origin/main",
+    "origin_main": "06e66cf25cba980a2937a639dfa6b3c8b1ccffb5"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": "yes: runner checkpoint pending"
   },
@@ -25,7 +25,7 @@
     "active_task_id": "t_4560aa1f",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "ready_for_checkpoint_after_afterburner_no_fuel_probe",
+    "status": "ready_for_successor_after_afterburner_no_fuel_probe",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T06:45:53Z",
+    "updated_at": "2026-06-05T06:46:33Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,9 +106,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Afterburner deterministic Godot probe now verifies the Terminal Velocity no-fuel blocked guidance path in addition to speed boost and fuel drain scaffold fields.",
-  "last_commit": "35f8be0 feat(godot): surface return trade margin help",
-  "last_checkpoint_commit": "35f8be0cb16c96b60c056a5b350bcb3f5f04a291",
+  "current_milestone": "Afterburner deterministic Godot probe verifies speed boost, fuel drain, and no-fuel blocked guidance under Terminal Velocity scaffold labels.",
+  "last_commit": "06e66cf feat(godot): verify afterburner no-fuel guidance",
+  "last_checkpoint_commit": "06e66cf25cba980a2937a639dfa6b3c8b1ccffb5",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -163,9 +163,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this afterburner no-fuel probe slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep afterburner constants and no-fuel behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe Terminal Velocity gameplay/fidelity slice from the live backlog; keep afterburner constants and no-fuel behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the afterburner no-fuel probe slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T06:45:53Z",
+  "updated_at": "2026-06-05T06:46:33Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
