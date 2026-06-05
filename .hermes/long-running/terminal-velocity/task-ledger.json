@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: runner checkpoint metadata updated after feature commit; checkpoint commit pending",
-    "head": "0c4478865cc3cb410dd6c537d38adf3ddba31cf0",
-    "status_short": "inspect with git status --short --branch before push",
-    "origin_main": "0c4478865cc3cb410dd6c537d38adf3ddba31cf0"
+    "dirty": "no: NPC retaliation recovery help checkpoint pushed and remote verified before this ledger-finalization commit",
+    "head": "7e5128197cf038f7354369c825bf19d19a7c745c",
+    "status_short": "## main...origin/main",
+    "origin_main": "7e5128197cf038f7354369c825bf19d19a7c745c"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: runner checkpoint metadata updated after feature commit; checkpoint commit pending"
+    "dirty": "no: NPC retaliation recovery help checkpoint pushed and remote verified before this ledger-finalization commit"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_51d80718",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "npc_retaliation_recovery_help_feature_commit_created_push_pending",
+    "status": "npc_retaliation_recovery_help_pushed_remote_verified",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T16:24:01Z",
+    "updated_at": "2026-06-05T16:24:27Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -107,8 +107,8 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "current_milestone": "NPC retaliation recovery help is verified locally: F10 tells players that hostile contacts can fire back after source-mined cooldowns, to watch Player Info shields/hull, break off to repair, and reserve F8 for disabled-player recovery; exact Classic AI cadence remains pending.",
-  "last_commit": "9107348 feat(godot): surface NPC retaliation recovery help",
-  "last_checkpoint_commit": "91073484453817183159ad82eebf41427f98a46e",
+  "last_commit": "7e51281 chore: checkpoint NPC retaliation help",
+  "last_checkpoint_commit": "7e5128197cf038f7354369c825bf19d19a7c745c",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -142,9 +142,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After broader verification, diff/no-secret checks, committing/pushing this NPC-retaliation recovery help slice, and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep NPC retaliation cadence labeled pending Classic runtime comparison.",
+  "next_resume_action": "Create exactly one successor Kanban continuation task from the final pushed checkpoint, then continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep NPC retaliation cadence labeled pending Classic runtime comparison.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity from the NPC-retaliation recovery help checkpoint. Read ledger/events/prompt/backlog, inspect git state, choose one source-aligned safe local slice, verify, checkpoint, commit, normal push, fetch, verify HEAD == origin/main, and create exactly one successor task unless a real gate/blocker remains.",
-  "updated_at": "2026-06-05T16:24:01Z",
+  "updated_at": "2026-06-05T16:24:27Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -198,5 +198,5 @@
   },
   "last_process_checkpoint_commit": "local checkpoint created; inspect current SHA with git log --oneline -1",
   "last_process_checkpoint": "Expose mission auto-abort Godot log",
-  "last_checkpoint_commit_note": "Feature slice commit created after full verification; final runner checkpoint commit/push pending."
+  "last_checkpoint_commit_note": "Feature/checkpoint commits were pushed and verified equal to origin/main before this final ledger checkpoint commit; inspect current SHA after final checkpoint push."
 }
