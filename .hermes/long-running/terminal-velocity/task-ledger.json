@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: afterburner fuel recovery help slice pending commit",
-    "head": "36675574d85f5658bdae1fdc90ea6113575c570f",
+    "dirty": "yes: runner checkpoint pending commit",
+    "head": "1743d4e4f2ff96c353238e9bc3c5747b2f7cf0eb",
     "status_short": "## main...origin/main",
-    "origin_main": "36675574d85f5658bdae1fdc90ea6113575c570f"
+    "origin_main": "1743d4e4f2ff96c353238e9bc3c5747b2f7cf0eb"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: afterburner fuel recovery help slice pending commit"
+    "dirty": "yes: runner checkpoint pending commit"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T07:35:50Z",
+    "updated_at": "2026-06-05T07:36:43Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,9 +106,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "F10 help surfaces afterburner no-fuel refuel recovery guidance; feature slice verified locally and pending commit/push.",
-  "last_commit": "1c65f73 feat(godot): surface autopilot launch recovery help",
-  "last_checkpoint_commit": "1c65f73db7aaa5852d052c68b07bf67c5183d77d",
+  "current_milestone": "F10 help surfaces afterburner no-fuel refuel recovery guidance; feature commit pushed and verified at origin/main.",
+  "last_commit": "1743d4e feat(godot): surface afterburner fuel recovery help",
+  "last_checkpoint_commit": "1743d4e4f2ff96c353238e9bc3c5747b2f7cf0eb",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -139,9 +139,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing/pushing this afterburner fuel-recovery help slice and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep afterburner constants/no-fuel/landed behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
+  "next_resume_action": "After committing/pushing this runner checkpoint and verifying origin/main HEAD equality, create successor Kanban continuation from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep afterburner constants/no-fuel/landed behavior labeled as Terminal Velocity scaffold pending Classic runtime/resource evidence.",
   "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Read ledger/events/prompt/backlog and git state. Continue from the latest pushed HEAD after the afterburner fuel recovery help surface slice; choose one source-aligned safe playable/fidelity slice, verify, update docs/ledger/events, commit, normal push, fetch, verify HEAD == origin/main, then create exactly one continuation task unless a real gate/blocker exists.",
-  "updated_at": "2026-06-05T07:35:50Z",
+  "updated_at": "2026-06-05T07:36:43Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
