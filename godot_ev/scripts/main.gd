@@ -2503,7 +2503,16 @@ func _run_target_selection_log() -> void:
 			live_target_count += 1
 	var scanner_target_detail := _scanner_target_detail_line()
 	var scanner_target_detail_visible := scanner_target_detail.contains("Scanner target: Contact") and scanner_target_detail.contains("S/H")
-	print("%s initialTarget=%d cycledTarget=%d closestTarget=%d targetCount=%d destroyedTargetSkippedByCycle=%s destroyedTargetSkippedByClosest=%s liveTargetCount=%d cycledStatusHasTarget=true actualCycledStatusHasTarget=%s cycledStatusHasStats=%s closestStatusHasClosest=true actualClosestStatusHasClosest=%s closestStatusHasStats=%s scannerTargetDetailVisible=%s scannerTargetDetail=\"%s\" cycledStatus=\"%s\" closestStatus=\"%s\" sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending" % [TARGET_SELECTION_EVENT_LOG_PREFIX, initial_target, cycled_target, closest_target, target_count, str(destroyed_target_skipped_by_cycle), str(destroyed_target_skipped_by_closest), live_target_count, str(cycled_status_has_target), str(cycled_status_has_stats), str(closest_status_has_closest), str(closest_status_has_stats), str(scanner_target_detail_visible).to_lower(), scanner_target_detail, cycled_status, closest_status])
+	for i in range(target_count):
+		target_shields[i] = 0
+		target_hulls[i] = 0
+	selected_target_index = 0
+	_cycle_target(1)
+	var no_active_cycle_status := status_line
+	_select_closest_target()
+	var no_active_closest_status := status_line
+	var no_active_scanner_status_visible := no_active_cycle_status == "No active scanner targets" and no_active_closest_status == "No active scanner targets"
+	print("%s initialTarget=%d cycledTarget=%d closestTarget=%d targetCount=%d destroyedTargetSkippedByCycle=%s destroyedTargetSkippedByClosest=%s liveTargetCount=%d cycledStatusHasTarget=true actualCycledStatusHasTarget=%s cycledStatusHasStats=%s closestStatusHasClosest=true actualClosestStatusHasClosest=%s closestStatusHasStats=%s scannerTargetDetailVisible=%s noActiveScannerStatusVisible=%s scannerTargetDetail=\"%s\" cycledStatus=\"%s\" closestStatus=\"%s\" noActiveCycleStatus=\"%s\" noActiveClosestStatus=\"%s\" sourceLabel=terminal-velocity-target-selection-scaffold oracleStatus=classic_runtime_target_selection_pending" % [TARGET_SELECTION_EVENT_LOG_PREFIX, initial_target, cycled_target, closest_target, target_count, str(destroyed_target_skipped_by_cycle), str(destroyed_target_skipped_by_closest), live_target_count, str(cycled_status_has_target), str(cycled_status_has_stats), str(closest_status_has_closest), str(closest_status_has_stats), str(scanner_target_detail_visible).to_lower(), str(no_active_scanner_status_visible).to_lower(), scanner_target_detail, cycled_status, closest_status, no_active_cycle_status, no_active_closest_status])
 	get_tree().quit(0)
 
 func _run_navigation_guardrail_log() -> void:

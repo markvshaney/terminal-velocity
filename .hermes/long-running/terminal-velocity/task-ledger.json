@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: push-unblock checkpoint pending commit",
-    "head": "784ee22f577621d537cd0635fb00123922e842ec",
-    "status_short": "## main...origin/main",
-    "origin_main": "784ee22f577621d537cd0635fb00123922e842ec"
+    "dirty": "yes: target retarget recovery slice pending commit",
+    "head": "6539d1b4b257a02e57b1b0991c15dc42c8299345",
+    "status_short": "## main...origin/main\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M godot_ev/scripts/main.gd\n M native_ev/data/help_overlay.json\n M native_ev/tests/test_model.py",
+    "origin_main": "6539d1b4b257a02e57b1b0991c15dc42c8299345"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes: push-unblock checkpoint pending commit"
+    "dirty": "yes: target retarget recovery slice pending commit"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_3bbdaabb",
+    "active_task_id": "t_bb668db0",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "afterburner_recovery_guidance_pushed_pending_successor_task",
+    "status": "target_retarget_recovery_slice_verified_pending_commit_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -47,7 +47,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-05T15:59:28Z",
+    "updated_at": "2026-06-05T16:03:53Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -57,7 +57,7 @@
     "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
     "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved; legacy LLM cron runner remains superseded"
   },
-  "status": "waiting_gate",
+  "status": "running",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "active_gate": {
     "type": "none_for_normal_push",
@@ -106,7 +106,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Afterburner and disabled-player blocked-action guidance now names concrete recovery affordances: F5 refuel for empty-fuel afterburner blocks, L launch for landed afterburner blocks, and F8 recovery for disabled-player blocks.",
+  "current_milestone": "Target selection help/probe now names the no-active-scanner-target recovery path: disabled/destroyed contacts are skipped and players should find live contacts or leave the route before retrying N/R.",
   "last_commit": "784ee22 feat(godot): clarify afterburner recovery guidance",
   "last_checkpoint_commit": "784ee22f577621d537cd0635fb00123922e842ec",
   "last_commits": [
@@ -123,9 +123,13 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model -v -> Ran 127 tests, OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_target_selection_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> Ran 2 tests OK",
+    "./run_godot.sh tv-target-selection-log -> noActiveScannerStatusVisible=true",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasTargetRetargetRecoveryHelp=true",
+    "python3 -m unittest native_ev.tests.test_model -v -> Ran 127 tests OK",
     "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
     "git diff --check -> OK",
+    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62"
   ],
@@ -136,9 +140,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Complete Kanban task t_3bbdaabb and create exactly one successor continuation task from pushed HEAD 784ee22; future continuation tasks must include visibility instructions so blocked/gated completion is reported through the watchdog/status channel instead of silent Kanban-only comments.",
-  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. A verified local commit feat(godot): clarify afterburner recovery guidance exists and branch main is ahead of origin/main by 1. Do not redo the slice. Resolve/confirm GitHub auth, push origin main, fetch, verify HEAD == origin/main, then create exactly one successor continuation task unless a real gate/blocker remains.",
-  "updated_at": "2026-06-05T15:59:28Z",
+  "next_resume_action": "After committing/pushing this target retarget recovery guidance/probe slice and verifying origin/main HEAD equality, create exactly one successor Kanban continuation task from pushed HEAD and continue the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog; keep target retarget/no-active-scanner behavior labeled as Terminal Velocity scaffold pending Classic runtime target-selection evidence.",
+  "resume_prompt": "Resume Terminal Velocity in /home/bh/workspaces/loki/terminal-velocity. Finish the current target retarget recovery slice if still dirty: commit/push the verified help/probe/backlog/ledger bundle, fetch, verify HEAD == origin/main, then create exactly one successor continuation task unless a real gate/blocker remains.",
+  "updated_at": "2026-06-05T16:03:53Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

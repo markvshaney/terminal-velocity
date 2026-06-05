@@ -279,6 +279,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Autopilot disabled recovery: if A blocks or disengages because the player ship is disabled, use F8 recovery before retrying autopilot; TV scaffold, exact Classic death/autopilot behavior pending.',
             'Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.',
             'Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.',
+            'Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.',
             'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
         ]:
             self.assertIn(expected_line, help_lines)
@@ -295,6 +296,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasRepairRecoveryHelp',
             'hasCombatHelp',
             'hasTargetDetailHelp',
+            'hasTargetRetargetRecoveryHelp',
             'hasCombatRewardsHelp',
             'hasSalvageHelp',
             'hasShieldRechargeHelp',
@@ -630,6 +632,7 @@ class NativeEvModelTests(unittest.TestCase):
             'cycledStatusHasStats=%s',
             'closestStatusHasStats=%s',
             'scannerTargetDetailVisible=%s',
+            'noActiveScannerStatusVisible=%s',
             'func _scanner_target_detail_line() -> String:',
             'Scanner target: Contact %d — %s',
             'No active scanner targets',
