@@ -135,7 +135,8 @@ Required labels:
 
 ## Next candidate improvements
 
-1. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay slice stabilizes. Source basis: Godot best-practice/project-organization docs.
-2. Add playtest/run records for manual Godot sessions, not just automated self-tests. Source basis: playtesting source plus VPT/action-trace references.
-3. Add branch/faction/legal scenarios before combat. Source basis: EV-family mission/legal/faction records and current safety policy.
-4. Create Kanban cards only for multi-lane work: e.g. “observe original EV mission surfaces” can run separately from “implement TV mission log UI.”
+1. Run the read-only backlog executability audit from `docs/research/terminal-velocity-coordination-topology.md` before adding more autonomous workers. Source basis: Loki Game Telegram coordination recommendation preserved in that artifact, plus its 2026-06-06 coordination-source cross-check against Claude Code worktrees/subagents, Git worktrees, Karpathy autoresearch, and Hermes local coordination guidance.
+2. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay slice stabilizes. Source basis: Godot best-practice/project-organization docs.
+3. Add playtest/run records for manual Godot sessions, not just automated self-tests. Source basis: playtesting source plus VPT/action-trace references.
+4. Add branch/faction/legal scenarios before combat. Source basis: EV-family mission/legal/faction records and current safety policy.
+5. Create Kanban cards only for multi-lane work: e.g. “observe original EV mission surfaces” can run separately from “implement TV mission log UI.”

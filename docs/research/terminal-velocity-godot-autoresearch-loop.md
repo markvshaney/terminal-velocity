@@ -176,6 +176,15 @@ Mission alignment branch scenario contract:
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
   This is a Terminal Velocity story-branch/playability probe; exact EV Classic branch offer UI, random refresh timing, and legal/reputation thresholds remain pending original-runtime/manual/resource evidence.
 
+
+Mission alignment branch delivery scenario contract:
+
+- `RunGodot.ps1 -MissionAlignmentDeliveryLog` / `--tv-mission-alignment-delivery-log`
+- Exercises the chapter-one alignment branch delivery scaffold in the Godot fast-eval lane after `frontier_samples_delivered`, without claiming exact EV Classic branch-completion UI.
+- Runs both branch choices independently: `federation_report_freeport` delivers to Earth and `freeport_pact_smugglers` delivers to Luna.
+- Logs branch acceptance/delivery, cargo release, reward payout, branch completion flags (`alignment_federation` / `alignment_freeport` plus asset flags), incompatible branch blockage after delivery, completed mission ids, and story flags.
+- `sourceLabel=terminal-velocity-mission-scaffold`; `oracleStatus=mission_behavior_pending_classic_runtime_trace`; `deliveryBoundary=terminal_velocity_alignment_delivery_scaffold_exact_classic_completion_ui_pending`.
+
 Mission alignment return-contract scenario contract:
 
 - `RunGodot.ps1 -MissionAlignmentReturnLog` / `--tv-mission-alignment-return-log`
