@@ -7,10 +7,10 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": false,
+    "dirty": true,
     "head": "SHA-neutral: inspect current git rev-parse HEAD",
     "origin_main": "SHA-neutral: inspect current git rev-parse origin/main before classifying live state",
-    "status_short": "clean at origin/main after remote-verified light_freighter_refuel_mission_margin_loop push; successor t_b2e83ae1 ready for dispatch"
+    "status_short": "dirty help-surface slice pending verification/local commit/review"
   },
   "repo_state": {
     "branch": "main",
@@ -25,7 +25,7 @@
     "active_task_id": "t_b2e83ae1",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_ready_pending_dispatch",
+    "status": "normal_push_prepared_successor_needed",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T10:49:00Z",
+    "updated_at": "2026-06-06T06:57:27-04:00",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,9 +111,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "light_freighter_refuel_mission_margin_loop pushed and verified; successor t_b2e83ae1 created for next safe source-aligned slice.",
+  "current_milestone": "Stale review-required gate resolved locally for Light Freighter refuel margin help-surface slice; normal non-force push/successor flow prepared.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
-  "last_checkpoint_commit": "remote-verified: feat(curriculum): add light freighter refuel margin scenario",
+  "last_checkpoint_commit": "local checkpoint: feat(help): surface light freighter refuel margin recovery",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -128,14 +128,13 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python -m pytest native_ev/tests/test_scenario_eval.py -k light_freighter_refuel_mission_margin_loop -q -> 1 passed, 79 deselected",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_refuel_mission_margin_loop --pretty -> success true, final credits 19540, completed levo_bulk_refuel_margin_supply, cargo cleared, fuel 299",
-    "python -m pytest native_ev/tests/test_scenario_eval.py -q -> 80 passed",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=76 failed=0 total=76",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 210 tests OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=76",
-    "git diff --check -> OK",
-    "npm test -> not applicable at repo root; failed ENOENT because package.json is absent"
+    "git status --short --branch -> main ahead 1; working tree clean before resolution event",
+    "git log --oneline origin/main..HEAD --stat -> one coherent help/probe/backlog/ledger commit",
+    "git diff --check HEAD~1..HEAD -> OK",
+    "changed-file scope check -> only native_ev help/tests, docs/checklists, and TV long-running ledger/events",
+    "refined credential scan on added lines excluding audit wording -> 0 hits",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasLightFreighterRefuelMarginRecoveryHelp=true"
   ],
   "active_gate": "none",
   "heartbeat_status": {
@@ -145,9 +144,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch/continue successor t_b2e83ae1 for the next source-aligned safe local gameplay/fidelity vertical slice from current origin/main; do not redo light_freighter_refuel_mission_margin_loop.",
+  "next_resume_action": "Push/fetch/verify HEAD == origin/main, complete t_b2e83ae1, create and dispatch exactly one successor continuation card.",
   "resume_prompt": "Continue Terminal Velocity via Kanban task t_b2e83ae1: inspect git status/origin, ledger/events tail, continuation prompt, and backlog; implement one safe source-aligned gameplay/fidelity vertical slice with tests/probes/docs/ledger updates.",
-  "updated_at": "2026-06-06T10:49:00Z",
+  "updated_at": "2026-06-06T06:57:27-04:00",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -212,12 +211,16 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "light-freighter-refuel-mission-margin-loop",
-    "summary": "Implemented and verified symbolic light_freighter_refuel_mission_margin_loop: buys a Light Freighter at Earth, reserves a 120-ton Levo delivery, evaluates remaining hold space for profitable Food Sol->Levo and negative Equipment Levo->Sol margins, carries only three Food lots, blocks the loaded return leg on zero fuel, refuels at Earth, completes delivery, sells retained trade cargo, and records source/oracle boundary metadata.",
-    "commit": "local checkpoint: feat(curriculum): add light freighter refuel margin scenario",
+    "id": "light-freighter-refuel-mission-margin-help-surface",
+    "summary": "Promoted the verified light_freighter_refuel_mission_margin_loop into visible F10 recovery guidance and the deterministic tv-gameplay-curriculum-help-log probe, covering reserved bulk delivery cargo, positive-margin remaining-hold trade, service-port refuel planning, delivery, and retained-cargo sale ordering.",
+    "commit": "local checkpoint: feat(help): surface light freighter refuel margin recovery",
     "source_fidelity_labels": [
       "terminal-velocity-light-freighter-refuel-mission-margin-scaffold",
       "light_freighter_refuel_mission_margin_pending_classic_runtime_trace"
     ]
+  },
+  "git_state": {
+    "dirty": false,
+    "status_short": "local checkpoint commit created; branch ahead of origin/main pending review"
   }
 }
