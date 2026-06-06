@@ -82,6 +82,7 @@
     "weapon_reputation_gate_recovery",
     "weapon_credit_recovery_loop",
     "weapon_availability_recovery_loop",
+    "weapon_purchase_mission_cargo_reservation_loop",
     "contraband_scan_clemency_recovery",
     "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
@@ -415,6 +416,10 @@
     "light_freighter_deadline_repair_refuel_margin_loop": {
       "purpose": "Light-freighter timed repair/refuel/mission-margin loop: buy a light freighter, accept a deadline-bound Sol-to-Levo bulk contract while damaged and nearly empty, deliver on the current last allowed day before the repair return, then refuel and repair while preserving pending-Classic deadline/runtime boundaries.",
       "surface": "light freighter/deadline/refuel/repair/mission-margin strategy scaffold"
+    },
+    "weapon_purchase_mission_cargo_reservation_loop": {
+      "purpose": "Weapon purchase with mission cargo reservation loop: accept a small active delivery at Sirius Station, buy a Pulse Cannon, and verify the weapon purchase preserves reserved mission cargo while retaining explicit pending-Classic cargo/purchase boundaries.",
+      "surface": "weapon purchase/mission cargo reservation scaffold"
     }
   }
 }
