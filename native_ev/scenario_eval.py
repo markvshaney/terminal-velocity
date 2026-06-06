@@ -43,6 +43,7 @@ SCENARIO_CURRICULUM = [
     'cross_market_trade_spread_scout',
     'max_hold_trade_route_scout',
     'trade_route_refuel_profit_loop',
+    'trade_route_margin_choice_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1234,6 +1235,21 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
                 'oracleStatus': 'classic_runtime_refuel_trade_route_pending',
             },
         ]
+    if name == 'trade_route_margin_choice_loop':
+        source_label = 'terminal-velocity-trade-margin-choice-scaffold'
+        oracle_status = 'trade_margin_choice_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'evaluate_trade_margin', 'commodity': 'food', 'originSystem': 'Sol', 'destinationSystem': START_SYSTEM, 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'evaluate_trade_margin', 'commodity': 'equipment', 'originSystem': START_SYSTEM, 'destinationSystem': 'Sol', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2112,6 +2128,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'refueled_before_return_leg': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
             'completed_refueled_trade_profit': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS + (2 * (120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
             'recorded_refuel_trade_source_boundary': 'passed' if trade_events and all(event.get('sourceLabel') == 'terminal-velocity-refuel-trade-route-scaffold' and event.get('oracleStatus') == 'classic_runtime_refuel_trade_route_pending' for event in trade_events) else 'failed',
+        })
+    elif name == 'trade_route_margin_choice_loop':
+        decisions = [event for event in trace if event.get('type') == 'trade_margin_decision']
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        source_events = decisions + trade_events
+        checks.update({
+            'identified_profitable_food_margin': 'passed' if any(event.get('commodity') == 'food' and event.get('originSystem') == 'Sol' and event.get('destinationSystem') == START_SYSTEM and event.get('marginPerTon') == 78 and event.get('decision') == 'carry' for event in decisions) else 'failed',
+            'skipped_negative_equipment_margin': 'passed' if any(event.get('commodity') == 'equipment' and event.get('originSystem') == START_SYSTEM and event.get('destinationSystem') == 'Sol' and event.get('marginPerTon') == -210 and event.get('decision') == 'skip' for event in decisions) else 'failed',
+            'carried_only_profitable_food_lot': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS + ((120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} and [event.get('commodity') for event in trade_events] == ['food', 'food'] else 'failed',
+            'recorded_margin_choice_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-trade-margin-choice-scaffold' and event.get('oracleStatus') == 'trade_margin_choice_pending_classic_runtime_trace' for event in source_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

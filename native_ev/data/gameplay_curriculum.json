@@ -11,6 +11,7 @@
     "cross_market_trade_spread_scout",
     "max_hold_trade_route_scout",
     "trade_route_refuel_profit_loop",
+    "trade_route_margin_choice_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -87,6 +88,10 @@
     "trade_route_refuel_profit_loop": {
       "purpose": "Trade-route refuel recovery loop: fill the starting hold at Sol, block the return profit leg on empty fuel, refuel at Earth, then return to Levo and sell both lots while retaining explicit pending-Classic fuel/trade boundaries.",
       "surface": "commodity exchange/refuel-aware trade-route scaffold"
+    },
+    "trade_route_margin_choice_loop": {
+      "purpose": "Trade-route margin-choice loop: at Sol, compare a profitable Food return leg against an unprofitable Equipment candidate, carry only the positive-margin lot to Levo, and retain explicit pending-Classic market-selection boundaries.",
+      "surface": "commodity exchange/trade-margin choice scaffold"
     },
     "mission_runner_first_delivery": {
       "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",

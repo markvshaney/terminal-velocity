@@ -23,6 +23,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'cross_market_trade_spread_scout',
                 'max_hold_trade_route_scout',
                 'trade_route_refuel_profit_loop',
+                'trade_route_margin_choice_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -238,6 +239,28 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual([event['system'] for event in trade_events], ['Sol', 'Sol', 'Levo', 'Levo'])
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-refuel-trade-route-scaffold' for event in trade_events))
         self.assertTrue(all(event['oracleStatus'] == 'classic_runtime_refuel_trade_route_pending' for event in trade_events))
+
+    def test_trade_route_margin_choice_loop_carries_positive_margin_and_skips_bad_cargo(self):
+        result = run_scripted_scenario('trade_route_margin_choice_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['credits'], 10780)
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['checks']['identified_profitable_food_margin'], 'passed')
+        self.assertEqual(result['checks']['skipped_negative_equipment_margin'], 'passed')
+        self.assertEqual(result['checks']['carried_only_profitable_food_lot'], 'passed')
+        self.assertEqual(result['checks']['recorded_margin_choice_source_boundary'], 'passed')
+        decisions = [event for event in result['trace'] if event['type'] == 'trade_margin_decision']
+        self.assertEqual([event['commodity'] for event in decisions], ['food', 'equipment'])
+        self.assertEqual([event['decision'] for event in decisions], ['carry', 'skip'])
+        self.assertEqual([event['marginPerTon'] for event in decisions], [78, -210])
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertEqual([event['commodity'] for event in trade_events], ['food', 'food'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-trade-margin-choice-scaffold' for event in decisions + trade_events))
+        self.assertTrue(all(event['oracleStatus'] == 'trade_margin_choice_pending_classic_runtime_trace' for event in decisions + trade_events))
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')
