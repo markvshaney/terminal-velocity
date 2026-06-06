@@ -86,6 +86,7 @@
     "Legal service gates: poor standing can block outfitter/shipyard buying even at a landed port; improve legal standing or use an eligible port before retrying. Exact Classic refusal UI pending.",
     "Weapon reputation gates: some weapon purchases require local government reputation; build standing or buy a lower-gate weapon before retrying. Exact Classic weapon-service thresholds/UI pending.",
     "Weapon credit recovery: if a landed weapon purchase is blocked for insufficient credits, run a safe trade/mission funding leg, return to the same service port, and retry only once the price is covered. TV scaffold; Classic purchase UI pending.",
+    "Weapon availability recovery: if a weapon is not sold at the current landed port, keep the purchase goal but scout the service matrix for a port that lists it, then retry there. TV scaffold; Classic store inventory UI pending.",
     "Alignment gates: story offers may require prior flags, local reputation, legal standing, or an open branch choice; scan Mission Computer details before hauling cargo. Exact Classic offer UI pending.",
     "Alignment return contracts: after choosing a chapter branch, scan Mission Computer for remaining non-branch return contracts before assuming the story chain is complete. TV timing scaffold pending Classic UI evidence.",
     "Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
@@ -317,6 +318,11 @@
       "flag": "hasWeaponCreditRecoveryHelp",
       "source": "help",
       "contains": "Weapon credit recovery: if a landed weapon purchase is blocked for insufficient credits"
+    },
+    {
+      "flag": "hasWeaponAvailabilityRecoveryHelp",
+      "source": "help",
+      "contains": "Weapon availability recovery: if a weapon is not sold at the current landed port"
     },
     {
       "flag": "hasAlignmentGateHelp",
