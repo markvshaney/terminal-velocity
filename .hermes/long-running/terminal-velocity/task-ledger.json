@@ -5,7 +5,7 @@
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "weapon_mission_cargo_godot_probe pushed and remote-verified; coordinator should complete t_54179157 and create exactly one successor continuation card.",
+  "current_milestone": "weapon_trade_cargo_godot_probe accepted by local integrator under normal TV push policy; push verification in progress.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -58,17 +58,18 @@
     "Do not redo contraband_clemency_funding_godot_contract work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo contraband_clemency_funding_godot_contract; pushed and verified in normal TV repo path with HEAD == origin/main.",
     "Do not redo weapon_credit_gate_godot_probe; pushed/verified or pending normal push in current slice history. Continue from review comments or next safe source-aligned slice.",
-    "Do not redo weapon_availability_gate_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main."
+    "Do not redo weapon_availability_gate_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main.",
+    "Do not redo weapon_trade_cargo_godot_probe once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "branch": "main",
     "dirty": false,
-    "head": "46b517730bbfa675acc0307f870925edbb4d65e9",
-    "origin_main": "46b517730bbfa675acc0307f870925edbb4d65e9",
-    "status_short": "## main...origin/main"
+    "head": "94e3c45e2015495fcf6a01b8e7eaff1c0c3a4194",
+    "origin_main": "4cc8bbe28bcd09a521de087df1b66f6ab588655a",
+    "status_short": "## main...origin/main [ahead 1]"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -87,13 +88,13 @@
     "7_do_not_redo": "recorded in do_not_redo"
   },
   "kanban": {
-    "active_task_id": "t_54179157",
+    "active_task_id": "t_d6887483",
     "last_completed_task_id": "t_86cf10d1",
     "last_successor_task_id": "t_78506339"
   },
-  "last_checkpoint_commit": "local checkpoint pending/created: feat(godot): surface upgrade affordability recovery help",
+  "last_checkpoint_commit": "local checkpoint: feat(godot): expose weapon trade cargo probe",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
-  "last_commit": "remote-verified: Add weapon purchase mission cargo scenario",
+  "last_commit": "local checkpoint: feat(godot): expose weapon trade cargo probe",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -108,24 +109,26 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_completed_slice": {
-    "commit": "46b517730bbfa675acc0307f870925edbb4d65e9",
-    "id": "weapon-mission-cargo-godot-probe",
-    "kanban_task_id": "t_54179157",
-    "remote_verified": true,
+    "commit": "local commit in this slice; inspect live with git rev-parse HEAD",
+    "id": "weapon-trade-cargo-godot-probe",
+    "kanban_task_id": "t_d6887483",
+    "remote_verified": "pending_push_verification",
     "review_required": false,
     "source_fidelity_labels": [
-      "terminal-velocity-weapon-mission-cargo-scaffold",
-      "classic_runtime_weapon_purchase_cargo_interaction_pending"
+      "terminal-velocity-weapon-trade-cargo-scaffold",
+      "classic_runtime_weapon_purchase_trade_cargo_interaction_pending"
     ],
-    "summary": "Godot exposes a deterministic Sirius Station active-mission cargo preservation probe for pulse_cannon purchase via TV_WEAPON_MISSION_CARGO_EVENT and both WSL/Windows wrappers.",
+    "summary": "Godot exposes a deterministic Sirius Station held trade-cargo preservation probe for pulse_cannon purchase via TV_WEAPON_TRADE_CARGO_EVENT and both WSL/Windows wrappers.",
     "verification": [
-      "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> FAIL before implementation",
+      "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> FAIL before Godot/wrapper implementation",
       "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
-      "./run_godot.sh tv-weapon-mission-cargo-log -> missionCargoPreserved=true activeMissionCargoBefore=5 activeMissionCargoAfter=5 cargoUsedAfterWeapon=5",
-      "git diff --check -> OK"
+      "./run_godot.sh tv-weapon-trade-cargo-log -> tradeCargoPreserved=true tradeCargoBefore=10 tradeCargoAfter=10 cargoUsedAfterWeapon=10 weaponBuySucceeded=true",
+      "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 225 tests OK",
+      "python3 tools/run_gameplay_scenarios.py --all --pretty -> 91/91 scenarios passed",
+      "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=91"
     ]
   },
-  "last_process_checkpoint": "weapon_mission_cargo_godot_probe remote-verified; ready for Kanban completion and successor continuation.",
+  "last_process_checkpoint": "weapon_trade_cargo_godot_probe locally committed and verified; review-required handoff active.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
@@ -168,7 +171,8 @@
     "./run_godot.sh tv-weapon-mission-cargo-log -> missionCargoPreserved=true activeMissionCargoBefore=5 activeMissionCargoAfter=5 cargoUsedAfterWeapon=5",
     "git push origin main -> OK be8b3ee..46b5177",
     "git fetch origin && test HEAD == origin/main -> OK 46b517730bbfa675acc0307f870925edbb4d65e9",
-    "sensitive_added_hits=0"
+    "sensitive_added_hits=0",
+    "./run_godot.sh tv-weapon-trade-cargo-log -> tradeCargoPreserved=true tradeCargoBefore=10 tradeCargoAfter=10 cargoUsedAfterWeapon=10 weaponBuySucceeded=true"
   ],
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
@@ -178,7 +182,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Complete Kanban task t_54179157, create exactly one successor continuation card from current origin/main, dispatch it, and continue the next safe source-aligned Terminal Velocity slice; do not redo weapon_mission_cargo_godot_probe.",
+  "next_resume_action": "Push weapon_trade_cargo_godot_probe normally, fetch/verify HEAD == origin/main, complete t_d6887483, create exactly one successor continuation card, dispatch it, and continue the next safe Terminal Velocity slice.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -210,7 +214,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Continue Terminal Velocity from current origin/main after weapon_inventory_stack_godot_probe. Read ledger/events, continuation prompt, backlog, and live git state first; do not redo verified weapon inventory stack/availability/credit/reputation slices.",
+  "resume_prompt": "Continue Terminal Velocity from current worktree/origin after weapon_trade_cargo_godot_probe review; do not redo weapon mission-cargo, trade-cargo, inventory stack, availability, credit, or reputation weapon probes.",
   "runner": {
     "active_task_id": "t_54179157",
     "assignee": "terminal-velocity",
@@ -320,5 +324,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T20:38:19Z"
+  "updated_at": "2026-06-06T20:51:37Z"
 }
