@@ -110,6 +110,7 @@ Post-slice gate template before using the closeout block:
 - hard tool/time/budget cap?
 - unsafe dirty worktree that must be stabilized first?
 - no safe backlog/docs slice remains after inspection?
+- push/PR/publication gate on the just-finished commit is not a blocker if another safe local slice can proceed without crossing that gate; checkpoint it, leave publication gated, and continue safe local work.
 If all answers are no, do not close out; start the next safe local slice.
 
 Closeout format only when the autonomous run is genuinely ending because a real gate/tool cap/time cap/no-safe-alternative has been reached. Do **not** emit this closeout after every completed slice if another safe local slice is available; treat the completed slice as a checkpoint and keep working. A local branch being ahead/push-gated is not itself a reason to stop local work.

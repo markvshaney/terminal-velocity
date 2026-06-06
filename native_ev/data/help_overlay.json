@@ -34,6 +34,7 @@
     "Upgrade affordability recovery: if a target ship is one funding leg out of reach, preserve the blocked purchase goal, run a safe profitable trade loop, then return to the same shipyard and verify the new hull in Player Info. TV upgrade-affordability scaffold; Classic progression loop pending.",
     "Cargo expansion recovery: if a third trade lot is blocked by shuttle hold limits, preserve the profitable route, buy a Cargo Pod at the outfitter, then fill the expanded hold and verify the larger run in Player Info. TV cargo-expansion scaffold; Classic cargo pod progression loop pending.",
     "Fuel reserve upgrade recovery: if a route leaves no reserve margin, buy an Auxiliary Fuel Tank, refuel to the expanded reserve, then verify the return hop before taking tighter jobs. TV fuel-reserve scaffold; Classic fuel tank progression loop pending.",
+    "Balanced upgrade recovery: if hull plating is blocked after cargo and fuel upgrades, run a safe funding trade leg, return to the outfitter, buy the final armor refit, and repair at the service port. TV balanced-upgrade scaffold; Classic refit budgeting loop pending.",
     "Mission route trade sale: after delivering a mission with preserved trade cargo, check the destination market and sell recoverable cargo before leaving the route. TV scaffold; Classic behavior pending.",
     "First mission delivery recovery: after accepting the intro courier, keep the route/mission log aligned through Sol to Luna, land before completing, and verify cargo/reward/history before taking the chain offer. TV scaffold; exact Classic first-job UI pending.",
     "Mission scan failure recovery: scan-sensitive cargo missions can fail when the matching government scans you; watch Mission Log/Player Info failure history, free released cargo, and seek follow-up contracts. Resource Bible-backed scaffold; exact Classic scan UI pending.",
@@ -469,6 +470,11 @@
       "flag": "hasFuelReserveUpgradeRecoveryHelp",
       "source": "help",
       "contains": "Fuel reserve upgrade recovery: if a route leaves no reserve margin"
+    },
+    {
+      "flag": "hasBalancedUpgradeRecoveryHelp",
+      "source": "help",
+      "contains": "Balanced upgrade recovery: if hull plating is blocked after cargo and fuel upgrades"
     },
     {
       "flag": "hasMissionRouteTradeSaleHelp",
