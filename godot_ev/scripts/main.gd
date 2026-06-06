@@ -92,6 +92,7 @@ const LIGHT_FREIGHTER_DEADLINE_REPAIR_REFUEL_EVENT_LOG_PREFIX := "TV_LIGHT_FREIG
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
+const MISSION_ALIGNMENT_GATE_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_GATE_EVENT"
 const LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX := "TV_LEGAL_CONSEQUENCE_EVENT"
 const LEGAL_CLEMENCY_EVENT_LOG_PREFIX := "TV_LEGAL_CLEMENCY_EVENT"
 const CONTRABAND_SCAN_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_EVENT"
@@ -357,6 +358,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_legal_eligibility_log")
 	if OS.get_cmdline_args().has("--tv-mission-story-gate-log") or OS.get_cmdline_user_args().has("--tv-mission-story-gate-log"):
 		call_deferred("_run_mission_story_gate_log")
+	if OS.get_cmdline_args().has("--tv-mission-alignment-gate-log") or OS.get_cmdline_user_args().has("--tv-mission-alignment-gate-log"):
+		call_deferred("_run_mission_alignment_gate_log")
 	if OS.get_cmdline_args().has("--tv-legal-consequence-log") or OS.get_cmdline_user_args().has("--tv-legal-consequence-log"):
 		call_deferred("_run_legal_consequence_log")
 	if OS.get_cmdline_args().has("--tv-legal-clemency-log") or OS.get_cmdline_user_args().has("--tv-legal-clemency-log"):
@@ -3834,6 +3837,53 @@ func _run_mission_story_gate_log() -> void:
 	var blocked_source_line := _blocked_mission_source_boundary_line()
 	var blocked_source_visible := blocked_source_line.contains("Terminal Velocity") and blocked_source_line.contains("Classic")
 	print("%s routeToSolSelected=%s system=%s body=%s storyFlags=%s missingAvailable=%s excludedAvailable=%s missingStoryGateVisible=%s excludedStoryGateVisible=%s blockedSourceVisible=%s missingGateState=%s excludedGateState=%s missingReason=\"%s\" excludedReason=\"%s\" blockedReasons=%s blockedSourceLine=\"%s\" sourceLabel=terminal-velocity-mission-story-gate-scaffold oracleStatus=classic_runtime_offer_visibility_pending" % [MISSION_STORY_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body.get("name", "?"), JSON.stringify(story_flags), str(missing_available), str(excluded_available), str(missing_visible), str(excluded_visible), str(blocked_source_visible), _mission_story_gate_state(missing_flag_mission), _mission_story_gate_state(excluded_flag_mission), missing_reason, excluded_reason, JSON.stringify(blocked_reasons), blocked_source_line])
+	get_tree().quit(0)
+
+func _run_mission_alignment_gate_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var body := _current_body()
+	var body_name := str(body.get("name", "?"))
+	var government_name := _current_government_name()
+	var alignment_gate_mission := {
+		"id": "alignment_gate_probe",
+		"title": "Alignment Gate Probe",
+		"originSystem": current_system.get("name", ""),
+		"originBody": body.get("name", ""),
+		"destinationSystem": "Sirius",
+		"destinationBody": "Sirius Station",
+		"cargoTons": 1,
+		"reward": 100,
+		"description": "Terminal Velocity alignment gate scaffold contract.",
+		"requiresFlags": ["frontier_samples_delivered"],
+		"excludesFlags": [],
+		"setsFlags": [],
+		"completionFlags": [],
+		"requirements": {"reputationMin": {government_name: 5}, "legalMin": {government_name: -20}}
+	}
+	var mission_list: Array = missions.get("missions", [])
+	mission_list.append(alignment_gate_mission)
+	missions["missions"] = mission_list
+	story_flags = []
+	reputation_scores[government_name] = 0
+	legal_records[government_name] = -10
+	var blocked_without_story := _blocked_mission_reasons(body)
+	var alignment_requirement_blocked := blocked_without_story.any(func(reason): return str(reason).contains("Alignment Gate Probe") and str(reason).contains("frontier_samples_delivered"))
+	story_flags = ["frontier_samples_delivered"]
+	reputation_scores[government_name] = 5
+	legal_records[government_name] = -50
+	var blocked_for_legal := _blocked_mission_reasons(body)
+	var alignment_legal_blocked := blocked_for_legal.any(func(reason): return str(reason).contains("Alignment Gate Probe") and str(reason).contains("legal score"))
+	legal_records[government_name] = -20
+	var recovered_offer_ids := _mission_ids(_available_missions(body))
+	var alignment_recovered_after_gates := recovered_offer_ids.has("alignment_gate_probe")
+	var help_text := "\n".join(_help_overlay_lines())
+	var alignment_help_visible := help_text.contains("Alignment gates: story offers may require prior flags")
+	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" alignmentRequirementBlocked=%s alignmentLegalBlocked=%s alignmentRecoveredAfterGates=%s alignmentGateHelpVisible=%s blockedWithoutStory=%s blockedForLegal=%s recoveredOffers=%s sourceLabel=terminal-velocity-mission-alignment-gate-scaffold oracleStatus=classic_runtime_alignment_offer_gate_ui_pending sourceBasis=EV Classic Resource Bible: mission AvailRecord/ScanGovt/PayVal plus Terminal Velocity requirement scaffolds" % [MISSION_ALIGNMENT_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, str(alignment_requirement_blocked), str(alignment_legal_blocked), str(alignment_recovered_after_gates), str(alignment_help_visible), JSON.stringify(blocked_without_story), JSON.stringify(blocked_for_legal), JSON.stringify(recovered_offer_ids)])
 	get_tree().quit(0)
 
 func _run_legal_consequence_log() -> void:

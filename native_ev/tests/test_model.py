@@ -1060,8 +1060,10 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_LEGAL_PATROL_POSTURE_EVENT',
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             'TV_MISSION_STORY_GATE_EVENT',
+            'TV_MISSION_ALIGNMENT_GATE_EVENT',
             'TV_CONTRABAND_CLEMENCY_FUNDING_EVENT',
             '--tv-legal-status-log',
+            '--tv-mission-alignment-gate-log',
             '--tv-contraband-clemency-funding-log',
             '--tv-legal-docking-log',
             '--tv-legal-service-gate-log',
@@ -1096,6 +1098,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_legal_patrol_posture_log',
             'func _run_mission_legal_eligibility_log',
             'func _run_mission_story_gate_log',
+            'func _run_mission_alignment_gate_log',
             'func _run_contraband_clemency_funding_log',
             'func _current_government_name() -> String:',
             'func _legal_status_for_government(government_name: String) -> String:',
@@ -1165,6 +1168,11 @@ class NativeEvModelTests(unittest.TestCase):
             'weaponReputationBlocked=%s',
             'weaponBoughtAfterReputation=%s',
             'sourceLabel=terminal-velocity-contraband-clemency-funding-scaffold',
+            'sourceLabel=terminal-velocity-mission-alignment-gate-scaffold',
+            'alignmentRequirementBlocked=%s',
+            'alignmentLegalBlocked=%s',
+            'alignmentRecoveredAfterGates=%s',
+            'oracleStatus=classic_runtime_alignment_offer_gate_ui_pending',
             'preservedFoodSoldForClemency=%s',
             'clemencyFundedAfterTrade=%s',
             'sourceLabel=terminal-velocity-weapon-reputation-gate-scaffold',
@@ -1234,6 +1242,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-light-freighter-deadline-repair-refuel-log', run_script)
         self.assertIn('tv-legal-patrol-posture-log', run_script)
         self.assertIn('tv-mission-legal-eligibility-log', run_script)
+        self.assertIn('tv-mission-alignment-gate-log', run_script)
         self.assertIn('tv-legal-consequence-log', run_script)
         self.assertIn('tv-legal-clemency-log', run_script)
         self.assertIn('tv-contraband-scan-log', run_script)
@@ -1256,6 +1265,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LightFreighterDeadlineRepairRefuelLog', windows_script)
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
         self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
+        self.assertIn('[switch]$MissionAlignmentGateLog', windows_script)
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)
         self.assertIn('[switch]$LegalClemencyLog', windows_script)
         self.assertIn('[switch]$ContrabandScanLog', windows_script)
