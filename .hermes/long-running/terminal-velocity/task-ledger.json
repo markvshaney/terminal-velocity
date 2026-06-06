@@ -8,13 +8,13 @@
     "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "local checkpoint commit; inspect git rev-parse HEAD",
-    "origin_main": "118947d6eb8aa1c3a19fdab6acd131686c6ebd99",
-    "status_short": "main ahead origin/main by 1 local checkpoint; review-required before push"
+    "head": "6bf7cb4f6105e2938c5a5c7123591adce8961bdb",
+    "origin_main": "6bf7cb4f6105e2938c5a5c7123591adce8961bdb",
+    "status_short": "## main...origin/main"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": false
   },
@@ -25,7 +25,7 @@
     "active_task_id": "t_57a7a5b6",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "local_checkpoint_pending_review_required",
+    "status": "pushed_checkpoint_ready_for_successor",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T12:15:24.724033Z",
+    "updated_at": "2026-06-06T12:18:42.148132Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -62,7 +62,7 @@
       "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/no-secrets review, light verification, non-force push, fetch, verify origin/main equals HEAD."
     ]
   },
-  "status": "waiting_gate",
+  "status": "running",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter deadline repair/refuel mission-margin help-surface slice verified locally and pending review/integrator push.",
+  "current_milestone": "Light Freighter deadline repair/refuel mission-margin help-surface slice pushed and verified; successor continuation should run next safe local slice.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -134,14 +134,12 @@
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 214 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=80 failed=0 total=80",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=80",
-    "git diff --check -> OK"
+    "git diff --check -> OK",
+    "git push origin main -> b46382d..6bf7cb4 main -> main",
+    "git fetch origin; git status --short --branch -> ## main...origin/main",
+    "git rev-parse HEAD == git rev-parse origin/main -> 6bf7cb4f6105e2938c5a5c7123591adce8961bdb"
   ],
-  "active_gate": {
-    "type": "review-required",
-    "reason": "Code-changing Terminal Velocity Kanban slice verified locally; worker must not push or mark done without review/integrator handling.",
-    "withheld_action": "git push origin main and marking t_57a7a5b6 complete as merged/done",
-    "resume_after": "reviewer/coordinator approves or requests changes"
-  },
+  "active_gate": null,
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
@@ -149,9 +147,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local Light Freighter deadline repair/refuel margin F10 help/probe checkpoint; if accepted, integrator may push/fetch/verify HEAD == origin/main, complete t_57a7a5b6, and dispatch/continue exactly one successor source-aligned safe local slice without redoing this help probe or scenario.",
-  "resume_prompt": "Continue Terminal Velocity from current main workspace; inspect successor/review comments, ledger/events tail, continuation prompt, backlog, and live git state, then review/commit/push if appropriate or continue one new source-aligned gameplay/fidelity slice without redoing Light Freighter deadline repair/refuel margin scenario/help work.",
-  "updated_at": "2026-06-06T12:15:24.724033Z",
+  "next_resume_action": "Create or dispatch exactly one successor Terminal Velocity Kanban continuation task from current origin/main; do not redo Light Freighter deadline repair/refuel margin scenario/help work.",
+  "resume_prompt": "Continue Terminal Velocity from current origin/main; inspect ledger/events tail, continuation prompt, backlog, and live git state, then implement one new source-aligned safe local gameplay/fidelity slice without redoing Light Freighter deadline repair/refuel margin scenario/help work.",
+  "updated_at": "2026-06-06T12:18:42.148132Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -222,14 +220,15 @@
   "last_completed_slice": {
     "id": "light-freighter-deadline-repair-refuel-margin-help-surface",
     "summary": "Promoted the existing light_freighter_deadline_repair_refuel_margin_loop outcome into F10 help with Godot log probe hasLightFreighterDeadlineRepairRefuelMarginRecoveryHelp; no Classic deadline/damaged freighter UI claim made.",
-    "commit": "local HEAD checkpoint; inspect git rev-parse HEAD",
+    "commit": "6bf7cb4f6105e2938c5a5c7123591adce8961bdb",
     "source_fidelity_labels": [
       "terminal-velocity-light-freighter-deadline-repair-refuel-margin-scaffold",
       "light_freighter_deadline_repair_refuel_margin_pending_classic_runtime_trace",
       "terminal-velocity-repair-service-scaffold",
       "repair_service_pending_ev_classic_runtime_trace",
       "help_surface_pending_playtest"
-    ]
+    ],
+    "remote_verified": true
   },
   "git_state": {
     "dirty": false,
