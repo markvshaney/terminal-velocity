@@ -24,6 +24,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'max_hold_trade_route_scout',
                 'trade_route_refuel_profit_loop',
                 'trade_route_margin_choice_loop',
+                'strategy_skill_rotation_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -261,6 +262,23 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual([event['commodity'] for event in trade_events], ['food', 'food'])
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-trade-margin-choice-scaffold' for event in decisions + trade_events))
         self.assertTrue(all(event['oracleStatus'] == 'trade_margin_choice_pending_classic_runtime_trace' for event in decisions + trade_events))
+
+    def test_strategy_skill_rotation_loop_records_distinct_playstyle_checkpoints(self):
+        result = run_scripted_scenario('strategy_skill_rotation_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['recorded_strategy_skill_rotation'], 'passed')
+        self.assertEqual(result['checks']['completed_strategy_trade_leg'], 'passed')
+        self.assertEqual(result['checks']['completed_strategy_mission_leg'], 'passed')
+        self.assertEqual(result['checks']['recorded_strategy_source_boundary'], 'passed')
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['merchant', 'mission_runner', 'route_planner'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-strategy-skill-rotation-scaffold' for event in checkpoints))
+        self.assertTrue(all(event['oracleStatus'] == 'strategy_skill_progression_pending_ev_family_source_trace' for event in checkpoints))
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertIn('intro_courier_earth_hera', result['state']['completedJobs'])
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')

@@ -44,6 +44,7 @@ SCENARIO_CURRICULUM = [
     'max_hold_trade_route_scout',
     'trade_route_refuel_profit_loop',
     'trade_route_margin_choice_loop',
+    'strategy_skill_rotation_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -250,6 +251,23 @@ def _evaluate_trade_margin(state: dict[str, Any], action: dict[str, Any], trace:
         'reason': 'positive margin' if margin > 0 else 'non-positive margin',
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-trade-margin-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'trade_margin_pending_classic_runtime_trace'),
+    })
+    return True
+
+
+def _record_strategy_skill_checkpoint(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    skill = str(action['skill'])
+    trace.append({
+        'type': 'strategy_skill_checkpoint',
+        'skill': skill,
+        'currentSystem': state.get('currentSystem'),
+        'landedBody': state.get('landedBody'),
+        'credits': state.get('credits'),
+        'cargoUsed': state.get('cargoUsed'),
+        'activeJobs': [job.get('id') for job in state.get('activeJobs', [])],
+        'completedJobs': list(state.get('completedJobs', [])),
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-strategy-skill-rotation-scaffold'),
+        'oracleStatus': action.get('oracleStatus', 'strategy_skill_progression_pending_ev_family_source_trace'),
     })
     return True
 
@@ -1250,6 +1268,26 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': START_BODY},
             {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'strategy_skill_rotation_loop':
+        source_label = 'terminal-velocity-strategy-skill-rotation-scaffold'
+        oracle_status = 'strategy_skill_progression_pending_ev_family_source_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'evaluate_trade_margin', 'commodity': 'food', 'originSystem': 'Sol', 'destinationSystem': START_SYSTEM, 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'merchant', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'accept_cargo_job', 'id': 'intro_courier_earth_hera', 'destinationSystem': 'Centauri', 'destinationBody': 'Luna', 'tons': 3, 'pay': 1800, 'setsFlags': ['story_intro_started'], 'completionFlags': ['story_intro_complete', 'federation_trusted_courier'], 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'mission_runner', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'route_to_active_mission_destination'},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'route_planner', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'jump'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2139,6 +2177,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'carried_only_profitable_food_lot': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS + ((120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} and [event.get('commodity') for event in trade_events] == ['food', 'food'] else 'failed',
             'recorded_margin_choice_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-trade-margin-choice-scaffold' and event.get('oracleStatus') == 'trade_margin_choice_pending_classic_runtime_trace' for event in source_events) else 'failed',
         })
+    elif name == 'strategy_skill_rotation_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        trade_events = [event for event in trace if event.get('type') in {'trade_margin_decision', 'buy_commodity_lot'}]
+        source_events = checkpoints + trade_events + [event for event in trace if event.get('type') in {'accept_cargo_job', 'complete_cargo_job', 'sell_commodity_lot'}]
+        checks.update({
+            'recorded_strategy_skill_rotation': 'passed' if [event.get('skill') for event in checkpoints] == ['merchant', 'mission_runner', 'route_planner'] else 'failed',
+            'completed_strategy_trade_leg': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('commodity') == 'food' for event in trace) and any(event.get('type') == 'sell_commodity_lot' and event.get('commodity') == 'food' for event in trace) and any(event.get('type') == 'trade_margin_decision' and event.get('decision') == 'carry' for event in trace) else 'failed',
+            'completed_strategy_mission_leg': 'passed' if 'intro_courier_earth_hera' in state.get('completedJobs', []) and state.get('cargoUsed') == 0 else 'failed',
+            'recorded_strategy_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-strategy-skill-rotation-scaffold' and event.get('oracleStatus') == 'strategy_skill_progression_pending_ev_family_source_trace' for event in source_events) else 'failed',
+        })
     elif name == 'mission_runner_first_delivery':
         checks.update({
             'accepted_reserved_cargo_job': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('reservedCargoTons') == 8 for event in trace) else 'failed',
@@ -2584,6 +2632,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'buy_commodity_lot': _buy_commodity_lot,
         'sell_commodity_lot': _sell_commodity_lot,
         'evaluate_trade_margin': _evaluate_trade_margin,
+        'record_strategy_skill_checkpoint': _record_strategy_skill_checkpoint,
         'accept_cargo_job': _accept_cargo_job,
         'jump': _jump,
         'land': _land,

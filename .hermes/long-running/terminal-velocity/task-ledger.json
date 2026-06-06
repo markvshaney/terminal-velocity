@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": false,
-    "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral after trade-margin checkpoint",
-    "origin_main": "inspect current SHA with `git rev-parse origin/main`; SHA-neutral after trade-margin checkpoint",
-    "status_short": "clean at origin/main after normal non-force push of trade_route_margin_choice_loop slice"
+    "head": "local commit created; inspect current SHA with `git rev-parse HEAD` (SHA-neutral before amend)",
+    "origin_main": "f54cef34a513d7051d6b3424c5eb8ef826ee92c4",
+    "status_short": "## main...origin/main [ahead 1]; clean verified strategy_skill_rotation_loop checkpoint, normal push in progress"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": false
   },
@@ -25,7 +25,7 @@
     "active_task_id": "t_f654d28c",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_created_ready_dispatch_pending",
+    "status": "push_in_progress_by_loki_game_coordinator",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T08:03:30Z",
+    "updated_at": "2026-06-06T08:16:13Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Trade-route margin-choice symbolic curriculum slice pushed and remote-verified.",
+  "current_milestone": "strategy_skill_rotation_loop verified locally; stale review-required gate is being resolved by preapproved normal non-force coordinator push.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -127,19 +127,21 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "git push origin main -> pushed trade_route_margin_choice_loop slice",
-    "git fetch origin; HEAD == origin/main == 06ea64de1c98f53062380e9c5fd93db7d90b6bbb",
-    "git status --short --branch -> ## main...origin/main",
-    "targeted trade margin scenario unittest OK",
-    "trade_route_margin_choice_loop scenario success true; creditsDelta 780; cargo cleared",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=63",
-    "added-lines high-signal secret scan -> 0"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_strategy_skill_rotation_loop_records_distinct_playstyle_checkpoints -v -> OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_gameplay_scenario_curriculum -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 68 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -v -> 198 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=64 failed=0 total=64",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=64",
+    "git diff --check -> OK",
+    "added-lines high-signal secret scan -> NONE",
+    "npm test -- --run -> not applicable: no package.json in repo root/current project"
   ],
   "active_gate": {
     "type": null,
-    "reason": "Successor Kanban continuation card t_f654d28c created from remote-verified origin/main; dispatch/verify exactly one running task.",
+    "reason": "stale review-required/push gate resolved locally under normal TV non-force push policy",
     "withheld_action": null,
-    "resume_after": "Dispatch t_f654d28c via Kanban dispatcher."
+    "resume_after": "after push/fetch/HEAD==origin/main verification, complete this task and create exactly one successor"
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -148,9 +150,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch Kanban task t_f654d28c and verify exactly one running Terminal Velocity task continues from origin/main after trade_route_margin_choice_loop.",
-  "resume_prompt": "Continue Terminal Velocity development from clean origin/main after full-hold trade-route recovery help was pushed and remote-verified.",
-  "updated_at": "2026-06-06T08:03:30Z",
+  "next_resume_action": "Push verified strategy_skill_rotation_loop checkpoint normally, fetch/verify HEAD == origin/main, complete t_f654d28c, create and dispatch exactly one successor continuation task.",
+  "resume_prompt": "Continue Terminal Velocity development after reviewing/integrating the verified strategy_skill_rotation_loop symbolic curriculum slice.",
+  "updated_at": "2026-06-06T08:16:13Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -207,13 +209,12 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "full-hold-trade-route-recovery-help",
-    "summary": "F10 help now guides players to preserve a service-port refuel margin for full-hold profitable cargo routes and sell both 10-ton lots before taking another cargo job; scenario probes verify max-hold sale and low-fuel/refuel recovery under Terminal Velocity scaffold labels.",
-    "commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint after remote verification",
+    "id": "strategy-skill-rotation-loop",
+    "summary": "Symbolic scenario strategy_skill_rotation_loop records merchant, mission_runner, and route_planner checkpoints while carrying a profitable Food lot alongside the intro courier, routing to Luna, delivering, selling the cargo, and clearing the hold.",
+    "commit": "local checkpoint commit exists; inspect current SHA with `git rev-parse HEAD` because this ledger may be amended into that commit",
     "source_fidelity_labels": [
-      "terminal-velocity-max-hold-trade-scaffold",
-      "terminal-velocity-refuel-trade-route-scaffold",
-      "classic_market_spread_pending"
+      "terminal-velocity-strategy-skill-rotation-scaffold",
+      "strategy_skill_progression_pending_ev_family_source_trace"
     ]
   }
 }
