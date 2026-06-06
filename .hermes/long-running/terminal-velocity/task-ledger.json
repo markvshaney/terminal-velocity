@@ -34,8 +34,7 @@
     "legacy_llm_runner_state": "paused/superseded; do not resume while Kanban owns implementation",
     "one_writer_rule": "Only the Kanban terminal-velocity worker may edit /home/bh/workspaces/loki/terminal-velocity for continuation slices; cron may inspect/dispatch/alert only.",
     "side_effect_boundaries": [
-      "safe local file/test/probe/docs work plus coherent normal non-force push to markvshaney/terminal-velocity preapproved after verification",
-      "force-push/history rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, unsafe dirty state, and missing source evidence for fidelity claims remain gated"
+      "Rule list entries must be concise and nonredundant; currently defined rules are in git_policy_rules."
     ],
     "superseded_jobs": [
       "f31074cbec03",
@@ -55,7 +54,13 @@
     ],
     "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
     "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
-    "normal_push_policy": "coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved, but should be bundled at natural boundaries; avoid one-commit micro-pushes and separate finalizer-only pushes unless a checkpoint/handoff/tool-cap risk makes the remote anchor valuable"
+    "normal_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/no-secrets review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
+    "worker_git_policy": "Workers edit, test, and commit locally; never push.",
+    "integrator_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/no-secrets review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
+    "git_policy_rules": [
+      "Workers edit, test, and commit locally; never push.",
+      "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/no-secrets review, light verification, non-force push, fetch, verify origin/main equals HEAD."
+    ]
   },
   "status": "waiting_gate",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
