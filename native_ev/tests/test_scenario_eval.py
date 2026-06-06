@@ -25,6 +25,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'trade_route_refuel_profit_loop',
                 'trade_route_margin_choice_loop',
                 'strategy_skill_rotation_loop',
+                'upgrade_readiness_strategy_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -279,6 +280,24 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['landedBody'], 'Luna')
         self.assertEqual(result['state']['cargoUsed'], 0)
         self.assertIn('intro_courier_earth_hera', result['state']['completedJobs'])
+
+    def test_upgrade_readiness_strategy_loop_records_service_outfit_weapon_and_ship_checkpoints(self):
+        result = run_scripted_scenario('upgrade_readiness_strategy_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['scanned_upgrade_service_matrix'], 'passed')
+        self.assertEqual(result['checks']['bought_outfit_weapon_and_ship_upgrade'], 'passed')
+        self.assertEqual(result['checks']['recorded_upgrade_readiness_strategy_checkpoints'], 'passed')
+        self.assertEqual(result['checks']['recorded_upgrade_readiness_source_boundary'], 'passed')
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['service_scout', 'outfitter', 'weapons', 'ship_buyer'])
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['ownedOutfits'].get('cargo_pod'), 1)
+        self.assertEqual(result['state']['ownedWeapons'].get('laser_cannon'), 1)
+        self.assertEqual(result['state']['playerShipId'], 'light_freighter')
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-upgrade-readiness-strategy-scaffold' for event in checkpoints))
+        self.assertTrue(all(event['oracleStatus'] == 'upgrade_strategy_progression_pending_ev_family_source_trace' for event in checkpoints))
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')

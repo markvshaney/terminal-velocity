@@ -8,9 +8,9 @@
     "ahead": 1,
     "behind": 0,
     "dirty": false,
-    "head": "local commit created; inspect current SHA with `git rev-parse HEAD` (SHA-neutral before amend)",
-    "origin_main": "f54cef34a513d7051d6b3424c5eb8ef826ee92c4",
-    "status_short": "## main...origin/main [ahead 1]; clean verified strategy_skill_rotation_loop checkpoint, normal push in progress"
+    "head": "cb17557e84e607f0e2eb8a0bfa1abf506e321b49",
+    "origin_main": "a3b5111bc439470bcedf8f6730695a05f9499d94",
+    "status_short": "## main...origin/main [ahead 1]; clean verified upgrade_readiness_strategy_loop checkpoint"
   },
   "repo_state": {
     "branch": "main",
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_f654d28c",
+    "active_task_id": "t_92c0ba74",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "push_in_progress_by_loki_game_coordinator",
+    "status": "stale_review_gate_reclassified_push_ready",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T08:16:13Z",
+    "updated_at": "2026-06-06T08:29:38Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,9 +110,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "strategy_skill_rotation_loop verified locally; stale review-required gate is being resolved by preapproved normal non-force coordinator push.",
+  "current_milestone": "upgrade_readiness_strategy_loop verified and local review-required halt reclassified as stale workflow gate; normal non-force push/successor flow in progress.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
-  "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
+  "last_checkpoint_commit": "local checkpoint commit exists; inspect current SHA with `git rev-parse HEAD` because this ledger may be amended into that commit",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -127,21 +127,19 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_strategy_skill_rotation_loop_records_distinct_playstyle_checkpoints -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_upgrade_readiness_strategy_loop_records_service_outfit_weapon_and_ship_checkpoints -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 69 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 199 tests OK",
+    "python3 tools/run_gameplay_scenarios.py upgrade_readiness_strategy_loop --pretty -> success true; checks all passed",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=65 failed=0 total=65",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_gameplay_scenario_curriculum -v -> OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 68 tests OK",
-    "python3 -m unittest discover -s native_ev/tests -v -> 198 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=64 failed=0 total=64",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=64",
-    "git diff --check -> OK",
-    "added-lines high-signal secret scan -> NONE",
-    "npm test -- --run -> not applicable: no package.json in repo root/current project"
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=65"
   ],
   "active_gate": {
     "type": null,
-    "reason": "stale review-required/push gate resolved locally under normal TV non-force push policy",
+    "reason": "Stale review-required/ahead-by-one was classified as a workflow bug for coherent verified Terminal Velocity work; normal non-force push is preapproved after standard checks.",
     "withheld_action": null,
-    "resume_after": "after push/fetch/HEAD==origin/main verification, complete this task and create exactly one successor"
+    "resume_after": "Push/fetch/verify HEAD == origin/main, complete t_92c0ba74, create and dispatch exactly one successor continuation task."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -150,9 +148,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Push verified strategy_skill_rotation_loop checkpoint normally, fetch/verify HEAD == origin/main, complete t_f654d28c, create and dispatch exactly one successor continuation task.",
-  "resume_prompt": "Continue Terminal Velocity development after reviewing/integrating the verified strategy_skill_rotation_loop symbolic curriculum slice.",
-  "updated_at": "2026-06-06T08:16:13Z",
+  "next_resume_action": "Push verified upgrade_readiness_strategy_loop checkpoint normally, fetch/verify HEAD == origin/main, complete t_92c0ba74, create and dispatch exactly one successor continuation task.",
+  "resume_prompt": "Continue Terminal Velocity development after reviewing/integrating the verified upgrade_readiness_strategy_loop symbolic curriculum slice.",
+  "updated_at": "2026-06-06T08:29:38Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -209,12 +207,12 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "strategy-skill-rotation-loop",
-    "summary": "Symbolic scenario strategy_skill_rotation_loop records merchant, mission_runner, and route_planner checkpoints while carrying a profitable Food lot alongside the intro courier, routing to Luna, delivering, selling the cargo, and clearing the hold.",
+    "id": "upgrade-readiness-strategy-loop",
+    "summary": "Symbolic scenario upgrade_readiness_strategy_loop records service_scout, outfitter, weapons, and ship_buyer checkpoints while scouting Earth services, buying cargo/weapon upgrades, and trading up to a light freighter.",
     "commit": "local checkpoint commit exists; inspect current SHA with `git rev-parse HEAD` because this ledger may be amended into that commit",
     "source_fidelity_labels": [
-      "terminal-velocity-strategy-skill-rotation-scaffold",
-      "strategy_skill_progression_pending_ev_family_source_trace"
+      "terminal-velocity-upgrade-readiness-strategy-scaffold",
+      "upgrade_strategy_progression_pending_ev_family_source_trace"
     ]
   }
 }

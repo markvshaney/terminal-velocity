@@ -13,6 +13,7 @@
     "trade_route_refuel_profit_loop",
     "trade_route_margin_choice_loop",
     "strategy_skill_rotation_loop",
+    "upgrade_readiness_strategy_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -97,6 +98,10 @@
     "strategy_skill_rotation_loop": {
       "purpose": "Strategy-skill rotation loop: combine a profitable merchant leg, mission acceptance, route-helper planning, mission delivery, and trade-cargo sale while recording explicit playstyle checkpoints for controller learning.",
       "surface": "merchant/mission-runner/route-planner strategy scaffold"
+    },
+    "upgrade_readiness_strategy_loop": {
+      "purpose": "Upgrade-readiness strategy loop: scout Earth services, buy a cargo outfit, weapon, and light freighter upgrade, and record service-scout/outfitter/weapons/ship-buyer checkpoints while preserving pending-Classic source boundaries.",
+      "surface": "service scouting/outfit-weapon-ship upgrade strategy scaffold"
     },
     "mission_runner_first_delivery": {
       "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",

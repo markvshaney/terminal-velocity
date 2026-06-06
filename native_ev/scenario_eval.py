@@ -45,6 +45,7 @@ SCENARIO_CURRICULUM = [
     'trade_route_refuel_profit_loop',
     'trade_route_margin_choice_loop',
     'strategy_skill_rotation_loop',
+    'upgrade_readiness_strategy_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1288,6 +1289,22 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'complete_cargo_jobs'},
             {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'upgrade_readiness_strategy_loop':
+        source_label = 'terminal-velocity-upgrade-readiness-strategy-scaffold'
+        oracle_status = 'upgrade_strategy_progression_pending_ev_family_source_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'scan_station_services', 'system': 'Sol', 'body': 'Earth', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'service_scout', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'outfitter', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'laser_cannon', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'weapons', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'set_state', 'values': {'credits': 60000}},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'ship_buyer', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2186,6 +2203,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'completed_strategy_trade_leg': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('commodity') == 'food' for event in trace) and any(event.get('type') == 'sell_commodity_lot' and event.get('commodity') == 'food' for event in trace) and any(event.get('type') == 'trade_margin_decision' and event.get('decision') == 'carry' for event in trace) else 'failed',
             'completed_strategy_mission_leg': 'passed' if 'intro_courier_earth_hera' in state.get('completedJobs', []) and state.get('cargoUsed') == 0 else 'failed',
             'recorded_strategy_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-strategy-skill-rotation-scaffold' and event.get('oracleStatus') == 'strategy_skill_progression_pending_ev_family_source_trace' for event in source_events) else 'failed',
+        })
+    elif name == 'upgrade_readiness_strategy_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        service_scans = [event for event in trace if event.get('type') == 'scan_station_services' and event.get('system') == 'Sol' and event.get('body') == 'Earth']
+        buys = [event for event in trace if event.get('type') in {'buy_outfit_or_weapon', 'buy_ship'}]
+        checks.update({
+            'scanned_upgrade_service_matrix': 'passed' if service_scans and service_scans[-1].get('hasOutfitter') and service_scans[-1].get('hasShipyard') and service_scans[-1].get('hasWeapons') else 'failed',
+            'bought_outfit_weapon_and_ship_upgrade': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and state.get('ownedWeapons', {}).get('laser_cannon') == 1 and state.get('playerShipId') == 'light_freighter' else 'failed',
+            'recorded_upgrade_readiness_strategy_checkpoints': 'passed' if [event.get('skill') for event in checkpoints] == ['service_scout', 'outfitter', 'weapons', 'ship_buyer'] else 'failed',
+            'recorded_upgrade_readiness_source_boundary': 'passed' if checkpoints and service_scans and buys and all(event.get('sourceLabel') == 'terminal-velocity-upgrade-readiness-strategy-scaffold' and event.get('oracleStatus') == 'upgrade_strategy_progression_pending_ev_family_source_trace' for event in checkpoints + service_scans + buys) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({
