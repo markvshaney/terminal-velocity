@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes-pending-coordinator-commit; inspect live git status",
+    "dirty": "no-after-pirate-low-fuel-push; successor ledger checkpoint pending commit",
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "pirate low-fuel recovery help/log slice verified by worker and coordinator after stale worker halt; pending commit/push",
+    "status_short": "pirate low-fuel recovery help/log slice pushed and remote-verified; successor Kanban task created",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`; latest pushed slice remote-verified before successor creation"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes-pending-coordinator-commit"
+    "dirty": "no-after-pirate-low-fuel-push"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_fcde7ac6",
+    "active_task_id": "t_59840b66",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "stale_worker_halt_recovered_pending_commit_push",
+    "status": "successor_ready_pending_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T07:12:10Z",
+    "updated_at": "2026-06-06T07:13:14Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Pirate low-fuel recovery help/log scaffold verified; stale worker process terminated by coordinator; pending normal commit/push and successor dispatch.",
+  "current_milestone": "Pirate low-fuel recovery help/log slice pushed and remote-verified; successor Kanban continuation card created pending dispatch.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -127,19 +127,20 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
+    "HOME=/home/bh git push origin main -> 805f0c8 pushed",
+    "git fetch origin; HEAD == origin/main == 805f0c807a4dda472d4313320b77123804b51585",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_pirate_avoidance_log_contract -v -> OK",
-    "./run_godot.sh tv-pirate-avoidance-log -> lowFuelEscapeBlocked=true refueledBeforeEscape=true evasionSucceeded=true sourceLabel=terminal-velocity-pirate-avoidance-scaffold oracleStatus=pirate_avoidance_pending_ev_classic_combat_trace",
+    "./run_godot.sh tv-pirate-avoidance-log -> lowFuelEscapeBlocked=true refueledBeforeEscape=true evasionSucceeded=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 195 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
-    "git diff --check -> OK",
-    "native_ev/data/help_overlay.json, task-ledger.json, events.jsonl parse OK"
+    "kanban completed t_fcde7ac6; created successor t_59840b66 ready"
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Stale worker halt was recovered locally; normal coherent non-force commit/push is preapproved after checks.",
-    "withheld_action": "None for commit/push/successor flow after standard checks.",
-    "resume_after": "Commit and push the verified slice, complete t_fcde7ac6, create/dispatch exactly one successor."
+    "reason": "Pirate low-fuel recovery help/log slice was pushed normally and remote-verified; successor continuation is safe to dispatch.",
+    "withheld_action": "None.",
+    "resume_after": "Dispatch or gateway watchdog claims successor task t_59840b66."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -148,9 +149,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Commit/push verified pirate low-fuel recovery help/log slice, complete t_fcde7ac6, create/dispatch exactly one successor continuation task, then verify exactly one running Terminal Velocity task.",
-  "resume_prompt": "Resume Terminal Velocity after coordinator recovered stale t_fcde7ac6 worker halt: finish commit/push/successor flow if not already complete, then continue the next source-aligned safe local gameplay/fidelity slice.",
-  "updated_at": "2026-06-06T07:12:10Z",
+  "next_resume_action": "Dispatch Kanban task t_59840b66 and verify exactly one running Terminal Velocity task; worker should read ledger/events/prompt/backlog and continue the next strongest source-aligned safe local gameplay/fidelity slice without redoing service-provisioning, starting-equipment, travel-timing, first-mission-delivery, or pirate-low-fuel recovery help/log work.",
+  "resume_prompt": "Resume Terminal Velocity from clean origin/main after pirate low-fuel recovery help/log remote verification: dispatch t_59840b66 if not running, then continue the next source-aligned safe local gameplay/fidelity slice.",
+  "updated_at": "2026-06-06T07:13:14Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -209,7 +210,7 @@
   "last_completed_slice": {
     "id": "pirate-low-fuel-recovery-help-log",
     "summary": "F10 help and tv-pirate-avoidance-log expose a Terminal Velocity scaffold for low-fuel pirate escape recovery with explicit pending Classic pirate/fuel trace labels.",
-    "commit": "pending normal coordinator commit/push; inspect live git state",
+    "commit": "805f0c807a4dda472d4313320b77123804b51585 pushed and remote-verified before successor creation",
     "source_fidelity_labels": [
       "terminal-velocity-pirate-avoidance-scaffold",
       "pirate_avoidance_pending_ev_classic_combat_trace",
