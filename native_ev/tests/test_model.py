@@ -1049,7 +1049,9 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_LEGAL_PATROL_POSTURE_EVENT',
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             'TV_MISSION_STORY_GATE_EVENT',
+            'TV_CONTRABAND_CLEMENCY_FUNDING_EVENT',
             '--tv-legal-status-log',
+            '--tv-contraband-clemency-funding-log',
             '--tv-legal-docking-log',
             '--tv-legal-service-gate-log',
             '--tv-weapon-reputation-gate-log',
@@ -1063,6 +1065,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_legal_patrol_posture_log',
             'func _run_mission_legal_eligibility_log',
             'func _run_mission_story_gate_log',
+            'func _run_contraband_clemency_funding_log',
             'func _current_government_name() -> String:',
             'func _legal_status_for_government(government_name: String) -> String:',
             'func _government_docking_allowed(government_name: String) -> bool:',
@@ -1130,6 +1133,9 @@ class NativeEvModelTests(unittest.TestCase):
             'sourceLabel=terminal-velocity-legal-docking-scaffold',
             'weaponReputationBlocked=%s',
             'weaponBoughtAfterReputation=%s',
+            'sourceLabel=terminal-velocity-contraband-clemency-funding-scaffold',
+            'preservedFoodSoldForClemency=%s',
+            'clemencyFundedAfterTrade=%s',
             'sourceLabel=terminal-velocity-weapon-reputation-gate-scaffold',
         ]:
             self.assertIn(symbol, main_script)
@@ -1143,6 +1149,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-legal-clemency-log', run_script)
         self.assertIn('tv-contraband-scan-log', run_script)
         self.assertIn('tv-contraband-risk-log', run_script)
+        self.assertIn('tv-contraband-clemency-funding-log', run_script)
         self.assertIn('[switch]$LegalStatusLog', windows_script)
         self.assertIn('[switch]$LegalDockingLog', windows_script)
         self.assertIn('[switch]$LegalServiceGateLog', windows_script)
@@ -1153,6 +1160,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LegalClemencyLog', windows_script)
         self.assertIn('[switch]$ContrabandScanLog', windows_script)
         self.assertIn('[switch]$ContrabandRiskLog', windows_script)
+        self.assertIn('[switch]$ContrabandClemencyFundingLog', windows_script)
 
     def test_godot_contraband_risk_surface_contract(self):
         root = Path(__file__).resolve().parents[2]

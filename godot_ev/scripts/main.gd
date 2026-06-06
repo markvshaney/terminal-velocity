@@ -85,6 +85,7 @@ const LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX := "TV_LEGAL_CONSEQUENCE_EVENT"
 const LEGAL_CLEMENCY_EVENT_LOG_PREFIX := "TV_LEGAL_CLEMENCY_EVENT"
 const CONTRABAND_SCAN_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_EVENT"
 const CONTRABAND_RISK_EVENT_LOG_PREFIX := "TV_CONTRABAND_RISK_EVENT"
+const CONTRABAND_CLEMENCY_FUNDING_EVENT_LOG_PREFIX := "TV_CONTRABAND_CLEMENCY_FUNDING_EVENT"
 const LEGAL_RESOURCE_SEMANTICS_SOURCE_BASIS := "sourceBasis=EV Classic Resource Bible: govt CrimeTol/penalties, interceptor scans, mission AvailRecord/ScanGovt/PayVal"
 const FIRST_MISSION_DELIVERY_EXPECTED_MISSION_FIELD := "acceptedMission=intro_courier_earth_hera"
 const MIN_HYPERSPACE_DISTANCE_FROM_CENTER := 450.0
@@ -330,6 +331,8 @@ func _ready() -> void:
 		call_deferred("_run_contraband_scan_log")
 	if OS.get_cmdline_args().has("--tv-contraband-risk-log") or OS.get_cmdline_user_args().has("--tv-contraband-risk-log"):
 		call_deferred("_run_contraband_risk_log")
+	if OS.get_cmdline_args().has("--tv-contraband-clemency-funding-log") or OS.get_cmdline_user_args().has("--tv-contraband-clemency-funding-log"):
+		call_deferred("_run_contraband_clemency_funding_log")
 
 func _capture_prefs_screenshot_and_quit() -> void:
 	DirAccess.make_dir_recursive_absolute(PREFS_SCREENSHOT_PATH.get_base_dir())
@@ -3013,6 +3016,50 @@ func _run_contraband_risk_log() -> void:
 	var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
 	var inventory_risk_visible := inventory_risk_line.contains("equipment x10") and inventory_risk_line.contains("fine %d cr/ton" % int(policy.get("finePerTon", 0)))
 	print("%s routeToSolSelected=%s system=%s government=\"%s\" commodity=%s isContraband=%s finePerTon=%d bribeAllowed=%s heldContrabandInventoryVisible=%s hint=\"%s\" inventoryHint=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending" % [CONTRABAND_RISK_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, commodity_id, str(is_contraband), int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), str(inventory_risk_visible), risk_line, inventory_risk_line])
+	get_tree().quit(0)
+
+func _run_contraband_clemency_funding_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	var systems_policy: Dictionary = governments.get("systems", {})
+	var levo_policy: Dictionary = systems_policy.get("Levo", {}).duplicate()
+	levo_policy["government"] = "Federation"
+	systems_policy["Levo"] = levo_policy
+	governments["systems"] = systems_policy
+	var government_name := _current_government_name()
+	var mechanics: Dictionary = reputation.get("mechanics", {})
+	var clemency_cost := int(mechanics.get("clemencyCost", 1000))
+	commodity_hold["equipment"] = EV_CLASSIC_COMMODITY_LOT_SIZE
+	commodity_hold["food"] = EV_CLASSIC_COMMODITY_LOT_SIZE
+	cargo = EV_CLASSIC_COMMODITY_LOT_SIZE * 2
+	credits = clemency_cost + 3900
+	legal_records[government_name] = -30
+	reputation_scores[government_name] = int(mechanics.get("clemencyMinReputation", 10))
+	landed = true
+	var credits_before_scan := credits
+	var legal_before_scan := int(legal_records.get(government_name, 0))
+	var food_before_scan := int(commodity_hold.get("food", 0))
+	var scan_outcome := _apply_contraband_scan(false)
+	var credits_after_scan := credits
+	var legal_after_scan := int(legal_records.get(government_name, 0))
+	var equipment_after_scan := int(commodity_hold.get("equipment", 0))
+	var food_after_scan := int(commodity_hold.get("food", 0))
+	status_messages.clear()
+	var blocked_paid := _pay_legal_clemency()
+	var blocked_status := status_line
+	var scan_left_clemency_one_hundred_credits_short := (not blocked_paid) and credits_after_scan == clemency_cost - 100 and blocked_status.contains("insufficient funds")
+	landing_tab = 1
+	selected_landing_item = 0
+	_sell_selected_commodity()
+	var credits_after_sale := credits
+	var food_after_sale := int(commodity_hold.get("food", 0))
+	var preserved_food_sold_for_clemency := food_before_scan > 0 and food_after_scan == food_before_scan and food_after_sale == 0 and credits_after_sale >= clemency_cost
+	status_messages.clear()
+	var paid_after_trade := _pay_legal_clemency()
+	var final_legal := int(legal_records.get(government_name, 0))
+	var clemency_funded_after_trade := paid_after_trade and credits == credits_after_sale - clemency_cost and final_legal == -8
+	print("%s routeToSolSelected=%s system=%s landedBody=\"%s\" government=\"%s\" scanAction=%s creditsBeforeScan=%d creditsAfterScan=%d legalBeforeScan=%d legalAfterScan=%d equipmentAfterScan=%d foodAfterScan=%d blockedClemencyBeforeTrade=%s scanLeftClemencyOneHundredCreditsShort=%s creditsAfterSale=%d finalCredits=%d finalLegal=%d cargoUsed=%d preservedFoodSoldForClemency=%s clemencyFundedAfterTrade=%s blockedStatus=\"%s\" sourceLabel=terminal-velocity-contraband-clemency-funding-scaffold oracleStatus=classic_runtime_scan_trade_clemency_cleanup_pending" % [CONTRABAND_CLEMENCY_FUNDING_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), _current_body().get("name", "?"), government_name, str(scan_outcome.get("action", "none")), credits_before_scan, credits_after_scan, legal_before_scan, legal_after_scan, equipment_after_scan, food_after_scan, str(not blocked_paid), str(scan_left_clemency_one_hundred_credits_short), credits_after_sale, credits, final_legal, cargo, str(preserved_food_sold_for_clemency), str(clemency_funded_after_trade), blocked_status])
 	get_tree().quit(0)
 
 func _run_pilot_save_resume_log() -> void:
