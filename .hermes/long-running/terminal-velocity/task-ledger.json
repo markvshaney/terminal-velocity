@@ -8,13 +8,13 @@
     "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "2a369604fc2cc84b4024e862c1480f85bc8ccbb9",
-    "origin_main": "2a369604fc2cc84b4024e862c1480f85bc8ccbb9",
-    "status_short": "clean; HEAD == origin/main after integrator push"
+    "head": "local checkpoint commit; inspect git rev-parse HEAD",
+    "origin_main": "118947d6eb8aa1c3a19fdab6acd131686c6ebd99",
+    "status_short": "main ahead origin/main by 1 local checkpoint; review-required before push"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": false
   },
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_7b94068c",
+    "active_task_id": "t_def82838",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "integrator_push_verified_pending_successor_dispatch",
+    "status": "local_checkpoint_committed_pending_review_required",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T11:45:26Z",
+    "updated_at": "2026-06-06T12:08:49Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -62,7 +62,7 @@
       "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/no-secrets review, light verification, non-force push, fetch, verify origin/main equals HEAD."
     ]
   },
-  "status": "checkpointed_not_scheduled",
+  "status": "waiting_gate",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter repair/refuel mission-margin help-surface slice accepted by loki-game integrator, pushed to origin/main, and ready for Kanban completion/successor dispatch.",
+  "current_milestone": "Light Freighter deadline repair/refuel mission-margin scenario slice committed locally and pending review/integrator push.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -128,37 +128,17 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> failed missing hasLightFreighterRepairRefuelMarginRecoveryHelp before help_overlay update",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hintCount=80; hasLightFreighterRepairRefuelMarginRecoveryHelp=true",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_repair_refuel_mission_margin_loop --pretty -> success true; final credits 9302; hull 300/300; fuel 299; completed levo_bulk_repair_refuel_margin_supply",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 213 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=79 failed=0 total=79",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=79",
-    "git diff --check -> OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=79 failed=0 total=79",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 213 tests OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 83 tests OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=79",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_repair_refuel_mission_margin_loop --pretty -> success true; checks passed; final credits 9302; hull 300/300; fuel 299; completed levo_bulk_repair_refuel_margin_supply",
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_refuel_mission_margin_loop_refuels_before_repair_return -v -> RED before implementation, then OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -> RED failure before help_overlay.json update; then OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json >/tmp/help_overlay.valid -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hintCount=79; hasDisposableCombatEvidenceGateHelp=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 212 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=78 failed=0 total=78",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=78",
-    "git diff --check -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK (after RED failure before data update)",
-    "python3 -m json.tool native_ev/data/help_overlay.json >/dev/null -> OK",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_repair_mission_margin_loop --pretty -> success true; final credits 9302; hull 300/300; cargo empty",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hintCount=79; hasLightFreighterRepairMissionMarginRecoveryHelp=true",
-    "git diff --check -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_gameplay_scenario_curriculum -v -> OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=78"
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 214 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> {'failed': 0, 'passed': 80, 'total': 80}",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=80",
+    "git diff --check -> OK"
   ],
-  "active_gate": "none",
+  "active_gate": {
+    "type": "review-required",
+    "reason": "Code-changing Terminal Velocity Kanban slice verified locally; worker must not push or mark done without review/integrator handling.",
+    "withheld_action": "git push origin main and marking t_def82838 complete as merged/done",
+    "resume_after": "reviewer/coordinator approves or requests changes"
+  },
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
@@ -166,7 +146,7 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Complete t_7b94068c if not already complete, create and dispatch exactly one successor from origin/main c020781a546c2a39e4202dec3e9a950e84c82ed2, then continue the next source-aligned safe local gameplay/fidelity vertical slice without redoing Light Freighter repair/refuel mission-margin scenario/help work.",
+  "next_resume_action": "Review local commit for light_freighter_deadline_repair_refuel_margin_loop; if accepted, integrator may push/fetch/verify HEAD == origin/main, complete t_def82838, and dispatch/continue exactly one successor source-aligned safe local slice without redoing this scenario.",
   "resume_prompt": "Continue Terminal Velocity from current main workspace; inspect task successor/review comments, ledger/events tail, continuation prompt, backlog, and live git state, then review/commit/push if appropriate or continue one new source-aligned gameplay/fidelity slice without redoing light_freighter_repair_refuel_mission_margin_loop or its help-surface work.",
   "updated_at": "2026-06-06T11:58:32.201350Z",
   "mandatory_resume_first_actions": [
