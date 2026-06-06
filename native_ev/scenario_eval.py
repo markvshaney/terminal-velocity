@@ -53,6 +53,7 @@ SCENARIO_CURRICULUM = [
     'hull_plating_repair_loop',
     'balanced_upgrade_trade_loop',
     'light_freighter_capacity_trade_loop',
+    'light_freighter_mission_trade_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1441,6 +1442,35 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'large_hold_trade_run', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'light_freighter_mission_trade_loop':
+        source_label = 'terminal-velocity-light-freighter-mission-trade-scaffold'
+        oracle_status = 'light_freighter_mission_trade_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'credits': 65000}},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'accept_cargo_job', 'id': 'levo_bulk_freighter_supply', 'destinationSystem': START_SYSTEM, 'destinationBody': START_BODY, 'tons': 80, 'pay': 6022, 'risk': 'safe', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'bulk_mission_capacity', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'complete_cargo_jobs'},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'mission_trade_cargo_recovery', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2419,6 +2449,19 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_light_freighter_capacity_upgrade': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
             'completed_large_freighter_trade_run': 'passed' if len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 6 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 6 and state.get('cargoCapacity') == 150 and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} and state.get('credits') == 10858 else 'failed',
             'recorded_light_freighter_trade_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-trade-scaffold' and event.get('oracleStatus') == 'light_freighter_trade_pending_classic_runtime_trace' for event in source_events) else 'failed',
+        })
+    elif name == 'light_freighter_mission_trade_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        buy_ship_events = [event for event in trace if event.get('type') == 'buy_ship']
+        mission_accepts = [event for event in trace if event.get('type') == 'accept_cargo_job']
+        complete_events = [event for event in trace if event.get('type') == 'complete_cargo_job']
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        source_events = checkpoints + buy_ship_events + mission_accepts + complete_events + trade_events
+        checks.update({
+            'bought_light_freighter_for_mission_trade_capacity': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
+            'accepted_bulk_mission_and_trade_load': 'passed' if mission_accepts and mission_accepts[-1].get('id') == 'levo_bulk_freighter_supply' and mission_accepts[-1].get('reservedCargoTons') == 80 and mission_accepts[-1].get('cargoUsed') == 80 and len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 6 and max([event.get('cargoUsed', 0) for event in trade_events], default=0) == 140 else 'failed',
+            'delivered_bulk_mission_before_trade_sale': 'passed' if complete_events and complete_events[-1].get('id') == 'levo_bulk_freighter_supply' and complete_events[-1].get('cargoUsed') == 60 and state.get('completedJobs') == ['levo_bulk_freighter_supply'] and not state.get('activeJobs') and state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} and state.get('credits') == 16880 else 'failed',
+            'recorded_light_freighter_mission_trade_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-mission-trade-scaffold' and event.get('oracleStatus') == 'light_freighter_mission_trade_pending_classic_runtime_trace' for event in source_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

@@ -20,6 +20,7 @@
     "hull_plating_repair_loop",
     "balanced_upgrade_trade_loop",
     "light_freighter_capacity_trade_loop",
+    "light_freighter_mission_trade_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -360,6 +361,10 @@
     "light_freighter_capacity_trade_loop": {
       "purpose": "Light-freighter capacity trade loop: buy a Light Freighter at Earth, use its 150-ton hold to carry a six-lot Sol Food return load, and verify the expanded ship-capacity trade run under pending-Classic source boundaries.",
       "surface": "ship upgrade/large-hold merchant route scaffold"
+    },
+    "light_freighter_mission_trade_loop": {
+      "purpose": "Light-freighter mission/trade loop: buy a Light Freighter at Earth, reserve an 80-ton Levo delivery, fill remaining hold with bulk Sol Food trade cargo, deliver before selling the retained trade load, and verify return sales under pending-Classic source boundaries.",
+      "surface": "ship upgrade/mission reserved-cargo plus bulk trade scaffold"
     }
   }
 }
