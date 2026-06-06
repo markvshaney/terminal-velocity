@@ -90,6 +90,7 @@
     "Weapon reputation gates: some weapon purchases require local government reputation; build standing or buy a lower-gate weapon before retrying. Exact Classic weapon-service thresholds/UI pending.",
     "Weapon credit recovery: if a landed weapon purchase is blocked for insufficient credits, run a safe trade/mission funding leg, return to the same service port, and retry only once the price is covered. TV scaffold; Classic purchase UI pending.",
     "Weapon availability recovery: if a weapon is not sold at the current landed port, keep the purchase goal but scout the service matrix for a port that lists it, then retry there. TV scaffold; Classic store inventory UI pending.",
+    "Weapon legal-docking recovery: if legal standing blocks a weapon run before you can land, repair clemency or choose a safer port, then continue to the weapon-service station and verify the purchase. TV scaffold; Classic docking/refusal UI pending.",
     "Weapon mission cargo recovery: buying a landed weapon should preserve active mission-reserved cargo; verify Mission Log/Player Info cargo before rerouting or accepting more freight. TV scaffold; Classic weapon/cargo UI pending.",
     "Weapon trade cargo recovery: buying a landed weapon should preserve held trade cargo; verify Player Info/commodity hold before selling, rerouting, or taking more freight. TV scaffold; Classic weapon/cargo UI pending.",
     "Weapon inventory stack recovery: repeated secondary purchases should stack in owned weapons instead of replacing the first copy; verify Player Info/secondary selection before buying another. TV scaffold; Classic multiple-weapon inventory UI pending.",
@@ -339,6 +340,11 @@
       "flag": "hasWeaponAvailabilityRecoveryHelp",
       "source": "help",
       "contains": "Weapon availability recovery: if a weapon is not sold at the current landed port"
+    },
+    {
+      "flag": "hasWeaponLegalDockingRecoveryHelp",
+      "source": "help",
+      "contains": "Weapon legal-docking recovery: if legal standing blocks a weapon run before you can land"
     },
     {
       "flag": "hasWeaponMissionCargoRecoveryHelp",
