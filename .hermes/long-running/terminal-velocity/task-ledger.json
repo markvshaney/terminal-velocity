@@ -8,9 +8,9 @@
     "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "ce605a7c8d9f8c51504185a2f05b4715f2572a30",
-    "origin_main": "ce605a7c8d9f8c51504185a2f05b4715f2572a30",
-    "status_short": "## main...origin/main"
+    "head": "inspect current SHA with `git rev-parse HEAD`",
+    "origin_main": "inspect current SHA with `git rev-parse origin/main`",
+    "status_short": "inspect current status with `git status --short --branch`; expected clean main tracking origin/main at last checkpoint"
   },
   "repo_state": {
     "branch": "main",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T13:11:11Z",
+    "updated_at": "2026-06-06T13:11:37Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "weapon_availability_recovery_help remote-verified; successor t_9d862435 queued from origin/main for next safe source-aligned slice.",
+  "current_milestone": "weapon_availability_recovery_help remote-verified; successor t_9d862435 queued from current origin/main for next safe source-aligned slice.",
   "last_commit": "remote-verified: feat(help): surface weapon availability recovery",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -146,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch and verify successor Kanban task t_9d862435 is running, then let terminal-velocity worker continue the next safe source-aligned slice from clean origin/main.",
+  "next_resume_action": "Dispatch and verify successor Kanban task t_9d862435 is running, then let terminal-velocity worker continue the next safe source-aligned slice from clean origin/main; inspect current SHA live rather than trusting ledger SHA fields.",
   "resume_prompt": "Continue Terminal Velocity via Kanban task t_9d862435 from clean origin/main after weapon availability recovery help was pushed and verified; do not redo weapon availability, weapon credit, or weapon reputation scenario/help work.",
-  "updated_at": "2026-06-06T13:11:11Z",
+  "updated_at": "2026-06-06T13:11:37Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -230,8 +230,8 @@
   },
   "git_state": {
     "dirty": false,
-    "status_short": "## main...origin/main",
-    "head": "ce605a7c8d9f8c51504185a2f05b4715f2572a30",
-    "origin_main": "ce605a7c8d9f8c51504185a2f05b4715f2572a30"
+    "status_short": "inspect current status with `git status --short --branch`; expected clean main tracking origin/main at last checkpoint",
+    "head": "inspect current SHA with `git rev-parse HEAD`",
+    "origin_main": "inspect current SHA with `git rev-parse origin/main`"
   }
 }
