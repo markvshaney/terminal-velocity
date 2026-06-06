@@ -175,7 +175,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "After normal push/completion of the Godot weapon inventory stack probe, continue from clean origin/main with exactly one successor Terminal Velocity Kanban card; do not redo the inventory stack, availability, credit, or reputation weapon probes.",
+  "next_resume_action": "Dispatch or continue Kanban task t_54179157 from clean origin/main; choose the strongest next safe source-aligned Terminal Velocity gameplay/fidelity slice and do not redo weapon_inventory_stack_godot_probe.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -207,9 +207,9 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Read this ledger, docs/prompts/terminal-velocity-continuation-prompt.md, and docs/checklists/ev-classic-fidelity-implementation-backlog.md; inspect git status and latest events; continue from the verified Godot weapon inventory stack probe without repeating it.",
+  "resume_prompt": "Continue Terminal Velocity from current origin/main after weapon_inventory_stack_godot_probe. Read ledger/events, continuation prompt, backlog, and live git state first; do not redo verified weapon inventory stack/availability/credit/reputation slices.",
   "runner": {
-    "active_task_id": "t_78506339",
+    "active_task_id": "t_54179157",
     "assignee": "terminal-velocity",
     "board": "terminal-velocity",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
@@ -317,5 +317,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T20:29:04.417753Z"
+  "updated_at": "2026-06-06T20:30:09.910005Z"
 }
