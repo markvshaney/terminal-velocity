@@ -1,11 +1,6 @@
 {
-  "active_gate": {
-    "reason": "local code/docs/help-surface slice full-regression verified; Kanban policy requires human review before marking code done",
-    "resume_after": "human reviewer approves/unblocks or requests changes",
-    "type": "review-required",
-    "withheld_action": "kanban_complete/merge/push by worker"
-  },
-  "current_milestone": "Light Freighter refuel mission margin F10 help local commit created after full regression; review-required before integrator push/completion.",
+  "active_gate": null,
+  "current_milestone": "Integrator pushed Light Freighter refuel mission margin help and queued successor continuation card.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -80,26 +75,24 @@
   "last_completed_slice": {
     "id": "light-freighter-refuel-mission-margin-help",
     "kanban_task_id": "t_5e0ce68f",
-    "remote_verified": false,
+    "remote_verified": true,
     "source_fidelity_labels": [
       "terminal-velocity-light-freighter-refuel-mission-margin-scaffold",
       "light_freighter_refuel_mission_margin_pending_classic_runtime_trace",
       "help_surface_pending_playtest"
     ],
+    "successor_kanban_task_id": "t_c2886e83",
     "summary": "F10 help now surfaces loaded Light Freighter bulk delivery zero-fuel recovery: land, refuel at the service port, relaunch, deliver first, then sell retained margin cargo."
   },
-  "last_process_checkpoint": "Light Freighter refuel mission margin F10 help local commit",
+  "last_process_checkpoint": "Light Freighter refuel mission margin help pushed; successor continuation queued",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> FAIL missing hasLightFreighterRefuelMissionMarginRecoveryHelp before help_overlay update",
-    "python3 -m json.tool native_ev/data/help_overlay.json >/dev/null -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_refuel_mission_margin_loop_refuels_before_margin_delivery -v -> 2 tests OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasLightFreighterRefuelMissionMarginRecoveryHelp=true; hintCount=90",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_refuel_mission_margin_loop --pretty -> success true; blocked zero-fuel loaded delivery, refueled, delivered, sold retained cargo",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 223 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=89 failed=0 total=89",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=89",
-    "git diff --check -> OK"
+    "targeted unit/scenario/Godot help probe passed during integrator review",
+    "git diff --check origin/main..HEAD -> OK before push",
+    "changed-file scope and added-line secret scan -> no credentials/proprietary assets found",
+    "git push origin main; git fetch origin; HEAD == origin/main == 730fe2726a8a0a798e581444e1b4115abab2fc2a",
+    "kanban complete t_5e0ce68f -> OK",
+    "kanban create successor t_c2886e83 -> ready"
   ],
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
@@ -109,11 +102,11 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Human/integrator review local light_freighter_refuel_mission_margin_help commit, then push main and dispatch the next source-aligned safe local slice. Do not redo Light Freighter refuel mission margin help unless review requests changes.",
+  "next_resume_action": "Dispatch/monitor successor t_c2886e83 for the next source-aligned safe local gameplay/fidelity vertical slice from current origin/main; do not redo light_freighter_refuel_mission_margin_help.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "branch": "main",
     "dirty": false,
@@ -122,7 +115,7 @@
     "status_short": "clean main tracking origin/main after Light Freighter bulk margin choice help push; successor process checkpoint pending"
   },
   "repo_state": {
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "branch": "main",
     "dirty": false
@@ -228,7 +221,7 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "waiting_gate",
+  "status": "running",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -249,5 +242,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T16:26:18Z"
+  "updated_at": "2026-06-06T16:29:47Z"
 }
