@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "SHA-neutral: inspect current git rev-parse HEAD; light_freighter_refuel_delivery_loop normal-push bundle prepared",
+    "head": "SHA-neutral: inspect current git rev-parse HEAD after light_freighter_bulk_margin_choice_loop push",
     "origin_main": "SHA-neutral: inspect current git rev-parse origin/main before classifying live state",
-    "status_short": "clean local branch ahead by one before normal push; successor created pending dispatch"
+    "status_short": "clean at origin/main after normal push; successor running or pending dispatch"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": false
   },
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_870fec57",
+    "active_task_id": "pending-successor-after-light-freighter-bulk-margin-choice-loop",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_created_pending_dispatch_after_push",
+    "status": "successor_needed_after_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T10:07:52Z",
+    "updated_at": "2026-06-06T10:21:16Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,9 +111,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "light_freighter_refuel_delivery_loop symbolic curriculum slice verified; stale review gate resolved by loki-game integrator, successor created for next slice.",
+  "current_milestone": "light_freighter_bulk_margin_choice_loop symbolic curriculum slice verified; resolving stale review gate via loki-game integrator and preparing successor.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
-  "last_checkpoint_commit": "SHA-neutral: local light_freighter_refuel_delivery_loop checkpoint commit; inspect current git rev-parse HEAD",
+  "last_checkpoint_commit": "SHA-neutral: local light_freighter_bulk_margin_choice_loop checkpoint commit; inspect current git rev-parse HEAD",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -128,14 +128,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_refuel_delivery_loop_recovers_low_fuel_bulk_delivery -v -> OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 77 tests OK",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_refuel_delivery_loop --pretty -> success true; final credits 12200; playerShipId=light_freighter; maxFuel=300; fuel=299; completed levo_bulk_refuel_supply; cargo cleared",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=73 failed=0 total=73",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 207 tests OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=73",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 208 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=74 failed=0 total=74",
+    "python3 -m json.tool native_ev/data/gameplay_curriculum.json >/dev/null -> OK",
     "git diff --check -> OK",
-    "npm test -> not applicable at repo root (no package.json)"
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=74"
   ],
   "active_gate": "none",
   "heartbeat_status": {
@@ -145,9 +142,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After normal push/fetch verifies HEAD == origin/main for light_freighter_refuel_delivery_loop, complete t_173b6043 and dispatch successor t_870fec57; continue the next source-aligned safe local gameplay/fidelity slice without redoing light_freighter_refuel_delivery_loop.",
-  "resume_prompt": "Continue Terminal Velocity from successor t_870fec57: inspect live git status/origin, ledger/events tail, continuation prompt, and backlog; then implement the next safe source-aligned gameplay/fidelity vertical slice.",
-  "updated_at": "2026-06-06T10:07:52Z",
+  "next_resume_action": "After normal push/fetch verifies HEAD == origin/main for light_freighter_bulk_margin_choice_loop, complete t_870fec57 and dispatch exactly one successor continuation card; continue the next source-aligned safe local gameplay/fidelity slice without redoing light_freighter_bulk_margin_choice_loop.",
+  "resume_prompt": "Continue Terminal Velocity after light_freighter_bulk_margin_choice_loop: inspect live git status/origin, ledger/events tail, continuation prompt, and backlog; then implement the next safe source-aligned gameplay/fidelity vertical slice.",
+  "updated_at": "2026-06-06T10:21:16Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -194,7 +191,8 @@
     "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo balanced_upgrade_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo light_freighter_capacity_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo light_freighter_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo light_freighter_bulk_margin_choice_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
@@ -209,12 +207,12 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "light-freighter-capacity-trade-loop",
-    "summary": "Implemented and verified symbolic light_freighter_capacity_trade_loop: buys a Light Freighter at Sol/Earth from a bounded training-credit state, verifies 150-ton cargo capacity, carries six Sol Food lots to Levo, sells the expanded hold load, and clears cargo under explicit scaffold labels.",
+    "id": "light-freighter-bulk-margin-choice-loop",
+    "summary": "Implemented and verified symbolic light_freighter_bulk_margin_choice_loop: buys a Light Freighter at Earth, evaluates profitable Food Sol->Levo and negative Equipment Levo->Sol margins, fills the 150-ton hold only with Food, sells all cargo at Levo, and records source/oracle boundary metadata.",
     "commit": "SHA-neutral: inspect current git rev-parse HEAD because this event may be amended into the commit it describes",
     "source_fidelity_labels": [
-      "terminal-velocity-light-freighter-trade-scaffold",
-      "light_freighter_trade_pending_classic_runtime_trace"
+      "terminal-velocity-light-freighter-bulk-margin-scaffold",
+      "light_freighter_bulk_margin_pending_classic_runtime_trace"
     ]
   }
 }
