@@ -97,6 +97,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'weapon_credit_recovery_loop',
                 'weapon_availability_recovery_loop',
                 'weapon_purchase_mission_cargo_reservation_loop',
+                'weapon_purchase_trade_cargo_reservation_loop',
                 'contraband_scan_clemency_recovery',
                 'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
@@ -1844,6 +1845,31 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(bought['itemId'], 'pulse_cannon')
         self.assertEqual(bought['cargoUsed'], 3)
         self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-mission-cargo-scaffold')
+        self.assertEqual(bought['oracleStatus'], 'classic_runtime_weapon_purchase_cargo_interaction_pending')
+
+    def test_weapon_purchase_trade_cargo_reservation_loop_preserves_held_lot(self):
+        result = run_scripted_scenario('weapon_purchase_trade_cargo_reservation_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['ownedWeapons']['pulse_cannon'], 1)
+        self.assertEqual(result['state']['cargoUsed'], 10)
+        self.assertEqual(result['state']['cargoHold'], {'food': 10})
+        self.assertEqual(result['state']['credits'], 7860)
+        self.assertEqual(result['checks']['bought_trade_lot_before_weapon_purchase'], 'passed')
+        self.assertEqual(result['checks']['weapon_purchase_preserved_trade_cargo'], 'passed')
+        self.assertEqual(result['checks']['recorded_weapon_purchase_trade_cargo_source_boundary'], 'passed')
+        trade = [event for event in result['trace'] if event['type'] == 'buy_commodity_lot'][-1]
+        bought = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon'][-1]
+        self.assertEqual(trade['commodity'], 'food')
+        self.assertEqual(trade['cargoUsed'], 10)
+        self.assertEqual(bought['saleType'], 'weapon')
+        self.assertEqual(bought['itemId'], 'pulse_cannon')
+        self.assertEqual(bought['cargoUsed'], 10)
+        self.assertEqual(bought['cargoHold'], {'food': 10})
+        self.assertEqual(bought['activeMissionCargo'], 0)
+        self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-trade-cargo-scaffold')
         self.assertEqual(bought['oracleStatus'], 'classic_runtime_weapon_purchase_cargo_interaction_pending')
 
     def test_contraband_scan_clemency_recovery_confiscates_and_repairs_legal_record(self):
