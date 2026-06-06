@@ -83,6 +83,7 @@ const WEAPON_AVAILABILITY_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_AVAILABILITY_GATE_
 const WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX := "TV_WEAPON_INVENTORY_STACK_EVENT"
 const WEAPON_MISSION_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_MISSION_CARGO_EVENT"
 const WEAPON_TRADE_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_TRADE_CARGO_EVENT"
+const WEAPON_LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_WEAPON_LEGAL_DOCKING_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
@@ -332,6 +333,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_mission_cargo_log")
 	if OS.get_cmdline_args().has("--tv-weapon-trade-cargo-log") or OS.get_cmdline_user_args().has("--tv-weapon-trade-cargo-log"):
 		call_deferred("_run_weapon_trade_cargo_log")
+	if OS.get_cmdline_args().has("--tv-weapon-legal-docking-log") or OS.get_cmdline_user_args().has("--tv-weapon-legal-docking-log"):
+		call_deferred("_run_weapon_legal_docking_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -2985,6 +2988,65 @@ func _run_weapon_trade_cargo_log() -> void:
 	var cargo_used_after_weapon := cargo
 	var trade_cargo_preserved := weapon_buy_succeeded and trade_cargo_before == trade_cargo_after and cargo_used_before_weapon == cargo_used_after_weapon and trade_cargo_after > 0
 	print("%s system=%s body=\"%s\" government=\"%s\" selectedWeapon=%s weaponBuySucceeded=%s tradeCommodity=food tradeCargoBefore=%d tradeCargoAfter=%d cargoUsedAfterWeapon=%d weaponCount=%d creditsAfterWeapon=%d tradeCargoPreserved=%s sourceLabel=terminal-velocity-weapon-trade-cargo-scaffold oracleStatus=classic_runtime_weapon_purchase_trade_cargo_interaction_pending" % [WEAPON_TRADE_CARGO_EVENT_LOG_PREFIX, system_name, body_name, government_name, selected_weapon, str(weapon_buy_succeeded), trade_cargo_before, trade_cargo_after, cargo_used_after_weapon, int(owned_weapons.get(selected_weapon, 0)), credits, str(trade_cargo_preserved)])
+	get_tree().quit(0)
+
+func _run_weapon_legal_docking_log() -> void:
+	_reset_travel_state()
+	var selected_weapon := "pulse_cannon"
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	var federation_name := _current_government_name()
+	legal_records[federation_name] = -70
+	reputation_scores[federation_name] = 10
+	credits = 2400
+	status_messages.clear()
+	_try_land()
+	var denied_message := _legal_docking_denied_message(federation_name)
+	var docking_denied_before_clemency := status_messages.has(denied_message) and not landed
+	# Terminal Velocity currently models clemency as a landed service. Seed the
+	# service panel after the denial to keep this a labeled scaffold/probe rather
+	# than a Classic runtime claim about where clemency is offered.
+	landed = true
+	var clemency_paid := _pay_legal_clemency()
+	var legal_after_clemency := int(legal_records.get(federation_name, 0))
+	landed = false
+	status_messages.clear()
+	_try_land()
+	var landed_after_clemency := landed
+	landed = false
+	map_visible = true
+	var route_to_sirius_selected := _select_map_route_to_system("Sirius")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Sirius Station")
+	_try_land()
+	var recovery_body_name := str(_current_body().get("name", ""))
+	var recovery_government_name := _current_government_name()
+	legal_records[recovery_government_name] = 0
+	reputation_scores[recovery_government_name] = 6
+	landing_tab = 2
+	status_messages.clear()
+	var weapon_buy_succeeded := _buy_outfit_or_weapon_by_id(selected_weapon)
+	print("%s routeToSolSelected=%s dockingSystem=Sol dockingGovernment=\"%s\" legalBeforeClemency=-70 dockingDeniedBeforeClemency=%s clemencyPaid=%s legalAfterClemency=%d landedAfterClemency=%s routeToSiriusSelected=%s recoverySystem=Sirius recoveryBody=\"%s\" recoveryGovernment=\"%s\" selectedWeapon=%s weaponBuySucceeded=%s weaponCount=%d creditsAfterWeapon=%d deniedMessage=\"%s\" sourceLabel=terminal-velocity-weapon-legal-docking-scaffold clemencySourceLabel=terminal-velocity-inferred-clemency-scaffold oracleStatus=classic_runtime_weapon_purchase_after_docking_denial_pending clemencyOracleStatus=classic_runtime_clemency_location_pending" % [
+		WEAPON_LEGAL_DOCKING_EVENT_LOG_PREFIX,
+		str(route_to_sol_selected).to_lower(),
+		federation_name,
+		str(docking_denied_before_clemency).to_lower(),
+		str(clemency_paid).to_lower(),
+		legal_after_clemency,
+		str(landed_after_clemency).to_lower(),
+		str(route_to_sirius_selected).to_lower(),
+		recovery_body_name,
+		recovery_government_name,
+		selected_weapon,
+		str(weapon_buy_succeeded).to_lower(),
+		int(owned_weapons.get(selected_weapon, 0)),
+		credits,
+		denied_message,
+	])
 	get_tree().quit(0)
 
 func _run_legal_patrol_posture_log() -> void:
