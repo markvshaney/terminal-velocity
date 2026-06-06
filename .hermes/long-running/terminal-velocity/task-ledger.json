@@ -8,8 +8,8 @@
     "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "6bf7cb4f6105e2938c5a5c7123591adce8961bdb",
-    "origin_main": "6bf7cb4f6105e2938c5a5c7123591adce8961bdb",
+    "head": "78db6f39b8251f13707193a2b65d674d1481e2d7",
+    "origin_main": "78db6f39b8251f13707193a2b65d674d1481e2d7",
     "status_short": "## main...origin/main"
   },
   "repo_state": {
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_893a460d",
+    "active_task_id": "t_1a6888c6",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "weapon_credit_recovery_loop_verified_pending_push_successor",
+    "status": "successor_created_pending_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T12:39:17Z",
+    "updated_at": "2026-06-06T12:40:58Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "weapon_credit_recovery_loop verified locally; normal push/successor handling in progress by loki-game integrator.",
+  "current_milestone": "weapon_credit_recovery_loop pushed/remote-verified; successor t_1a6888c6 created and pending dispatch.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -144,9 +144,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Commit/push/fetch/verify the weapon_credit_recovery_loop slice, complete t_893a460d, create and dispatch exactly one successor from current origin/main, then continue the next safe local source-aligned Terminal Velocity slice without redoing weapon credit recovery work.",
+  "next_resume_action": "Dispatch/continue successor t_1a6888c6 from current origin/main and implement the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing weapon_credit_recovery_loop.",
   "resume_prompt": "Continue Terminal Velocity from current origin/main; inspect ledger/events tail, continuation prompt, backlog, and live git state, then implement one new source-aligned safe local gameplay/fidelity slice without redoing weapon_credit_recovery_loop or prior Light Freighter work.",
-  "updated_at": "2026-06-06T12:39:17Z",
+  "updated_at": "2026-06-06T12:40:58Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -217,15 +217,15 @@
   "last_completed_slice": {
     "id": "weapon-credit-recovery-loop",
     "summary": "Added symbolic weapon_credit_recovery_loop for Sirius Station Pulse Cannon affordability: one-credit-short purchase blocks, exact-price recovery buys the weapon and leaves credits at 0.",
-    "commit": "local checkpoint pending; inspect current git rev-parse HEAD after commit/push",
+    "commit": "78db6f39b8251f13707193a2b65d674d1481e2d7",
     "source_fidelity_labels": [
       "terminal-velocity-weapon-credit-gate-scaffold",
       "classic_runtime_weapon_purchase_credit_ui_pending"
     ],
-    "remote_verified": false
+    "remote_verified": true
   },
   "git_state": {
-    "dirty": true,
-    "status_short": "pending commit for weapon_credit_recovery_loop slice"
+    "dirty": false,
+    "status_short": "## main...origin/main"
   }
 }
