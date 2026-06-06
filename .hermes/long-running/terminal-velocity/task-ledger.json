@@ -25,7 +25,7 @@
     "active_task_id": "t_c678d680",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_ready_pending_dispatch",
+    "status": "full_regression_verified_pending_local_checkpoint_commit",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:58:37-04:00",
+    "updated_at": "2026-06-06T11:06:51.251035Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter refuel margin help-surface slice pushed and remote-verified; successor t_c678d680 created/ready for next safe local slice.",
+  "current_milestone": "light_freighter_repair_margin_loop full regression verified; preparing local checkpoint/review handoff.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter refuel margin recovery",
   "last_commits": [
@@ -128,10 +128,15 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "git push origin main -> 94c6b02..6698233",
-    "git fetch origin and HEAD == origin/main 6698233040d854189a195f8079f3168b5c2eef0f",
-    "kanban completed t_b2e83ae1",
-    "created successor t_c678d680 and it is ready"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_margin_loop_funds_hull_repair_after_margin_sale native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order -v -> OK",
+    "python3 tools/run_gameplay_scenarios.py light_freighter_repair_margin_loop --pretty -> success true; repaired hull 260->300; final credits 2080",
+    "python3 -m json.tool native_ev/data/gameplay_curriculum.json >/dev/null -> OK",
+    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json >/dev/null -> OK",
+    "events JSONL validation -> events jsonl OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 81 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 211 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=77 failed=0 total=77",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=77"
   ],
   "active_gate": "none",
   "heartbeat_status": {
@@ -141,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch/continue successor t_c678d680 for the next source-aligned safe local gameplay/fidelity vertical slice from current origin/main; do not redo Light Freighter refuel margin help/probe work.",
+  "next_resume_action": "Review local Light Freighter repair margin curriculum checkpoint; if accepted, integrator may push/complete per policy, then continue next source-aligned safe local slice without redoing this scenario.",
   "resume_prompt": "Continue Terminal Velocity via Kanban task t_b2e83ae1: inspect git status/origin, ledger/events tail, continuation prompt, and backlog; implement one safe source-aligned gameplay/fidelity vertical slice with tests/probes/docs/ledger updates.",
-  "updated_at": "2026-06-06T06:58:37-04:00",
+  "updated_at": "2026-06-06T11:06:51.251035Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -208,16 +213,18 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "light-freighter-refuel-mission-margin-help-surface",
-    "summary": "Promoted the verified light_freighter_refuel_mission_margin_loop into visible F10 recovery guidance and the deterministic tv-gameplay-curriculum-help-log probe, covering reserved bulk delivery cargo, positive-margin remaining-hold trade, service-port refuel planning, delivery, and retained-cargo sale ordering.",
-    "commit": "local checkpoint: feat(help): surface light freighter refuel margin recovery",
+    "id": "light-freighter-repair-margin-loop",
+    "summary": "Added symbolic Light Freighter repair-margin loop: damaged 260/300 freighter uses two profitable Sol Food lots to fund Earth hull repair after a Levo sale run; native curriculum, Godot self-test order, gameplay curriculum JSON, backlog, and long-running ledger are synchronized.",
+    "commit": "local checkpoint pending: feat(curriculum): add light freighter repair margin scenario",
     "source_fidelity_labels": [
-      "terminal-velocity-light-freighter-refuel-mission-margin-scaffold",
-      "light_freighter_refuel_mission_margin_pending_classic_runtime_trace"
+      "terminal-velocity-light-freighter-repair-margin-scaffold",
+      "light_freighter_repair_margin_pending_classic_runtime_trace",
+      "terminal-velocity-repair-service-scaffold",
+      "repair_service_pending_ev_classic_runtime_trace"
     ]
   },
   "git_state": {
-    "dirty": false,
-    "status_short": "local checkpoint commit created; branch ahead of origin/main pending review"
+    "dirty": true,
+    "status_short": "full regression verified; local checkpoint commit pending"
   }
 }

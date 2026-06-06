@@ -39,6 +39,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'light_freighter_bulk_margin_choice_loop',
                 'light_freighter_bulk_mission_margin_loop',
                 'light_freighter_refuel_mission_margin_loop',
+                'light_freighter_repair_margin_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -624,6 +625,40 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         source_events = decisions + trade_events + checkpoints + [event for event in result['trace'] if event['type'] in {'buy_ship', 'accept_cargo_job', 'complete_cargo_job'}]
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-light-freighter-refuel-mission-margin-scaffold' for event in source_events))
         self.assertTrue(all(event['oracleStatus'] == 'light_freighter_refuel_mission_margin_pending_classic_runtime_trace' for event in source_events))
+
+    def test_light_freighter_repair_margin_loop_funds_hull_repair_after_margin_sale(self):
+        result = run_scripted_scenario('light_freighter_repair_margin_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['bought_light_freighter_for_repair_margin'], 'passed')
+        self.assertEqual(result['checks']['identified_profitable_repair_margin_food'], 'passed')
+        self.assertEqual(result['checks']['funded_repair_with_margin_sale'], 'passed')
+        self.assertEqual(result['checks']['repaired_light_freighter_hull_after_trade'], 'passed')
+        self.assertEqual(result['checks']['recorded_light_freighter_repair_margin_source_boundary'], 'passed')
+        decisions = [event for event in result['trace'] if event['type'] == 'trade_margin_decision']
+        self.assertEqual([(event['commodity'], event['marginPerTon'], event['decision']) for event in decisions], [('food', 78, 'carry')])
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertEqual(len([event for event in trade_events if event['type'] == 'buy_commodity_lot']), 2)
+        self.assertEqual(len([event for event in trade_events if event['type'] == 'sell_commodity_lot']), 2)
+        repair_events = [event for event in result['trace'] if event['type'] == 'repair_hull']
+        self.assertEqual(repair_events[-1]['hullBefore'], 260)
+        self.assertEqual(repair_events[-1]['hullAfter'], 300)
+        self.assertEqual(repair_events[-1]['cost'], 320)
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['repair_margin_gap', 'margin_sale_repair_budget', 'light_freighter_repaired'])
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['playerShipId'], 'light_freighter')
+        self.assertEqual(result['state']['cargoCapacity'], 150)
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['currentHull'], 300)
+        self.assertEqual(result['state']['credits'], 2080)
+        source_events = decisions + trade_events + checkpoints + [event for event in result['trace'] if event['type'] == 'buy_ship']
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-light-freighter-repair-margin-scaffold' for event in source_events))
+        self.assertTrue(all(event['oracleStatus'] == 'light_freighter_repair_margin_pending_classic_runtime_trace' for event in source_events))
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-repair-service-scaffold' for event in repair_events))
+        self.assertTrue(all(event['oracleStatus'] == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events))
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')

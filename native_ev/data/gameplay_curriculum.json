@@ -25,6 +25,7 @@
     "light_freighter_bulk_margin_choice_loop",
     "light_freighter_bulk_mission_margin_loop",
     "light_freighter_refuel_mission_margin_loop",
+    "light_freighter_repair_margin_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -385,6 +386,10 @@
     "light_freighter_refuel_mission_margin_loop": {
       "purpose": "Light-freighter refuel mission margin loop: buy a Light Freighter at Earth, reserve a 120-ton Levo delivery, use the remaining hold for profitable Sol Food after skipping negative-margin Equipment, block the loaded return leg at zero fuel, refuel at Earth, then complete delivery and sell retained trade cargo under pending-Classic source boundaries.",
       "surface": "ship upgrade/bulk mission margin-choice plus low-fuel recovery scaffold"
+    },
+    "light_freighter_repair_margin_loop": {
+      "purpose": "Light-freighter repair margin loop: buy a Light Freighter at Earth, mark a damaged-hull repair budget gap, run two profitable Sol Food lots to Levo, return to Earth, and repair the freighter hull under pending-Classic source boundaries.",
+      "surface": "ship upgrade/large-hold margin trade funding service-port repair scaffold"
     }
   }
 }
