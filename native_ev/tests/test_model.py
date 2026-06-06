@@ -421,6 +421,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-starting-equipment-log', run_script)
         self.assertIn('[switch]$StartingEquipmentLog', windows_script)
 
+    def test_godot_service_provisioning_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_SERVICE_PROVISIONING_EVENT',
+            '--tv-service-provisioning-log',
+            'func _run_service_provisioning_log() -> void:',
+            'levoNoOutfitterObserved=%s',
+            'earthFullServiceScaffold=%s',
+            'stardockNoShipyardScaffold=%s',
+            'serviceMatrixScoutVisible=%s',
+            'sourceLabel=original-runtime-observed-levo-plus-terminal-velocity-service-provisioning-scaffold',
+            'oracleStatus=classic_runtime_service_matrix_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-service-provisioning-log', run_script)
+        self.assertIn('[switch]$ServiceProvisioningLog', windows_script)
+
     def test_godot_pirate_avoidance_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

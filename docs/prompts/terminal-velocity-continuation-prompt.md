@@ -72,7 +72,7 @@ Hard requirements:
    - Python tests: python3 -m unittest discover -s native_ev/tests -p 'test_*.py'
    - scenario harness: python3 tools/run_gameplay_scenarios.py --all --pretty
    - Godot wrapper: ./run_godot.sh self-test
-   - use existing wrapper probes such as tv-map-route-log, tv-route-jump-log, tv-low-fuel-jump-log, tv-mission-route-hint-log, tv-combat-log, tv-legal-status-log, etc.
+   - use existing wrapper probes such as tv-map-route-log, tv-route-jump-log, tv-low-fuel-jump-log, tv-mission-route-hint-log, tv-service-provisioning-log, tv-combat-log, tv-legal-status-log, etc.
    - when adding a new Godot probe, expose it through run_godot.sh and godot_ev/windows/RunGodot.ps1.
 
 8. Keep fidelity labels explicit:

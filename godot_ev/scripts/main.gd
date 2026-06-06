@@ -27,6 +27,7 @@ const MOVEMENT_LOG_THRUST_RIGHT_TURN_PREFIX := "TV_MOVEMENT_LOG scenario=thrust_
 const AFTERBURNER_EVENT_LOG_PREFIX := "TV_AFTERBURNER_EVENT"
 const TRAVEL_EVENT_LOG_PREFIX := "TV_TRAVEL_EVENT"
 const LANDED_UI_MATRIX_PREFIX := "TV_LANDED_UI_MATRIX"
+const SERVICE_PROVISIONING_EVENT_LOG_PREFIX := "TV_SERVICE_PROVISIONING_EVENT"
 const MAP_ROUTE_EVENT_LOG_PREFIX := "TV_MAP_ROUTE_EVENT"
 const ROUTE_CLEAR_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_EVENT"
 const ROUTE_CLEAR_RESELECT_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_RESELECT_EVENT"
@@ -207,6 +208,8 @@ func _ready() -> void:
 		call_deferred("_run_travel_event_log")
 	if OS.get_cmdline_args().has("--tv-landed-ui-matrix") or OS.get_cmdline_user_args().has("--tv-landed-ui-matrix"):
 		call_deferred("_run_landed_ui_matrix")
+	if OS.get_cmdline_args().has("--tv-service-provisioning-log") or OS.get_cmdline_user_args().has("--tv-service-provisioning-log"):
+		call_deferred("_run_service_provisioning_log")
 	if OS.get_cmdline_args().has("--tv-map-route-log") or OS.get_cmdline_user_args().has("--tv-map-route-log"):
 		call_deferred("_run_map_route_log")
 	if OS.get_cmdline_args().has("--tv-route-invalid-log") or OS.get_cmdline_user_args().has("--tv-route-invalid-log"):
@@ -828,6 +831,31 @@ func _run_landed_ui_matrix() -> void:
 		for body in current_system.get("bodies", []):
 			_print_landed_ui_matrix_for_body(body)
 	get_tree().quit(0)
+
+func _run_service_provisioning_log() -> void:
+	_reset_travel_state()
+	var levo := _body_by_system_and_name("Levo", "Levo Spaceport")
+	var earth := _body_by_system_and_name("Sol", "Earth")
+	var stardock := _body_by_system_and_name("Sol", "Stardock Alpha")
+	var levo_services: Array = _station_inventory(levo).get("services", [])
+	var earth_services: Array = _station_inventory(earth).get("services", [])
+	var stardock_services: Array = _station_inventory(stardock).get("services", [])
+	var help_text := "\n".join(_help_overlay_lines())
+	var levo_no_outfitter_observed := levo_services.has("commodities") and levo_services.has("missions") and not levo_services.has("outfitter") and not levo_services.has("shipyard")
+	var earth_full_service_scaffold := earth_services.has("repairs") and earth_services.has("outfitter") and earth_services.has("shipyard") and earth_services.has("weapons") and earth_services.has("commodities") and earth_services.has("missions")
+	var stardock_no_shipyard_scaffold := stardock_services.has("repairs") and stardock_services.has("outfitter") and stardock_services.has("weapons") and stardock_services.has("commodities") and not stardock_services.has("shipyard")
+	var service_matrix_scout_visible := help_text.contains("Service provisioning scout: newly reached ports need service/store checks before buying")
+	print("%s levoServices=%s earthServices=%s stardockServices=%s levoNoOutfitterObserved=%s earthFullServiceScaffold=%s stardockNoShipyardScaffold=%s serviceMatrixScoutVisible=%s sourceLabel=original-runtime-observed-levo-plus-terminal-velocity-service-provisioning-scaffold oracleStatus=classic_runtime_service_matrix_pending" % [SERVICE_PROVISIONING_EVENT_LOG_PREFIX, JSON.stringify(levo_services), JSON.stringify(earth_services), JSON.stringify(stardock_services), levo_no_outfitter_observed, earth_full_service_scaffold, stardock_no_shipyard_scaffold, service_matrix_scout_visible])
+	get_tree().quit(0)
+
+func _body_by_system_and_name(system_name: String, body_name: String) -> Dictionary:
+	for system in universe.get("systems", []):
+		if str(system.get("name", "")) != system_name:
+			continue
+		for body in system.get("bodies", []):
+			if str(body.get("name", "")) == body_name:
+				return body
+	return {}
 
 func _print_landed_ui_matrix_for_body(body: Dictionary) -> void:
 	var inventory := _station_inventory(body)

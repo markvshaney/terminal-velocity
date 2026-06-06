@@ -4,6 +4,7 @@ param(
     [switch]$AfterburnerLog,
     [switch]$TravelEventLog,
     [switch]$LandedUiMatrix,
+    [switch]$ServiceProvisioningLog,
     [switch]$MapRouteLog,
     [switch]$RouteInvalidLog,
     [switch]$RouteClearLog,
@@ -83,6 +84,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-travel-event-log
 } elseif ($LandedUiMatrix) {
     & $Godot --headless --path $Project -- --tv-landed-ui-matrix
+} elseif ($ServiceProvisioningLog) {
+    & $Godot --headless --path $Project -- --tv-service-provisioning-log
 } elseif ($MapRouteLog) {
     & $Godot --headless --path $Project -- --tv-map-route-log
 } elseif ($RouteInvalidLog) {

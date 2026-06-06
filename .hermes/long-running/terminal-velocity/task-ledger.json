@@ -84,6 +84,11 @@
   ],
   "safe_backlog": [
     {
+      "id": "stabilize-service-provisioning-slice",
+      "description": "Review/stage/commit the Godot service-provisioning probe bundle after verification; do not start unrelated behavior if this slice is still dirty/unreviewed.",
+      "gate": "normal coherent non-force push remains allowed after standard status/remotes/branch/no-secrets checks; human review may be required by Kanban policy before marking code done"
+    },
+    {
       "id": "next-source-aligned-playable-slice",
       "description": "Each run must inspect the live backlog/repo and implement the strongest safe local Terminal Velocity gameplay/fidelity slice with tests/probes/docs before considering process-only work.",
       "gate": "safe local code/docs/tests plus coherent normal non-force push to markvshaney/terminal-velocity are approved after standard checks; destructive original-EV actions and actual public-state changes beyond normal push remain gated"
@@ -122,10 +127,13 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_starting_equipment_log_contract -v failed on missing TV_STARTING_EQUIPMENT_EVENT before implementation",
-    "GREEN: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_starting_equipment_log_contract -v -> OK",
-    "./run_godot.sh tv-starting-equipment-log -> TV_STARTING_EQUIPMENT_EVENT with startingSecondaryHudObserved=true, startingNoTargetObserved=true, startingFuelFullObserved=true, startingFreeCargoObserved=true, primaryInfoVisible=true, primarySourceStockName=\"Laser Cannon\", secondaryInfoVisible=true",
-    "python3 -m unittest native_ev.tests.test_model -v -> 128 tests OK"
+    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_service_provisioning_log_contract -v failed on missing TV_SERVICE_PROVISIONING_EVENT before implementation",
+    "GREEN: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_service_provisioning_log_contract -v -> OK",
+    "./run_godot.sh tv-service-provisioning-log -> TV_SERVICE_PROVISIONING_EVENT with levoNoOutfitterObserved=true, earthFullServiceScaffold=true, stardockNoShipyardScaffold=true, serviceMatrixScoutVisible=true",
+    "python3 -m unittest native_ev.tests.test_model -v -> 129 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 195 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> 62/62 scenarios passed"
   ],
   "active_gate": {
     "type": "none",
@@ -140,9 +148,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch Kanban successor task t_121fe2dd and verify it becomes the exactly-one running Terminal Velocity worker for the next source-aligned safe local gameplay/fidelity slice.",
+  "next_resume_action": "Continue from the dirty worktree if unreviewed/uncommitted: inspect git diff/status, finish any needed stabilization for the Godot service-provisioning probe, then choose the next safe source-aligned playable slice from the live backlog only after this slice is coherent.",
   "resume_prompt": "Resume Terminal Velocity via Kanban task t_121fe2dd from clean origin/main; read ledger/events/prompt/backlog, avoid redoing the starting-equipment log, and implement one source-aligned safe local gameplay/fidelity slice with verification.",
-  "updated_at": "2026-06-06T06:41:43Z",
+  "updated_at": "2026-06-06T06:46:41Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -197,5 +205,24 @@
   },
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
-  "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata."
+  "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
+  "last_completed_slice": {
+    "id": "godot-service-provisioning-log",
+    "summary": "Added a deterministic Godot service/store provisioning scout that logs Levo no-outfitter observed evidence plus Earth and Stardock Alpha Terminal Velocity service matrices under explicit pending-Classic labels.",
+    "changed_files": [
+      "godot_ev/scripts/main.gd",
+      "run_godot.sh",
+      "godot_ev/windows/RunGodot.ps1",
+      "native_ev/tests/test_model.py",
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+      "docs/prompts/terminal-velocity-continuation-prompt.md",
+      ".hermes/long-running/terminal-velocity/task-ledger.json",
+      ".hermes/long-running/terminal-velocity/events.jsonl"
+    ],
+    "source_fidelity_labels": [
+      "original-runtime-observed-levo",
+      "terminal-velocity-service-provisioning-scaffold",
+      "classic_runtime_service_matrix_pending"
+    ]
+  }
 }
