@@ -1,11 +1,6 @@
 {
-  "active_gate": {
-    "reason": "Kanban code-changing task requires human review before done",
-    "resume_after": "review approval or requested changes in task comments",
-    "type": "human_review",
-    "withheld_action": "kanban_complete / push"
-  },
-  "current_milestone": "Upgrade affordability recovery help implemented and verified locally; awaiting human review before final Kanban completion.",
+  "active_gate": null,
+  "current_milestone": "Upgrade affordability recovery help was pushed and verified; successor Kanban task t_55eac0ea is ready/running for the next safe source-aligned slice.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -85,7 +80,8 @@
     "id": "upgrade-affordability-recovery-help",
     "kanban_task_id": "t_068a2d95",
     "local_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-    "remote_verified": false,
+    "remote_commit": "a081fb000ab455167d7a91b6950d763d02868ee6",
+    "remote_verified": true,
     "source_fidelity_labels": [
       "terminal-velocity-upgrade-affordability-strategy-scaffold",
       "upgrade_affordability_progression_pending_ev_family_source_trace",
@@ -93,7 +89,7 @@
     ],
     "summary": "F10 help promotes existing upgrade_affordability_trade_loop into player-facing one-leg-short ship purchase recovery guidance and deterministic help probe hasUpgradeAffordabilityRecoveryHelp."
   },
-  "last_process_checkpoint": "Completed local implementation/verification for t_068a2d95; code/docs/tests committed locally and blocked for human review per Kanban worker policy.",
+  "last_process_checkpoint": "loki-game integrator resolved stale review-required gate for t_068a2d95 via standard normal-push checks, completed the card, and created successor t_55eac0ea.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
     "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> FAIL missing Upgrade affordability recovery help line before help_overlay update",
@@ -115,20 +111,20 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Human review t_068a2d95 local checkpoint; if approved/unblocked, complete the Kanban task or continue from review comments. Do not redo upgrade affordability recovery help/probe work.",
+  "next_resume_action": "Kanban successor t_55eac0ea owns the next safe source-aligned Terminal Velocity gameplay/fidelity slice from current origin/main; do not redo upgrade affordability recovery help/probe work.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "branch": "main",
     "dirty": false,
-    "head": "inspect current SHA with `git rev-parse HEAD`",
-    "origin_main": "inspect current SHA with `git rev-parse origin/main`",
-    "status_short": "local commit expected ahead of origin/main after upgrade affordability recovery help checkpoint; inspect live git status"
+    "head": "a081fb000ab455167d7a91b6950d763d02868ee6",
+    "origin_main": "a081fb000ab455167d7a91b6950d763d02868ee6",
+    "status_short": "clean at origin/main after upgrade affordability recovery help push; successor t_55eac0ea created"
   },
   "repo_state": {
-    "ahead": "1",
+    "ahead": "0",
     "behind": "0",
     "branch": "main",
     "dirty": false
@@ -147,9 +143,9 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Continue Terminal Velocity from remote-verified trade_margin_choice_recovery_help at current origin/main. Successor Kanban card t_8e331d1c owns the next safe source-aligned slice; do not redo trade margin choice help or prior repair/light-freighter/legal/weapon/contraband recovery work.",
+  "resume_prompt": "Continue Terminal Velocity from remote-verified upgrade_affordability_recovery_help at current origin/main. Successor Kanban card t_55eac0ea owns the next safe source-aligned slice; do not redo upgrade affordability recovery help or prior recovery/help/curriculum work.",
   "runner": {
-    "active_task_id": "t_068a2d95",
+    "active_task_id": "t_55eac0ea",
     "assignee": "terminal-velocity",
     "board": "terminal-velocity",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
@@ -168,8 +164,8 @@
       "Rule list entries must be concise and nonredundant; currently defined rules are in git_policy_rules."
     ],
     "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
-    "status": "review_required_local_checkpoint",
-    "successor_kanban_task_id": "t_068a2d95",
+    "status": "successor_created_pending_dispatch",
+    "successor_kanban_task_id": "t_55eac0ea",
     "superseded_jobs": [
       "f31074cbec03",
       "e12f13d4b75e",
@@ -180,7 +176,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T17:20:31Z",
+    "updated_at": "2026-06-06T17:23:38Z",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
     "watchdog_schedule": "every 5m",
@@ -235,7 +231,7 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "waiting_gate",
+  "status": "running",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -256,5 +252,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T17:20:31Z"
+  "updated_at": "2026-06-06T17:23:38Z"
 }
