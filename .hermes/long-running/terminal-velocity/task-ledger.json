@@ -7,9 +7,9 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true,
-    "head": "SHA-neutral: inspect current git rev-parse HEAD",
-    "origin_main": "SHA-neutral: inspect current git rev-parse origin/main before classifying live state",
+    "dirty": false,
+    "head": "remote-verified: 6698233040d854189a195f8079f3168b5c2eef0f",
+    "origin_main": "remote-verified: 6698233040d854189a195f8079f3168b5c2eef0f",
     "status_short": "dirty help-surface slice pending verification/local commit/review"
   },
   "repo_state": {
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_b2e83ae1",
+    "active_task_id": "t_c678d680",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "normal_push_prepared_successor_needed",
+    "status": "successor_ready_pending_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:57:27-04:00",
+    "updated_at": "2026-06-06T06:58:37-04:00",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,9 +111,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Stale review-required gate resolved locally for Light Freighter refuel margin help-surface slice; normal non-force push/successor flow prepared.",
+  "current_milestone": "Light Freighter refuel margin help-surface slice pushed and remote-verified; successor t_c678d680 created/ready for next safe local slice.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
-  "last_checkpoint_commit": "local checkpoint: feat(help): surface light freighter refuel margin recovery",
+  "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter refuel margin recovery",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -128,13 +128,10 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "git status --short --branch -> main ahead 1; working tree clean before resolution event",
-    "git log --oneline origin/main..HEAD --stat -> one coherent help/probe/backlog/ledger commit",
-    "git diff --check HEAD~1..HEAD -> OK",
-    "changed-file scope check -> only native_ev help/tests, docs/checklists, and TV long-running ledger/events",
-    "refined credential scan on added lines excluding audit wording -> 0 hits",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasLightFreighterRefuelMarginRecoveryHelp=true"
+    "git push origin main -> 94c6b02..6698233",
+    "git fetch origin and HEAD == origin/main 6698233040d854189a195f8079f3168b5c2eef0f",
+    "kanban completed t_b2e83ae1",
+    "created successor t_c678d680 and it is ready"
   ],
   "active_gate": "none",
   "heartbeat_status": {
@@ -144,9 +141,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Push/fetch/verify HEAD == origin/main, complete t_b2e83ae1, create and dispatch exactly one successor continuation card.",
+  "next_resume_action": "Dispatch/continue successor t_c678d680 for the next source-aligned safe local gameplay/fidelity vertical slice from current origin/main; do not redo Light Freighter refuel margin help/probe work.",
   "resume_prompt": "Continue Terminal Velocity via Kanban task t_b2e83ae1: inspect git status/origin, ledger/events tail, continuation prompt, and backlog; implement one safe source-aligned gameplay/fidelity vertical slice with tests/probes/docs/ledger updates.",
-  "updated_at": "2026-06-06T06:57:27-04:00",
+  "updated_at": "2026-06-06T06:58:37-04:00",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
