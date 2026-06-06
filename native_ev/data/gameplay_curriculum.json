@@ -14,6 +14,7 @@
     "trade_route_margin_choice_loop",
     "strategy_skill_rotation_loop",
     "upgrade_readiness_strategy_loop",
+    "upgrade_affordability_trade_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -102,6 +103,10 @@
     "upgrade_readiness_strategy_loop": {
       "purpose": "Upgrade-readiness strategy loop: scout Earth services, buy a cargo outfit, weapon, and light freighter upgrade, and record service-scout/outfitter/weapons/ship-buyer checkpoints while preserving pending-Classic source boundaries.",
       "surface": "service scouting/outfit-weapon-ship upgrade strategy scaffold"
+    },
+    "upgrade_affordability_trade_loop": {
+      "purpose": "Upgrade-affordability strategy loop: block an unaffordable light freighter purchase, run a profitable Sol-to-Levo Food funding trade, return to Earth, and buy the light freighter while preserving pending-Classic source boundaries.",
+      "surface": "upgrade affordability/merchant funding strategy scaffold"
     },
     "mission_runner_first_delivery": {
       "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",

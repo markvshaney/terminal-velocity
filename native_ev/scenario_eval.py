@@ -46,6 +46,7 @@ SCENARIO_CURRICULUM = [
     'trade_route_margin_choice_loop',
     'strategy_skill_rotation_loop',
     'upgrade_readiness_strategy_loop',
+    'upgrade_affordability_trade_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1305,6 +1306,29 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'ship_buyer', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'upgrade_affordability_trade_loop':
+        source_label = 'terminal-velocity-upgrade-affordability-strategy-scaffold'
+        oracle_status = 'upgrade_affordability_progression_pending_ev_family_source_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': oracle_status, 'expectBlocked': True},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'affordability_gap', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'set_state', 'values': {'credits': 57700}},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'trade_funding_run', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'ship_buyer', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2213,6 +2237,18 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_outfit_weapon_and_ship_upgrade': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and state.get('ownedWeapons', {}).get('laser_cannon') == 1 and state.get('playerShipId') == 'light_freighter' else 'failed',
             'recorded_upgrade_readiness_strategy_checkpoints': 'passed' if [event.get('skill') for event in checkpoints] == ['service_scout', 'outfitter', 'weapons', 'ship_buyer'] else 'failed',
             'recorded_upgrade_readiness_source_boundary': 'passed' if checkpoints and service_scans and buys and all(event.get('sourceLabel') == 'terminal-velocity-upgrade-readiness-strategy-scaffold' and event.get('oracleStatus') == 'upgrade_strategy_progression_pending_ev_family_source_trace' for event in checkpoints + service_scans + buys) else 'failed',
+        })
+    elif name == 'upgrade_affordability_trade_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        buy_ship_events = [event for event in trace if event.get('type') == 'buy_ship']
+        blocked_ship_events = [event for event in trace if event.get('type') == 'blocked_buy_ship']
+        source_events = checkpoints + trade_events + buy_ship_events + blocked_ship_events
+        checks.update({
+            'blocked_initial_light_freighter_purchase': 'passed' if any(event.get('shipId') == 'light_freighter' and event.get('reason') == 'insufficient credits' and event.get('credits') == STARTING_CREDITS for event in blocked_ship_events) else 'failed',
+            'completed_upgrade_funding_trade_run': 'passed' if len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 2 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 2 else 'failed',
+            'bought_affordable_light_freighter_upgrade': 'passed' if state.get('playerShipId') == 'light_freighter' and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and any(event.get('shipId') == 'light_freighter' for event in buy_ship_events) else 'failed',
+            'recorded_upgrade_affordability_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-upgrade-affordability-strategy-scaffold' and event.get('oracleStatus') == 'upgrade_affordability_progression_pending_ev_family_source_trace' for event in source_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

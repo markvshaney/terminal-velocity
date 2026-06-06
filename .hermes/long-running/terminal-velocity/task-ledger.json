@@ -8,13 +8,13 @@
     "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "9808e540155ed57a0f7c89c1533185e144f1a349",
-    "origin_main": "9808e540155ed57a0f7c89c1533185e144f1a349",
-    "status_short": "## main...origin/main; clean remote-verified upgrade_readiness_strategy_loop checkpoint"
+    "head": "SHA-neutral: inspect current git rev-parse HEAD because this ledger is amended into the commit it describes",
+    "origin_main": "072b153a4acae453b9e494786a789b771962f260",
+    "status_short": "## main...origin/main [ahead 1]; local upgrade_affordability_trade_loop checkpoint committed pending review/integrator handling"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": false
   },
@@ -25,7 +25,7 @@
     "active_task_id": "t_facc7ac6",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_ready_pending_dispatch",
+    "status": "review_required_after_local_commit",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -62,7 +62,7 @@
       "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/no-secrets review, light verification, non-force push, fetch, verify origin/main equals HEAD."
     ]
   },
-  "status": "running",
+  "status": "waiting_gate",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "upgrade_readiness_strategy_loop pushed and remote-verified; successor t_facc7ac6 created for next safe local slice.",
+  "current_milestone": "upgrade_affordability_trade_loop symbolic curriculum slice verified and committed locally; review/integrator handling pending.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
   "last_commits": [
@@ -127,19 +127,19 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_upgrade_readiness_strategy_loop_records_service_outfit_weapon_and_ship_checkpoints -v -> OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 69 tests OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 199 tests OK",
-    "python3 tools/run_gameplay_scenarios.py upgrade_readiness_strategy_loop --pretty -> success true; checks all passed",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=65 failed=0 total=65",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_upgrade_affordability_trade_loop_funds_upgrade_after_initial_credit_gate -v -> OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_gameplay_scenario_curriculum -v -> OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=65"
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 200 tests OK",
+    "run_scripted_scenario('upgrade_affordability_trade_loop') -> success true; checks all passed; credits=438; playerShipId=light_freighter",
+    "all scripted scenarios -> passed=66 failed=0 total=66",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=66",
+    "git diff --check -> OK"
   ],
   "active_gate": {
-    "type": null,
-    "reason": null,
-    "withheld_action": null,
-    "resume_after": "Dispatch t_facc7ac6 and verify exactly one running Terminal Velocity task."
+    "type": "review-required",
+    "reason": "Kanban worker changed scenario harness, tests, curriculum manifest, Godot self-test manifest, backlog, and ledger/events; review/integrator handling required before push/done.",
+    "withheld_action": "git push origin main and marking t_facc7ac6 complete as merged/done",
+    "resume_after": "Reviewer/coordinator approves local checkpoint or requests changes on t_facc7ac6."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -148,9 +148,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch Kanban task t_facc7ac6 and verify exactly one running Terminal Velocity task continues from clean origin/main after upgrade_readiness_strategy_loop.",
-  "resume_prompt": "Continue Terminal Velocity development from origin/main after upgrade_readiness_strategy_loop; active successor task t_facc7ac6 owns the next source-aligned safe local slice.",
-  "updated_at": "2026-06-06T08:30:34Z",
+  "next_resume_action": "Review local upgrade_affordability_trade_loop symbolic curriculum commit; if accepted, integrator may push per normal non-force policy, then continue the next source-aligned safe local Terminal Velocity slice without redoing strategy/upgrade affordability work.",
+  "resume_prompt": "Continue Terminal Velocity development from local upgrade_affordability_trade_loop commit; inspect live git state and handle review/integrator flow before selecting the next safe local slice.",
+  "updated_at": "2026-06-06T08:40:28Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

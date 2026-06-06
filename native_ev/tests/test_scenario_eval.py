@@ -26,6 +26,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'trade_route_margin_choice_loop',
                 'strategy_skill_rotation_loop',
                 'upgrade_readiness_strategy_loop',
+                'upgrade_affordability_trade_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -298,6 +299,27 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['playerShipId'], 'light_freighter')
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-upgrade-readiness-strategy-scaffold' for event in checkpoints))
         self.assertTrue(all(event['oracleStatus'] == 'upgrade_strategy_progression_pending_ev_family_source_trace' for event in checkpoints))
+
+    def test_upgrade_affordability_trade_loop_funds_upgrade_after_initial_credit_gate(self):
+        result = run_scripted_scenario('upgrade_affordability_trade_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['blocked_initial_light_freighter_purchase'], 'passed')
+        self.assertEqual(result['checks']['completed_upgrade_funding_trade_run'], 'passed')
+        self.assertEqual(result['checks']['bought_affordable_light_freighter_upgrade'], 'passed')
+        self.assertEqual(result['checks']['recorded_upgrade_affordability_source_boundary'], 'passed')
+        blocked_ship_events = [event for event in result['trace'] if event['type'] == 'blocked_buy_ship']
+        self.assertEqual(blocked_ship_events[0]['reason'], 'insufficient credits')
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertGreaterEqual(len(trade_events), 2)
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['affordability_gap', 'trade_funding_run', 'ship_buyer'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-upgrade-affordability-strategy-scaffold' for event in checkpoints))
+        self.assertTrue(all(event['oracleStatus'] == 'upgrade_affordability_progression_pending_ev_family_source_trace' for event in checkpoints))
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['playerShipId'], 'light_freighter')
+        self.assertGreaterEqual(result['state']['credits'], 0)
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')
