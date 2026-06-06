@@ -7,22 +7,22 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes",
+    "dirty": "no",
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "travel timing recovery help/log slice committed locally; push/review pending",
+    "status_short": "travel timing recovery help/log slice pushed and remote-verified; successor Kanban task created",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`; latest pushed slice remote-verified before successor creation"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no except this post-commit ledger checkpoint before amend"
+    "dirty": "no"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_65a7a59a",
+    "active_task_id": "t_cd3fe1ea",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "successor_ready_pending_dispatch",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:53:47Z",
+    "updated_at": "2026-06-06T06:57:09Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,9 +110,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Travel timing recovery help slice committed locally; F10 help surfaces TV event-log transition-state guidance for L/H/\\/J recovery while exact Classic transition timing/sound remains pending.",
+  "current_milestone": "Travel timing recovery help/log slice remote-verified; successor Kanban continuation task created from clean origin/main.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
-  "last_checkpoint_commit": "will be updated by amended commit containing this checkpoint; inspect current SHA with `git rev-parse HEAD`",
+  "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -138,10 +138,10 @@
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK"
   ],
   "active_gate": {
-    "type": "review_or_push",
-    "reason": "Local code/docs/ledger commit is complete and verified; push/publication remains gated by workflow/owner policy.",
-    "withheld_action": "git push origin main",
-    "resume_after": "Human/integrator approval to push, or reviewer accepts the local commit."
+    "type": "none",
+    "reason": "Normal non-force push completed and successor task created.",
+    "withheld_action": "None.",
+    "resume_after": "Dispatch successor task and continue safe-local Terminal Velocity development."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -150,9 +150,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review/push local commit for the verified travel timing recovery help/log slice, then continue from live backlog with the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo service-provisioning or travel timing help if present and verified.",
-  "resume_prompt": "Resume Terminal Velocity via Kanban task t_65a7a59a from clean origin/main 8289700afeaa4427de699a374e321748b8fba563; read ledger/events/prompt/backlog, avoid redoing service-provisioning log, and implement one source-aligned safe local gameplay/fidelity slice with verification.",
-  "updated_at": "2026-06-06T06:53:47Z",
+  "next_resume_action": "Dispatch Kanban task t_cd3fe1ea and verify exactly one running Terminal Velocity task; worker should read ledger/events/prompt/backlog and continue the next strongest source-aligned safe local gameplay/fidelity slice without redoing service-provisioning, starting-equipment, or travel-timing help/log work.",
+  "resume_prompt": "Resume Terminal Velocity via Kanban task t_cd3fe1ea from clean origin/main 0a248d7e3b49782d9e5e064519a5e3f6022cf3b5; read ledger/events/prompt/backlog and implement one source-aligned safe local gameplay/fidelity slice with verification.",
+  "updated_at": "2026-06-06T06:57:09Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -211,7 +211,7 @@
   "last_completed_slice": {
     "id": "travel-timing-recovery-help",
     "summary": "F10 help now surfaces deterministic travel event-log timing recovery guidance for launch/leave, hyper-mode/select, and jump retry states under pending-Classic labels.",
-    "commit": "18541385333816e43a4a60c9324c708a79be2dd4",
+    "commit": "0a248d7e3b49782d9e5e064519a5e3f6022cf3b5",
     "source_fidelity_labels": [
       "terminal-velocity-travel-event-log-scaffold",
       "classic_runtime_transition_timing_sound_pending",
