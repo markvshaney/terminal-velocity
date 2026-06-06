@@ -153,6 +153,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"light_freighter_refuel_delivery_loop",
 		"light_freighter_bulk_margin_choice_loop",
 		"light_freighter_bulk_mission_margin_loop",
+		"light_freighter_refuel_mission_margin_loop",
 		"mission_runner_first_delivery",
 		"scan_intro_mission_offers",
 		"intro_courier_mission_delivery",
