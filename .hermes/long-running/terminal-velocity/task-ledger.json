@@ -25,7 +25,7 @@
     "active_task_id": "t_7b94068c",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "worker_slice_checkpoint_pending_review",
+    "status": "integrator_push_verified_pending_successor_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter repair/refuel mission-margin help-surface slice implemented, verified, and locally checkpoint-committed; branch ahead origin/main by 1 pending review-required handoff.",
+  "current_milestone": "Light Freighter repair/refuel mission-margin help-surface slice accepted by loki-game integrator, pushed to origin/main, and ready for Kanban completion/successor dispatch.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -166,9 +166,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review the local HEAD commit (Light Freighter repair/refuel mission margin help-surface checkpoint); if accepted, integrator may push/fetch/verify HEAD == origin/main, complete t_7b94068c, and dispatch/continue exactly one successor source-aligned safe local slice without redoing this help probe or scenario.",
+  "next_resume_action": "Complete t_7b94068c if not already complete, create and dispatch exactly one successor from origin/main c020781a546c2a39e4202dec3e9a950e84c82ed2, then continue the next source-aligned safe local gameplay/fidelity vertical slice without redoing Light Freighter repair/refuel mission-margin scenario/help work.",
   "resume_prompt": "Continue Terminal Velocity from current main workspace; inspect task successor/review comments, ledger/events tail, continuation prompt, backlog, and live git state, then review/commit/push if appropriate or continue one new source-aligned gameplay/fidelity slice without redoing light_freighter_repair_refuel_mission_margin_loop or its help-surface work.",
-  "updated_at": "2026-06-06T11:57:33.797146Z",
+  "updated_at": "2026-06-06T11:58:32.201350Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -238,7 +238,7 @@
   "last_completed_slice": {
     "id": "light-freighter-repair-refuel-margin-help-surface",
     "summary": "Promoted the existing light_freighter_repair_refuel_mission_margin_loop outcome into F10 help with Godot log probe hasLightFreighterRepairRefuelMarginRecoveryHelp; no Classic damaged freighter fuel/repair UI claim made.",
-    "commit": "local HEAD checkpoint; inspect git rev-parse HEAD",
+    "commit": "pushed origin/main c020781a546c2a39e4202dec3e9a950e84c82ed2",
     "source_fidelity_labels": [
       "terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold",
       "light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace",
@@ -248,6 +248,6 @@
   },
   "git_state": {
     "dirty": false,
-    "status_short": "local checkpoint committed; branch ahead origin/main by 1; review required before Kanban completion"
+    "status_short": "clean at origin/main after pushed commit c020781"
   }
 }
