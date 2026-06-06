@@ -2450,6 +2450,42 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission alignment return-contract scenario contract', plan)
         self.assertIn('freeport_return_earth', plan)
 
+    def test_godot_mission_alignment_delivery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-alignment-delivery-log',
+            'func _run_mission_alignment_delivery_log',
+            'TV_MISSION_ALIGNMENT_DELIVERY_EVENT',
+            'federationBranchAccepted=%s',
+            'federationBranchDelivered=%s',
+            'freeportBranchAccepted=%s',
+            'freeportBranchDelivered=%s',
+            'federationCargoReleased=%s',
+            'freeportCargoReleased=%s',
+            'federationRewardPaid=%s',
+            'freeportRewardPaid=%s',
+            'federationBranchFlagsSet=%s',
+            'freeportBranchFlagsSet=%s',
+            'incompatibleBranchBlockedAfterDelivery=%s',
+            'federation_report_freeport',
+            'freeport_pact_smugglers',
+            'alignment_federation',
+            'alignment_freeport',
+            'sourceLabel=terminal-velocity-mission-scaffold',
+            'oracleStatus=mission_behavior_pending_classic_runtime_trace',
+            'deliveryBoundary=terminal_velocity_alignment_delivery_scaffold_exact_classic_completion_ui_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAlignmentDeliveryLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-alignment-delivery-log', run_script)
+        self.assertIn('tv-mission-alignment-delivery-log', launcher)
+        self.assertIn('Mission alignment branch delivery scenario contract', plan)
+        self.assertIn('alignment_federation', plan)
+
     def test_godot_first_mission_delivery_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
