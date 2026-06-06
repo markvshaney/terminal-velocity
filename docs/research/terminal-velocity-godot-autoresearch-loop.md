@@ -343,6 +343,14 @@ Mission trade destination-sale scenario contract:
 - `sourceLabel=terminal-velocity-mission-trade-destination-sale-scaffold`; `oracleStatus=mission_trade_destination_sale_pending_classic_runtime_trace`.
 - This is a Terminal Velocity mission/trade destination-sale scaffold; exact EV Classic mixed mission/trade UI and market behavior remain pending Classic runtime evidence.
 
+Chapter-one trade carryover scenario contract:
+
+- `RunGodot.ps1 -ChapterOneTradeCarryoverLog` / `--tv-chapter-one-trade-carryover-log`
+- Exercises the Terminal Velocity chapter-one mission/trade loop where a player accepts the intro courier at Earth, buys one Sol Food lot in spare hold space, delivers at Luna, accepts the follow-up Frontier Sample Transfer, carries the same trade lot alongside the second mission, delivers at Sirius Station, then sells the preserved trade lot.
+- Logs `introMissionDelivered=true`, `secondMissionDelivered=true`, `tradeCargoReservedAlongsideSecondMission=true`, `tradeCargoPreservedThroughSecondDelivery=true`, and `tradeCargoSoldAtSiriusStation=true` plus cargo, credit, route, completed-mission, and story-flag counters.
+- `sourceLabel=terminal-velocity-chapter-one-trade-carryover-scaffold`; `oracleStatus=chapter_one_trade_carryover_pending_classic_runtime_trace`.
+- This is a Terminal Velocity chapter-one mission/trade carryover scaffold; exact EV Classic story-chain, mixed mission/trade UI, and market behavior remain pending Classic runtime evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`

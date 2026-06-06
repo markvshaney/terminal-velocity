@@ -1968,6 +1968,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-mission-trade-destination-sale-log', wrapper)
         self.assertIn('Mission trade destination-sale scenario contract', plan)
 
+    def test_godot_chapter_one_trade_carryover_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-chapter-one-trade-carryover-log',
+            'func _run_chapter_one_trade_carryover_log',
+            'TV_CHAPTER_ONE_TRADE_CARRYOVER_EVENT',
+            'introMissionDelivered=true',
+            'secondMissionDelivered=true',
+            'tradeCargoReservedAlongsideSecondMission=true',
+            'tradeCargoPreservedThroughSecondDelivery=true',
+            'tradeCargoSoldAtSiriusStation=true',
+            'cargoUsedAfterSale=0',
+            'sourceLabel=terminal-velocity-chapter-one-trade-carryover-scaffold',
+            'oracleStatus=chapter_one_trade_carryover_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$ChapterOneTradeCarryoverLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-chapter-one-trade-carryover-log', run_script)
+        self.assertIn('tv-chapter-one-trade-carryover-log', wrapper)
+        self.assertIn('Chapter-one trade carryover scenario contract', plan)
+
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
