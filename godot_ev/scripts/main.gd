@@ -79,6 +79,7 @@ const LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_LEGAL_DOCKING_EVENT"
 const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
 const WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_REPUTATION_GATE_EVENT"
 const WEAPON_CREDIT_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_CREDIT_GATE_EVENT"
+const WEAPON_AVAILABILITY_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_AVAILABILITY_GATE_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
@@ -320,6 +321,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_reputation_gate_log")
 	if OS.get_cmdline_args().has("--tv-weapon-credit-gate-log") or OS.get_cmdline_user_args().has("--tv-weapon-credit-gate-log"):
 		call_deferred("_run_weapon_credit_gate_log")
+	if OS.get_cmdline_args().has("--tv-weapon-availability-gate-log") or OS.get_cmdline_user_args().has("--tv-weapon-availability-gate-log"):
+		call_deferred("_run_weapon_availability_gate_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -2837,6 +2840,50 @@ func _run_weapon_credit_gate_log() -> void:
 	_buy_selected_outfit_or_weapon()
 	var weapon_bought_after_funding := int(owned_weapons.get(selected_weapon, 0)) == 1
 	print("%s system=%s body=%s government=\"%s\" legalScore=%d reputation=%d selectedWeapon=%s weaponPrice=%d creditsBefore=%d creditsAfterFunding=%d weaponCreditBlocked=%s weaponBoughtAfterFunding=%s blockedMessage=\"%s\" sourceLabel=terminal-velocity-weapon-credit-gate-scaffold oracleStatus=classic_runtime_weapon_purchase_credit_flow_pending" % [WEAPON_CREDIT_GATE_EVENT_LOG_PREFIX, current_system.get("name", "?"), body_name, government_name, int(legal_records.get(government_name, 0)), int(reputation_scores.get(government_name, 0)), selected_weapon, selected_weapon_price, credits_before, credits_after_funding, str(weapon_credit_blocked), str(weapon_bought_after_funding), blocked_message])
+	get_tree().quit(0)
+
+func _run_weapon_availability_gate_log() -> void:
+	_reset_travel_state()
+	var selected_weapon := "pulse_cannon"
+	var unavailable_system_name := "Sol"
+	var unavailable_body_name := "Earth"
+	current_system_index = _system_index_by_name(unavailable_system_name, current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == unavailable_body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			break
+	var unavailable_government_name := _current_government_name()
+	legal_records[unavailable_government_name] = 0
+	reputation_scores[unavailable_government_name] = 6
+	credits = 100000
+	landing_tab = 2
+	var unavailable_sale_items := _outfitter_sale_items(_current_body())
+	var weapon_available_at_unavailable_body := false
+	for item in unavailable_sale_items:
+		if str(item.get("id", "")) == selected_weapon:
+			weapon_available_at_unavailable_body = true
+			break
+	status_messages.clear()
+	var bought_at_unavailable_body := _buy_outfit_or_weapon_by_id(selected_weapon)
+	var unavailable_blocked_message := "Item not sold here: %s" % selected_weapon
+	var weapon_availability_blocked := status_messages.has(unavailable_blocked_message) and not bought_at_unavailable_body and not owned_weapons.has(selected_weapon)
+	var recovery_system_name := "Sirius"
+	var recovery_body_name := "Sirius Station"
+	current_system_index = _system_index_by_name(recovery_system_name, current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == recovery_body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			break
+	var recovery_government_name := _current_government_name()
+	legal_records[recovery_government_name] = 0
+	reputation_scores[recovery_government_name] = 6
+	status_messages.clear()
+	var bought_after_relocation := _buy_outfit_or_weapon_by_id(selected_weapon)
+	var weapon_bought_after_relocation := bought_after_relocation and int(owned_weapons.get(selected_weapon, 0)) == 1
+	print("%s unavailableSystem=%s unavailableBody=\"%s\" unavailableGovernment=\"%s\" recoverySystem=%s recoveryBody=\"%s\" recoveryGovernment=\"%s\" selectedWeapon=%s credits=%d legalScore=%d reputation=%d weaponAvailableAtUnavailableBody=%s weaponAvailabilityBlocked=%s weaponBoughtAfterRelocation=%s blockedMessage=\"%s\" sourceLabel=terminal-velocity-weapon-availability-gate-scaffold oracleStatus=classic_runtime_weapon_service_availability_pending" % [WEAPON_AVAILABILITY_GATE_EVENT_LOG_PREFIX, unavailable_system_name, unavailable_body_name, unavailable_government_name, recovery_system_name, recovery_body_name, recovery_government_name, selected_weapon, credits, int(legal_records.get(unavailable_government_name, 0)), int(reputation_scores.get(unavailable_government_name, 0)), str(weapon_available_at_unavailable_body), str(weapon_availability_blocked), str(weapon_bought_after_relocation), unavailable_blocked_message])
 	get_tree().quit(0)
 
 func _run_legal_patrol_posture_log() -> void:
@@ -6545,14 +6592,34 @@ func _buy_selected_outfit_or_weapon() -> void:
 		_set_status("No outfitter stock")
 		return
 	var item: Dictionary = sale_items[selected_landing_item % sale_items.size()]
+	if _buy_outfit_or_weapon_item(item, government_name):
+		_play_sound("ui_click")
+
+func _buy_outfit_or_weapon_by_id(item_id: String) -> bool:
+	if _disabled_player_action_blocked():
+		return false
+	var government_name := _current_government_name()
+	if not _legal_service_access_allowed(government_name):
+		_set_status(_legal_service_blocked_message(government_name))
+		return false
+	for item in _outfitter_sale_items(_current_body()):
+		if str(item.get("id", "")) == item_id:
+			var bought := _buy_outfit_or_weapon_item(item, government_name)
+			if bought:
+				_play_sound("ui_click")
+			return bought
+	_set_status("Item not sold here: %s" % item_id)
+	return false
+
+func _buy_outfit_or_weapon_item(item: Dictionary, government_name: String) -> bool:
 	var service_name := "weapons" if item.get("saleType", "") == "weapon" else "outfitter"
 	if not _service_access_allowed(service_name, government_name):
 		_set_status(_service_blocked_message(service_name, government_name))
-		return
+		return false
 	var price := int(item.get("price", 0))
 	if credits < price:
 		_set_status("Not enough credits")
-		return
+		return false
 	credits -= price
 	var item_id := str(item.get("id", ""))
 	if item.get("saleType", "") == "weapon":
@@ -6564,7 +6631,7 @@ func _buy_selected_outfit_or_weapon() -> void:
 		player_hull = min(_max_player_hull(), player_hull + int(effects.get("maxHull", 0)))
 		player_fuel = min(_max_player_fuel(), player_fuel + int(effects.get("maxFuel", 0)))
 	_set_status("Bought " + str(item.get("name", item_id)))
-	_play_sound("ui_click")
+	return true
 
 func _shipyard_listings(body: Dictionary) -> Array:
 	var inventory := _station_inventory(body)

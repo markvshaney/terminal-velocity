@@ -1047,6 +1047,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_LEGAL_SERVICE_GATE_EVENT',
             'TV_WEAPON_REPUTATION_GATE_EVENT',
             'TV_WEAPON_CREDIT_GATE_EVENT',
+            'TV_WEAPON_AVAILABILITY_GATE_EVENT',
             'TV_LEGAL_PATROL_POSTURE_EVENT',
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             'TV_MISSION_STORY_GATE_EVENT',
@@ -1057,6 +1058,7 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-legal-service-gate-log',
             '--tv-weapon-reputation-gate-log',
             '--tv-weapon-credit-gate-log',
+            '--tv-weapon-availability-gate-log',
             '--tv-legal-patrol-posture-log',
             '--tv-mission-legal-eligibility-log',
             '--tv-mission-story-gate-log',
@@ -1065,6 +1067,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_legal_service_gate_log',
             'func _run_weapon_reputation_gate_log',
             'func _run_weapon_credit_gate_log',
+            'func _run_weapon_availability_gate_log',
             'func _run_legal_patrol_posture_log',
             'func _run_mission_legal_eligibility_log',
             'func _run_mission_story_gate_log',
@@ -1141,9 +1144,14 @@ class NativeEvModelTests(unittest.TestCase):
             'clemencyFundedAfterTrade=%s',
             'sourceLabel=terminal-velocity-weapon-reputation-gate-scaffold',
             'sourceLabel=terminal-velocity-weapon-credit-gate-scaffold',
+            'sourceLabel=terminal-velocity-weapon-availability-gate-scaffold',
             'oracleStatus=classic_runtime_weapon_purchase_credit_flow_pending',
+            'oracleStatus=classic_runtime_weapon_service_availability_pending',
             'weaponCreditBlocked=%s',
             'weaponBoughtAfterFunding=%s',
+            'weaponAvailableAtUnavailableBody=%s',
+            'weaponAvailabilityBlocked=%s',
+            'weaponBoughtAfterRelocation=%s',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('tv-legal-status-log', run_script)
@@ -1151,6 +1159,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-legal-service-gate-log', run_script)
         self.assertIn('tv-weapon-reputation-gate-log', run_script)
         self.assertIn('tv-weapon-credit-gate-log', run_script)
+        self.assertIn('tv-weapon-availability-gate-log', run_script)
         self.assertIn('tv-legal-patrol-posture-log', run_script)
         self.assertIn('tv-mission-legal-eligibility-log', run_script)
         self.assertIn('tv-legal-consequence-log', run_script)
@@ -1163,6 +1172,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LegalServiceGateLog', windows_script)
         self.assertIn('[switch]$WeaponReputationGateLog', windows_script)
         self.assertIn('[switch]$WeaponCreditGateLog', windows_script)
+        self.assertIn('[switch]$WeaponAvailabilityGateLog', windows_script)
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
         self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)

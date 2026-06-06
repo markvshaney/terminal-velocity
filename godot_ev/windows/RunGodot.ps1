@@ -58,6 +58,7 @@ param(
     [switch]$LegalServiceGateLog,
     [switch]$WeaponReputationGateLog,
     [switch]$WeaponCreditGateLog,
+    [switch]$WeaponAvailabilityGateLog,
     [switch]$LegalPatrolPostureLog,
     [switch]$MissionLegalEligibilityLog,
     [switch]$MissionStoryGateLog,
@@ -196,6 +197,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-weapon-reputation-gate-log
 } elseif ($WeaponCreditGateLog) {
     & $Godot --headless --path $Project -- --tv-weapon-credit-gate-log
+} elseif ($WeaponAvailabilityGateLog) {
+    & $Godot --headless --path $Project -- --tv-weapon-availability-gate-log
 } elseif ($LegalPatrolPostureLog) {
     & $Godot --headless --path $Project -- --tv-legal-patrol-posture-log
 } elseif ($MissionLegalEligibilityLog) {
