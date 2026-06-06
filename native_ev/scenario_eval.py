@@ -51,6 +51,7 @@ SCENARIO_CURRICULUM = [
     'cargo_expansion_trade_loop',
     'fuel_reserve_upgrade_loop',
     'hull_plating_repair_loop',
+    'balanced_upgrade_trade_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1385,6 +1386,33 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'repair_hull'},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'repair_service_fill', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'balanced_upgrade_trade_loop':
+        source_label = 'terminal-velocity-balanced-upgrade-trade-scaffold'
+        oracle_status = 'balanced_upgrade_budget_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'credits': 3600}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'cargo_pod', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'fuel_tank', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'hull_plating', 'sourceLabel': source_label, 'oracleStatus': oracle_status, 'expectBlocked': True},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'budget_gap_after_cargo_and_fuel', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'trade_funded_final_refit', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'hull_plating', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'balanced_refit_complete', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2339,6 +2367,20 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_hull_plating_upgrade': 'passed' if outfit_events and outfit_events[-1].get('maxHull') == STARTING_MAX_HULL + 25 and state.get('ownedOutfits', {}).get('hull_plating') == 1 else 'failed',
             'repaired_added_hull_capacity': 'passed' if repair_events and repair_events[-1].get('hullBefore') == STARTING_MAX_HULL and repair_events[-1].get('hullAfter') == STARTING_MAX_HULL + 25 and repair_events[-1].get('cost') == 25 * 8 and state.get('currentHull') == state.get('maxHull') == STARTING_MAX_HULL + 25 else 'failed',
             'recorded_hull_refit_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-hull-plating-repair-scaffold' and event.get('oracleStatus') == 'hull_plating_repair_pending_classic_runtime_trace' for event in source_events) and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
+        })
+    elif name == 'balanced_upgrade_trade_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        outfit_events = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon']
+        blocked_outfit_events = [event for event in trace if event.get('type') == 'blocked_buy_outfit_or_weapon']
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        source_events = checkpoints + outfit_events + blocked_outfit_events + trade_events
+        checks.update({
+            'blocked_hull_plating_until_trade_funding': 'passed' if any(event.get('itemId') == 'hull_plating' and event.get('reason') == 'insufficient credits' and event.get('credits') == 900 for event in blocked_outfit_events) else 'failed',
+            'completed_balanced_upgrade_trade_run': 'passed' if len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 2 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 2 else 'failed',
+            'bought_cargo_fuel_and_hull_upgrades': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and state.get('ownedOutfits', {}).get('fuel_tank') == 1 and state.get('ownedOutfits', {}).get('hull_plating') == 1 and state.get('cargoCapacity') == STARTING_CARGO_CAPACITY + 10 and state.get('maxFuel') == STARTING_FUEL + 25 and state.get('maxHull') == STARTING_MAX_HULL + 25 else 'failed',
+            'repaired_final_hull_refit': 'passed' if repair_events and repair_events[-1].get('hullBefore') == STARTING_MAX_HULL and repair_events[-1].get('hullAfter') == STARTING_MAX_HULL + 25 and state.get('currentHull') == STARTING_MAX_HULL + 25 and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' else 'failed',
+            'recorded_balanced_upgrade_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-balanced-upgrade-trade-scaffold' and event.get('oracleStatus') == 'balanced_upgrade_budget_pending_classic_runtime_trace' for event in source_events) and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

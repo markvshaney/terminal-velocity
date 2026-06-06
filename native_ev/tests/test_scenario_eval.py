@@ -30,6 +30,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'cargo_expansion_trade_loop',
                 'fuel_reserve_upgrade_loop',
                 'hull_plating_repair_loop',
+                'balanced_upgrade_trade_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -390,6 +391,41 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['credits'], 8000)
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-hull-plating-repair-scaffold' for event in checkpoints + outfit_events))
         self.assertTrue(all(event['oracleStatus'] == 'hull_plating_repair_pending_classic_runtime_trace' for event in checkpoints + outfit_events))
+
+    def test_balanced_upgrade_trade_loop_funds_final_refit_with_trade_run(self):
+        result = run_scripted_scenario('balanced_upgrade_trade_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['blocked_hull_plating_until_trade_funding'], 'passed')
+        self.assertEqual(result['checks']['completed_balanced_upgrade_trade_run'], 'passed')
+        self.assertEqual(result['checks']['bought_cargo_fuel_and_hull_upgrades'], 'passed')
+        self.assertEqual(result['checks']['repaired_final_hull_refit'], 'passed')
+        self.assertEqual(result['checks']['recorded_balanced_upgrade_source_boundary'], 'passed')
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['budget_gap_after_cargo_and_fuel', 'trade_funded_final_refit', 'balanced_refit_complete'])
+        blocked_outfit_events = [event for event in result['trace'] if event['type'] == 'blocked_buy_outfit_or_weapon']
+        self.assertEqual(blocked_outfit_events[0]['itemId'], 'hull_plating')
+        self.assertEqual(blocked_outfit_events[0]['reason'], 'insufficient credits')
+        self.assertEqual(blocked_outfit_events[0]['credits'], 900)
+        outfit_events = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon']
+        self.assertEqual([event['itemId'] for event in outfit_events], ['cargo_pod', 'fuel_tank', 'hull_plating'])
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertEqual([event['commodity'] for event in trade_events], ['food', 'food', 'food', 'food'])
+        repair_events = [event for event in result['trace'] if event['type'] == 'repair_hull']
+        self.assertEqual(repair_events[-1]['cost'], 200)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['ownedOutfits'].get('cargo_pod'), 1)
+        self.assertEqual(result['state']['ownedOutfits'].get('fuel_tank'), 1)
+        self.assertEqual(result['state']['ownedOutfits'].get('hull_plating'), 1)
+        self.assertEqual(result['state']['cargoCapacity'], 30)
+        self.assertEqual(result['state']['maxFuel'], 31)
+        self.assertEqual(result['state']['maxHull'], 125)
+        self.assertEqual(result['state']['currentHull'], 125)
+        self.assertEqual(result['state']['credits'], 460)
+        source_events = checkpoints + outfit_events + blocked_outfit_events + trade_events
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-balanced-upgrade-trade-scaffold' for event in source_events))
+        self.assertTrue(all(event['oracleStatus'] == 'balanced_upgrade_budget_pending_classic_runtime_trace' for event in source_events))
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')

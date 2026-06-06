@@ -147,6 +147,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"cargo_expansion_trade_loop",
 		"fuel_reserve_upgrade_loop",
 		"hull_plating_repair_loop",
+		"balanced_upgrade_trade_loop",
 		"mission_runner_first_delivery",
 		"scan_intro_mission_offers",
 		"intro_courier_mission_delivery",

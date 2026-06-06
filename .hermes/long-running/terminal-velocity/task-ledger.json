@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": false,
+    "dirty": true,
     "head": "ce3a07fed8641deafaf00cf3a887d7e226dbd394 (remote-verified after hull_plating_repair_loop push; inspect live git for current HEAD if advanced)",
     "origin_main": "ce3a07fed8641deafaf00cf3a887d7e226dbd394 (remote-verified after hull_plating_repair_loop push; inspect live git for current origin/main if advanced)",
-    "status_short": "## main...origin/main clean after remote-verified hull_plating_repair_loop push; successor t_7e6b950d created pending dispatch"
+    "status_short": "balanced_upgrade_trade_loop slice verified pending full regression/local commit; inspect live git for exact state"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": false
+    "dirty": true
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_7e6b950d",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_created_pending_dispatch",
+    "status": "balanced_upgrade_trade_loop_verified_pending_local_commit_review",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T09:19:56Z",
+    "updated_at": "2026-06-06T09:30:50Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -83,6 +83,7 @@
     "terminal-velocity-provenance"
   ],
   "safe_backlog": [
+    "balanced_upgrade_trade_loop verified pending full regression/local commit: sourceLabel=terminal-velocity-balanced-upgrade-trade-scaffold; oracleStatus=balanced_upgrade_budget_pending_classic_runtime_trace; repair service uses existing repair_service_pending_ev_classic_runtime_trace.",
     {
       "id": "stabilize-service-provisioning-slice",
       "description": "Review/stage/commit the Godot service-provisioning probe bundle after verification; do not start unrelated behavior if this slice is still dirty/unreviewed.",
@@ -127,11 +128,13 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_hull_plating_repair_loop_buys_armor_and_repairs_added_hull -v -> OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 203 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all -> {'failed': 0, 'passed': 69, 'total': 69}",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=69",
-    "git push origin main; git fetch origin; HEAD == origin/main ce3a07f"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_balanced_upgrade_trade_loop_funds_final_refit_with_trade_run -> OK",
+    "python3 tools/run_gameplay_scenarios.py balanced_upgrade_trade_loop --pretty -> success true; final credits 460; cargo/fuel/hull upgrades installed; hull 125/125",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 204 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=70 failed=0 total=70",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=70",
+    "git diff --check -> OK",
+    "gameplay_curriculum.json, task-ledger.json, and events.jsonl parse OK"
   ],
   "active_gate": {
     "type": "none",
@@ -146,9 +149,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch/continue successor t_7e6b950d from clean origin/main and implement the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing strategy/upgrade/cargo/fuel reserve/hull plating repair work.",
-  "resume_prompt": "Continue Terminal Velocity development from remote-verified hull_plating_repair_loop commit; inspect live git/Kanban state, then run the next safe source-aligned vertical slice.",
-  "updated_at": "2026-06-06T09:19:56Z",
+  "next_resume_action": "Commit local balanced_upgrade_trade_loop checkpoint if final git/no-secrets checks are clean, then block t_7e6b950d for review/integrator handling; do not push from worker.",
+  "resume_prompt": "Continue Terminal Velocity from t_7e6b950d: balanced_upgrade_trade_loop adds constrained 3,600-credit Earth refit budget, cargo/fuel upgrades, blocked hull-plating affordability, two-lot Sol Food funding run to Levo, final hull-plating purchase and repair at Earth. Verify full native scenarios and Godot self-test, commit locally, then review/integrator handles push; do not redo this slice.",
+  "updated_at": "2026-06-06T09:30:50Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

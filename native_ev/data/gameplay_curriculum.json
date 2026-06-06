@@ -18,6 +18,7 @@
     "cargo_expansion_trade_loop",
     "fuel_reserve_upgrade_loop",
     "hull_plating_repair_loop",
+    "balanced_upgrade_trade_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -122,6 +123,10 @@
     "hull_plating_repair_loop": {
       "purpose": "Hull-plating repair loop: buy reinforced hull plating at Earth, verify the added maximum hull creates repairable capacity, then repair at a service port using the manifest price-per-hull-point while preserving explicit Classic-runtime-pending labels.",
       "surface": "outfitter/repair service hull-upgrade scaffold"
+    },
+    "balanced_upgrade_trade_loop": {
+      "purpose": "Balanced upgrade trade loop: start from a constrained 3,600-credit refit budget at Earth, buy cargo and fuel upgrades, verify hull plating is blocked until a Sol-to-Levo Food run funds the final hull refit and repair, and preserve explicit Classic-runtime-pending labels.",
+      "surface": "multi-upgrade budget/trade-funded repair scaffold"
     },
     "mission_runner_first_delivery": {
       "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",
