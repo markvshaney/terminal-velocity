@@ -25,7 +25,7 @@
     "active_task_id": "t_68f856c5",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_ready_pending_dispatch",
+    "status": "worker_slice_checkpoint_pending_review",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T11:26:09.614737Z",
+    "updated_at": "2026-06-06T11:32:43Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter repair mission margin help surface remote-verified; successor continuation card t_68f856c5 created for next safe local slice.",
+  "current_milestone": "Disposable combat evidence gate help surface implemented locally; player-facing F10 help and Godot help-log probe verified; pending human review/commit integration.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -128,6 +128,13 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -> RED failure before help_overlay.json update; then OK",
+    "python3 -m json.tool native_ev/data/help_overlay.json >/tmp/help_overlay.valid -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hintCount=79; hasDisposableCombatEvidenceGateHelp=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 212 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=78 failed=0 total=78",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=78",
+    "git diff --check -> OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK (after RED failure before data update)",
     "python3 -m json.tool native_ev/data/help_overlay.json >/dev/null -> OK",
     "python3 tools/run_gameplay_scenarios.py light_freighter_repair_mission_margin_loop --pretty -> success true; final credits 9302; hull 300/300; cargo empty",
@@ -139,14 +146,7 @@
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 212 tests OK",
     "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_mission_margin_loop_repairs_after_bulk_delivery_and_margin_sale -v -> OK; python3 tools/run_gameplay_scenarios.py light_freighter_repair_mission_margin_loop --pretty -> success true; repaired hull 260->300; final credits 9302",
     "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_margin_loop_funds_hull_repair_after_margin_sale native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order -v -> OK",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_repair_margin_loop --pretty -> success true; repaired hull 260->300; final credits 2080",
-    "python3 -m json.tool native_ev/data/gameplay_curriculum.json >/dev/null -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json >/dev/null -> OK",
-    "events JSONL validation -> events jsonl OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 81 tests OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 211 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=77 failed=0 total=77",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=77"
+    "python3 tools/run_gameplay_scenarios.py light_freighter_repair_margin_loop --pretty -> success true; repaired hull 260->300; final credits 2080"
   ],
   "active_gate": "none",
   "heartbeat_status": {
@@ -156,9 +156,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch/continue Kanban task t_68f856c5 for exactly one next source-aligned safe local Terminal Velocity gameplay/fidelity vertical slice; do not redo Light Freighter repair mission margin scenario or help/probe work.",
-  "resume_prompt": "Continue Terminal Velocity from clean origin/main; inspect task t_68f856c5, ledger/events tail, continuation prompt, backlog, and live git state, then implement one new source-aligned gameplay/fidelity vertical slice with verification and checkpoint.",
-  "updated_at": "2026-06-06T11:26:09.614737Z",
+  "next_resume_action": "Review/commit the disposable combat evidence gate help-surface slice, or continue with the next source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo Light Freighter repair mission margin work or this disposable combat help gate.",
+  "resume_prompt": "Continue Terminal Velocity from current main workspace; inspect task t_68f856c5, ledger/events tail, continuation prompt, backlog, and live git state, then either review/commit the disposable combat evidence gate help slice or implement one new source-aligned gameplay/fidelity vertical slice with verification and checkpoint.",
+  "updated_at": "2026-06-06T11:32:43Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -208,7 +208,8 @@
     "Do not redo light_freighter_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo light_freighter_bulk_margin_choice_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo light_freighter_bulk_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo light_freighter_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo disposable combat evidence gate help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
@@ -223,20 +224,18 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "light-freighter-repair-mission-margin-help-surface",
-    "summary": "Promoted the existing light_freighter_repair_mission_margin_loop symbolic outcome into F10 help with an explicit Godot log probe hasLightFreighterRepairMissionMarginRecoveryHelp.",
-    "commit": "2a369604fc2cc84b4024e862c1480f85bc8ccbb9",
+    "id": "disposable-combat-evidence-gate-help-surface",
+    "summary": "Promoted the existing disposable_combat_placeholder / pirate-combat safety boundary into F10 help with explicit Godot log probe hasDisposableCombatEvidenceGateHelp; no Classic combat behavior claim made.",
+    "commit": "local checkpoint pending commit; inspect git rev-parse HEAD",
     "source_fidelity_labels": [
-      "terminal-velocity-light-freighter-repair-mission-margin-scaffold",
-      "light_freighter_repair_mission_margin_pending_classic_runtime_trace",
-      "terminal-velocity-repair-service-scaffold",
-      "repair_service_pending_ev_classic_runtime_trace",
       "terminal-velocity-curriculum-scaffold",
-      "help_surface_pending_playtest"
+      "help_surface_pending_playtest",
+      "terminal-velocity guardrail/help surface",
+      "Classic combat evidence pending"
     ]
   },
   "git_state": {
     "dirty": false,
-    "status_short": "clean; HEAD == origin/main after integrator push"
+    "status_short": "local checkpoint committed on main; branch ahead origin/main by 1; review required before Kanban completion"
   }
 }

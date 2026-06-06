@@ -70,6 +70,7 @@
     "Shield recharge recovery: after taking retaliation damage, break off and wait for the Player Info shield-recharge cadence before re-engaging; disabled hulls still need F8 recovery. Classic timing pending.",
     "Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
     "Pirate low-fuel recovery: if a pirate-avoidance jump is blocked for empty fuel, stay on the safe route, refuel at a service port, then escape before engaging. TV scaffold; exact Classic pirate/fuel behavior pending.",
+    "Disposable combat evidence gate: before any pirate/combat Classic-runtime trace, use a disposable non-Strict pilot, verify controls/save state, avoid reusable pilots, and stop if hull/shields are unsafe. TV guardrail; Classic combat evidence pending.",
     "Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
     "Contraband recovery: if Player Info flags cargo as illegal for the current government, sell or reroute before landing scans, or budget clemency after confiscation. TV scaffold; exact Classic scan/bribe UI pending.",
     "Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
@@ -252,6 +253,11 @@
       "flag": "hasPirateLowFuelRecoveryHelp",
       "source": "help",
       "contains": "Pirate low-fuel recovery: if a pirate-avoidance jump is blocked for empty fuel"
+    },
+    {
+      "flag": "hasDisposableCombatEvidenceGateHelp",
+      "source": "help",
+      "contains": "Disposable combat evidence gate: before any pirate/combat Classic-runtime trace"
     },
     {
       "flag": "hasContrabandHelp",
