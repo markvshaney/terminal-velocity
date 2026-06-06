@@ -283,6 +283,8 @@ class NativeEvModelTests(unittest.TestCase):
             'Last-day delivery recovery: timed TV missions can still deliver on the current scaffold deadline day; verify Mission Log/Player Info shows reward paid, cargo released, and no failure flag before waiting longer. Classic date inclusivity/UI pending.',
             'Completed deadline recovery: after delivering a timed TV mission, waiting past the former deadline should not create a late failure; verify Mission Log/Player Info shows completed/rewarded and no failure flag before re-planning. Classic cleanup UI pending.',
             'Active deadline recovery: before waiting or rerouting, check Mission Log/Player Info days remaining and complete timed deliveries before the TV deadline scaffold expires. Exact Classic date UI pending.',
+            'Mission return trade margin: before buying return-leg cargo after a delivery, compare destination and linked-market prices; skip negative-margin cargo and finish the contract chain. TV scaffold; Classic behavior pending.',
+            'Movement tuning: arrows/WASD use the current Terminal Velocity inertial flight scaffold; coast, turn, and thrust deliberately drift, while exact EV Classic acceleration/facing frame order remains pending runtime comparison.',
             'Afterburner: Z gives a Terminal Velocity thrust boost and drains fuel; if it is blocked, refuel at a landed service port before retrying. Exact Classic curve pending.',
             'Afterburner fuel recovery: if Z is blocked for empty fuel, land at a service port and refuel with F5 before retrying; TV scaffold, exact Classic fuel thresholds pending.',
             'Afterburner launch recovery: if Z is blocked while landed, launch first with L, then boost only after clearing port; TV scaffold, exact Classic landed afterburner behavior pending.',
@@ -311,6 +313,7 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertIn(expected_line, help_lines)
         for flag in [
             'hasAfterburnerHelp',
+            'hasMovementTuningHelp',
             'hasAfterburnerFuelRecoveryHelp',
             'hasAfterburnerLaunchRecoveryHelp',
             'hasAfterburnerDisabledRecoveryHelp',

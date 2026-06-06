@@ -7,7 +7,7 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no",
+    "dirty": "yes",
     "head": "5ad317e42531acd326d0ddb887cae93b8ff71f39",
     "status_short": "## main...origin/main",
     "origin_main": "5ad317e42531acd326d0ddb887cae93b8ff71f39"
@@ -16,7 +16,7 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no"
+    "dirty": "yes"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_fb2a984c",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_ready_for_dispatch",
+    "status": "worker_local_slice_verified_pending_commit",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -105,8 +105,8 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Mission legal eligibility recovery help remote-verified; successor Kanban continuation card queued from HEAD 5ad317e.",
-  "last_commit": "feat(godot): add mission legal eligibility help",
+  "current_milestone": "Movement tuning help slice verified locally; F10 help now labels inertial flight as a Terminal Velocity scaffold while exact EV Classic movement/facing remains pending original-runtime comparison.",
+  "last_commit": "pending local commit: feat(godot): surface movement tuning help",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -122,11 +122,10 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v failed on missing Mission legal eligibility recovery help line",
+    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v failed on missing Movement tuning help line",
     "GREEN: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionLegalEligibilityRecoveryHelp=true",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
-    "./run_godot.sh tv-mission-legal-eligibility-log -> visibleBlockedReason=true blockedTitleVisible=true blockedSourceVisible=true",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMovementTuningHelp=true",
+    "./run_godot.sh tv-movement-log -> scenario=thrust_right_turn present; deterministic movement fields emitted",
     "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 193 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> passed=62 failed=0 total=62",
@@ -134,13 +133,13 @@
     "git diff --check -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK lines=599 before event append"
+    "events.jsonl parse -> OK lines=602 before event append"
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Mission legal eligibility recovery help slice is remote-verified and successor Kanban task is ready for dispatcher pickup.",
-    "withheld_action": "None for safe-local continuation. Worker still withholds push per policy; loki-game integrator handles normal non-force pushes by checklist/trigger.",
-    "resume_after": "Kanban dispatcher claims t_fb2a984c or watchdog next tick runs a dispatch pass."
+    "reason": "Movement tuning help slice is safe-local, verified, and ready for local commit; worker withholds push per policy.",
+    "withheld_action": "Normal push to origin/main is deferred to loki-game integrator policy, not blocked for worker continuation.",
+    "resume_after": "After local commit, loki-game integrator may review/push by checklist; successor work can continue from local HEAD."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -149,9 +148,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatcher/watchdog should run Kanban task t_fb2a984c for the next source-aligned safe local Terminal Velocity gameplay/fidelity slice from remote-verified HEAD 5ad317e; worker edits/tests/commits locally and does not push.",
-  "resume_prompt": "Resume Terminal Velocity from the live repo state. Read ledger/events/prompt/backlog, inspect git state, honor terminal-velocity worker no-push policy, and implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs before committing locally.",
-  "updated_at": "2026-06-06T05:50:28Z",
+  "next_resume_action": "After local commit, continue from the movement-tuning help checkpoint and pick the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; worker edits/tests/commits locally and does not push.",
+  "resume_prompt": "Resume Terminal Velocity from live repo state. Read ledger/events/prompt/backlog, honor terminal-velocity worker no-push policy, avoid redoing movement-tuning help if present, and implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs before committing locally.",
+  "updated_at": "2026-06-06T05:54:11Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",

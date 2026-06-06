@@ -169,7 +169,7 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
 - [ ] Movement tuning: turn rate, acceleration curve, max speed, inertial drift
   - Status: `instrumented / needs original comparison`
   - Source: behavior baseline checklist marks exact original acceleration/max-speed/drift integration as unknown; decoded EV Classic ship fields are wired and Terminal Velocity now emits deterministic movement scenarios.
-  - Implementation/instrumentation: `RunGodot.ps1 -MovementLog` emits `right_turn`, `left_turn`, `thrust`, `coast`, and `thrust_right_turn` scenarios with tick count, facing index, angle, velocity, position, and selected ship physics fields.
+  - Implementation/instrumentation: `RunGodot.ps1 -MovementLog` emits `right_turn`, `left_turn`, `thrust`, `coast`, and `thrust_right_turn` scenarios with tick count, facing index, angle, velocity, position, and selected ship physics fields. F10 help now surfaces a movement-tuning boundary so players understand arrows/WASD use the current Terminal Velocity inertial flight scaffold, drift/coast are expected, and exact EV Classic acceleration/facing frame order remains pending runtime comparison; `./run_godot.sh tv-gameplay-curriculum-help-log` verifies `hasMovementTuningHelp=true`.
   - Next action: capture original-runtime acceleration/max-speed/drift against the same scenario shape, then tune Terminal Velocity integration if the deterministic logs diverge.
 
 - [ ] Afterburner acceleration and fuel-use behavior
