@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": "no",
-    "head": "a3434d411694880498fb2d78dee388b8fa1051fa",
-    "status_short": "## main...origin/main",
-    "origin_main": "a3434d411694880498fb2d78dee388b8fa1051fa"
+    "head": "inspect with git rev-parse HEAD; commit-containing ledger avoids self-staling SHA",
+    "status_short": "## main...origin/main [ahead 1] after local checkpoint commit",
+    "origin_main": "0bcdd06bc9c5a6a62a43cfe509d2dd55104c9574"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": "no"
   },
@@ -105,8 +105,8 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Weapon reputation gate slice remote-verified; successor Kanban continuation card queued from HEAD a3434d4.",
-  "last_commit": "feat(godot): gate weapon buys by reputation",
+  "current_milestone": "Mission legal eligibility recovery help slice locally committed; worker push is deferred to loki-game integrator policy.",
+  "last_commit": "feat(godot): add mission legal eligibility help",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -122,22 +122,25 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK after RED missing weapon reputation Godot surface",
-    "./run_godot.sh tv-weapon-reputation-gate-log -> weaponReputationBlocked=true weaponBoughtAfterReputation=true",
+    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v failed on missing Mission legal eligibility recovery help line",
+    "GREEN: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionLegalEligibilityRecoveryHelp=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-mission-legal-eligibility-log -> visibleBlockedReason=true blockedTitleVisible=true blockedSourceVisible=true",
     "python3 -m unittest native_ev.tests.test_model -v -> 127 tests OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> 193 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 193 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
     "git diff --check -> OK",
+    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
     "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK lines=597 before event append",
-    "added-lines secret scan -> NONE",
-    "npm test -- --run / npm run build -> blocked: no package.json at repo root"
+    "events.jsonl parse -> OK lines=599 before event append"
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Weapon reputation gate slice is remote-verified and successor Kanban task is ready for dispatcher pickup.",
-    "withheld_action": "None for safe-local continuation. Worker still withholds push per policy; loki-game integrator handles normal non-force pushes by checklist/trigger.",
-    "resume_after": "Kanban dispatcher claims t_df9a9b0c or watchdog next tick runs a dispatch pass."
+    "reason": "Local mission legal eligibility recovery help checkpoint is committed and verified; push is deferred by worker policy, not a worker blocker.",
+    "withheld_action": "Normal non-force push to origin/main is withheld for loki-game integrator policy.",
+    "resume_after": "Integrator or successor worker inspects live git state and continues from local ahead checkpoint."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -146,9 +149,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatcher/watchdog should run Kanban task t_df9a9b0c for the next source-aligned safe local Terminal Velocity gameplay/fidelity slice from remote-verified HEAD a3434d4; worker edits/tests/commits locally and does not push.",
+  "next_resume_action": "Proceed from local commit feat(godot): add mission legal eligibility help; inspect live git status, avoid redoing this help slice, and pick the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice. terminal-velocity worker still does not push.",
   "resume_prompt": "Resume Terminal Velocity from the live repo state. Read ledger/events/prompt/backlog, inspect git state, honor terminal-velocity worker no-push policy, and implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs before committing locally.",
-  "updated_at": "2026-06-06T05:37:23Z",
+  "updated_at": "2026-06-06T05:42:12Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -203,5 +206,5 @@
   },
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
-  "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording so the commit containing this checkpoint does not stale its own metadata."
+  "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata."
 }
