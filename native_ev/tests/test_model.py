@@ -334,6 +334,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.',
             'Combat reward recovery: after a target is disabled, verify Player Info/HUD reward history and legal deltas before assuming a Classic bounty payout. TV scaffold; exact Classic bounty behavior pending.',
             'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
+            'Route invalid stop recovery: if Shift-click refuses the current system, a duplicate stop, or an unlinked tail stop, keep the preserved green route and choose a linked stop from the current route tail before retrying J. TV route-guardrail scaffold; exact Classic map refusal UI pending.',
         ]:
             self.assertIn(expected_line, help_lines)
         for flag in [
@@ -440,6 +441,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasRecentMessagesHelp',
             'hasBlockedActionHelp',
             'hasRouteClearHelp',
+            'hasRouteInvalidStopRecoveryHelp',
         ]:
             self.assertIn(flag, help_probes)
         self.assertEqual(help_probes['hasPirateAvoidanceHint']['source'], 'curriculum')
