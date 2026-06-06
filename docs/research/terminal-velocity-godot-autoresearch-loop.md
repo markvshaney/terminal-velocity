@@ -179,12 +179,16 @@ Mission alignment branch scenario contract:
 Mission alignment return-contract scenario contract:
 
 - `RunGodot.ps1 -MissionAlignmentReturnLog` / `--tv-mission-alignment-return-log`
-- Sets the fast-eval state to Sirius Station after `frontier_sample_hera_freeport`, verifies the non-branch return contract (`freeport_return_earth`) appears alongside both open `chapter_one_alignment` branch offers, then applies the Federation branch-completed state and verifies only the return contract remains available. The log records:
+- Sets the fast-eval state to Sirius Station after `frontier_sample_hera_freeport`, verifies the non-branch return contract (`freeport_return_earth`) appears alongside both open `chapter_one_alignment` branch offers, applies the Federation branch-completed state and verifies only the return contract remains available, then exercises accept/deliver loops for the return contract after both Federation and Freeport branch completion states. The log records:
   - Sirius Station scan system/body;
   - before-branch offer ids (`offersBeforeBranch`) including `freeport_return_earth`, `federation_report_freeport`, and `freeport_pact_smugglers`;
   - `returnContractVisibleWithBranches=true`;
   - post-Federation offer ids (`offersAfterFederation`) with only `freeport_return_earth`;
   - `returnContractVisibleAfterCompletion=true`;
+  - `returnContractAcceptedAfterFederation=true` and `returnContractDeliveredAfterFederation=true`;
+  - `returnContractAcceptedAfterFreeport=true` and `returnContractDeliveredAfterFreeport=true`;
+  - `returnContractCargoReleased=true` for the 5-ton return-contract cargo release in both branch paths;
+  - `returnContractRewardPaid=true` for the 3200-credit return-contract reward in both branch paths;
   - `alignmentReturnHelpVisible=true` for the F10 recovery guidance;
   - completed mission ids and story flags used by the timing scaffold;
   - `sourceLabel=terminal-velocity-observed`;

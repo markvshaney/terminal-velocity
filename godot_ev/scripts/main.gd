@@ -1203,7 +1203,9 @@ func _run_mission_alignment_return_log() -> void:
 	story_flags = ["frontier_samples_delivered"]
 	reputation_scores = {"Federation": 5, "Independent": 7}
 	legal_records = {"Federation": -20, "Independent": -90}
+	var branch_system_name := str(current_system.get("name", "?"))
 	var branch_body := _current_body()
+	var branch_body_name := str(branch_body.get("name", "None"))
 	var offers_before_branch := _available_missions(branch_body)
 	var offer_ids_before_branch := _mission_ids(offers_before_branch)
 	var return_visible_with_branches := offer_ids_before_branch.has("freeport_return_earth") and offer_ids_before_branch.has("federation_report_freeport") and offer_ids_before_branch.has("freeport_pact_smugglers")
@@ -1212,10 +1214,43 @@ func _run_mission_alignment_return_log() -> void:
 	var offers_after_federation := _available_missions(branch_body)
 	var offer_ids_after_federation := _mission_ids(offers_after_federation)
 	var return_visible_after_completion := offer_ids_after_federation == ["freeport_return_earth"]
+	var federation_return_result := _mission_alignment_return_delivery_result(["frontier_sample_hera_freeport", "federation_report_freeport"], ["frontier_samples_delivered", "chapter_one_choice_seen", "alignment_federation", "federation_intel_asset"])
+	var freeport_return_result := _mission_alignment_return_delivery_result(["frontier_sample_hera_freeport", "freeport_pact_smugglers"], ["frontier_samples_delivered", "chapter_one_choice_seen", "alignment_freeport", "freeport_network_asset"])
+	var return_contract_cargo_released := int(federation_return_result.get("cargoReleased", 0)) == 5 and int(freeport_return_result.get("cargoReleased", 0)) == 5
+	var return_contract_reward_paid := int(federation_return_result.get("rewardPaid", 0)) == 3200 and int(freeport_return_result.get("rewardPaid", 0)) == 3200
 	var help_text := "\n".join(_help_overlay_lines())
 	var alignment_return_help_visible := help_text.contains("Alignment return contracts: after choosing a chapter branch")
-	print("%s scanSystem=%s scanBody=\"%s\" offersBeforeBranch=%s returnContractVisibleWithBranches=%s offersAfterFederation=%s returnContractVisibleAfterCompletion=%s alignmentReturnHelpVisible=%s completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace returnBoundary=terminal_velocity_return_contract_timing_scaffold_exact_classic_offer_ui_pending status=\"%s\"" % [MISSION_ALIGNMENT_RETURN_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), str(branch_body.get("name", "None")), JSON.stringify(offer_ids_before_branch), str(return_visible_with_branches), JSON.stringify(offer_ids_after_federation), str(return_visible_after_completion), str(alignment_return_help_visible), JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
+	print("%s scanSystem=%s scanBody=\"%s\" offersBeforeBranch=%s returnContractVisibleWithBranches=%s offersAfterFederation=%s returnContractVisibleAfterCompletion=%s returnContractAcceptedAfterFederation=%s returnContractDeliveredAfterFederation=%s returnContractAcceptedAfterFreeport=%s returnContractDeliveredAfterFreeport=%s returnContractCargoReleased=%s returnContractRewardPaid=%s alignmentReturnHelpVisible=%s completedMissions=%s storyFlags=%s federationReturnStatus=\"%s\" freeportReturnStatus=\"%s\" sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace returnBoundary=terminal_velocity_return_contract_timing_scaffold_exact_classic_offer_ui_pending status=\"%s\"" % [MISSION_ALIGNMENT_RETURN_EVENT_LOG_PREFIX, branch_system_name, branch_body_name, JSON.stringify(offer_ids_before_branch), str(return_visible_with_branches), JSON.stringify(offer_ids_after_federation), str(return_visible_after_completion), str(bool(federation_return_result.get("accepted", false))), str(bool(federation_return_result.get("delivered", false))), str(bool(freeport_return_result.get("accepted", false))), str(bool(freeport_return_result.get("delivered", false))), str(return_contract_cargo_released), str(return_contract_reward_paid), str(alignment_return_help_visible), JSON.stringify(completed_missions), JSON.stringify(story_flags), str(federation_return_result.get("status", "")), str(freeport_return_result.get("status", "")), status_line])
 	get_tree().quit(0)
+
+func _mission_alignment_return_delivery_result(branch_completed_missions: Array, branch_story_flags: Array) -> Dictionary:
+	_reset_travel_state()
+	current_system_index = _system_index_by_name("Sirius", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	_position_at_body("Sirius Station")
+	landed = true
+	landing_tab = 0
+	selected_landing_item = 0
+	completed_missions = branch_completed_missions.duplicate()
+	story_flags = branch_story_flags.duplicate()
+	reputation_scores = {"Federation": 5, "Independent": 7}
+	legal_records = {"Federation": -20, "Independent": -90}
+	var credits_before_accept := credits
+	_accept_selected_mission()
+	var accepted := active_missions.has("freeport_return_earth")
+	var cargo_after_accept := cargo
+	current_system_index = _system_index_by_name("Sol", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	_position_at_body("Earth")
+	landed = true
+	var completed_now := _complete_arrived_missions()
+	return {
+		"accepted": accepted,
+		"delivered": completed_now.has("freeport_return_earth") and completed_missions.has("freeport_return_earth"),
+		"cargoReleased": cargo_after_accept - cargo,
+		"rewardPaid": credits - credits_before_accept,
+		"status": status_line,
+	}
 
 func _mission_ids(missions: Array) -> Array:
 	var ids := []
