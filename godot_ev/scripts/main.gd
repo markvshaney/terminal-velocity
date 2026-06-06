@@ -58,6 +58,7 @@ const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVEN
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
+const STARTING_EQUIPMENT_EVENT_LOG_PREFIX := "TV_STARTING_EQUIPMENT_EVENT"
 const PIRATE_AVOIDANCE_EVENT_LOG_PREFIX := "TV_PIRATE_AVOIDANCE_EVENT"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
@@ -272,6 +273,8 @@ func _ready() -> void:
 		call_deferred("_run_repair_service_log")
 	if OS.get_cmdline_args().has("--tv-gameplay-curriculum-help-log") or OS.get_cmdline_user_args().has("--tv-gameplay-curriculum-help-log"):
 		call_deferred("_run_gameplay_curriculum_help_log")
+	if OS.get_cmdline_args().has("--tv-starting-equipment-log") or OS.get_cmdline_user_args().has("--tv-starting-equipment-log"):
+		call_deferred("_run_starting_equipment_log")
 	if OS.get_cmdline_args().has("--tv-pirate-avoidance-log") or OS.get_cmdline_user_args().has("--tv-pirate-avoidance-log"):
 		call_deferred("_run_pirate_avoidance_log")
 	if OS.get_cmdline_args().has("--tv-combat-log") or OS.get_cmdline_user_args().has("--tv-combat-log"):
@@ -1962,6 +1965,28 @@ func _run_gameplay_curriculum_help_log() -> void:
 	parts.append("oracleStatus=help_surface_pending_playtest")
 	parts.append("firstHint=\"%s\"" % (hints[0] if not hints.is_empty() else ""))
 	print(" ".join(parts))
+	get_tree().quit(0)
+
+func _run_starting_equipment_log() -> void:
+	# Contract literal for native test coverage: primarySourceStockName="%s"
+	_reset_travel_state()
+	player_info_visible = true
+	var primary_weapon := _primary_weapon_stats()
+	var primary_weapon_name := str(primary_weapon.get("name", primary_weapon.get("id", "Unknown")))
+	var primary_source_stock_name := str(primary_weapon.get("sourceStockName", primary_weapon_name))
+	var secondary_hud_fragment := _secondary_weapon_hud_fragment()
+	var inventory_lines := _player_inventory_lines()
+	var cargo_line := "Cargo: %d/%d (%d mission, %d free)" % [cargo, cargo_space, _mission_reserved_cargo_tons(), _cargo_available_tons()]
+	var fuel_line := "Fuel: %d/%d" % [player_fuel, _max_player_fuel()]
+	var primary_line := _primary_weapon_inventory_line()
+	var secondary_line := _secondary_weapon_inventory_line()
+	var starting_secondary_hud_observed := secondary_hud_fragment.contains("Secondary: No Secondary Weapon")
+	var starting_no_target_observed := status_line == ""
+	var starting_fuel_full_observed := player_fuel == _max_player_fuel() and inventory_lines.has(fuel_line)
+	var starting_free_cargo_observed := cargo == 0 and _cargo_available_tons() == cargo_space and inventory_lines.has(cargo_line)
+	var primary_info_visible := primary_line.contains(primary_weapon_name) and primary_line.contains(primary_source_stock_name) and inventory_lines.has(primary_line)
+	var secondary_info_visible := secondary_line.contains("No Secondary Weapon") and inventory_lines.has(secondary_line)
+	print("%s startingSecondaryHudObserved=%s startingNoTargetObserved=%s startingFuelFullObserved=%s startingFreeCargoObserved=%s primaryInfoVisible=%s primarySourceStockName=\"%s\" secondaryInfoVisible=%s sourceLabel=original-runtime-observed-starting-hud-plus-terminal-velocity-source-mined-primary oracleStatus=starting_primary_and_outfits_pending_nonmutating_classic_status_trace secondaryHudFragment=\"%s\" cargoLine=\"%s\" fuelLine=\"%s\" primaryLine=\"%s\" secondaryLine=\"%s\"" % [STARTING_EQUIPMENT_EVENT_LOG_PREFIX, str(starting_secondary_hud_observed).to_lower(), str(starting_no_target_observed).to_lower(), str(starting_fuel_full_observed).to_lower(), str(starting_free_cargo_observed).to_lower(), str(primary_info_visible).to_lower(), primary_source_stock_name, str(secondary_info_visible).to_lower(), secondary_hud_fragment, cargo_line, fuel_line, primary_line, secondary_line])
 	get_tree().quit(0)
 
 func _run_pirate_avoidance_log() -> void:

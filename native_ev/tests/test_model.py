@@ -397,6 +397,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-gameplay-curriculum-help-log', run_script)
         self.assertIn('[switch]$GameplayCurriculumHelpLog', windows_script)
 
+    def test_godot_starting_equipment_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_STARTING_EQUIPMENT_EVENT',
+            '--tv-starting-equipment-log',
+            'func _run_starting_equipment_log() -> void:',
+            'startingSecondaryHudObserved=%s',
+            'startingNoTargetObserved=%s',
+            'startingFuelFullObserved=%s',
+            'startingFreeCargoObserved=%s',
+            'primaryInfoVisible=%s',
+            'primarySourceStockName="%s"',
+            'secondaryInfoVisible=%s',
+            'sourceLabel=original-runtime-observed-starting-hud-plus-terminal-velocity-source-mined-primary',
+            'oracleStatus=starting_primary_and_outfits_pending_nonmutating_classic_status_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-starting-equipment-log', run_script)
+        self.assertIn('[switch]$StartingEquipmentLog', windows_script)
+
     def test_godot_pirate_avoidance_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

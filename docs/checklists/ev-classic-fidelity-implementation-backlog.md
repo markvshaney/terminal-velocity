@@ -120,10 +120,12 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Next action: measure exact original EV Classic distance/wording if a later Basilisk probe can capture the transition point cleanly.
 
 - [ ] Exact starting primary weapons/outfits
-  - Status: `needs evidence / player-facing uncertainty helper added`
+  - Status: `needs evidence / player-facing uncertainty helper and deterministic starting-equipment contract added`
   - Source: first HUD proves `No Secondary Weapon`, `No Target`, full shield/fuel, and `Free: 20`; it does not prove full primary weapon/outfit inventory.
   - Implementation addendum: F10 help now surfaces this evidence boundary as a starting-equipment uncertainty reminder: players can rely on the original-runtime-observed `No Secondary Weapon`, `No Target`, full shield/fuel, and `Free: 20` HUD facts, but should check Player Info or a non-mutating outfitter/status surface before treating primary weapons/outfits as exact Classic data. `./run_godot.sh tv-gameplay-curriculum-help-log` verifies `hasStartingEquipmentUncertaintyHelp=true` under the existing help-surface pending-playtest boundary.
-  - Next action: open a player/ship info screen or an outfitter/status screen at a port that exposes one, without changing inventory.
+  - Implementation addendum: 2026-06-06 added `./run_godot.sh tv-starting-equipment-log`, `--tv-starting-equipment-log`, and `TV_STARTING_EQUIPMENT_EVENT` to pin the starting-state contract without mutating inventory. The probe reports original-runtime-observed starting HUD facts separately from Terminal Velocity/source-mined primary visibility: `startingSecondaryHudObserved=true`, `startingNoTargetObserved=true`, `startingFuelFullObserved=true`, `startingFreeCargoObserved=true`, `primaryInfoVisible=true`, `primarySourceStockName="Laser Cannon"`, `secondaryInfoVisible=true`, `sourceLabel=original-runtime-observed-starting-hud-plus-terminal-velocity-source-mined-primary`, and `oracleStatus=starting_primary_and_outfits_pending_nonmutating_classic_status_trace`.
+  - Verification: `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_starting_equipment_log_contract -v`; `./run_godot.sh tv-starting-equipment-log`; `python3 -m unittest native_ev.tests.test_model -v` (128 tests).
+  - Next action: open a player/ship info screen or an outfitter/status screen in EV Classic at a port that exposes one, without changing inventory, to confirm primary weapons/outfits beyond the starting HUD.
 
 - [x] EV Classic commodity transaction granularity and Levo same-port sellback
   - Status: `implemented / source-backed scenario coverage added`
