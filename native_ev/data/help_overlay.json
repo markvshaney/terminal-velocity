@@ -44,6 +44,7 @@
     "Light Freighter refuel margin recovery: after reserving a bulk delivery, fill only remaining hold with positive-margin cargo, preserve a service-port refuel plan, then deliver and sell retained cargo. TV scaffold; Classic Light Freighter/trade UI pending.",
     "Light Freighter repair mission margin recovery: when a damaged freighter carries a bulk delivery, reserve repair credits, fill only spare hold with positive-margin cargo, deliver, sell retained cargo, then return to a repair port before taking another risky job. TV scaffold; Classic damaged freighter mission/trade/repair UI pending.",
     "Light Freighter repair/refuel margin recovery: when a damaged, low-fuel freighter carries a bulk delivery, reserve repair credits, buy only positive-margin spare cargo, deliver and sell at Levo, refuel before the empty return, then repair at Earth. TV scaffold; Classic damaged freighter fuel/repair UI pending.",
+    "Light Freighter deadline repair/refuel margin recovery: on the final allowed day, deliver the timed bulk job before waiting or returning for repairs, then sell retained cargo, refuel at the service port, and repair at Earth. TV scaffold; Classic deadline/damaged freighter UI pending.",
     "Commodity recovery: if Buy/Sell is blocked, check free hold, selected commodity, credits, and same-port sellback before changing route.",
     "Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
     "Deadline recovery: failed timed TV missions release reserved cargo but can preserve trade cargo; sell recoverable cargo or scan for follow-up contracts before abandoning the route. Classic failure UI pending.",
@@ -449,6 +450,11 @@
       "flag": "hasLightFreighterRepairRefuelMarginRecoveryHelp",
       "source": "help",
       "contains": "Light Freighter repair/refuel margin recovery: when a damaged, low-fuel freighter carries a bulk delivery"
+    },
+    {
+      "flag": "hasLightFreighterDeadlineRepairRefuelMarginRecoveryHelp",
+      "source": "help",
+      "contains": "Light Freighter deadline repair/refuel margin recovery: on the final allowed day"
     },
     {
       "flag": "hasCommodityRecoveryHelp",
