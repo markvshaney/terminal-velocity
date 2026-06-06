@@ -47,6 +47,7 @@
     "Light Freighter repair trade funding recovery: when a damaged freighter cannot afford full repair, use only positive-margin cargo runs to fund the service bill, then return to a repair port before taking higher-risk jobs. TV scaffold; Classic damaged freighter trade/repair UI pending.",
     "Light Freighter mission/trade capacity recovery: after upgrading to a Light Freighter, reserve bulk mission cargo first, fill only remaining hold with profitable trade cargo, deliver the job, then sell retained cargo before accepting another bulk contract. TV scaffold; Classic Light Freighter mission/trade UI pending.",
     "Light Freighter refuel margin recovery: after reserving a bulk delivery, fill only remaining hold with positive-margin cargo, preserve a service-port refuel plan, then deliver and sell retained cargo. TV scaffold; Classic Light Freighter/trade UI pending.",
+    "Light Freighter refuel mission margin recovery: if a loaded bulk delivery blocks at zero fuel before launch, land, refuel at the service port, relaunch, deliver first, then sell retained margin cargo. TV scaffold; Classic Light Freighter low-fuel mission/trade UI pending.",
     "Light Freighter repair mission margin recovery: when a damaged freighter carries a bulk delivery, reserve repair credits, fill only spare hold with positive-margin cargo, deliver, sell retained cargo, then return to a repair port before taking another risky job. TV scaffold; Classic damaged freighter mission/trade/repair UI pending.",
     "Light Freighter repair/refuel margin recovery: when a damaged, low-fuel freighter carries a bulk delivery, reserve repair credits, buy only positive-margin spare cargo, deliver and sell at Levo, refuel before the empty return, then repair at Earth. TV scaffold; Classic damaged freighter fuel/repair UI pending.",
     "Light Freighter deadline repair/refuel margin recovery: on the final allowed day, deliver the timed bulk job before waiting or returning for repairs, then sell retained cargo, refuel at the service port, and repair at Earth. TV scaffold; Classic deadline/damaged freighter UI pending.",
@@ -536,6 +537,11 @@
       "flag": "hasLightFreighterRefuelMarginRecoveryHelp",
       "source": "help",
       "contains": "Light Freighter refuel margin recovery: after reserving a bulk delivery"
+    },
+    {
+      "flag": "hasLightFreighterRefuelMissionMarginRecoveryHelp",
+      "source": "help",
+      "contains": "Light Freighter refuel mission margin recovery: if a loaded bulk delivery blocks at zero fuel"
     },
     {
       "flag": "hasLightFreighterRepairMissionMarginRecoveryHelp",

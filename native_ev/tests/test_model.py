@@ -418,6 +418,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasLightFreighterRepairTradeFundingHelp',
             'hasLightFreighterMissionTradeCapacityHelp',
             'hasLightFreighterRefuelMarginRecoveryHelp',
+            'hasLightFreighterRefuelMissionMarginRecoveryHelp',
             'hasLightFreighterRepairMissionMarginRecoveryHelp',
             'hasLightFreighterRepairRefuelMarginRecoveryHelp',
             'hasLightFreighterDeadlineRepairRefuelMarginRecoveryHelp',
