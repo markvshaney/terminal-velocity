@@ -5,27 +5,27 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
-    "dirty": "no after amend checkpoint",
+    "dirty": "no",
     "head": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
     "status_short": "## main...origin/main",
     "origin_main": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
-    "dirty": "no after amend checkpoint"
+    "dirty": "no"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_a0588e59",
+    "active_task_id": "t_06993bf1",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "local_commit_complete_push_deferred_to_integrator",
+    "status": "successor_ready_watchdog_resume_pending",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T04:40:23Z",
+    "updated_at": "2026-06-06T04:42:08Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -105,7 +105,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Mission-route recovery help slice committed locally; repository is intentionally ahead of origin/main for loki-game integrator push policy.",
+  "current_milestone": "Mission-route recovery help pushed and remote-verified; successor Kanban continuation task t_06993bf1 created.",
   "last_commit": "feat(godot): surface mission route recovery help",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -122,22 +122,17 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "git status --short --branch -> ## main...origin/main before editing",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> 2 OK after RED missing mission-route recovery help",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasMissionRouteRecoveryHelp=true",
-    "./run_godot.sh tv-mission-route-hint-log -> staleRouteReplaced=true lowFuelJumpBlocked=true landedForRefuel=true refuelSucceeded=true deliveredAfterRefuel=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -v -> OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
+    "git status --short --branch -> ## main...origin/main [ahead 1] before push",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK",
     "git diff --check -> OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK before ledger update",
-    "events.jsonl parse -> OK lines=594 before event append"
+    "python3 -m json.tool native_ev/data/help_overlay.json and task-ledger.json -> OK; events.jsonl parse -> OK",
+    "added-lines high-signal secret scan -> NONE",
+    "HOME=/home/bh git push origin main; git fetch origin main; HEAD == origin/main == d502b604eb78d604a81cb987bae202936169a05d"
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Previous GitHub auth push gate was resolved by HOME=/home/bh credential context; local HEAD was pushed and verified equal to origin/main.",
-    "withheld_action": "No action withheld for normal non-force TV continuation pushes after standard checks.",
+    "reason": "Mission-route recovery slice has been pushed and verified.",
+    "withheld_action": "No action withheld for normal TV continuation.",
     "resume_after": "Continue the next source-aligned safe local Terminal Velocity gameplay/fidelity slice through Kanban."
   },
   "heartbeat_status": {
@@ -147,9 +142,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue the next source-aligned safe local Terminal Velocity gameplay/fidelity slice from the live backlog unless loki-game integrator push triggers fire; workers must not push.",
-  "resume_prompt": "Resume Terminal Velocity from local commit feat(godot): surface mission route recovery help. Read ledger/events/prompt/backlog, inspect git state including ahead/dirty status, and continue one source-aligned safe local gameplay/fidelity slice; workers commit locally and never push.",
-  "updated_at": "2026-06-06T04:40:23Z",
+  "next_resume_action": "Resume/run the Terminal Velocity Kanban watchdog/coordinator and verify task t_06993bf1 becomes running or remains scheduled/ready with an explicit dispatcher reason.",
+  "resume_prompt": "Resume Terminal Velocity from remote-verified HEAD. Read ledger/events/prompt/backlog, inspect git state, implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs, commit locally, and leave push to loki-game integrator policy.",
+  "updated_at": "2026-06-06T04:42:08Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
