@@ -9,8 +9,8 @@
     "behind": 0,
     "dirty": "yes",
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "successor t_121fe2dd created; ledger checkpoint pending commit",
-    "origin_main": "inspect current SHA with `git rev-parse origin/main`; successor created from clean remote-verified HEAD"
+    "status_short": "successor t_65a7a59a created; ledger checkpoint pending commit",
+    "origin_main": "inspect current SHA with `git rev-parse origin/main`; latest pushed slice remote-verified before successor creation"
   },
   "repo_state": {
     "branch": "main",
@@ -22,7 +22,7 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_121fe2dd",
+    "active_task_id": "t_65a7a59a",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "successor_ready_pending_dispatch",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:41:43Z",
+    "updated_at": "2026-06-06T06:49:21Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -127,19 +127,18 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_service_provisioning_log_contract -v failed on missing TV_SERVICE_PROVISIONING_EVENT before implementation",
-    "GREEN: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_service_provisioning_log_contract -v -> OK",
-    "./run_godot.sh tv-service-provisioning-log -> TV_SERVICE_PROVISIONING_EVENT with levoNoOutfitterObserved=true, earthFullServiceScaffold=true, stardockNoShipyardScaffold=true, serviceMatrixScoutVisible=true",
-    "python3 -m unittest native_ev.tests.test_model -v -> 129 tests OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 195 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> 62/62 scenarios passed"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_service_provisioning_log_contract -v -> OK",
+    "./run_godot.sh tv-service-provisioning-log -> TV_SERVICE_PROVISIONING_EVENT levoNoOutfitterObserved=true earthFullServiceScaffold=true stardockNoShipyardScaffold=true serviceMatrixScoutVisible=true",
+    "git diff --check -> OK",
+    "high-signal secret scan over origin/main..HEAD -> none",
+    "HOME=/home/bh git push origin main; git fetch origin main; HEAD == origin/main == 8289700afeaa4427de699a374e321748b8fba563",
+    "kanban successor t_65a7a59a created ready from remote-verified HEAD"
   ],
   "active_gate": {
     "type": "none",
-    "reason": "No Kanban task was running/ready/blocked; successor t_121fe2dd was created from clean origin/main and is ready for dispatch.",
+    "reason": "Service-provisioning slice was pushed and remote-verified; successor task created for continued safe-local TV work.",
     "withheld_action": "None.",
-    "resume_after": "Dispatch t_121fe2dd and verify exactly one running Terminal Velocity task, or record explicit dispatcher blocker."
+    "resume_after": "Dispatch t_65a7a59a and verify exactly one running Terminal Velocity task."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -148,9 +147,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue from the dirty worktree if unreviewed/uncommitted: inspect git diff/status, finish any needed stabilization for the Godot service-provisioning probe, then choose the next safe source-aligned playable slice from the live backlog only after this slice is coherent.",
-  "resume_prompt": "Resume Terminal Velocity via Kanban task t_121fe2dd from clean origin/main; read ledger/events/prompt/backlog, avoid redoing the starting-equipment log, and implement one source-aligned safe local gameplay/fidelity slice with verification.",
-  "updated_at": "2026-06-06T06:46:41Z",
+  "next_resume_action": "Commit/push this ledger checkpoint, then dispatch t_65a7a59a and verify exactly one running Terminal Velocity Kanban task continues from origin/main 8289700afeaa4427de699a374e321748b8fba563.",
+  "resume_prompt": "Resume Terminal Velocity via Kanban task t_65a7a59a from clean origin/main 8289700afeaa4427de699a374e321748b8fba563; read ledger/events/prompt/backlog, avoid redoing service-provisioning log, and implement one source-aligned safe local gameplay/fidelity slice with verification.",
+  "updated_at": "2026-06-06T06:49:21Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -208,17 +207,8 @@
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
     "id": "godot-service-provisioning-log",
-    "summary": "Added a deterministic Godot service/store provisioning scout that logs Levo no-outfitter observed evidence plus Earth and Stardock Alpha Terminal Velocity service matrices under explicit pending-Classic labels.",
-    "changed_files": [
-      "godot_ev/scripts/main.gd",
-      "run_godot.sh",
-      "godot_ev/windows/RunGodot.ps1",
-      "native_ev/tests/test_model.py",
-      "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
-      "docs/prompts/terminal-velocity-continuation-prompt.md",
-      ".hermes/long-running/terminal-velocity/task-ledger.json",
-      ".hermes/long-running/terminal-velocity/events.jsonl"
-    ],
+    "summary": "Accepted and pushed deterministic Godot service/store provisioning scout: Levo no-outfitter observed evidence plus Earth and Stardock Alpha Terminal Velocity service matrices under explicit pending-Classic labels.",
+    "commit": "8289700afeaa4427de699a374e321748b8fba563",
     "source_fidelity_labels": [
       "original-runtime-observed-levo",
       "terminal-velocity-service-provisioning-scaffold",
