@@ -1,11 +1,11 @@
 {
   "active_gate": {
-    "reason": "local code/docs/ledger slice verified; Kanban policy requires human review before marking code done",
+    "reason": "local code/docs/ledger help-surface slice verified; Kanban policy requires human review before marking code done",
     "resume_after": "human reviewer approves/unblocks or requests changes",
     "type": "review-required",
     "withheld_action": "kanban_complete/merge/push by worker"
   },
-  "current_milestone": "contraband_scan_trade_recovery_loop implemented locally and verified; awaiting human review/normal integration.",
+  "current_milestone": "contraband_scan_trade_recovery_help implemented locally and full-regression verified; pending local commit/review.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -31,7 +31,8 @@
     "Do not redo weapon_purchase_trade_cargo_reservation_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo weapon_purchase_secondary_activation_loop or weapon secondary activation help/probe work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo weapon_legal_docking_recovery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_inventory_stack_recovery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo weapon_inventory_stack_recovery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo contraband_scan_trade_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -73,23 +74,25 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_completed_slice": {
-    "id": "contraband-scan-trade-recovery-loop",
-    "kanban_task_id": "t_faca6d97",
+    "id": "contraband-scan-trade-recovery-help",
+    "kanban_task_id": "t_7a9fd771",
     "remote_verified": "false-local-only",
     "source_fidelity_labels": [
       "terminal-velocity-contraband-trade-recovery-scaffold",
-      "classic_runtime_scan_trade_cargo_cleanup_pending"
+      "classic_runtime_scan_trade_cargo_cleanup_pending",
+      "help_surface_pending_playtest"
     ],
-    "summary": "Added and verified contraband_scan_trade_recovery_loop: a mixed Earth cargo hold loses only equipment during Federation scan, preserves legal food, pays clemency, jumps to Levo, and sells the food lot under explicit pending-Classic scan/trade cleanup boundaries."
+    "summary": "Added and target-verified contraband scan/trade F10 help: after scan confiscation from a mixed hold, check preserved legal cargo, pay clemency only when needed, then sell at a safe market."
   },
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
-    "python3 tools/run_gameplay_scenarios.py contraband_scan_trade_recovery_loop --pretty -> success true, all 5 checks passed",
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_contraband_scan_trade_recovery_loop_preserves_legal_trade_cargo -v -> OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> Ran 92 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=88 failed=0 total=88",
+    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> FAIL missing Contraband trade recovery help line before help_overlay update",
+    "python3 -m json.tool native_ev/data/help_overlay.json >/dev/null -> OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasContrabandTradeRecoveryHelp=true; hintCount=89",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 222 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=88 failed=0 total=88",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=88",
     "git diff --check -> OK"
   ],
@@ -101,7 +104,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review/commit the local contraband_scan_trade_recovery_loop bundle, then continue the next source-aligned safe local slice without redoing this scenario.",
+  "next_resume_action": "Commit the local contraband_scan_trade_recovery_help slice, then block review-required for integrator handling without redoing contraband scan/trade scenario or help work.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -111,7 +114,7 @@
     "dirty": true,
     "head": "inspect current SHA with `git rev-parse HEAD`",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`",
-    "status_short": "dirty local reviewed bundle for contraband_scan_trade_recovery_loop; not pushed"
+    "status_short": "dirty local contraband scan/trade recovery help slice; not committed"
   },
   "repo_state": {
     "ahead": 0,
@@ -135,7 +138,7 @@
   ],
   "resume_prompt": "Continue Terminal Velocity from remote-verified weapon_purchase_mission_cargo_reservation_loop; do not redo weapon reputation/credit/availability or mission-cargo reservation work. Inspect live repo/backlog and implement the next safe source-aligned slice.",
   "runner": {
-    "active_task_id": "t_faca6d97",
+    "active_task_id": "t_7a9fd771",
     "assignee": "terminal-velocity",
     "board": "terminal-velocity",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
@@ -154,7 +157,7 @@
       "Rule list entries must be concise and nonredundant; currently defined rules are in git_policy_rules."
     ],
     "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
-    "status": "waiting_review_for_local_slice",
+    "status": "full_regression_verified_pending_local_commit",
     "superseded_jobs": [
       "f31074cbec03",
       "e12f13d4b75e",
@@ -165,7 +168,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T14:43:55Z",
+    "updated_at": "2026-06-06T14:52:24Z",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
     "watchdog_schedule": "every 5m",
@@ -241,5 +244,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T14:43:55Z"
+  "updated_at": "2026-06-06T14:52:24Z"
 }
