@@ -18,6 +18,7 @@ param(
     [switch]$MissionChainOfferLog,
     [switch]$MissionChainLockLog,
     [switch]$MissionAlignmentBranchLog,
+    [switch]$MissionAlignmentReturnLog,
     [switch]$MissionRouteHintLog,
     [switch]$MissionAbortLog,
     [switch]$MissionAbortForbiddenLog,
@@ -112,6 +113,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-chain-lock-log
 } elseif ($MissionAlignmentBranchLog) {
     & $Godot --headless --path $Project -- --tv-mission-alignment-branch-log
+} elseif ($MissionAlignmentReturnLog) {
+    & $Godot --headless --path $Project -- --tv-mission-alignment-return-log
 } elseif ($MissionRouteHintLog) {
     & $Godot --headless --path $Project -- --tv-mission-route-hint-log
 } elseif ($MissionAbortLog) {

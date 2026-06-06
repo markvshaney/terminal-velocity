@@ -41,6 +41,7 @@ const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
 const MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_BRANCH_EVENT"
+const MISSION_ALIGNMENT_RETURN_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_RETURN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
@@ -236,6 +237,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_chain_lock_log")
 	if OS.get_cmdline_args().has("--tv-mission-alignment-branch-log") or OS.get_cmdline_user_args().has("--tv-mission-alignment-branch-log"):
 		call_deferred("_run_mission_alignment_branch_log")
+	if OS.get_cmdline_args().has("--tv-mission-alignment-return-log") or OS.get_cmdline_user_args().has("--tv-mission-alignment-return-log"):
+		call_deferred("_run_mission_alignment_return_log")
 	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
 		call_deferred("_run_mission_route_hint_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
@@ -1188,6 +1191,37 @@ func _run_mission_alignment_branch_log() -> void:
 	var freeport_result := _mission_alignment_branch_attempt("freeport_pact_smugglers", "federation_report_freeport")
 	print("%s startSystem=Levo routeToSolSelected=%s routeToLunaSelected=%s firstMissionDelivered=%s chainMissionAccepted=%s routeToSiriusSelected=%s chainMissionDelivered=%s scanSystem=%s scanBody=\"%s\" branchOffersVisible=%s federationOfferVisible=%s freeportOfferVisible=%s branchOffers=%s choiceGroups=%s selectedBranchOfferDetailsVisible=%s selectedBranchOfferDetails=%s federationBranchAccepted=%s freeportBranchHiddenAfterChoice=%s freeportBranchAccepted=%s federationBranchHiddenAfterChoice=%s offersAfterChoice=%s freeportOffersAfterChoice=%s reputation=%s freeportReputation=%s activeMissions=%s freeportActiveMissions=%s completedMissions=%s freeportCompletedMissions=%s storyFlags=%s freeportStoryFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace choiceBoundary=terminal_velocity_choice_group_scaffold_exact_classic_branch_ui_pending status=\"%s\"" % [MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX, str(federation_result.get("route_to_sol_selected", false)), str(federation_result.get("route_to_luna_selected", false)), str(federation_result.get("first_completed", false)), str(federation_result.get("chain_accepted", false)), str(federation_result.get("route_to_sirius_selected", false)), str(federation_result.get("chain_delivered", false)), str(federation_result.get("scan_system", "?")), str(federation_result.get("scan_body", "None")), str(federation_result.get("branch_offers_visible", false)), str(federation_result.get("federation_visible", false)), str(federation_result.get("freeport_visible", false)), JSON.stringify(federation_result.get("branch_offer_ids", [])), JSON.stringify(federation_result.get("branch_choice_groups", [])), str(federation_result.get("selected_branch_offer_details_visible", false)), JSON.stringify(federation_result.get("selected_branch_offer_details", [])), str(federation_result.get("selected_branch_accepted", false)), str(federation_result.get("other_branch_hidden_after_choice", false)), str(freeport_result.get("selected_branch_accepted", false)), str(freeport_result.get("other_branch_hidden_after_choice", false)), JSON.stringify(federation_result.get("offer_ids_after_choice", [])), JSON.stringify(freeport_result.get("offer_ids_after_choice", [])), JSON.stringify(federation_result.get("reputation", {})), JSON.stringify(freeport_result.get("reputation", {})), JSON.stringify(federation_result.get("active_missions", [])), JSON.stringify(freeport_result.get("active_missions", [])), JSON.stringify(federation_result.get("completed_missions", [])), JSON.stringify(freeport_result.get("completed_missions", [])), JSON.stringify(federation_result.get("story_flags", [])), JSON.stringify(freeport_result.get("story_flags", [])), str(federation_result.get("status", ""))])
 	get_tree().quit(0)
+
+func _run_mission_alignment_return_log() -> void:
+	_reset_travel_state()
+	current_system_index = _system_index_by_name("Sirius", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	_position_at_body("Sirius Station")
+	landed = true
+	landing_tab = 0
+	completed_missions = ["frontier_sample_hera_freeport"]
+	story_flags = ["frontier_samples_delivered"]
+	reputation_scores = {"Federation": 5, "Independent": 7}
+	legal_records = {"Federation": -20, "Independent": -90}
+	var branch_body := _current_body()
+	var offers_before_branch := _available_missions(branch_body)
+	var offer_ids_before_branch := _mission_ids(offers_before_branch)
+	var return_visible_with_branches := offer_ids_before_branch.has("freeport_return_earth") and offer_ids_before_branch.has("federation_report_freeport") and offer_ids_before_branch.has("freeport_pact_smugglers")
+	completed_missions = ["frontier_sample_hera_freeport", "federation_report_freeport"]
+	story_flags = ["frontier_samples_delivered", "chapter_one_choice_seen", "alignment_federation", "federation_intel_asset"]
+	var offers_after_federation := _available_missions(branch_body)
+	var offer_ids_after_federation := _mission_ids(offers_after_federation)
+	var return_visible_after_completion := offer_ids_after_federation == ["freeport_return_earth"]
+	var help_text := "\n".join(_help_overlay_lines())
+	var alignment_return_help_visible := help_text.contains("Alignment return contracts: after choosing a chapter branch")
+	print("%s scanSystem=%s scanBody=\"%s\" offersBeforeBranch=%s returnContractVisibleWithBranches=%s offersAfterFederation=%s returnContractVisibleAfterCompletion=%s alignmentReturnHelpVisible=%s completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace returnBoundary=terminal_velocity_return_contract_timing_scaffold_exact_classic_offer_ui_pending status=\"%s\"" % [MISSION_ALIGNMENT_RETURN_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), str(branch_body.get("name", "None")), JSON.stringify(offer_ids_before_branch), str(return_visible_with_branches), JSON.stringify(offer_ids_after_federation), str(return_visible_after_completion), str(alignment_return_help_visible), JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
+	get_tree().quit(0)
+
+func _mission_ids(missions: Array) -> Array:
+	var ids := []
+	for mission in missions:
+		ids.append(str(mission.get("id", "")))
+	return ids
 
 func _mission_alignment_branch_attempt(branch_mission_id: String, incompatible_mission_id: String) -> Dictionary:
 	_reset_travel_state()

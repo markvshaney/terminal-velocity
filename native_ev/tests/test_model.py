@@ -2149,6 +2149,35 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission alignment branch scenario contract', plan)
         self.assertIn('chapter_one_alignment', plan)
 
+    def test_godot_mission_alignment_return_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-alignment-return-log',
+            'func _run_mission_alignment_return_log',
+            'TV_MISSION_ALIGNMENT_RETURN_EVENT',
+            'offersBeforeBranch=%s',
+            'returnContractVisibleWithBranches=%s',
+            'offersAfterFederation=%s',
+            'returnContractVisibleAfterCompletion=%s',
+            'alignmentReturnHelpVisible=%s',
+            'freeport_return_earth',
+            'federation_report_freeport',
+            'freeport_pact_smugglers',
+            'returnBoundary=terminal_velocity_return_contract_timing_scaffold_exact_classic_offer_ui_pending',
+            'sourceLabel=terminal-velocity-observed',
+            'oracleStatus=terminal_velocity_eval_pending_original_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAlignmentReturnLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-alignment-return-log', run_script)
+        self.assertIn('tv-mission-alignment-return-log', launcher)
+        self.assertIn('Mission alignment return-contract scenario contract', plan)
+        self.assertIn('freeport_return_earth', plan)
+
     def test_godot_first_mission_delivery_autoresearch_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

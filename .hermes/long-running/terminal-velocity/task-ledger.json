@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "no-after-pirate-low-fuel-push; successor ledger checkpoint pending commit",
+    "dirty": "no-local-checkpoint-commit-created-ahead-1-ready-for-preapproved-normal-push",
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "pirate low-fuel recovery help/log slice pushed and remote-verified; successor Kanban task created",
+    "status_short": "alignment return-contract Godot log slice committed locally; branch ahead of origin/main by 1; integrator treating stale review-required as workflow bug per policy",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`; latest pushed slice remote-verified before successor creation"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
-    "dirty": "no-after-pirate-low-fuel-push"
+    "dirty": "no-local-checkpoint-commit-created-ahead-1"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Pirate low-fuel recovery help/log slice pushed and remote-verified; successor Kanban continuation card created pending dispatch.",
+  "current_milestone": "Alignment return-contract Godot probe slice verified and committed locally; integrator normal push handling in progress.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -127,20 +127,19 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "HOME=/home/bh git push origin main -> 805f0c8 pushed",
-    "git fetch origin; HEAD == origin/main == 805f0c807a4dda472d4313320b77123804b51585",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_pirate_avoidance_log_contract -v -> OK",
-    "./run_godot.sh tv-pirate-avoidance-log -> lowFuelEscapeBlocked=true refueledBeforeEscape=true evasionSucceeded=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 195 tests OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_return_log_contract -v -> OK",
+    "./run_godot.sh tv-mission-alignment-return-log -> returnContractVisibleWithBranches=true returnContractVisibleAfterCompletion=true alignmentReturnHelpVisible=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 196 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
-    "kanban completed t_fcde7ac6; created successor t_59840b66 ready"
+    "git diff --check -> OK",
+    "native_ev/data/help_overlay.json, task-ledger.json, events.jsonl parse OK"
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Pirate low-fuel recovery help/log slice was pushed normally and remote-verified; successor continuation is safe to dispatch.",
-    "withheld_action": "None.",
-    "resume_after": "Dispatch or gateway watchdog claims successor task t_59840b66."
+    "reason": "Stale review-required/ahead-by-one was classified as a workflow bug for coherent normal Terminal Velocity work; normal non-force push is preapproved after standard checks.",
+    "withheld_action": "None for normal push/successor flow after standard status/remotes/verification/no-secrets checks.",
+    "resume_after": "After push/fetch verifies HEAD == origin/main, complete t_59840b66 and create/dispatch exactly one successor."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -149,9 +148,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch Kanban task t_59840b66 and verify exactly one running Terminal Velocity task; worker should read ledger/events/prompt/backlog and continue the next strongest source-aligned safe local gameplay/fidelity slice without redoing service-provisioning, starting-equipment, travel-timing, first-mission-delivery, or pirate-low-fuel recovery help/log work.",
-  "resume_prompt": "Resume Terminal Velocity from clean origin/main after pirate low-fuel recovery help/log remote verification: dispatch t_59840b66 if not running, then continue the next source-aligned safe local gameplay/fidelity slice.",
-  "updated_at": "2026-06-06T07:13:14Z",
+  "next_resume_action": "Push the verified alignment return-contract Godot log slice per normal non-force policy, complete t_59840b66, create and dispatch exactly one successor continuation task, then verify exactly one running Terminal Velocity task.",
+  "resume_prompt": "Resume Terminal Velocity from the local alignment return-contract Godot log checkpoint: review/handle the local commit, then continue the next source-aligned safe local gameplay/fidelity slice.",
+  "updated_at": "2026-06-06T07:26:48Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -208,13 +207,13 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "pirate-low-fuel-recovery-help-log",
-    "summary": "F10 help and tv-pirate-avoidance-log expose a Terminal Velocity scaffold for low-fuel pirate escape recovery with explicit pending Classic pirate/fuel trace labels.",
-    "commit": "805f0c807a4dda472d4313320b77123804b51585 pushed and remote-verified before successor creation",
+    "id": "alignment-return-contract-godot-log",
+    "summary": "Godot fast-eval log exposes Terminal Velocity alignment return-contract timing: freeport_return_earth remains visible alongside open chapter-one branch offers and after Federation branch completion, with explicit pending Classic offer UI/timing boundary.",
+    "commit": "local checkpoint commit created; inspect current git rev-parse HEAD for exact SHA",
     "source_fidelity_labels": [
-      "terminal-velocity-pirate-avoidance-scaffold",
-      "pirate_avoidance_pending_ev_classic_combat_trace",
-      "TV scaffold; exact Classic pirate/fuel behavior pending"
+      "terminal-velocity-observed",
+      "terminal_velocity_eval_pending_original_trace",
+      "terminal_velocity_return_contract_timing_scaffold_exact_classic_offer_ui_pending"
     ]
   }
 }

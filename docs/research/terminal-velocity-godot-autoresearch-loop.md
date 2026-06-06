@@ -176,6 +176,22 @@ Mission alignment branch scenario contract:
   - `oracleStatus=terminal_velocity_eval_pending_original_trace`.
   This is a Terminal Velocity story-branch/playability probe; exact EV Classic branch offer UI, random refresh timing, and legal/reputation thresholds remain pending original-runtime/manual/resource evidence.
 
+Mission alignment return-contract scenario contract:
+
+- `RunGodot.ps1 -MissionAlignmentReturnLog` / `--tv-mission-alignment-return-log`
+- Sets the fast-eval state to Sirius Station after `frontier_sample_hera_freeport`, verifies the non-branch return contract (`freeport_return_earth`) appears alongside both open `chapter_one_alignment` branch offers, then applies the Federation branch-completed state and verifies only the return contract remains available. The log records:
+  - Sirius Station scan system/body;
+  - before-branch offer ids (`offersBeforeBranch`) including `freeport_return_earth`, `federation_report_freeport`, and `freeport_pact_smugglers`;
+  - `returnContractVisibleWithBranches=true`;
+  - post-Federation offer ids (`offersAfterFederation`) with only `freeport_return_earth`;
+  - `returnContractVisibleAfterCompletion=true`;
+  - `alignmentReturnHelpVisible=true` for the F10 recovery guidance;
+  - completed mission ids and story flags used by the timing scaffold;
+  - `sourceLabel=terminal-velocity-observed`;
+  - `oracleStatus=terminal_velocity_eval_pending_original_trace`;
+  - `returnBoundary=terminal_velocity_return_contract_timing_scaffold_exact_classic_offer_ui_pending`.
+  This is a Terminal Velocity return-contract timing/playability probe; exact EV Classic Mission Computer refresh timing, UI wording, and branch-chain behavior remain pending original-runtime/manual/resource evidence.
+
 Mission route-hint scenario contract:
 
 - `RunGodot.ps1 -MissionRouteHintLog` / `--tv-mission-route-hint-log`
