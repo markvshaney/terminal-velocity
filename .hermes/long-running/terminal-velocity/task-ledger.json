@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_3391a669",
+    "active_task_id": "t_0d29f443",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "slice_pushed_remote_verified_successor_needed",
+    "status": "successor_created_ready_dispatch_pending",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T07:48:56Z",
+    "updated_at": "2026-06-06T07:49:49Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -134,9 +134,9 @@
   ],
   "active_gate": {
     "type": null,
-    "reason": "No active gate after normal non-force push; coordinator should complete current Kanban card and dispatch one successor continuation card.",
+    "reason": "Successor Kanban continuation card t_0d29f443 created from remote-verified origin/main; dispatch/verify exactly one running task.",
     "withheld_action": null,
-    "resume_after": "Create/dispatch successor from clean origin/main."
+    "resume_after": "Dispatch t_0d29f443 via Kanban dispatcher."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -145,9 +145,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create exactly one successor Kanban card from clean origin/main after full-hold trade-route recovery help push checkpoint, dispatch it, and verify exactly one running task.",
+  "next_resume_action": "Dispatch Kanban task t_0d29f443 and verify exactly one running Terminal Velocity task continues from origin/main after full-hold trade-route recovery help.",
   "resume_prompt": "Continue Terminal Velocity development from clean origin/main after full-hold trade-route recovery help was pushed and remote-verified.",
-  "updated_at": "2026-06-06T07:48:56Z",
+  "updated_at": "2026-06-06T07:49:49Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
