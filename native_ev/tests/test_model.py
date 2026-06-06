@@ -376,6 +376,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasWeaponAvailabilityRecoveryHelp',
             'hasWeaponMissionCargoRecoveryHelp',
             'hasWeaponTradeCargoRecoveryHelp',
+            'hasWeaponInventoryStackRecoveryHelp',
             'hasWeaponSecondaryActivationHelp',
             'hasAlignmentGateHelp',
             'hasAlignmentReturnHelp',
