@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_1a6888c6",
+    "active_task_id": "t_519a1e53",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "pushed_verified_ready_for_successor",
+    "status": "successor_ready_pending_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T12:48:03.352290Z",
+    "updated_at": "2026-06-06T12:48:48.938021Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "weapon credit recovery help-surface slice pushed and remote-verified; successor needed.",
+  "current_milestone": "weapon credit recovery help-surface bundle remote-verified; successor t_519a1e53 created.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -146,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Complete t_1a6888c6, create and dispatch exactly one successor from current origin/main, then continue the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing weapon_credit_recovery_loop or weapon-credit F10 help/probe work.",
+  "next_resume_action": "Dispatch/continue successor t_519a1e53 from current origin/main and implement the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing weapon_credit_recovery_loop or weapon-credit F10 help/probe work.",
   "resume_prompt": "Continue Terminal Velocity from current origin/main after verified weapon credit recovery help-surface push; do not redo weapon_credit_recovery_loop or weapon-credit F10 help/probe; select the next source-aligned safe local gameplay/fidelity slice.",
-  "updated_at": "2026-06-06T12:48:03.352290Z",
+  "updated_at": "2026-06-06T12:48:48.938021Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
