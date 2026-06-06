@@ -52,6 +52,7 @@ SCENARIO_CURRICULUM = [
     'fuel_reserve_upgrade_loop',
     'hull_plating_repair_loop',
     'balanced_upgrade_trade_loop',
+    'light_freighter_capacity_trade_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1413,6 +1414,33 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'balanced_refit_complete', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'light_freighter_capacity_trade_loop':
+        source_label = 'terminal-velocity-light-freighter-trade-scaffold'
+        oracle_status = 'light_freighter_trade_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'credits': 65000}},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'ship_capacity_upgrade', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'large_hold_trade_run', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2381,6 +2409,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_cargo_fuel_and_hull_upgrades': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and state.get('ownedOutfits', {}).get('fuel_tank') == 1 and state.get('ownedOutfits', {}).get('hull_plating') == 1 and state.get('cargoCapacity') == STARTING_CARGO_CAPACITY + 10 and state.get('maxFuel') == STARTING_FUEL + 25 and state.get('maxHull') == STARTING_MAX_HULL + 25 else 'failed',
             'repaired_final_hull_refit': 'passed' if repair_events and repair_events[-1].get('hullBefore') == STARTING_MAX_HULL and repair_events[-1].get('hullAfter') == STARTING_MAX_HULL + 25 and state.get('currentHull') == STARTING_MAX_HULL + 25 and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' else 'failed',
             'recorded_balanced_upgrade_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-balanced-upgrade-trade-scaffold' and event.get('oracleStatus') == 'balanced_upgrade_budget_pending_classic_runtime_trace' for event in source_events) and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
+        })
+    elif name == 'light_freighter_capacity_trade_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        buy_ship_events = [event for event in trace if event.get('type') == 'buy_ship']
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        source_events = checkpoints + buy_ship_events + trade_events
+        checks.update({
+            'bought_light_freighter_capacity_upgrade': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
+            'completed_large_freighter_trade_run': 'passed' if len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 6 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 6 and state.get('cargoCapacity') == 150 and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} and state.get('credits') == 10858 else 'failed',
+            'recorded_light_freighter_trade_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-trade-scaffold' and event.get('oracleStatus') == 'light_freighter_trade_pending_classic_runtime_trace' for event in source_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

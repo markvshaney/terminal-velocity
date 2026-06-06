@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": false,
-    "head": "0b9a8764f8b98d282ea455be40123c0ed19fde88 (remote-verified after balanced_upgrade_trade_loop push; inspect live git for current HEAD if advanced)",
-    "origin_main": "0b9a8764f8b98d282ea455be40123c0ed19fde88 (remote-verified after balanced_upgrade_trade_loop push; inspect live git for current origin/main if advanced)",
-    "status_short": "clean at origin/main after balanced_upgrade_trade_loop normal push; successor created pending dispatch"
+    "head": "SHA-neutral: local light_freighter_capacity_trade_loop checkpoint commit; inspect current git rev-parse HEAD",
+    "origin_main": "8fac19e (remote-verified baseline before local light_freighter_capacity_trade_loop commit)",
+    "status_short": "clean, ahead of origin/main by 1 local light_freighter_capacity_trade_loop commit pending review/integrator push"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": false
   },
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T09:33:56Z",
+    "updated_at": "2026-06-06T09:39:33Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "balanced_upgrade_trade_loop symbolic curriculum slice remote-verified; successor t_398ce7ab created to continue the next source-aligned safe local slice.",
+  "current_milestone": "light_freighter_capacity_trade_loop symbolic curriculum slice verified and committed locally; review/integrator handling pending.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
   "last_commits": [
@@ -128,19 +128,21 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_balanced_upgrade_trade_loop_funds_final_refit_with_trade_run -> OK",
-    "python3 tools/run_gameplay_scenarios.py balanced_upgrade_trade_loop --pretty -> success true; final credits 460; cargo/fuel/hull upgrades installed; hull 125/125",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 204 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=70 failed=0 total=70",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=70",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_capacity_trade_loop_uses_ship_capacity_for_large_return_load -v -> OK",
+    "python3 tools/run_gameplay_scenarios.py light_freighter_capacity_trade_loop --pretty -> success true; final credits 10858; playerShipId=light_freighter; cargoCapacity=150; cargo cleared",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 205 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=71 failed=0 total=71",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=71",
     "git diff --check -> OK",
-    "gameplay_curriculum.json, task-ledger.json, and events.jsonl parse OK"
+    "gameplay_curriculum.json, task-ledger.json, and events.jsonl parse OK",
+    "high-signal secret scan on changed files -> NONE",
+    "git commit local checkpoint -> feat(curriculum): add light freighter capacity trade scenario"
   ],
   "active_gate": {
-    "type": "none",
-    "reason": "No active gate: stale review-required/push gate was resolved locally under normal non-force push policy; successor t_398ce7ab is ready for dispatch.",
-    "withheld_action": null,
-    "resume_after": "Continue safe-local Terminal Velocity gameplay/fidelity slices."
+    "type": "review-required",
+    "reason": "Code-changing Kanban slice committed locally; worker must not push or mark done without review/integrator handling.",
+    "withheld_action": "git push origin main and marking t_398ce7ab complete as merged/done",
+    "resume_after": "reviewer/coordinator approves or requests changes"
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -149,9 +151,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch/continue successor t_398ce7ab from clean origin/main and implement the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing strategy/upgrade/cargo/fuel/hull/balanced-upgrade work.",
-  "resume_prompt": "Continue Terminal Velocity from t_398ce7ab: balanced_upgrade_trade_loop was pushed and remote-verified; read live ledger/events/backlog, then implement the next source-aligned safe local slice with tests/docs/checkpoint. Do not redo prior verified curriculum slices.",
-  "updated_at": "2026-06-06T09:33:56Z",
+  "next_resume_action": "Review local light_freighter_capacity_trade_loop symbolic curriculum commit; if accepted, integrator may push per normal non-force policy, then continue the next source-aligned safe local Terminal Velocity slice without redoing prior upgrade/trade/light-freighter capacity work.",
+  "resume_prompt": "Continue Terminal Velocity after local light_freighter_capacity_trade_loop commit: inspect live git status and task comments; if approved/pushed, continue next source-aligned slice without redoing prior verified curriculum work.",
+  "updated_at": "2026-06-06T09:39:33Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -196,7 +198,8 @@
     "Do not activate Strict Play or destructive original-EV tests for reusable pilots without explicit approval.",
     "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo balanced_upgrade_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo balanced_upgrade_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo light_freighter_capacity_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
@@ -211,14 +214,12 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "hull-plating-repair-loop",
-    "summary": "Symbolic scenario hull_plating_repair_loop buys Hull Plating at Sol/Earth, verifies max hull increases 100 -> 125 while current hull remains repairable at 100, then repairs the added 25 hull for manifest cost 200 credits.",
-    "commit": "SHA-neutral: inspect current git rev-parse HEAD because this ledger may be included in the commit it describes",
+    "id": "light-freighter-capacity-trade-loop",
+    "summary": "Implemented and verified symbolic light_freighter_capacity_trade_loop: buys a Light Freighter at Sol/Earth from a bounded training-credit state, verifies 150-ton cargo capacity, carries six Sol Food lots to Levo, sells the expanded hold load, and clears cargo under explicit scaffold labels.",
+    "commit": "SHA-neutral: inspect current git rev-parse HEAD because this event may be amended into the commit it describes",
     "source_fidelity_labels": [
-      "terminal-velocity-hull-plating-repair-scaffold",
-      "hull_plating_repair_pending_classic_runtime_trace",
-      "terminal-velocity-repair-service-scaffold",
-      "repair_service_pending_ev_classic_runtime_trace"
+      "terminal-velocity-light-freighter-trade-scaffold",
+      "light_freighter_trade_pending_classic_runtime_trace"
     ]
   }
 }

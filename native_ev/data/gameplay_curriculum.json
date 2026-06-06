@@ -19,6 +19,7 @@
     "fuel_reserve_upgrade_loop",
     "hull_plating_repair_loop",
     "balanced_upgrade_trade_loop",
+    "light_freighter_capacity_trade_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -355,6 +356,10 @@
     "weapon_reputation_gate_recovery": {
       "purpose": "Weapon-service reputation gate loop: at Sirius Station, block Pulse Cannon purchase below the Independent weapons-service reputation threshold, then raise reputation to the threshold and verify purchase recovery while preserving exact Classic service-refusal UI as pending.",
       "surface": "government reputation-gated weapons service scaffold"
+    },
+    "light_freighter_capacity_trade_loop": {
+      "purpose": "Light-freighter capacity trade loop: buy a Light Freighter at Earth, use its 150-ton hold to carry a six-lot Sol Food return load, and verify the expanded ship-capacity trade run under pending-Classic source boundaries.",
+      "surface": "ship upgrade/large-hold merchant route scaffold"
     }
   }
 }
