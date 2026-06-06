@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": false,
-    "head": "eb920402afc3b149d30596c3fe4c04d69af64f9e",
-    "origin_main": "eb920402afc3b149d30596c3fe4c04d69af64f9e",
-    "status_short": "## main...origin/main"
+    "dirty": true,
+    "head": "b8fca0fb629a4f07331f0018f6659a9647799c52",
+    "origin_main": "b8fca0fb629a4f07331f0018f6659a9647799c52",
+    "status_short": "## main...origin/main\n M docs/checklists/ev-classic-fidelity-implementation-backlog.md\n M godot_ev/scripts/self_test.gd\n M native_ev/data/gameplay_curriculum.json\n M native_ev/scenario_eval.py\n M native_ev/tests/test_scenario_eval.py"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": false
+    "dirty": true
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_519a1e53",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "successor_ready_pending_dispatch",
+    "status": "review_required_after_local_checkpoint_pending_integrator_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T12:48:48.938021Z",
+    "updated_at": "2026-06-06T13:02:04Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "weapon credit recovery help-surface bundle remote-verified; successor t_519a1e53 created.",
+  "current_milestone": "weapon_availability_recovery_loop verified locally; stale review-required gate accepted for normal integrator commit/push flow.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -128,17 +128,17 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> failed missing Weapon credit recovery help line before help_overlay update",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasWeaponCreditRecoveryHelp=true",
-    "python3 tools/run_gameplay_scenarios.py weapon_credit_recovery_loop --pretty -> success true; blocked one credit short; exact price bought pulse_cannon; credits 0",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 215 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=81 failed=0 total=81",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=81",
+    "python3 -m unittest discover -s native_ev/tests -p test_*.py -> 216 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=82 failed=0 total=82",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=82",
     "git diff --check -> OK"
   ],
-  "active_gate": null,
+  "active_gate": {
+    "type": "review-required/stale workflow gate accepted for integrator handling",
+    "reason": "terminal-velocity worker blocked after verified coherent TV code slice; policy says stale review-required gates on coherent normal TV work are resolved locally by loki-game integrator",
+    "withheld_action": "none after this coordinator run; proceed to commit/push/complete/successor under normal TV policy",
+    "resume_after": "commit/push/fetch/verify HEAD == origin/main, complete t_519a1e53, create/dispatch exactly one successor"
+  },
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
@@ -146,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Dispatch/continue successor t_519a1e53 from current origin/main and implement the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing weapon_credit_recovery_loop or weapon-credit F10 help/probe work.",
-  "resume_prompt": "Continue Terminal Velocity from current origin/main after verified weapon credit recovery help-surface push; do not redo weapon_credit_recovery_loop or weapon-credit F10 help/probe; select the next source-aligned safe local gameplay/fidelity slice.",
-  "updated_at": "2026-06-06T12:48:48.938021Z",
+  "next_resume_action": "Commit/push/fetch/verify the weapon_availability_recovery_loop slice, complete t_519a1e53, create and dispatch exactly one successor from current origin/main, then continue the next source-aligned safe local Terminal Velocity slice without redoing weapon availability or weapon credit work.",
+  "resume_prompt": "Continue Terminal Velocity from current origin/main after verified weapon availability recovery scenario; do not redo weapon_credit_recovery_loop, weapon-credit help/probe, or weapon_availability_recovery_loop; select the next safe source-aligned gameplay/fidelity slice.",
+  "updated_at": "2026-06-06T13:02:04Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -217,15 +217,14 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "weapon-credit-recovery-help-surface",
-    "summary": "Added and verified F10 help/probe promotion for the existing weapon_credit_recovery_loop: players now get recovery guidance for insufficient-credit landed weapon purchases while retaining pending-Classic purchase UI labels.",
-    "commit": "eb920402afc3b149d30596c3fe4c04d69af64f9e",
+    "id": "weapon-availability-recovery-loop",
+    "summary": "Added symbolic weapon_availability_recovery_loop: blocks pulse_cannon purchase at Sol/Earth when the local TV weapon service does not sell it, then recovers at Sirius/Sirius Station and buys it under pending-Classic store-inventory labels.",
+    "commit": "local checkpoint pending; inspect current git rev-parse HEAD after commit",
     "source_fidelity_labels": [
-      "terminal-velocity-weapon-credit-gate-scaffold",
-      "classic_runtime_weapon_purchase_credit_ui_pending",
-      "help_surface_pending_playtest"
+      "terminal-velocity-weapon-availability-scaffold",
+      "classic_runtime_weapon_store_inventory_pending"
     ],
-    "remote_verified": true
+    "remote_verified": false
   },
   "git_state": {
     "dirty": false,

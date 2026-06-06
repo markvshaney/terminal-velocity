@@ -114,6 +114,7 @@ SCENARIO_CURRICULUM = [
     'legal_docking_service_gate_recovery',
     'weapon_reputation_gate_recovery',
     'weapon_credit_recovery_loop',
+    'weapon_availability_recovery_loop',
     'contraband_scan_clemency_recovery',
     'legal_clemency_insufficient_credit_guardrail',
     'pirate_avoidance_escape_route',
@@ -2533,6 +2534,13 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'credits': 1400}},
             {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': 'terminal-velocity-weapon-credit-gate-scaffold', 'oracleStatus': 'classic_runtime_weapon_purchase_credit_ui_pending'},
         ]
+    if name == 'weapon_availability_recovery_loop':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'reputation': {'Federation': 5, 'Independent': 6}, 'legalRecords': {'Federation': 0, 'Independent': 0}, 'credits': 1400}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': 'terminal-velocity-weapon-availability-scaffold', 'oracleStatus': 'classic_runtime_weapon_store_inventory_pending', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station'}},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': 'terminal-velocity-weapon-availability-scaffold', 'oracleStatus': 'classic_runtime_weapon_store_inventory_pending'},
+        ]
     if name == 'contraband_scan_clemency_recovery':
         return [
             {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'cargoHold': {'equipment': 2}, 'cargoUsed': 2, 'credits': 5000, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
@@ -3272,6 +3280,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_weapon_purchase_one_credit_short': 'passed' if blocked and blocked[-1].get('reason') == 'insufficient credits' and blocked[-1].get('price') == 1400 and blocked[-1].get('credits') == 1399 else 'failed',
             'recovered_weapon_purchase_at_exact_price': 'passed' if bought and bought[-1].get('price') == 1400 and state.get('credits') == 0 and state.get('ownedWeapons', {}).get('pulse_cannon') == 1 else 'failed',
             'recorded_weapon_credit_source_boundary': 'passed' if blocked and bought and blocked[-1].get('sourceLabel') == 'terminal-velocity-weapon-credit-gate-scaffold' and blocked[-1].get('oracleStatus') == 'classic_runtime_weapon_purchase_credit_ui_pending' and bought[-1].get('sourceLabel') == 'terminal-velocity-weapon-credit-gate-scaffold' and bought[-1].get('oracleStatus') == 'classic_runtime_weapon_purchase_credit_ui_pending' else 'failed',
+        })
+    elif name == 'weapon_availability_recovery_loop':
+        blocked = [event for event in trace if event.get('type') == 'blocked_buy_outfit_or_weapon' and event.get('itemId') == 'pulse_cannon']
+        bought = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'pulse_cannon']
+        checks.update({
+            'blocked_weapon_not_for_sale_at_earth': 'passed' if blocked and blocked[-1].get('reason') == 'weapon not for sale here' and blocked[-1].get('system') == 'Sol' and blocked[-1].get('body') == 'Earth' else 'failed',
+            'recovered_at_sirius_weapon_service': 'passed' if bought and state.get('currentSystem') == 'Sirius' and state.get('landedBody') == 'Sirius Station' and state.get('ownedWeapons', {}).get('pulse_cannon') == 1 else 'failed',
+            'recorded_weapon_availability_source_boundary': 'passed' if blocked and bought and blocked[-1].get('sourceLabel') == 'terminal-velocity-weapon-availability-scaffold' and blocked[-1].get('oracleStatus') == 'classic_runtime_weapon_store_inventory_pending' and bought[-1].get('sourceLabel') == 'terminal-velocity-weapon-availability-scaffold' and bought[-1].get('oracleStatus') == 'classic_runtime_weapon_store_inventory_pending' else 'failed',
         })
     elif name == 'contraband_scan_clemency_recovery':
         scan = next((event for event in trace if event.get('type') == 'contraband_scan'), {})

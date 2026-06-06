@@ -81,6 +81,7 @@
     "legal_docking_service_gate_recovery",
     "weapon_reputation_gate_recovery",
     "weapon_credit_recovery_loop",
+    "weapon_availability_recovery_loop",
     "contraband_scan_clemency_recovery",
     "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
@@ -370,6 +371,10 @@
     "weapon_credit_recovery_loop": {
       "purpose": "Weapon purchase credit guardrail: at Sirius Station, block Pulse Cannon purchase one credit short of the local TV price, then recover at exact price while preserving exact Classic refusal UI as pending.",
       "surface": "weapon purchase affordability/recovery scaffold"
+    },
+    "weapon_availability_recovery_loop": {
+      "purpose": "Weapon store availability recovery loop: block a Pulse Cannon purchase at Earth where the local manifest sells only Laser Cannon, then relocate to Sirius Station and buy the local Pulse Cannon while preserving exact Classic store-inventory UI as pending.",
+      "surface": "weapon store availability/recovery scaffold"
     },
     "light_freighter_capacity_trade_loop": {
       "purpose": "Light-freighter capacity trade loop: buy a Light Freighter at Earth, use its 150-ton hold to carry a six-lot Sol Food return load, and verify the expanded ship-capacity trade run under pending-Classic source boundaries.",
