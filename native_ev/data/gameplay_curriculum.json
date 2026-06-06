@@ -88,6 +88,7 @@
     "weapon_legal_docking_recovery_loop",
     "weapon_inventory_stack_recovery_loop",
     "contraband_scan_clemency_recovery",
+    "contraband_scan_trade_recovery_loop",
     "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
     "disposable_combat_placeholder"
@@ -164,6 +165,10 @@
     "contraband_scan_clemency_recovery": {
       "purpose": "Contraband scan/recovery loop: confiscate illegal cargo, apply a government fine/legal penalty, then pay a clemency scaffold to partially repair the legal record while preserving source boundaries.",
       "surface": "government patrol/legal recovery scaffold"
+    },
+    "contraband_scan_trade_recovery_loop": {
+      "purpose": "Contraband scan/trade recovery loop: confiscate only illegal cargo from a mixed hold, preserve a legal Food lot, then recover via clemency and a Levo commodity sale while retaining pending-Classic runtime/source boundaries.",
+      "surface": "government patrol/legal cargo preservation trade scaffold"
     },
     "legal_clemency_insufficient_credit_guardrail": {
       "purpose": "Legal clemency credit guardrail: block a clemency payment when the pilot is one credit short, then recover when exact-cost credits are available while preserving scaffold/source-boundary labels.",

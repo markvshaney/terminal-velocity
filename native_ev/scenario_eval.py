@@ -121,6 +121,7 @@ SCENARIO_CURRICULUM = [
     'weapon_legal_docking_recovery_loop',
     'weapon_inventory_stack_recovery_loop',
     'contraband_scan_clemency_recovery',
+    'contraband_scan_trade_recovery_loop',
     'legal_clemency_insufficient_credit_guardrail',
     'pirate_avoidance_escape_route',
     'disposable_combat_placeholder',
@@ -989,8 +990,10 @@ def _apply_contraband_scan(state: dict[str, Any], action: dict[str, Any], trace:
         'legalAfter': state['legalRecords'][government],
         'confiscated': confiscated,
         'cargoHold': dict(state.get('cargoHold', {})),
-        'sourceLabel': 'terminal-velocity-classic-resource-smuggling-scan-semantics',
-        'oracleStatus': 'classic_runtime_scan_frequency_and_ui_wording_pending',
+        'cargoHoldAfter': dict(state.get('cargoHold', {})),
+        'cargoUsedAfter': int(state.get('cargoUsed', 0)),
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-classic-resource-smuggling-scan-semantics'),
+        'oracleStatus': action.get('oracleStatus', 'classic_runtime_scan_frequency_and_ui_wording_pending'),
     })
     return True
 
@@ -2594,6 +2597,18 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'apply_contraband_scan', 'government': 'Federation'},
             {'type': 'pay_legal_clemency', 'government': 'Federation'},
         ]
+    if name == 'contraband_scan_trade_recovery_loop':
+        source_label = 'terminal-velocity-contraband-trade-recovery-scaffold'
+        oracle_status = 'classic_runtime_scan_trade_cargo_cleanup_pending'
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'cargoHold': {'equipment': 2, 'food': 10}, 'cargoUsed': 12, 'credits': 6000, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
+            {'type': 'apply_contraband_scan', 'government': 'Federation', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'pay_legal_clemency', 'government': 'Federation'},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Levo'},
+            {'type': 'land', 'body': 'Levo Spaceport'},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'legal_clemency_insufficient_credit_guardrail':
         return [
             {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'credits': 999, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
@@ -3389,6 +3404,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'confiscated_federation_contraband': 'passed' if scan.get('government') == 'Federation' and scan.get('action') == 'fine' and scan.get('confiscated') == {'equipment': 2} and state.get('cargoHold') == {} and state.get('cargoUsed') == 0 else 'failed',
             'applied_federation_fine_and_legal_penalty': 'passed' if scan.get('creditsDelta') == -800 and scan.get('legalDelta') == -3 else 'failed',
             'paid_clemency_after_scan': 'passed' if clemency.get('government') == 'Federation' and clemency.get('cost') == 1000 and clemency.get('legalDelta') == 25 and state.get('credits') == 3200 and state.get('legalRecords', {}).get('Federation') == -8 else 'failed',
+        })
+    elif name == 'contraband_scan_trade_recovery_loop':
+        scan = next((event for event in trace if event.get('type') == 'contraband_scan'), {})
+        sale = next((event for event in trace if event.get('type') == 'sell_commodity_lot' and event.get('commodity') == 'food'), {})
+        checks.update({
+            'confiscated_only_contraband_cargo': 'passed' if scan.get('confiscated') == {'equipment': 2} and scan.get('cargoHoldAfter') == {'food': 10} and scan.get('cargoUsedAfter') == 10 else 'failed',
+            'preserved_legal_food_trade_lot': 'passed' if state.get('cargoHold') == {} and state.get('cargoUsed') == 0 and sale.get('system') == 'Levo' and sale.get('unitPrice') == 120 else 'failed',
+            'recovered_scan_penalty_with_clemency_and_trade_sale': 'passed' if state.get('credits') == 5400 and state.get('legalRecords', {}).get('Federation') == -8 else 'failed',
+            'recorded_contraband_trade_source_boundary': 'passed' if scan.get('sourceLabel') == 'terminal-velocity-contraband-trade-recovery-scaffold' and scan.get('oracleStatus') == 'classic_runtime_scan_trade_cargo_cleanup_pending' and sale.get('sourceLabel') == 'terminal-velocity-contraband-trade-recovery-scaffold' and sale.get('oracleStatus') == 'classic_runtime_scan_trade_cargo_cleanup_pending' else 'failed',
         })
     elif name == 'legal_clemency_insufficient_credit_guardrail':
         blocked = [event for event in trace if event.get('type') == 'blocked_legal_clemency']
