@@ -118,6 +118,7 @@ SCENARIO_CURRICULUM = [
     'weapon_purchase_mission_cargo_reservation_loop',
     'weapon_purchase_trade_cargo_reservation_loop',
     'weapon_purchase_secondary_activation_loop',
+    'weapon_legal_docking_recovery_loop',
     'contraband_scan_clemency_recovery',
     'legal_clemency_insufficient_credit_guardrail',
     'pirate_avoidance_escape_route',
@@ -2568,6 +2569,16 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'secondary_weapon_loaded', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'weapon_legal_docking_recovery_loop':
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': None, 'reputation': {'Federation': 10, 'Independent': 6}, 'legalRecords': {'Federation': -70, 'Independent': 0}, 'credits': 2400}},
+            {'type': 'land', 'body': 'Earth', 'expectBlocked': True},
+            {'type': 'pay_legal_clemency', 'government': 'Federation'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'jump', 'destinationSystem': 'Sirius'},
+            {'type': 'land', 'body': 'Sirius Station'},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': 'terminal-velocity-weapon-legal-docking-scaffold', 'oracleStatus': 'classic_runtime_weapon_purchase_after_docking_denial_pending'},
+        ]
     if name == 'contraband_scan_clemency_recovery':
         return [
             {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'cargoHold': {'equipment': 2}, 'cargoUsed': 2, 'credits': 5000, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
@@ -3341,6 +3352,17 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_secondary_weapon_for_activation': 'passed' if bought and bought[-1].get('saleType') == 'weapon' and state.get('ownedWeapons', {}).get('pulse_cannon') == 1 else 'failed',
             'recorded_secondary_activation_steps': 'passed' if [event.get('skill') for event in checkpoints] == ['secondary_weapon_unloaded', 'secondary_weapon_loaded'] else 'failed',
             'recorded_weapon_secondary_source_boundary': 'passed' if bought and bought[-1].get('sourceLabel') == source_label and bought[-1].get('oracleStatus') == oracle_status and len(checkpoints) == 2 and all(event.get('oracleStatus') == oracle_status for event in checkpoints) else 'failed',
+        })
+    elif name == 'weapon_legal_docking_recovery_loop':
+        blocked_land = [event for event in trace if event.get('type') == 'blocked_land' and event.get('body') == 'Earth']
+        clemency = [event for event in trace if event.get('type') == 'pay_legal_clemency' and event.get('government') == 'Federation']
+        landed = [event for event in trace if event.get('type') == 'land' and event.get('body') == 'Sirius Station']
+        bought = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'pulse_cannon']
+        checks.update({
+            'blocked_weapon_service_docking_on_bad_legal': 'passed' if blocked_land and blocked_land[-1].get('reason') == 'legal docking denied' and blocked_land[-1].get('government') == 'Federation' and blocked_land[-1].get('legal') == -70 else 'failed',
+            'clemency_restored_weapon_port_docking': 'passed' if clemency and clemency[-1].get('legalAfter') == -45 and landed else 'failed',
+            'bought_weapon_after_legal_docking_recovery': 'passed' if bought and state.get('ownedWeapons', {}).get('pulse_cannon') == 1 and state.get('credits') == 0 else 'failed',
+            'recorded_weapon_legal_docking_source_boundary': 'passed' if blocked_land and bought and blocked_land[-1].get('sourceLabel') == 'terminal-velocity-legal-docking-scaffold' and bought[-1].get('sourceLabel') == 'terminal-velocity-weapon-legal-docking-scaffold' and bought[-1].get('oracleStatus') == 'classic_runtime_weapon_purchase_after_docking_denial_pending' else 'failed',
         })
     elif name == 'contraband_scan_clemency_recovery':
         scan = next((event for event in trace if event.get('type') == 'contraband_scan'), {})

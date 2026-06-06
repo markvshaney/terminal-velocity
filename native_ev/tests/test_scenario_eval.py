@@ -99,6 +99,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'weapon_purchase_mission_cargo_reservation_loop',
                 'weapon_purchase_trade_cargo_reservation_loop',
                 'weapon_purchase_secondary_activation_loop',
+                'weapon_legal_docking_recovery_loop',
                 'contraband_scan_clemency_recovery',
                 'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
@@ -1891,6 +1892,29 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(bought['oracleStatus'], 'classic_runtime_secondary_weapon_activation_pending')
         checkpoints = [event['skill'] for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
         self.assertEqual(checkpoints, ['secondary_weapon_unloaded', 'secondary_weapon_loaded'])
+
+    def test_weapon_legal_docking_recovery_loop_repairs_legal_record_then_buys_weapon(self):
+        result = run_scripted_scenario('weapon_legal_docking_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['legalRecords']['Federation'], -45)
+        self.assertEqual(result['state']['ownedWeapons']['pulse_cannon'], 1)
+        self.assertEqual(result['state']['credits'], 0)
+        self.assertEqual(result['checks']['blocked_weapon_service_docking_on_bad_legal'], 'passed')
+        self.assertEqual(result['checks']['clemency_restored_weapon_port_docking'], 'passed')
+        self.assertEqual(result['checks']['bought_weapon_after_legal_docking_recovery'], 'passed')
+        self.assertEqual(result['checks']['recorded_weapon_legal_docking_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_land'][-1]
+        self.assertEqual(blocked['government'], 'Federation')
+        self.assertEqual(blocked['body'], 'Earth')
+        self.assertEqual(blocked['sourceLabel'], 'terminal-velocity-legal-docking-scaffold')
+        bought = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon'][-1]
+        self.assertEqual(bought['saleType'], 'weapon')
+        self.assertEqual(bought['itemId'], 'pulse_cannon')
+        self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-legal-docking-scaffold')
+        self.assertEqual(bought['oracleStatus'], 'classic_runtime_weapon_purchase_after_docking_denial_pending')
 
     def test_contraband_scan_clemency_recovery_confiscates_and_repairs_legal_record(self):
         result = run_scripted_scenario('contraband_scan_clemency_recovery')

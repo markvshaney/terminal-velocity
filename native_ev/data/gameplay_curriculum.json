@@ -85,6 +85,7 @@
     "weapon_purchase_mission_cargo_reservation_loop",
     "weapon_purchase_trade_cargo_reservation_loop",
     "weapon_purchase_secondary_activation_loop",
+    "weapon_legal_docking_recovery_loop",
     "contraband_scan_clemency_recovery",
     "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
@@ -430,6 +431,10 @@
     "weapon_purchase_secondary_activation_loop": {
       "purpose": "Weapon purchase secondary activation loop: buy a Pulse Cannon at Sirius Station, record unloaded/loaded secondary weapon strategy checkpoints, and preserve explicit TV scaffold and Classic-runtime-pending activation boundaries.",
       "surface": "weapon purchase/secondary activation scaffold"
+    },
+    "weapon_legal_docking_recovery_loop": {
+      "purpose": "Weapon legal-docking recovery loop: block Federation docking at Earth under bad legal standing, pay the existing clemency scaffold, recover access, travel to Sirius Station, and buy the Pulse Cannon while preserving pending-Classic weapon/legal UI boundaries.",
+      "surface": "weapon purchase/legal docking recovery scaffold"
     }
   }
 }
