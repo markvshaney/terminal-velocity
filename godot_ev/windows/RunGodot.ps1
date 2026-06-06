@@ -60,6 +60,7 @@ param(
     [switch]$WeaponCreditGateLog,
     [switch]$WeaponAvailabilityGateLog,
     [switch]$WeaponInventoryStackLog,
+    [switch]$WeaponMissionCargoLog,
     [switch]$LegalPatrolPostureLog,
     [switch]$MissionLegalEligibilityLog,
     [switch]$MissionStoryGateLog,
@@ -202,6 +203,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-weapon-availability-gate-log
 } elseif ($WeaponInventoryStackLog) {
     & $Godot --headless --path $Project -- --tv-weapon-inventory-stack-log
+} elseif ($WeaponMissionCargoLog) {
+    & $Godot --headless --path $Project -- --tv-weapon-mission-cargo-log
 } elseif ($LegalPatrolPostureLog) {
     & $Godot --headless --path $Project -- --tv-legal-patrol-posture-log
 } elseif ($MissionLegalEligibilityLog) {

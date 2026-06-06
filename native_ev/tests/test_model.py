@@ -1048,6 +1048,8 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_WEAPON_REPUTATION_GATE_EVENT',
             'TV_WEAPON_CREDIT_GATE_EVENT',
             'TV_WEAPON_AVAILABILITY_GATE_EVENT',
+            'TV_WEAPON_INVENTORY_STACK_EVENT',
+            'TV_WEAPON_MISSION_CARGO_EVENT',
             'TV_LEGAL_PATROL_POSTURE_EVENT',
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             'TV_MISSION_STORY_GATE_EVENT',
@@ -1069,6 +1071,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_weapon_credit_gate_log',
             'func _run_weapon_availability_gate_log',
             'func _run_weapon_inventory_stack_log',
+            'func _run_weapon_mission_cargo_log',
             'func _run_legal_patrol_posture_log',
             'func _run_mission_legal_eligibility_log',
             'func _run_mission_story_gate_log',
@@ -1147,6 +1150,7 @@ class NativeEvModelTests(unittest.TestCase):
             'sourceLabel=terminal-velocity-weapon-credit-gate-scaffold',
             'sourceLabel=terminal-velocity-weapon-availability-gate-scaffold',
             'sourceLabel=terminal-velocity-weapon-inventory-stack-scaffold',
+            'sourceLabel=terminal-velocity-weapon-mission-cargo-scaffold',
             'oracleStatus=classic_runtime_weapon_purchase_credit_flow_pending',
             'oracleStatus=classic_runtime_weapon_service_availability_pending',
             'weaponCreditBlocked=%s',
@@ -1158,6 +1162,10 @@ class NativeEvModelTests(unittest.TestCase):
             'secondWeaponBuySucceeded=%s',
             'weaponStackCountAfterFirst=%d',
             'weaponStackCountAfterSecond=%d',
+            'activeMissionCargoBefore=%d',
+            'activeMissionCargoAfter=%d',
+            'cargoUsedAfterWeapon=%d',
+            'missionCargoPreserved=%s',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('tv-legal-status-log', run_script)
@@ -1167,6 +1175,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-weapon-credit-gate-log', run_script)
         self.assertIn('tv-weapon-availability-gate-log', run_script)
         self.assertIn('tv-weapon-inventory-stack-log', run_script)
+        self.assertIn('tv-weapon-mission-cargo-log', run_script)
         self.assertIn('tv-legal-patrol-posture-log', run_script)
         self.assertIn('tv-mission-legal-eligibility-log', run_script)
         self.assertIn('tv-legal-consequence-log', run_script)
@@ -1181,6 +1190,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$WeaponCreditGateLog', windows_script)
         self.assertIn('[switch]$WeaponAvailabilityGateLog', windows_script)
         self.assertIn('[switch]$WeaponInventoryStackLog', windows_script)
+        self.assertIn('[switch]$WeaponMissionCargoLog', windows_script)
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
         self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)

@@ -81,6 +81,7 @@ const WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_REPUTATION_GATE_EVEN
 const WEAPON_CREDIT_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_CREDIT_GATE_EVENT"
 const WEAPON_AVAILABILITY_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_AVAILABILITY_GATE_EVENT"
 const WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX := "TV_WEAPON_INVENTORY_STACK_EVENT"
+const WEAPON_MISSION_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_MISSION_CARGO_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
@@ -326,6 +327,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_availability_gate_log")
 	if OS.get_cmdline_args().has("--tv-weapon-inventory-stack-log") or OS.get_cmdline_user_args().has("--tv-weapon-inventory-stack-log"):
 		call_deferred("_run_weapon_inventory_stack_log")
+	if OS.get_cmdline_args().has("--tv-weapon-mission-cargo-log") or OS.get_cmdline_user_args().has("--tv-weapon-mission-cargo-log"):
+		call_deferred("_run_weapon_mission_cargo_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -2915,6 +2918,40 @@ func _run_weapon_inventory_stack_log() -> void:
 	var weapon_stack_count_after_second := int(owned_weapons.get(selected_weapon, 0))
 	var weapon_stack_preserved := first_weapon_buy_succeeded and second_weapon_buy_succeeded and weapon_stack_count_after_first == 1 and weapon_stack_count_after_second == 2
 	print("%s system=%s body=\"%s\" government=\"%s\" selectedWeapon=%s firstWeaponBuySucceeded=%s secondWeaponBuySucceeded=%s weaponStackCountAfterFirst=%d weaponStackCountAfterSecond=%d weaponStackPreserved=%s creditsAfterFirst=%d creditsAfterSecond=%d sourceLabel=terminal-velocity-weapon-inventory-stack-scaffold oracleStatus=classic_runtime_multiple_weapon_purchase_inventory_pending" % [WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX, system_name, body_name, government_name, selected_weapon, str(first_weapon_buy_succeeded), str(second_weapon_buy_succeeded), weapon_stack_count_after_first, weapon_stack_count_after_second, str(weapon_stack_preserved), credits_after_first, credits])
+	get_tree().quit(0)
+
+func _run_weapon_mission_cargo_log() -> void:
+	_reset_travel_state()
+	var selected_weapon := "pulse_cannon"
+	var system_name := "Sirius"
+	var body_name := "Sirius Station"
+	current_system_index = _system_index_by_name(system_name, current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			break
+	var government_name := _current_government_name()
+	legal_records[government_name] = 0
+	reputation_scores[government_name] = 6
+	story_flags = ["frontier_samples_delivered"]
+	credits = 10000
+	owned_weapons.clear()
+	landing_tab = 0
+	selected_landing_item = 0
+	status_messages.clear()
+	_accept_selected_mission()
+	var accepted_mission_id := "freeport_return_earth"
+	var mission_accepted := active_missions.has(accepted_mission_id)
+	var active_mission_cargo_before := _mission_reserved_cargo_tons()
+	var cargo_used_before_weapon := cargo
+	status_messages.clear()
+	var weapon_buy_succeeded := _buy_outfit_or_weapon_by_id(selected_weapon)
+	var active_mission_cargo_after := _mission_reserved_cargo_tons()
+	var cargo_used_after_weapon := cargo
+	var mission_cargo_preserved := mission_accepted and weapon_buy_succeeded and active_mission_cargo_before == active_mission_cargo_after and cargo_used_before_weapon == cargo_used_after_weapon and active_mission_cargo_after > 0
+	print("%s system=%s body=\"%s\" government=\"%s\" selectedWeapon=%s acceptedMission=%s missionAccepted=%s weaponBuySucceeded=%s activeMissionCargoBefore=%d activeMissionCargoAfter=%d cargoUsedAfterWeapon=%d weaponCount=%d creditsAfterWeapon=%d missionCargoPreserved=%s sourceLabel=terminal-velocity-weapon-mission-cargo-scaffold oracleStatus=classic_runtime_weapon_purchase_cargo_interaction_pending" % [WEAPON_MISSION_CARGO_EVENT_LOG_PREFIX, system_name, body_name, government_name, selected_weapon, accepted_mission_id, str(mission_accepted), str(weapon_buy_succeeded), active_mission_cargo_before, active_mission_cargo_after, cargo_used_after_weapon, int(owned_weapons.get(selected_weapon, 0)), credits, str(mission_cargo_preserved)])
 	get_tree().quit(0)
 
 func _run_legal_patrol_posture_log() -> void:
