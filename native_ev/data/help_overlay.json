@@ -88,6 +88,7 @@
     "Weapon credit recovery: if a landed weapon purchase is blocked for insufficient credits, run a safe trade/mission funding leg, return to the same service port, and retry only once the price is covered. TV scaffold; Classic purchase UI pending.",
     "Weapon availability recovery: if a weapon is not sold at the current landed port, keep the purchase goal but scout the service matrix for a port that lists it, then retry there. TV scaffold; Classic store inventory UI pending.",
     "Weapon mission cargo recovery: buying a landed weapon should preserve active mission-reserved cargo; verify Mission Log/Player Info cargo before rerouting or accepting more freight. TV scaffold; Classic weapon/cargo UI pending.",
+    "Weapon trade cargo recovery: buying a landed weapon should preserve held trade cargo; verify Player Info/commodity hold before selling, rerouting, or taking more freight. TV scaffold; Classic weapon/cargo UI pending.",
     "Alignment gates: story offers may require prior flags, local reputation, legal standing, or an open branch choice; scan Mission Computer details before hauling cargo. Exact Classic offer UI pending.",
     "Alignment return contracts: after choosing a chapter branch, scan Mission Computer for remaining non-branch return contracts before assuming the story chain is complete. TV timing scaffold pending Classic UI evidence.",
     "Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
@@ -329,6 +330,11 @@
       "flag": "hasWeaponMissionCargoRecoveryHelp",
       "source": "help",
       "contains": "Weapon mission cargo recovery: buying a landed weapon should preserve active mission-reserved cargo"
+    },
+    {
+      "flag": "hasWeaponTradeCargoRecoveryHelp",
+      "source": "help",
+      "contains": "Weapon trade cargo recovery: buying a landed weapon should preserve held trade cargo"
     },
     {
       "flag": "hasAlignmentGateHelp",
