@@ -24,6 +24,7 @@ param(
     [switch]$MissionTradeDestinationSaleLog,
     [switch]$ChapterOneTradeCarryoverLog,
     [switch]$MissionAbortLog,
+    [switch]$MissionAbortReacceptLog,
     [switch]$MissionAbortForbiddenLog,
     [switch]$MissionAbortPenaltyLog,
     [switch]$MissionAutoAbortLog,
@@ -143,6 +144,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-chapter-one-trade-carryover-log
 } elseif ($MissionAbortLog) {
     & $Godot --headless --path $Project -- --tv-mission-abort-log
+} elseif ($MissionAbortReacceptLog) {
+    & $Godot --headless --path $Project -- --tv-mission-abort-reaccept-log
 } elseif ($MissionAbortForbiddenLog) {
     & $Godot --headless --path $Project -- --tv-mission-abort-forbidden-log
 } elseif ($MissionAbortPenaltyLog) {

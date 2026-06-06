@@ -1675,6 +1675,34 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Mission abort scenario contract', plan)
         self.assertIn('reserved cargo release', plan)
 
+    def test_godot_mission_abort_reaccept_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-abort-reaccept-log',
+            'func _run_mission_abort_reaccept_log',
+            'TV_MISSION_ABORT_REACCEPT_EVENT',
+            'firstMissionAccepted=true',
+            'firstMissionAborted=true',
+            'reservedCargoReleasedAfterAbort=true',
+            'missionReofferVisibleAfterAbort=true',
+            'missionReaccepted=true',
+            'reservedCargoReclaimedAfterReaccept=true',
+            'reacceptedMissionDelivered=true',
+            'reservedCargoReleasedAfterDelivery=true',
+            'rewardPaidAfterDelivery=true',
+            'sourceLabel=terminal-velocity-mission-abort-reaccept-scaffold',
+            'oracleStatus=mission_abort_reaccept_pending_classic_runtime_or_manual_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionAbortReacceptLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-abort-reaccept-log', run_script)
+        self.assertIn('tv-mission-abort-reaccept-log', wrapper)
+        self.assertIn('Mission abort/reaccept delivery scenario contract', plan)
+
     def test_godot_mission_abort_forbidden_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

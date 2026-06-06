@@ -1,11 +1,11 @@
 {
   "active_gate": {
-    "reason": "Code/docs/test changes for tv-mission-alignment-delivery-log need review/integrator handling before push/merge and Kanban completion.",
+    "reason": "Code/docs/test changes for tv-mission-abort-reaccept-log need review/integrator handling before push/merge and Kanban completion.",
     "resume_after": "reviewer/coordinator approves the local diff or requests changes via Kanban comment/unblock",
     "type": "review-required",
-    "withheld_action": "git push origin main and marking t_a51b8e49 complete as merged/done"
+    "withheld_action": "git push origin main and marking t_94b2f1ec complete as merged/done"
   },
-  "current_milestone": "tv-mission-alignment-delivery-log implemented locally and full-regression verified; review-required handoff active.",
+  "current_milestone": "tv-mission-abort-reaccept-log implemented locally and full-regression verified; review-required handoff active.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -78,10 +78,10 @@
     "ahead": "inspect with git status --short --branch",
     "behind": "inspect with git status --short --branch",
     "branch": "main",
-    "dirty": false,
-    "head": "current local checkpoint; inspect with git rev-parse HEAD (SHA-neutral to avoid self-staling on amend)",
+    "dirty": true,
+    "head": "local checkpoint commit for tv-mission-abort-reaccept-log; inspect live SHA with git rev-parse HEAD",
     "origin_main": "inspect with git rev-parse origin/main",
-    "status_short": "## main...origin/main after local checkpoint commit; verify live with git status --short --branch"
+    "status_short": "## main...origin/main [ahead 2 after local checkpoint commit] with pre-existing unrelated dirty docs/research/automated-gameplay-learning-reference-sources.md; verify live with git status --short --branch"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -104,9 +104,9 @@
     "last_completed_task_id": "t_2d00271a",
     "last_successor_task_id": "t_315b0230"
   },
-  "last_checkpoint_commit": "feat(godot): expose chapter one trade carryover probe",
+  "last_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording for the current local checkpoint because commits containing this checkpoint stale exact embedded HEAD values when amended.",
-  "last_commit": "local checkpoint: feat(godot): expose chapter one trade carryover probe",
+  "last_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -121,43 +121,38 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_completed_slice": {
-    "id": "tv-mission-alignment-delivery-log",
-    "kanban_task_id": "t_a51b8e49",
+    "id": "tv-mission-abort-reaccept-log",
+    "kanban_task_id": "t_94b2f1ec",
     "review_required": true,
     "source_fidelity_labels": [
-      "terminal-velocity-mission-scaffold",
-      "mission_behavior_pending_classic_runtime_trace",
-      "terminal_velocity_alignment_delivery_scaffold_exact_classic_completion_ui_pending"
+      "terminal-velocity-mission-abort-reaccept-scaffold",
+      "mission_abort_reaccept_pending_classic_runtime_or_manual_trace"
     ],
-    "summary": "Local implementation adds a deterministic Godot alignment branch-delivery probe for both chapter-one branch jobs: Federation report to Earth and Freeport pact to Luna; it verifies acceptance, delivery, 2-ton cargo release, reward payout, branch story flags, and incompatible branch blockage under pending-Classic UI labels.",
+    "summary": "Local implementation adds a deterministic Godot mission abort/reaccept/delivery probe for the intro courier scaffold: accept, abort, verify cargo release and reoffer, reaccept, deliver at Luna, verify cargo release/reward payout, and preserve abort/completion history under pending-Classic labels.",
     "verification": [
-      "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_delivery_log_contract -v -> FAIL before implementation on missing event/log contract fields",
-      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_delivery_log_contract native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_federation_alignment_delivery_loop_completes_branch_and_preserves_choice native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_freeport_alignment_delivery_loop_completes_branch_and_preserves_choice -v -> OK (3 tests)",
-      "python3 tools/run_gameplay_scenarios.py federation_alignment_delivery_loop --pretty -> success true; reward/cargo/branch-block checks passed",
-      "python3 tools/run_gameplay_scenarios.py freeport_alignment_delivery_loop --pretty -> success true; reward/cargo/branch-block checks passed",
-      "./run_godot.sh tv-mission-alignment-delivery-log -> federation/freeport accepted+delivered, cargo released, rewards paid, flags set, incompatible branch blocked",
-      "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (229 tests)",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_abort_reaccept_log_contract -v -> OK (1 test)",
+      "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_abort_reaccept_delivery_loop_recovers_after_abort -v -> OK (1 test)",
+      "python3 tools/run_gameplay_scenarios.py mission_abort_reaccept_delivery_loop --pretty -> success true; abort/reaccept/delivery checks passed",
+      "./run_godot.sh tv-mission-abort-reaccept-log -> TV_MISSION_ABORT_REACCEPT_EVENT with first accept+abort, reoffer, reaccept, delivery, cargo/reward checks true",
+      "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (230 tests)",
       "python3 tools/run_gameplay_scenarios.py --all --pretty -> 91/91 scenarios passed",
       "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=91",
-      "git diff --check -> OK",
-      "diff-only sensitive scan for touched code/docs -> sensitive_added_hits=0"
+      "git diff --check -> OK"
     ]
   },
-  "last_process_checkpoint": "weapon_trade_cargo_godot_probe locally committed and verified; review-required handoff active.",
+  "last_process_checkpoint": "tv-mission-abort-reaccept-log locally implemented and verified; review-required handoff active.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_delivery_log_contract -v -> FAIL before implementation on missing event/log contract fields",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_delivery_log_contract native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_federation_alignment_delivery_loop_completes_branch_and_preserves_choice native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_freeport_alignment_delivery_loop_completes_branch_and_preserves_choice -v -> OK (3 tests)",
-    "python3 tools/run_gameplay_scenarios.py federation_alignment_delivery_loop --pretty -> success true; reward/cargo/branch-block checks passed",
-    "python3 tools/run_gameplay_scenarios.py freeport_alignment_delivery_loop --pretty -> success true; reward/cargo/branch-block checks passed",
-    "./run_godot.sh tv-mission-alignment-delivery-log -> federation/freeport accepted+delivered, cargo released, rewards paid, flags set, incompatible branch blocked",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (229 tests)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_abort_reaccept_log_contract -v -> OK (1 test)",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_abort_reaccept_delivery_loop_recovers_after_abort -v -> OK (1 test)",
+    "python3 tools/run_gameplay_scenarios.py mission_abort_reaccept_delivery_loop --pretty -> success true; abort/reaccept/delivery checks passed",
+    "./run_godot.sh tv-mission-abort-reaccept-log -> TV_MISSION_ABORT_REACCEPT_EVENT with first accept+abort, reoffer, reaccept, delivery, cargo/reward checks true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (230 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> 91/91 scenarios passed",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=91",
-    "git diff --check -> OK",
-    "diff-only sensitive scan for touched code/docs -> sensitive_added_hits=0"
+    "git diff --check -> OK"
   ],
-  "local_checkpoint_commit": "feat(godot): expose chapter one trade carryover probe; SHA-neutral, inspect live HEAD",
+  "local_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -166,7 +161,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review/push local tv-mission-alignment-delivery-log checkpoint normally if accepted, fetch/verify HEAD == origin/main, complete t_a51b8e49, and dispatch exactly one successor from clean origin/main. Do not redo this alignment delivery Godot probe unless review requests changes.",
+  "next_resume_action": "Review local tv-mission-abort-reaccept-log checkpoint and either request changes or let the coordinator/integrator push normally after standard checks; do not redo this abort/reaccept Godot probe unless review requests changes.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -174,9 +169,9 @@
     "behind": "inspect with git status --short --branch",
     "branch": "main",
     "dirty": true,
-    "head": "current local checkpoint; inspect with git rev-parse HEAD (SHA-neutral to avoid self-staling on amend)",
+    "head": "local checkpoint commit for tv-mission-abort-reaccept-log; inspect live SHA with git rev-parse HEAD",
     "origin_main": "inspect with git rev-parse origin/main",
-    "status_short": "## main...origin/main with local tv-mission-alignment-delivery-log changes pending review; verify live with git status --short --branch"
+    "status_short": "## main...origin/main [ahead 2 after local checkpoint commit] with pre-existing unrelated dirty docs/research/automated-gameplay-learning-reference-sources.md; verify live with git status --short --branch"
   },
   "repo_state": {
     "ahead": "inspect live",
@@ -200,7 +195,7 @@
   ],
   "resume_prompt": "Read .hermes/long-running/terminal-velocity/task-ledger.json and events.jsonl; inspect git status/diff; review or continue from t_ff06fbac tv-light-freighter-mission-trade-log local implementation.",
   "runner": {
-    "active_task_id": "t_a51b8e49",
+    "active_task_id": "t_94b2f1ec",
     "assignee": "terminal-velocity",
     "board": "terminal-velocity",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
@@ -211,7 +206,7 @@
     ],
     "integrator_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
     "kind": "kanban",
-    "last_completed_task_id": "t_2d00271a",
+    "last_completed_task_id": "t_a51b8e49",
     "legacy_llm_runner_job_id": "aafb9b3eac29",
     "legacy_llm_runner_state": "paused/superseded; do not resume while Kanban owns implementation",
     "normal_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
@@ -232,7 +227,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T23:31:44.076883+00:00",
+    "updated_at": "2026-06-06T23:49:28.256182+00:00",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
     "watchdog_schedule": "every 5m",
@@ -287,7 +282,7 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "running",
+  "status": "waiting_gate",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -308,5 +303,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T23:31:44.076899+00:00"
+  "updated_at": "2026-06-06T23:49:28.256182+00:00"
 }

@@ -47,6 +47,7 @@ const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_TRADE_DESTINATION_SALE_EVENT_LOG_PREFIX := "TV_MISSION_TRADE_DESTINATION_SALE_EVENT"
 const CHAPTER_ONE_TRADE_CARRYOVER_EVENT_LOG_PREFIX := "TV_CHAPTER_ONE_TRADE_CARRYOVER_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
+const MISSION_ABORT_REACCEPT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_REACCEPT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
 const MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_PENALTY_EVENT"
 const MISSION_AUTO_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_AUTO_ABORT_EVENT"
@@ -267,6 +268,8 @@ func _ready() -> void:
 		call_deferred("_run_chapter_one_trade_carryover_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
 		call_deferred("_run_mission_abort_log")
+	if OS.get_cmdline_args().has("--tv-mission-abort-reaccept-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-reaccept-log"):
+		call_deferred("_run_mission_abort_reaccept_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-forbidden-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-forbidden-log"):
 		call_deferred("_run_mission_abort_forbidden_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-penalty-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-penalty-log"):
@@ -1684,6 +1687,57 @@ func _run_mission_abort_log() -> void:
 	var abort_status := "missionAborted=true" if abort_succeeded else "missionAborted=false"
 	var cargo_released_status := "reservedCargoReleased=true" if cargo_after_abort == cargo_before_accept else "reservedCargoReleased=false"
 	print("%s startSystem=Levo routeToSolSelected=%s noActiveAbortBlocked=%s noActiveAbortStatusVisible=%s historyBeforeAccept=%d acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s repeatAbortBlocked=%s repeatAbortStatusVisible=%s cargoBeforeAccept=%d cargoAfterAccept=%d cargoAfterAbort=%d activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestAbort=%s sourceLabel=terminal-velocity-mission-abort-scaffold oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_ABORT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(no_active_abort_blocked), str(no_active_abort_status_visible), history_before_accept, str(accepted_body.get("name", "None")), accepted_mission_id, accepted_status, abort_status, cargo_released_status, str(repeat_abort_blocked), str(repeat_abort_status_visible), cargo_before_accept, cargo_after_accept, cargo_after_abort, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_abort, status_line])
+	get_tree().quit(0)
+
+func _run_mission_abort_reaccept_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var accepted_body := _current_body()
+	var mission_before_accept: Dictionary = _first_available_mission(accepted_body)
+	var accepted_mission_id := str(mission_before_accept.get("id", "none"))
+	var cargo_before_first_accept := cargo
+	_accept_selected_mission()
+	var first_accept_succeeded := active_missions.has(accepted_mission_id)
+	var cargo_after_first_accept := cargo
+	var first_abort_succeeded := _abort_active_mission(accepted_mission_id)
+	var cargo_after_abort := cargo
+	var offers_after_abort := _available_missions(accepted_body)
+	var offer_ids_after_abort := _mission_ids(offers_after_abort)
+	var reoffer_visible := offer_ids_after_abort.has(accepted_mission_id)
+	selected_landing_item = offer_ids_after_abort.find(accepted_mission_id)
+	if selected_landing_item < 0:
+		selected_landing_item = 0
+	_accept_selected_mission()
+	var reaccept_succeeded := active_missions.has(accepted_mission_id)
+	var cargo_after_reaccept := cargo
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_luna_selected := _select_map_route_to_system("Centauri")
+	var route_before_jump := selected_route.duplicate()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Luna")
+	_try_land()
+	var credits_before_delivery := credits
+	var completed_ids := _complete_arrived_missions()
+	var delivery_succeeded := completed_ids.has(accepted_mission_id) and completed_missions.has(accepted_mission_id)
+	var cargo_after_delivery := cargo
+	var latest_abort := JSON.stringify(aborted_mission_history[aborted_mission_history.size() - 1]) if not aborted_mission_history.is_empty() else "{}"
+	var latest_completion := JSON.stringify(completed_mission_history[completed_mission_history.size() - 1]) if not completed_mission_history.is_empty() else "{}"
+	var first_accept_status := "firstMissionAccepted=true" if first_accept_succeeded else "firstMissionAccepted=false"
+	var abort_status := "firstMissionAborted=true" if first_abort_succeeded else "firstMissionAborted=false"
+	var release_status := "reservedCargoReleasedAfterAbort=true" if cargo_after_abort == cargo_before_first_accept else "reservedCargoReleasedAfterAbort=false"
+	var reoffer_status := "missionReofferVisibleAfterAbort=true" if reoffer_visible else "missionReofferVisibleAfterAbort=false"
+	var reaccept_status := "missionReaccepted=true" if reaccept_succeeded else "missionReaccepted=false"
+	var reaccept_reserve_status := "reservedCargoReclaimedAfterReaccept=true" if cargo_after_reaccept == cargo_before_first_accept + int(mission_before_accept.get("cargoTons", 0)) else "reservedCargoReclaimedAfterReaccept=false"
+	var delivery_status := "reacceptedMissionDelivered=true" if delivery_succeeded else "reacceptedMissionDelivered=false"
+	var final_release_status := "reservedCargoReleasedAfterDelivery=true" if cargo_after_delivery == cargo_before_first_accept else "reservedCargoReleasedAfterDelivery=false"
+	var reward_status := "rewardPaidAfterDelivery=true" if credits == credits_before_delivery + int(mission_before_accept.get("reward", 0)) else "rewardPaidAfterDelivery=false"
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s %s %s %s offersAfterAbort=%s %s %s routeToLunaSelected=%s routeBeforeJump=%s %s %s %s cargoBeforeFirstAccept=%d cargoAfterFirstAccept=%d cargoAfterAbort=%d cargoAfterReaccept=%d cargoAfterDelivery=%d creditsBeforeDelivery=%d creditsAfterDelivery=%d activeMissions=%s completedMissions=%s abortedHistoryCount=%d latestAbort=%s latestCompletion=%s sourceLabel=terminal-velocity-mission-abort-reaccept-scaffold oracleStatus=mission_abort_reaccept_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_ABORT_REACCEPT_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, first_accept_status, abort_status, release_status, reoffer_status, JSON.stringify(offer_ids_after_abort), reaccept_status, reaccept_reserve_status, str(route_to_luna_selected), JSON.stringify(route_before_jump), delivery_status, final_release_status, reward_status, cargo_before_first_accept, cargo_after_first_accept, cargo_after_abort, cargo_after_reaccept, cargo_after_delivery, credits_before_delivery, credits, JSON.stringify(active_missions), JSON.stringify(completed_missions), aborted_mission_history.size(), latest_abort, latest_completion, status_line])
 	get_tree().quit(0)
 
 func _run_mission_abort_forbidden_log() -> void:

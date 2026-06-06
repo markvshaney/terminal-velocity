@@ -234,6 +234,14 @@ Mission abort scenario contract:
   - `oracleStatus=mission_abort_pending_classic_runtime_or_manual_trace`.
   This is a Terminal Velocity mission-state scaffold, not an EV Classic abort-semantics fidelity claim.
 
+Mission abort/reaccept delivery scenario contract:
+
+- `RunGodot.ps1 -MissionAbortReacceptLog` / `--tv-mission-abort-reaccept-log`
+- Exercises the Terminal Velocity mission-abort recovery loop in the Godot fast-eval lane while keeping exact EV Classic abort/reoffer UI pending.
+- Resets to Levo, route-selects Sol, lands at Earth, accepts `intro_courier_earth_hera`, aborts it, verifies reserved cargo release and reoffer visibility, reaccepts the same scaffold mission, routes to Centauri/Luna, and completes it.
+- Logs first acceptance, abort, cargo release after abort, reoffer visibility, reacceptance, cargo reservation after reaccept, final delivery, final cargo release, reward payment, active/completed/aborted history, `sourceLabel=terminal-velocity-mission-abort-reaccept-scaffold`, and `oracleStatus=mission_abort_reaccept_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity mission-state recovery scaffold, not an EV Classic exact reacceptance/UI fidelity claim.
+
 Mission abort-forbidden return-cleanup scenario contract:
 
 - `RunGodot.ps1 -MissionAbortForbiddenLog` / `--tv-mission-abort-forbidden-log`
