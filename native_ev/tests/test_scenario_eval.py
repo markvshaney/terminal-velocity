@@ -98,6 +98,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'weapon_availability_recovery_loop',
                 'weapon_purchase_mission_cargo_reservation_loop',
                 'weapon_purchase_trade_cargo_reservation_loop',
+                'weapon_purchase_secondary_activation_loop',
                 'contraband_scan_clemency_recovery',
                 'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
@@ -1871,6 +1872,25 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(bought['activeMissionCargo'], 0)
         self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-trade-cargo-scaffold')
         self.assertEqual(bought['oracleStatus'], 'classic_runtime_weapon_purchase_cargo_interaction_pending')
+
+    def test_weapon_purchase_secondary_activation_loop_buys_and_surfaces_secondary_steps(self):
+        result = run_scripted_scenario('weapon_purchase_secondary_activation_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['ownedWeapons']['pulse_cannon'], 1)
+        self.assertEqual(result['state']['credits'], 8600)
+        self.assertEqual(result['checks']['bought_secondary_weapon_for_activation'], 'passed')
+        self.assertEqual(result['checks']['recorded_secondary_activation_steps'], 'passed')
+        self.assertEqual(result['checks']['recorded_weapon_secondary_source_boundary'], 'passed')
+        bought = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon'][-1]
+        self.assertEqual(bought['saleType'], 'weapon')
+        self.assertEqual(bought['itemId'], 'pulse_cannon')
+        self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-secondary-activation-scaffold')
+        self.assertEqual(bought['oracleStatus'], 'classic_runtime_secondary_weapon_activation_pending')
+        checkpoints = [event['skill'] for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual(checkpoints, ['secondary_weapon_unloaded', 'secondary_weapon_loaded'])
 
     def test_contraband_scan_clemency_recovery_confiscates_and_repairs_legal_record(self):
         result = run_scripted_scenario('contraband_scan_clemency_recovery')

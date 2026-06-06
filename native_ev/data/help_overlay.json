@@ -62,6 +62,7 @@
     "Explosion timing: disabled contacts show a short TV explosion scaffold before cleanup/reward; wait for scanner/HUD update before retargeting. Exact Classic explosion frames pending.",
     "Combat sound prefs: Set Prefs Sound Volume gates decoded combat sounds; if combat is silent, reopen Set Prefs before treating weapons as broken. Exact Classic volume behavior pending.",
     "Secondary weapon recovery: starting Shuttle shows No Secondary Weapon; install a secondary, press S to select it, then Space fires after the source-backed reload cadence.",
+    "Weapon secondary activation: after buying a secondary weapon, press S until it is selected, verify Player Info/secondary HUD, then Space fires after reload. TV scaffold; Classic secondary install UI pending.",
     "Starting equipment uncertainty: original EV Classic HUD proves No Secondary Weapon, No Target, full shield/fuel, and Free: 20; check Player Info or an outfitter/status screen before treating primary weapons/outfits as exact Classic data.",
     "Target scanner: selected contacts show name, shield/hull, and distance on the scanner/HUD; exact Classic targeting UI pending.",
     "Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.",
@@ -335,6 +336,11 @@
       "flag": "hasWeaponTradeCargoRecoveryHelp",
       "source": "help",
       "contains": "Weapon trade cargo recovery: buying a landed weapon should preserve held trade cargo"
+    },
+    {
+      "flag": "hasWeaponSecondaryActivationHelp",
+      "source": "help",
+      "contains": "Weapon secondary activation: after buying a secondary weapon"
     },
     {
       "flag": "hasAlignmentGateHelp",

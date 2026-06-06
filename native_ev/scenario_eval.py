@@ -117,6 +117,7 @@ SCENARIO_CURRICULUM = [
     'weapon_availability_recovery_loop',
     'weapon_purchase_mission_cargo_reservation_loop',
     'weapon_purchase_trade_cargo_reservation_loop',
+    'weapon_purchase_secondary_activation_loop',
     'contraband_scan_clemency_recovery',
     'legal_clemency_insufficient_credit_guardrail',
     'pirate_avoidance_escape_route',
@@ -2558,6 +2559,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': 'terminal-velocity-weapon-trade-cargo-scaffold', 'oracleStatus': 'classic_runtime_weapon_purchase_cargo_interaction_pending'},
             {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': 'terminal-velocity-weapon-trade-cargo-scaffold', 'oracleStatus': 'classic_runtime_weapon_purchase_cargo_interaction_pending'},
         ]
+    if name == 'weapon_purchase_secondary_activation_loop':
+        source_label = 'terminal-velocity-weapon-secondary-activation-scaffold'
+        oracle_status = 'classic_runtime_secondary_weapon_activation_pending'
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sirius', 'landedBody': 'Sirius Station', 'reputation': {'Federation': 5, 'Independent': 6}, 'legalRecords': {'Federation': 0, 'Independent': 0}, 'credits': STARTING_CREDITS}},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'secondary_weapon_unloaded', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'pulse_cannon', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'secondary_weapon_loaded', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'contraband_scan_clemency_recovery':
         return [
             {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'cargoHold': {'equipment': 2}, 'cargoUsed': 2, 'credits': 5000, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
@@ -3321,6 +3331,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_trade_lot_before_weapon_purchase': 'passed' if trade and trade[-1].get('tons') == 10 and trade[-1].get('cargoUsed') == 10 else 'failed',
             'weapon_purchase_preserved_trade_cargo': 'passed' if bought and bought[-1].get('cargoUsed') == 10 and bought[-1].get('cargoHold') == {'food': 10} and bought[-1].get('activeMissionCargo') == 0 and state.get('cargoUsed') == 10 and state.get('cargoHold') == {'food': 10} and state.get('ownedWeapons', {}).get('pulse_cannon') == 1 else 'failed',
             'recorded_weapon_purchase_trade_cargo_source_boundary': 'passed' if trade and bought and trade[-1].get('sourceLabel') == 'terminal-velocity-weapon-trade-cargo-scaffold' and bought[-1].get('sourceLabel') == 'terminal-velocity-weapon-trade-cargo-scaffold' and trade[-1].get('oracleStatus') == 'classic_runtime_weapon_purchase_cargo_interaction_pending' and bought[-1].get('oracleStatus') == 'classic_runtime_weapon_purchase_cargo_interaction_pending' else 'failed',
+        })
+    elif name == 'weapon_purchase_secondary_activation_loop':
+        source_label = 'terminal-velocity-weapon-secondary-activation-scaffold'
+        oracle_status = 'classic_runtime_secondary_weapon_activation_pending'
+        bought = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'pulse_cannon']
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint' and event.get('sourceLabel') == source_label]
+        checks.update({
+            'bought_secondary_weapon_for_activation': 'passed' if bought and bought[-1].get('saleType') == 'weapon' and state.get('ownedWeapons', {}).get('pulse_cannon') == 1 else 'failed',
+            'recorded_secondary_activation_steps': 'passed' if [event.get('skill') for event in checkpoints] == ['secondary_weapon_unloaded', 'secondary_weapon_loaded'] else 'failed',
+            'recorded_weapon_secondary_source_boundary': 'passed' if bought and bought[-1].get('sourceLabel') == source_label and bought[-1].get('oracleStatus') == oracle_status and len(checkpoints) == 2 and all(event.get('oracleStatus') == oracle_status for event in checkpoints) else 'failed',
         })
     elif name == 'contraband_scan_clemency_recovery':
         scan = next((event for event in trace if event.get('type') == 'contraband_scan'), {})
