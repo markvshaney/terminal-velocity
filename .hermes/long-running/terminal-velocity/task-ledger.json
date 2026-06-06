@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": "no",
-    "head": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-    "status_short": "## main...origin/main [ahead 1]",
-    "origin_main": "inspect current SHA with `git rev-parse origin/main`; worker push deferred to loki-game integrator policy"
+    "head": "a3434d411694880498fb2d78dee388b8fa1051fa",
+    "status_short": "## main...origin/main",
+    "origin_main": "a3434d411694880498fb2d78dee388b8fa1051fa"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": "no"
   },
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_06993bf1",
+    "active_task_id": "t_df9a9b0c",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "local_commit_pending_push_deferred_to_integrator",
+    "status": "successor_ready_for_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T04:49:53Z",
+    "updated_at": "2026-06-06T05:37:23Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -105,7 +105,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Weapon reputation gate Godot slice verified; local worker commit pending, with push deferred to loki-game integrator policy.",
+  "current_milestone": "Weapon reputation gate slice remote-verified; successor Kanban continuation card queued from HEAD a3434d4.",
   "last_commit": "feat(godot): gate weapon buys by reputation",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -135,9 +135,9 @@
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Weapon reputation gate slice is safe-local and ready for local worker commit; push is deferred by policy, not blocked.",
-    "withheld_action": "Normal non-force push to origin/main is intentionally withheld for loki-game integrator policy.",
-    "resume_after": "Integrator may push when policy triggers; next worker can continue from local ahead commit or remote-verified HEAD after integration."
+    "reason": "Weapon reputation gate slice is remote-verified and successor Kanban task is ready for dispatcher pickup.",
+    "withheld_action": "None for safe-local continuation. Worker still withholds push per policy; loki-game integrator handles normal non-force pushes by checklist/trigger.",
+    "resume_after": "Kanban dispatcher claims t_df9a9b0c or watchdog next tick runs a dispatch pass."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -146,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After local commit, complete Kanban task t_06993bf1 with changed files and verification; loki-game integrator handles non-force push by trigger/checklist policy, then creates or dispatches the next source-aligned safe local Terminal Velocity slice.",
+  "next_resume_action": "Dispatcher/watchdog should run Kanban task t_df9a9b0c for the next source-aligned safe local Terminal Velocity gameplay/fidelity slice from remote-verified HEAD a3434d4; worker edits/tests/commits locally and does not push.",
   "resume_prompt": "Resume Terminal Velocity from the live repo state. Read ledger/events/prompt/backlog, inspect git state, honor terminal-velocity worker no-push policy, and implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs before committing locally.",
-  "updated_at": "2026-06-06T04:49:53Z",
+  "updated_at": "2026-06-06T05:37:23Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
