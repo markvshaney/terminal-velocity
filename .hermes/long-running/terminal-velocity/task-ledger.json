@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Cargo expansion recovery help is committed locally for review; successor continuation should not redo it.",
+  "current_milestone": "Cargo expansion recovery help normal-pushed and verified; successor continuation pending dispatch.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -78,10 +78,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_completed_slice": {
+    "commit": "32ffb9eb80a59053a91c9d7d669dd92db534cbc3",
     "id": "cargo-expansion-recovery-help",
     "kanban_task_id": "t_55eac0ea",
     "local_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-    "remote_verified": false,
+    "remote_verified": true,
     "source_fidelity_labels": [
       "terminal-velocity-cargo-expansion-trade-scaffold",
       "cargo_expansion_trade_pending_classic_runtime_trace",
@@ -109,7 +110,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Human/integrator review the local cargo_expansion_recovery_help commit, then push main and dispatch/continue the next source-aligned safe local slice. Do not redo cargo_expansion_recovery_help unless review requests changes.",
+  "next_resume_action": "Complete t_55eac0ea, create/dispatch exactly one successor from current origin/main, and continue the next source-aligned safe Terminal Velocity slice; do not redo cargo_expansion_recovery_help.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -117,9 +118,9 @@
     "behind": 0,
     "branch": "main",
     "dirty": false,
-    "head": "a081fb000ab455167d7a91b6950d763d02868ee6",
-    "origin_main": "a081fb000ab455167d7a91b6950d763d02868ee6",
-    "status_short": "clean except this ledger may be amended into local cargo_expansion_recovery_help commit; inspect live git status"
+    "head": "32ffb9eb80a59053a91c9d7d669dd92db534cbc3",
+    "origin_main": "32ffb9eb80a59053a91c9d7d669dd92db534cbc3",
+    "status_short": "clean tracking origin/main after normal push"
   },
   "repo_state": {
     "ahead": "0",
@@ -250,5 +251,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T17:26:37Z"
+  "updated_at": "2026-06-06T17:30:41Z"
 }
