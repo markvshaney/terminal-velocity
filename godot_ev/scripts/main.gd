@@ -78,6 +78,7 @@ const LEGAL_STATUS_EVENT_LOG_PREFIX := "TV_LEGAL_STATUS_EVENT"
 const LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_LEGAL_DOCKING_EVENT"
 const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
 const WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_REPUTATION_GATE_EVENT"
+const WEAPON_CREDIT_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_CREDIT_GATE_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
@@ -317,6 +318,8 @@ func _ready() -> void:
 		call_deferred("_run_legal_service_gate_log")
 	if OS.get_cmdline_args().has("--tv-weapon-reputation-gate-log") or OS.get_cmdline_user_args().has("--tv-weapon-reputation-gate-log"):
 		call_deferred("_run_weapon_reputation_gate_log")
+	if OS.get_cmdline_args().has("--tv-weapon-credit-gate-log") or OS.get_cmdline_user_args().has("--tv-weapon-credit-gate-log"):
+		call_deferred("_run_weapon_credit_gate_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -2797,6 +2800,43 @@ func _run_weapon_reputation_gate_log() -> void:
 	_buy_selected_outfit_or_weapon()
 	var weapon_bought_after_reputation := int(owned_weapons.get("pulse_cannon", 0)) == 1
 	print("%s system=%s body=%s government=\"%s\" reputationBefore=5 reputationAfter=%d legalScore=%d selectedWeapon=pulse_cannon weaponReputationBlocked=%s weaponBoughtAfterReputation=%s blockedMessage=\"%s\" sourceLabel=terminal-velocity-weapon-reputation-gate-scaffold oracleStatus=classic_runtime_weapon_service_reputation_gate_pending" % [WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX, current_system.get("name", "?"), body_name, government_name, int(reputation_scores.get(government_name, 0)), int(legal_records.get(government_name, 0)), str(weapon_reputation_blocked), str(weapon_bought_after_reputation), blocked_message])
+	get_tree().quit(0)
+
+func _run_weapon_credit_gate_log() -> void:
+	_reset_travel_state()
+	current_system_index = _system_index_by_name("Sirius", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	var body_name := "Sirius Station"
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			break
+	var government_name := _current_government_name()
+	legal_records[government_name] = 0
+	reputation_scores[government_name] = 6
+	landing_tab = 2
+	var sale_items := _outfitter_sale_items(_current_body())
+	var selected_weapon := "pulse_cannon"
+	var selected_weapon_price := 0
+	selected_landing_item = 0
+	for i in range(sale_items.size()):
+		if str(sale_items[i].get("id", "")) == selected_weapon:
+			selected_landing_item = i
+			selected_weapon_price = int(sale_items[i].get("price", 0))
+			break
+	credits = max(0, selected_weapon_price - 1)
+	var credits_before := credits
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var blocked_message := "Not enough credits"
+	var weapon_credit_blocked := status_messages.has(blocked_message) and not owned_weapons.has(selected_weapon)
+	credits = selected_weapon_price
+	var credits_after_funding := credits
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var weapon_bought_after_funding := int(owned_weapons.get(selected_weapon, 0)) == 1
+	print("%s system=%s body=%s government=\"%s\" legalScore=%d reputation=%d selectedWeapon=%s weaponPrice=%d creditsBefore=%d creditsAfterFunding=%d weaponCreditBlocked=%s weaponBoughtAfterFunding=%s blockedMessage=\"%s\" sourceLabel=terminal-velocity-weapon-credit-gate-scaffold oracleStatus=classic_runtime_weapon_purchase_credit_flow_pending" % [WEAPON_CREDIT_GATE_EVENT_LOG_PREFIX, current_system.get("name", "?"), body_name, government_name, int(legal_records.get(government_name, 0)), int(reputation_scores.get(government_name, 0)), selected_weapon, selected_weapon_price, credits_before, credits_after_funding, str(weapon_credit_blocked), str(weapon_bought_after_funding), blocked_message])
 	get_tree().quit(0)
 
 func _run_legal_patrol_posture_log() -> void:
