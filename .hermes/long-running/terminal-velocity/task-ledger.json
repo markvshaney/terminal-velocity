@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "local-commit-pending-review",
+    "dirty": false,
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "alignment return-contract accept/deliver extension implemented and verified locally; worker must commit and leave review gate",
-    "origin_main": "dbe5e9c60fba15cce050d85c10e9b569c7907f61"
+    "status_short": "clean at origin/main after normal non-force push of alignment return-contract accept/deliver slice",
+    "origin_main": "ee47305cd8127b1069775f269c6c8cb45923476a"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "local-commit-pending-review"
+    "dirty": false
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_a0378640",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "worker_slice_verified_pending_local_commit_review_gate",
+    "status": "slice_pushed_remote_verified_successor_needed",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T07:35:16Z",
+    "updated_at": "2026-06-06T07:40:45Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Alignment return-contract Godot log now verifies accept/deliver loops after both Federation and Freeport branches.",
+  "current_milestone": "Alignment return-contract Godot log accept/deliver slice pushed and remote-verified.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -136,10 +136,10 @@
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62"
   ],
   "active_gate": {
-    "type": "review-required",
-    "reason": "Code/docs/ledger slice verified locally; human/integrator review required before marking Kanban card done or pushing.",
-    "withheld_action": "Do not push from terminal-velocity worker; integrator/reviewer handles coherent normal non-force push after review.",
-    "resume_after": "Review approves local commit or requests changes."
+    "type": null,
+    "reason": "No active gate after normal non-force push; coordinator should complete current Kanban card and dispatch one successor continuation card.",
+    "withheld_action": null,
+    "resume_after": "Create/dispatch successor from clean origin/main."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -148,9 +148,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local alignment return-contract accept/deliver extension, then commit/push through the integrator path or request changes.",
-  "resume_prompt": "Review Terminal Velocity local slice extending tv-mission-alignment-return-log to accept/deliver freeport_return_earth after both Federation and Freeport branches, with docs/backlog/ledger updates and verification recorded.",
-  "updated_at": "2026-06-06T07:35:16Z",
+  "next_resume_action": "Create exactly one successor Kanban card from clean origin/main ee47305 and dispatch it to continue the next source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
+  "resume_prompt": "Continue Terminal Velocity development from clean origin/main after alignment return-contract accept/deliver Godot log slice was pushed and remote-verified.",
+  "updated_at": "2026-06-06T07:40:45Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -208,8 +208,8 @@
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
     "id": "alignment-return-contract-branch-delivery-log-extension",
-    "summary": "Godot fast-eval log now verifies freeport_return_earth remains visible after branch completion and can be accepted/delivered after both Federation and Freeport branch states, releasing 5 cargo tons and paying 3200 credits under Terminal Velocity observed/pending Classic timing labels.",
-    "commit": "local pending commit/review",
+    "summary": "Godot fast-eval log verifies freeport_return_earth remains visible after branch completion and can be accepted/delivered after both Federation and Freeport branch states, releasing 5 cargo tons and paying 3200 credits under Terminal Velocity observed/pending Classic timing labels.",
+    "commit": "ee47305cd8127b1069775f269c6c8cb45923476a",
     "source_fidelity_labels": [
       "terminal-velocity-observed",
       "terminal_velocity_eval_pending_original_trace",
