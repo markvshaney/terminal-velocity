@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 1,
     "behind": 0,
-    "dirty": true,
-    "head": "SHA-neutral: local light_freighter_capacity_trade_loop checkpoint commit; inspect current git rev-parse HEAD",
-    "origin_main": "8fac19e (remote-verified baseline before local light_freighter_capacity_trade_loop commit)",
-    "status_short": "dirty local light_freighter_mission_trade_loop slice verified; not committed/pushed by worker"
+    "dirty": false,
+    "head": "SHA-neutral: inspect current git rev-parse HEAD; light_freighter_refuel_delivery_loop normal-push bundle prepared",
+    "origin_main": "SHA-neutral: inspect current git rev-parse origin/main before classifying live state",
+    "status_short": "clean local branch ahead by one before normal push; successor created pending dispatch"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 1,
     "behind": 0,
-    "dirty": true
+    "dirty": false
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_665d54b4",
+    "active_task_id": "t_870fec57",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "verified_pending_review",
+    "status": "successor_created_pending_dispatch_after_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T09:49:22Z",
+    "updated_at": "2026-06-06T10:07:52Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,9 +111,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "light_freighter_mission_trade_loop symbolic curriculum slice verified locally; review/integrator handling pending.",
+  "current_milestone": "light_freighter_refuel_delivery_loop symbolic curriculum slice verified; stale review gate resolved by loki-game integrator, successor created for next slice.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
-  "last_checkpoint_commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
+  "last_checkpoint_commit": "SHA-neutral: local light_freighter_refuel_delivery_loop checkpoint commit; inspect current git rev-parse HEAD",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -128,20 +128,16 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_mission_trade_loop_reserves_mission_cargo_alongside_bulk_trade -v -> OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 76 tests OK",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_mission_trade_loop --pretty -> success true; final credits 16880; playerShipId=light_freighter; cargoCapacity=150; completed levo_bulk_freighter_supply; cargo cleared",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 206 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=72 failed=0 total=72",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=72",
-    "git diff --check -> OK"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_refuel_delivery_loop_recovers_low_fuel_bulk_delivery -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 77 tests OK",
+    "python3 tools/run_gameplay_scenarios.py light_freighter_refuel_delivery_loop --pretty -> success true; final credits 12200; playerShipId=light_freighter; maxFuel=300; fuel=299; completed levo_bulk_refuel_supply; cargo cleared",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=73 failed=0 total=73",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 207 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=73",
+    "git diff --check -> OK",
+    "npm test -> not applicable at repo root (no package.json)"
   ],
-  "active_gate": {
-    "type": "review-required",
-    "reason": "Code-changing Kanban slice verified locally; worker must not push or mark done without review/integrator handling.",
-    "withheld_action": "git push origin main and marking t_665d54b4 complete as merged/done",
-    "resume_after": "reviewer/coordinator approves or requests changes"
-  },
+  "active_gate": "none",
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
@@ -149,9 +145,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local light_freighter_mission_trade_loop symbolic curriculum slice; if accepted, integrator may commit/push per normal non-force policy, then continue the next source-aligned safe local Terminal Velocity slice without redoing prior light-freighter capacity or mission/trade work.",
-  "resume_prompt": "Continue Terminal Velocity after verified light_freighter_mission_trade_loop slice: inspect live git status and task comments; if approved, commit/push via integrator policy or request changes; otherwise continue from current dirty work without redoing verified scenario work.",
-  "updated_at": "2026-06-06T09:49:22Z",
+  "next_resume_action": "After normal push/fetch verifies HEAD == origin/main for light_freighter_refuel_delivery_loop, complete t_173b6043 and dispatch successor t_870fec57; continue the next source-aligned safe local gameplay/fidelity slice without redoing light_freighter_refuel_delivery_loop.",
+  "resume_prompt": "Continue Terminal Velocity from successor t_870fec57: inspect live git status/origin, ledger/events tail, continuation prompt, and backlog; then implement the next safe source-aligned gameplay/fidelity vertical slice.",
+  "updated_at": "2026-06-06T10:07:52Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -197,7 +193,8 @@
     "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo balanced_upgrade_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_capacity_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo light_freighter_capacity_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo light_freighter_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",

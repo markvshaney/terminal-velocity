@@ -21,6 +21,7 @@
     "balanced_upgrade_trade_loop",
     "light_freighter_capacity_trade_loop",
     "light_freighter_mission_trade_loop",
+    "light_freighter_refuel_delivery_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -365,6 +366,10 @@
     "light_freighter_mission_trade_loop": {
       "purpose": "Light-freighter mission/trade loop: buy a Light Freighter at Earth, reserve an 80-ton Levo delivery, fill remaining hold with bulk Sol Food trade cargo, deliver before selling the retained trade load, and verify return sales under pending-Classic source boundaries.",
       "surface": "ship upgrade/mission reserved-cargo plus bulk trade scaffold"
+    },
+    "light_freighter_refuel_delivery_loop": {
+      "purpose": "Light-freighter refuel delivery loop: buy a Light Freighter at Earth, reserve a 120-ton Levo delivery, block the loaded return leg at zero fuel, refuel at Earth, then complete delivery under pending-Classic source boundaries.",
+      "surface": "ship upgrade/mission delivery low-fuel recovery scaffold"
     }
   }
 }
