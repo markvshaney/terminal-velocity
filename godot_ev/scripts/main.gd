@@ -85,6 +85,7 @@ const WEAPON_MISSION_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_MISSION_CARGO_EVENT"
 const WEAPON_TRADE_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_TRADE_CARGO_EVENT"
 const WEAPON_LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_WEAPON_LEGAL_DOCKING_EVENT"
 const LIGHT_FREIGHTER_MISSION_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_MISSION_TRADE_EVENT"
+const LIGHT_FREIGHTER_REPAIR_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REPAIR_TRADE_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
@@ -338,6 +339,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_legal_docking_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-mission-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-mission-trade-log"):
 		call_deferred("_run_light_freighter_mission_trade_log")
+	if OS.get_cmdline_args().has("--tv-light-freighter-repair-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-repair-trade-log"):
+		call_deferred("_run_light_freighter_repair_trade_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -3162,6 +3165,96 @@ func _run_light_freighter_mission_trade_log() -> void:
 		str(trade_sale_completed).to_lower(),
 		cargo_after_trade_sell,
 		credits_before_accept,
+		credits,
+		status_line,
+	])
+	get_tree().quit(0)
+
+func _run_light_freighter_repair_trade_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var accepted_body := _current_body()
+	credits = 70000
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(accepted_body)
+	var selected_ship_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			selected_ship_listing = shipyard_listings[i]
+			break
+	var ship_price := int(selected_ship_listing.get("price", 0))
+	_buy_selected_ship()
+	var bought_light_freighter := player_ship_id == "light_freighter"
+	var max_hull_after_purchase := _max_player_hull()
+	player_hull = 260
+	credits = 840
+	var damaged_hull := player_hull
+	var credits_before_trade := credits
+	var repair_cost_before_trade := _repair_cost()
+	var trade_commodity := "food"
+	var buy_price := int(_market_prices(current_system.get("name", "")).get(trade_commodity, {}).get("buy", 0))
+	var sell_price := int(_market_prices("Levo").get(trade_commodity, {}).get("sell", 0))
+	var trade_margin_per_ton := sell_price - buy_price
+	landing_tab = 1
+	selected_landing_item = 0
+	_buy_selected_commodity()
+	_buy_selected_commodity()
+	var trade_cargo_after_buy := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_after_trade_buy := cargo
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_levo_selected := _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	_sell_selected_commodity()
+	_sell_selected_commodity()
+	var credits_after_trade := credits
+	var trade_cargo_after_sell := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_after_trade_sell := cargo
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_back_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var repair_funded_by_trade := (credits_after_trade - credits_before_trade) >= repair_cost_before_trade and credits_after_trade >= repair_cost_before_trade
+	var repair_succeeded := _repair_current_hull()
+	var repaired_hull := player_hull
+	print("%s routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" boughtLightFreighter=%s shipPrice=%d damagedHull=%d maxHull=%d creditsBeforeTrade=%d repairCostBeforeTrade=%d tradeCommodity=%s buyPrice=%d sellPrice=%d tradeMarginPerTon=%d tradeCargoAfterBuy=%d cargoAfterTradeBuy=%d routeToLevoSelected=%s creditsAfterTrade=%d tradeCargoAfterSell=%d cargoAfterTradeSell=%d routeBackToSolSelected=%s repairFundedByTrade=%s repairSucceeded=%s repairedHull=%d creditsAfterRepair=%d sourceLabel=terminal-velocity-light-freighter-repair-margin-scaffold oracleStatus=light_freighter_repair_margin_pending_classic_runtime_trace repairSourceLabel=terminal-velocity-repair-service-scaffold repairOracleStatus=repair_service_pending_ev_classic_runtime_trace status=\"%s\"" % [
+		LIGHT_FREIGHTER_REPAIR_TRADE_EVENT_LOG_PREFIX,
+		str(route_to_sol_selected).to_lower(),
+		str(accepted_body.get("name", "None")),
+		str(bought_light_freighter).to_lower(),
+		ship_price,
+		damaged_hull,
+		max_hull_after_purchase,
+		credits_before_trade,
+		repair_cost_before_trade,
+		trade_commodity,
+		buy_price,
+		sell_price,
+		trade_margin_per_ton,
+		trade_cargo_after_buy,
+		cargo_after_trade_buy,
+		str(route_to_levo_selected).to_lower(),
+		credits_after_trade,
+		trade_cargo_after_sell,
+		cargo_after_trade_sell,
+		str(route_back_to_sol_selected).to_lower(),
+		str(repair_funded_by_trade).to_lower(),
+		str(repair_succeeded).to_lower(),
+		repaired_hull,
 		credits,
 		status_line,
 	])

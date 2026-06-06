@@ -1053,6 +1053,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_WEAPON_TRADE_CARGO_EVENT',
             'TV_WEAPON_LEGAL_DOCKING_EVENT',
             'TV_LIGHT_FREIGHTER_MISSION_TRADE_EVENT',
+            'TV_LIGHT_FREIGHTER_REPAIR_TRADE_EVENT',
             'TV_LEGAL_PATROL_POSTURE_EVENT',
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             'TV_MISSION_STORY_GATE_EVENT',
@@ -1067,6 +1068,7 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-weapon-trade-cargo-log',
             '--tv-weapon-legal-docking-log',
             '--tv-light-freighter-mission-trade-log',
+            '--tv-light-freighter-repair-trade-log',
             '--tv-legal-patrol-posture-log',
             '--tv-mission-legal-eligibility-log',
             '--tv-mission-story-gate-log',
@@ -1081,6 +1083,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_weapon_trade_cargo_log',
             'func _run_weapon_legal_docking_log',
             'func _run_light_freighter_mission_trade_log',
+            'func _run_light_freighter_repair_trade_log',
             'func _run_legal_patrol_posture_log',
             'func _run_mission_legal_eligibility_log',
             'func _run_mission_story_gate_log',
@@ -1187,6 +1190,13 @@ class NativeEvModelTests(unittest.TestCase):
             'weaponBuySucceeded=%s',
             'oracleStatus=classic_runtime_weapon_purchase_after_docking_denial_pending',
             'clemencyOracleStatus=classic_runtime_clemency_location_pending',
+            'sourceLabel=terminal-velocity-light-freighter-repair-margin-scaffold',
+            'oracleStatus=light_freighter_repair_margin_pending_classic_runtime_trace',
+            'repairSourceLabel=terminal-velocity-repair-service-scaffold',
+            'repairOracleStatus=repair_service_pending_ev_classic_runtime_trace',
+            'damagedHull=%d',
+            'repairedHull=%d',
+            'repairFundedByTrade=%s',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('tv-legal-status-log', run_script)
@@ -1200,6 +1210,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-weapon-trade-cargo-log', run_script)
         self.assertIn('tv-weapon-legal-docking-log', run_script)
         self.assertIn('tv-light-freighter-mission-trade-log', run_script)
+        self.assertIn('tv-light-freighter-repair-trade-log', run_script)
         self.assertIn('tv-legal-patrol-posture-log', run_script)
         self.assertIn('tv-mission-legal-eligibility-log', run_script)
         self.assertIn('tv-legal-consequence-log', run_script)
@@ -1218,6 +1229,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$WeaponTradeCargoLog', windows_script)
         self.assertIn('[switch]$WeaponLegalDockingLog', windows_script)
         self.assertIn('[switch]$LightFreighterMissionTradeLog', windows_script)
+        self.assertIn('[switch]$LightFreighterRepairTradeLog', windows_script)
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
         self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)
