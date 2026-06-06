@@ -209,6 +209,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"blocked_reason_curriculum",
 		"legal_docking_service_gate_recovery",
 		"weapon_reputation_gate_recovery",
+		"weapon_credit_recovery_loop",
 		"contraband_scan_clemency_recovery",
 		"legal_clemency_insufficient_credit_guardrail",
 		"pirate_avoidance_escape_route",

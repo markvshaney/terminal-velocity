@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_582d9897",
+    "active_task_id": "t_893a460d",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "pushed_verified_ready_for_successor",
+    "status": "weapon_credit_recovery_loop_verified_pending_push_successor",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T12:25:39.738660Z",
+    "updated_at": "2026-06-06T12:39:17Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter mission/trade capacity help-surface slice pushed and remote-verified; successor continuation pending dispatch.",
+  "current_milestone": "weapon_credit_recovery_loop verified locally; normal push/successor handling in progress by loki-game integrator.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -128,19 +128,13 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json >/dev/null -> OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json >/dev/null -> OK",
-    "events.jsonl json.loads per line -> OK",
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> failed missing Light Freighter mission/trade capacity help line before help_overlay update",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v -> OK after updating contract to assert data-driven help lines in help_overlay.json rather than Godot main.gd literals",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 214 tests OK",
-    "python3 tools/run_gameplay_scenarios.py light_freighter_mission_trade_loop --pretty -> success=True",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary {'failed': 0, 'passed': 80, 'total': 80}",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hintCount=81 hasLightFreighterMissionTradeCapacityHelp=true",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=80",
+    "python3 -m json.tool native_ev/data/gameplay_curriculum.json -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_weapon_credit_recovery_loop_blocks_then_buys_at_exact_price native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order -v -> 2 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 215 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all -> summary passed=81 failed=0 total=81; weapon_credit_recovery_loop success true credits=0",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=81",
     "git diff --check -> OK",
-    "local checkpoint commit created; inspect git rev-parse HEAD for current SHA"
+    "high-signal added-line secret scan -> NONE"
   ],
   "active_gate": null,
   "heartbeat_status": {
@@ -150,9 +144,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Complete t_582d9897, create and dispatch exactly one successor from current origin/main, then continue the next source-aligned safe local Terminal Velocity gameplay/fidelity vertical slice without redoing Light Freighter mission/trade capacity help work.",
-  "resume_prompt": "Continue Terminal Velocity from current origin/main; inspect ledger/events tail, continuation prompt, backlog, and live git state, then implement one new source-aligned safe local gameplay/fidelity slice without redoing Light Freighter deadline repair/refuel margin scenario/help work.",
-  "updated_at": "2026-06-06T12:25:39.738660Z",
+  "next_resume_action": "Commit/push/fetch/verify the weapon_credit_recovery_loop slice, complete t_893a460d, create and dispatch exactly one successor from current origin/main, then continue the next safe local source-aligned Terminal Velocity slice without redoing weapon credit recovery work.",
+  "resume_prompt": "Continue Terminal Velocity from current origin/main; inspect ledger/events tail, continuation prompt, backlog, and live git state, then implement one new source-aligned safe local gameplay/fidelity slice without redoing weapon_credit_recovery_loop or prior Light Freighter work.",
+  "updated_at": "2026-06-06T12:39:17Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -221,18 +215,17 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "light-freighter-mission-trade-capacity-help-surface",
-    "summary": "Promoted the existing light_freighter_mission_trade_loop outcome into F10 help with Godot log probe hasLightFreighterMissionTradeCapacityHelp; no Classic Light Freighter mission/trade UI claim made.",
-    "commit": "88cecf6badcaae39f3a86f183919bc7971d6e52d",
+    "id": "weapon-credit-recovery-loop",
+    "summary": "Added symbolic weapon_credit_recovery_loop for Sirius Station Pulse Cannon affordability: one-credit-short purchase blocks, exact-price recovery buys the weapon and leaves credits at 0.",
+    "commit": "local checkpoint pending; inspect current git rev-parse HEAD after commit/push",
     "source_fidelity_labels": [
-      "terminal-velocity-light-freighter-mission-trade-scaffold",
-      "light_freighter_mission_trade_pending_classic_runtime_trace",
-      "help_surface_pending_playtest"
+      "terminal-velocity-weapon-credit-gate-scaffold",
+      "classic_runtime_weapon_purchase_credit_ui_pending"
     ],
-    "remote_verified": true
+    "remote_verified": false
   },
   "git_state": {
-    "dirty": false,
-    "status_short": "clean at origin/main after pushed commit c020781"
+    "dirty": true,
+    "status_short": "pending commit for weapon_credit_recovery_loop slice"
   }
 }

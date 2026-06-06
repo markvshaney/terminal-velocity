@@ -94,6 +94,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'blocked_reason_curriculum',
                 'legal_docking_service_gate_recovery',
                 'weapon_reputation_gate_recovery',
+                'weapon_credit_recovery_loop',
                 'contraband_scan_clemency_recovery',
                 'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
@@ -1779,6 +1780,27 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         bought = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon'][-1]
         self.assertEqual(bought['saleType'], 'weapon')
         self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-reputation-gate-scaffold')
+
+    def test_weapon_credit_recovery_loop_blocks_then_buys_at_exact_price(self):
+        result = run_scripted_scenario('weapon_credit_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['ownedWeapons']['pulse_cannon'], 1)
+        self.assertEqual(result['state']['credits'], 0)
+        self.assertEqual(result['checks']['blocked_weapon_purchase_one_credit_short'], 'passed')
+        self.assertEqual(result['checks']['recovered_weapon_purchase_at_exact_price'], 'passed')
+        self.assertEqual(result['checks']['recorded_weapon_credit_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_buy_outfit_or_weapon'][-1]
+        self.assertEqual(blocked['reason'], 'insufficient credits')
+        self.assertEqual(blocked['price'], 1400)
+        self.assertEqual(blocked['credits'], 1399)
+        bought = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon'][-1]
+        self.assertEqual(bought['saleType'], 'weapon')
+        self.assertEqual(bought['itemId'], 'pulse_cannon')
+        self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-credit-gate-scaffold')
+        self.assertEqual(bought['oracleStatus'], 'classic_runtime_weapon_purchase_credit_ui_pending')
 
     def test_contraband_scan_clemency_recovery_confiscates_and_repairs_legal_record(self):
         result = run_scripted_scenario('contraband_scan_clemency_recovery')
