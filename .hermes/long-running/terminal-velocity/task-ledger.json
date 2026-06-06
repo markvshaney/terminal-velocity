@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Strategy skill rotation recovery help accepted by integrator; normal push prepared with successor continuation card.",
+  "current_milestone": "Strategy skill rotation recovery help remote-verified; successor continuation card ready for dispatch.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -40,7 +40,7 @@
     "dirty": false,
     "head": "inspect current SHA with `git rev-parse HEAD`",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`",
-    "status_short": "clean at origin/main after normal push before successor ledger checkpoint"
+    "status_short": "clean at origin/main after strategy skill rotation recovery help push; successor dispatch pending"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -58,7 +58,7 @@
     "6_source_artifacts_separate_from_chat": "recorded in source_artifact_policy and existing TV docs/checklists",
     "7_do_not_redo": "recorded in do_not_redo"
   },
-  "last_checkpoint_commit": "remote-verified: Add route invalid stop recovery help",
+  "last_checkpoint_commit": "remote-verified: feat(godot): surface strategy skill recovery help",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_commit": "remote-verified: Add weapon purchase mission cargo scenario",
   "last_commits": [
@@ -78,7 +78,7 @@
     "id": "strategy-skill-rotation-recovery-help",
     "kanban_task_id": "t_dc30a771",
     "local_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
-    "remote_verified": false,
+    "remote_verified": true,
     "source_fidelity_labels": [
       "terminal-velocity strategy-skill rotation scaffold",
       "strategy_skill_progression_pending_ev_family_source_trace",
@@ -86,7 +86,7 @@
     ],
     "summary": "F10 help promotes existing strategy_skill_rotation_loop into player recovery guidance and deterministic help probe hasStrategySkillRotationRecoveryHelp."
   },
-  "last_process_checkpoint": "Strategy skill rotation recovery help accepted by integrator; successor continuation card prepared; normal push/fetch verification pending.",
+  "last_process_checkpoint": "Strategy skill rotation recovery help pushed normally and verified HEAD == origin/main; successor continuation card ready for dispatch.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
@@ -106,20 +106,20 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "After normal push/fetch verifies HEAD == origin/main, complete t_dc30a771, promote/dispatch successor t_72f2f204, and monitor exactly one running Terminal Velocity worker.",
+  "next_resume_action": "Complete t_dc30a771 in Kanban, promote and dispatch successor t_72f2f204, then verify exactly one running Terminal Velocity worker.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "branch": "main",
     "dirty": false,
     "head": "inspect current SHA with `git rev-parse HEAD`",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`",
-    "status_short": "main ahead 1 with accepted strategy skill rotation help and successor ledger checkpoint pending normal push"
+    "status_short": "clean at origin/main after strategy skill rotation recovery help push; successor dispatch pending"
   },
   "repo_state": {
-    "ahead": "0 before successor ledger checkpoint",
+    "ahead": "0",
     "behind": "0",
     "branch": "main",
     "dirty": false
@@ -159,7 +159,7 @@
       "Rule list entries must be concise and nonredundant; currently defined rules are in git_policy_rules."
     ],
     "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
-    "status": "successor_ready_for_dispatch_after_push",
+    "status": "successor_ready_for_dispatch",
     "superseded_jobs": [
       "f31074cbec03",
       "e12f13d4b75e",
@@ -170,7 +170,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T17:01:17Z",
+    "updated_at": "2026-06-06T17:01:46Z",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
     "watchdog_schedule": "every 5m",
@@ -246,5 +246,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T17:01:17Z"
+  "updated_at": "2026-06-06T17:01:46Z"
 }
