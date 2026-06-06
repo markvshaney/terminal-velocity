@@ -89,6 +89,7 @@
     "weapon_inventory_stack_recovery_loop",
     "contraband_scan_clemency_recovery",
     "contraband_scan_trade_recovery_loop",
+    "contraband_trade_funds_clemency_loop",
     "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
     "disposable_combat_placeholder"
@@ -445,6 +446,10 @@
     "weapon_inventory_stack_recovery_loop": {
       "purpose": "Weapon inventory stack recovery loop: buy two Pulse Cannons at Sirius Station, verify the weapon inventory count stacks across repeated secondary purchases, and retain explicit pending-Classic multiple-weapon purchase boundaries.",
       "surface": "weapon purchase/inventory stack scaffold"
+    },
+    "contraband_trade_funds_clemency_loop": {
+      "purpose": "Contraband clemency-funding loop: after a scan confiscates illegal cargo and leaves the pilot short of clemency credits, sell preserved legal cargo at a safe market, then pay the clemency scaffold while retaining pending-Classic scan/trade/bribe boundaries.",
+      "surface": "government patrol/legal cargo preservation clemency-funding scaffold"
     }
   }
 }

@@ -122,6 +122,7 @@ SCENARIO_CURRICULUM = [
     'weapon_inventory_stack_recovery_loop',
     'contraband_scan_clemency_recovery',
     'contraband_scan_trade_recovery_loop',
+    'contraband_trade_funds_clemency_loop',
     'legal_clemency_insufficient_credit_guardrail',
     'pirate_avoidance_escape_route',
     'disposable_combat_placeholder',
@@ -2609,6 +2610,19 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': 'Levo Spaceport'},
             {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'contraband_trade_funds_clemency_loop':
+        source_label = 'terminal-velocity-contraband-clemency-funding-scaffold'
+        oracle_status = 'classic_runtime_scan_trade_clemency_cleanup_pending'
+        return [
+            {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'cargoHold': {'equipment': 2, 'food': 10}, 'cargoUsed': 12, 'credits': 1700, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
+            {'type': 'apply_contraband_scan', 'government': 'Federation', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'pay_legal_clemency', 'government': 'Federation', 'expectBlocked': True},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Levo'},
+            {'type': 'land', 'body': 'Levo Spaceport'},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'pay_legal_clemency', 'government': 'Federation'},
+        ]
     if name == 'legal_clemency_insufficient_credit_guardrail':
         return [
             {'type': 'set_state', 'values': {'currentSystem': 'Sol', 'landedBody': 'Earth', 'credits': 999, 'reputation': {'Federation': 15, 'Independent': 7}, 'legalRecords': {'Federation': -30, 'Independent': 0}}},
@@ -3413,6 +3427,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'preserved_legal_food_trade_lot': 'passed' if state.get('cargoHold') == {} and state.get('cargoUsed') == 0 and sale.get('system') == 'Levo' and sale.get('unitPrice') == 120 else 'failed',
             'recovered_scan_penalty_with_clemency_and_trade_sale': 'passed' if state.get('credits') == 5400 and state.get('legalRecords', {}).get('Federation') == -8 else 'failed',
             'recorded_contraband_trade_source_boundary': 'passed' if scan.get('sourceLabel') == 'terminal-velocity-contraband-trade-recovery-scaffold' and scan.get('oracleStatus') == 'classic_runtime_scan_trade_cargo_cleanup_pending' and sale.get('sourceLabel') == 'terminal-velocity-contraband-trade-recovery-scaffold' and sale.get('oracleStatus') == 'classic_runtime_scan_trade_cargo_cleanup_pending' else 'failed',
+        })
+    elif name == 'contraband_trade_funds_clemency_loop':
+        scan = next((event for event in trace if event.get('type') == 'contraband_scan'), {})
+        blocked = [event for event in trace if event.get('type') == 'blocked_legal_clemency']
+        sale = next((event for event in trace if event.get('type') == 'sell_commodity_lot' and event.get('commodity') == 'food'), {})
+        paid = [event for event in trace if event.get('type') == 'pay_legal_clemency']
+        checks.update({
+            'scan_left_clemency_one_hundred_credits_short': 'passed' if scan.get('creditsAfter') == 900 and blocked and blocked[-1].get('reason') == 'insufficient credits' and blocked[-1].get('cost') == 1000 else 'failed',
+            'preserved_trade_lot_funded_clemency': 'passed' if sale.get('system') == 'Levo' and sale.get('creditsAfter') == 2100 and paid and paid[-1].get('creditsAfter') == 1100 and state.get('legalRecords', {}).get('Federation') == -8 else 'failed',
+            'recorded_contraband_clemency_funding_boundaries': 'passed' if scan.get('sourceLabel') == 'terminal-velocity-contraband-clemency-funding-scaffold' and scan.get('oracleStatus') == 'classic_runtime_scan_trade_clemency_cleanup_pending' and sale.get('sourceLabel') == 'terminal-velocity-contraband-clemency-funding-scaffold' and sale.get('oracleStatus') == 'classic_runtime_scan_trade_clemency_cleanup_pending' and blocked and paid and all(event.get('sourceLabel') == 'terminal-velocity-inferred-clemency-scaffold' and event.get('oracleStatus') == 'approved_inference_pending_ev_classic_confirmation' for event in [blocked[-1], paid[-1]]) else 'failed',
         })
     elif name == 'legal_clemency_insufficient_credit_guardrail':
         blocked = [event for event in trace if event.get('type') == 'blocked_legal_clemency']

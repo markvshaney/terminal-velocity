@@ -78,6 +78,7 @@
     "Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
     "Contraband recovery: if Player Info flags cargo as illegal for the current government, sell or reroute before landing scans, or budget clemency after confiscation. TV scaffold; exact Classic scan/bribe UI pending.",
     "Contraband trade recovery: after a scan removes illegal cargo from a mixed hold, check preserved legal cargo in Player Info, pay clemency only when needed, then sell the legal lot at a safe market. TV scaffold; Classic scan/cargo cleanup UI pending.",
+    "Contraband clemency funding: if a contraband scan leaves you short of legal clemency credits, confirm legal cargo survived in Player Info, route to a safe market, sell that preserved lot, then retry C. TV scaffold; Classic scan/cargo cleanup and bribe/clemency UI pending.",
     "Recovery: F8 resets a disabled player ship as a Terminal Velocity scaffold pending Classic death/reload evidence.",
     "Disabled recovery: while disabled, flight/combat/service/trade/mission actions stay blocked until F8 recovery; TV scaffold pending Classic death/reload evidence.",
     "Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.",
@@ -283,6 +284,11 @@
       "flag": "hasContrabandTradeRecoveryHelp",
       "source": "help",
       "contains": "Contraband trade recovery: after a scan removes illegal cargo from a mixed hold"
+    },
+    {
+      "flag": "hasContrabandClemencyFundingHelp",
+      "source": "help",
+      "contains": "Contraband clemency funding: if a contraband scan leaves you short of legal clemency credits"
     },
     {
       "flag": "hasLegalStatusHelp",

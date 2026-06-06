@@ -103,6 +103,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'weapon_inventory_stack_recovery_loop',
                 'contraband_scan_clemency_recovery',
                 'contraband_scan_trade_recovery_loop',
+                'contraband_trade_funds_clemency_loop',
                 'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
                 'disposable_combat_placeholder',
@@ -1972,6 +1973,26 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         sale = [event for event in result['trace'] if event['type'] == 'sell_commodity_lot'][-1]
         self.assertEqual(sale['sourceLabel'], 'terminal-velocity-contraband-trade-recovery-scaffold')
         self.assertEqual(sale['oracleStatus'], 'classic_runtime_scan_trade_cargo_cleanup_pending')
+
+    def test_contraband_trade_funds_clemency_loop_sells_preserved_cargo_before_clemency(self):
+        result = run_scripted_scenario('contraband_trade_funds_clemency_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['scan_left_clemency_one_hundred_credits_short'], 'passed')
+        self.assertEqual(result['checks']['preserved_trade_lot_funded_clemency'], 'passed')
+        self.assertEqual(result['checks']['recorded_contraband_clemency_funding_boundaries'], 'passed')
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['credits'], 1100)
+        self.assertEqual(result['state']['legalRecords']['Federation'], -8)
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_legal_clemency']
+        sale = [event for event in result['trace'] if event['type'] == 'sell_commodity_lot'][-1]
+        self.assertEqual(blocked[-1]['credits'], 900)
+        self.assertEqual(sale['creditsAfter'], 2100)
+        self.assertEqual(sale['sourceLabel'], 'terminal-velocity-contraband-clemency-funding-scaffold')
+        self.assertEqual(sale['oracleStatus'], 'classic_runtime_scan_trade_clemency_cleanup_pending')
 
     def test_legal_clemency_insufficient_credit_guardrail_blocks_then_recovers(self):
         result = run_scripted_scenario('legal_clemency_insufficient_credit_guardrail')

@@ -218,6 +218,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"weapon_inventory_stack_recovery_loop",
 		"contraband_scan_clemency_recovery",
 		"contraband_scan_trade_recovery_loop",
+		"contraband_trade_funds_clemency_loop",
 		"legal_clemency_insufficient_credit_guardrail",
 		"pirate_avoidance_escape_route",
 		"disposable_combat_placeholder",
