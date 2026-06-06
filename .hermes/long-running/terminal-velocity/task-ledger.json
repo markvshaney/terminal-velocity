@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true,
-    "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral until commit/push",
-    "origin_main": "inspect current SHA with `git rev-parse origin/main`",
-    "status_short": "dirty with verified trade_route_margin_choice_loop slice pending normal non-force commit/push"
+    "dirty": false,
+    "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral after trade-margin checkpoint",
+    "origin_main": "inspect current SHA with `git rev-parse origin/main`; SHA-neutral after trade-margin checkpoint",
+    "status_short": "clean at origin/main after normal non-force push of trade_route_margin_choice_loop slice"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true
+    "dirty": false
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_0d29f443",
+    "active_task_id": "t_f654d28c",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "stale_review_gate_reclassified_commit_push_pending",
+    "status": "successor_created_ready_dispatch_pending",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T08:02:15Z",
+    "updated_at": "2026-06-06T08:03:30Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Trade-route margin-choice symbolic scenario verified locally; pending normal non-force commit/push and successor dispatch.",
+  "current_milestone": "Trade-route margin-choice symbolic curriculum slice pushed and remote-verified.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -127,17 +127,19 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_trade_route_margin_choice_loop_carries_positive_margin_and_skips_bad_cargo -v -> OK",
-    "python3 tools/run_gameplay_scenarios.py trade_route_margin_choice_loop --pretty -> success true; creditsDelta 780; cargo cleared",
+    "git push origin main -> pushed trade_route_margin_choice_loop slice",
+    "git fetch origin; HEAD == origin/main == 06ea64de1c98f53062380e9c5fd93db7d90b6bbb",
+    "git status --short --branch -> ## main...origin/main",
+    "targeted trade margin scenario unittest OK",
+    "trade_route_margin_choice_loop scenario success true; creditsDelta 780; cargo cleared",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=63",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' && python3 tools/run_gameplay_scenarios.py --all --pretty && ./run_godot.sh self-test -> OK / failed=0 passed=63 total=63 / GODOT SELFTEST OK gameplayScenarios=63",
-    "git diff --check -> OK"
+    "added-lines high-signal secret scan -> 0"
   ],
   "active_gate": {
     "type": null,
-    "reason": "Stale review-required gate for coherent verified Terminal Velocity work reclassified as workflow bug; normal non-force push is preapproved after standard checks.",
+    "reason": "Successor Kanban continuation card t_f654d28c created from remote-verified origin/main; dispatch/verify exactly one running task.",
     "withheld_action": null,
-    "resume_after": "Commit/push verified trade_route_margin_choice_loop slice, complete t_0d29f443, create/dispatch exactly one successor."
+    "resume_after": "Dispatch t_f654d28c via Kanban dispatcher."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -146,9 +148,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Commit/push verified trade_route_margin_choice_loop slice, complete t_0d29f443, create/dispatch exactly one successor continuation task, then verify exactly one running Terminal Velocity task.",
+  "next_resume_action": "Dispatch Kanban task t_f654d28c and verify exactly one running Terminal Velocity task continues from origin/main after trade_route_margin_choice_loop.",
   "resume_prompt": "Continue Terminal Velocity development from clean origin/main after full-hold trade-route recovery help was pushed and remote-verified.",
-  "updated_at": "2026-06-06T08:02:15Z",
+  "updated_at": "2026-06-06T08:03:30Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
