@@ -9,8 +9,8 @@
     "behind": 0,
     "dirty": "yes",
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "## main...origin/main; ledger finalization pending commit",
-    "origin_main": "inspect current SHA with `git rev-parse origin/main`; implementation commit was remote-verified before this ledger checkpoint"
+    "status_short": "successor t_121fe2dd created; ledger checkpoint pending commit",
+    "origin_main": "inspect current SHA with `git rev-parse origin/main`; successor created from clean remote-verified HEAD"
   },
   "repo_state": {
     "branch": "main",
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_d45e0766",
+    "active_task_id": "t_121fe2dd",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "implementation_pushed_ledger_finalization_pending",
+    "status": "successor_ready_pending_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:38:29Z",
+    "updated_at": "2026-06-06T06:41:43Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -129,9 +129,9 @@
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Starting equipment/status log implementation was committed, pushed normally, fetched, and HEAD matched origin/main before this ledger finalization checkpoint.",
+    "reason": "No Kanban task was running/ready/blocked; successor t_121fe2dd was created from clean origin/main and is ready for dispatch.",
     "withheld_action": "None.",
-    "resume_after": "Continue from clean origin/main after this checkpoint commit/push is verified."
+    "resume_after": "Dispatch t_121fe2dd and verify exactly one running Terminal Velocity task, or record explicit dispatcher blocker."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -140,9 +140,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Continue from the starting-equipment log checkpoint and pick the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo starting-equipment log if present and verified.",
-  "resume_prompt": "Resume Terminal Velocity from live repo state. Read ledger/events/prompt/backlog, avoid redoing the starting-equipment log if present, keep Classic evidence labels distinct from Terminal Velocity scaffolds, and implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs before checkpointing.",
-  "updated_at": "2026-06-06T06:38:29Z",
+  "next_resume_action": "Dispatch Kanban successor task t_121fe2dd and verify it becomes the exactly-one running Terminal Velocity worker for the next source-aligned safe local gameplay/fidelity slice.",
+  "resume_prompt": "Resume Terminal Velocity via Kanban task t_121fe2dd from clean origin/main; read ledger/events/prompt/backlog, avoid redoing the starting-equipment log, and implement one source-aligned safe local gameplay/fidelity slice with verification.",
+  "updated_at": "2026-06-06T06:41:43Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
