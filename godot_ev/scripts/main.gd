@@ -84,6 +84,7 @@ const WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX := "TV_WEAPON_INVENTORY_STACK_EVEN
 const WEAPON_MISSION_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_MISSION_CARGO_EVENT"
 const WEAPON_TRADE_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_TRADE_CARGO_EVENT"
 const WEAPON_LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_WEAPON_LEGAL_DOCKING_EVENT"
+const LIGHT_FREIGHTER_MISSION_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_MISSION_TRADE_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
@@ -335,6 +336,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_trade_cargo_log")
 	if OS.get_cmdline_args().has("--tv-weapon-legal-docking-log") or OS.get_cmdline_user_args().has("--tv-weapon-legal-docking-log"):
 		call_deferred("_run_weapon_legal_docking_log")
+	if OS.get_cmdline_args().has("--tv-light-freighter-mission-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-mission-trade-log"):
+		call_deferred("_run_light_freighter_mission_trade_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -3046,6 +3049,121 @@ func _run_weapon_legal_docking_log() -> void:
 		int(owned_weapons.get(selected_weapon, 0)),
 		credits,
 		denied_message,
+	])
+	get_tree().quit(0)
+
+func _run_light_freighter_mission_trade_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var accepted_body := _current_body()
+	credits = 100000
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(accepted_body)
+	var selected_ship_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			selected_ship_listing = shipyard_listings[i]
+			break
+	var starting_cargo_space := cargo_space
+	var ship_price := int(selected_ship_listing.get("price", 0))
+	_buy_selected_ship()
+	var bought_light_freighter := player_ship_id == "light_freighter"
+	var upgraded_cargo_space := cargo_space
+	var bulk_mission := {
+		"id": "light_freighter_bulk_levo_delivery",
+		"title": "Light Freighter Bulk Delivery to Levo",
+		"originSystem": "Sol",
+		"originBody": "Earth",
+		"destinationSystem": "Levo",
+		"destinationBody": "Levo Spaceport",
+		"cargoTons": 40,
+		"reward": 4200,
+		"description": "Terminal velocity scaffold probe for mixing reserved mission cargo with retained trade cargo after a Light Freighter upgrade.",
+		"requiresFlags": [],
+		"excludesFlags": [],
+		"setsFlags": ["light_freighter_bulk_delivery_started"],
+		"completionFlags": ["light_freighter_bulk_delivery_complete"],
+		"choiceGroup": null,
+		"next": null,
+		"reputationEvent": null,
+		"requirements": {},
+		"timeLimitDays": 5,
+		"sourceLabel": "terminal-velocity-light-freighter-mission-trade-scaffold",
+		"oracleStatus": "light_freighter_mission_trade_pending_ev_classic_runtime_trace",
+	}
+	missions["missions"].insert(0, bulk_mission)
+	landing_tab = 0
+	selected_landing_item = 0
+	var mission_cargo_tons := int(bulk_mission.get("cargoTons", 0))
+	var trade_commodity := "food"
+	var buy_price := int(_market_prices(current_system.get("name", "")).get(trade_commodity, {}).get("buy", 0))
+	var sell_price := int(_market_prices("Levo").get(trade_commodity, {}).get("sell", 0))
+	var credits_before_accept := credits
+	var cargo_before_accept := cargo
+	_accept_selected_mission()
+	var mission_accepted := active_missions.has(str(bulk_mission.get("id")))
+	var cargo_after_accept := cargo
+	var available_after_accept := _cargo_available_tons()
+	landing_tab = 1
+	selected_landing_item = 0
+	_buy_selected_commodity()
+	var trade_cargo_after_buy := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_after_trade_buy := cargo
+	var combined_load_fits := cargo_after_trade_buy == mission_cargo_tons + EV_CLASSIC_COMMODITY_LOT_SIZE and cargo_after_trade_buy <= upgraded_cargo_space
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_levo_selected := _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	var completed_ids := _complete_arrived_missions()
+	var mission_delivered := completed_ids.has(str(bulk_mission.get("id"))) and completed_missions.has(str(bulk_mission.get("id")))
+	var trade_cargo_after_delivery := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_after_delivery := cargo
+	var trade_cargo_preserved_after_delivery := mission_delivered and trade_cargo_after_delivery == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo_after_delivery == EV_CLASSIC_COMMODITY_LOT_SIZE
+	landing_tab = 1
+	selected_landing_item = 0
+	_sell_selected_commodity()
+	var trade_cargo_after_sell := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_after_trade_sell := cargo
+	var trade_sale_completed := trade_cargo_after_sell == 0 and cargo_after_trade_sell == 0
+	print("%s routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" boughtLightFreighter=%s startingCargoSpace=%d upgradedCargoSpace=%d shipPrice=%d acceptedMission=%s missionAccepted=%s missionCargoTons=%d tradeCommodity=%s buyPrice=%d sellPrice=%d cargoBeforeAccept=%d cargoAfterAccept=%d availableAfterAccept=%d tradeCargoAfterBuy=%d cargoAfterTradeBuy=%d combinedLoadFits=%s routeToLevoSelected=%s missionDelivered=%s tradeCargoAfterDelivery=%d cargoAfterDelivery=%d tradeCargoPreservedAfterDelivery=%s tradeSaleCompleted=%s cargoAfterTradeSell=%d creditsBeforeAccept=%d creditsAfter=%d sourceLabel=terminal-velocity-light-freighter-mission-trade-scaffold oracleStatus=light_freighter_mission_trade_pending_ev_classic_runtime_trace status=\"%s\"" % [
+		LIGHT_FREIGHTER_MISSION_TRADE_EVENT_LOG_PREFIX,
+		str(route_to_sol_selected).to_lower(),
+		str(accepted_body.get("name", "None")),
+		str(bought_light_freighter).to_lower(),
+		starting_cargo_space,
+		upgraded_cargo_space,
+		ship_price,
+		str(bulk_mission.get("id")),
+		str(mission_accepted).to_lower(),
+		mission_cargo_tons,
+		trade_commodity,
+		buy_price,
+		sell_price,
+		cargo_before_accept,
+		cargo_after_accept,
+		available_after_accept,
+		trade_cargo_after_buy,
+		cargo_after_trade_buy,
+		str(combined_load_fits).to_lower(),
+		str(route_to_levo_selected).to_lower(),
+		str(mission_delivered).to_lower(),
+		trade_cargo_after_delivery,
+		cargo_after_delivery,
+		str(trade_cargo_preserved_after_delivery).to_lower(),
+		str(trade_sale_completed).to_lower(),
+		cargo_after_trade_sell,
+		credits_before_accept,
+		credits,
+		status_line,
 	])
 	get_tree().quit(0)
 
