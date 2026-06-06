@@ -80,6 +80,7 @@ const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
 const WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_REPUTATION_GATE_EVENT"
 const WEAPON_CREDIT_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_CREDIT_GATE_EVENT"
 const WEAPON_AVAILABILITY_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_AVAILABILITY_GATE_EVENT"
+const WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX := "TV_WEAPON_INVENTORY_STACK_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
@@ -323,6 +324,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_credit_gate_log")
 	if OS.get_cmdline_args().has("--tv-weapon-availability-gate-log") or OS.get_cmdline_user_args().has("--tv-weapon-availability-gate-log"):
 		call_deferred("_run_weapon_availability_gate_log")
+	if OS.get_cmdline_args().has("--tv-weapon-inventory-stack-log") or OS.get_cmdline_user_args().has("--tv-weapon-inventory-stack-log"):
+		call_deferred("_run_weapon_inventory_stack_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -2884,6 +2887,34 @@ func _run_weapon_availability_gate_log() -> void:
 	var bought_after_relocation := _buy_outfit_or_weapon_by_id(selected_weapon)
 	var weapon_bought_after_relocation := bought_after_relocation and int(owned_weapons.get(selected_weapon, 0)) == 1
 	print("%s unavailableSystem=%s unavailableBody=\"%s\" unavailableGovernment=\"%s\" recoverySystem=%s recoveryBody=\"%s\" recoveryGovernment=\"%s\" selectedWeapon=%s credits=%d legalScore=%d reputation=%d weaponAvailableAtUnavailableBody=%s weaponAvailabilityBlocked=%s weaponBoughtAfterRelocation=%s blockedMessage=\"%s\" sourceLabel=terminal-velocity-weapon-availability-gate-scaffold oracleStatus=classic_runtime_weapon_service_availability_pending" % [WEAPON_AVAILABILITY_GATE_EVENT_LOG_PREFIX, unavailable_system_name, unavailable_body_name, unavailable_government_name, recovery_system_name, recovery_body_name, recovery_government_name, selected_weapon, credits, int(legal_records.get(unavailable_government_name, 0)), int(reputation_scores.get(unavailable_government_name, 0)), str(weapon_available_at_unavailable_body), str(weapon_availability_blocked), str(weapon_bought_after_relocation), unavailable_blocked_message])
+	get_tree().quit(0)
+
+func _run_weapon_inventory_stack_log() -> void:
+	_reset_travel_state()
+	var selected_weapon := "pulse_cannon"
+	var system_name := "Sirius"
+	var body_name := "Sirius Station"
+	current_system_index = _system_index_by_name(system_name, current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			break
+	var government_name := _current_government_name()
+	legal_records[government_name] = 0
+	reputation_scores[government_name] = 6
+	credits = 100000
+	owned_weapons.clear()
+	status_messages.clear()
+	var first_weapon_buy_succeeded := _buy_outfit_or_weapon_by_id(selected_weapon)
+	var weapon_stack_count_after_first := int(owned_weapons.get(selected_weapon, 0))
+	var credits_after_first := credits
+	status_messages.clear()
+	var second_weapon_buy_succeeded := _buy_outfit_or_weapon_by_id(selected_weapon)
+	var weapon_stack_count_after_second := int(owned_weapons.get(selected_weapon, 0))
+	var weapon_stack_preserved := first_weapon_buy_succeeded and second_weapon_buy_succeeded and weapon_stack_count_after_first == 1 and weapon_stack_count_after_second == 2
+	print("%s system=%s body=\"%s\" government=\"%s\" selectedWeapon=%s firstWeaponBuySucceeded=%s secondWeaponBuySucceeded=%s weaponStackCountAfterFirst=%d weaponStackCountAfterSecond=%d weaponStackPreserved=%s creditsAfterFirst=%d creditsAfterSecond=%d sourceLabel=terminal-velocity-weapon-inventory-stack-scaffold oracleStatus=classic_runtime_multiple_weapon_purchase_inventory_pending" % [WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX, system_name, body_name, government_name, selected_weapon, str(first_weapon_buy_succeeded), str(second_weapon_buy_succeeded), weapon_stack_count_after_first, weapon_stack_count_after_second, str(weapon_stack_preserved), credits_after_first, credits])
 	get_tree().quit(0)
 
 func _run_legal_patrol_posture_log() -> void:
