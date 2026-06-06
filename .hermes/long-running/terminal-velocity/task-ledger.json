@@ -5,12 +5,12 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0,
     "dirty": false,
     "head": "SHA-neutral: inspect current git rev-parse HEAD because this ledger is amended into the commit it describes",
-    "origin_main": "072b153a4acae453b9e494786a789b771962f260",
-    "status_short": "## main...origin/main [ahead 1]; local upgrade_affordability_trade_loop checkpoint committed pending review/integrator handling"
+    "origin_main": "c8d279de43e3d4fd683fdfd72a7c7fa529c4068c or inspect live git rev-parse origin/main if advanced",
+    "status_short": "## main...origin/main [ahead 1]; local cargo_expansion_trade_loop checkpoint committed pending review/integrator handling"
   },
   "repo_state": {
     "branch": "main",
@@ -22,7 +22,7 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_facc7ac6",
+    "active_task_id": "t_9ef0ec22",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "review_required_after_local_commit",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T08:30:34Z",
+    "updated_at": "2026-06-06T08:52:53Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "upgrade_affordability_trade_loop symbolic curriculum slice verified and committed locally; review/integrator handling pending.",
+  "current_milestone": "cargo_expansion_trade_loop symbolic curriculum slice verified and committed locally; review/integrator handling pending.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
   "last_commits": [
@@ -127,19 +127,20 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_upgrade_affordability_trade_loop_funds_upgrade_after_initial_credit_gate -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_cargo_expansion_trade_loop_uses_cargo_pod_for_third_trade_lot -v -> OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_gameplay_scenario_curriculum -v -> OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 200 tests OK",
-    "run_scripted_scenario('upgrade_affordability_trade_loop') -> success true; checks all passed; credits=438; playerShipId=light_freighter",
-    "all scripted scenarios -> passed=66 failed=0 total=66",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=66",
-    "git diff --check -> OK"
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 201 tests OK",
+    "python3 tools/run_gameplay_scenarios.py cargo_expansion_trade_loop --pretty -> success true; credits=11140; cargoCapacity=30; cargo cleared",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=67 failed=0 total=67",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=67",
+    "git diff --check -> OK",
+    "native_ev/data/gameplay_curriculum.json and task-ledger.json parse OK; events.jsonl parse OK lines=639 before append"
   ],
   "active_gate": {
     "type": "review-required",
     "reason": "Kanban worker changed scenario harness, tests, curriculum manifest, Godot self-test manifest, backlog, and ledger/events; review/integrator handling required before push/done.",
-    "withheld_action": "git push origin main and marking t_facc7ac6 complete as merged/done",
-    "resume_after": "Reviewer/coordinator approves local checkpoint or requests changes on t_facc7ac6."
+    "withheld_action": "git push origin main and marking t_9ef0ec22 complete as merged/done",
+    "resume_after": "Reviewer/coordinator approves local checkpoint or requests changes on t_9ef0ec22."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -148,9 +149,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local upgrade_affordability_trade_loop symbolic curriculum commit; if accepted, integrator may push per normal non-force policy, then continue the next source-aligned safe local Terminal Velocity slice without redoing strategy/upgrade affordability work.",
-  "resume_prompt": "Continue Terminal Velocity development from local upgrade_affordability_trade_loop commit; inspect live git state and handle review/integrator flow before selecting the next safe local slice.",
-  "updated_at": "2026-06-06T08:40:28Z",
+  "next_resume_action": "Review local cargo_expansion_trade_loop symbolic curriculum commit; if accepted, integrator may push per normal non-force policy, then continue the next source-aligned safe local Terminal Velocity slice without redoing strategy/upgrade/cargo expansion work.",
+  "resume_prompt": "Continue Terminal Velocity development from local cargo_expansion_trade_loop commit; inspect live git state and handle review/integrator flow before selecting the next safe local slice.",
+  "updated_at": "2026-06-06T08:52:53Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -207,12 +208,12 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "upgrade-readiness-strategy-loop",
-    "summary": "Symbolic scenario upgrade_readiness_strategy_loop records service_scout, outfitter, weapons, and ship_buyer checkpoints while scouting Earth services, buying cargo/weapon upgrades, and trading up to a light freighter.",
-    "commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
+    "id": "cargo-expansion-trade-loop",
+    "summary": "Symbolic scenario cargo_expansion_trade_loop records capacity_gap, cargo_pod_upgrade, and expanded_trade_run checkpoints while expanding shuttle cargo capacity and running a three-lot Sol Food to Levo trade.",
+    "commit": "SHA-neutral: inspect current git rev-parse HEAD because this ledger is amended into the commit it describes",
     "source_fidelity_labels": [
-      "terminal-velocity-upgrade-readiness-strategy-scaffold",
-      "upgrade_strategy_progression_pending_ev_family_source_trace"
+      "terminal-velocity-cargo-expansion-trade-scaffold",
+      "cargo_expansion_trade_pending_classic_runtime_trace"
     ]
   }
 }

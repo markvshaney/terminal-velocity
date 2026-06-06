@@ -27,6 +27,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'strategy_skill_rotation_loop',
                 'upgrade_readiness_strategy_loop',
                 'upgrade_affordability_trade_loop',
+                'cargo_expansion_trade_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -320,6 +321,29 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['landedBody'], 'Earth')
         self.assertEqual(result['state']['playerShipId'], 'light_freighter')
         self.assertGreaterEqual(result['state']['credits'], 0)
+
+    def test_cargo_expansion_trade_loop_uses_cargo_pod_for_third_trade_lot(self):
+        result = run_scripted_scenario('cargo_expansion_trade_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['blocked_third_lot_before_cargo_pod'], 'passed')
+        self.assertEqual(result['checks']['bought_cargo_pod_capacity_upgrade'], 'passed')
+        self.assertEqual(result['checks']['completed_expanded_three_lot_trade_run'], 'passed')
+        self.assertEqual(result['checks']['recorded_cargo_expansion_source_boundary'], 'passed')
+        blocked_buy_events = [event for event in result['trace'] if event['type'] == 'blocked_buy_commodity_lot']
+        self.assertEqual(blocked_buy_events[0]['reason'], 'insufficient cargo space')
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['capacity_gap', 'cargo_pod_upgrade', 'expanded_trade_run'])
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertEqual([event['commodity'] for event in trade_events], ['food', 'food', 'food', 'food', 'food', 'food'])
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['cargoCapacity'], 30)
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['credits'], 11140)
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-cargo-expansion-trade-scaffold' for event in checkpoints + trade_events))
+        self.assertTrue(all(event['oracleStatus'] == 'cargo_expansion_trade_pending_classic_runtime_trace' for event in checkpoints + trade_events))
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')
