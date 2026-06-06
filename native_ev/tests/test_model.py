@@ -1056,6 +1056,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_LIGHT_FREIGHTER_REPAIR_TRADE_EVENT',
             'TV_LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT',
             'TV_LIGHT_FREIGHTER_REPAIR_REFUEL_MISSION_TRADE_EVENT',
+            'TV_LIGHT_FREIGHTER_DEADLINE_REPAIR_REFUEL_EVENT',
             'TV_LEGAL_PATROL_POSTURE_EVENT',
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             'TV_MISSION_STORY_GATE_EVENT',
@@ -1073,6 +1074,7 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-light-freighter-repair-trade-log',
             '--tv-light-freighter-repair-mission-trade-log',
             '--tv-light-freighter-repair-refuel-mission-trade-log',
+            '--tv-light-freighter-deadline-repair-refuel-log',
             '--tv-legal-patrol-posture-log',
             '--tv-mission-legal-eligibility-log',
             '--tv-mission-story-gate-log',
@@ -1090,6 +1092,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_light_freighter_repair_trade_log',
             'func _run_light_freighter_repair_mission_trade_log',
             'func _run_light_freighter_repair_refuel_mission_trade_log',
+            'func _run_light_freighter_deadline_repair_refuel_log',
             'func _run_legal_patrol_posture_log',
             'func _run_mission_legal_eligibility_log',
             'func _run_mission_story_gate_log',
@@ -1208,6 +1211,10 @@ class NativeEvModelTests(unittest.TestCase):
             'missionCargoReserved=%s',
             'missionDeliveredBeforeRepair=%s',
             'repairFundedByMissionTrade=%s',
+            'sourceLabel=terminal-velocity-light-freighter-deadline-repair-refuel-margin-scaffold',
+            'oracleStatus=light_freighter_deadline_repair_refuel_margin_pending_classic_runtime_trace',
+            'deliveredOnDeadlineDay=%s',
+            'deadlineFailurePreventedBeforeRepair=%s',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('tv-legal-status-log', run_script)
@@ -1223,6 +1230,8 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-light-freighter-mission-trade-log', run_script)
         self.assertIn('tv-light-freighter-repair-trade-log', run_script)
         self.assertIn('tv-light-freighter-repair-mission-trade-log', run_script)
+        self.assertIn('tv-light-freighter-repair-refuel-mission-trade-log', run_script)
+        self.assertIn('tv-light-freighter-deadline-repair-refuel-log', run_script)
         self.assertIn('tv-legal-patrol-posture-log', run_script)
         self.assertIn('tv-mission-legal-eligibility-log', run_script)
         self.assertIn('tv-legal-consequence-log', run_script)
@@ -1243,6 +1252,8 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LightFreighterMissionTradeLog', windows_script)
         self.assertIn('[switch]$LightFreighterRepairTradeLog', windows_script)
         self.assertIn('[switch]$LightFreighterRepairMissionTradeLog', windows_script)
+        self.assertIn('[switch]$LightFreighterRepairRefuelMissionTradeLog', windows_script)
+        self.assertIn('[switch]$LightFreighterDeadlineRepairRefuelLog', windows_script)
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
         self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)
