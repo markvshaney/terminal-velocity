@@ -56,6 +56,7 @@
     "Refuel: landed ports show F5 availability; F5 refuels when service exists.",
     "Repair: landed ports with repair service show F7; hull repair costs credits and keeps source-boundary labels.",
     "Repair recovery: if F7 is blocked, check that you are landed at a repair-service port, hull is damaged, and credits cover the repair quote before retrying.",
+    "Repair credit recovery: if F7 reports insufficient credits, keep the damage state stable, run a safe funding leg until the quoted repair bill is covered, then return to the repair-service port before taking another risky job. TV scaffold; Classic repair credit UI pending.",
     "Combat: Tab fires primary; Space fires selected secondary; S cycles secondary; N/R target contacts; disabled contacts can drop TV-scaffold cargo salvage; exact Classic cadence/effects/loot still pending.",
     "Combat cadence recovery: immediate fire attempts can be blocked by source-mined reload timing; wait for the HUD message/cooldown before treating weapons as broken. Classic timing pending.",
     "NPC retaliation recovery: hostile contacts can fire back under source-mined reload cadence; watch Player Info shields/hull, break off to repair, and use F8 only if disabled. Classic AI cadence pending.",
@@ -172,6 +173,11 @@
       "flag": "hasRepairRecoveryHelp",
       "source": "help",
       "contains": "Repair recovery: if F7 is blocked"
+    },
+    {
+      "flag": "hasRepairCreditRecoveryHelp",
+      "source": "help",
+      "contains": "Repair credit recovery: if F7 reports insufficient credits"
     },
     {
       "flag": "hasCombatHelp",
