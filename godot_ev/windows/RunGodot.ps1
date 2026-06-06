@@ -75,6 +75,7 @@ param(
     [switch]$LegalClemencyLog,
     [switch]$ContrabandScanLog,
     [switch]$ContrabandRiskLog,
+    [switch]$ContrabandScanTradeLog,
     [switch]$ContrabandClemencyFundingLog
 )
 
@@ -240,6 +241,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-contraband-scan-log
 } elseif ($ContrabandRiskLog) {
     & $Godot --headless --path $Project -- --tv-contraband-risk-log
+} elseif ($ContrabandScanTradeLog) {
+    & $Godot --headless --path $Project -- --tv-contraband-scan-trade-log
 } elseif ($ContrabandClemencyFundingLog) {
     & $Godot --headless --path $Project -- --tv-contraband-clemency-funding-log
 } else {

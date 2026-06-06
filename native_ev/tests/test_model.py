@@ -1284,6 +1284,26 @@ class NativeEvModelTests(unittest.TestCase):
         ]:
             self.assertIn(symbol, main_script)
 
+    def test_godot_contraband_scan_trade_recovery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        for symbol in [
+            'TV_CONTRABAND_SCAN_TRADE_EVENT',
+            '--tv-contraband-scan-trade-log',
+            'func _run_contraband_scan_trade_log',
+            'equipmentAfterScan=%d',
+            'foodAfterScan=%d',
+            'preservedLegalCargoAfterScan=%s',
+            'preservedFoodSoldSafely=%s',
+            'sourceLabel=terminal-velocity-contraband-trade-recovery-scaffold',
+            'oracleStatus=classic_runtime_scan_trade_cargo_cleanup_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-contraband-scan-trade-log', run_script)
+        self.assertIn('[switch]$ContrabandScanTradeLog', windows_script)
+
     def test_godot_outfitter_shipyard_purchases_feed_recent_messages_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
