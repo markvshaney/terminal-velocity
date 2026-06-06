@@ -64,6 +64,7 @@
     "mission_deadline_trade_carryover_loop",
     "mission_deadline_sequential_failures_loop",
     "mission_scan_failure_guardrail",
+    "mission_scan_failure_recovery_loop",
     "outfitter_ship_ladder_intro",
     "outfitter_purchase_guardrail_recovery_loop",
     "shipyard_overfull_cargo_guardrail",
@@ -335,6 +336,10 @@
     "mission_scan_failure_guardrail": {
       "purpose": "Mission scan-failure guardrail: accept a scan-sensitive dispatch, verify a nonmatching government scan preserves it, then fail it on the matching government scan, release reserved cargo, and record the Resource Bible ScanGovt/FailIfScan boundary while exact Classic scan UI remains pending.",
       "surface": "mission state/EV Classic Resource Bible-backed scan failure scaffold"
+    },
+    "mission_scan_failure_recovery_loop": {
+      "purpose": "Mission scan-failure recovery loop: fail a scan-sensitive dispatch on a matching government scan, keep the Resource Bible-backed failure history visible, then accept and complete a safe Terminal Velocity follow-up contract while exact Classic reoffer/UI behavior remains pending.",
+      "surface": "mission state/scan-failure recovery scaffold"
     },
     "outfitter_ship_ladder_intro": {
       "purpose": "Outfitter/ship-ladder intro: reach Earth, buy a cargo upgrade and weapon, then trade up to a larger ship from local manifest stock while preserving explicit scaffold/source-boundary labels.",

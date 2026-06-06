@@ -78,6 +78,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'mission_deadline_trade_carryover_loop',
                 'mission_deadline_sequential_failures_loop',
                 'mission_scan_failure_guardrail',
+                'mission_scan_failure_recovery_loop',
                 'outfitter_ship_ladder_intro',
                 'outfitter_purchase_guardrail_recovery_loop',
                 'shipyard_overfull_cargo_guardrail',
@@ -1533,6 +1534,26 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(scans[1]['government'], 'Federation')
         self.assertEqual(scans[1]['releasedCargoTons'], 4)
         self.assertTrue(all(event['sourceLabel'] == 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold' for event in scans))
+
+    def test_mission_scan_failure_recovery_loop_accepts_followup_after_scan_failure(self):
+        result = run_scripted_scenario('mission_scan_failure_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['failed_scan_sensitive_mission'], 'passed')
+        self.assertEqual(result['checks']['accepted_followup_after_scan_failure'], 'passed')
+        self.assertEqual(result['checks']['delivered_followup_after_scan_failure'], 'passed')
+        self.assertEqual(result['checks']['preserved_scan_failure_history_and_source_boundaries'], 'passed')
+        self.assertEqual(result['state']['currentSystem'], 'Centauri')
+        self.assertEqual(result['state']['landedBody'], 'Luna')
+        self.assertEqual(result['state']['failedJobs'], ['scan_sensitive_dispatch_probe'])
+        self.assertEqual(result['state']['completedJobs'], ['scan_recovery_followup'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['credits'], 10900)
+        self.assertIn('fail_mission_bit_44', result['state']['storyFlags'])
+        recovery_events = [event for event in result['trace'] if event.get('id') == 'scan_recovery_followup']
+        self.assertEqual([event['type'] for event in recovery_events], ['accept_cargo_job', 'complete_cargo_job'])
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-mission-scan-recovery-scaffold' for event in recovery_events))
+        self.assertTrue(all(event['oracleStatus'] == 'scan_failure_recovery_pending_classic_runtime_or_manual_trace' for event in recovery_events))
 
     def test_outfitter_ship_ladder_intro_buys_upgrade_weapon_and_bigger_ship(self):
         result = run_scripted_scenario('outfitter_ship_ladder_intro')

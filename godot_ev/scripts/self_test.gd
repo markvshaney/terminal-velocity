@@ -193,6 +193,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"mission_deadline_trade_carryover_loop",
 		"mission_deadline_sequential_failures_loop",
 		"mission_scan_failure_guardrail",
+		"mission_scan_failure_recovery_loop",
 		"outfitter_ship_ladder_intro",
 		"outfitter_purchase_guardrail_recovery_loop",
 		"shipyard_overfull_cargo_guardrail",

@@ -97,6 +97,7 @@ SCENARIO_CURRICULUM = [
     'mission_deadline_trade_carryover_loop',
     'mission_deadline_sequential_failures_loop',
     'mission_scan_failure_guardrail',
+    'mission_scan_failure_recovery_loop',
     'outfitter_ship_ladder_intro',
     'outfitter_purchase_guardrail_recovery_loop',
     'shipyard_overfull_cargo_guardrail',
@@ -2419,6 +2420,44 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'apply_mission_cargo_scan', 'government': 'Independent'},
             {'type': 'apply_mission_cargo_scan', 'government': 'Federation'},
         ]
+    if name == 'mission_scan_failure_recovery_loop':
+        scan_source_label = 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold'
+        scan_oracle_status = 'classic_runtime_scan_failure_ui_pending'
+        recovery_source_label = 'terminal-velocity-mission-scan-recovery-scaffold'
+        recovery_oracle_status = 'scan_failure_recovery_pending_classic_runtime_or_manual_trace'
+        return [
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'scan_sensitive_dispatch_probe',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 4,
+                'pay': 1200,
+                'scanGovernment': 'Federation',
+                'failIfScanned': True,
+                'failureBitSet': 44,
+                'risk': 'scan-sensitive cargo',
+                'sourceLabel': scan_source_label,
+                'oracleStatus': scan_oracle_status,
+            },
+            {'type': 'apply_mission_cargo_scan', 'government': 'Federation'},
+            {
+                'type': 'accept_cargo_job',
+                'id': 'scan_recovery_followup',
+                'destinationSystem': 'Centauri',
+                'destinationBody': 'Luna',
+                'tons': 2,
+                'pay': 900,
+                'sourceLabel': recovery_source_label,
+                'oracleStatus': recovery_oracle_status,
+            },
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Centauri'},
+            {'type': 'land', 'body': 'Luna'},
+            {'type': 'complete_cargo_jobs', 'sourceLabel': recovery_source_label, 'oracleStatus': recovery_oracle_status},
+        ]
     if name == 'outfitter_ship_ladder_intro':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -3270,6 +3309,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'failed_job_after_matching_scan': 'passed' if state.get('failedJobs') == ['scan_sensitive_dispatch_probe'] and not state.get('activeJobs') else 'failed',
             'released_scan_sensitive_cargo': 'passed' if state.get('cargoUsed') == 0 and any(event.get('releasedCargoTons') == 4 for event in scan_failures) else 'failed',
             'recorded_scan_failure_flag_and_boundary': 'passed' if 'fail_mission_bit_44' in state.get('storyFlags', []) and scan_failures and all(event.get('sourceLabel') == 'ev-classic-resource-bible-backed-mission-scan-failure-scaffold' and event.get('oracleStatus') == 'classic_runtime_scan_failure_ui_pending' for event in scan_failures + scan_clears) else 'failed',
+        })
+    elif name == 'mission_scan_failure_recovery_loop':
+        scan_failures = [event for event in trace if event.get('type') == 'mission_scan_failure' and event.get('missionId') == 'scan_sensitive_dispatch_probe']
+        recovery_events = [event for event in trace if event.get('type') in {'accept_cargo_job', 'complete_cargo_job'} and event.get('id') == 'scan_recovery_followup']
+        checks.update({
+            'failed_scan_sensitive_mission': 'passed' if scan_failures and state.get('failedJobs') == ['scan_sensitive_dispatch_probe'] and 'fail_mission_bit_44' in state.get('storyFlags', []) else 'failed',
+            'accepted_followup_after_scan_failure': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'scan_recovery_followup' and event.get('reservedCargoTons') == 2 for event in trace) else 'failed',
+            'delivered_followup_after_scan_failure': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['scan_recovery_followup'] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 900 else 'failed',
+            'preserved_scan_failure_history_and_source_boundaries': 'passed' if scan_failures and recovery_events and all(event.get('sourceLabel') == 'terminal-velocity-mission-scan-recovery-scaffold' and event.get('oracleStatus') == 'scan_failure_recovery_pending_classic_runtime_or_manual_trace' for event in recovery_events) else 'failed',
         })
     elif name == 'outfitter_ship_ladder_intro':
         checks.update({
