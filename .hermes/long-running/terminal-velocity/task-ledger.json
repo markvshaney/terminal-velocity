@@ -5,16 +5,16 @@
   "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, no-secrets/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
   "repo": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "local checkpoint commit pending SHA-neutral inspection after commit",
-    "origin_main": "remote-verified before slice: 6e5c222c0394a3bf84ef9964e923aa0a9c7047d0",
-    "status_short": "local checkpoint commit prepared; branch will be ahead of origin/main by 1"
+    "head": "2a369604fc2cc84b4024e862c1480f85bc8ccbb9",
+    "origin_main": "2a369604fc2cc84b4024e862c1480f85bc8ccbb9",
+    "status_short": "clean; HEAD == origin/main after integrator push"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "dirty": false
   },
@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_5f82739c",
+    "active_task_id": "t_68f856c5",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "review_required_after_local_commit",
+    "status": "successor_ready_pending_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T11:23:28.770476Z",
+    "updated_at": "2026-06-06T11:26:09.614737Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,9 +111,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter repair mission margin help surface verified and prepared as a local checkpoint commit; review/integrator push pending.",
+  "current_milestone": "Light Freighter repair mission margin help surface remote-verified; successor continuation card t_68f856c5 created for next safe local slice.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
-  "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter refuel margin recovery",
+  "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -156,9 +156,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local Light Freighter repair mission margin help-surface checkpoint; if accepted, integrator may push/fetch/verify HEAD == origin/main, complete t_5f82739c, and dispatch/continue exactly one successor source-aligned safe local slice without redoing this help probe.",
-  "resume_prompt": "Continue Terminal Velocity after t_5f82739c: inspect git status/origin, ledger/events tail, continuation prompt, and backlog; if the help-surface checkpoint is already integrated, start exactly one new source-aligned gameplay/fidelity vertical slice.",
-  "updated_at": "2026-06-06T11:23:28.770476Z",
+  "next_resume_action": "Dispatch/continue Kanban task t_68f856c5 for exactly one next source-aligned safe local Terminal Velocity gameplay/fidelity vertical slice; do not redo Light Freighter repair mission margin scenario or help/probe work.",
+  "resume_prompt": "Continue Terminal Velocity from clean origin/main; inspect task t_68f856c5, ledger/events tail, continuation prompt, backlog, and live git state, then implement one new source-aligned gameplay/fidelity vertical slice with verification and checkpoint.",
+  "updated_at": "2026-06-06T11:26:09.614737Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -225,7 +225,7 @@
   "last_completed_slice": {
     "id": "light-freighter-repair-mission-margin-help-surface",
     "summary": "Promoted the existing light_freighter_repair_mission_margin_loop symbolic outcome into F10 help with an explicit Godot log probe hasLightFreighterRepairMissionMarginRecoveryHelp.",
-    "commit": "local checkpoint: feat(help): surface light freighter repair mission margin recovery",
+    "commit": "2a369604fc2cc84b4024e862c1480f85bc8ccbb9",
     "source_fidelity_labels": [
       "terminal-velocity-light-freighter-repair-mission-margin-scaffold",
       "light_freighter_repair_mission_margin_pending_classic_runtime_trace",
@@ -237,6 +237,6 @@
   },
   "git_state": {
     "dirty": false,
-    "status_short": "local checkpoint committed/prepared; branch ahead of origin/main by 1"
+    "status_short": "clean; HEAD == origin/main after integrator push"
   }
 }
