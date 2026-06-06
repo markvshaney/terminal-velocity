@@ -30,6 +30,7 @@
     "Mission cargo: I toggles mission log with reserved tons; HUD and market show mission/free cargo.",
     "Mission/trade hybrid: accept cargo jobs first, then buy only commodity lots that fit remaining free hold; carry trade through delivery chains only when fuel, deadline, and hold margins stay safe.",
     "Strategy skill rotation recovery: after combining route planning, a courier job, and a safe trade lot, verify Mission Log/Player Info checkpoints before specializing the pilot further. TV strategy scaffold; Classic progression loop pending.",
+    "Upgrade readiness recovery: before spending upgrade savings, scout service availability, buy capacity and defensive gear intentionally, then verify Player Info ship/outfit/weapon checkpoints after trading up. TV upgrade-readiness scaffold; Classic upgrade progression loop pending.",
     "Mission route trade sale: after delivering a mission with preserved trade cargo, check the destination market and sell recoverable cargo before leaving the route. TV scaffold; Classic behavior pending.",
     "First mission delivery recovery: after accepting the intro courier, keep the route/mission log aligned through Sol to Luna, land before completing, and verify cargo/reward/history before taking the chain offer. TV scaffold; exact Classic first-job UI pending.",
     "Mission scan failure recovery: scan-sensitive cargo missions can fail when the matching government scans you; watch Mission Log/Player Info failure history, free released cargo, and seek follow-up contracts. Resource Bible-backed scaffold; exact Classic scan UI pending.",
@@ -445,6 +446,11 @@
       "flag": "hasStrategySkillRotationRecoveryHelp",
       "source": "help",
       "contains": "Strategy skill rotation recovery: after combining route planning"
+    },
+    {
+      "flag": "hasUpgradeReadinessRecoveryHelp",
+      "source": "help",
+      "contains": "Upgrade readiness recovery: before spending upgrade savings"
     },
     {
       "flag": "hasMissionRouteTradeSaleHelp",
