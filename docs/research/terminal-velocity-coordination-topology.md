@@ -225,6 +225,46 @@ Deficiencies found in the first draft and corrective rules:
 7. **Autoresearch is not just “more agents.”** If a TV workflow becomes iterative optimization, define goal, metric, baseline, mutable surface, trusted surface, fixed budget, experiment log, and keep/revert rule before running it. Otherwise treat it as normal source-aligned development or read-only discovery.
 8. **Source separation must stay visible.** External agent/workflow sources may improve process only. They do not justify EV Classic behavior claims; EV behavior still requires original runtime, decoded resources, manuals/Bibles, or explicitly labeled EV-family/community evidence.
 
+## Automatic-gameplay source pass: topology implications
+
+A 2026-06-06 automatic-gameplay source pass expanded `docs/research/automated-gameplay-learning-reference-sources.md` with implementation-oriented automation/game-testing sources. These sources reinforce the topology above, but they do **not** move Terminal Velocity to broad autonomous gameplay yet.
+
+Sources checked for this pass:
+
+- Voyager README: automatic curriculum, executable skill library, environment feedback, execution-error repair, and self-verification.
+- Airtest README: image-recognition UI automation for games/apps, simulated input/assertions, command-line/Python API runs, HTML reports, and screen recording.
+- Poco README.rst: SDK-integrated cross-engine UI hierarchy/action access for Unity3D/cocos/native apps.
+- Stable-Retro README: emulator-backed Gymnasium environments for classic games, with ROM/state/emulator integration constraints.
+- Wuji README: automatic online combat-game testing with MOEA/DRL to explore state and discover bugs.
+- Tencent GAutomator README: SDK-integrated mobile-game test automation through engine elements/GameObjects.
+- SerpentAI README: older Python game-agent framework lead; useful as architecture history, lower priority due to age/status.
+
+Topology updates from those sources:
+
+1. **Two automation lanes, not one.** Keep `symbolic/semantic Godot probes` separate from `screen/capture-driven Basilisk or UI automation`. Semantic hooks can write stable JSON event logs and scenario results; capture-driven automation must attach screenshots, OCR/vision notes, and uncertainty labels.
+2. **Curriculum requires an execution surface.** Before automatic gameplay loops, define a scenario registry, objective queue, skill/macro library location, environment-feedback schema, and promotion rule from discovered macro → regression/test/backlog entry.
+3. **State archive before exploration.** Go-Explore/Stable-Retro-style patterns only apply when a state can be named and returned to. For Terminal Velocity, record save/pilot/scenario seed, system/location, fuel/cargo/mission state, route, and expected restore command before branching exploration.
+4. **Failure artifacts are first-class.** Automation runs should produce durable failure packets: command/macro, starting state, observed state, expected predicate, screenshot/log path when available, and whether the failure is `automation-flake`, `TV-bug`, `source-gap`, or `fidelity-pending`.
+5. **Engine-integrated APIs are preferred in Godot, unavailable in Basilisk.** Poco/GAutomator-style hierarchy access supports adding Godot semantic probes/UI contracts; original EV Classic/Basilisk should remain capture/input based unless a real emulator/object-state bridge is built.
+6. **RL/evolutionary exploration stays gated.** Wuji/Stable-Retro-style mutation-heavy exploration needs a bounded mutable surface, restoreable states, metric, run budget, and keep/revert rule. Until those exist, use read-only scouting and deterministic Godot scenario probes.
+7. **Single writer still wins.** Gameplay agents may generate candidate macros, traces, or bug reports, but repo mutation still funnels through the coordinator unless a manifest assigns isolated worktrees and write-exclusive claims.
+8. **Source labels must travel with automation output.** Every automatic gameplay finding should say whether it is `terminal-velocity-observed`, `automation-design`, `original-runtime-observed`, `decoded-resource`, `manual-backed`, or `external-adaptation-observed`.
+
+### Automatic-gameplay manifest additions
+
+For any gameplay-agent or automated-play slice, add these fields to the coordination manifest:
+
+- Automation lane: `semantic-godot-probe`, `screen-capture-ui`, `emulator-state-wrapper`, `read-only-source-scout`, or `mutation-gated-experiment`.
+- Objective/curriculum item:
+- Starting state and restore method:
+- Action/macro source: human demo, generated macro, existing regression, or source-derived scenario.
+- Observation schema: JSON event, screenshot/vision packet, OCR text, trace log, or mixed.
+- Success predicate / metric:
+- Failure packet path:
+- Skill/macro promotion rule:
+- Exploration budget and stop condition:
+- Keep/revert rule for any generated code/data:
+
 ## First safe step
 
 Run a **read-only backlog executability audit** before adding more workers.

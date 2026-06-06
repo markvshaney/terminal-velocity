@@ -51,6 +51,53 @@ Purpose: reusable reference list for general game-agent/autonomous-task research
   - Project page: https://os-world.github.io/
   - Use for Terminal Velocity: task setup scripts, execution traces, result getters, artifacts, and validation in a real UI/action environment.
 
+## Gameplay automation / game-testing implementation sources
+
+- **Airtest: Cross-Platform UI Automation Framework for Games and Apps**
+  - Label: `automation-design`
+  - URL: https://github.com/AirtestProject/Airtest
+  - Evidence checked: project README says Airtest is a cross-platform UI automation framework for games/apps, uses image recognition to locate UI elements, simulates input/assertions, supports command-line/Python API runs, reports, and screen recording.
+  - Use for Terminal Velocity: screen/image-based automation patterns for Basilisk/Godot UI capture loops, assertions, and failure artifacts without requiring engine injection.
+
+- **Poco**
+  - Label: `automation-design`
+  - URL: https://github.com/AirtestProject/Poco
+  - Source checked: `https://raw.githubusercontent.com/AirtestProject/Poco/master/README.rst`.
+  - Evidence checked: README describes Poco as a cross-engine UI automation framework for Unity3D, cocos2dx, native apps, and other SDK-integrated engines; it retrieves UI element hierarchy in the game's runtime and provides engine-independent APIs.
+  - Use for Terminal Velocity: compare against Godot-side semantic UI hooks and hierarchy/action APIs; not applicable to original EV Classic/Basilisk fidelity unless an external object hierarchy exists.
+
+- **SerpentAI: Python Game Agent Development Kit**
+  - Label: `automation-design-lead`
+  - URL: https://github.com/SerpentAI/SerpentAI
+  - Evidence checked: project README identifies it as a Python game-agent development kit; README also flags pre-alpha status and Linux-only support at the time of that README.
+  - Use for Terminal Velocity: architectural lead for screenshot/action-loop game agents; lower priority because of age/pre-alpha status.
+
+- **Wuji: Automatic Online Combat Game Testing Using Evolutionary Deep Reinforcement Learning**
+  - Label: `automation-design`
+  - URL: https://github.com/NeteaseFuxiRL/wuji
+  - Paper/source note: original source code for ASE 2019 distinguished paper.
+  - Evidence checked: README says it combines multi-objective evolutionary algorithm (MOEA) and deep reinforcement learning (DRL) to explore game state and discover bugs.
+  - Use for Terminal Velocity: bug-finding/exploration design for combat/state-space stress tests; likely overkill for first safe-local TV gameplay automation.
+
+- **Tencent GAutomator**
+  - Label: `automation-design-lead`
+  - URL: https://github.com/Tencent/GAutomator
+  - Evidence checked: README describes an open-source test automation framework for mobile games; interacts with engine elements such as Unity GameObjects; requires SDK integration to interact with game-engine elements.
+  - Use for Terminal Velocity: engine-integrated test-agent pattern for Godot-side semantic controls; not useful for original EV Classic/Basilisk automation because it depends on target integration.
+
+- **Stable-Retro / Gym Retro**
+  - Label: `automation-design-lead`
+  - URL: https://stable-retro.farama.org/
+  - Source repository: https://github.com/Farama-Foundation/stable-retro
+  - Evidence checked: README describes Stable-Retro as a maintained Gym Retro fork for turning classic video games into Gymnasium reinforcement-learning environments, with multiple supported emulators/platforms.
+  - Use for Terminal Velocity: reference for emulator-backed RL environment wrappers and state/action integration; not directly applicable to Classic Mac EV unless a compatible emulator integration exists or is built.
+
+- **GitHub topic indexes: game automation / game testing**
+  - Label: `source-discovery-lead`
+  - URLs: https://github.com/topics/game-automation and https://github.com/topics/game-testing
+  - Evidence checked: search results expose many small Python/OpenCV/mss/PyAutoGUI bots plus broader testing frameworks.
+  - Use for Terminal Velocity: discovery surface for implementation examples; individual repos should be inspected before borrowing patterns.
+
 ## Guardrail
 
 These sources justify automation architecture and evaluation design only. Original EV Classic runtime observation, decoded EV Classic resources, manuals, and bounded Basilisk traces remain the fidelity sources for game behavior.
