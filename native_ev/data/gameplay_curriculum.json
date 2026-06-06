@@ -23,6 +23,7 @@
     "light_freighter_mission_trade_loop",
     "light_freighter_refuel_delivery_loop",
     "light_freighter_bulk_margin_choice_loop",
+    "light_freighter_bulk_mission_margin_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -375,6 +376,10 @@
     "light_freighter_bulk_margin_choice_loop": {
       "purpose": "Light-freighter bulk margin choice loop: buy a Light Freighter at Earth, compare profitable Sol Food against negative-margin Levo Equipment, fill the 150-ton hold only with positive-margin Food, and sell it at Levo under pending-Classic source boundaries.",
       "surface": "ship upgrade/bulk commodity margin-choice scaffold"
+    },
+    "light_freighter_bulk_mission_margin_loop": {
+      "purpose": "Light-freighter bulk mission margin loop: buy a Light Freighter at Earth, reserve a 120-ton Levo delivery, evaluate remaining hold space for profitable Sol Food versus negative-margin Levo Equipment, carry only three Food lots alongside mission cargo, complete delivery, and sell retained trade cargo under pending-Classic source boundaries.",
+      "surface": "ship upgrade/bulk mission reserved-cargo plus margin-choice scaffold"
     }
   }
 }
