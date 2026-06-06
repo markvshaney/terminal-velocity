@@ -43,6 +43,7 @@ const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
 const MISSION_ALIGNMENT_BRANCH_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_BRANCH_EVENT"
 const MISSION_ALIGNMENT_RETURN_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_RETURN_EVENT"
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
+const MISSION_TRADE_DESTINATION_SALE_EVENT_LOG_PREFIX := "TV_MISSION_TRADE_DESTINATION_SALE_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
 const MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_PENALTY_EVENT"
@@ -256,6 +257,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_alignment_return_log")
 	if OS.get_cmdline_args().has("--tv-mission-route-hint-log") or OS.get_cmdline_user_args().has("--tv-mission-route-hint-log"):
 		call_deferred("_run_mission_route_hint_log")
+	if OS.get_cmdline_args().has("--tv-mission-trade-destination-sale-log") or OS.get_cmdline_user_args().has("--tv-mission-trade-destination-sale-log"):
+		call_deferred("_run_mission_trade_destination_sale_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
 		call_deferred("_run_mission_abort_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-forbidden-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-forbidden-log"):
@@ -1474,6 +1477,58 @@ func _route_to_active_mission_destination() -> bool:
 	if route_selected:
 		status_line = "Mission route queued to %s. %s" % [destination_system, _route_fuel_hint_line()]
 	return route_selected
+
+func _run_mission_trade_destination_sale_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var accepted_body := _current_body()
+	var mission_before_accept: Dictionary = _first_available_mission(accepted_body)
+	var accepted_mission_id := str(mission_before_accept.get("id", "none"))
+	var destination_system := str(mission_before_accept.get("destinationSystem", "?"))
+	_accept_selected_mission()
+	var mission_accepted := active_missions.has(accepted_mission_id)
+	landing_tab = 1
+	selected_landing_item = 0
+	var trade_commodity := "food"
+	var credits_before_trade_buy := credits
+	var cargo_before_trade_buy := cargo
+	_buy_selected_commodity()
+	var credits_after_trade_buy := credits
+	var held_trade_cargo_after_buy := int(commodity_hold.get(trade_commodity, 0))
+	var trade_bought_before_delivery := held_trade_cargo_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo == cargo_before_trade_buy + EV_CLASSIC_COMMODITY_LOT_SIZE and credits_after_trade_buy < credits_before_trade_buy
+	_ev_land_or_launch()
+	selected_route.clear()
+	var mission_route_queued := _route_to_active_mission_destination()
+	var route_before_delivery_jump := selected_route.duplicate()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Luna")
+	_try_land()
+	var completed_ids := _complete_arrived_missions()
+	var credits_after_delivery := credits
+	var held_trade_cargo_after_delivery := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_used_after_delivery := cargo
+	var mission_delivered := completed_ids.has(accepted_mission_id) and active_missions.is_empty() and str(current_system.get("name", "?")) == destination_system
+	var trade_cargo_preserved_after_delivery := mission_delivered and held_trade_cargo_after_delivery == held_trade_cargo_after_buy and cargo_used_after_delivery == held_trade_cargo_after_buy
+	landing_tab = 1
+	selected_landing_item = 0
+	_sell_selected_commodity()
+	var credits_after_destination_sale := credits
+	var held_trade_cargo_after_sale := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_used_after_sale := cargo
+	var trade_cargo_sold_at_destination := trade_cargo_preserved_after_delivery and held_trade_cargo_after_sale == 0 and cargo_used_after_sale == 0 and credits_after_destination_sale > credits_after_delivery
+	var accepted_status := "missionAccepted=true" if mission_accepted else "missionAccepted=false"
+	var trade_buy_status := "tradeBoughtBeforeDelivery=true" if trade_bought_before_delivery else "tradeBoughtBeforeDelivery=false"
+	var delivered_status := "missionDelivered=true" if mission_delivered else "missionDelivered=false"
+	var preserved_status := "tradeCargoPreservedAfterDelivery=true" if trade_cargo_preserved_after_delivery else "tradeCargoPreservedAfterDelivery=false"
+	var sold_status := "tradeCargoSoldAtDestination=true" if trade_cargo_sold_at_destination else "tradeCargoSoldAtDestination=false"
+	var cargo_sale_status := "cargoUsedAfterSale=0" if cargo_used_after_sale == 0 else "cargoUsedAfterSale=%d" % cargo_used_after_sale
+	print("%s startSystem=Levo routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" acceptedMission=%s %s destinationSystem=%s missionRouteQueued=%s routeBeforeDeliveryJump=%s tradeCommodity=%s %s %s %s %s heldTradeCargoAfterBuy=%d heldTradeCargoAfterDelivery=%d heldTradeCargoAfterSale=%d cargoUsedAfterDelivery=%d %s creditsBeforeTradeBuy=%d creditsAfterTradeBuy=%d creditsAfterDelivery=%d creditsAfterDestinationSale=%d completedMissions=%s sourceLabel=terminal-velocity-mission-trade-destination-sale-scaffold oracleStatus=mission_trade_destination_sale_pending_classic_runtime_trace status=\"%s\"" % [MISSION_TRADE_DESTINATION_SALE_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(accepted_body.get("name", "None")), accepted_mission_id, accepted_status, destination_system, str(mission_route_queued), JSON.stringify(route_before_delivery_jump), trade_commodity, trade_buy_status, delivered_status, preserved_status, sold_status, held_trade_cargo_after_buy, held_trade_cargo_after_delivery, held_trade_cargo_after_sale, cargo_used_after_delivery, cargo_sale_status, credits_before_trade_buy, credits_after_trade_buy, credits_after_delivery, credits_after_destination_sale, JSON.stringify(completed_missions), status_line])
+	get_tree().quit(0)
 
 func _run_mission_abort_log() -> void:
 	_reset_travel_state()

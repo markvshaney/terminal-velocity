@@ -335,6 +335,14 @@ Mission deadline trade-carryover scenario contract:
 - `sourceLabel=terminal-velocity-mission-deadline-trade-carryover-scaffold`; `oracleStatus=deadline_failure_trade_carryover_pending_classic_runtime_or_manual_trace`.
 - This is a Terminal Velocity guardrail scaffold; exact EV Classic missed-deadline behavior with mixed mission/trade cargo remains pending Classic runtime or manual trace evidence.
 
+Mission trade destination-sale scenario contract:
+
+- `RunGodot.ps1 -MissionTradeDestinationSaleLog` / `--tv-mission-trade-destination-sale-log`
+- Exercises the Terminal Velocity mission/trade hybrid loop where a player accepts the intro courier at Earth, buys one Sol Food lot in spare hold space, delivers at Luna, then sells the preserved trade lot at the destination market.
+- Logs `missionAccepted=true`, `tradeBoughtBeforeDelivery=true`, `missionDelivered=true`, `tradeCargoPreservedAfterDelivery=true`, and `tradeCargoSoldAtDestination=true` plus cargo, credit, route, and completed-mission counters.
+- `sourceLabel=terminal-velocity-mission-trade-destination-sale-scaffold`; `oracleStatus=mission_trade_destination_sale_pending_classic_runtime_trace`.
+- This is a Terminal Velocity mission/trade destination-sale scaffold; exact EV Classic mixed mission/trade UI and market behavior remain pending Classic runtime evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`
