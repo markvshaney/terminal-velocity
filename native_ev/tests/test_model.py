@@ -911,16 +911,19 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_LEGAL_STATUS_EVENT',
             'TV_LEGAL_DOCKING_EVENT',
             'TV_LEGAL_SERVICE_GATE_EVENT',
+            'TV_WEAPON_REPUTATION_GATE_EVENT',
             'TV_LEGAL_PATROL_POSTURE_EVENT',
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             '--tv-legal-status-log',
             '--tv-legal-docking-log',
             '--tv-legal-service-gate-log',
+            '--tv-weapon-reputation-gate-log',
             '--tv-legal-patrol-posture-log',
             '--tv-mission-legal-eligibility-log',
             'func _run_legal_status_log',
             'func _run_legal_docking_log',
             'func _run_legal_service_gate_log',
+            'func _run_weapon_reputation_gate_log',
             'func _run_legal_patrol_posture_log',
             'func _run_mission_legal_eligibility_log',
             'func _current_government_name() -> String:',
@@ -929,6 +932,8 @@ class NativeEvModelTests(unittest.TestCase):
             'func _legal_docking_denied_message(government_name: String) -> String:',
             'func _government_name_for_system(system_name: String) -> String:',
             'func _legal_service_access_allowed(government_name: String) -> bool:',
+            'func _service_access_allowed(service_name: String, government_name: String) -> bool:',
+            'func _service_blocked_message(service_name: String, government_name: String) -> String:',
             'func _legal_service_blocked_message(government_name: String) -> String:',
             'func _legal_patrol_hostile_posture_active(government_name: String) -> bool:',
             'func _legal_patrol_warning_message(government_name: String) -> String:',
@@ -986,11 +991,15 @@ class NativeEvModelTests(unittest.TestCase):
             'Legal status: Player Info shows current government/legal stance; hostile patrol fire worsens the TV scaffold and landed C buys clemency when eligible.',
             'legalDockingDenied=%s',
             'sourceLabel=terminal-velocity-legal-docking-scaffold',
+            'weaponReputationBlocked=%s',
+            'weaponBoughtAfterReputation=%s',
+            'sourceLabel=terminal-velocity-weapon-reputation-gate-scaffold',
         ]:
             self.assertIn(symbol, main_script)
         self.assertIn('tv-legal-status-log', run_script)
         self.assertIn('tv-legal-docking-log', run_script)
         self.assertIn('tv-legal-service-gate-log', run_script)
+        self.assertIn('tv-weapon-reputation-gate-log', run_script)
         self.assertIn('tv-legal-patrol-posture-log', run_script)
         self.assertIn('tv-mission-legal-eligibility-log', run_script)
         self.assertIn('tv-legal-consequence-log', run_script)
@@ -1000,6 +1009,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LegalStatusLog', windows_script)
         self.assertIn('[switch]$LegalDockingLog', windows_script)
         self.assertIn('[switch]$LegalServiceGateLog', windows_script)
+        self.assertIn('[switch]$WeaponReputationGateLog', windows_script)
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
         self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)

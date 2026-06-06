@@ -74,6 +74,7 @@ const NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX := "TV_NAVIGATION_GUARDRAIL_EVENT"
 const LEGAL_STATUS_EVENT_LOG_PREFIX := "TV_LEGAL_STATUS_EVENT"
 const LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_LEGAL_DOCKING_EVENT"
 const LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX := "TV_LEGAL_SERVICE_GATE_EVENT"
+const WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_REPUTATION_GATE_EVENT"
 const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX := "TV_LEGAL_CONSEQUENCE_EVENT"
@@ -303,6 +304,8 @@ func _ready() -> void:
 		call_deferred("_run_legal_docking_log")
 	if OS.get_cmdline_args().has("--tv-legal-service-gate-log") or OS.get_cmdline_user_args().has("--tv-legal-service-gate-log"):
 		call_deferred("_run_legal_service_gate_log")
+	if OS.get_cmdline_args().has("--tv-weapon-reputation-gate-log") or OS.get_cmdline_user_args().has("--tv-weapon-reputation-gate-log"):
+		call_deferred("_run_weapon_reputation_gate_log")
 	if OS.get_cmdline_args().has("--tv-legal-patrol-posture-log") or OS.get_cmdline_user_args().has("--tv-legal-patrol-posture-log"):
 		call_deferred("_run_legal_patrol_posture_log")
 	if OS.get_cmdline_args().has("--tv-mission-legal-eligibility-log") or OS.get_cmdline_user_args().has("--tv-mission-legal-eligibility-log"):
@@ -2630,6 +2633,38 @@ func _run_legal_service_gate_log() -> void:
 	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" legalScore=%d blockedOutfitter=%s blockedShipyard=%s noPurchase=%s serviceBlockedMessage=\"%s\" sourceLabel=terminal-velocity-legal-service-gate-scaffold oracleStatus=legal_service_denial_pending_ev_classic_confirmation" % [LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, int(legal_records.get(government_name, 0)), str(blocked_outfitter), str(blocked_shipyard), str(no_purchase), service_blocked_message])
 	get_tree().quit(0)
 
+func _run_weapon_reputation_gate_log() -> void:
+	_reset_travel_state()
+	current_system_index = _system_index_by_name("Sirius", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	var body_name := "Sirius Station"
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			break
+	var government_name := _current_government_name()
+	legal_records[government_name] = 0
+	reputation_scores[government_name] = 5
+	credits = 100000
+	landing_tab = 2
+	var sale_items := _outfitter_sale_items(_current_body())
+	selected_landing_item = 0
+	for i in range(sale_items.size()):
+		if str(sale_items[i].get("id", "")) == "pulse_cannon":
+			selected_landing_item = i
+			break
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var blocked_message := _service_blocked_message("weapons", government_name)
+	var weapon_reputation_blocked := status_messages.has(blocked_message) and not owned_weapons.has("pulse_cannon")
+	reputation_scores[government_name] = 6
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var weapon_bought_after_reputation := int(owned_weapons.get("pulse_cannon", 0)) == 1
+	print("%s system=%s body=%s government=\"%s\" reputationBefore=5 reputationAfter=%d legalScore=%d selectedWeapon=pulse_cannon weaponReputationBlocked=%s weaponBoughtAfterReputation=%s blockedMessage=\"%s\" sourceLabel=terminal-velocity-weapon-reputation-gate-scaffold oracleStatus=classic_runtime_weapon_service_reputation_gate_pending" % [WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX, current_system.get("name", "?"), body_name, government_name, int(reputation_scores.get(government_name, 0)), int(legal_records.get(government_name, 0)), str(weapon_reputation_blocked), str(weapon_bought_after_reputation), blocked_message])
+	get_tree().quit(0)
+
 func _run_legal_patrol_posture_log() -> void:
 	_reset_travel_state()
 	map_visible = true
@@ -4139,7 +4174,36 @@ func _government_crime_tolerance_score(government_name: String) -> int:
 	return int(tolerance_by_government.get(government_name, mechanics.get("crimeToleranceLegalScore", mechanics.get("patrolHostileLegalScore", -60))))
 
 func _legal_service_access_allowed(government_name: String) -> bool:
-	return _government_docking_allowed(government_name)
+	return _service_access_allowed("outfitter", government_name)
+
+func _service_access_allowed(service_name: String, government_name: String) -> bool:
+	if not _government_docking_allowed(government_name):
+		return false
+	var requirements: Dictionary = reputation.get("mechanics", {}).get("serviceRequirements", {}).get(service_name, {})
+	var legal_min: Dictionary = requirements.get("legalMin", {})
+	for key in legal_min.keys():
+		if str(key) == "*" or str(key) == government_name:
+			if int(legal_records.get(government_name, 0)) < int(legal_min.get(key, 0)):
+				return false
+	var reputation_by_government: Dictionary = requirements.get("reputationMinByGovernment", {})
+	var reputation_min: Dictionary = reputation_by_government.get(government_name, {})
+	for key in reputation_min.keys():
+		if int(reputation_scores.get(str(key), 0)) < int(reputation_min.get(key, 0)):
+			return false
+	return true
+
+func _service_blocked_message(service_name: String, government_name: String) -> String:
+	if not _government_docking_allowed(government_name):
+		return _legal_service_blocked_message(government_name)
+	var requirements: Dictionary = reputation.get("mechanics", {}).get("serviceRequirements", {}).get(service_name, {})
+	var reputation_by_government: Dictionary = requirements.get("reputationMinByGovernment", {})
+	var reputation_min: Dictionary = reputation_by_government.get(government_name, {})
+	for key in reputation_min.keys():
+		var faction := str(key)
+		var needed := int(reputation_min.get(key, 0))
+		if int(reputation_scores.get(faction, 0)) < needed:
+			return "%s access needs %s reputation %d; TV scaffold, exact Classic service refusal UI pending" % [service_name.capitalize(), faction, needed]
+	return _legal_service_blocked_message(government_name)
 
 func _legal_service_blocked_message(government_name: String) -> String:
 	return "Services blocked by %s legal status; TV scaffold, exact Classic thresholds unconfirmed" % _legal_status_for_government(government_name)
@@ -6206,6 +6270,10 @@ func _buy_selected_outfit_or_weapon() -> void:
 		_set_status("No outfitter stock")
 		return
 	var item: Dictionary = sale_items[selected_landing_item % sale_items.size()]
+	var service_name := "weapons" if item.get("saleType", "") == "weapon" else "outfitter"
+	if not _service_access_allowed(service_name, government_name):
+		_set_status(_service_blocked_message(service_name, government_name))
+		return
 	var price := int(item.get("price", 0))
 	if credits < price:
 		_set_status("Not enough credits")
@@ -6265,8 +6333,8 @@ func _buy_selected_ship() -> void:
 	if _disabled_player_action_blocked():
 		return
 	var government_name := _current_government_name()
-	if not _legal_service_access_allowed(government_name):
-		_set_status(_legal_service_blocked_message(government_name))
+	if not _service_access_allowed("shipyard", government_name):
+		_set_status(_service_blocked_message("shipyard", government_name))
 		return
 	var listings := _shipyard_listings(_current_body())
 	if listings.is_empty():
