@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true,
-    "head": "ce3a07fed8641deafaf00cf3a887d7e226dbd394 (remote-verified after hull_plating_repair_loop push; inspect live git for current HEAD if advanced)",
-    "origin_main": "ce3a07fed8641deafaf00cf3a887d7e226dbd394 (remote-verified after hull_plating_repair_loop push; inspect live git for current origin/main if advanced)",
-    "status_short": "balanced_upgrade_trade_loop slice verified pending full regression/local commit; inspect live git for exact state"
+    "dirty": false,
+    "head": "0b9a8764f8b98d282ea455be40123c0ed19fde88 (remote-verified after balanced_upgrade_trade_loop push; inspect live git for current HEAD if advanced)",
+    "origin_main": "0b9a8764f8b98d282ea455be40123c0ed19fde88 (remote-verified after balanced_upgrade_trade_loop push; inspect live git for current origin/main if advanced)",
+    "status_short": "clean at origin/main after balanced_upgrade_trade_loop normal push; successor created pending dispatch"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true
+    "dirty": false
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_7e6b950d",
+    "active_task_id": "t_398ce7ab",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "balanced_upgrade_trade_loop_verified_pending_local_commit_review",
+    "status": "successor_created_pending_dispatch_after_balanced_upgrade_trade_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T09:30:50Z",
+    "updated_at": "2026-06-06T09:33:56Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,8 +111,8 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "hull_plating_repair_loop symbolic curriculum slice remote-verified; successor t_7e6b950d created to continue the next source-aligned safe local slice.",
-  "last_commit": "remote-verified: feat(curriculum): add hull plating repair scenario",
+  "current_milestone": "balanced_upgrade_trade_loop symbolic curriculum slice remote-verified; successor t_398ce7ab created to continue the next source-aligned safe local slice.",
+  "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -138,7 +138,7 @@
   ],
   "active_gate": {
     "type": "none",
-    "reason": "No active gate: stale review-required/push gate was resolved locally under normal non-force push policy; successor t_7e6b950d is ready for dispatch.",
+    "reason": "No active gate: stale review-required/push gate was resolved locally under normal non-force push policy; successor t_398ce7ab is ready for dispatch.",
     "withheld_action": null,
     "resume_after": "Continue safe-local Terminal Velocity gameplay/fidelity slices."
   },
@@ -149,9 +149,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Commit local balanced_upgrade_trade_loop checkpoint if final git/no-secrets checks are clean, then block t_7e6b950d for review/integrator handling; do not push from worker.",
-  "resume_prompt": "Continue Terminal Velocity from t_7e6b950d: balanced_upgrade_trade_loop adds constrained 3,600-credit Earth refit budget, cargo/fuel upgrades, blocked hull-plating affordability, two-lot Sol Food funding run to Levo, final hull-plating purchase and repair at Earth. Verify full native scenarios and Godot self-test, commit locally, then review/integrator handles push; do not redo this slice.",
-  "updated_at": "2026-06-06T09:30:50Z",
+  "next_resume_action": "Dispatch/continue successor t_398ce7ab from clean origin/main and implement the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing strategy/upgrade/cargo/fuel/hull/balanced-upgrade work.",
+  "resume_prompt": "Continue Terminal Velocity from t_398ce7ab: balanced_upgrade_trade_loop was pushed and remote-verified; read live ledger/events/backlog, then implement the next source-aligned safe local slice with tests/docs/checkpoint. Do not redo prior verified curriculum slices.",
+  "updated_at": "2026-06-06T09:33:56Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -195,7 +195,8 @@
     "Do not repeat broad source mining when the next_resume_action names a bounded source-aligned slice; inspect the live backlog and choose the strongest adjacent slice.",
     "Do not activate Strict Play or destructive original-EV tests for reusable pilots without explicit approval.",
     "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo balanced_upgrade_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
