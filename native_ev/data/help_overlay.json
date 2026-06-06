@@ -18,6 +18,7 @@
     "Map service/legal summary: selected systems show Terminal Velocity station services and legal risk.",
     "Mission objective marker: active mission destinations are highlighted on the map.",
     "Mission route helper: G queues the active mission destination when known.",
+    "Mission route recovery: if G replaces a stale route or J blocks for low fuel after queuing an active mission, keep the mission destination selected, land/refuel at a linked service port, then jump/deliver before buying more cargo. TV scaffold; Classic route UI pending.",
     "Route/fuel planning: G and Shift-click route status show hop cost and refuel-before-full-route warnings before J jumps.",
     "Navigation guardrail recovery: if J/L/F5 blocks, read the HUD reason for no route, low fuel, too-close hyperspace, no nearby port, fast approach, or missing refuel service before changing destinations. TV scaffold; Classic wording pending.",
     "Hyperspace distance recovery: if J reports you are not far enough away from the system center, keep your route selected, fly outward, then retry J before changing destination. Original-runtime-observed guardrail; exact Classic distance pending.",
@@ -328,6 +329,11 @@
       "flag": "hasMissionRouteHelp",
       "source": "help",
       "contains": "Mission route helper: G queues the active mission destination"
+    },
+    {
+      "flag": "hasMissionRouteRecoveryHelp",
+      "source": "help",
+      "contains": "Mission route recovery: if G replaces a stale route or J blocks for low fuel"
     },
     {
       "flag": "hasMissionTradeHybridHelp",
