@@ -7,16 +7,16 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true,
+    "dirty": false,
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "dirty with verified full-hold trade route recovery help slice pending local checkpoint commit/push",
-    "origin_main": "ee47305cd8127b1069775f269c6c8cb45923476a"
+    "status_short": "clean at origin/main after normal non-force push of full-hold trade-route recovery help slice",
+    "origin_main": "inspect current SHA with `git rev-parse origin/main`; SHA-neutral to avoid self-staling checkpoint metadata"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true
+    "dirty": false
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_3391a669",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "stale_review_required_reclassified_for_integrator_push",
+    "status": "slice_pushed_remote_verified_successor_needed",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T07:48:22Z",
+    "updated_at": "2026-06-06T07:48:56Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Full-hold trade-route recovery help slice verified locally; normal non-force push/checkpoint/successor flow in progress.",
+  "current_milestone": "Full-hold trade-route recovery help slice pushed and remote-verified.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -127,18 +127,16 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasFullHoldTradeRouteRecoveryHelp=true hintCount=63",
-    "python3 tools/run_gameplay_scenarios.py max_hold_trade_route_scout --pretty -> success=true creditsDelta=1560",
-    "python3 tools/run_gameplay_scenarios.py trade_route_refuel_profit_loop --pretty -> success=true creditsDelta=1560",
-    "git diff --check -> OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK"
+    "HOME=/home/bh git push origin main -> pushed full-hold trade-route recovery help slice",
+    "git fetch origin main -> OK",
+    "git rev-parse HEAD == git rev-parse origin/main == 7850c964000299e7105ca8457ecc8967a3e655e6 before this SHA-neutral checkpoint",
+    "git status --short --branch -> ## main...origin/main"
   ],
   "active_gate": {
     "type": null,
-    "reason": "Stale review-required block for coherent verified Terminal Velocity work was classified as a workflow bug; normal non-force push is preapproved after standard checks.",
+    "reason": "No active gate after normal non-force push; coordinator should complete current Kanban card and dispatch one successor continuation card.",
     "withheld_action": null,
-    "resume_after": "Commit/push the verified full-hold trade-route recovery help slice, complete t_3391a669, create/dispatch exactly one successor."
+    "resume_after": "Create/dispatch successor from clean origin/main."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -147,9 +145,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Commit/push verified full-hold trade-route recovery help slice, complete t_3391a669, create/dispatch exactly one successor continuation task, then verify exactly one running Terminal Velocity task.",
-  "resume_prompt": "Continue Terminal Velocity development after full-hold trade-route recovery help is pushed and remote-verified; do not redo completed probes/help slices.",
-  "updated_at": "2026-06-06T07:48:22Z",
+  "next_resume_action": "Create exactly one successor Kanban card from clean origin/main after full-hold trade-route recovery help push checkpoint, dispatch it, and verify exactly one running task.",
+  "resume_prompt": "Continue Terminal Velocity development from clean origin/main after full-hold trade-route recovery help was pushed and remote-verified.",
+  "updated_at": "2026-06-06T07:48:56Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -208,7 +206,7 @@
   "last_completed_slice": {
     "id": "full-hold-trade-route-recovery-help",
     "summary": "F10 help now guides players to preserve a service-port refuel margin for full-hold profitable cargo routes and sell both 10-ton lots before taking another cargo job; scenario probes verify max-hold sale and low-fuel/refuel recovery under Terminal Velocity scaffold labels.",
-    "commit": "pending normal non-force push; inspect current SHA with `git rev-parse HEAD` after commit",
+    "commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint after remote verification",
     "source_fidelity_labels": [
       "terminal-velocity-max-hold-trade-scaffold",
       "terminal-velocity-refuel-trade-route-scaffold",
