@@ -28,6 +28,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'upgrade_readiness_strategy_loop',
                 'upgrade_affordability_trade_loop',
                 'cargo_expansion_trade_loop',
+                'fuel_reserve_upgrade_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -344,6 +345,26 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['credits'], 11140)
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-cargo-expansion-trade-scaffold' for event in checkpoints + trade_events))
         self.assertTrue(all(event['oracleStatus'] == 'cargo_expansion_trade_pending_classic_runtime_trace' for event in checkpoints + trade_events))
+
+    def test_fuel_reserve_upgrade_loop_buys_aux_tank_and_refuels_expanded_reserve(self):
+        result = run_scripted_scenario('fuel_reserve_upgrade_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['bought_auxiliary_fuel_tank_upgrade'], 'passed')
+        self.assertEqual(result['checks']['refueled_to_expanded_reserve'], 'passed')
+        self.assertEqual(result['checks']['completed_fuel_reserve_return_hop'], 'passed')
+        self.assertEqual(result['checks']['recorded_fuel_reserve_source_boundary'], 'passed')
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['fuel_range_gap', 'fuel_tank_upgrade', 'expanded_reserve_return'])
+        refuel_events = [event for event in result['trace'] if event['type'] == 'refuel']
+        self.assertEqual(refuel_events[-1]['fuelAfter'], 31)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['maxFuel'], 31)
+        self.assertEqual(result['state']['fuel'], 30)
+        self.assertEqual(result['state']['ownedOutfits'].get('fuel_tank'), 1)
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-fuel-reserve-upgrade-scaffold' for event in checkpoints))
+        self.assertTrue(all(event['oracleStatus'] == 'fuel_reserve_upgrade_pending_classic_runtime_trace' for event in checkpoints))
 
     def test_mission_trade_destination_sale_loop_sells_cargo_after_delivery(self):
         result = run_scripted_scenario('mission_trade_destination_sale_loop')

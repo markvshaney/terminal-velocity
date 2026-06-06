@@ -16,6 +16,7 @@
     "upgrade_readiness_strategy_loop",
     "upgrade_affordability_trade_loop",
     "cargo_expansion_trade_loop",
+    "fuel_reserve_upgrade_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -112,6 +113,10 @@
     "cargo_expansion_trade_loop": {
       "purpose": "Cargo-expansion trade loop: hit the starting hold limit on a third Sol Food lot, buy a cargo pod at Earth, carry the expanded three-lot load to Levo, and verify profit while preserving pending-Classic source boundaries.",
       "surface": "cargo upgrade/expanded merchant route scaffold"
+    },
+    "fuel_reserve_upgrade_loop": {
+      "purpose": "Fuel-reserve upgrade loop: surface an empty-reserve range gap at Earth, buy an auxiliary fuel tank, refuel to the expanded reserve, and return to Levo while preserving pending-Classic source boundaries.",
+      "surface": "fuel reserve/outfitter upgrade route scaffold"
     },
     "mission_runner_first_delivery": {
       "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",

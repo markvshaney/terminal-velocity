@@ -9,8 +9,8 @@
     "behind": 0,
     "dirty": false,
     "head": "SHA-neutral: inspect current git rev-parse HEAD because this ledger is amended into the commit it describes",
-    "origin_main": "c8d279de43e3d4fd683fdfd72a7c7fa529c4068c or inspect live git rev-parse origin/main if advanced",
-    "status_short": "## main...origin/main [ahead 1]; local cargo_expansion_trade_loop checkpoint committed pending review/integrator handling"
+    "origin_main": "inspect live git rev-parse origin/main; latest worker commit is local pending review/integrator handling",
+    "status_short": "## main...origin/main [ahead 1]; local fuel_reserve_upgrade_loop checkpoint committed pending review/integrator handling"
   },
   "repo_state": {
     "branch": "main",
@@ -22,7 +22,7 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_9ef0ec22",
+    "active_task_id": "t_6715df3f",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "review_required_after_local_commit",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T08:52:53Z",
+    "updated_at": "2026-06-06T09:05:12Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,8 +110,8 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "cargo_expansion_trade_loop symbolic curriculum slice verified and committed locally; review/integrator handling pending.",
-  "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
+  "current_milestone": "fuel_reserve_upgrade_loop symbolic curriculum slice verified locally; review/integrator handling pending.",
+  "last_commit": "local checkpoint: feat(curriculum): add fuel reserve upgrade scenario",
   "last_checkpoint_commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -127,20 +127,17 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_cargo_expansion_trade_loop_uses_cargo_pod_for_third_trade_lot -v -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_self_test_covers_gameplay_scenario_curriculum -v -> OK",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 201 tests OK",
-    "python3 tools/run_gameplay_scenarios.py cargo_expansion_trade_loop --pretty -> success true; credits=11140; cargoCapacity=30; cargo cleared",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=67 failed=0 total=67",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=67",
-    "git diff --check -> OK",
-    "native_ev/data/gameplay_curriculum.json and task-ledger.json parse OK; events.jsonl parse OK lines=639 before append"
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_fuel_reserve_upgrade_loop_buys_aux_tank_and_refuels_expanded_reserve -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 72 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=68 failed=0 total=68",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 202 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=68"
   ],
   "active_gate": {
     "type": "review-required",
-    "reason": "Kanban worker changed scenario harness, tests, curriculum manifest, Godot self-test manifest, backlog, and ledger/events; review/integrator handling required before push/done.",
-    "withheld_action": "git push origin main and marking t_9ef0ec22 complete as merged/done",
-    "resume_after": "Reviewer/coordinator approves local checkpoint or requests changes on t_9ef0ec22."
+    "reason": "Kanban worker changed scenario harness, tests, curriculum manifest, Godot self-test manifest, backlog, and ledger/events for fuel_reserve_upgrade_loop; review/integrator handling required before push/done.",
+    "withheld_action": "git push origin main and marking t_6715df3f complete as merged/done",
+    "resume_after": "Reviewer/coordinator approves local checkpoint or requests changes on t_6715df3f."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -149,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local cargo_expansion_trade_loop symbolic curriculum commit; if accepted, integrator may push per normal non-force policy, then continue the next source-aligned safe local Terminal Velocity slice without redoing strategy/upgrade/cargo expansion work.",
-  "resume_prompt": "Continue Terminal Velocity development from local cargo_expansion_trade_loop commit; inspect live git state and handle review/integrator flow before selecting the next safe local slice.",
-  "updated_at": "2026-06-06T08:52:53Z",
+  "next_resume_action": "Review local fuel_reserve_upgrade_loop symbolic curriculum commit; if accepted, integrator may push per normal non-force policy, then continue the next source-aligned safe local Terminal Velocity slice without redoing strategy/upgrade/cargo/fuel reserve work.",
+  "resume_prompt": "Continue Terminal Velocity development from local fuel_reserve_upgrade_loop commit; inspect live git state and handle review/integrator flow before selecting the next safe local slice.",
+  "updated_at": "2026-06-06T09:05:12Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -193,7 +190,8 @@
     "Do not use PATH-only Godot checks; run repo-local ./run_godot.sh for TV verification.",
     "Do not treat EV adaptations/Godot logs as Classic truth; label them as hypothesis or Terminal Velocity evidence until original/resource/manual support exists.",
     "Do not repeat broad source mining when the next_resume_action names a bounded source-aligned slice; inspect the live backlog and choose the strongest adjacent slice.",
-    "Do not activate Strict Play or destructive original-EV tests for reusable pilots without explicit approval."
+    "Do not activate Strict Play or destructive original-EV tests for reusable pilots without explicit approval.",
+    "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
@@ -208,12 +206,12 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "cargo-expansion-trade-loop",
-    "summary": "Symbolic scenario cargo_expansion_trade_loop records capacity_gap, cargo_pod_upgrade, and expanded_trade_run checkpoints while expanding shuttle cargo capacity and running a three-lot Sol Food to Levo trade.",
+    "id": "fuel-reserve-upgrade-loop",
+    "summary": "Symbolic scenario fuel_reserve_upgrade_loop records fuel_range_gap, fuel_tank_upgrade, and expanded_reserve_return checkpoints while buying an Auxiliary Fuel Tank, refueling to 31, and returning to Levo with 30 fuel.",
     "commit": "SHA-neutral: inspect current git rev-parse HEAD because this ledger is amended into the commit it describes",
     "source_fidelity_labels": [
-      "terminal-velocity-cargo-expansion-trade-scaffold",
-      "cargo_expansion_trade_pending_classic_runtime_trace"
+      "terminal-velocity-fuel-reserve-upgrade-scaffold",
+      "fuel_reserve_upgrade_pending_classic_runtime_trace"
     ]
   }
 }

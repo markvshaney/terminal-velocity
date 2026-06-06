@@ -48,6 +48,7 @@ SCENARIO_CURRICULUM = [
     'upgrade_readiness_strategy_loop',
     'upgrade_affordability_trade_loop',
     'cargo_expansion_trade_loop',
+    'fuel_reserve_upgrade_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -563,7 +564,7 @@ def _refuel(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str
     if state['landedBody'] is None:
         trace.append({'type': 'blocked_refuel', 'reason': 'not landed', 'system': state['currentSystem']})
         return False
-    state['fuel'] = STARTING_FUEL
+    state['fuel'] = int(state.get('maxFuel', STARTING_FUEL))
     trace.append({'type': 'refuel', 'system': state['currentSystem'], 'body': state['landedBody'], 'fuelAfter': state['fuel']})
     return True
 
@@ -1351,6 +1352,23 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'expanded_trade_run', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
+    if name == 'fuel_reserve_upgrade_loop':
+        source_label = 'terminal-velocity-fuel-reserve-upgrade-scaffold'
+        oracle_status = 'fuel_reserve_upgrade_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'fuel_range_gap', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'fuel_tank', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'fuel_tank_upgrade', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'refuel'},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'expanded_reserve_return', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
     if name == 'mission_runner_first_delivery':
         return [
@@ -2284,6 +2302,18 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_cargo_pod_capacity_upgrade': 'passed' if outfit_events and outfit_events[-1].get('cargoCapacity') == STARTING_CARGO_CAPACITY + 10 and state.get('ownedOutfits', {}).get('cargo_pod') == 1 else 'failed',
             'completed_expanded_three_lot_trade_run': 'passed' if len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 3 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 3 and state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS - 1200 + (3 * (120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} else 'failed',
             'recorded_cargo_expansion_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-cargo-expansion-trade-scaffold' and event.get('oracleStatus') == 'cargo_expansion_trade_pending_classic_runtime_trace' for event in source_events) else 'failed',
+        })
+    elif name == 'fuel_reserve_upgrade_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        outfit_events = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'fuel_tank']
+        refuel_events = [event for event in trace if event.get('type') == 'refuel']
+        jump_events = [event for event in trace if event.get('type') == 'jump']
+        source_events = checkpoints + outfit_events
+        checks.update({
+            'bought_auxiliary_fuel_tank_upgrade': 'passed' if outfit_events and outfit_events[-1].get('maxFuel') == STARTING_FUEL + 25 and state.get('ownedOutfits', {}).get('fuel_tank') == 1 else 'failed',
+            'refueled_to_expanded_reserve': 'passed' if refuel_events and refuel_events[-1].get('fuelAfter') == STARTING_FUEL + 25 else 'failed',
+            'completed_fuel_reserve_return_hop': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('maxFuel') == STARTING_FUEL + 25 and state.get('fuel') == STARTING_FUEL + 24 and any(event.get('originSystem') == 'Sol' and event.get('destinationSystem') == START_SYSTEM for event in jump_events) else 'failed',
+            'recorded_fuel_reserve_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-fuel-reserve-upgrade-scaffold' and event.get('oracleStatus') == 'fuel_reserve_upgrade_pending_classic_runtime_trace' for event in source_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({
