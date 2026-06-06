@@ -100,6 +100,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'weapon_purchase_trade_cargo_reservation_loop',
                 'weapon_purchase_secondary_activation_loop',
                 'weapon_legal_docking_recovery_loop',
+                'weapon_inventory_stack_recovery_loop',
                 'contraband_scan_clemency_recovery',
                 'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
@@ -1915,6 +1916,24 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(bought['itemId'], 'pulse_cannon')
         self.assertEqual(bought['sourceLabel'], 'terminal-velocity-weapon-legal-docking-scaffold')
         self.assertEqual(bought['oracleStatus'], 'classic_runtime_weapon_purchase_after_docking_denial_pending')
+
+    def test_weapon_inventory_stack_recovery_loop_records_multiple_purchases(self):
+        result = run_scripted_scenario('weapon_inventory_stack_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['ownedWeapons']['pulse_cannon'], 2)
+        self.assertEqual(result['state']['credits'], 7200)
+        self.assertEqual(result['checks']['bought_first_secondary_weapon'], 'passed')
+        self.assertEqual(result['checks']['bought_second_secondary_weapon_stack'], 'passed')
+        self.assertEqual(result['checks']['recorded_weapon_inventory_stack_source_boundary'], 'passed')
+        buys = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon' and event['itemId'] == 'pulse_cannon']
+        self.assertEqual(len(buys), 2)
+        self.assertEqual([event['creditsAfter'] for event in buys], [8600, 7200])
+        self.assertTrue(all(event['saleType'] == 'weapon' for event in buys))
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-weapon-inventory-stack-scaffold' for event in buys))
+        self.assertTrue(all(event['oracleStatus'] == 'classic_runtime_multiple_weapon_purchase_inventory_pending' for event in buys))
 
     def test_contraband_scan_clemency_recovery_confiscates_and_repairs_legal_record(self):
         result = run_scripted_scenario('contraband_scan_clemency_recovery')
