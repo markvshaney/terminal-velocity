@@ -22,6 +22,7 @@
     "light_freighter_capacity_trade_loop",
     "light_freighter_mission_trade_loop",
     "light_freighter_refuel_delivery_loop",
+    "light_freighter_deadline_refuel_delivery_loop",
     "light_freighter_bulk_margin_choice_loop",
     "light_freighter_bulk_mission_margin_loop",
     "light_freighter_refuel_mission_margin_loop",
@@ -398,6 +399,10 @@
     "light_freighter_refuel_delivery_loop": {
       "purpose": "Light-freighter refuel delivery loop: buy a Light Freighter at Earth, reserve a 120-ton Levo delivery, block the loaded return leg at zero fuel, refuel at Earth, then complete delivery under pending-Classic source boundaries.",
       "surface": "ship upgrade/mission delivery low-fuel recovery scaffold"
+    },
+    "light_freighter_deadline_refuel_delivery_loop": {
+      "purpose": "Light-freighter deadline refuel delivery loop: buy a Light Freighter at Earth, reserve a 120-ton timed Levo delivery, block the loaded return leg at zero fuel, refuel at Earth, wait to the current scaffold deadline day, then complete delivery without late-failure side effects under pending-Classic source boundaries.",
+      "surface": "ship upgrade/timed bulk delivery low-fuel recovery scaffold"
     },
     "light_freighter_bulk_margin_choice_loop": {
       "purpose": "Light-freighter bulk margin choice loop: buy a Light Freighter at Earth, compare profitable Sol Food against negative-margin Levo Equipment, fill the 150-ton hold only with positive-margin Food, and sell it at Levo under pending-Classic source boundaries.",

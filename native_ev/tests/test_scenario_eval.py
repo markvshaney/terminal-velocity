@@ -36,6 +36,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'light_freighter_capacity_trade_loop',
                 'light_freighter_mission_trade_loop',
                 'light_freighter_refuel_delivery_loop',
+                'light_freighter_deadline_refuel_delivery_loop',
                 'light_freighter_bulk_margin_choice_loop',
                 'light_freighter_bulk_mission_margin_loop',
                 'light_freighter_refuel_mission_margin_loop',
@@ -533,6 +534,38 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         source_events = checkpoints + [event for event in result['trace'] if event['type'] in {'buy_ship', 'accept_cargo_job', 'complete_cargo_job'}]
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-light-freighter-refuel-delivery-scaffold' for event in source_events))
         self.assertTrue(all(event['oracleStatus'] == 'light_freighter_refuel_delivery_pending_classic_runtime_trace' for event in source_events))
+
+    def test_light_freighter_deadline_refuel_delivery_loop_completes_last_day_after_refuel(self):
+        result = run_scripted_scenario('light_freighter_deadline_refuel_delivery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['bought_light_freighter_for_deadline_refuel_delivery'], 'passed')
+        self.assertEqual(result['checks']['reserved_timed_bulk_delivery_before_low_fuel_block'], 'passed')
+        self.assertEqual(result['checks']['blocked_timed_bulk_delivery_on_low_fuel'], 'passed')
+        self.assertEqual(result['checks']['completed_last_day_bulk_delivery_after_refuel'], 'passed')
+        self.assertEqual(result['checks']['recorded_light_freighter_deadline_refuel_delivery_source_boundary'], 'passed')
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['timed_bulk_delivery_refuel_gap', 'last_day_refueled_bulk_delivery_recovery'])
+        blocked_jumps = [event for event in result['trace'] if event['type'] == 'blocked_jump']
+        self.assertEqual(blocked_jumps[-1]['reason'], 'insufficient fuel')
+        refuels = [event for event in result['trace'] if event['type'] == 'refuel']
+        self.assertEqual(refuels[-1]['fuelAfter'], 300)
+        complete_events = [event for event in result['trace'] if event['type'] == 'complete_cargo_job']
+        self.assertEqual(complete_events[-1]['id'], 'levo_bulk_deadline_refuel_supply')
+        self.assertEqual(result['state']['currentDay'], 2)
+        self.assertEqual(result['state'].get('failedJobs', []), [])
+        self.assertNotIn('fail_mission_bit_46', result['state']['storyFlags'])
+        self.assertEqual(result['state']['currentSystem'], START_SYSTEM)
+        self.assertEqual(result['state']['landedBody'], START_BODY)
+        self.assertEqual(result['state']['completedJobs'], ['levo_bulk_deadline_refuel_supply'])
+        self.assertEqual(result['state']['activeJobs'], [])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['fuel'], 299)
+        self.assertEqual(result['state']['credits'], 12200)
+        source_events = checkpoints + [event for event in result['trace'] if event['type'] in {'buy_ship', 'accept_cargo_job', 'complete_cargo_job'}]
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-light-freighter-deadline-refuel-delivery-scaffold' for event in source_events))
+        self.assertTrue(all(event['oracleStatus'] == 'light_freighter_deadline_refuel_delivery_pending_classic_runtime_trace' for event in source_events))
 
     def test_light_freighter_bulk_margin_choice_loop_fills_hold_with_positive_margin(self):
         result = run_scripted_scenario('light_freighter_bulk_margin_choice_loop')
