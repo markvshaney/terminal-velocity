@@ -8,9 +8,9 @@
     "ahead": 0,
     "behind": 0,
     "dirty": "yes",
-    "head": "79fc152d6748d20ca3dc972b9d5fe3a8aa599985",
-    "status_short": "## main...origin/main; modified starting-equipment slice files pending local commit",
-    "origin_main": "79fc152d6748d20ca3dc972b9d5fe3a8aa599985"
+    "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
+    "status_short": "## main...origin/main; ledger finalization pending commit",
+    "origin_main": "inspect current SHA with `git rev-parse origin/main`; implementation commit was remote-verified before this ledger checkpoint"
   },
   "repo_state": {
     "branch": "main",
@@ -25,7 +25,7 @@
     "active_task_id": "t_d45e0766",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "worker_local_slice_verified_pending_commit",
+    "status": "implementation_pushed_ledger_finalization_pending",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:37:36Z",
+    "updated_at": "2026-06-06T06:38:29Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -106,8 +106,8 @@
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
   "current_milestone": "Starting equipment/status deterministic Godot log slice verified locally; original-runtime-observed starting HUD facts are labeled separately from Terminal Velocity/source-mined primary visibility while exact Classic primary/outfit status remains pending nonmutating trace.",
-  "last_commit": "pending local commit: feat(godot): expose starting equipment log",
-  "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
+  "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
+  "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -129,9 +129,9 @@
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Starting equipment/status log slice is safe-local, verified, and ready for local commit.",
-    "withheld_action": "None for local commit; normal push behavior follows current task body/policy after standard checks.",
-    "resume_after": "After local commit and optional normal push verification, continue with the next strongest source-aligned safe local TV slice."
+    "reason": "Starting equipment/status log implementation was committed, pushed normally, fetched, and HEAD matched origin/main before this ledger finalization checkpoint.",
+    "withheld_action": "None.",
+    "resume_after": "Continue from clean origin/main after this checkpoint commit/push is verified."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -140,9 +140,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After committing the starting-equipment log checkpoint, continue from live main/origin state and pick the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo starting-equipment log if present and verified.",
+  "next_resume_action": "Continue from the starting-equipment log checkpoint and pick the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo starting-equipment log if present and verified.",
   "resume_prompt": "Resume Terminal Velocity from live repo state. Read ledger/events/prompt/backlog, avoid redoing the starting-equipment log if present, keep Classic evidence labels distinct from Terminal Velocity scaffolds, and implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs before checkpointing.",
-  "updated_at": "2026-06-06T06:37:36Z",
+  "updated_at": "2026-06-06T06:38:29Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
