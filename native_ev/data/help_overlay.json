@@ -41,6 +41,7 @@
     "Active deadline recovery: before waiting or rerouting, check Mission Log/Player Info days remaining and complete timed deliveries before the TV deadline scaffold expires. Exact Classic date UI pending.",
     "Mission return trade margin: before buying return-leg cargo after a delivery, compare destination and linked-market prices; skip negative-margin cargo and finish the contract chain. TV scaffold; Classic behavior pending.",
     "Full-hold trade route recovery: when a profitable cargo route fills the shuttle, keep a service-port refuel margin before the return jump and sell both lots before taking another cargo job. TV scaffold; Classic market spread pending.",
+    "Light Freighter mission/trade capacity recovery: after upgrading to a Light Freighter, reserve bulk mission cargo first, fill only remaining hold with profitable trade cargo, deliver the job, then sell retained cargo before accepting another bulk contract. TV scaffold; Classic Light Freighter mission/trade UI pending.",
     "Light Freighter refuel margin recovery: after reserving a bulk delivery, fill only remaining hold with positive-margin cargo, preserve a service-port refuel plan, then deliver and sell retained cargo. TV scaffold; Classic Light Freighter/trade UI pending.",
     "Light Freighter repair mission margin recovery: when a damaged freighter carries a bulk delivery, reserve repair credits, fill only spare hold with positive-margin cargo, deliver, sell retained cargo, then return to a repair port before taking another risky job. TV scaffold; Classic damaged freighter mission/trade/repair UI pending.",
     "Light Freighter repair/refuel margin recovery: when a damaged, low-fuel freighter carries a bulk delivery, reserve repair credits, buy only positive-margin spare cargo, deliver and sell at Levo, refuel before the empty return, then repair at Earth. TV scaffold; Classic damaged freighter fuel/repair UI pending.",
@@ -435,6 +436,11 @@
       "flag": "hasFullHoldTradeRouteRecoveryHelp",
       "source": "help",
       "contains": "Full-hold trade route recovery: when a profitable cargo route fills the shuttle"
+    },
+    {
+      "flag": "hasLightFreighterMissionTradeCapacityHelp",
+      "source": "help",
+      "contains": "Light Freighter mission/trade capacity recovery: after upgrading to a Light Freighter"
     },
     {
       "flag": "hasLightFreighterRefuelMarginRecoveryHelp",

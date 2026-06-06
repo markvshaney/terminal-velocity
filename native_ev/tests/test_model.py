@@ -287,6 +287,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Active deadline recovery: before waiting or rerouting, check Mission Log/Player Info days remaining and complete timed deliveries before the TV deadline scaffold expires. Exact Classic date UI pending.',
             'Mission return trade margin: before buying return-leg cargo after a delivery, compare destination and linked-market prices; skip negative-margin cargo and finish the contract chain. TV scaffold; Classic behavior pending.',
             'Full-hold trade route recovery: when a profitable cargo route fills the shuttle, keep a service-port refuel margin before the return jump and sell both lots before taking another cargo job. TV scaffold; Classic market spread pending.',
+            'Light Freighter mission/trade capacity recovery: after upgrading to a Light Freighter, reserve bulk mission cargo first, fill only remaining hold with profitable trade cargo, deliver the job, then sell retained cargo before accepting another bulk contract. TV scaffold; Classic Light Freighter mission/trade UI pending.',
             'Light Freighter refuel margin recovery: after reserving a bulk delivery, fill only remaining hold with positive-margin cargo, preserve a service-port refuel plan, then deliver and sell retained cargo. TV scaffold; Classic Light Freighter/trade UI pending.',
             'Light Freighter repair mission margin recovery: when a damaged freighter carries a bulk delivery, reserve repair credits, fill only spare hold with positive-margin cargo, deliver, sell retained cargo, then return to a repair port before taking another risky job. TV scaffold; Classic damaged freighter mission/trade/repair UI pending.',
             'Light Freighter repair/refuel margin recovery: when a damaged, low-fuel freighter carries a bulk delivery, reserve repair credits, buy only positive-margin spare cargo, deliver and sell at Levo, refuel before the empty return, then repair at Earth. TV scaffold; Classic damaged freighter fuel/repair UI pending.',
@@ -387,6 +388,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasActiveDeadlineRecoveryHelp',
             'hasMissionTradeReturnMarginHelp',
             'hasFullHoldTradeRouteRecoveryHelp',
+            'hasLightFreighterMissionTradeCapacityHelp',
             'hasLightFreighterRefuelMarginRecoveryHelp',
             'hasLightFreighterRepairMissionMarginRecoveryHelp',
             'hasLightFreighterRepairRefuelMarginRecoveryHelp',
@@ -3257,9 +3259,8 @@ class NativeEvModelTests(unittest.TestCase):
             'func _outfit_effect_summary(item: Dictionary) -> String:',
             'Effect: ',
             'func _draw_help_overlay() -> void:',
-            'Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.',
-            'Mission route helper: G queues the active mission destination when known.',
-            'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
+            'func _help_overlay_lines() -> Array[String]:',
+            'help_overlay.get("lines", [])',
             'KEY_F10:',
             'Fuel: %d/%d',
             'KEY_F5:',
@@ -3268,6 +3269,14 @@ class NativeEvModelTests(unittest.TestCase):
             '_set_status("Refueled at " + str(body.get("name", "port")))',
         ]:
             self.assertIn(prompt, main_script)
+        help_overlay = json.loads((root / 'native_ev' / 'data' / 'help_overlay.json').read_text())
+        help_lines = help_overlay['lines']
+        for prompt in [
+            'Terminal Velocity helper/scaffold — not an EV Classic fidelity claim.',
+            'Mission route helper: G queues the active mission destination when known.',
+            'Shipyard/outfitter: listings show local manifest deltas/effects before buying.',
+        ]:
+            self.assertIn(prompt, help_lines)
 
     def test_godot_commodity_trade_uses_ev_classic_ten_ton_lots(self):
         root = Path(__file__).resolve().parents[2]

@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_57a7a5b6",
+    "active_task_id": "t_582d9897",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "pushed_checkpoint_ready_for_successor",
+    "status": "local_checkpoint_committed_pending_review_required_block",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T12:18:42.148132Z",
+    "updated_at": "2026-06-06T12:25:21.723572Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Light Freighter deadline repair/refuel mission-margin help-surface slice pushed and verified; successor continuation should run next safe local slice.",
+  "current_milestone": "Light Freighter mission/trade capacity help-surface slice fully regression-verified and locally committed; review-required Kanban handoff pending.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -128,18 +128,26 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
+    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json >/dev/null -> OK",
     "python3 -m json.tool native_ev/data/help_overlay.json >/dev/null -> OK",
+    "events.jsonl json.loads per line -> OK",
+    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> failed missing Light Freighter mission/trade capacity help line before help_overlay update",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_landing_panels_are_actionable -v -> OK after updating contract to assert data-driven help lines in help_overlay.json rather than Godot main.gd literals",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> hintCount=81 hasLightFreighterDeadlineRepairRefuelMarginRecoveryHelp=true",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 214 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=80 failed=0 total=80",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 214 tests OK",
+    "python3 tools/run_gameplay_scenarios.py light_freighter_mission_trade_loop --pretty -> success=True",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary {'failed': 0, 'passed': 80, 'total': 80}",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hintCount=81 hasLightFreighterMissionTradeCapacityHelp=true",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=80",
     "git diff --check -> OK",
-    "git push origin main -> b46382d..6bf7cb4 main -> main",
-    "git fetch origin; git status --short --branch -> ## main...origin/main",
-    "git rev-parse HEAD == git rev-parse origin/main -> 6bf7cb4f6105e2938c5a5c7123591adce8961bdb"
+    "local checkpoint commit created; inspect git rev-parse HEAD for current SHA"
   ],
-  "active_gate": null,
+  "active_gate": {
+    "type": "review-required",
+    "reason": "Code-changing Terminal Velocity Kanban slice verified locally; worker must not push or mark done without review/integrator handling.",
+    "withheld_action": "git push origin main and marking t_582d9897 complete as merged/done",
+    "resume_after": "reviewer/coordinator approves or requests changes"
+  },
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
@@ -147,9 +155,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create or dispatch exactly one successor Terminal Velocity Kanban continuation task from current origin/main; do not redo Light Freighter deadline repair/refuel margin scenario/help work.",
+  "next_resume_action": "Review local HEAD checkpoint for Light Freighter mission/trade capacity F10 help/probe; if accepted, integrator may push/fetch/verify HEAD == origin/main, complete t_582d9897, and dispatch/continue exactly one successor source-aligned safe local slice without redoing this help probe or scenario.",
   "resume_prompt": "Continue Terminal Velocity from current origin/main; inspect ledger/events tail, continuation prompt, backlog, and live git state, then implement one new source-aligned safe local gameplay/fidelity slice without redoing Light Freighter deadline repair/refuel margin scenario/help work.",
-  "updated_at": "2026-06-06T12:18:42.148132Z",
+  "updated_at": "2026-06-06T12:25:21.723572Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -218,17 +226,15 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "light-freighter-deadline-repair-refuel-margin-help-surface",
-    "summary": "Promoted the existing light_freighter_deadline_repair_refuel_margin_loop outcome into F10 help with Godot log probe hasLightFreighterDeadlineRepairRefuelMarginRecoveryHelp; no Classic deadline/damaged freighter UI claim made.",
-    "commit": "6bf7cb4f6105e2938c5a5c7123591adce8961bdb",
+    "id": "light-freighter-mission-trade-capacity-help-surface",
+    "summary": "Promoted the existing light_freighter_mission_trade_loop outcome into F10 help with Godot log probe hasLightFreighterMissionTradeCapacityHelp; no Classic Light Freighter mission/trade UI claim made.",
+    "commit": "local HEAD checkpoint; inspect git rev-parse HEAD",
     "source_fidelity_labels": [
-      "terminal-velocity-light-freighter-deadline-repair-refuel-margin-scaffold",
-      "light_freighter_deadline_repair_refuel_margin_pending_classic_runtime_trace",
-      "terminal-velocity-repair-service-scaffold",
-      "repair_service_pending_ev_classic_runtime_trace",
+      "terminal-velocity-light-freighter-mission-trade-scaffold",
+      "light_freighter_mission_trade_pending_classic_runtime_trace",
       "help_surface_pending_playtest"
     ],
-    "remote_verified": true
+    "remote_verified": false
   },
   "git_state": {
     "dirty": false,
