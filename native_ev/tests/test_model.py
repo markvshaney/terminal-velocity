@@ -334,6 +334,7 @@ class NativeEvModelTests(unittest.TestCase):
             'Target retarget recovery: if N/R reports no active scanner targets, all disabled/destroyed contacts are skipped; find live contacts or leave the route before retrying. TV scaffold; exact Classic retarget UI pending.',
             'Combat reward recovery: after a target is disabled, verify Player Info/HUD reward history and legal deltas before assuming a Classic bounty payout. TV scaffold; exact Classic bounty behavior pending.',
             'Blocked actions: when a jump, buy, land, fire, repair, or mission action fails, read the HUD Messages line before retrying; TV scaffold feedback, not Classic wording.',
+            'Route clear/reselect recovery: after Backspace/Delete clears a multi-stop green route, J should stay blocked until you choose a fresh linked stop; then retry the new route instead of assuming the old path survived. TV route-clear scaffold; exact Classic clear/reselect UI pending.',
             'Route invalid stop recovery: if Shift-click refuses the current system, a duplicate stop, or an unlinked tail stop, keep the preserved green route and choose a linked stop from the current route tail before retrying J. TV route-guardrail scaffold; exact Classic map refusal UI pending.',
         ]:
             self.assertIn(expected_line, help_lines)
@@ -441,6 +442,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasRecentMessagesHelp',
             'hasBlockedActionHelp',
             'hasRouteClearHelp',
+            'hasRouteClearReselectRecoveryHelp',
             'hasRouteInvalidStopRecoveryHelp',
         ]:
             self.assertIn(flag, help_probes)
