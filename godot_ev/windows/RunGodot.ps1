@@ -65,6 +65,7 @@ param(
     [switch]$WeaponLegalDockingLog,
     [switch]$LightFreighterMissionTradeLog,
     [switch]$LightFreighterRepairTradeLog,
+    [switch]$LightFreighterRepairMissionTradeLog,
     [switch]$LegalPatrolPostureLog,
     [switch]$MissionLegalEligibilityLog,
     [switch]$MissionStoryGateLog,
@@ -217,6 +218,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-light-freighter-mission-trade-log
 } elseif ($LightFreighterRepairTradeLog) {
     & $Godot --headless --path $Project -- --tv-light-freighter-repair-trade-log
+} elseif ($LightFreighterRepairMissionTradeLog) {
+    & $Godot --headless --path $Project -- --tv-light-freighter-repair-mission-trade-log
 } elseif ($LegalPatrolPostureLog) {
     & $Godot --headless --path $Project -- --tv-legal-patrol-posture-log
 } elseif ($MissionLegalEligibilityLog) {
