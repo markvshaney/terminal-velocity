@@ -31,6 +31,7 @@ from native_ev.model import (
 COMMODITY_LOT_SIZE = 10
 STARTING_CREDITS = 10000
 STARTING_CARGO_CAPACITY = 20
+STARTING_MAX_HULL = 100
 STARTING_FUEL = 6
 START_SYSTEM = 'Levo'
 START_BODY = 'Levo Spaceport'
@@ -49,6 +50,7 @@ SCENARIO_CURRICULUM = [
     'upgrade_affordability_trade_loop',
     'cargo_expansion_trade_loop',
     'fuel_reserve_upgrade_loop',
+    'hull_plating_repair_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1370,6 +1372,19 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'land', 'body': START_BODY},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'expanded_reserve_return', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'hull_plating_repair_loop':
+        source_label = 'terminal-velocity-hull-plating-repair-scaffold'
+        oracle_status = 'hull_plating_repair_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'armor_refit_gap', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_outfit_or_weapon', 'itemId': 'hull_plating', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'hull_plating_upgrade', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'repair_hull'},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'repair_service_fill', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2314,6 +2329,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'refueled_to_expanded_reserve': 'passed' if refuel_events and refuel_events[-1].get('fuelAfter') == STARTING_FUEL + 25 else 'failed',
             'completed_fuel_reserve_return_hop': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('maxFuel') == STARTING_FUEL + 25 and state.get('fuel') == STARTING_FUEL + 24 and any(event.get('originSystem') == 'Sol' and event.get('destinationSystem') == START_SYSTEM for event in jump_events) else 'failed',
             'recorded_fuel_reserve_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-fuel-reserve-upgrade-scaffold' and event.get('oracleStatus') == 'fuel_reserve_upgrade_pending_classic_runtime_trace' for event in source_events) else 'failed',
+        })
+    elif name == 'hull_plating_repair_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        outfit_events = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'hull_plating']
+        repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        source_events = checkpoints + outfit_events
+        checks.update({
+            'bought_hull_plating_upgrade': 'passed' if outfit_events and outfit_events[-1].get('maxHull') == STARTING_MAX_HULL + 25 and state.get('ownedOutfits', {}).get('hull_plating') == 1 else 'failed',
+            'repaired_added_hull_capacity': 'passed' if repair_events and repair_events[-1].get('hullBefore') == STARTING_MAX_HULL and repair_events[-1].get('hullAfter') == STARTING_MAX_HULL + 25 and repair_events[-1].get('cost') == 25 * 8 and state.get('currentHull') == state.get('maxHull') == STARTING_MAX_HULL + 25 else 'failed',
+            'recorded_hull_refit_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-hull-plating-repair-scaffold' and event.get('oracleStatus') == 'hull_plating_repair_pending_classic_runtime_trace' for event in source_events) and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

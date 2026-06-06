@@ -17,6 +17,7 @@
     "upgrade_affordability_trade_loop",
     "cargo_expansion_trade_loop",
     "fuel_reserve_upgrade_loop",
+    "hull_plating_repair_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -117,6 +118,10 @@
     "fuel_reserve_upgrade_loop": {
       "purpose": "Fuel-reserve upgrade loop: surface an empty-reserve range gap at Earth, buy an auxiliary fuel tank, refuel to the expanded reserve, and return to Levo while preserving pending-Classic source boundaries.",
       "surface": "fuel reserve/outfitter upgrade route scaffold"
+    },
+    "hull_plating_repair_loop": {
+      "purpose": "Hull-plating repair loop: buy reinforced hull plating at Earth, verify the added maximum hull creates repairable capacity, then repair at a service port using the manifest price-per-hull-point while preserving explicit Classic-runtime-pending labels.",
+      "surface": "outfitter/repair service hull-upgrade scaffold"
     },
     "mission_runner_first_delivery": {
       "purpose": "Mission-runner loop: reserve cargo, travel to destination, complete job, release reserved cargo, and receive pay.",
