@@ -8,8 +8,8 @@
     "ahead": 0,
     "behind": 0,
     "dirty": false,
-    "head": "78db6f39b8251f13707193a2b65d674d1481e2d7",
-    "origin_main": "78db6f39b8251f13707193a2b65d674d1481e2d7",
+    "head": "eb920402afc3b149d30596c3fe4c04d69af64f9e",
+    "origin_main": "eb920402afc3b149d30596c3fe4c04d69af64f9e",
     "status_short": "## main...origin/main"
   },
   "repo_state": {
@@ -25,7 +25,7 @@
     "active_task_id": "t_1a6888c6",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "local_checkpoint_committed_pending_review",
+    "status": "pushed_verified_ready_for_successor",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T12:45:38.372821Z",
+    "updated_at": "2026-06-06T12:48:03.352290Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "weapon credit recovery help-surface slice verified and locally committed; pending review/integrator push.",
+  "current_milestone": "weapon credit recovery help-surface slice pushed and remote-verified; successor needed.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -138,12 +138,7 @@
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=81",
     "git diff --check -> OK"
   ],
-  "active_gate": {
-    "type": "review-required",
-    "reason": "Code-changing Terminal Velocity Kanban slice verified locally; worker must not push or mark done without review/integrator handling.",
-    "withheld_action": "git push origin main and marking t_1a6888c6 complete as merged/done",
-    "resume_after": "reviewer/coordinator approves or requests changes"
-  },
+  "active_gate": null,
   "heartbeat_status": {
     "send_message_available": false,
     "visibility_degraded": true,
@@ -151,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local checkpoint feat(help): surface weapon credit recovery guidance; if accepted, loki-game integrator may push normally, fetch/verify HEAD == origin/main, complete t_1a6888c6, and dispatch/continue exactly one successor source-aligned safe local slice without redoing weapon_credit_recovery_loop or this help probe.",
-  "resume_prompt": "Continue Terminal Velocity from this local checkpoint or pushed origin/main after review; do not redo weapon_credit_recovery_loop or weapon-credit F10 help/probe; select the next source-aligned safe local gameplay/fidelity slice.",
-  "updated_at": "2026-06-06T12:45:38.372821Z",
+  "next_resume_action": "Complete t_1a6888c6, create and dispatch exactly one successor from current origin/main, then continue the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing weapon_credit_recovery_loop or weapon-credit F10 help/probe work.",
+  "resume_prompt": "Continue Terminal Velocity from current origin/main after verified weapon credit recovery help-surface push; do not redo weapon_credit_recovery_loop or weapon-credit F10 help/probe; select the next source-aligned safe local gameplay/fidelity slice.",
+  "updated_at": "2026-06-06T12:48:03.352290Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -224,13 +219,13 @@
   "last_completed_slice": {
     "id": "weapon-credit-recovery-help-surface",
     "summary": "Added and verified F10 help/probe promotion for the existing weapon_credit_recovery_loop: players now get recovery guidance for insufficient-credit landed weapon purchases while retaining pending-Classic purchase UI labels.",
-    "commit": "local checkpoint: feat(help): surface weapon credit recovery guidance (inspect git rev-parse HEAD for exact SHA)",
+    "commit": "eb920402afc3b149d30596c3fe4c04d69af64f9e",
     "source_fidelity_labels": [
       "terminal-velocity-weapon-credit-gate-scaffold",
       "classic_runtime_weapon_purchase_credit_ui_pending",
       "help_surface_pending_playtest"
     ],
-    "remote_verified": false
+    "remote_verified": true
   },
   "git_state": {
     "dirty": false,
