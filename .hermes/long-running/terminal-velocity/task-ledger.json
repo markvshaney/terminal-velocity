@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": false,
+    "dirty": true,
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "clean at origin/main after normal non-force push of alignment return-contract accept/deliver slice",
+    "status_short": "dirty with verified full-hold trade route recovery help slice pending local checkpoint commit/push",
     "origin_main": "ee47305cd8127b1069775f269c6c8cb45923476a"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": false
+    "dirty": true
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_a0378640",
+    "active_task_id": "t_3391a669",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "slice_pushed_remote_verified_successor_needed",
+    "status": "stale_review_required_reclassified_for_integrator_push",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T07:40:45Z",
+    "updated_at": "2026-06-06T07:48:22Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Alignment return-contract Godot log accept/deliver slice pushed and remote-verified.",
+  "current_milestone": "Full-hold trade-route recovery help slice verified locally; normal non-force push/checkpoint/successor flow in progress.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -127,19 +127,18 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_return_log_contract -v -> OK",
-    "python3 -m unittest native_ev.tests.test_model -v -> 130 tests OK",
-    "./run_godot.sh tv-mission-alignment-return-log -> returnContractAcceptedAfterFederation=true returnContractDeliveredAfterFederation=true returnContractAcceptedAfterFreeport=true returnContractDeliveredAfterFreeport=true returnContractCargoReleased=true returnContractRewardPaid=true",
-    "npm test -- --run -> blocked: no package.json at repo root",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 196 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasFullHoldTradeRouteRecoveryHelp=true hintCount=63",
+    "python3 tools/run_gameplay_scenarios.py max_hold_trade_route_scout --pretty -> success=true creditsDelta=1560",
+    "python3 tools/run_gameplay_scenarios.py trade_route_refuel_profit_loop --pretty -> success=true creditsDelta=1560",
+    "git diff --check -> OK",
+    "python3 -m json.tool native_ev/data/help_overlay.json -> OK"
   ],
   "active_gate": {
     "type": null,
-    "reason": "No active gate after normal non-force push; coordinator should complete current Kanban card and dispatch one successor continuation card.",
+    "reason": "Stale review-required block for coherent verified Terminal Velocity work was classified as a workflow bug; normal non-force push is preapproved after standard checks.",
     "withheld_action": null,
-    "resume_after": "Create/dispatch successor from clean origin/main."
+    "resume_after": "Commit/push the verified full-hold trade-route recovery help slice, complete t_3391a669, create/dispatch exactly one successor."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -148,9 +147,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create exactly one successor Kanban card from clean origin/main ee47305 and dispatch it to continue the next source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
-  "resume_prompt": "Continue Terminal Velocity development from clean origin/main after alignment return-contract accept/deliver Godot log slice was pushed and remote-verified.",
-  "updated_at": "2026-06-06T07:40:45Z",
+  "next_resume_action": "Commit/push verified full-hold trade-route recovery help slice, complete t_3391a669, create/dispatch exactly one successor continuation task, then verify exactly one running Terminal Velocity task.",
+  "resume_prompt": "Continue Terminal Velocity development after full-hold trade-route recovery help is pushed and remote-verified; do not redo completed probes/help slices.",
+  "updated_at": "2026-06-06T07:48:22Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -207,13 +206,13 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "alignment-return-contract-branch-delivery-log-extension",
-    "summary": "Godot fast-eval log verifies freeport_return_earth remains visible after branch completion and can be accepted/delivered after both Federation and Freeport branch states, releasing 5 cargo tons and paying 3200 credits under Terminal Velocity observed/pending Classic timing labels.",
-    "commit": "ee47305cd8127b1069775f269c6c8cb45923476a",
+    "id": "full-hold-trade-route-recovery-help",
+    "summary": "F10 help now guides players to preserve a service-port refuel margin for full-hold profitable cargo routes and sell both 10-ton lots before taking another cargo job; scenario probes verify max-hold sale and low-fuel/refuel recovery under Terminal Velocity scaffold labels.",
+    "commit": "pending normal non-force push; inspect current SHA with `git rev-parse HEAD` after commit",
     "source_fidelity_labels": [
-      "terminal-velocity-observed",
-      "terminal_velocity_eval_pending_original_trace",
-      "terminal_velocity_return_contract_timing_scaffold_exact_classic_offer_ui_pending"
+      "terminal-velocity-max-hold-trade-scaffold",
+      "terminal-velocity-refuel-trade-route-scaffold",
+      "classic_market_spread_pending"
     ]
   }
 }

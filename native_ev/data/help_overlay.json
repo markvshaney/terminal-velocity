@@ -40,6 +40,7 @@
     "Completed deadline recovery: after delivering a timed TV mission, waiting past the former deadline should not create a late failure; verify Mission Log/Player Info shows completed/rewarded and no failure flag before re-planning. Classic cleanup UI pending.",
     "Active deadline recovery: before waiting or rerouting, check Mission Log/Player Info days remaining and complete timed deliveries before the TV deadline scaffold expires. Exact Classic date UI pending.",
     "Mission return trade margin: before buying return-leg cargo after a delivery, compare destination and linked-market prices; skip negative-margin cargo and finish the contract chain. TV scaffold; Classic behavior pending.",
+    "Full-hold trade route recovery: when a profitable cargo route fills the shuttle, keep a service-port refuel margin before the return jump and sell both lots before taking another cargo job. TV scaffold; Classic market spread pending.",
     "Commodity recovery: if Buy/Sell is blocked, check free hold, selected commodity, credits, and same-port sellback before changing route.",
     "Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
     "Deadline recovery: failed timed TV missions release reserved cargo but can preserve trade cargo; sell recoverable cargo or scan for follow-up contracts before abandoning the route. Classic failure UI pending.",
@@ -419,6 +420,11 @@
       "flag": "hasMissionTradeReturnMarginHelp",
       "source": "help",
       "contains": "Mission return trade margin: before buying return-leg cargo"
+    },
+    {
+      "flag": "hasFullHoldTradeRouteRecoveryHelp",
+      "source": "help",
+      "contains": "Full-hold trade route recovery: when a profitable cargo route fills the shuttle"
     },
     {
       "flag": "hasCommodityRecoveryHelp",
