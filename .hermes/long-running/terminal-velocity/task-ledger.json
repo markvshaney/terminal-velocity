@@ -5,7 +5,7 @@
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "weapon_mission_cargo_godot_probe committed locally; review-required before push/merge.",
+  "current_milestone": "weapon_mission_cargo_godot_probe pushed and remote-verified; coordinator should complete t_54179157 and create exactly one successor continuation card.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -62,13 +62,13 @@
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0,
     "branch": "main",
     "dirty": false,
-    "head": "local checkpoint commit in this slice; inspect live with git rev-parse HEAD",
-    "origin_main": "be8b3ee149faf6615029de5f4cfa5562b7f0bdc4",
-    "status_short": "## main...origin/main [ahead 1]"
+    "head": "46b517730bbfa675acc0307f870925edbb4d65e9",
+    "origin_main": "46b517730bbfa675acc0307f870925edbb4d65e9",
+    "status_short": "## main...origin/main"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -108,11 +108,11 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_completed_slice": {
-    "commit": "local commit: feat(godot): expose weapon mission cargo log",
+    "commit": "46b517730bbfa675acc0307f870925edbb4d65e9",
     "id": "weapon-mission-cargo-godot-probe",
     "kanban_task_id": "t_54179157",
-    "remote_verified": false,
-    "review_required": true,
+    "remote_verified": true,
+    "review_required": false,
     "source_fidelity_labels": [
       "terminal-velocity-weapon-mission-cargo-scaffold",
       "classic_runtime_weapon_purchase_cargo_interaction_pending"
@@ -125,7 +125,7 @@
       "git diff --check -> OK"
     ]
   },
-  "last_process_checkpoint": "weapon_mission_cargo_godot_probe local commit completed; review-required before normal push/remote verification.",
+  "last_process_checkpoint": "weapon_mission_cargo_godot_probe remote-verified; ready for Kanban completion and successor continuation.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
@@ -165,7 +165,10 @@
     "./run_godot.sh tv-weapon-inventory-stack-log -> weaponStackPreserved=true weaponStackCountAfterSecond=2",
     "added-line sensitive scan -> no real secrets; two false positive lines from JSONL/long wrapper containing token-like words",
     "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> FAIL before implementation",
-    "./run_godot.sh tv-weapon-mission-cargo-log -> missionCargoPreserved=true activeMissionCargoBefore=5 activeMissionCargoAfter=5 cargoUsedAfterWeapon=5"
+    "./run_godot.sh tv-weapon-mission-cargo-log -> missionCargoPreserved=true activeMissionCargoBefore=5 activeMissionCargoAfter=5 cargoUsedAfterWeapon=5",
+    "git push origin main -> OK be8b3ee..46b5177",
+    "git fetch origin && test HEAD == origin/main -> OK 46b517730bbfa675acc0307f870925edbb4d65e9",
+    "sensitive_added_hits=0"
   ],
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
@@ -175,7 +178,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review t_54179157 local commit, then if approved push normally and verify HEAD == origin/main, or request follow-up edits.",
+  "next_resume_action": "Complete Kanban task t_54179157, create exactly one successor continuation card from current origin/main, dispatch it, and continue the next safe source-aligned Terminal Velocity slice; do not redo weapon_mission_cargo_godot_probe.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -317,5 +320,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T20:36:20Z"
+  "updated_at": "2026-06-06T20:38:19Z"
 }
