@@ -7,25 +7,25 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true,
-    "head": "be46a68776c8620f6397767effce45eb530a8bff (remote-verified before successor checkpoint; inspect live git for current HEAD if advanced)",
-    "origin_main": "be46a68776c8620f6397767effce45eb530a8bff (remote-verified before successor checkpoint; inspect live git for current origin/main if advanced)",
-    "status_short": "local verified hull_plating_repair_loop slice pending normal non-force push; inspect live git status for exact state"
+    "dirty": false,
+    "head": "ce3a07fed8641deafaf00cf3a887d7e226dbd394 (remote-verified after hull_plating_repair_loop push; inspect live git for current HEAD if advanced)",
+    "origin_main": "ce3a07fed8641deafaf00cf3a887d7e226dbd394 (remote-verified after hull_plating_repair_loop push; inspect live git for current origin/main if advanced)",
+    "status_short": "## main...origin/main clean after remote-verified hull_plating_repair_loop push; successor t_7e6b950d created pending dispatch"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true
+    "dirty": false
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_96349b2b",
+    "active_task_id": "t_7e6b950d",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "review_required_resolved_locally_pending_push",
+    "status": "successor_created_pending_dispatch",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T09:18:39Z",
+    "updated_at": "2026-06-06T09:19:56Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,8 +110,8 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "hull_plating_repair_loop symbolic curriculum slice verified locally; normal push/successor flow in progress.",
-  "last_commit": "remote-verified: feat(curriculum): add fuel reserve upgrade scenario",
+  "current_milestone": "hull_plating_repair_loop symbolic curriculum slice remote-verified; successor t_7e6b950d created to continue the next source-aligned safe local slice.",
+  "last_commit": "remote-verified: feat(curriculum): add hull plating repair scenario",
   "last_checkpoint_commit": "9808e540155ed57a0f7c89c1533185e144f1a349",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -130,11 +130,12 @@
     "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_hull_plating_repair_loop_buys_armor_and_repairs_added_hull -v -> OK",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 203 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all -> {'failed': 0, 'passed': 69, 'total': 69}",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=69"
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=69",
+    "git push origin main; git fetch origin; HEAD == origin/main ce3a07f"
   ],
   "active_gate": {
     "type": "none",
-    "reason": "Stale review-required halt for coherent normal TV work resolved locally under preapproved normal non-force policy; push and successor dispatch are in progress.",
+    "reason": "No active gate: stale review-required/push gate was resolved locally under normal non-force push policy; successor t_7e6b950d is ready for dispatch.",
     "withheld_action": null,
     "resume_after": "Continue safe-local Terminal Velocity gameplay/fidelity slices."
   },
@@ -145,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "After pushing hull_plating_repair_loop and completing t_96349b2b, create/dispatch exactly one successor from clean origin/main for the next source-aligned safe local Terminal Velocity gameplay/fidelity slice.",
-  "resume_prompt": "Continue Terminal Velocity development from remote-verified fuel_reserve_upgrade_loop commit; inspect live git/Kanban state, then run the next safe source-aligned vertical slice.",
-  "updated_at": "2026-06-06T09:18:39Z",
+  "next_resume_action": "Dispatch/continue successor t_7e6b950d from clean origin/main and implement the next source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing strategy/upgrade/cargo/fuel reserve/hull plating repair work.",
+  "resume_prompt": "Continue Terminal Velocity development from remote-verified hull_plating_repair_loop commit; inspect live git/Kanban state, then run the next safe source-aligned vertical slice.",
+  "updated_at": "2026-06-06T09:19:56Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -190,7 +191,8 @@
     "Do not treat EV adaptations/Godot logs as Classic truth; label them as hypothesis or Terminal Velocity evidence until original/resource/manual support exists.",
     "Do not repeat broad source mining when the next_resume_action names a bounded source-aligned slice; inspect the live backlog and choose the strongest adjacent slice.",
     "Do not activate Strict Play or destructive original-EV tests for reusable pilots without explicit approval.",
-    "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
