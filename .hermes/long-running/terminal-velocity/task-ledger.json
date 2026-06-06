@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Worker verified route clear/reselect recovery help; local commit ready.",
+  "current_milestone": "Integrator pushed route clear/reselect recovery help and created successor t_dc30a771 for the next safe local slice.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -36,10 +36,10 @@
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
-    "dirty": true,
-    "head": "inspect current SHA with `git rev-parse HEAD` before/after commit",
+    "dirty": false,
+    "head": "inspect current SHA with `git rev-parse HEAD`",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`",
-    "status_short": "dirty local route clear/reselect help slice verified; local commit ready"
+    "status_short": "clean at origin/main after normal push before successor ledger checkpoint"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -85,18 +85,16 @@
     ],
     "summary": "Route clear/reselect recovery help promoted existing route-clear scenarios into F10 player guidance with deterministic help probe hasRouteClearReselectRecoveryHelp."
   },
-  "last_process_checkpoint": "Route clear/reselect recovery help verified and prepared for local commit.",
+  "last_process_checkpoint": "Route clear/reselect recovery help normal-pushed; HEAD verified equal to origin/main; stale review-required gate resolved locally.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_clear_guardrail_clears_route_and_blocks_unselected_jump native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_clear_reselect_guardrail_recovers_after_new_route_selection -v -> OK (3 tests)",
-    "python3 -m json.tool native_ev/data/help_overlay.json >/dev/null -> OK",
-    "python3 tools/run_gameplay_scenarios.py route_queue_clear_guardrail --pretty -> success true",
-    "python3 tools/run_gameplay_scenarios.py route_queue_clear_reselect_guardrail --pretty -> success true",
+    "git diff --check origin/main..HEAD -> OK before push",
+    "changed-file scope and added-line secret scan -> no credentials/proprietary assets found; only existing policy phrase matched",
+    "python3 -m unittest NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract + route_queue_clear guardrail/reselect scenario tests -v -> OK (3 tests)",
     "./run_godot.sh tv-gameplay-curriculum-help-log -> hasRouteClearReselectRecoveryHelp=true",
-    "python3 -m unittest discover native_ev/tests -v -> OK (223 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty >/tmp/tv_scenarios_all.json -> OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK; gameplayScenarios=89",
-    "git diff --check -> OK"
+    "git push origin main; git fetch origin; HEAD == origin/main == eddb9df6e3b9439eee01e80f6a8466e6ea8f1549",
+    "kanban complete t_bfd223d9 -> OK",
+    "kanban create successor t_dc30a771 -> ready"
   ],
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
@@ -106,7 +104,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "After local review approval, continue from the next source-aligned safe local gameplay/fidelity slice; do not redo route invalid-stop or route clear/reselect recovery help.",
+  "next_resume_action": "Dispatch/monitor successor t_dc30a771 for the next source-aligned safe local gameplay/fidelity vertical slice from current origin/main; do not redo route_clear_reselect_recovery_help.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -119,10 +117,10 @@
     "status_short": "clean main tracking origin/main after route invalid-stop recovery help push; successor process checkpoint pending"
   },
   "repo_state": {
-    "ahead": "inspect with git status",
-    "behind": "inspect with git status",
+    "ahead": "0 before successor ledger checkpoint",
+    "behind": "0",
     "branch": "main",
-    "dirty": true
+    "dirty": false
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -170,7 +168,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T16:45:09Z",
+    "updated_at": "2026-06-06T16:47:42Z",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
     "watchdog_schedule": "every 5m",
@@ -246,5 +244,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T16:45:09Z"
+  "updated_at": "2026-06-06T16:47:42Z"
 }
