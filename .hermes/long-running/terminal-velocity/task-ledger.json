@@ -7,22 +7,22 @@
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true,
-    "head": "61db752f55f27e09b9ae31afde1b6e7cc19b341a",
-    "origin_main": "61db752f55f27e09b9ae31afde1b6e7cc19b341a",
+    "dirty": false,
+    "head": "ce605a7c8d9f8c51504185a2f05b4715f2572a30",
+    "origin_main": "ce605a7c8d9f8c51504185a2f05b4715f2572a30",
     "status_short": "## main...origin/main"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": true
+    "dirty": false
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_0dcc42c2",
+    "active_task_id": "t_9d862435",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "successor_ready_pending_dispatch",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T13:03:22Z",
+    "updated_at": "2026-06-06T13:11:11Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -111,8 +111,8 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "weapon_availability_recovery_help target/full regression verified locally; pending review/integrator handling.",
-  "last_commit": "remote-verified: feat(curriculum): add weapon availability recovery scenario",
+  "current_milestone": "weapon_availability_recovery_help remote-verified; successor t_9d862435 queued from origin/main for next safe source-aligned slice.",
+  "last_commit": "remote-verified: feat(help): surface weapon availability recovery",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -146,9 +146,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local weapon availability F10 help/probe checkpoint; if accepted, integrator may push normally, fetch/verify HEAD == origin/main, complete t_0dcc42c2, and dispatch/continue exactly one successor source-aligned safe local slice without redoing weapon availability scenario or help work.",
-  "resume_prompt": "Continue Terminal Velocity from the local weapon availability help checkpoint after review/integrator handling; do not redo weapon availability, weapon credit, or weapon reputation scenario/help work; select the next safe source-aligned gameplay/fidelity slice.",
-  "updated_at": "2026-06-06T13:07:24Z",
+  "next_resume_action": "Dispatch and verify successor Kanban task t_9d862435 is running, then let terminal-velocity worker continue the next safe source-aligned slice from clean origin/main.",
+  "resume_prompt": "Continue Terminal Velocity via Kanban task t_9d862435 from clean origin/main after weapon availability recovery help was pushed and verified; do not redo weapon availability, weapon credit, or weapon reputation scenario/help work.",
+  "updated_at": "2026-06-06T13:11:11Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -224,10 +224,14 @@
       "classic_runtime_weapon_store_inventory_pending",
       "help_surface_pending_playtest"
     ],
-    "remote_verified": false
+    "remote_verified": true,
+    "remote_commit": "ce605a7c8d9f8c51504185a2f05b4715f2572a30",
+    "kanban_task_id": "t_0dcc42c2"
   },
   "git_state": {
-    "dirty": true,
-    "status_short": "pending final git status after commit"
+    "dirty": false,
+    "status_short": "## main...origin/main",
+    "head": "ce605a7c8d9f8c51504185a2f05b4715f2572a30",
+    "origin_main": "ce605a7c8d9f8c51504185a2f05b4715f2572a30"
   }
 }
