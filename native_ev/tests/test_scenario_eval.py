@@ -41,6 +41,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'light_freighter_refuel_mission_margin_loop',
                 'light_freighter_repair_margin_loop',
                 'light_freighter_repair_mission_margin_loop',
+                'light_freighter_repair_refuel_mission_margin_loop',
                 'mission_runner_first_delivery',
                 'scan_intro_mission_offers',
                 'intro_courier_mission_delivery',
@@ -699,6 +700,43 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         source_events = decisions + trade_events + checkpoints + [event for event in result['trace'] if event['type'] in {'buy_ship', 'accept_cargo_job', 'complete_cargo_job'}]
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-light-freighter-repair-mission-margin-scaffold' for event in source_events))
         self.assertTrue(all(event['oracleStatus'] == 'light_freighter_repair_mission_margin_pending_classic_runtime_trace' for event in source_events))
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-repair-service-scaffold' for event in repair_events))
+        self.assertTrue(all(event['oracleStatus'] == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events))
+
+    def test_light_freighter_repair_refuel_mission_margin_loop_refuels_before_repair_return(self):
+        result = run_scripted_scenario('light_freighter_repair_refuel_mission_margin_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['checks']['bought_light_freighter_for_repair_refuel_mission_margin'], 'passed')
+        self.assertEqual(result['checks']['reserved_bulk_delivery_while_damaged_and_low_fuel'], 'passed')
+        self.assertEqual(result['checks']['blocked_empty_fuel_repair_return_after_delivery'], 'passed')
+        self.assertEqual(result['checks']['refueled_before_repair_port_return'], 'passed')
+        self.assertEqual(result['checks']['repaired_light_freighter_after_refueled_bulk_mission_margin'], 'passed')
+        self.assertEqual(result['checks']['recorded_light_freighter_repair_refuel_mission_margin_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump']
+        self.assertTrue(any(event.get('reason') == 'insufficient fuel' and event.get('destinationSystem') == 'Sol' for event in blocked))
+        refuel_events = [event for event in result['trace'] if event['type'] == 'refuel']
+        self.assertEqual(refuel_events[-1]['system'], 'Levo')
+        self.assertEqual(refuel_events[-1]['body'], 'Levo Spaceport')
+        self.assertEqual(refuel_events[-1]['fuelAfter'], 300)
+        repair_events = [event for event in result['trace'] if event['type'] == 'repair_hull']
+        self.assertEqual(repair_events[-1]['hullBefore'], 260)
+        self.assertEqual(repair_events[-1]['hullAfter'], 300)
+        self.assertEqual(repair_events[-1]['cost'], 320)
+        checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
+        self.assertEqual([event['skill'] for event in checkpoints], ['damaged_freighter_refuel_repair_margin_choice', 'refueled_repair_return_budget', 'refueled_mission_margin_light_freighter_repaired'])
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['playerShipId'], 'light_freighter')
+        self.assertEqual(result['state']['completedJobs'], ['levo_bulk_repair_refuel_margin_supply'])
+        self.assertEqual(result['state']['cargoUsed'], 0)
+        self.assertEqual(result['state']['cargoHold'], {})
+        self.assertEqual(result['state']['currentHull'], 300)
+        self.assertEqual(result['state']['fuel'], 299)
+        self.assertEqual(result['state']['credits'], 9302)
+        source_events = [event for event in result['trace'] if event['type'] in {'buy_ship', 'accept_cargo_job', 'complete_cargo_job', 'trade_margin_decision', 'buy_commodity_lot', 'sell_commodity_lot', 'strategy_skill_checkpoint'}]
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold' for event in source_events))
+        self.assertTrue(all(event['oracleStatus'] == 'light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace' for event in source_events))
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-repair-service-scaffold' for event in repair_events))
         self.assertTrue(all(event['oracleStatus'] == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events))
 

@@ -60,6 +60,7 @@ SCENARIO_CURRICULUM = [
     'light_freighter_refuel_mission_margin_loop',
     'light_freighter_repair_margin_loop',
     'light_freighter_repair_mission_margin_loop',
+    'light_freighter_repair_refuel_mission_margin_loop',
     'mission_runner_first_delivery',
     'scan_intro_mission_offers',
     'intro_courier_mission_delivery',
@@ -1642,6 +1643,44 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'mission_margin_light_freighter_repaired', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
+    if name == 'light_freighter_repair_refuel_mission_margin_loop':
+        source_label = 'terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold'
+        oracle_status = 'light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'credits': 70000}},
+            {'type': 'buy_ship', 'shipId': 'light_freighter', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'set_state', 'values': {'currentHull': 260, 'credits': 1260}},
+            {'type': 'accept_cargo_job', 'id': 'levo_bulk_repair_refuel_margin_supply', 'destinationSystem': START_SYSTEM, 'destinationBody': START_BODY, 'tons': 120, 'pay': 6022, 'risk': 'safe', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'evaluate_trade_margin', 'commodity': 'food', 'originSystem': 'Sol', 'destinationSystem': START_SYSTEM, 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'evaluate_trade_margin', 'commodity': 'equipment', 'originSystem': START_SYSTEM, 'destinationSystem': 'Sol', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'damaged_freighter_refuel_repair_margin_choice', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ] + [
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status}
+            for _ in range(3)
+        ] + [
+            {'type': 'set_state', 'values': {'fuel': 1}},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'complete_cargo_jobs', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ] + [
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status}
+            for _ in range(3)
+        ] + [
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'refueled_repair_return_budget', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol', 'expectBlocked': True},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'refuel'},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'refueled_mission_margin_light_freighter_repaired', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+        ]
     if name == 'mission_runner_first_delivery':
         return [
             {
@@ -2726,6 +2765,25 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'completed_bulk_mission_and_sold_repair_margin_cargo': 'passed' if complete_events and complete_events[-1].get('id') == 'levo_bulk_repair_margin_supply' and complete_events[-1].get('cargoUsed') == 30 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 3 and any(event.get('skill') == 'mission_margin_repair_budget' for event in checkpoints) else 'failed',
             'repaired_light_freighter_after_bulk_mission_margin': 'passed' if repair_events and repair_events[-1].get('system') == 'Sol' and repair_events[-1].get('body') == 'Earth' and repair_events[-1].get('hullBefore') == 260 and repair_events[-1].get('hullAfter') == 300 and repair_events[-1].get('cost') == 320 and state.get('currentHull') == 300 and state.get('maxHull') == 300 and state.get('credits') == 9302 else 'failed',
             'recorded_light_freighter_repair_mission_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-mission-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_mission_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
+        })
+    elif name == 'light_freighter_repair_refuel_mission_margin_loop':
+        checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
+        buy_ship_events = [event for event in trace if event.get('type') == 'buy_ship']
+        mission_accepts = [event for event in trace if event.get('type') == 'accept_cargo_job']
+        complete_events = [event for event in trace if event.get('type') == 'complete_cargo_job']
+        decisions = [event for event in trace if event.get('type') == 'trade_margin_decision']
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        blocked_jumps = [event for event in trace if event.get('type') == 'blocked_jump']
+        refuel_events = [event for event in trace if event.get('type') == 'refuel']
+        repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        source_events = checkpoints + buy_ship_events + mission_accepts + complete_events + decisions + trade_events
+        checks.update({
+            'bought_light_freighter_for_repair_refuel_mission_margin': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
+            'reserved_bulk_delivery_while_damaged_and_low_fuel': 'passed' if mission_accepts and mission_accepts[-1].get('id') == 'levo_bulk_repair_refuel_margin_supply' and mission_accepts[-1].get('reservedCargoTons') == 120 and any(event.get('skill') == 'damaged_freighter_refuel_repair_margin_choice' for event in checkpoints) else 'failed',
+            'blocked_empty_fuel_repair_return_after_delivery': 'passed' if any(event.get('reason') == 'insufficient fuel' and event.get('originSystem') == START_SYSTEM and event.get('destinationSystem') == 'Sol' for event in blocked_jumps) and complete_events and complete_events[-1].get('id') == 'levo_bulk_repair_refuel_margin_supply' and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 3 else 'failed',
+            'refueled_before_repair_port_return': 'passed' if refuel_events and refuel_events[-1].get('system') == START_SYSTEM and refuel_events[-1].get('body') == START_BODY and refuel_events[-1].get('fuelAfter') == 300 and any(event.get('skill') == 'refueled_repair_return_budget' for event in checkpoints) else 'failed',
+            'repaired_light_freighter_after_refueled_bulk_mission_margin': 'passed' if repair_events and repair_events[-1].get('system') == 'Sol' and repair_events[-1].get('body') == 'Earth' and repair_events[-1].get('hullBefore') == 260 and repair_events[-1].get('hullAfter') == 300 and repair_events[-1].get('cost') == 320 and state.get('currentHull') == 300 and state.get('maxHull') == 300 and state.get('fuel') == 299 and state.get('credits') == 9302 else 'failed',
+            'recorded_light_freighter_repair_refuel_mission_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({

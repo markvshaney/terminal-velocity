@@ -22,7 +22,7 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_68f856c5",
+    "active_task_id": "t_0589dbe6",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "worker_slice_checkpoint_pending_review",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T11:32:43Z",
+    "updated_at": "2026-06-06T11:45:26Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -62,7 +62,7 @@
       "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/no-secrets review, light verification, non-force push, fetch, verify origin/main equals HEAD."
     ]
   },
-  "status": "running",
+  "status": "checkpointed_not_scheduled",
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -111,7 +111,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Disposable combat evidence gate help surface implemented locally; player-facing F10 help and Godot help-log probe verified; pending human review/commit integration.",
+  "current_milestone": "Low-fuel damaged Light Freighter repair/refuel mission-margin symbolic scenario implemented locally; native scenario, full native tests, all gameplay scenarios, and Godot self-test verified; pending review/commit integration.",
   "last_commit": "remote-verified: feat(curriculum): add balanced upgrade trade scenario",
   "last_checkpoint_commit": "remote-verified: feat(help): surface light freighter repair mission margin recovery",
   "last_commits": [
@@ -128,6 +128,12 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=79 failed=0 total=79",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 213 tests OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> 83 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=79",
+    "python3 tools/run_gameplay_scenarios.py light_freighter_repair_refuel_mission_margin_loop --pretty -> success true; checks passed; final credits 9302; hull 300/300; fuel 299; completed levo_bulk_repair_refuel_margin_supply",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_refuel_mission_margin_loop_refuels_before_repair_return -v -> RED before implementation, then OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -> RED failure before help_overlay.json update; then OK",
     "python3 -m json.tool native_ev/data/help_overlay.json >/tmp/help_overlay.valid -> OK",
     "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hintCount=79; hasDisposableCombatEvidenceGateHelp=true",
@@ -156,9 +162,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review/commit the disposable combat evidence gate help-surface slice, or continue with the next source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo Light Freighter repair mission margin work or this disposable combat help gate.",
-  "resume_prompt": "Continue Terminal Velocity from current main workspace; inspect task t_68f856c5, ledger/events tail, continuation prompt, backlog, and live git state, then either review/commit the disposable combat evidence gate help slice or implement one new source-aligned gameplay/fidelity vertical slice with verification and checkpoint.",
-  "updated_at": "2026-06-06T11:32:43Z",
+  "next_resume_action": "Review/commit the light_freighter_repair_refuel_mission_margin_loop slice, then continue with the next source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo the low-fuel damaged Light Freighter repair/refuel mission-margin work.",
+  "resume_prompt": "Continue Terminal Velocity from current main workspace; inspect task t_0589dbe6 successor/review comments, ledger/events tail, continuation prompt, backlog, and live git state, then review/commit the light_freighter_repair_refuel_mission_margin_loop slice or implement one new source-aligned gameplay/fidelity slice with verification and checkpoint.",
+  "updated_at": "2026-06-06T11:45:26Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -209,7 +215,8 @@
     "Do not redo light_freighter_bulk_margin_choice_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo light_freighter_bulk_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo light_freighter_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo disposable combat evidence gate help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo disposable combat evidence gate help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo light_freighter_repair_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "implementation_of_friction_reducers": {
     "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",

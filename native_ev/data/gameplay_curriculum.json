@@ -27,6 +27,7 @@
     "light_freighter_refuel_mission_margin_loop",
     "light_freighter_repair_margin_loop",
     "light_freighter_repair_mission_margin_loop",
+    "light_freighter_repair_refuel_mission_margin_loop",
     "mission_runner_first_delivery",
     "scan_intro_mission_offers",
     "intro_courier_mission_delivery",
@@ -395,6 +396,10 @@
     "light_freighter_repair_mission_margin_loop": {
       "purpose": "Light Freighter repair mission-margin loop: reserve a bulk delivery while damaged, fill only the remaining hold with profitable Sol Food, complete the delivery, sell retained margin cargo, and return to Earth to fund hull repair while retaining explicit pending-Classic source boundaries.",
       "surface": "light freighter/mission margin/repair budget scaffold"
+    },
+    "light_freighter_repair_refuel_mission_margin_loop": {
+      "purpose": "Light Freighter repair/refuel mission-margin loop: a damaged low-fuel freighter reserves a bulk delivery, fills spare hold only with profitable cargo, delivers/sells at Levo, blocks the repair-port return on empty fuel, refuels, then returns to Earth for hull repair while preserving pending-Classic source boundaries.",
+      "surface": "Light Freighter mission/trade/refuel/repair scaffold"
     }
   }
 }
