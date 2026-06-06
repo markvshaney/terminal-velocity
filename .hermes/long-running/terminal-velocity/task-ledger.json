@@ -9,20 +9,20 @@
     "behind": 0,
     "dirty": "no",
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "travel timing recovery help/log slice pushed and remote-verified; successor Kanban task created",
+    "status_short": "first mission delivery recovery help slice pushed and remote-verified; successor Kanban task created",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`; latest pushed slice remote-verified before successor creation"
   },
   "repo_state": {
     "branch": "main",
-    "ahead": "pending local commit",
+    "ahead": 0,
     "behind": 0,
-    "dirty": "yes until commit"
+    "dirty": "no"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_cd3fe1ea",
+    "active_task_id": "t_fcde7ac6",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
     "status": "successor_ready_pending_dispatch",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:57:09Z",
+    "updated_at": "2026-06-06T07:04:52Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,7 +110,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "First mission delivery recovery help slice verified locally; local commit/review handoff pending.",
+  "current_milestone": "First mission delivery recovery help slice pushed and remote-verified; successor Kanban continuation card created pending dispatch.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral checkpoint",
   "last_commits": [
@@ -127,22 +127,18 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> failed missing first mission delivery recovery help line before help_overlay.json update",
-    "GREEN: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "git push origin main -> 98f994b pushed",
+    "git fetch origin; HEAD == origin/main == 98f994bfb7737034eb8c2f2fe561c348e92a2c09",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
     "./run_godot.sh tv-gameplay-curriculum-help-log -> hasFirstMissionDeliveryRecoveryHelp=true",
-    "./run_godot.sh tv-first-mission-delivery-log -> missionDelivered=true reward=1800 cargoAfterDelivery=0 completionHistoryCount=1 sourceLabel=terminal-velocity-observed oracleStatus=terminal_velocity_eval_pending_original_trace",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 195 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK profile=classic gameplayScenarios=62",
-    "git diff --check -> OK",
-    "python3 -m json.tool native_ev/data/help_overlay.json -> OK",
-    "added-lines high-signal secret scan -> NONE"
+    "HEAD added-lines high-signal secret scan -> NONE",
+    "kanban completed t_cd3fe1ea; created successor t_fcde7ac6 ready"
   ],
   "active_gate": {
-    "type": "review_or_push_gate",
-    "reason": "Terminal-velocity worker implemented and verified a code/data/docs slice; human/integrator review is required before treating it as done/pushed.",
-    "withheld_action": "Non-force push/merge of the local commit to origin/main.",
-    "resume_after": "Reviewer approves/unblocks or integrator pushes according to current policy."
+    "type": "none",
+    "reason": "First mission delivery recovery help slice was pushed normally and remote-verified; successor continuation is safe to dispatch.",
+    "withheld_action": "None.",
+    "resume_after": "Dispatch or gateway watchdog claims successor task t_fcde7ac6."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -151,9 +147,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Review local first-mission delivery recovery help slice, then have the integrator push per policy if accepted; after remote verification, create/dispatch the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice without redoing first-mission delivery help.",
-  "resume_prompt": "Resume Terminal Velocity after local first-mission delivery recovery help slice: inspect git status/diff, verify or review hasFirstMissionDeliveryRecoveryHelp and tv-first-mission-delivery-log, then push via integrator policy only after review/acceptance.",
-  "updated_at": "2026-06-06T07:02:42Z",
+  "next_resume_action": "Dispatch Kanban task t_fcde7ac6 and verify exactly one running Terminal Velocity task; worker should read ledger/events/prompt/backlog and continue the next strongest source-aligned safe local gameplay/fidelity slice without redoing service-provisioning, starting-equipment, travel-timing, or first-mission-delivery help/log work.",
+  "resume_prompt": "Resume Terminal Velocity from clean origin/main after first mission delivery recovery help remote verification: dispatch t_fcde7ac6 if not running, then continue the next source-aligned safe local gameplay/fidelity slice.",
+  "updated_at": "2026-06-06T07:04:52Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -211,8 +207,8 @@
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
     "id": "first-mission-delivery-recovery-help",
-    "summary": "F10 help now includes Terminal Velocity scaffold guidance for completing the intro courier route through Luna, checking mission log/cargo/reward/history before taking chain offers.",
-    "commit": "pending local commit; inspect with git rev-parse HEAD after commit",
+    "summary": "F10 help includes Terminal Velocity scaffold guidance for completing the intro courier route through Luna, checking mission log/cargo/reward/history before taking chain offers.",
+    "commit": "inspect current SHA with `git rev-parse HEAD`; pushed and remote-verified before this checkpoint",
     "source_fidelity_labels": [
       "terminal-velocity-observed",
       "terminal_velocity_eval_pending_original_trace",
