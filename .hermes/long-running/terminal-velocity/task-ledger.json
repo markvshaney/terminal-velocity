@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "tv-light-freighter-repair-mission-trade-log locally implemented and full-regression verified; ready for local commit/review gate.",
+  "current_milestone": "tv-light-freighter-repair-mission-trade-log pushed and verified; coordinator preparing successor continuation.",
   "do_not_redo": [
     "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
     "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
@@ -66,10 +66,10 @@
     "ahead": 0,
     "behind": 0,
     "branch": "main",
-    "dirty": true,
-    "head": "de9effaa295105cfffc45d5e7e2a02b49d146e19",
-    "origin_main": "de9effaa295105cfffc45d5e7e2a02b49d146e19",
-    "status_short": "## main...origin/main; modified godot_ev/scripts/main.gd, godot_ev/windows/RunGodot.ps1, native_ev/tests/test_model.py, run_godot.sh"
+    "dirty": false,
+    "head": "07e283b3a7c674772ebb0a5b9b14ca1576f904aa",
+    "origin_main": "07e283b3a7c674772ebb0a5b9b14ca1576f904aa",
+    "status_short": "## main...origin/main"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -111,7 +111,8 @@
   "last_completed_slice": {
     "id": "tv-light-freighter-repair-mission-trade-log",
     "kanban_task_id": "t_7922e44d",
-    "remote_verified": false,
+    "pushed_commit": "07e283b3a7c674772ebb0a5b9b14ca1576f904aa",
+    "remote_verified": true,
     "review_required": false,
     "source_fidelity_labels": [
       "terminal-velocity-light-freighter-repair-mission-margin-scaffold",
@@ -126,16 +127,18 @@
       "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (225 tests)",
       "python3 tools/run_gameplay_scenarios.py --all --pretty -> 91 results, 0 failed",
       "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=91",
-      "git diff --check -> OK"
+      "git diff --check -> OK",
+      "git push origin main -> OK",
+      "git fetch origin; HEAD == origin/main -> OK"
     ]
   },
   "last_process_checkpoint": "weapon_trade_cargo_godot_probe locally committed and verified; review-required handoff active.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (225 tests)",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> 91 results, 0 failed",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=91",
-    "git diff --check -> OK"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-light-freighter-repair-mission-trade-log -> emitted expected TV_LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT",
+    "git push origin main -> OK",
+    "git fetch origin; HEAD == origin/main -> OK"
   ],
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
@@ -145,7 +148,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review/push local tv-light-freighter-repair-mission-trade-log checkpoint normally if accepted, fetch/verify HEAD == origin/main, complete t_7922e44d, and dispatch exactly one successor from clean origin/main. Do not redo this slice unless review requests changes.",
+  "next_resume_action": "Complete Kanban task t_7922e44d, create and dispatch exactly one successor from clean origin/main, then continue next source-aligned safe local gameplay/fidelity slice. Do not redo tv-light-freighter-repair-mission-trade-log.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -287,5 +290,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-06T21:37:24.181251+00:00"
+  "updated_at": "2026-06-06T21:46:34.259411+00:00"
 }
