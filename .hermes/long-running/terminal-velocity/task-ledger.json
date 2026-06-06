@@ -22,10 +22,10 @@
   "runner": {
     "kind": "kanban",
     "board": "terminal-velocity",
-    "active_task_id": "t_d4b99539",
+    "active_task_id": "t_a0588e59",
     "assignee": "terminal-velocity",
     "workspace": "/home/bh/workspaces/loki/terminal-velocity",
-    "status": "legal_patrol_posture_recovery_help_pushed_verified_successor_pending",
+    "status": "successor_ready_watchdog_resume_pending",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T04:36:25Z",
+    "updated_at": "2026-06-06T04:37:12Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -105,7 +105,7 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Legal-patrol posture recovery help and Kanban push-policy checkpoint were pushed and remote-verified; successor Kanban continuation task is pending creation/dispatch.",
+  "current_milestone": "Successor Kanban continuation task t_a0588e59 created from remote-verified HEAD; watchdog/coordinator resume and dispatch are pending.",
   "last_commit": "inspect current commit with `git log --oneline -1`",
   "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest committed checkpoint intentionally avoids self-staling SHA metadata",
   "last_commits": [
@@ -144,9 +144,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Create exactly one successor Kanban continuation task from remote-verified HEAD, then dispatch/resume the Terminal Velocity Kanban watchdog/coordinator so the terminal-velocity worker continues one source-aligned safe local gameplay/fidelity slice.",
+  "next_resume_action": "Resume/run the Terminal Velocity Kanban watchdog/coordinator and verify task t_a0588e59 becomes running or remains scheduled/ready with an explicit dispatcher reason.",
   "resume_prompt": "Resume Terminal Velocity from remote-verified HEAD. Read ledger/events/prompt/backlog, inspect git state, implement one source-aligned safe local gameplay/fidelity slice with tests/probes/docs, commit locally, and leave push to loki-game integrator policy.",
-  "updated_at": "2026-06-06T04:36:25Z",
+  "updated_at": "2026-06-06T04:37:12Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
