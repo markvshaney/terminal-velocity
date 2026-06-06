@@ -2026,6 +2026,12 @@ func _run_pirate_avoidance_log() -> void:
 	var threat_message_visible := status_messages.has("Pirate intercept detected; avoiding combat by routing to nearest safe linked port (TV scaffold)")
 	var route_selected := _select_map_route_to_system("Sol")
 	var destination := _selected_destination_name()
+	player_fuel = 0
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var low_fuel_escape_blocked := status_messages.has("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route") and str(current_system.get("name", "?")) == start_system and player_fuel == 0
+	player_fuel = _max_player_fuel()
+	var refueled_before_escape := low_fuel_escape_blocked and player_fuel == _max_player_fuel()
 	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var final_system := str(current_system.get("name", "?"))
@@ -2034,8 +2040,8 @@ func _run_pirate_avoidance_log() -> void:
 	var landed_body := _current_body()
 	var landed_at_safe_port := landed and final_system == "Sol" and str(landed_body.get("name", "")) == "Earth"
 	var combat_executed := not projectiles.is_empty() or not explosion_events.is_empty()
-	var evasion_succeeded := threat_detected and route_selected and final_system == destination and landed_at_safe_port and not combat_executed
-	print("%s startSystem=%s threat=pirate_intercept threatDetected=%s threatMessageVisible=%s routeSelected=%s destination=%s finalSystem=%s landedAtSafePort=%s landedBody=\"%s\" combatExecuted=%s evasionSucceeded=%s decision=jump_to_linked_safe_port sourceLabel=terminal-velocity-pirate-avoidance-scaffold oracleStatus=pirate_avoidance_pending_ev_classic_combat_trace status=\"%s\"" % [PIRATE_AVOIDANCE_EVENT_LOG_PREFIX, start_system, str(threat_detected).to_lower(), str(threat_message_visible).to_lower(), str(route_selected).to_lower(), destination, final_system, str(landed_at_safe_port).to_lower(), str(landed_body.get("name", "None")), str(combat_executed).to_lower(), str(evasion_succeeded).to_lower(), status_line])
+	var evasion_succeeded := threat_detected and route_selected and low_fuel_escape_blocked and refueled_before_escape and final_system == destination and landed_at_safe_port and not combat_executed
+	print("%s startSystem=%s threat=pirate_intercept threatDetected=%s threatMessageVisible=%s routeSelected=%s destination=%s finalSystem=%s landedAtSafePort=%s lowFuelEscapeBlocked=%s refueledBeforeEscape=%s landedBody=\"%s\" combatExecuted=%s evasionSucceeded=%s decision=jump_to_linked_safe_port sourceLabel=terminal-velocity-pirate-avoidance-scaffold oracleStatus=pirate_avoidance_pending_ev_classic_combat_trace status=\"%s\"" % [PIRATE_AVOIDANCE_EVENT_LOG_PREFIX, start_system, str(threat_detected).to_lower(), str(threat_message_visible).to_lower(), str(route_selected).to_lower(), destination, final_system, str(landed_at_safe_port).to_lower(), str(low_fuel_escape_blocked).to_lower(), str(refueled_before_escape).to_lower(), str(landed_body.get("name", "None")), str(combat_executed).to_lower(), str(evasion_succeeded).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_combat_log() -> void:
