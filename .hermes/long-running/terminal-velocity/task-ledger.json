@@ -9,14 +9,14 @@
     "behind": 0,
     "dirty": "yes",
     "head": "inspect current SHA with `git rev-parse HEAD`; SHA-neutral to avoid self-staling checkpoint metadata",
-    "status_short": "successor t_65a7a59a created; ledger checkpoint pending commit",
+    "status_short": "travel timing recovery help/log slice committed locally; push/review pending",
     "origin_main": "inspect current SHA with `git rev-parse origin/main`; latest pushed slice remote-verified before successor creation"
   },
   "repo_state": {
     "branch": "main",
     "ahead": 0,
     "behind": 0,
-    "dirty": "yes"
+    "dirty": "no except this post-commit ledger checkpoint before amend"
   },
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "runner": {
@@ -46,7 +46,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-06T06:49:21Z",
+    "updated_at": "2026-06-06T06:53:47Z",
     "worker_forced_skills": [
       "long-running-task-harness",
       "source-and-fidelity",
@@ -110,9 +110,9 @@
     },
     "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties."
   ],
-  "current_milestone": "Starting equipment/status deterministic Godot log slice verified locally; original-runtime-observed starting HUD facts are labeled separately from Terminal Velocity/source-mined primary visibility while exact Classic primary/outfit status remains pending nonmutating trace.",
+  "current_milestone": "Travel timing recovery help slice committed locally; F10 help surfaces TV event-log transition-state guidance for L/H/\\/J recovery while exact Classic transition timing/sound remains pending.",
   "last_commit": "feat(godot): expose starting equipment log (implementation pushed; inspect live git for exact SHA)",
-  "last_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; latest checkpoint intentionally avoids self-staling SHA metadata",
+  "last_checkpoint_commit": "will be updated by amended commit containing this checkpoint; inspect current SHA with `git rev-parse HEAD`",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
     "local checkpoint: feat(godot): surface mission history in player info",
@@ -127,18 +127,21 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_service_provisioning_log_contract -v -> OK",
-    "./run_godot.sh tv-service-provisioning-log -> TV_SERVICE_PROVISIONING_EVENT levoNoOutfitterObserved=true earthFullServiceScaffold=true stardockNoShipyardScaffold=true serviceMatrixScoutVisible=true",
+    "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> failed missing travel timing help line",
+    "GREEN: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasTravelTimingRecoveryHelp=true",
+    "./run_godot.sh tv-travel-event-log -> start/land_request/leave/hyper_mode/hyper_select/jump events emitted with too-close jump block",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 195 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=62 failed=0 total=62",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=62",
     "git diff --check -> OK",
-    "high-signal secret scan over origin/main..HEAD -> none",
-    "HOME=/home/bh git push origin main; git fetch origin main; HEAD == origin/main == 8289700afeaa4427de699a374e321748b8fba563",
-    "kanban successor t_65a7a59a created ready from remote-verified HEAD"
+    "python3 -m json.tool native_ev/data/help_overlay.json -> OK"
   ],
   "active_gate": {
-    "type": "none",
-    "reason": "Service-provisioning slice was pushed and remote-verified; successor task created for continued safe-local TV work.",
-    "withheld_action": "None.",
-    "resume_after": "Dispatch t_65a7a59a and verify exactly one running Terminal Velocity task."
+    "type": "review_or_push",
+    "reason": "Local code/docs/ledger commit is complete and verified; push/publication remains gated by workflow/owner policy.",
+    "withheld_action": "git push origin main",
+    "resume_after": "Human/integrator approval to push, or reviewer accepts the local commit."
   },
   "heartbeat_status": {
     "send_message_available": false,
@@ -147,9 +150,9 @@
     "progress_heartbeats_sent": 0,
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold"
   },
-  "next_resume_action": "Commit/push this ledger checkpoint, then dispatch t_65a7a59a and verify exactly one running Terminal Velocity Kanban task continues from origin/main 8289700afeaa4427de699a374e321748b8fba563.",
+  "next_resume_action": "Review/push local commit for the verified travel timing recovery help/log slice, then continue from live backlog with the next strongest source-aligned safe local Terminal Velocity gameplay/fidelity slice; do not redo service-provisioning or travel timing help if present and verified.",
   "resume_prompt": "Resume Terminal Velocity via Kanban task t_65a7a59a from clean origin/main 8289700afeaa4427de699a374e321748b8fba563; read ledger/events/prompt/backlog, avoid redoing service-provisioning log, and implement one source-aligned safe local gameplay/fidelity slice with verification.",
-  "updated_at": "2026-06-06T06:49:21Z",
+  "updated_at": "2026-06-06T06:53:47Z",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -206,13 +209,13 @@
   "last_process_checkpoint": "Completed deadline no-late-failure recovery help remote-verified checkpoint",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording where possible so commits containing this checkpoint do not stale their own metadata.",
   "last_completed_slice": {
-    "id": "godot-service-provisioning-log",
-    "summary": "Accepted and pushed deterministic Godot service/store provisioning scout: Levo no-outfitter observed evidence plus Earth and Stardock Alpha Terminal Velocity service matrices under explicit pending-Classic labels.",
-    "commit": "8289700afeaa4427de699a374e321748b8fba563",
+    "id": "travel-timing-recovery-help",
+    "summary": "F10 help now surfaces deterministic travel event-log timing recovery guidance for launch/leave, hyper-mode/select, and jump retry states under pending-Classic labels.",
+    "commit": "18541385333816e43a4a60c9324c708a79be2dd4",
     "source_fidelity_labels": [
-      "original-runtime-observed-levo",
-      "terminal-velocity-service-provisioning-scaffold",
-      "classic_runtime_service_matrix_pending"
+      "terminal-velocity-travel-event-log-scaffold",
+      "classic_runtime_transition_timing_sound_pending",
+      "terminal-velocity-helper-scaffold"
     ]
   }
 }
