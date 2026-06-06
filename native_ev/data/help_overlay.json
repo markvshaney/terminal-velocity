@@ -56,6 +56,7 @@
     "Light Freighter repair trade funding recovery: when a damaged freighter cannot afford full repair, use only positive-margin cargo runs to fund the service bill, then return to a repair port before taking higher-risk jobs. TV scaffold; Classic damaged freighter trade/repair UI pending.",
     "Light Freighter mission/trade capacity recovery: after upgrading to a Light Freighter, reserve bulk mission cargo first, fill only remaining hold with profitable trade cargo, deliver the job, then sell retained cargo before accepting another bulk contract. TV scaffold; Classic Light Freighter mission/trade UI pending.",
     "Light Freighter refuel delivery recovery: if a loaded bulk delivery blocks for empty fuel before launch, keep the cargo reserved, refuel at the service port, then jump and deliver before changing mission or cargo plans. TV scaffold; Classic Light Freighter refuel/delivery UI pending.",
+    "Light Freighter deadline/refuel delivery recovery: if a timed bulk delivery reaches its scaffold deadline day after a zero-fuel launch block, refuel first, deliver before waiting longer, then verify no late failure history appears. TV scaffold; Classic Light Freighter deadline/refuel UI pending.",
     "Light Freighter refuel margin recovery: after reserving a bulk delivery, fill only remaining hold with positive-margin cargo, preserve a service-port refuel plan, then deliver and sell retained cargo. TV scaffold; Classic Light Freighter/trade UI pending.",
     "Light Freighter refuel mission margin recovery: if a loaded bulk delivery blocks at zero fuel before launch, land, refuel at the service port, relaunch, deliver first, then sell retained margin cargo. TV scaffold; Classic Light Freighter low-fuel mission/trade UI pending.",
     "Light Freighter repair mission margin recovery: when a damaged freighter carries a bulk delivery, reserve repair credits, fill only spare hold with positive-margin cargo, deliver, sell retained cargo, then return to a repair port before taking another risky job. TV scaffold; Classic damaged freighter mission/trade/repair UI pending.",
@@ -582,6 +583,11 @@
       "flag": "hasLightFreighterRefuelDeliveryRecoveryHelp",
       "source": "help",
       "contains": "Light Freighter refuel delivery recovery: if a loaded bulk delivery blocks for empty fuel"
+    },
+    {
+      "flag": "hasLightFreighterDeadlineRefuelDeliveryRecoveryHelp",
+      "source": "help",
+      "contains": "Light Freighter deadline/refuel delivery recovery: if a timed bulk delivery reaches its scaffold deadline day"
     },
     {
       "flag": "hasLightFreighterRefuelMarginRecoveryHelp",
