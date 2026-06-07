@@ -225,8 +225,18 @@ Operational note:
 
 - Avoid assuming client Y coordinates from screenshots directly; subtract the Basilisk title-bar/client offset or use the known corrected `Done` coordinate from this pass.
 
+Operational policy going forward:
+
+- Treat Basilisk freeze/input problems as **inline blockers first**, not as a detached permanent project lane.
+- During normal EV/Terminal Velocity work, if Basilisk freezes, stalls, shows confusing foreground behavior, or input wedges, stop the current gameplay/fidelity slice and classify the emulator failure immediately before making further EV behavior claims.
+- Preserve evidence before poking: capture the Basilisk window, wait a few seconds, capture again, and save named local-only screenshots when the result informs a durable observation.
+- Classify the blocker explicitly: Windows process responsiveness, CPU time advancement, Mac guest/display changes, EV app state, scripted-input failure versus all-input failure, and whether a modal/window/coordinate mistake explains the symptom.
+- Use the known safe recovery ladder before declaring the emulator unusable: release keys, force foreground/topmost, use `AttachThreadInput` helpers, use verified VK/scancode helpers, and restart only when those fail or the guest is clearly wedged.
+- Resume the original EV/TV slice after Basilisk is usable again; do not let a one-off emulator failure absorb the gameplay-development thread.
+- Split Basilisk debugging into a separate Kanban/debug lane only when the same failure class repeats, the source/build fix is larger than the current EV slice, TV-side development can proceed without original-runtime evidence, or the emulator blocks all useful Basilisk observations.
+
 Open longer-term improvement:
 
-- Build/run the diagnostic Basilisk patch when build tooling is available, so future SDL/ADB input failures can be classified from logs instead of black-box symptoms.
+- Build/run the diagnostic Basilisk patch when build tooling is available and a recurring blocker justifies it, so future SDL/ADB input failures can be classified from logs instead of black-box symptoms.
 
 Do not enable Strict Play or death-test during gameplay learning unless explicitly requested.
