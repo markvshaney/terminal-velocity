@@ -288,5 +288,6 @@ Why this first:
 ## Relationship to existing process artifacts
 
 - Extends `docs/research/source-aligned-game-development-method.md`, especially its rule to keep the inner loop direct and use Kanban at feature boundaries.
+- Paired acceleration synthesis: `docs/research/2026-06-07-terminal-velocity-acceleration-plan.md` preserves the 2026-06-07 09:20 EDT post tying this topology to vertical slices, cheap evaluators, Basilisk inline-blocker policy, watchdogs, and fan-in review.
 - Uses `docs/checklists/ev-classic-fidelity-implementation-backlog.md` as the execution surface, not this artifact.
 - This artifact is the coordination rationale and template; concrete work items should still land in the backlog or Kanban board.
