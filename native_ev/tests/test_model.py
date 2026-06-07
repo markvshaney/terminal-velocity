@@ -1316,6 +1316,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-contraband-scan-trade-log', run_script)
         self.assertIn('[switch]$ContrabandScanTradeLog', windows_script)
 
+    def test_godot_contraband_clemency_funding_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        for symbol in [
+            'TV_CONTRABAND_CLEMENCY_FUNDING_EVENT',
+            '--tv-contraband-clemency-funding-log',
+            'func _run_contraband_clemency_funding_log',
+            'scanLeftClemencyOneHundredCreditsShort=%s',
+            'preservedFoodSoldForClemency=%s',
+            'clemencyFundedAfterTrade=%s',
+            'clemencySourceLabel=terminal-velocity-inferred-clemency-scaffold',
+            'clemencyOracleStatus=approved_inference_pending_ev_classic_confirmation',
+            'sourceLabel=terminal-velocity-contraband-clemency-funding-scaffold',
+            'oracleStatus=classic_runtime_scan_trade_clemency_cleanup_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-contraband-clemency-funding-log', run_script)
+        self.assertIn('[switch]$ContrabandClemencyFundingLog', windows_script)
+
     def test_godot_outfitter_shipyard_purchases_feed_recent_messages_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
