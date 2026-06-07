@@ -46,6 +46,7 @@ const TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX := "TV_TRADE_REFUEL_PROFIT_EVENT"
 const CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX := "TV_CARGO_EXPANSION_TRADE_EVENT"
 const FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX := "TV_FUEL_RESERVE_UPGRADE_EVENT"
 const BALANCED_UPGRADE_TRADE_EVENT_LOG_PREFIX := "TV_BALANCED_UPGRADE_TRADE_EVENT"
+const HULL_PLATING_REPAIR_EVENT_LOG_PREFIX := "TV_HULL_PLATING_REPAIR_EVENT"
 const UPGRADE_READINESS_EVENT_LOG_PREFIX := "TV_UPGRADE_READINESS_EVENT"
 const UPGRADE_AFFORDABILITY_EVENT_LOG_PREFIX := "TV_UPGRADE_AFFORDABILITY_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
@@ -289,6 +290,8 @@ func _ready() -> void:
 		call_deferred("_run_fuel_reserve_upgrade_log")
 	if OS.get_cmdline_args().has("--tv-balanced-upgrade-trade-log") or OS.get_cmdline_user_args().has("--tv-balanced-upgrade-trade-log"):
 		call_deferred("_run_balanced_upgrade_trade_log")
+	if OS.get_cmdline_args().has("--tv-hull-plating-repair-log") or OS.get_cmdline_user_args().has("--tv-hull-plating-repair-log"):
+		call_deferred("_run_hull_plating_repair_log")
 	if OS.get_cmdline_args().has("--tv-upgrade-readiness-log") or OS.get_cmdline_user_args().has("--tv-upgrade-readiness-log"):
 		call_deferred("_run_upgrade_readiness_log")
 	if OS.get_cmdline_args().has("--tv-upgrade-affordability-log") or OS.get_cmdline_user_args().has("--tv-upgrade-affordability-log"):
@@ -1847,6 +1850,41 @@ func _run_balanced_upgrade_trade_log() -> void:
 	var repaired_status := "repairedFinalHullRefit=true" if repaired_final_hull and player_hull == _max_player_hull() else "repairedFinalHullRefit=false"
 	var final_cargo_status := "finalCargo=0" if cargo == 0 else "finalCargo=%d" % cargo
 	print("%s startSystem=Levo upgradeSystem=%s upgradeBody=\"%s\" sellSystem=%s routeToUpgradeSystemSelected=%s routeToSellSystemSelected=%s routeBackToUpgradeSystemSelected=%s commodity=%s buyPrice=%d sellPrice=%d profitPerTon=%d lotSize=%d fundingTargetTons=%d startingCredits=%d creditsBeforeCargoPod=%d creditsBeforeAuxFuelTank=%d creditsBeforeBlockedHull=%d creditsBeforeFundingBuy=%d creditsBeforeFundingSale=%d creditsBeforeHullPlating=%d creditsBeforeRepair=%d creditsAfterRepair=%d startingCargoSpace=%d cargoSpaceAfterPod=%d startingFuelMax=%d maxFuelAfterTank=%d startingMaxHull=%d maxHullAfterPlating=%d hullBeforeRepair=%d finalHull=%d tonsAfterFundingBuy=%d heldAfterFundingSale=%d %s %s %s %s %s %s %s sourceLabel=terminal-velocity-balanced-upgrade-trade-scaffold repairSourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=balanced_upgrade_budget_pending_classic_runtime_trace status=\"%s\"" % [BALANCED_UPGRADE_TRADE_EVENT_LOG_PREFIX, upgrade_system, upgrade_body, sell_system, str(route_to_upgrade_system_selected), str(route_to_sell_system_selected), str(route_back_to_upgrade_system_selected), trade_commodity, buy_price, sell_price, profit_per_ton, lot_size, funding_target_tons, starting_credits, credits_before_cargo_pod, credits_before_aux_tank, credits_before_blocked_hull, credits_before_funding_buy, credits_before_funding_sale, credits_before_hull_plating, credits_before_repair, credits, starting_cargo_space, cargo_space_after_pod, starting_fuel_max, max_fuel_after_tank, starting_max_hull, max_hull_after_plating, hull_before_repair, player_hull, tons_after_funding_buy, held_after_funding_sale, bought_cargo_status, bought_fuel_status, hull_blocked_status, funding_status, bought_hull_status, repaired_status, final_cargo_status, status_line])
+	get_tree().quit(0)
+
+func _run_hull_plating_repair_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var upgrade_system := str(current_system.get("name", "?"))
+	var upgrade_body := str(_current_body().get("name", "?"))
+	var starting_credits := 2200
+	credits = starting_credits
+	var starting_max_hull := _max_player_hull()
+	var credits_before_hull_plating := credits
+	var bought_hull_plating := _buy_outfit_or_weapon_by_id("hull_plating")
+	var max_hull_after_plating := _max_player_hull()
+	player_hull = max(1, max_hull_after_plating - 7)
+	var hull_before_repair := player_hull
+	var credits_before_repair := credits
+	var repair_gap_created := hull_before_repair < max_hull_after_plating
+	var repair_succeeded := _repair_current_hull()
+	var player_info_lines := _player_inventory_lines()
+	var player_info_max_hull_visible := false
+	for line in player_info_lines:
+		if line.contains("Hull") or line.contains("hull"):
+			player_info_max_hull_visible = true
+			break
+	var bought_status := "boughtHullPlating=true" if bought_hull_plating else "boughtHullPlating=false"
+	var expanded_status := "maxHullExpanded=true" if max_hull_after_plating > starting_max_hull else "maxHullExpanded=false"
+	var gap_status := "repairGapCreated=true" if repair_gap_created else "repairGapCreated=false"
+	var repair_status := "repairSucceeded=true" if repair_succeeded and player_hull == _max_player_hull() else "repairSucceeded=false"
+	var player_info_status := "playerInfoMaxHullVisible=true" if player_info_max_hull_visible else "playerInfoMaxHullVisible=false"
+	print("%s upgradeSystem=%s upgradeBody=\"%s\" routeToUpgradeSystemSelected=%s startingCredits=%d creditsBeforeHullPlating=%d creditsBeforeRepair=%d creditsAfterRepair=%d startingMaxHull=%d maxHullAfterPlating=%d hullBeforeRepair=%d finalHull=%d %s %s %s %s %s playerInfoLines=%s sourceLabel=terminal-velocity-hull-plating-repair-scaffold repairSourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=hull_plating_repair_pending_classic_runtime_trace" % [HULL_PLATING_REPAIR_EVENT_LOG_PREFIX, upgrade_system, upgrade_body, str(route_to_sol_selected), starting_credits, credits_before_hull_plating, credits_before_repair, credits, starting_max_hull, max_hull_after_plating, hull_before_repair, player_hull, bought_status, expanded_status, gap_status, repair_status, player_info_status, JSON.stringify(player_info_lines)])
 	get_tree().quit(0)
 
 func _run_mission_offer_scan_log() -> void:

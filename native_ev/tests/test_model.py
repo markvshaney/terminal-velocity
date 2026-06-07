@@ -607,6 +607,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-balanced-upgrade-trade-log', run_script)
         self.assertIn('[switch]$BalancedUpgradeTradeLog', windows_script)
 
+    def test_godot_hull_plating_repair_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_HULL_PLATING_REPAIR_EVENT',
+            '--tv-hull-plating-repair-log',
+            'func _run_hull_plating_repair_log() -> void:',
+            'boughtHullPlating=true',
+            'maxHullExpanded=true',
+            'repairGapCreated=true',
+            'repairSucceeded=true',
+            'playerInfoMaxHullVisible=true',
+            'sourceLabel=terminal-velocity-hull-plating-repair-scaffold',
+            'repairSourceLabel=terminal-velocity-repair-service-scaffold',
+            'oracleStatus=hull_plating_repair_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-hull-plating-repair-log', run_script)
+        self.assertIn('[switch]$HullPlatingRepairLog', windows_script)
+
     def test_godot_starting_equipment_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

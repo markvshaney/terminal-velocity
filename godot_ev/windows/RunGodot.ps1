@@ -23,6 +23,7 @@ param(
     [switch]$CargoExpansionTradeLog,
     [switch]$FuelReserveUpgradeLog,
     [switch]$BalancedUpgradeTradeLog,
+    [switch]$HullPlatingRepairLog,
     [switch]$UpgradeReadinessLog,
     [switch]$UpgradeAffordabilityLog,
     [switch]$MissionOfferScanLog,
@@ -166,6 +167,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-fuel-reserve-upgrade-log
 } elseif ($BalancedUpgradeTradeLog) {
     & $Godot --headless --path $Project -- --tv-balanced-upgrade-trade-log
+} elseif ($HullPlatingRepairLog) {
+    & $Godot --headless --path $Project -- --tv-hull-plating-repair-log
 } elseif ($UpgradeReadinessLog) {
     & $Godot --headless --path $Project -- --tv-upgrade-readiness-log
 } elseif ($UpgradeAffordabilityLog) {
