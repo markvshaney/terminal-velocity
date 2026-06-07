@@ -5,7 +5,7 @@
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "Contraband bribe visibility boundary accepted, pushed, and verified; successor continuation card created for the next safe local slice.",
+  "current_milestone": "Contraband bribe recovery probe accepted by coordinator after local verification; normal push/successor flow in progress.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -120,7 +120,8 @@
     "tv-mission-legal-eligibility-log legalMin threshold boundary",
     "tv-mission-legal-eligibility-log legalMax threshold boundary",
     "tv-mission-legal-eligibility-log legalMax threshold boundary broad-verified locally",
-    "Do not redo tv-contraband-risk-log bribe visibility boundary once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo tv-contraband-risk-log bribe visibility boundary once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo tv-contraband-bribe-recovery-log once accepted/pushed; continue from the next source-aligned safe local gameplay/fidelity slice."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -169,18 +170,14 @@
     "local checkpoint: Expose mission deadline abort Godot log",
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
-  "last_completed_slice": "tv-mission-legal-eligibility-log legalMax threshold boundary pushed/verified in normal TV repo path.",
-  "last_process_checkpoint": "Local worker extended tv-mission-legal-eligibility-log to cover legalMax upper-bound blocking/recovery, hardened native source contract assertions for the legalMax blocked reason, updated docs, and reran broad safe verification; pending review/coordinator integration.",
+  "last_completed_slice": "tv-contraband-bribe-recovery-log accepted locally; pending normal push verification.",
+  "last_process_checkpoint": "Coordinator accepted tv-contraband-bribe-recovery-log after rerunning focused contract and Godot probe; backlog provenance added.",
   "last_process_checkpoint_commit": "not committed before checkpoint update; inspect live git status/diff",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; HEAD == origin/main verified after normal push",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_risk_surface_contract -v -> OK",
-    "./run_godot.sh tv-contraband-risk-log -> OK; event includes Federation bribeAllowed=false/bribePerTon=0/bribeCost=0 and Independent bribableBribePerTon=75/bribableBribeCost=750",
-    "git diff --check -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
-    "events.jsonl json.loads line scan -> OK",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK, gameplayScenarios=92",
-    "git push origin main; git fetch origin; HEAD == origin/main -> OK"
+    "git diff --check -> OK before backlog addendum",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_bribe_recovery_log_contract -v -> OK",
+    "./run_godot.sh tv-contraband-bribe-recovery-log -> OK; actualBribeAction=bribe bribeCreditsDelta=-750 creditsAfterBribe=0 bribeCargoPreserved=true bribeLegalPreserved=true bribeStatusVisible=true"
   ],
   "local_checkpoint_commit": "pushed/verified in normal TV repo path; inspect current SHA with git rev-parse HEAD",
   "mandatory_resume_first_actions": [
@@ -191,7 +188,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Dispatch t_528d411e and verify exactly one running Terminal Velocity task; worker should choose the next source-aligned safe local slice and not redo tv-contraband-risk-log bribe visibility boundary.",
+  "next_resume_action": "Commit/push tv-contraband-bribe-recovery-log normally, fetch/verify HEAD == origin/main, complete t_528d411e, then create/dispatch exactly one successor continuation task.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -208,7 +205,7 @@
     "head": "inspect current SHA with git rev-parse HEAD",
     "origin_main": "inspect current SHA with git rev-parse origin/main",
     "status": "pushed and verified in normal TV repo path; HEAD == origin/main",
-    "status_short": "## main...origin/main with local legalMax mission eligibility checkpoint pending review/integration"
+    "status_short": "## main...origin/main with accepted tv-contraband-bribe-recovery-log local diff pending normal push"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -258,7 +255,7 @@
       "t_5d681084",
       "t_6aedca1b"
     ],
-    "updated_at": "2026-06-07T09:05:23Z",
+    "updated_at": "2026-06-07T10:32:45Z",
     "watchdog_job_id": "72e736287129",
     "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
     "watchdog_schedule": "every 5m",
@@ -271,7 +268,7 @@
     "workspace": "/home/bh/workspaces/loki/terminal-velocity"
   },
   "runner_state": {
-    "updated_at": "2026-06-07T09:13:54Z"
+    "updated_at": "2026-06-07T10:32:45Z"
   },
   "safe_backlog": [
     "combat_reward_salvage_recovery_help verified pending review/local commit: F10 help now exposes hasCombatRewardSalvageRecoveryHelp=true for combined reward-history visibility plus full-hold salvage recovery guidance; sourceLabel=terminal-velocity-combat-reward-salvage-recovery-help-scaffold; oracleStatus=classic_runtime_bounty_loot_coupling_pending; help_surface_pending_playtest.",

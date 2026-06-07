@@ -132,6 +132,7 @@ const LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX := "TV_LEGAL_CONSEQUENCE_EVENT"
 const LEGAL_CLEMENCY_EVENT_LOG_PREFIX := "TV_LEGAL_CLEMENCY_EVENT"
 const CONTRABAND_SCAN_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_EVENT"
 const CONTRABAND_RISK_EVENT_LOG_PREFIX := "TV_CONTRABAND_RISK_EVENT"
+const CONTRABAND_BRIBE_RECOVERY_EVENT_LOG_PREFIX := "TV_CONTRABAND_BRIBE_RECOVERY_EVENT"
 const CONTRABAND_SCAN_TRADE_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_TRADE_EVENT"
 const CONTRABAND_CLEMENCY_FUNDING_EVENT_LOG_PREFIX := "TV_CONTRABAND_CLEMENCY_FUNDING_EVENT"
 const LEGAL_RESOURCE_SEMANTICS_SOURCE_BASIS := "sourceBasis=EV Classic Resource Bible: govt CrimeTol/penalties, interceptor scans, mission AvailRecord/ScanGovt/PayVal"
@@ -475,6 +476,8 @@ func _ready() -> void:
 		call_deferred("_run_contraband_scan_log")
 	if OS.get_cmdline_args().has("--tv-contraband-risk-log") or OS.get_cmdline_user_args().has("--tv-contraband-risk-log"):
 		call_deferred("_run_contraband_risk_log")
+	if OS.get_cmdline_args().has("--tv-contraband-bribe-recovery-log") or OS.get_cmdline_user_args().has("--tv-contraband-bribe-recovery-log"):
+		call_deferred("_run_contraband_bribe_recovery_log")
 	if OS.get_cmdline_args().has("--tv-contraband-scan-trade-log") or OS.get_cmdline_user_args().has("--tv-contraband-scan-trade-log"):
 		call_deferred("_run_contraband_scan_trade_log")
 	if OS.get_cmdline_args().has("--tv-contraband-clemency-funding-log") or OS.get_cmdline_user_args().has("--tv-contraband-clemency-funding-log"):
@@ -6234,6 +6237,37 @@ func _run_contraband_risk_log() -> void:
 	var primary_bribe_per_ton := int(policy.get("bribePerTon", 0))
 	var primary_bribe_cost := primary_bribe_per_ton * EV_CLASSIC_COMMODITY_LOT_SIZE
 	print("%s routeToSolSelected=%s routeToSiriusSelected=%s system=%s government=\"%s\" commodity=%s isContraband=%s finePerTon=%d bribeAllowed=%s bribePerTon=%d bribeCost=%d heldContrabandInventoryVisible=%s bribeHintVisible=%s bribeCostVisible=%s hint=\"%s\" inventoryHint=\"%s\" bribableSystem=%s bribableGovernment=\"%s\" bribableCommodity=%s bribableBribePerTon=%d bribableBribeCost=%d bribableHint=\"%s\" bribableInventoryHint=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending" % [CONTRABAND_RISK_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(route_to_sirius_selected), enforcement_system_name, government_name, commodity_id, str(is_contraband), int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), primary_bribe_per_ton, primary_bribe_cost, str(inventory_risk_visible), str(bribe_hint_visible), str(bribe_cost_visible), risk_line, inventory_risk_line, current_system.get("name", "?"), bribe_government_name, bribe_commodity_id, bribe_per_ton, bribe_cost, bribe_risk_line, bribe_inventory_line])
+	get_tree().quit(0)
+
+func _run_contraband_bribe_recovery_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sirius_selected := _select_map_route_to_system("Sirius")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var government_name := _current_government_name()
+	var commodity_id := "medical"
+	var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
+	var bribe_per_ton := int(policy.get("bribePerTon", 0))
+	var bribe_cost := bribe_per_ton * EV_CLASSIC_COMMODITY_LOT_SIZE
+	commodity_hold[commodity_id] = EV_CLASSIC_COMMODITY_LOT_SIZE
+	cargo = EV_CLASSIC_COMMODITY_LOT_SIZE
+	credits = bribe_cost
+	legal_records[government_name] = -10
+	var credits_before_bribe := credits
+	var legal_before_bribe := int(legal_records.get(government_name, 0))
+	var cargo_before_bribe := cargo
+	var medical_before_bribe := int(commodity_hold.get(commodity_id, 0))
+	var bribe_outcome := _apply_contraband_scan(true)
+	var credits_after_bribe := credits
+	var legal_after_bribe := int(legal_records.get(government_name, 0))
+	var medical_after_bribe := int(commodity_hold.get(commodity_id, 0))
+	var bribe_action := str(bribe_outcome.get("action", "none"))
+	var bribe_credits_delta := int(bribe_outcome.get("creditsDelta", 0))
+	var bribe_cargo_preserved := cargo == cargo_before_bribe and medical_after_bribe == medical_before_bribe
+	var bribe_legal_preserved := legal_after_bribe == legal_before_bribe and int(bribe_outcome.get("legalDelta", 0)) == 0
+	var bribe_status_visible := status_line.contains("Paid %d cr contraband bribe" % bribe_cost) and status_line.contains(government_name)
+	print("%s routeToSiriusSelected=%s system=%s government=\"%s\" commodity=%s bribeAllowed=%s bribePerTon=%d bribeCost=%d bribeAction=bribe actualBribeAction=%s bribeCreditsDelta=%d creditsBeforeBribe=%d creditsAfterBribe=%d legalBeforeBribe=%d legalAfterBribe=%d medicalBeforeBribe=%d medicalAfterBribe=%d cargoBeforeBribe=%d cargoAfterBribe=%d bribeCargoPreserved=%s bribeLegalPreserved=%s bribeStatusVisible=%s status=\"%s\" bribeSourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface bribeOracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending sourceLabel=terminal-velocity-contraband-bribe-recovery-scaffold oracleStatus=classic_runtime_bribe_resolution_pending" % [CONTRABAND_BRIBE_RECOVERY_EVENT_LOG_PREFIX, str(route_to_sirius_selected), current_system.get("name", "?"), government_name, commodity_id, str(policy.get("bribeAllowed", false)), bribe_per_ton, bribe_cost, bribe_action, bribe_credits_delta, credits_before_bribe, credits_after_bribe, legal_before_bribe, legal_after_bribe, medical_before_bribe, medical_after_bribe, cargo_before_bribe, cargo, str(bribe_cargo_preserved), str(bribe_legal_preserved), str(bribe_status_visible), status_line])
 	get_tree().quit(0)
 
 func _run_contraband_scan_trade_log() -> void:

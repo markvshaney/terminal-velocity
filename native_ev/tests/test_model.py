@@ -1689,6 +1689,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LegalClemencyLog', windows_script)
         self.assertIn('[switch]$ContrabandScanLog', windows_script)
         self.assertIn('[switch]$ContrabandRiskLog', windows_script)
+        self.assertIn('[switch]$ContrabandBribeRecoveryLog', windows_script)
         self.assertIn('[switch]$ContrabandClemencyFundingLog', windows_script)
 
     def test_godot_contraband_risk_surface_contract(self):
@@ -1719,6 +1720,29 @@ class NativeEvModelTests(unittest.TestCase):
             'oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending',
         ]:
             self.assertIn(symbol, main_script)
+
+    def test_godot_contraband_bribe_recovery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        for symbol in [
+            'TV_CONTRABAND_BRIBE_RECOVERY_EVENT',
+            '--tv-contraband-bribe-recovery-log',
+            'func _run_contraband_bribe_recovery_log',
+            'bribeAction=bribe',
+            'bribeCreditsDelta=%d',
+            'bribeCargoPreserved=%s',
+            'bribeLegalPreserved=%s',
+            'bribeStatusVisible=%s',
+            'bribeSourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface',
+            'bribeOracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending',
+            'sourceLabel=terminal-velocity-contraband-bribe-recovery-scaffold',
+            'oracleStatus=classic_runtime_bribe_resolution_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-contraband-bribe-recovery-log', run_script)
+        self.assertIn('[switch]$ContrabandBribeRecoveryLog', windows_script)
 
     def test_godot_contraband_scan_trade_recovery_log_contract(self):
         root = Path(__file__).resolve().parents[2]
