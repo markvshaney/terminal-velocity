@@ -78,6 +78,7 @@ const RETALIATION_EVENT_LOG_PREFIX := "TV_RETALIATION_EVENT"
 const PROJECTILE_MOTION_EVENT_LOG_PREFIX := "TV_PROJECTILE_MOTION_EVENT"
 const EXPLOSION_EVENT_LOG_PREFIX := "TV_EXPLOSION_EVENT"
 const CARGO_SALVAGE_EVENT_LOG_PREFIX := "TV_CARGO_SALVAGE_EVENT"
+const CARGO_SALVAGE_RECOVERY_EVENT_LOG_PREFIX := "TV_CARGO_SALVAGE_RECOVERY_EVENT"
 const SECONDARY_WEAPON_EVENT_LOG_PREFIX := "TV_SECONDARY_WEAPON_EVENT"
 const TARGET_SELECTION_EVENT_LOG_PREFIX := "TV_TARGET_SELECTION_EVENT"
 const AUTOPILOT_EVENT_LOG_PREFIX := "TV_AUTOPILOT_EVENT"
@@ -342,6 +343,8 @@ func _ready() -> void:
 		call_deferred("_run_explosion_log")
 	if OS.get_cmdline_args().has("--tv-cargo-salvage-log") or OS.get_cmdline_user_args().has("--tv-cargo-salvage-log"):
 		call_deferred("_run_cargo_salvage_log")
+	if OS.get_cmdline_args().has("--tv-cargo-salvage-recovery-log") or OS.get_cmdline_user_args().has("--tv-cargo-salvage-recovery-log"):
+		call_deferred("_run_cargo_salvage_recovery_log")
 	if OS.get_cmdline_args().has("--tv-secondary-weapon-log") or OS.get_cmdline_user_args().has("--tv-secondary-weapon-log"):
 		call_deferred("_run_secondary_weapon_log")
 	if OS.get_cmdline_args().has("--tv-target-selection-log") or OS.get_cmdline_user_args().has("--tv-target-selection-log"):
@@ -3124,6 +3127,44 @@ func _run_cargo_salvage_log() -> void:
 	var salvage_hud_visible := _salvage_hud_fragment() == "    Salvage: 1 pickup(s)/2 tons"
 	var salvage_scanner_visible := _salvage_scanner_blip_count() == remaining_pickups_before_save and remaining_pickups_before_save > 0
 	print("%s combatExecuted=true projectileSpawned=%s targetDestroyed=%s salvageCreated=%s salvageScooped=%s cargoBeforeDestroy=%d cargoAfterScoop=%d equipmentBefore=%d equipmentAfter=%d fullHoldCreated=%s fullHoldBlocked=%s remainingPickups=%d salvageSaveSucceeded=%s salvageSaved=%s salvageResumeVisible=%s salvageInventoryVisible=%s salvageHudVisible=%s salvageScannerVisible=%s sourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_behavior_pending status=\"%s\"" % [CARGO_SALVAGE_EVENT_LOG_PREFIX, str(projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(salvage_created).to_lower(), str(salvage_scooped).to_lower(), cargo_before_destroy, cargo_after_scoop, equipment_before_destroy, equipment_after_scoop, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), remaining_pickups_before_save, str(save_succeeded).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), str(salvage_inventory_visible).to_lower(), str(salvage_hud_visible).to_lower(), str(salvage_scanner_visible).to_lower(), status_line])
+	get_tree().quit(0)
+
+func _run_cargo_salvage_recovery_log() -> void:
+	_reset_travel_state()
+	loaded_pilot_name = "Cargo Salvage Recovery Test"
+	loaded_ship_name = "Holdover"
+	status_messages.clear()
+	cargo_salvage_pickups.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	cargo = cargo_space
+	commodity_hold["food"] = cargo_space
+	var salvage_pickup := _spawn_cargo_salvage_pickup(0, Vector2.ZERO)
+	var full_hold_created := salvage_pickup.size() > 0
+	_advance_cargo_salvage_pickups()
+	var full_hold_blocked := cargo_salvage_pickups.size() == 1 and status_messages.has("Cargo hold full; salvage remains in space")
+	var save_succeeded := _save_current_pilot_file()
+	var saved_data := _read_pilot_file(loaded_pilot_file)
+	var saved_salvage: Array = saved_data.get("cargo_salvage_pickups", [])
+	var salvage_saved := save_succeeded and saved_salvage.size() == 1
+	cargo_salvage_pickups.clear()
+	_restore_cargo_salvage_pickups(saved_salvage)
+	var salvage_resume_visible := cargo_salvage_pickups.size() == 1 and _player_inventory_lines().has("In-space salvage: 1 pickup(s), 2 tons — TV combat-salvage scaffold; Classic loot behavior pending") and _salvage_hud_fragment() == "    Salvage: 1 pickup(s)/2 tons"
+	landed = true
+	landing_tab = 1
+	selected_landing_item = 0
+	var cargo_before_sale := cargo
+	var food_before_sale := int(commodity_hold.get("food", 0))
+	_sell_selected_commodity()
+	var cargo_freed_by_sale := status_messages.has("Sold 10 tons of Food") and cargo == cargo_before_sale - EV_CLASSIC_COMMODITY_LOT_SIZE and int(commodity_hold.get("food", 0)) == food_before_sale - EV_CLASSIC_COMMODITY_LOT_SIZE
+	landed = false
+	if not cargo_salvage_pickups.is_empty():
+		pos = cargo_salvage_pickups[0].get("position", pos)
+	_advance_cargo_salvage_pickups()
+	var salvage_scooped_after_cargo_freed := cargo_salvage_pickups.is_empty() and int(commodity_hold.get("equipment", 0)) == 2 and cargo == cargo_before_sale - EV_CLASSIC_COMMODITY_LOT_SIZE + 2
+	var recovery_status_visible := status_messages.has("Recovered 2 tons of Equipment salvage (TV scaffold; Classic loot behavior pending)")
+	var salvage_recovery_complete := full_hold_blocked and salvage_saved and salvage_resume_visible and cargo_freed_by_sale and salvage_scooped_after_cargo_freed and recovery_status_visible
+	print("%s fullHoldCreated=%s fullHoldBlocked=%s salvageSaved=%s salvageResumeVisible=%s cargoFreedBySale=%s salvageScoopedAfterCargoFreed=%s recoveryStatusVisible=%s salvageRecoveryComplete=%s foodAfterSale=%d equipmentAfterRecovery=%d cargoAfterRecovery=%d sourceLabel=terminal-velocity-combat-salvage-recovery-scaffold salvageSourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_loot_cargo_recovery_pending status=\"%s\"" % [CARGO_SALVAGE_RECOVERY_EVENT_LOG_PREFIX, str(full_hold_created).to_lower(), str(full_hold_blocked).to_lower(), str(salvage_saved).to_lower(), str(salvage_resume_visible).to_lower(), str(cargo_freed_by_sale).to_lower(), str(salvage_scooped_after_cargo_freed).to_lower(), str(recovery_status_visible).to_lower(), str(salvage_recovery_complete).to_lower(), int(commodity_hold.get("food", 0)), int(commodity_hold.get("equipment", 0)), cargo, status_line])
 	get_tree().quit(0)
 
 func _run_target_selection_log() -> void:

@@ -1057,6 +1057,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-combat-reward-salvage-log', run_script)
         self.assertIn('[switch]$CombatRewardSalvageLog', windows_script)
 
+    def test_godot_cargo_salvage_recovery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_CARGO_SALVAGE_RECOVERY_EVENT',
+            '--tv-cargo-salvage-recovery-log',
+            'func _run_cargo_salvage_recovery_log() -> void:',
+            'fullHoldBlocked=%s',
+            'salvageSaved=%s',
+            'salvageResumeVisible=%s',
+            'cargoFreedBySale=%s',
+            'salvageScoopedAfterCargoFreed=%s',
+            'recoveryStatusVisible=%s',
+            'salvageRecoveryComplete=%s',
+            'sourceLabel=terminal-velocity-combat-salvage-recovery-scaffold',
+            'salvageSourceLabel=terminal-velocity-combat-salvage-scaffold',
+            'oracleStatus=classic_runtime_loot_cargo_recovery_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-cargo-salvage-recovery-log', run_script)
+        self.assertIn('[switch]$CargoSalvageRecoveryLog', windows_script)
+
     def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

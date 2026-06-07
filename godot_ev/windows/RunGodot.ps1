@@ -57,6 +57,7 @@ param(
     [switch]$ProjectileMotionLog,
     [switch]$ExplosionLog,
     [switch]$CargoSalvageLog,
+    [switch]$CargoSalvageRecoveryLog,
     [switch]$SecondaryWeaponLog,
     [switch]$TargetSelectionLog,
     [switch]$AutopilotLog,
@@ -218,6 +219,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-explosion-log
 } elseif ($CargoSalvageLog) {
     & $Godot --headless --path $Project -- --tv-cargo-salvage-log
+} elseif ($CargoSalvageRecoveryLog) {
+    & $Godot --headless --path $Project -- --tv-cargo-salvage-recovery-log
 } elseif ($SecondaryWeaponLog) {
     & $Godot --headless --path $Project -- --tv-secondary-weapon-log
 } elseif ($TargetSelectionLog) {
