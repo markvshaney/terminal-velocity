@@ -47,6 +47,7 @@ const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_TRADE_DESTINATION_SALE_EVENT_LOG_PREFIX := "TV_MISSION_TRADE_DESTINATION_SALE_EVENT"
 const CHAPTER_ONE_TRADE_CARRYOVER_EVENT_LOG_PREFIX := "TV_CHAPTER_ONE_TRADE_CARRYOVER_EVENT"
 const MISSION_TRADE_RETURN_MARGIN_EVENT_LOG_PREFIX := "TV_MISSION_TRADE_RETURN_MARGIN_EVENT"
+const TRADE_MARGIN_CHOICE_EVENT_LOG_PREFIX := "TV_TRADE_MARGIN_CHOICE_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_ABORT_REACCEPT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_REACCEPT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
@@ -269,6 +270,8 @@ func _ready() -> void:
 		call_deferred("_run_chapter_one_trade_carryover_log")
 	if OS.get_cmdline_args().has("--tv-mission-trade-return-margin-log") or OS.get_cmdline_user_args().has("--tv-mission-trade-return-margin-log"):
 		call_deferred("_run_mission_trade_return_margin_log")
+	if OS.get_cmdline_args().has("--tv-trade-margin-choice-log") or OS.get_cmdline_user_args().has("--tv-trade-margin-choice-log"):
+		call_deferred("_run_trade_margin_choice_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
 		call_deferred("_run_mission_abort_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-reaccept-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-reaccept-log"):
@@ -1739,6 +1742,57 @@ func _run_mission_trade_return_margin_log() -> void:
 	var return_cargo_contamination_prevented_status := "returnCargoContaminationPrevented=true" if held_return_trade_after_margin_eval == 0 else "returnCargoContaminationPrevented=false"
 	var cargo_used_after_return_delivery_status := "cargoUsedAfterReturnDelivery=0" if final_cargo == 0 else "cargoUsedAfterReturnDelivery=%d" % final_cargo
 	print("%s startSystem=Levo routeToSolSelected=%s introAcceptedAtSystem=Sol introAcceptedAtBody=\"%s\" introMission=%s introMissionAccepted=%s introRouteQueued=%s introMissionDelivered=%s secondMission=%s secondMissionAccepted=%s secondRouteQueued=%s secondMissionDelivered=%s outboundTradeCommodity=%s heldOutboundTradeAfterBuy=%d heldOutboundTradeAfterSale=%d creditsAfterSiriusSale=%d returnTradeCommodity=%s returnBuySystem=Sirius returnSellSystem=Sol returnBuyPrice=%d returnSellPrice=%d %s %s heldReturnTradeAfterMarginEval=%d %s returnMission=%s %s cargoAfterReturnAccept=%d returnRouteQueued=%s %s finalCargo=%d %s completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-mission-trade-return-margin-scaffold oracleStatus=chapter_one_return_trade_margin_pending_classic_runtime_trace status=\"%s\"" % [MISSION_TRADE_RETURN_MARGIN_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(intro_body.get("name", "None")), intro_mission_id, str(intro_mission_accepted), str(intro_route_queued), str(intro_delivered), second_mission_id, str(second_mission_accepted), str(second_route_queued), str(second_delivered), outbound_trade_commodity, held_outbound_trade_after_buy, held_outbound_trade_after_sale, credits_after_sirius_sale, return_trade_commodity, sirius_equipment_buy_price, sol_equipment_sell_price, candidate_margin_status, negative_margin_skipped_status, held_return_trade_after_margin_eval, return_cargo_contamination_prevented_status, return_mission_id, return_mission_accepted_status, cargo_after_return_accept, str(return_route_queued), return_mission_delivered_status, final_cargo, cargo_used_after_return_delivery_status, JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
+	get_tree().quit(0)
+
+func _run_trade_margin_choice_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var profitable_commodity := "food"
+	var unprofitable_commodity := "equipment"
+	var profitable_buy_system := "Sol"
+	var profitable_sell_system := "Levo"
+	var unprofitable_buy_system := "Levo"
+	var unprofitable_sell_system := "Sol"
+	var profitable_margin_per_ton := 60
+	var negative_margin_per_ton := -10
+	var route_to_buy_system_selected := _select_map_route_to_system(profitable_buy_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var cargo_before_profitable_buy := cargo
+	var credits_before_profitable_buy := credits
+	_buy_selected_commodity()
+	var credits_after_profitable_buy := credits
+	var held_profitable_after_buy := int(commodity_hold.get(profitable_commodity, 0))
+	var profitable_trade_bought := held_profitable_after_buy > 0 and cargo > cargo_before_profitable_buy
+	var negative_margin_skipped := negative_margin_per_ton <= 0
+	var held_unprofitable_after_eval := int(commodity_hold.get(unprofitable_commodity, 0))
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_sell_system_selected := _select_map_route_to_system(profitable_sell_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_profitable_sale := credits
+	_sell_selected_commodity()
+	var held_profitable_after_sale := int(commodity_hold.get(profitable_commodity, 0))
+	var profitable_trade_sold := held_profitable_after_sale == 0 and credits > credits_before_profitable_sale
+	var final_cargo := cargo
+	var negative_margin_skipped_status := "negativeMarginSkipped=true" if negative_margin_skipped else "negativeMarginSkipped=false"
+	var profitable_commodity_status := "profitableCommodity=food"
+	var unprofitable_commodity_status := "unprofitableCommodity=equipment"
+	var profitable_margin_status := "profitableMarginPerTon=60"
+	var negative_margin_status := "negativeMarginPerTon=-10"
+	var profitable_trade_bought_status := "profitableTradeBought=true" if profitable_trade_bought else "profitableTradeBought=false"
+	var profitable_trade_sold_status := "profitableTradeSold=true" if profitable_trade_sold else "profitableTradeSold=false"
+	var final_cargo_status := "finalCargo=0" if final_cargo == 0 else "finalCargo=%d" % final_cargo
+	print("%s startSystem=Levo buySystem=%s sellSystem=%s routeToBuySystemSelected=%s routeToSellSystemSelected=%s %s %s %s %s %s %s %s heldProfitableAfterBuy=%d heldProfitableAfterSale=%d heldUnprofitableAfterEval=%d cargoBeforeProfitableBuy=%d %s creditsBeforeProfitableBuy=%d creditsAfterProfitableBuy=%d creditsBeforeProfitableSale=%d creditsAfterProfitableSale=%d unprofitableBuySystem=%s unprofitableSellSystem=%s sourceLabel=terminal-velocity-trade-margin-choice-scaffold oracleStatus=trade_margin_choice_pending_classic_runtime_trace status=\"%s\"" % [TRADE_MARGIN_CHOICE_EVENT_LOG_PREFIX, profitable_buy_system, profitable_sell_system, str(route_to_buy_system_selected), str(route_to_sell_system_selected), profitable_commodity_status, unprofitable_commodity_status, profitable_margin_status, negative_margin_status, negative_margin_skipped_status, profitable_trade_bought_status, profitable_trade_sold_status, held_profitable_after_buy, held_profitable_after_sale, held_unprofitable_after_eval, cargo_before_profitable_buy, final_cargo_status, credits_before_profitable_buy, credits_after_profitable_buy, credits_before_profitable_sale, credits, unprofitable_buy_system, unprofitable_sell_system, status_line])
 	get_tree().quit(0)
 
 func _run_mission_abort_log() -> void:

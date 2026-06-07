@@ -2069,6 +2069,33 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-mission-trade-return-margin-log', wrapper)
         self.assertIn('Mission trade return-margin scenario contract', plan)
 
+    def test_godot_trade_margin_choice_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-trade-margin-choice-log',
+            'func _run_trade_margin_choice_log',
+            'TV_TRADE_MARGIN_CHOICE_EVENT',
+            'profitableCommodity=food',
+            'unprofitableCommodity=equipment',
+            'profitableMarginPerTon=60',
+            'negativeMarginPerTon=-10',
+            'negativeMarginSkipped=true',
+            'profitableTradeBought=true',
+            'profitableTradeSold=true',
+            'finalCargo=0',
+            'sourceLabel=terminal-velocity-trade-margin-choice-scaffold',
+            'oracleStatus=trade_margin_choice_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$TradeMarginChoiceLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-trade-margin-choice-log', run_script)
+        self.assertIn('tv-trade-margin-choice-log', wrapper)
+        self.assertIn('Trade margin choice scenario contract', plan)
+
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

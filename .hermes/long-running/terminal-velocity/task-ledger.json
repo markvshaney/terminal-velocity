@@ -1,317 +1,317 @@
 {
-  "active_gate": null,
-  "current_milestone": "contraband_clemency_funding_godot_contract pushed/verified, t_faf8918b completed, successor t_4216c4cd created for continued safe-local Terminal Velocity development.",
-  "do_not_redo": [
-    "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "tv-mission-trade-return-margin-log",
-    "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
-    "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
-    "Do not treat normal coherent non-force pushes to markvshaney/terminal-velocity as a human gate; run the standard checks, push, fetch, verify HEAD == origin/main, and continue/report afterward.",
-    "Do not micro-push every tiny slice or separate finalizer-only checkpoint; use normal non-force pushes at natural coherent bundle boundaries after standard checks, unless handoff/tool-cap/dirty-state risk makes an immediate remote checkpoint valuable.",
-    "Do not use PATH-only Godot checks; run repo-local ./run_godot.sh for TV verification.",
-    "Do not treat EV adaptations/Godot logs as Classic truth; label them as hypothesis or Terminal Velocity evidence until original/resource/manual support exists.",
-    "Do not repeat broad source mining when the next_resume_action names a bounded source-aligned slice; inspect the live backlog and choose the strongest adjacent slice.",
-    "Do not activate Strict Play or destructive original-EV tests for reusable pilots without explicit approval.",
-    "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo balanced_upgrade_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_capacity_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_bulk_margin_choice_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_bulk_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo disposable combat evidence gate help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_repair_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo Light Freighter repair/refuel mission margin help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo Light Freighter deadline repair/refuel margin help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_mission_cargo_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_purchase_trade_cargo_reservation_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_purchase_secondary_activation_loop or weapon secondary activation help/probe work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_legal_docking_recovery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_inventory_stack_recovery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo contraband_scan_trade_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo contraband_trade_funds_clemency_loop or contraband clemency-funding help/backlog work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_legal_docking_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo legal_clemency_insufficient_credit_guardrail help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_refuel_mission_margin_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo route invalid-stop recovery help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo strategy_skill_rotation_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo upgrade_readiness_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo upgrade_affordability_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo cargo_expansion_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo fuel_reserve_upgrade_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo balanced_upgrade_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_capacity_trade_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo light_freighter_deadline_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo hull_plating_repair_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo route_planner_refuel_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo mission_deadline_followup_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo mission_deadline_followup_recovery_help; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo mission_scan_failure_recovery_loop or mission scan follow-up recovery help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo mission_scan_failure_recovery_loop; local slice preserves Resource Bible-backed scan failure then completes a clearly TV-labeled safe follow-up recovery contract.",
-    "Do not redo mission_scan_failure_recovery_loop; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo mission_story_gate_godot_probe work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo mission_story_gate_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo contraband_clemency_funding_godot_contract work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo contraband_clemency_funding_godot_contract; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo weapon_credit_gate_godot_probe; pushed/verified or pending normal push in current slice history. Continue from review comments or next safe source-aligned slice.",
-    "Do not redo weapon_availability_gate_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo weapon_trade_cargo_godot_probe once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo weapon_trade_cargo_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo weapon_legal_docking_godot_probe once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-light-freighter-mission-trade-log work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-light-freighter-repair-trade-log work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-light-freighter-repair-mission-trade-log work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-light-freighter-deadline-repair-refuel-log once present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-contraband-scan-trade-log once present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-mission-alignment-gate-log once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-mission-trade-destination-sale-log if this local checkpoint is accepted; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-mission-trade-destination-sale-log; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo tv-chapter-one-trade-carryover-log once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-mission-alignment-delivery-log once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-mission-abort-reaccept-log; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo automatic-gameplay topology source pass; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo contraband_clemency_funding_godot_contract once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
-  ],
-  "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
-  "git_state": {
-    "branch": "main",
-    "dirty": false,
-    "head": "979b9a371b9149efdee07079c90d22e412b1fad7",
-    "origin_main": "979b9a371b9149efdee07079c90d22e412b1fad7",
-    "status_short": "## main...origin/main clean after push verification"
-  },
-  "heartbeat_status": {
-    "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
-    "progress_heartbeats_sent": 0,
-    "send_message_available": false,
-    "start_heartbeat_fallback": ".hermes/long-running/terminal-velocity/heartbeat.json",
-    "visibility_degraded": true
-  },
-  "implementation_of_friction_reducers": {
-    "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
-    "2_resume_prompt": "embedded in ledger.resume_prompt and docs/prompts/terminal-velocity-continuation-prompt.md",
-    "3_deterministic_first_actions": "recorded in mandatory_resume_first_actions",
-    "4_four_stop_states": "recorded in stopping_state_contract",
-    "5_cron_wakeup": "Kanban-centered continuation via terminal-velocity board plus script-only cron watchdog/coordinator 72e736287129; legacy LLM runner aafb9b3eac29 is paused/superseded",
-    "6_source_artifacts_separate_from_chat": "recorded in source_artifact_policy and existing TV docs/checklists",
-    "7_do_not_redo": "recorded in do_not_redo"
-  },
-  "kanban": {
-    "active_task_id": "t_4216c4cd",
-    "last_completed_task_id": "t_2d00271a",
-    "last_successor_task_id": "t_315b0230"
-  },
-  "last_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
-  "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording for the current local checkpoint because commits containing this checkpoint stale exact embedded HEAD values when amended.",
-  "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
-  "last_commits": [
-    "2079829 feat(godot): preserve trade cargo in mission route probe",
-    "local checkpoint: feat(godot): surface mission history in player info",
-    "local checkpoint: feat(godot): expose mission deadline trade carryover log",
-    "local checkpoint: feat(godot): expose sequential deadline failure log",
-    "local checkpoint: feat(godot): expose mission deadline last-day log",
-    "local checkpoint: feat(godot): expose mission deadline abort log",
-    "local checkpoint: feat(godot): expose mission deadline trade carryover log",
-    "local checkpoint: feat(godot): expose sequential deadline failure log",
-    "local checkpoint: feat(godot): expose mission deadline last-day log",
-    "local checkpoint: Expose mission deadline abort Godot log",
-    "local checkpoint: Expose mission auto-abort Godot log"
-  ],
-  "last_completed_slice": {
-    "id": "contraband_clemency_funding_godot_contract",
-    "kanban_task_id": "t_faf8918b",
-    "pushed_commit": "979b9a371b9149efdee07079c90d22e412b1fad7",
-    "review_required": false,
-    "source_fidelity_labels": [
-      "terminal-velocity-contraband-clemency-funding-scaffold",
-      "classic_runtime_scan_trade_clemency_cleanup_pending",
-      "terminal-velocity-inferred-clemency-scaffold",
-      "approved_inference_pending_ev_classic_confirmation"
+    "active_gate": null,
+    "current_milestone": "contraband_clemency_funding_godot_contract pushed/verified, t_faf8918b completed, successor t_4216c4cd created for continued safe-local Terminal Velocity development.",
+    "do_not_redo": [
+        "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+        "tv-mission-trade-return-margin-log",
+        "Do not reconstruct continuation state from chat when this ledger and events.jsonl are available; read them first.",
+        "Do not stop merely because a safe local slice completed; checkpoint and continue unless a real gate/cap/blocker/no-safe-slice is proven.",
+        "Do not treat normal coherent non-force pushes to markvshaney/terminal-velocity as a human gate; run the standard checks, push, fetch, verify HEAD == origin/main, and continue/report afterward.",
+        "Do not micro-push every tiny slice or separate finalizer-only checkpoint; use normal non-force pushes at natural coherent bundle boundaries after standard checks, unless handoff/tool-cap/dirty-state risk makes an immediate remote checkpoint valuable.",
+        "Do not use PATH-only Godot checks; run repo-local ./run_godot.sh for TV verification.",
+        "Do not treat EV adaptations/Godot logs as Classic truth; label them as hypothesis or Terminal Velocity evidence until original/resource/manual support exists.",
+        "Do not repeat broad source mining when the next_resume_action names a bounded source-aligned slice; inspect the live backlog and choose the strongest adjacent slice.",
+        "Do not activate Strict Play or destructive original-EV tests for reusable pilots without explicit approval.",
+        "Do not redo fuel_reserve_upgrade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo hull_plating_repair_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo balanced_upgrade_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_capacity_trade_loop work if already present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_bulk_margin_choice_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_bulk_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo disposable combat evidence gate help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_repair_refuel_mission_margin_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo Light Freighter repair/refuel mission margin help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo Light Freighter deadline repair/refuel margin help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo weapon_mission_cargo_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo weapon_purchase_trade_cargo_reservation_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo weapon_purchase_secondary_activation_loop or weapon secondary activation help/probe work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo weapon_legal_docking_recovery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo weapon_inventory_stack_recovery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo contraband_scan_trade_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo contraband_trade_funds_clemency_loop or contraband clemency-funding help/backlog work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo weapon_legal_docking_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo legal_clemency_insufficient_credit_guardrail help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_refuel_mission_margin_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo route invalid-stop recovery help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo strategy_skill_rotation_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo upgrade_readiness_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo upgrade_affordability_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo cargo_expansion_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo fuel_reserve_upgrade_recovery_help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo balanced_upgrade_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_capacity_trade_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo light_freighter_deadline_refuel_delivery_loop work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo hull_plating_repair_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo route_planner_refuel_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo mission_deadline_followup_recovery_help work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo mission_deadline_followup_recovery_help; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo mission_scan_failure_recovery_loop or mission scan follow-up recovery help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo mission_scan_failure_recovery_loop; local slice preserves Resource Bible-backed scan failure then completes a clearly TV-labeled safe follow-up recovery contract.",
+        "Do not redo mission_scan_failure_recovery_loop; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo mission_story_gate_godot_probe work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo mission_story_gate_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo contraband_clemency_funding_godot_contract work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo contraband_clemency_funding_godot_contract; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo weapon_credit_gate_godot_probe; pushed/verified or pending normal push in current slice history. Continue from review comments or next safe source-aligned slice.",
+        "Do not redo weapon_availability_gate_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo weapon_trade_cargo_godot_probe once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo weapon_trade_cargo_godot_probe; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo weapon_legal_docking_godot_probe once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-light-freighter-mission-trade-log work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-light-freighter-repair-trade-log work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-light-freighter-repair-mission-trade-log work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-light-freighter-deadline-repair-refuel-log once present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-contraband-scan-trade-log once present and verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-mission-alignment-gate-log once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-mission-trade-destination-sale-log if this local checkpoint is accepted; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-mission-trade-destination-sale-log; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo tv-chapter-one-trade-carryover-log once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-mission-alignment-delivery-log once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+        "Do not redo tv-mission-abort-reaccept-log; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo automatic-gameplay topology source pass; pushed and verified in normal TV repo path with HEAD == origin/main.",
+        "Do not redo contraband_clemency_funding_godot_contract once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
     ],
-    "summary": "Godot contraband clemency-funding probe now exposes explicit clemency source/oracle labels while preserving the pending-Classic scan/trade cleanup boundary.",
-    "verification": [
-      "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_clemency_funding_log_contract -v -> FAIL missing clemencyOracleStatus field",
-      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_clemency_funding_log_contract -v -> OK",
-      "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_contraband_trade_funds_clemency_loop_sells_preserved_cargo_before_clemency -v -> OK",
-      "./run_godot.sh tv-contraband-clemency-funding-log -> emitted TV_CONTRABAND_CLEMENCY_FUNDING_EVENT with clemencySourceLabel/clemencyOracleStatus fields; non-fatal ObjectDB leak warning remains",
-      "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 233 tests OK",
-      "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
-      "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
-      "git diff --check -> OK",
-      "sensitive_added_hits=0",
-      "python3 -m json.tool task-ledger.json and events JSONL parse -> OK",
-      "git fetch origin; HEAD d4be081 == origin/main d4be081 before local commit",
-      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_clemency_funding_log_contract -v -> OK",
-      "./run_godot.sh tv-contraband-clemency-funding-log -> emitted expected TV_CONTRABAND_CLEMENCY_FUNDING_EVENT fields",
-      "git diff --check origin/main..HEAD -> OK before push",
-      "sensitive_added_hits=0",
-      "git push origin main -> OK",
-      "git fetch origin -> OK",
-      "HEAD == origin/main -> true at 979b9a3"
-    ]
-  },
-  "last_process_checkpoint": "tv-mission-abort-reaccept-log pushed and verified; normal stale review gate resolved locally.",
-  "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
-  "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_clemency_funding_log_contract -v -> OK",
-    "./run_godot.sh tv-contraband-clemency-funding-log -> emitted expected TV_CONTRABAND_CLEMENCY_FUNDING_EVENT fields",
-    "git diff --check origin/main..HEAD -> OK before push",
-    "sensitive_added_hits=0",
-    "git push origin main -> OK",
-    "git fetch origin -> OK",
-    "HEAD == origin/main -> true at 979b9a3"
-  ],
-  "local_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
-  "mandatory_resume_first_actions": [
-    "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
-    "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
-    "Read .hermes/long-running/terminal-velocity/task-ledger.json and the tail of events.jsonl before choosing work.",
-    "Read docs/prompts/terminal-velocity-continuation-prompt.md and any backlog/docs named by next_resume_action.",
-    "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
-    "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
-  ],
-  "next_resume_action": "Dispatcher should claim t_4216c4cd and continue the next source-aligned safe local gameplay/fidelity slice from current origin/main; do not redo contraband_clemency_funding_godot_contract.",
-  "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
-  "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
-  "repo": {
-    "ahead": "inspect with git status --short --branch",
-    "behind": "inspect with git status --short --branch",
-    "branch": "main",
-    "dirty": false,
-    "head": "979b9a371b9149efdee07079c90d22e412b1fad7",
-    "origin_main": "979b9a371b9149efdee07079c90d22e412b1fad7",
-    "status_short": "## main...origin/main clean after push verification"
-  },
-  "repo_state": {
-    "ahead": "0",
-    "behind": "0",
-    "branch": "main",
-    "dirty": false
-  },
-  "required_skill_candidates": [
-    "source-and-fidelity",
-    "artifact-governance",
-    "bounded-autoresearch",
-    "game-prototyping",
-    "ev-terminal-velocity-play",
-    "ev-classic-basilisk-observation",
-    "terminal-velocity-provenance"
-  ],
-  "required_start_artifacts": [
-    "docs/prompts/terminal-velocity-continuation-prompt.md",
-    "docs/checklists/agent-continuation-process-failure-remediation.md",
-    "docs/checklists/long-running-game-development-harness-audit.md"
-  ],
-  "resume_prompt": "Continue Terminal Velocity from Kanban task t_b74bee45: read ledger/events and continuation prompt, inspect live repo/backlog, implement the next safe source-aligned vertical slice, verify, checkpoint, and leave review/integrator handoff if needed.",
-  "runner": {
-    "active_task_id": "t_4216c4cd",
-    "assignee": "terminal-velocity",
-    "board": "terminal-velocity",
-    "cron_role": "script-only watchdog/coordinator; no repo implementation",
-    "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
-    "git_policy_rules": [
-      "Workers edit, test, and commit locally; never push.",
-      "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD."
-    ],
-    "integrator_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
-    "kind": "kanban",
-    "last_completed_task_id": "t_a51b8e49",
-    "legacy_llm_runner_job_id": "aafb9b3eac29",
-    "legacy_llm_runner_state": "paused/superseded; do not resume while Kanban owns implementation",
-    "normal_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
-    "one_writer_rule": "Only the Kanban terminal-velocity worker may edit /home/bh/workspaces/loki/terminal-velocity for continuation slices; cron may inspect/dispatch/alert only.",
-    "side_effect_boundaries": [
-      "Rule list entries must be concise and nonredundant; currently defined rules are in git_policy_rules."
-    ],
-    "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
-    "status": "ready_to_dispatch_successor",
-    "successor_kanban_task_id": "t_315b0230",
-    "superseded_jobs": [
-      "f31074cbec03",
-      "e12f13d4b75e",
-      "aafb9b3eac29"
-    ],
-    "superseded_kanban_tasks": [
-      "t_f853333b",
-      "t_5d681084",
-      "t_6aedca1b"
-    ],
-    "updated_at": "2026-06-06T23:49:28.256182+00:00",
-    "watchdog_job_id": "72e736287129",
-    "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
-    "watchdog_schedule": "every 5m",
-    "worker_forced_skills": [
-      "long-running-task-harness",
-      "source-and-fidelity",
-      "artifact-governance"
-    ],
-    "worker_git_policy": "Workers edit, test, and commit locally; never push.",
-    "workspace": "/home/bh/workspaces/loki/terminal-velocity"
-  },
-  "safe_backlog": [
-    "balanced_upgrade_recovery_help verified pending review/local commit: F10 help surface now exposes hasBalancedUpgradeRecoveryHelp=true for existing balanced_upgrade_trade_loop; sourceLabel=terminal-velocity-balanced-upgrade-trade-scaffold; oracleStatus=balanced_upgrade_budget_pending_classic_runtime_trace; help_surface_pending_playtest.",
-    {
-      "description": "Review/stage/commit the Godot service-provisioning probe bundle after verification; do not start unrelated behavior if this slice is still dirty/unreviewed.",
-      "gate": "normal coherent non-force push remains allowed after standard status/remotes/branch/sensitive-value checks; human review may be required by Kanban policy before marking code done",
-      "id": "stabilize-service-provisioning-slice"
+    "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
+    "git_state": {
+        "branch": "main",
+        "dirty": false,
+        "head": "979b9a371b9149efdee07079c90d22e412b1fad7",
+        "origin_main": "979b9a371b9149efdee07079c90d22e412b1fad7",
+        "status_short": "## main...origin/main clean after push verification"
     },
-    {
-      "description": "Each run must inspect the live backlog/repo and implement the strongest safe local Terminal Velocity gameplay/fidelity slice with tests/probes/docs before considering process-only work.",
-      "gate": "safe local code/docs/tests plus coherent normal non-force push to markvshaney/terminal-velocity are approved after standard checks; destructive original-EV actions and actual public-state changes beyond normal push remain gated",
-      "id": "next-source-aligned-playable-slice"
+    "heartbeat_status": {
+        "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
+        "progress_heartbeats_sent": 0,
+        "send_message_available": false,
+        "start_heartbeat_fallback": ".hermes/long-running/terminal-velocity/heartbeat.json",
+        "visibility_degraded": true
     },
-    {
-      "description": "Audit which Loki Game Terminal Velocity skills should be shared/promoted or explicitly loaded by the chosen runner profile.",
-      "gate": "broad profile/skill propagation remains approval-gated; read-only audit is safe",
-      "id": "skill-availability-audit"
+    "implementation_of_friction_reducers": {
+        "1_project_local_ledger": "implemented at .hermes/long-running/terminal-velocity/task-ledger.json with append-only events at events.jsonl",
+        "2_resume_prompt": "embedded in ledger.resume_prompt and docs/prompts/terminal-velocity-continuation-prompt.md",
+        "3_deterministic_first_actions": "recorded in mandatory_resume_first_actions",
+        "4_four_stop_states": "recorded in stopping_state_contract",
+        "5_cron_wakeup": "Kanban-centered continuation via terminal-velocity board plus script-only cron watchdog/coordinator 72e736287129; legacy LLM runner aafb9b3eac29 is paused/superseded",
+        "6_source_artifacts_separate_from_chat": "recorded in source_artifact_policy and existing TV docs/checklists",
+        "7_do_not_redo": "recorded in do_not_redo"
     },
-    {
-      "description": "Draft a self-contained cron/Kanban runner prompt that reads this ledger, performs one safe local slice, verifies, checkpoints, and records gates.",
-      "gate": "scheduling/activation approval required",
-      "id": "runner-prompt-draft"
+    "kanban": {
+        "active_task_id": "t_4216c4cd",
+        "last_completed_task_id": "t_2d00271a",
+        "last_successor_task_id": "t_315b0230"
     },
-    {
-      "description": "Inspect Hermes source/docs for the implied long_task tool and decide whether to implement/expose it or correct misleading docs.",
-      "gate": "Hermes code changes safe-local until push/restart/supervision",
-      "id": "long-task-tool-triage"
-    },
-    "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties.",
-    "Compare weapon_purchase_mission_cargo_reservation_loop against exact EV Classic weapon purchase and mission cargo UI/runtime evidence when available.",
-    "Compare weapon_purchase_trade_cargo_reservation_loop against exact EV Classic weapon purchase and held trade-cargo UI/runtime evidence when available."
-  ],
-  "schema_version": 1,
-  "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, sensitive-value/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
-  "source_artifact_policy": {
-    "local_only_boundary": "Raw proprietary screenshots/assets stay local-only unless explicitly approved.",
-    "primary_surfaces": [
-      "docs/research/original-ev-classic-runtime-observations.md",
-      "docs/checklists/ev-classic-behavior-baseline-checklist.md",
-      "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
-      "docs/research/source-aligned-game-development-method.md"
+    "last_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
+    "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording for the current local checkpoint because commits containing this checkpoint stale exact embedded HEAD values when amended.",
+    "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
+    "last_commits": [
+        "2079829 feat(godot): preserve trade cargo in mission route probe",
+        "local checkpoint: feat(godot): surface mission history in player info",
+        "local checkpoint: feat(godot): expose mission deadline trade carryover log",
+        "local checkpoint: feat(godot): expose sequential deadline failure log",
+        "local checkpoint: feat(godot): expose mission deadline last-day log",
+        "local checkpoint: feat(godot): expose mission deadline abort log",
+        "local checkpoint: feat(godot): expose mission deadline trade carryover log",
+        "local checkpoint: feat(godot): expose sequential deadline failure log",
+        "local checkpoint: feat(godot): expose mission deadline last-day log",
+        "local checkpoint: Expose mission deadline abort Godot log",
+        "local checkpoint: Expose mission auto-abort Godot log"
     ],
-    "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
-  },
-  "status": "running",
-  "stopping_state_contract": {
-    "allowed_terminal_report_states": [
-      "waiting_gate",
-      "checkpointed_near_cap",
-      "blocked",
-      "complete"
+    "last_completed_slice": {
+        "id": "contraband_clemency_funding_godot_contract",
+        "kanban_task_id": "t_faf8918b",
+        "pushed_commit": "979b9a371b9149efdee07079c90d22e412b1fad7",
+        "review_required": false,
+        "source_fidelity_labels": [
+            "terminal-velocity-contraband-clemency-funding-scaffold",
+            "classic_runtime_scan_trade_clemency_cleanup_pending",
+            "terminal-velocity-inferred-clemency-scaffold",
+            "approved_inference_pending_ev_classic_confirmation"
+        ],
+        "summary": "Godot contraband clemency-funding probe now exposes explicit clemency source/oracle labels while preserving the pending-Classic scan/trade cleanup boundary.",
+        "verification": [
+            "RED: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_clemency_funding_log_contract -v -> FAIL missing clemencyOracleStatus field",
+            "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_clemency_funding_log_contract -v -> OK",
+            "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_contraband_trade_funds_clemency_loop_sells_preserved_cargo_before_clemency -v -> OK",
+            "./run_godot.sh tv-contraband-clemency-funding-log -> emitted TV_CONTRABAND_CLEMENCY_FUNDING_EVENT with clemencySourceLabel/clemencyOracleStatus fields; non-fatal ObjectDB leak warning remains",
+            "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 233 tests OK",
+            "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
+            "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
+            "git diff --check -> OK",
+            "sensitive_added_hits=0",
+            "python3 -m json.tool task-ledger.json and events JSONL parse -> OK",
+            "git fetch origin; HEAD d4be081 == origin/main d4be081 before local commit",
+            "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_clemency_funding_log_contract -v -> OK",
+            "./run_godot.sh tv-contraband-clemency-funding-log -> emitted expected TV_CONTRABAND_CLEMENCY_FUNDING_EVENT fields",
+            "git diff --check origin/main..HEAD -> OK before push",
+            "sensitive_added_hits=0",
+            "git push origin main -> OK",
+            "git fetch origin -> OK",
+            "HEAD == origin/main -> true at 979b9a3"
+        ]
+    },
+    "last_process_checkpoint": "tv-mission-abort-reaccept-log pushed and verified; normal stale review gate resolved locally.",
+    "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
+    "last_verified_commands": [
+        "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_trade_margin_choice_log_contract -v -> OK",
+        "./run_godot.sh tv-trade-margin-choice-log -> TV_TRADE_MARGIN_CHOICE_EVENT with profitableTradeBought=true profitableTradeSold=true negativeMarginSkipped=true finalCargo=0",
+        "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (234 tests)",
+        "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
+        "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
+        "git diff --check -> OK",
+        "sensitive_added_hits=0"
     ],
-    "running_note": "While cron is actively scheduled, ledger status may be running; any human-visible stop/checkpoint must map to one of the four report states above.",
-    "state_meanings": {
-      "blocked": "Specific local/external blocker prevents all safe local slices; evidence is recorded.",
-      "checkpointed_near_cap": "Tool/time/context budget is near cap; checkpoint and next_resume_action are recorded for the next tick.",
-      "complete": "Done condition is verified or user explicitly stops/changes target.",
-      "waiting_gate": "Approval or external event is needed; withheld action and resume condition must be recorded."
-    }
-  },
-  "task_id": "terminal-velocity-game-development",
-  "tool_caps_policy": {
-    "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
-    "rule": "Tool/time/context caps are per-run budgets, not task completion."
-  },
-  "updated_at": "2026-06-07T00:48:14.543392Z"
+    "local_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
+    "mandatory_resume_first_actions": [
+        "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
+        "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
+        "Read .hermes/long-running/terminal-velocity/task-ledger.json and the tail of events.jsonl before choosing work.",
+        "Read docs/prompts/terminal-velocity-continuation-prompt.md and any backlog/docs named by next_resume_action.",
+        "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
+        "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
+    ],
+    "next_resume_action": "Push tv-trade-margin-choice-log normally, fetch/verify HEAD == origin/main, complete Kanban task t_4216c4cd, and create/dispatch exactly one successor continuation task.",
+    "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
+    "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
+    "repo": {
+        "ahead": "inspect with git status --short --branch",
+        "behind": "inspect with git status --short --branch",
+        "branch": "main",
+        "dirty": false,
+        "head": "979b9a371b9149efdee07079c90d22e412b1fad7",
+        "origin_main": "979b9a371b9149efdee07079c90d22e412b1fad7",
+        "status_short": "## main...origin/main clean after push verification"
+    },
+    "repo_state": {
+        "ahead": "0",
+        "behind": "0",
+        "branch": "main",
+        "dirty": false
+    },
+    "required_skill_candidates": [
+        "source-and-fidelity",
+        "artifact-governance",
+        "bounded-autoresearch",
+        "game-prototyping",
+        "ev-terminal-velocity-play",
+        "ev-classic-basilisk-observation",
+        "terminal-velocity-provenance"
+    ],
+    "required_start_artifacts": [
+        "docs/prompts/terminal-velocity-continuation-prompt.md",
+        "docs/checklists/agent-continuation-process-failure-remediation.md",
+        "docs/checklists/long-running-game-development-harness-audit.md"
+    ],
+    "resume_prompt": "Continue Terminal Velocity from Kanban task t_b74bee45: read ledger/events and continuation prompt, inspect live repo/backlog, implement the next safe source-aligned vertical slice, verify, checkpoint, and leave review/integrator handoff if needed.",
+    "runner": {
+        "active_task_id": "t_4216c4cd",
+        "assignee": "terminal-velocity",
+        "board": "terminal-velocity",
+        "cron_role": "script-only watchdog/coordinator; no repo implementation",
+        "gate_wait_state": "scheduled rather than blocked because the gateway dispatcher promoted blocked gate cards; scheduled prevents accidental dispatch until human unblock/promote",
+        "git_policy_rules": [
+            "Workers edit, test, and commit locally; never push.",
+            "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD."
+        ],
+        "integrator_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
+        "kind": "kanban",
+        "last_completed_task_id": "t_a51b8e49",
+        "legacy_llm_runner_job_id": "aafb9b3eac29",
+        "legacy_llm_runner_state": "paused/superseded; do not resume while Kanban owns implementation",
+        "normal_push_policy": "loki-game pushes when a trigger fires and the checklist passes: triggers are 10-25 local commits, feature boundary, reset/handoff risk, long idle clean commits, or explicit user request; checklist is status/remotes, commit count, changed-file/sensitive-value review, light verification, non-force push, fetch, verify origin/main equals HEAD.",
+        "one_writer_rule": "Only the Kanban terminal-velocity worker may edit /home/bh/workspaces/loki/terminal-velocity for continuation slices; cron may inspect/dispatch/alert only.",
+        "side_effect_boundaries": [
+            "Rule list entries must be concise and nonredundant; currently defined rules are in git_policy_rules."
+        ],
+        "skill_availability_note": "terminal-velocity profile lacks ev-terminal-velocity-play; do not force-load missing EV-specific skills until profile skill propagation is explicitly handled",
+        "status": "ready_to_dispatch_successor",
+        "successor_kanban_task_id": "t_315b0230",
+        "superseded_jobs": [
+            "f31074cbec03",
+            "e12f13d4b75e",
+            "aafb9b3eac29"
+        ],
+        "superseded_kanban_tasks": [
+            "t_f853333b",
+            "t_5d681084",
+            "t_6aedca1b"
+        ],
+        "updated_at": "2026-06-06T23:49:28.256182+00:00",
+        "watchdog_job_id": "72e736287129",
+        "watchdog_name": "Terminal Velocity Kanban watchdog/coordinator",
+        "watchdog_schedule": "every 5m",
+        "worker_forced_skills": [
+            "long-running-task-harness",
+            "source-and-fidelity",
+            "artifact-governance"
+        ],
+        "worker_git_policy": "Workers edit, test, and commit locally; never push.",
+        "workspace": "/home/bh/workspaces/loki/terminal-velocity"
+    },
+    "safe_backlog": [
+        "balanced_upgrade_recovery_help verified pending review/local commit: F10 help surface now exposes hasBalancedUpgradeRecoveryHelp=true for existing balanced_upgrade_trade_loop; sourceLabel=terminal-velocity-balanced-upgrade-trade-scaffold; oracleStatus=balanced_upgrade_budget_pending_classic_runtime_trace; help_surface_pending_playtest.",
+        {
+            "description": "Review/stage/commit the Godot service-provisioning probe bundle after verification; do not start unrelated behavior if this slice is still dirty/unreviewed.",
+            "gate": "normal coherent non-force push remains allowed after standard status/remotes/branch/sensitive-value checks; human review may be required by Kanban policy before marking code done",
+            "id": "stabilize-service-provisioning-slice"
+        },
+        {
+            "description": "Each run must inspect the live backlog/repo and implement the strongest safe local Terminal Velocity gameplay/fidelity slice with tests/probes/docs before considering process-only work.",
+            "gate": "safe local code/docs/tests plus coherent normal non-force push to markvshaney/terminal-velocity are approved after standard checks; destructive original-EV actions and actual public-state changes beyond normal push remain gated",
+            "id": "next-source-aligned-playable-slice"
+        },
+        {
+            "description": "Audit which Loki Game Terminal Velocity skills should be shared/promoted or explicitly loaded by the chosen runner profile.",
+            "gate": "broad profile/skill propagation remains approval-gated; read-only audit is safe",
+            "id": "skill-availability-audit"
+        },
+        {
+            "description": "Draft a self-contained cron/Kanban runner prompt that reads this ledger, performs one safe local slice, verifies, checkpoints, and records gates.",
+            "gate": "scheduling/activation approval required",
+            "id": "runner-prompt-draft"
+        },
+        {
+            "description": "Inspect Hermes source/docs for the implied long_task tool and decide whether to implement/expose it or correct misleading docs.",
+            "gate": "Hermes code changes safe-local until push/restart/supervision",
+            "id": "long-task-tool-triage"
+        },
+        "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties.",
+        "Compare weapon_purchase_mission_cargo_reservation_loop against exact EV Classic weapon purchase and mission cargo UI/runtime evidence when available.",
+        "Compare weapon_purchase_trade_cargo_reservation_loop against exact EV Classic weapon purchase and held trade-cargo UI/runtime evidence when available."
+    ],
+    "schema_version": 1,
+    "scope": "Continuous autonomous safe-local Terminal Velocity development in /home/bh/workspaces/loki/terminal-velocity; coherent normal non-force pushes to markvshaney/terminal-velocity are preapproved after status/remotes/branch inspection, targeted verification, sensitive-value/unrelated-file check, push, fetch, and origin/main HEAD verification; reasonable bundling is required to avoid push spam. Force-push/rewrite, deletion, merge/release/settings/public-state changes beyond normal push, credentials/accounts, destructive/social actions, non-TV repos, and unsafe dirty state remain gated.",
+    "source_artifact_policy": {
+        "local_only_boundary": "Raw proprietary screenshots/assets stay local-only unless explicitly approved.",
+        "primary_surfaces": [
+            "docs/research/original-ev-classic-runtime-observations.md",
+            "docs/checklists/ev-classic-behavior-baseline-checklist.md",
+            "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+            "docs/research/source-aligned-game-development-method.md"
+        ],
+        "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
+    },
+    "status": "running",
+    "stopping_state_contract": {
+        "allowed_terminal_report_states": [
+            "waiting_gate",
+            "checkpointed_near_cap",
+            "blocked",
+            "complete"
+        ],
+        "running_note": "While cron is actively scheduled, ledger status may be running; any human-visible stop/checkpoint must map to one of the four report states above.",
+        "state_meanings": {
+            "blocked": "Specific local/external blocker prevents all safe local slices; evidence is recorded.",
+            "checkpointed_near_cap": "Tool/time/context budget is near cap; checkpoint and next_resume_action are recorded for the next tick.",
+            "complete": "Done condition is verified or user explicitly stops/changes target.",
+            "waiting_gate": "Approval or external event is needed; withheld action and resume condition must be recorded."
+        }
+    },
+    "task_id": "terminal-velocity-game-development",
+    "tool_caps_policy": {
+        "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
+        "rule": "Tool/time/context caps are per-run budgets, not task completion."
+    },
+    "updated_at": "2026-06-07T01:00:53Z"
 }

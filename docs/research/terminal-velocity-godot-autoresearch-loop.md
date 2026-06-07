@@ -376,6 +376,14 @@ Mission trade return-margin scenario contract:
 - `sourceLabel=terminal-velocity-mission-trade-return-margin-scaffold`; `oracleStatus=chapter_one_return_trade_margin_pending_classic_runtime_trace`.
 - This is a Terminal Velocity return-leg trade-margin scaffold; exact EV Classic story-chain, mixed mission/trade UI, and market behavior remain pending Classic runtime evidence.
 
+Trade margin choice scenario contract:
+
+- `RunGodot.ps1 -TradeMarginChoiceLog` / `--tv-trade-margin-choice-log`
+- Exercises the Terminal Velocity trade-margin choice scaffold where a pilot compares a profitable Food option with an Equipment option that has a negative return-leg margin, buys/sells the profitable cargo, and leaves the unprofitable cargo out of the hold.
+- Logs `profitableCommodity=food`, `unprofitableCommodity=equipment`, `profitableMarginPerTon=60`, `negativeMarginPerTon=-10`, `negativeMarginSkipped=true`, `profitableTradeBought=true`, `profitableTradeSold=true`, and `finalCargo=0` plus route, cargo, and credit counters.
+- `sourceLabel=terminal-velocity-trade-margin-choice-scaffold`; `oracleStatus=trade_margin_choice_pending_classic_runtime_trace`.
+- This is a Terminal Velocity scaffold for deterministic autoresearch coverage; exact EV Classic commodity-choice UI, price reasoning, and player-facing margin prompts remain pending Classic runtime evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`
