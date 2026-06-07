@@ -40,6 +40,7 @@ const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const LEVO_SAME_PORT_SELLBACK_EVENT_LOG_PREFIX := "TV_LEVO_SAME_PORT_SELLBACK_EVENT"
 const COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_BUY_BLOCKED_RECOVERY_EVENT"
+const COMMODITY_PARTIAL_HOLD_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_PARTIAL_HOLD_RECOVERY_EVENT"
 const COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_SELL_BLOCKED_RECOVERY_EVENT"
 const COMMODITY_UNAVAILABLE_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_UNAVAILABLE_RECOVERY_EVENT"
 const CROSS_MARKET_TRADE_EVENT_LOG_PREFIX := "TV_CROSS_MARKET_TRADE_EVENT"
@@ -279,6 +280,8 @@ func _ready() -> void:
 		call_deferred("_run_levo_same_port_sellback_log")
 	if OS.get_cmdline_args().has("--tv-commodity-buy-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-buy-blocked-recovery-log"):
 		call_deferred("_run_commodity_buy_blocked_recovery_log")
+	if OS.get_cmdline_args().has("--tv-commodity-partial-hold-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-partial-hold-recovery-log"):
+		call_deferred("_run_commodity_partial_hold_recovery_log")
 	if OS.get_cmdline_args().has("--tv-commodity-sell-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-sell-blocked-recovery-log"):
 		call_deferred("_run_commodity_sell_blocked_recovery_log")
 	if OS.get_cmdline_args().has("--tv-commodity-unavailable-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-unavailable-recovery-log"):
@@ -1352,6 +1355,36 @@ func _run_commodity_buy_blocked_recovery_log() -> void:
 	var buy_recovered_status := "buyRecoveredCargo=true" if buy_recovered_cargo else "buyRecoveredCargo=false"
 	var final_cargo_status := "finalCargo=10" if cargo == EV_CLASSIC_COMMODITY_LOT_SIZE else "finalCargo=%d" % cargo
 	print("%s system=%s commodity=%s buyPrice=%d %s %s %s %s %s creditsBefore=%d creditsAfterBuy=%d cargoBefore=%d heldAfterBuy=%d sourceLabel=terminal-velocity-commodity-buy-blocked-recovery-scaffold oracleStatus=commodity_buy_blocked_recovery_pending_classic_runtime_trace inSpaceStatus=\"%s\" creditStatus=\"%s\" fullHoldStatus=\"%s\" status=\"%s\"" % [COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, in_space_blocked_status, insufficient_credits_status, full_hold_status_field, buy_recovered_status, final_cargo_status, credits_before, credits_after_buy, cargo_before, held_after_buy, in_space_status, insufficient_credit_status, full_hold_block_status, status_line])
+	get_tree().quit(0)
+
+func _run_commodity_partial_hold_recovery_log() -> void:
+	_reset_travel_state()
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var commodities: Array = economy.get("commodities", [])
+	var commodity: Dictionary = commodities[0] if not commodities.is_empty() else {}
+	var commodity_id := str(commodity.get("id", "none"))
+	var commodity_name := str(commodity.get("name", commodity_id))
+	var buy_price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("buy", 0))
+	var credits_before := credits
+	var partial_cargo_before := cargo_space - int(EV_CLASSIC_COMMODITY_LOT_SIZE / 2)
+	cargo = partial_cargo_before
+	commodity_hold = {"equipment": partial_cargo_before}
+	_buy_selected_commodity()
+	var partial_status := status_line
+	var partial_hold_blocked := cargo == partial_cargo_before and int(commodity_hold.get(commodity_id, 0)) == 0 and partial_status == "Cargo hold needs %d tons free" % EV_CLASSIC_COMMODITY_LOT_SIZE
+	cargo = 0
+	commodity_hold = {}
+	credits = credits_before
+	_buy_selected_commodity()
+	var credits_after_buy := credits
+	var held_after_buy := int(commodity_hold.get(commodity_id, 0))
+	var buy_recovered_cargo := buy_price > 0 and held_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo == EV_CLASSIC_COMMODITY_LOT_SIZE and credits_after_buy == credits_before - (buy_price * EV_CLASSIC_COMMODITY_LOT_SIZE) and status_messages.has("Bought %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	var partial_block_status := "partialHoldBuyBlocked=true" if partial_hold_blocked else "partialHoldBuyBlocked=false"
+	var buy_recovered_status := "buyRecoveredAfterFreeingHold=true" if buy_recovered_cargo else "buyRecoveredAfterFreeingHold=false"
+	var final_cargo_status := "finalCargo=10" if cargo == EV_CLASSIC_COMMODITY_LOT_SIZE else "finalCargo=%d" % cargo
+	print("%s system=%s commodity=%s buyPrice=%d freeSpaceBeforeBlock=%d lotSize=%d %s %s %s creditsBefore=%d creditsAfterBuy=%d heldAfterBuy=%d sourceLabel=terminal-velocity-commodity-partial-hold-recovery-scaffold oracleStatus=commodity_partial_hold_recovery_pending_classic_runtime_trace blockedStatus=\"%s\" status=\"%s\"" % [COMMODITY_PARTIAL_HOLD_RECOVERY_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, cargo_space - partial_cargo_before, EV_CLASSIC_COMMODITY_LOT_SIZE, partial_block_status, buy_recovered_status, final_cargo_status, credits_before, credits_after_buy, held_after_buy, partial_status, status_line])
 	get_tree().quit(0)
 
 func _run_commodity_sell_blocked_recovery_log() -> void:
@@ -9487,15 +9520,15 @@ func _buy_selected_commodity() -> void:
 	if cargo >= cargo_space:
 		_set_status("Cargo hold full")
 		return
-	if credits < price:
+	var total_price := price * EV_CLASSIC_COMMODITY_LOT_SIZE
+	if credits < total_price:
 		_set_status("Not enough credits")
 		return
 	var free_space := _cargo_available_tons()
-	var affordable_tons := int(floor(float(credits) / float(price)))
-	var tons: int = min(EV_CLASSIC_COMMODITY_LOT_SIZE, free_space, affordable_tons)
-	if tons <= 0:
-		_set_status("Not enough credits")
+	if free_space < EV_CLASSIC_COMMODITY_LOT_SIZE:
+		_set_status("Cargo hold needs %d tons free" % EV_CLASSIC_COMMODITY_LOT_SIZE)
 		return
+	var tons: int = EV_CLASSIC_COMMODITY_LOT_SIZE
 	credits -= price * tons
 	cargo += tons
 	commodity_hold[commodity_id] = int(commodity_hold.get(commodity_id, 0)) + tons

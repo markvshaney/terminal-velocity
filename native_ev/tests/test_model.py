@@ -4193,7 +4193,9 @@ class NativeEvModelTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
         self.assertIn('const EV_CLASSIC_COMMODITY_LOT_SIZE := 10', main_script)
-        self.assertIn('min(EV_CLASSIC_COMMODITY_LOT_SIZE, free_space, affordable_tons)', main_script)
+        self.assertIn('var total_price := price * EV_CLASSIC_COMMODITY_LOT_SIZE', main_script)
+        self.assertIn('if free_space < EV_CLASSIC_COMMODITY_LOT_SIZE:', main_script)
+        self.assertIn('var tons: int = EV_CLASSIC_COMMODITY_LOT_SIZE', main_script)
         self.assertIn('price * tons', main_script)
         self.assertIn('Bought %d tons of %s', main_script)
         self.assertIn('Sold %d tons of %s', main_script)
@@ -4311,6 +4313,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$CommodityBuyBlockedRecoveryLog', run_script)
         self.assertIn('--headless --path $Project -- --tv-commodity-buy-blocked-recovery-log', run_script)
         self.assertIn('tv-commodity-buy-blocked-recovery-log', launcher)
+
+    def test_godot_commodity_partial_hold_recovery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            'const COMMODITY_PARTIAL_HOLD_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_PARTIAL_HOLD_RECOVERY_EVENT"',
+            '--tv-commodity-partial-hold-recovery-log',
+            'func _run_commodity_partial_hold_recovery_log() -> void:',
+            'partialHoldBuyBlocked=true',
+            'buyRecoveredAfterFreeingHold=true',
+            'Cargo hold needs %d tons free',
+            'sourceLabel=terminal-velocity-commodity-partial-hold-recovery-scaffold',
+            'oracleStatus=commodity_partial_hold_recovery_pending_classic_runtime_trace',
+            'var total_price := price * EV_CLASSIC_COMMODITY_LOT_SIZE',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$CommodityPartialHoldRecoveryLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-commodity-partial-hold-recovery-log', run_script)
+        self.assertIn('tv-commodity-partial-hold-recovery-log', launcher)
 
     def test_godot_commodity_route_hint_contract(self):
         root = Path(__file__).resolve().parents[2]
