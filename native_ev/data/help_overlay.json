@@ -119,6 +119,7 @@
     "Weapon trade cargo recovery: buying a landed weapon should preserve held trade cargo; verify Player Info/commodity hold before selling, rerouting, or taking more freight. TV scaffold; Classic weapon/cargo UI pending.",
     "Weapon inventory stack recovery: repeated secondary purchases should stack in owned weapons instead of replacing the first copy; verify Player Info/secondary selection before buying another. TV scaffold; Classic multiple-weapon inventory UI pending.",
     "Alignment gates: story offers may require prior flags, local reputation, legal standing, or an open branch choice; scan Mission Computer details before hauling cargo. Exact Classic offer UI pending.",
+    "Alignment branch delivery recovery: after accepting a chapter branch, keep the chosen destination/cargo goal stable, deliver it before taking the incompatible branch, then verify Mission Log/Player Info flags and cargo release. TV mission scaffold; Classic branch completion UI pending.",
     "Alignment return contracts: after choosing a chapter branch, scan Mission Computer for remaining non-branch return contracts before assuming the story chain is complete. TV timing scaffold pending Classic UI evidence.",
     "Alignment return completion recovery: after finishing either chapter branch, re-scan Mission Computer for leftover return contracts, accept only after free cargo is confirmed, complete the cleanup haul, and verify Mission Log/Player Info cargo release before treating the branch hub as cleared. TV mission scaffold; Classic branch cleanup UI pending.",
     "Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
@@ -415,6 +416,11 @@
       "flag": "hasAlignmentGateHelp",
       "source": "help",
       "contains": "Alignment gates: story offers may require prior flags"
+    },
+    {
+      "flag": "hasAlignmentBranchDeliveryRecoveryHelp",
+      "source": "help",
+      "contains": "Alignment branch delivery recovery: after accepting a chapter branch"
     },
     {
       "flag": "hasAlignmentReturnHelp",
