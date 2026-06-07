@@ -76,6 +76,7 @@ const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
+const OUTFITTER_PURCHASE_GUARDRAIL_EVENT_LOG_PREFIX := "TV_OUTFITTER_PURCHASE_GUARDRAIL_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const STARTING_EQUIPMENT_EVENT_LOG_PREFIX := "TV_STARTING_EQUIPMENT_EVENT"
 const PIRATE_AVOIDANCE_EVENT_LOG_PREFIX := "TV_PIRATE_AVOIDANCE_EVENT"
@@ -350,6 +351,8 @@ func _ready() -> void:
 		call_deferred("_run_pilot_save_resume_log")
 	if OS.get_cmdline_args().has("--tv-outfitter-shipyard-log") or OS.get_cmdline_user_args().has("--tv-outfitter-shipyard-log"):
 		call_deferred("_run_outfitter_shipyard_log")
+	if OS.get_cmdline_args().has("--tv-outfitter-purchase-guardrail-log") or OS.get_cmdline_user_args().has("--tv-outfitter-purchase-guardrail-log"):
+		call_deferred("_run_outfitter_purchase_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-repair-service-log") or OS.get_cmdline_user_args().has("--tv-repair-service-log"):
 		call_deferred("_run_repair_service_log")
 	if OS.get_cmdline_args().has("--tv-gameplay-curriculum-help-log") or OS.get_cmdline_user_args().has("--tv-gameplay-curriculum-help-log"):
@@ -3125,6 +3128,58 @@ func _run_outfitter_shipyard_log() -> void:
 	var cargo_space_status := "cargoSpaceIncreased=true" if cargo_space_increased else "cargoSpaceIncreased=false"
 	var shipyard_art_status := "shipyardArtLoaded=true" if shipyard_art_loaded else "shipyardArtLoaded=false"
 	print("%s routeToSolSelected=%s system=%s body=%s %s %s %s %s %s overfullShipyardBlocked=%s overfullCargoPreserved=%s overfullRecoveryBoughtSmallerShip=%s startingCargoSpace=%d cargoAfterOutfit=%d finalCargoSpace=%d cargoAfterOverfullRecovery=%d creditsAfter=%d sourceLabel=terminal-velocity-outfitter-shipyard-scaffold cargoGuardrailSourceLabel=terminal-velocity-shipyard-cargo-guardrail-scaffold oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace cargoGuardrailOracleStatus=shipyard_cargo_transfer_pending_ev_classic_runtime_trace status=\"%s\"" % [OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), landed_body, cargo_pod_status, laser_status, light_freighter_status, cargo_space_status, shipyard_art_status, str(overfull_shipyard_blocked), str(overfull_cargo_preserved), str(overfull_recovery_bought_smaller_ship), starting_cargo_space, cargo_space_after_outfit, cargo_space, cargo, credits, status_line])
+	get_tree().quit(0)
+
+func _run_outfitter_purchase_guardrail_log() -> void:
+	_reset_travel_state()
+	_try_land()
+	landing_tab = 2
+	selected_landing_item = 0
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var no_outfitter_stock_blocked := status_messages.has("No outfitter stock") and not owned_outfits.has("cargo_pod")
+	_ev_land_or_launch()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	landing_tab = 2
+	selected_landing_item = 0
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var in_space_outfit_blocked := status_messages.has("Land before outfitter purchases") and not owned_outfits.has("cargo_pod")
+	_position_at_body("Earth")
+	_try_land()
+	var sale_items := _outfitter_sale_items(_current_body())
+	var cargo_pod_price := int(sale_items[0].get("price", 0)) if not sale_items.is_empty() else 0
+	credits = max(0, cargo_pod_price - 1)
+	var credits_before_outfit_block := credits
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var outfit_credit_blocked := status_messages.has("Not enough credits") and credits == credits_before_outfit_block and not owned_outfits.has("cargo_pod")
+	credits = cargo_pod_price
+	status_messages.clear()
+	_buy_selected_outfit_or_weapon()
+	var outfit_bought_after_funding := owned_outfits.has("cargo_pod") and int(owned_outfits.get("cargo_pod", 0)) == 1 and credits == 0
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(_current_body())
+	var light_freighter_price := 0
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			light_freighter_price = int(shipyard_listings[i].get("price", 0))
+			break
+	credits = max(0, light_freighter_price - 1)
+	var ship_before_block := player_ship_id
+	var credits_before_ship_block := credits
+	status_messages.clear()
+	_buy_selected_ship()
+	var ship_credit_blocked := status_messages.has("Not enough credits") and player_ship_id == ship_before_block and credits == credits_before_ship_block
+	credits = light_freighter_price
+	status_messages.clear()
+	_buy_selected_ship()
+	var ship_bought_after_funding := player_ship_id == "light_freighter" and credits == 0
+	print("%s routeToSolSelected=%s system=%s body=\"%s\" inSpaceOutfitBlocked=%s noOutfitterStockBlocked=%s outfitCreditBlocked=%s shipCreditBlocked=%s outfitBoughtAfterFunding=%s shipBoughtAfterFunding=%s cargoPodPrice=%d lightFreighterPrice=%d finalShip=%s sourceLabel=terminal-velocity-outfitter-purchase-guardrail-scaffold outfitOracleStatus=outfitter_purchase_guardrail_pending_original_runtime_trace shipOracleStatus=shipyard_purchase_guardrail_pending_original_runtime_trace status=\"%s\"" % [OUTFITTER_PURCHASE_GUARDRAIL_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), str(_current_body().get("name", "?")), str(in_space_outfit_blocked), str(no_outfitter_stock_blocked), str(outfit_credit_blocked), str(ship_credit_blocked), str(outfit_bought_after_funding), str(ship_bought_after_funding), cargo_pod_price, light_freighter_price, player_ship_id, status_line])
 	get_tree().quit(0)
 
 func _run_gameplay_curriculum_help_log() -> void:
@@ -9335,6 +9390,9 @@ func _outfitter_sale_items(body: Dictionary) -> Array:
 func _buy_selected_outfit_or_weapon() -> void:
 	if _disabled_player_action_blocked():
 		return
+	if not landed:
+		_set_status("Land before outfitter purchases")
+		return
 	var government_name := _current_government_name()
 	if not _legal_service_access_allowed(government_name):
 		_set_status(_legal_service_blocked_message(government_name))
@@ -9349,6 +9407,9 @@ func _buy_selected_outfit_or_weapon() -> void:
 
 func _buy_outfit_or_weapon_by_id(item_id: String) -> bool:
 	if _disabled_player_action_blocked():
+		return false
+	if not landed:
+		_set_status("Land before outfitter purchases")
 		return false
 	var government_name := _current_government_name()
 	if not _legal_service_access_allowed(government_name):
@@ -9425,6 +9486,9 @@ func _outfit_source_summary(item: Dictionary) -> String:
 
 func _buy_selected_ship() -> void:
 	if _disabled_player_action_blocked():
+		return
+	if not landed:
+		_set_status("Land before shipyard purchases")
 		return
 	var government_name := _current_government_name()
 	if not _service_access_allowed("shipyard", government_name):
