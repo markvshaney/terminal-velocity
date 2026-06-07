@@ -34,6 +34,7 @@ const ROUTE_CLEAR_RESELECT_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_RESELECT_EVENT"
 const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
 const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
 const REPAIR_SERVICE_EVENT_LOG_PREFIX := "TV_REPAIR_SERVICE_EVENT"
+const REPAIR_CREDIT_RECOVERY_EVENT_LOG_PREFIX := "TV_REPAIR_CREDIT_RECOVERY_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
@@ -292,6 +293,8 @@ func _ready() -> void:
 		call_deferred("_run_balanced_upgrade_trade_log")
 	if OS.get_cmdline_args().has("--tv-hull-plating-repair-log") or OS.get_cmdline_user_args().has("--tv-hull-plating-repair-log"):
 		call_deferred("_run_hull_plating_repair_log")
+	if OS.get_cmdline_args().has("--tv-repair-credit-recovery-log") or OS.get_cmdline_user_args().has("--tv-repair-credit-recovery-log"):
+		call_deferred("_run_repair_credit_recovery_log")
 	if OS.get_cmdline_args().has("--tv-upgrade-readiness-log") or OS.get_cmdline_user_args().has("--tv-upgrade-readiness-log"):
 		call_deferred("_run_upgrade_readiness_log")
 	if OS.get_cmdline_args().has("--tv-upgrade-affordability-log") or OS.get_cmdline_user_args().has("--tv-upgrade-affordability-log"):
@@ -1173,6 +1176,39 @@ func _run_repair_service_log() -> void:
 	var hull_after_insufficient := player_hull
 	var insufficient_message_visible := status_messages.has("Not enough credits for repairs: need %d" % insufficient_cost)
 	print("%s inSpaceBlocked=%s inSpaceMessageVisible=%s routeToSolSelected=%s system=%s body=\"%s\" repairAvailable=%s damagedHull=%d maxHull=%d expectedCost=%d repaired=%s repairedHull=%d creditsAfterRepair=%d repairMessageVisible=%s alreadyFullBlocked=%s alreadyFullMessageVisible=%s insufficientCost=%d creditsBeforeInsufficient=%d insufficientBlocked=%s insufficientMessageVisible=%s creditsAfterInsufficient=%d hullBeforeInsufficient=%d hullAfterInsufficient=%d sourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=repair_service_pending_ev_classic_runtime_trace status=\"%s\"" % [REPAIR_SERVICE_EVENT_LOG_PREFIX, str(in_space_blocked), str(in_space_message_visible), str(route_to_sol_selected), current_system.get("name", "?"), str(body.get("name", "?")), str(repair_available), damaged_hull, max_hull, expected_cost, str(repaired), repaired_hull, credits_after_repair, str(repair_message_visible), str(already_full_blocked), str(already_full_message_visible), insufficient_cost, credits_before_insufficient, str(insufficient_blocked), str(insufficient_message_visible), credits_after_insufficient, hull_before_insufficient, hull_after_insufficient, status_line])
+	get_tree().quit(0)
+
+func _run_repair_credit_recovery_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var body := _current_body()
+	var max_hull := _max_player_hull()
+	player_hull = max(1, max_hull - 30)
+	var damaged_hull := player_hull
+	var repair_cost := _repair_cost()
+	credits = max(0, repair_cost - 1)
+	var credits_before_block := credits
+	status_messages.clear()
+	var insufficient_blocked := not _repair_current_hull()
+	var hull_after_block := player_hull
+	var credits_after_block := credits
+	var insufficient_message_visible := status_messages.has("Not enough credits for repairs: need %d" % repair_cost)
+	var damage_preserved_after_block := hull_after_block == damaged_hull
+	var credits_preserved_after_block := credits_after_block == credits_before_block
+	credits = repair_cost
+	var funding_leg_prepared := insufficient_blocked and credits == repair_cost and player_hull == damaged_hull
+	status_messages.clear()
+	var repair_succeeded_after_funding := _repair_current_hull()
+	var final_hull := player_hull
+	var final_credits := credits
+	var repair_message_visible := status_messages.has("Repaired hull at Earth for %d credits" % repair_cost)
+	var repair_credit_recovery_complete := route_to_sol_selected and str(current_system.get("name", "?")) == "Sol" and str(body.get("name", "?")) == "Earth" and insufficient_blocked and insufficient_message_visible and damage_preserved_after_block and credits_preserved_after_block and funding_leg_prepared and repair_succeeded_after_funding and final_hull == max_hull and final_credits == 0
+	print("%s routeToSolSelected=%s system=%s body=\"%s\" repairCost=%d creditsBeforeBlock=%d insufficientBlocked=%s insufficientMessageVisible=%s damagePreservedAfterBlock=%s creditsPreservedAfterBlock=%s fundingLegPrepared=%s repairSucceededAfterFunding=%s repairMessageVisible=%s damagedHull=%d hullAfterBlock=%d finalHull=%d maxHull=%d finalCredits=%d repairCreditRecoveryComplete=%s sourceLabel=terminal-velocity-repair-credit-recovery-scaffold oracleStatus=repair_credit_recovery_pending_ev_classic_runtime_trace status=\"%s\"" % [REPAIR_CREDIT_RECOVERY_EVENT_LOG_PREFIX, str(route_to_sol_selected).to_lower(), str(current_system.get("name", "?")), str(body.get("name", "?")), repair_cost, credits_before_block, str(insufficient_blocked).to_lower(), str(insufficient_message_visible).to_lower(), str(damage_preserved_after_block).to_lower(), str(credits_preserved_after_block).to_lower(), str(funding_leg_prepared).to_lower(), str(repair_succeeded_after_funding).to_lower(), str(repair_message_visible).to_lower(), damaged_hull, hull_after_block, final_hull, max_hull, final_credits, str(repair_credit_recovery_complete).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_low_fuel_jump_log() -> void:

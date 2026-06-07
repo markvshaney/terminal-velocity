@@ -2730,6 +2730,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-repair-service-log', run_script)
         self.assertIn('tv-repair-service-log', wrapper)
 
+    def test_godot_repair_credit_recovery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        backlog = (root / 'docs' / 'checklists' / 'ev-classic-fidelity-implementation-backlog.md').read_text()
+        for symbol in [
+            '--tv-repair-credit-recovery-log',
+            'func _run_repair_credit_recovery_log',
+            'TV_REPAIR_CREDIT_RECOVERY_EVENT',
+            'insufficientBlocked=%s',
+            'damagePreservedAfterBlock=%s',
+            'creditsPreservedAfterBlock=%s',
+            'fundingLegPrepared=%s',
+            'repairSucceededAfterFunding=%s',
+            'repairCreditRecoveryComplete=%s',
+            'sourceLabel=terminal-velocity-repair-credit-recovery-scaffold',
+            'oracleStatus=repair_credit_recovery_pending_ev_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$RepairCreditRecoveryLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-repair-credit-recovery-log', run_script)
+        self.assertIn('tv-repair-credit-recovery-log', wrapper)
+        self.assertIn('Godot repair credit recovery probe addendum', backlog)
+
     def test_godot_pilot_save_resume_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
