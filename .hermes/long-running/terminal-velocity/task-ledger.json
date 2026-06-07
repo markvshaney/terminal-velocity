@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Local verified checkpoint: commodity partial-hold recovery help surface.",
+  "current_milestone": "Commodity partial-hold recovery help surface pushed/verified; successor continuation queued.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -125,11 +125,11 @@
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
     "branch": "main",
-    "dirty": true,
+    "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
     "origin_main": "inspect current SHA with git rev-parse origin/main",
-    "status": "local verified checkpoint pending worker commit/review; HEAD == origin/main before edits",
-    "status_short": "## main...origin/main with local modifications"
+    "status": "HEAD == origin/main after normal push; successor queued before dispatch",
+    "status_short": "## main...origin/main"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -148,9 +148,9 @@
     "7_do_not_redo": "recorded in do_not_redo"
   },
   "kanban": {
-    "active_task_id": "t_1790bd3d",
-    "last_completed_task_id": "t_8841aa11",
-    "last_successor_task_id": "t_8841aa11"
+    "active_task_id": "t_292f94f2",
+    "last_completed_task_id": "t_1790bd3d",
+    "last_successor_task_id": "t_292f94f2"
   },
   "last_checkpoint_commit": "local commit feat(godot): expose Levo sellback probe; SHA-neutral because ledger metadata may be amended into the commit.",
   "last_checkpoint_commit_note": "Inspect live HEAD with git rev-parse HEAD; exact embedded SHAs are intentionally avoided for amended ledger commits.",
@@ -172,10 +172,13 @@
   "last_completed_slice": "commodity partial-hold recovery help surface",
   "last_process_checkpoint": "Coordinator accepted tv-contraband-bribe-recovery-log after rerunning focused contract and Godot probe; backlog provenance added.",
   "last_process_checkpoint_commit": "not committed before checkpoint update; inspect live git status/diff",
-  "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; HEAD == origin/main verified after normal push",
+  "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; commodity partial-hold recovery help surface pushed and verified with HEAD == origin/main.",
   "last_verified_commands": [
+    "git diff --check origin/main..HEAD -> OK",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hasCommodityPartialHoldRecoveryHelp=true"
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hasCommodityPartialHoldRecoveryHelp=true",
+    "git push origin main; git fetch origin; HEAD == origin/main -> OK",
+    "kanban complete t_1790bd3d; create successor t_292f94f2 -> OK"
   ],
   "local_checkpoint_commit": "pushed/verified in normal TV repo path; inspect current SHA with git rev-parse HEAD",
   "mandatory_resume_first_actions": [
@@ -186,16 +189,16 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review/accept or revise the local commodity partial-hold recovery help-surface checkpoint; if accepted, commit/push normally, then choose the next source-aligned safe local gameplay/fidelity slice without redoing this help surface.",
+  "next_resume_action": "Dispatch t_292f94f2 and verify exactly one running Terminal Velocity task; do not redo commodity partial-hold recovery help surface.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
     "branch": "main",
-    "dirty": true,
+    "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
     "origin_main": "inspect current SHA with git rev-parse origin/main",
-    "status": "local verified checkpoint pending worker commit/review; HEAD == origin/main before edits",
-    "status_short": "## main...origin/main with local modifications"
+    "status": "HEAD == origin/main after normal push; successor queued before dispatch",
+    "status_short": "## main...origin/main"
   },
   "repo_state": {
     "branch": "main",
@@ -340,5 +343,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T10:58:58Z"
+  "updated_at": "2026-06-07T11:03:18Z"
 }
