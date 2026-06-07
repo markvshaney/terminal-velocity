@@ -5944,12 +5944,13 @@ func _run_mission_legal_eligibility_log() -> void:
 		"excludesFlags": [],
 		"setsFlags": [],
 		"completionFlags": [],
-		"requirements": {"legalMin": {government_name: 0}}
+		"requirements": {"legalMin": {government_name: 0}, "legalMax": {government_name: 10}}
 	}
 	var mission_list: Array = missions.get("missions", [])
 	mission_list.append(test_mission)
 	missions["missions"] = mission_list
 	var mission_legal_min_score := int(test_mission.get("requirements", {}).get("legalMin", {}).get(government_name, 0))
+	var mission_legal_max_score := int(test_mission.get("requirements", {}).get("legalMax", {}).get(government_name, 0))
 	legal_records[government_name] = mission_legal_min_score
 	var clean_available := _available_missions(body).any(func(m): return str(m.get("id", "")) == "legal_clean_test_contract")
 	var legal_score_at_mission_min := int(legal_records.get(government_name, 0))
@@ -5957,6 +5958,13 @@ func _run_mission_legal_eligibility_log() -> void:
 	legal_records[government_name] = mission_legal_min_score - 1
 	var mission_blocked_just_below_min := not _available_missions(body).any(func(m): return str(m.get("id", "")) == "legal_clean_test_contract")
 	var legal_score_just_below_mission_min := int(legal_records.get(government_name, 0))
+	legal_records[government_name] = mission_legal_max_score
+	var mission_recovered_at_max := _available_missions(body).any(func(m): return str(m.get("id", "")) == "legal_clean_test_contract")
+	var legal_score_at_mission_max := int(legal_records.get(government_name, 0))
+	legal_records[government_name] = mission_legal_max_score + 1
+	var mission_blocked_just_above_max := not _available_missions(body).any(func(m): return str(m.get("id", "")) == "legal_clean_test_contract")
+	var legal_score_just_above_mission_max := int(legal_records.get(government_name, 0))
+	var legal_max_blocked_reason := _mission_legal_requirement_block_reason(test_mission)
 	legal_records[government_name] = -75
 	var blocked_available := _available_missions(body).any(func(m): return str(m.get("id", "")) == "legal_clean_test_contract")
 	var blocked_reasons := _blocked_mission_reasons(body)
@@ -5965,7 +5973,7 @@ func _run_mission_legal_eligibility_log() -> void:
 	var blocked_title_visible := blocked_reasons.any(func(reason): return str(reason).contains("Clean Legal Standing Contract"))
 	var blocked_source_line := _blocked_mission_source_boundary_line()
 	var blocked_source_visible := blocked_source_line.contains("Terminal Velocity") and blocked_source_line.contains("Classic")
-	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" cleanAvailable=%s blockedAvailable=%s visibleBlockedReason=%s blockedTitleVisible=%s blockedSourceVisible=%s legalScore=%d missionLegalMinScore=%d legalScoreJustBelowMissionMin=%d missionBlockedJustBelowMin=%s legalScoreAtMissionMin=%d missionRecoveredAtMin=%s blockedReason=\"%s\" blockedReasons=%s blockedSourceLine=\"%s\" sourceLabel=terminal-velocity-classic-resource-mission-availability oracleStatus=classic_runtime_ui_wording_pending" % [MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body.get("name", "?"), government_name, str(clean_available), str(blocked_available), str(visible_blocked_reason), str(blocked_title_visible), str(blocked_source_visible), int(legal_records.get(government_name, 0)), mission_legal_min_score, legal_score_just_below_mission_min, str(mission_blocked_just_below_min), legal_score_at_mission_min, str(mission_recovered_at_min), blocked_reason, JSON.stringify(blocked_reasons), blocked_source_line])
+	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" cleanAvailable=%s blockedAvailable=%s visibleBlockedReason=%s blockedTitleVisible=%s blockedSourceVisible=%s legalScore=%d missionLegalMinScore=%d legalScoreJustBelowMissionMin=%d missionBlockedJustBelowMin=%s legalScoreAtMissionMin=%d missionRecoveredAtMin=%s missionLegalMaxScore=%d legalScoreJustAboveMissionMax=%d missionBlockedJustAboveMax=%s legalScoreAtMissionMax=%d missionRecoveredAtMax=%s legalMaxBlockedReason=\"%s\" blockedReason=\"%s\" blockedReasons=%s blockedSourceLine=\"%s\" sourceLabel=terminal-velocity-classic-resource-mission-availability oracleStatus=classic_runtime_ui_wording_pending" % [MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body.get("name", "?"), government_name, str(clean_available), str(blocked_available), str(visible_blocked_reason), str(blocked_title_visible), str(blocked_source_visible), int(legal_records.get(government_name, 0)), mission_legal_min_score, legal_score_just_below_mission_min, str(mission_blocked_just_below_min), legal_score_at_mission_min, str(mission_recovered_at_min), mission_legal_max_score, legal_score_just_above_mission_max, str(mission_blocked_just_above_max), legal_score_at_mission_max, str(mission_recovered_at_max), legal_max_blocked_reason, blocked_reason, JSON.stringify(blocked_reasons), blocked_source_line])
 	get_tree().quit(0)
 
 func _run_mission_story_gate_log() -> void:
@@ -9588,6 +9596,12 @@ func _mission_legal_requirement_block_reason(mission: Dictionary) -> String:
 		var minimum := int(legal_min.get(government_name, 0))
 		if score < minimum:
 			return "%s legal score %d below required %d; TV scaffold, exact Classic mission gates unconfirmed" % [str(government_name), score, minimum]
+	var legal_max: Dictionary = requirements.get("legalMax", {})
+	for government_name in legal_max.keys():
+		var score := int(legal_records.get(str(government_name), 0))
+		var maximum := int(legal_max.get(government_name, 0))
+		if score > maximum:
+			return "%s legal score %d above allowed %d; TV scaffold, exact Classic mission gates unconfirmed" % [str(government_name), score, maximum]
 	return "requirements met"
 
 func _market_prices(system_name: String) -> Dictionary:
