@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "pirate_avoidance_mission_trade_escape_loop accepted by cron integrator; normal push/successor flow in progress.",
+  "current_milestone": "pirate_cargo_avoidance_help_surface verified with full native/scenario/Godot regression; commit/push pending.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -120,20 +120,22 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_completed_slice": {
-    "id": "pirate_avoidance_mission_trade_escape_loop",
-    "kanban_task_id": "t_b74bee45",
+    "id": "pirate_cargo_avoidance_help_surface",
+    "kanban_task_id": "t_cf9ccfcb",
     "review_required": false,
     "source_fidelity_labels": [
       "terminal-velocity-pirate-avoidance-loaded-cargo-scaffold",
-      "pirate_avoidance_loaded_cargo_pending_ev_classic_combat_trace"
+      "pirate_avoidance_loaded_cargo_pending_ev_classic_combat_trace",
+      "help_surface_pending_playtest"
     ],
-    "summary": "Accepted symbolic loaded-cargo pirate-avoidance scenario preserving 10 tons Food trade cargo plus 5 tons mission-reserved cargo through a noncombat pirate intercept and return to Levo under pending-Classic labels.",
+    "summary": "F10 help now surfaces loaded mission/trade cargo pirate-avoidance recovery guidance under pending-Classic labels.",
     "verification": [
-      "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_pirate_avoidance_mission_trade_escape_loop_preserves_loaded_cargo -v -> OK",
-      "python3 tools/run_gameplay_scenarios.py pirate_avoidance_mission_trade_escape_loop --pretty -> success true",
-      "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
-      "python3 -m unittest discover -s native_ev/tests -p test_*.py -> OK (232 tests)",
+      "TDD red: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> FAIL missing pirate cargo help line",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+      "./run_godot.sh tv-gameplay-curriculum-help-log -> hasPirateCargoAvoidanceRecoveryHelp=true",
+      "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (232 tests)",
       "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
+      "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
       "git diff --check -> OK",
       "sensitive_added_hits=0"
     ]
@@ -141,11 +143,12 @@
   "last_process_checkpoint": "tv-mission-abort-reaccept-log pushed and verified; normal stale review gate resolved locally.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_pirate_avoidance_mission_trade_escape_loop_preserves_loaded_cargo -v -> OK",
-    "python3 tools/run_gameplay_scenarios.py pirate_avoidance_mission_trade_escape_loop --pretty -> success true",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
-    "python3 -m unittest discover -s native_ev/tests -p test_*.py -> OK (232 tests)",
+    "TDD red: python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> FAIL missing pirate cargo help line",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> hasPirateCargoAvoidanceRecoveryHelp=true",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK (232 tests)",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
     "git diff --check -> OK",
     "sensitive_added_hits=0"
   ],
@@ -158,7 +161,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "After normal push verification and Kanban completion for t_b74bee45, create/dispatch exactly one successor continuation card from clean origin/main; do not redo pirate_avoidance_mission_trade_escape_loop.",
+  "next_resume_action": "Inspect sensitive diff, commit the pirate cargo avoidance help surface checkpoint, push normally, fetch/verify HEAD == origin/main, complete t_cf9ccfcb, and dispatch exactly one successor continuation card.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -300,5 +303,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T00:31:55.945939Z"
+  "updated_at": "2026-06-07T00:36:14.306623Z"
 }

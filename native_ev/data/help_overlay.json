@@ -95,6 +95,7 @@
     "Shield recharge recovery: after taking retaliation damage, break off and wait for the Player Info shield-recharge cadence before re-engaging; disabled hulls still need F8 recovery. Classic timing pending.",
     "Pirate avoidance: if an intercept warning appears, use map/route/refuel guidance to jump to a linked safe port before fighting; TV scaffold pending Classic trace.",
     "Pirate low-fuel recovery: if a pirate-avoidance jump is blocked for empty fuel, stay on the safe route, refuel at a service port, then escape before engaging. TV scaffold; exact Classic pirate/fuel behavior pending.",
+    "Pirate cargo avoidance recovery: if a loaded mission/trade route gets an intercept warning, preserve reserved mission cargo and legal trade cargo, escape without combat, then deliver/sell before accepting more risk. TV scaffold; Classic pirate/cargo behavior pending.",
     "Disposable combat evidence gate: before any pirate/combat Classic-runtime trace, use a disposable non-Strict pilot, verify controls/save state, avoid reusable pilots, and stop if hull/shields are unsafe. TV guardrail; Classic combat evidence pending.",
     "Contraband: Player Info and map commodity hints flag TV legal-risk scaffold cargo before mutating scans; exact Classic scan timing/UI pending.",
     "Contraband recovery: if Player Info flags cargo as illegal for the current government, sell or reroute before landing scans, or budget clemency after confiscation. TV scaffold; exact Classic scan/bribe UI pending.",
@@ -293,6 +294,11 @@
       "flag": "hasPirateLowFuelRecoveryHelp",
       "source": "help",
       "contains": "Pirate low-fuel recovery: if a pirate-avoidance jump is blocked for empty fuel"
+    },
+    {
+      "flag": "hasPirateCargoAvoidanceRecoveryHelp",
+      "source": "help",
+      "contains": "Pirate cargo avoidance recovery: if a loaded mission/trade route gets an intercept warning"
     },
     {
       "flag": "hasDisposableCombatEvidenceGateHelp",
