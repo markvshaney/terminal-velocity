@@ -8,6 +8,7 @@
     "levo_same_port_sellback_loop",
     "commodity_sell_blocked_recovery_loop",
     "commodity_buy_blocked_recovery_loop",
+    "commodity_partial_hold_recovery_loop",
     "commodity_exact_credit_sellback_rebuy_loop",
     "cross_market_trade_spread_scout",
     "max_hold_trade_route_scout",
@@ -382,6 +383,10 @@
     "commodity_buy_blocked_recovery_loop": {
       "purpose": "Commodity buy guardrail/recovery loop: block buying while in space, without credits, and without capacity, then recover by landing and buying one Levo lot while preserving Terminal Velocity scaffold/source-boundary labels.",
       "surface": "commodity exchange/blocker recovery scaffold"
+    },
+    "commodity_partial_hold_recovery_loop": {
+      "purpose": "Commodity partial-hold recovery loop: start with only five free tons, block a full 10-ton Levo Food lot buy, sell one held Equipment lot to free space, then retry and buy the Food lot while preserving pending-Classic source boundaries.",
+      "surface": "commodity exchange/partial-hold buy recovery scaffold"
     },
     "commodity_exact_credit_sellback_rebuy_loop": {
       "purpose": "Commodity exact-credit sellback/rebuy loop: start with exactly enough credits for one Levo Food lot, buy to zero credits, block a second buy, sell back to restore the exact lot budget, then rebuy while preserving pending-Classic source boundaries.",

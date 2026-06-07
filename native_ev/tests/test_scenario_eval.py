@@ -22,6 +22,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'levo_same_port_sellback_loop',
                 'commodity_sell_blocked_recovery_loop',
                 'commodity_buy_blocked_recovery_loop',
+                'commodity_partial_hold_recovery_loop',
                 'commodity_exact_credit_sellback_rebuy_loop',
                 'cross_market_trade_spread_scout',
                 'max_hold_trade_route_scout',
@@ -212,6 +213,29 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual([event['reason'] for event in blocked], ['not landed', 'insufficient credits', 'insufficient cargo space'])
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-trade-scaffold' for event in blocked))
         self.assertTrue(all(event['oracleStatus'] == 'commodity_buy_guardrail_pending_original_runtime_trace' for event in blocked))
+
+    def test_commodity_partial_hold_recovery_loop_frees_space_then_buys_lot(self):
+        result = run_scripted_scenario('commodity_partial_hold_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['cargoUsed'], 15)
+        self.assertEqual(result['state']['cargoHold'].get('food', 0), 10)
+        self.assertEqual(result['state']['cargoHold'].get('equipment', 0), 5)
+        self.assertEqual(result['checks']['blocked_buy_with_only_partial_lot_space'], 'passed')
+        self.assertEqual(result['checks']['freed_hold_space_by_selling_lot'], 'passed')
+        self.assertEqual(result['checks']['recovered_by_buying_after_freeing_hold'], 'passed')
+        self.assertEqual(result['checks']['recorded_partial_hold_source_boundary'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_buy_commodity_lot']
+        trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        self.assertEqual([event['reason'] for event in blocked], ['insufficient cargo space'])
+        self.assertEqual([event['type'] for event in trade_events], ['sell_commodity_lot', 'buy_commodity_lot'])
+        self.assertEqual([event['commodity'] for event in trade_events], ['equipment', 'food'])
+        self.assertEqual([event['cargoUsed'] for event in trade_events], [5, 15])
+        labeled_events = blocked + trade_events
+        self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-commodity-partial-hold-recovery-scaffold' for event in labeled_events))
+        self.assertTrue(all(event['oracleStatus'] == 'commodity_partial_hold_recovery_pending_classic_runtime_trace' for event in labeled_events))
 
     def test_commodity_exact_credit_sellback_rebuy_loop_recovers_after_sellback(self):
         result = run_scripted_scenario('commodity_exact_credit_sellback_rebuy_loop')
