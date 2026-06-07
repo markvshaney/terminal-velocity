@@ -384,6 +384,14 @@ Trade margin choice scenario contract:
 - `sourceLabel=terminal-velocity-trade-margin-choice-scaffold`; `oracleStatus=trade_margin_choice_pending_classic_runtime_trace`.
 - This is a Terminal Velocity scaffold for deterministic autoresearch coverage; exact EV Classic commodity-choice UI, price reasoning, and player-facing margin prompts remain pending Classic runtime evidence.
 
+Light Freighter bulk margin scenario contract:
+
+- `RunGodot.ps1 -LightFreighterBulkMarginLog` / `--tv-light-freighter-bulk-margin-log`
+- Exercises the Terminal Velocity Light Freighter bulk margin scaffold where the pilot upgrades at Earth, compares a profitable 150-ton Food fill against a negative-margin Equipment candidate, carries only the positive-margin bulk cargo, and sells it at Levo.
+- Logs `boughtLightFreighter=true`, `startingCargoSpace=20`, `upgradedCargoSpace=150`, `profitableCommodity=food`, `unprofitableCommodity=equipment`, `profitableMarginPerTon=78`, `negativeMarginPerTon=-210`, `positiveMarginLotsBought=15`, `positiveMarginTonsBought=150`, `negativeMarginSkipped=true`, `bulkCargoCleared=true`, and `finalCargo=0` plus route, ship-price, cargo, and credit counters.
+- `sourceLabel=terminal-velocity-light-freighter-bulk-margin-scaffold`; `oracleStatus=light_freighter_bulk_margin_pending_classic_runtime_trace`.
+- This is a Terminal Velocity scaffold for deterministic autoresearch coverage; exact EV Classic bulk-hold price reasoning and commodity-choice UI remain pending Classic runtime evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`

@@ -1054,6 +1054,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_WEAPON_MISSION_CARGO_EVENT',
             'TV_WEAPON_TRADE_CARGO_EVENT',
             'TV_WEAPON_LEGAL_DOCKING_EVENT',
+            'TV_LIGHT_FREIGHTER_BULK_MARGIN_EVENT',
             'TV_LIGHT_FREIGHTER_MISSION_TRADE_EVENT',
             'TV_LIGHT_FREIGHTER_REPAIR_TRADE_EVENT',
             'TV_LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT',
@@ -1074,6 +1075,7 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-weapon-availability-gate-log',
             '--tv-weapon-trade-cargo-log',
             '--tv-weapon-legal-docking-log',
+            '--tv-light-freighter-bulk-margin-log',
             '--tv-light-freighter-mission-trade-log',
             '--tv-light-freighter-repair-trade-log',
             '--tv-light-freighter-repair-mission-trade-log',
@@ -1092,6 +1094,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_weapon_mission_cargo_log',
             'func _run_weapon_trade_cargo_log',
             'func _run_weapon_legal_docking_log',
+            'func _run_light_freighter_bulk_margin_log',
             'func _run_light_freighter_mission_trade_log',
             'func _run_light_freighter_repair_trade_log',
             'func _run_light_freighter_repair_mission_trade_log',
@@ -2095,6 +2098,37 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-trade-margin-choice-log', run_script)
         self.assertIn('tv-trade-margin-choice-log', wrapper)
         self.assertIn('Trade margin choice scenario contract', plan)
+
+    def test_godot_light_freighter_bulk_margin_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-light-freighter-bulk-margin-log',
+            'func _run_light_freighter_bulk_margin_log',
+            'TV_LIGHT_FREIGHTER_BULK_MARGIN_EVENT',
+            'boughtLightFreighter=true',
+            'startingCargoSpace=20',
+            'upgradedCargoSpace=150',
+            'profitableCommodity=food',
+            'unprofitableCommodity=equipment',
+            'profitableMarginPerTon=78',
+            'negativeMarginPerTon=-210',
+            'positiveMarginLotsBought=15',
+            'positiveMarginTonsBought=150',
+            'negativeMarginSkipped=true',
+            'bulkCargoCleared=true',
+            'finalCargo=0',
+            'sourceLabel=terminal-velocity-light-freighter-bulk-margin-scaffold',
+            'oracleStatus=light_freighter_bulk_margin_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$LightFreighterBulkMarginLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-light-freighter-bulk-margin-log', run_script)
+        self.assertIn('tv-light-freighter-bulk-margin-log', wrapper)
+        self.assertIn('Light Freighter bulk margin scenario contract', plan)
 
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
