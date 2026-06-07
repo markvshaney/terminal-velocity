@@ -68,6 +68,7 @@
     "Light Freighter deadline repair/refuel margin recovery: on the final allowed day, deliver the timed bulk job before waiting or returning for repairs, then sell retained cargo, refuel at the service port, and repair at Earth. TV scaffold; Classic deadline/damaged freighter UI pending.",
     "Commodity recovery: if Buy/Sell is blocked, check free hold, selected commodity, credits, and same-port sellback before changing route.",
     "Commodity buy recovery: if B is blocked for space, credits, or a full hold, land, free 10 tons, and budget exactly the displayed full-lot price before retrying. TV commodity-buy scaffold; exact Classic Commodity Exchange wording pending.",
+    "Commodity unavailable recovery: if Buy reports the selected good is unavailable here, keep the trade goal, route to a market that lists it, and retry only after confirming the new price. TV commodity-unavailable scaffold; exact Classic market UI pending.",
     "Commodity partial-hold recovery: if Buy reports the hold needs a full 10-ton lot, sell or deliver cargo until 10 tons are free before retrying the commodity purchase. TV scaffold; exact Classic partial-hold UI pending.",
     "Mission deadlines: Mission Log and Player Info show TV deadline countdown/failure scaffolds; exact Classic wording and penalties pending.",
     "Deadline recovery: failed timed TV missions release reserved cargo but can preserve trade cargo; sell recoverable cargo or scan for follow-up contracts before abandoning the route. Classic failure UI pending.",
@@ -671,6 +672,11 @@
       "flag": "hasCommodityBuyBlockedRecoveryHelp",
       "source": "help",
       "contains": "Commodity buy recovery: if B is blocked for space, credits, or a full hold"
+    },
+    {
+      "flag": "hasCommodityUnavailableRecoveryHelp",
+      "source": "help",
+      "contains": "Commodity unavailable recovery: if Buy reports the selected good is unavailable here"
     },
     {
       "flag": "hasCommodityPartialHoldRecoveryHelp",
