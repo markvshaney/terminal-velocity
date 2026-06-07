@@ -1292,6 +1292,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-navigation-guardrail-log', run_script)
         self.assertIn('[switch]$NavigationGuardrailLog', windows_script)
 
+    def test_godot_upgrade_readiness_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        for symbol in [
+            'TV_UPGRADE_READINESS_EVENT',
+            '--tv-upgrade-readiness-log',
+            'func _run_upgrade_readiness_log',
+            'sourceLabel=terminal-velocity-upgrade-readiness-strategy-scaffold',
+            'oracleStatus=upgrade_strategy_progression_pending_ev_family_source_trace',
+            'serviceScoutCheckpoint=true',
+            'cargoPodBought=true',
+            'laserCannonBought=true',
+            'lightFreighterBought=true',
+            'playerInfoUpgradeVisible=true',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-upgrade-readiness-log', run_script)
+        self.assertIn('[switch]$UpgradeReadinessLog', windows_script)
+
     def test_godot_legal_status_surface_is_scaffold_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

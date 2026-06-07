@@ -46,6 +46,7 @@ const TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX := "TV_TRADE_REFUEL_PROFIT_EVENT"
 const CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX := "TV_CARGO_EXPANSION_TRADE_EVENT"
 const FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX := "TV_FUEL_RESERVE_UPGRADE_EVENT"
 const BALANCED_UPGRADE_TRADE_EVENT_LOG_PREFIX := "TV_BALANCED_UPGRADE_TRADE_EVENT"
+const UPGRADE_READINESS_EVENT_LOG_PREFIX := "TV_UPGRADE_READINESS_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
@@ -286,6 +287,8 @@ func _ready() -> void:
 		call_deferred("_run_fuel_reserve_upgrade_log")
 	if OS.get_cmdline_args().has("--tv-balanced-upgrade-trade-log") or OS.get_cmdline_user_args().has("--tv-balanced-upgrade-trade-log"):
 		call_deferred("_run_balanced_upgrade_trade_log")
+	if OS.get_cmdline_args().has("--tv-upgrade-readiness-log") or OS.get_cmdline_user_args().has("--tv-upgrade-readiness-log"):
+		call_deferred("_run_upgrade_readiness_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
@@ -1628,6 +1631,52 @@ func _run_fuel_reserve_upgrade_log() -> void:
 	var return_status := "returnHopCompleted=true" if completed_return_hop else "returnHopCompleted=false"
 	var final_reserve_status := "finalFuelOneHopBelowExpandedMax=true" if player_fuel == max_fuel_after_upgrade - 1 else "finalFuelOneHopBelowExpandedMax=false"
 	print("%s startSystem=%s serviceSystem=%s serviceBody=\"%s\" finalSystem=%s finalBody=\"%s\" routeToServiceSystemSelected=%s routeToStartSystemSelected=%s landedAtServicePort=%s %s %s %s %s %s %s startingFuelMax=%d maxFuelBeforeUpgrade=%d maxFuelAfterUpgrade=%d fuelBeforeBlockedReturn=%d fuelBeforeUpgrade=%d fuelAfterUpgrade=%d fuelAfterRefuel=%d finalFuel=%d creditsBeforeUpgrade=%d creditsAfterUpgrade=%d sourceLabel=terminal-velocity-fuel-reserve-upgrade-scaffold oracleStatus=fuel_reserve_upgrade_pending_classic_runtime_trace status=\"%s\"" % [FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX, start_system, service_system, service_body, final_system, final_body, str(route_to_service_system_selected), str(route_to_start_system_selected), str(landed_at_service_port), blocked_status, bought_status, max_status, refuel_status, return_status, final_reserve_status, starting_fuel_max, max_fuel_before_upgrade, max_fuel_after_upgrade, fuel_before_blocked_return, fuel_before_upgrade, fuel_after_upgrade, fuel_after_refuel, player_fuel, credits_before_upgrade, credits, status_line])
+	get_tree().quit(0)
+
+func _run_upgrade_readiness_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var route_to_service_system_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var service_body := _current_body()
+	var service_system := str(current_system.get("name", "?"))
+	var service_body_name := str(service_body.get("name", "?"))
+	var inventory: Dictionary = _station_inventory(service_body)
+	var services: Array = inventory.get("services", [])
+	var service_scout_checkpoint := landed and service_system == "Sol" and service_body_name == "Earth" and services.has("outfitter") and services.has("weapons") and services.has("shipyard")
+	credits = 100000
+	var starting_cargo_space := cargo_space
+	var starting_player_ship_id := player_ship_id
+	var credits_before_cargo_pod := credits
+	var cargo_pod_bought := _buy_outfit_or_weapon_by_id("cargo_pod")
+	var cargo_space_after_pod := cargo_space
+	var credits_before_laser := credits
+	var laser_cannon_bought := _buy_outfit_or_weapon_by_id("laser_cannon")
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(service_body)
+	var selected_ship_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			selected_ship_listing = shipyard_listings[i]
+			break
+	var credits_before_ship := credits
+	var ship_price := int(selected_ship_listing.get("price", 0))
+	_buy_selected_ship()
+	var light_freighter_bought := player_ship_id == "light_freighter"
+	var upgraded_cargo_space := cargo_space
+	var player_info_lines := _player_inventory_lines()
+	var player_info_upgrade_visible := player_info_lines.has("Ship: light_freighter") and _inventory_dictionary_summary(owned_outfits).contains("cargo_pod") and _inventory_dictionary_summary(owned_weapons).contains("laser_cannon")
+	var service_scout_status := "serviceScoutCheckpoint=true" if service_scout_checkpoint else "serviceScoutCheckpoint=false"
+	var cargo_pod_status := "cargoPodBought=true" if cargo_pod_bought and int(owned_outfits.get("cargo_pod", 0)) > 0 and cargo_space_after_pod > starting_cargo_space else "cargoPodBought=false"
+	var laser_status := "laserCannonBought=true" if laser_cannon_bought and int(owned_weapons.get("laser_cannon", 0)) > 0 else "laserCannonBought=false"
+	var ship_status := "lightFreighterBought=true" if light_freighter_bought else "lightFreighterBought=false"
+	var player_info_status := "playerInfoUpgradeVisible=true" if player_info_upgrade_visible else "playerInfoUpgradeVisible=false"
+	print("%s startSystem=%s serviceSystem=%s serviceBody=\"%s\" routeToServiceSystemSelected=%s %s %s %s %s %s services=%s startingShip=%s finalShip=%s startingCargoSpace=%d cargoSpaceAfterPod=%d upgradedCargoSpace=%d shipPrice=%d creditsBeforeCargoPod=%d creditsBeforeLaser=%d creditsBeforeShip=%d creditsAfter=%d playerInfoLines=%s sourceLabel=terminal-velocity-upgrade-readiness-strategy-scaffold oracleStatus=upgrade_strategy_progression_pending_ev_family_source_trace status=\"%s\"" % [UPGRADE_READINESS_EVENT_LOG_PREFIX, start_system, service_system, service_body_name, str(route_to_service_system_selected), service_scout_status, cargo_pod_status, laser_status, ship_status, player_info_status, JSON.stringify(services), starting_player_ship_id, player_ship_id, starting_cargo_space, cargo_space_after_pod, upgraded_cargo_space, ship_price, credits_before_cargo_pod, credits_before_laser, credits_before_ship, credits, JSON.stringify(player_info_lines), status_line])
 	get_tree().quit(0)
 
 func _run_balanced_upgrade_trade_log() -> void:

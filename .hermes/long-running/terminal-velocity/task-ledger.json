@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "local checkpoint: alignment branch-delivery F10 recovery help verified; pending review/coordinator integration.",
+  "current_milestone": "local commit: tv-upgrade-readiness-log verified and committed; pending human review/integrator push.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -95,17 +95,18 @@
     "tv-light-freighter-capacity-trade-log; pushed and verified in normal TV repo path with HEAD == origin/main.",
     "Do not redo tv-light-freighter-deadline-refuel-delivery-log work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "tv-light-freighter-deadline-refuel-delivery-log; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "Do not redo alignment branch-delivery recovery help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo alignment branch-delivery recovery help if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo tv-upgrade-readiness-log once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
-    "ahead": "0",
+    "ahead": "1",
     "behind": "0",
     "branch": "main",
-    "dirty": true,
+    "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
-    "origin_main": "inspect current SHA with git rev-parse origin/main",
-    "status_short": "local checkpoint dirty: alignment branch-delivery recovery help files modified; run git status --short --branch live"
+    "origin_main": "bb0717a28087e7359079c8804b5524ff27bda00c",
+    "status_short": "## main...origin/main [ahead 1]; local commit pending human review/integrator push"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -128,9 +129,9 @@
     "last_completed_task_id": "t_a52cdb68",
     "last_successor_task_id": "t_a5e3a030"
   },
-  "last_checkpoint_commit": "tv-pirate-loaded-cargo-avoidance-log local checkpoint pending commit; SHA-neutral, inspect live HEAD",
-  "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording for the current local checkpoint because commits containing this checkpoint stale exact embedded HEAD values when amended.",
-  "last_checkpoint_summary": "Added player-facing F10 recovery guidance for existing chapter-one alignment branch delivery probe, with help-log flag hasAlignmentBranchDeliveryRecoveryHelp and explicit pending-Classic branch-completion UI boundary.",
+  "last_checkpoint_commit": "local commit feat(godot): expose upgrade readiness probe; SHA-neutral because ledger metadata is amended into the commit.",
+  "last_checkpoint_commit_note": "Inspect live HEAD with git rev-parse HEAD; exact embedded SHAs are intentionally avoided for amended ledger commits.",
+  "last_checkpoint_summary": "Added deterministic Godot upgrade readiness probe for Earth service scouting, Cargo Pod, Laser Cannon, Light Freighter, and Player Info upgrade checkpoints.",
   "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -145,7 +146,7 @@
     "local checkpoint: Expose mission deadline abort Godot log",
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
-  "last_completed_slice": "Alignment branch-delivery recovery help surface verified locally; sourceLabel=terminal-velocity-mission-scaffold; oracleStatus=mission_behavior_pending_classic_runtime_trace; exact Classic branch-completion UI pending.",
+  "last_completed_slice": "tv-upgrade-readiness-log local checkpoint verified: serviceScoutCheckpoint/cargoPodBought/laserCannonBought/lightFreighterBought/playerInfoUpgradeVisible true under Terminal Velocity upgrade-readiness scaffold labels.",
   "last_process_checkpoint": "Commodity unavailable recovery probe verified and committed locally; push blocked by missing GitHub HTTPS credentials and gh not logged in.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; light freighter deadline/refuel delivery probe accepted and pushed",
@@ -175,7 +176,11 @@
     "./run_godot.sh tv-gameplay-curriculum-help-log -> hasAlignmentBranchDeliveryRecoveryHelp=true",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_alignment_delivery_log_contract -v -> OK",
     "./run_godot.sh tv-mission-alignment-delivery-log -> incompatibleBranchBlockedAfterDelivery=true, federation/freeport delivery flags true",
-    "python3 -m unittest discover -s native_ev/tests -p test_*.py -> 250 tests OK"
+    "python3 -m unittest discover -s native_ev/tests -p test_*.py -> 250 tests OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_upgrade_readiness_log_contract -v -> OK after expected RED failure before implementation",
+    "./run_godot.sh tv-upgrade-readiness-log -> TV_UPGRADE_READINESS_EVENT with serviceScoutCheckpoint=true, cargoPodBought=true, laserCannonBought=true, lightFreighterBought=true, playerInfoUpgradeVisible=true",
+    "python3 -m unittest native_ev.tests.test_model -v -> OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> OK"
   ],
   "local_checkpoint_commit": "feat(godot): expose commodity unavailable recovery probe; SHA-neutral, inspect live HEAD",
   "mandatory_resume_first_actions": [
@@ -186,27 +191,27 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review/stage/commit the local alignment branch-delivery recovery help checkpoint or continue from review comments; do not redo hasAlignmentBranchDeliveryRecoveryHelp once accepted.",
+  "next_resume_action": "Review/push local commit feat(godot): expose upgrade readiness probe or continue from review comments; do not redo tv-upgrade-readiness-log once accepted.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
-    "ahead": "0",
+    "ahead": "1",
     "behind": "0",
     "branch": "main",
-    "dirty": true,
+    "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
-    "origin_main": "inspect current SHA with git rev-parse origin/main",
-    "status_short": "local checkpoint dirty: alignment branch-delivery recovery help files modified; run git status --short --branch live"
+    "origin_main": "bb0717a28087e7359079c8804b5524ff27bda00c",
+    "status_short": "## main...origin/main [ahead 1]; local commit pending human review/integrator push"
   },
   "repo_state": {
-    "ahead": "0",
+    "ahead": "1",
     "behind": "0",
     "branch": "main",
-    "dirty": true,
+    "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
-    "origin_main": "inspect current SHA with git rev-parse origin/main",
+    "origin_main": "bb0717a28087e7359079c8804b5524ff27bda00c",
     "status": "local checkpoint pending review/coordinator integration",
-    "status_short": "local checkpoint dirty: alignment branch-delivery recovery help files modified; run git status --short --branch live"
+    "status_short": "## main...origin/main [ahead 1]; local commit pending human review/integrator push"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -333,5 +338,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T05:57:25Z"
+  "updated_at": "2026-06-07T06:13:59Z"
 }
