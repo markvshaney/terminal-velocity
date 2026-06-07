@@ -48,6 +48,7 @@ param(
     [switch]$StartingEquipmentLog,
     [switch]$PirateAvoidanceLog,
     [switch]$CombatLog,
+    [switch]$CombatRewardLog,
     [switch]$CombatGuardrailLog,
     [switch]$PlayerDisabledLog,
     [switch]$ShieldRechargeLog,
@@ -198,6 +199,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-pirate-avoidance-log
 } elseif ($CombatLog) {
     & $Godot --headless --path $Project -- --tv-combat-log
+} elseif ($CombatRewardLog) {
+    & $Godot --headless --path $Project -- --tv-combat-reward-log
 } elseif ($CombatGuardrailLog) {
     & $Godot --headless --path $Project -- --tv-combat-guardrail-log
 } elseif ($PlayerDisabledLog) {

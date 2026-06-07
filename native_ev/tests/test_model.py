@@ -691,6 +691,33 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-combat-log', run_script)
         self.assertIn('[switch]$CombatLog', windows_script)
 
+    def test_godot_combat_reward_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_COMBAT_REWARD_EVENT',
+            '--tv-combat-reward-log',
+            'func _run_combat_reward_log',
+            'combatRewardPaid=%s',
+            'combatRewardAmount=25',
+            'combatRewardRecorded=%s',
+            'combatRewardSaved=%s',
+            'combatRewardResumeVisible=%s',
+            'combatRewardInventoryVisible=%s',
+            'combatRewardHudVisible=%s',
+            'combatRewardStatusVisible=%s',
+            'destroyedTargetBlocked=%s',
+            'retargetedAfterDestroyed=%s',
+            'sourceLabel=terminal-velocity-combat-reward-scaffold',
+            'oracleStatus=classic_runtime_combat_reward_behavior_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-combat-reward-log', run_script)
+        self.assertIn('[switch]$CombatRewardLog', windows_script)
+
     def test_godot_player_disabled_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
