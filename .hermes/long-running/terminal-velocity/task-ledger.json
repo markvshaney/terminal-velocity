@@ -1,10 +1,13 @@
 {
   "active_gate": {
+    "reason": "Coherent local code/docs checkpoint for symbolic commodity exact-credit full-hold sellback/rebuy scenario needs review before board completion/push handling.",
+    "resume_after": "Reviewer accepts or requests changes via Kanban comment/unblock.",
     "type": "review-required",
-    "reason": "Kanban worker produced code/docs changes that need human/coordinator review before marking done or pushing.",
-    "withheld_action": "Marking task complete / coordinator integration beyond local commit.",
-    "resume_after": "Reviewer approves/unblocks or requests changes in the Kanban comment thread."
+    "withheld_action": "kanban completion as done / external publication beyond normal reviewed workflow"
   },
+  "artifacts_touched": [
+    "godot_ev/scripts/self_test.gd"
+  ],
   "current_milestone": "Symbolic commodity partial-hold recovery scenario implemented and verified locally; pending review/coordinator integration.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
@@ -136,7 +139,7 @@
     "Do not redo commodity_exact_credit_sellback_rebuy_loop; it was pushed to origin/main as ae9cbf8 and verified by native, scenario, and Godot self-test.",
     "Do not redo commodity_partial_hold_recovery_loop once accepted/pushed; local worker checkpoint verified with native unittest discover, full gameplay scenario suite, and Godot self-test."
   ],
-  "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
+  "done_condition": "Terminal Velocity EV-like gameplay/fidelity backlog continues with one verified safe local slice per run, source-boundary labels, docs/checkpoint updates, and review before completion.",
   "git_state": {
     "branch": "main",
     "dirty": true,
@@ -168,7 +171,7 @@
   },
   "last_checkpoint_commit": "pending local worker commit: feat(native): add commodity partial-hold recovery scenario",
   "last_checkpoint_commit_note": "Inspect live HEAD with git rev-parse HEAD; exact embedded SHAs are intentionally avoided for amended ledger commits.",
-  "last_checkpoint_summary": "Native curriculum now includes commodity_partial_hold_recovery_loop: start at Levo Spaceport with only five free tons, block a full 10-ton Food lot buy, sell one held Equipment lot to free space, then buy Food successfully with pending-Classic source boundaries.",
+  "last_checkpoint_summary": "Added symbolic commodity_exact_credit_full_hold_sellback_loop: exact 2400-credit Levo Food budget fills starter hold, blocks third buy on capacity, sellback restores one-lot budget/space, and rebuy returns to full hold under pending-Classic labels.",
   "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -188,11 +191,15 @@
   "last_process_checkpoint_commit": "included in local worker checkpoint commit; inspect git log -1. Not pushed by worker.",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; commodity exact-credit recovery help surface pushed and verified with HEAD == origin/main.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_commodity_partial_hold_recovery_loop_frees_space_then_buys_lot -v -> Ran 2 tests OK",
-    "python3 tools/run_gameplay_scenarios.py commodity_partial_hold_recovery_loop --pretty -> success true; checks all passed",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 263 tests OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=94 failed=0 total=94",
-    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=94"
+    "targeted red failure: new commodity_exact_credit_full_hold_sellback_loop test failed before implementation with unknown scenario",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_commodity_exact_credit_full_hold_sellback_loop_recovers_after_sellback -v -> Ran 2 tests OK",
+    "python3 tools/run_gameplay_scenarios.py commodity_exact_credit_full_hold_sellback_loop --pretty -> success true; full-hold exact-credit checks all passed",
+    "python3 -m json.tool native_ev/data/gameplay_curriculum.json >/dev/null -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval -v -> OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=95 failed=0 total=95",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 264 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=95",
+    "git diff --check -> OK"
   ],
   "local_checkpoint_commit": "pending local worker commit; inspect git log -1 after commit",
   "mandatory_resume_first_actions": [
@@ -203,7 +210,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review local checkpoint for commodity_partial_hold_recovery_loop; after coordinator acceptance/push, continue from the next source-aligned safe local gameplay/fidelity slice without redoing this scenario.",
+  "next_resume_action": "Review local checkpoint for commodity_exact_credit_full_hold_sellback_loop; after coordinator acceptance/push, continue from the next source-aligned safe local gameplay/fidelity slice without redoing this scenario.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -337,7 +344,11 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "waiting_gate",
+  "source_fidelity_labels": [
+    "terminal-velocity-commodity-exact-credit-full-hold-sellback-scaffold",
+    "commodity_exact_credit_full_hold_rebuy_pending_classic_runtime_trace"
+  ],
+  "status": "checkpointed_not_scheduled",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -358,5 +369,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T12:20:20.865260Z"
+  "updated_at": "2026-06-07T12:30:43.587711Z"
 }

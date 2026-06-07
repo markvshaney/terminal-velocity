@@ -10,6 +10,7 @@
     "commodity_buy_blocked_recovery_loop",
     "commodity_partial_hold_recovery_loop",
     "commodity_exact_credit_sellback_rebuy_loop",
+    "commodity_exact_credit_full_hold_sellback_loop",
     "cross_market_trade_spread_scout",
     "max_hold_trade_route_scout",
     "trade_route_refuel_profit_loop",
@@ -391,6 +392,10 @@
     "commodity_exact_credit_sellback_rebuy_loop": {
       "purpose": "Commodity exact-credit sellback/rebuy loop: start with exactly enough credits for one Levo Food lot, buy to zero credits, block a second buy, sell back to restore the exact lot budget, then rebuy while preserving pending-Classic source boundaries.",
       "surface": "commodity exchange/exact-credit sellback recovery scaffold"
+    },
+    "commodity_exact_credit_full_hold_sellback_loop": {
+      "purpose": "Commodity exact-credit full-hold sellback/rebuy loop: start with exactly enough credits for two Levo Food lots, fill the starter hold, block another buy on capacity, sell one lot to restore both budget and space, then rebuy to full hold while preserving pending-Classic source boundaries.",
+      "surface": "commodity exchange/exact-credit full-hold sellback recovery scaffold"
     },
     "legal_docking_service_gate_recovery": {
       "purpose": "Legal docking/service recovery loop: with a hostile Federation legal record, block docking and landed outfitter access, then pay clemency and verify docking plus outfitter purchase recover under explicit pending-Classic source boundaries.",
