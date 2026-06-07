@@ -4046,6 +4046,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-commodity-sell-blocked-recovery-log', run_script)
         self.assertIn('tv-commodity-sell-blocked-recovery-log', launcher)
 
+    def test_godot_commodity_unavailable_recovery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            'const COMMODITY_UNAVAILABLE_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_UNAVAILABLE_RECOVERY_EVENT"',
+            '--tv-commodity-unavailable-recovery-log',
+            'func _run_commodity_unavailable_recovery_log() -> void:',
+            'commodityUnavailableBlocked=true',
+            'boughtAfterRelocation=true',
+            'finalCargo=10',
+            'Commodity unavailable here',
+            'sourceLabel=terminal-velocity-commodity-unavailable-recovery-scaffold',
+            'oracleStatus=commodity_unavailable_recovery_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$CommodityUnavailableRecoveryLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-commodity-unavailable-recovery-log', run_script)
+        self.assertIn('tv-commodity-unavailable-recovery-log', launcher)
+
     def test_godot_commodity_buy_blocked_recovery_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

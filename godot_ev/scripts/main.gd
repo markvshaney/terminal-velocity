@@ -39,6 +39,7 @@ const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_BUY_BLOCKED_RECOVERY_EVENT"
 const COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_SELL_BLOCKED_RECOVERY_EVENT"
+const COMMODITY_UNAVAILABLE_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_UNAVAILABLE_RECOVERY_EVENT"
 const CROSS_MARKET_TRADE_EVENT_LOG_PREFIX := "TV_CROSS_MARKET_TRADE_EVENT"
 const MAX_HOLD_TRADE_EVENT_LOG_PREFIX := "TV_MAX_HOLD_TRADE_EVENT"
 const TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX := "TV_TRADE_REFUEL_PROFIT_EVENT"
@@ -269,6 +270,8 @@ func _ready() -> void:
 		call_deferred("_run_commodity_buy_blocked_recovery_log")
 	if OS.get_cmdline_args().has("--tv-commodity-sell-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-sell-blocked-recovery-log"):
 		call_deferred("_run_commodity_sell_blocked_recovery_log")
+	if OS.get_cmdline_args().has("--tv-commodity-unavailable-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-unavailable-recovery-log"):
+		call_deferred("_run_commodity_unavailable_recovery_log")
 	if OS.get_cmdline_args().has("--tv-cross-market-trade-log") or OS.get_cmdline_user_args().has("--tv-cross-market-trade-log"):
 		call_deferred("_run_cross_market_trade_log")
 	if OS.get_cmdline_args().has("--tv-max-hold-trade-log") or OS.get_cmdline_user_args().has("--tv-max-hold-trade-log"):
@@ -1288,6 +1291,49 @@ func _run_commodity_sell_blocked_recovery_log() -> void:
 	var sell_recovered_status := "sellRecoveredCargo=true" if sell_recovered_cargo else "sellRecoveredCargo=false"
 	var final_cargo_status := "finalCargo=0" if cargo_after_sell == 0 else "finalCargo=%d" % cargo_after_sell
 	print("%s system=%s commodity=%s buyPrice=%d sellPrice=%d %s %s %s %s creditsBefore=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBefore=%d cargoAfterBuy=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=terminal-velocity-commodity-sell-blocked-recovery-scaffold oracleStatus=commodity_sell_blocked_recovery_pending_classic_runtime_trace blockedStatus=\"%s\" status=\"%s\"" % [COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, sell_price, sell_blocked_status, buy_recovered_status, sell_recovered_status, final_cargo_status, credits_before, credits_after_buy, credits_after_sell, cargo_before, cargo_after_buy, held_after_buy, held_after_sell, sell_block_status, status_line])
+	get_tree().quit(0)
+
+func _run_commodity_unavailable_recovery_log() -> void:
+	_reset_travel_state()
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var commodity_id := "food"
+	var commodity_name := "Food"
+	var start_system := str(current_system.get("name", "?"))
+	var start_market: Dictionary = _market_prices(start_system).get(commodity_id, {}).duplicate()
+	var original_buy_price := int(start_market.get("buy", 0))
+	var markets: Dictionary = economy.get("markets", {})
+	var mutated_market: Dictionary = start_market.duplicate()
+	mutated_market.erase("buy")
+	var start_system_market: Dictionary = markets.get(start_system, {}).duplicate()
+	start_system_market[commodity_id] = mutated_market
+	markets[start_system] = start_system_market
+	economy["markets"] = markets
+	var credits_before_block := credits
+	var cargo_before_block := cargo
+	_buy_selected_commodity()
+	var unavailable_status := status_line
+	var unavailable_blocked := unavailable_status == "Commodity unavailable here" and credits == credits_before_block and cargo == cargo_before_block and int(commodity_hold.get(commodity_id, 0)) == 0
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_recovery_system_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var recovery_buy_price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("buy", 0))
+	var credits_before_recovery_buy := credits
+	_buy_selected_commodity()
+	var held_after_recovery_buy := int(commodity_hold.get(commodity_id, 0))
+	var cargo_after_recovery_buy := cargo
+	var bought_after_relocation := str(current_system.get("name", "?")) == "Sol" and recovery_buy_price > 0 and held_after_recovery_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo_after_recovery_buy == cargo_before_block + EV_CLASSIC_COMMODITY_LOT_SIZE and credits == credits_before_recovery_buy - (recovery_buy_price * EV_CLASSIC_COMMODITY_LOT_SIZE) and status_messages.has("Bought %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	var unavailable_status_field := "commodityUnavailableBlocked=true" if unavailable_blocked else "commodityUnavailableBlocked=false"
+	var recovery_status_field := "boughtAfterRelocation=true" if bought_after_relocation else "boughtAfterRelocation=false"
+	var final_cargo_status := "finalCargo=10" if cargo_after_recovery_buy == EV_CLASSIC_COMMODITY_LOT_SIZE else "finalCargo=%d" % cargo_after_recovery_buy
+	print("%s unavailableSystem=%s recoverySystem=%s recoveryBody=\"Earth\" commodity=%s originalBuyPrice=%d recoveryBuyPrice=%d routeToRecoverySystemSelected=%s %s %s %s creditsBeforeBlock=%d creditsBeforeRecoveryBuy=%d creditsAfterRecoveryBuy=%d cargoBeforeBlock=%d heldAfterRecoveryBuy=%d sourceLabel=terminal-velocity-commodity-unavailable-recovery-scaffold oracleStatus=commodity_unavailable_recovery_pending_classic_runtime_trace blockedStatus=\"%s\" status=\"%s\"" % [COMMODITY_UNAVAILABLE_RECOVERY_EVENT_LOG_PREFIX, start_system, str(current_system.get("name", "?")), commodity_id, original_buy_price, recovery_buy_price, str(route_to_recovery_system_selected).to_lower(), unavailable_status_field, recovery_status_field, final_cargo_status, credits_before_block, credits_before_recovery_buy, credits, cargo_before_block, held_after_recovery_buy, unavailable_status, status_line])
 	get_tree().quit(0)
 
 func _run_cross_market_trade_log() -> void:

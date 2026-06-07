@@ -16,6 +16,7 @@ param(
     [switch]$CommodityTradeLog,
     [switch]$CommodityBuyBlockedRecoveryLog,
     [switch]$CommoditySellBlockedRecoveryLog,
+    [switch]$CommodityUnavailableRecoveryLog,
     [switch]$CrossMarketTradeLog,
     [switch]$MaxHoldTradeLog,
     [switch]$TradeRefuelProfitLog,
@@ -146,6 +147,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-commodity-buy-blocked-recovery-log
 } elseif ($CommoditySellBlockedRecoveryLog) {
     & $Godot --headless --path $Project -- --tv-commodity-sell-blocked-recovery-log
+} elseif ($CommodityUnavailableRecoveryLog) {
+    & $Godot --headless --path $Project -- --tv-commodity-unavailable-recovery-log
 } elseif ($CrossMarketTradeLog) {
     & $Godot --headless --path $Project -- --tv-cross-market-trade-log
 } elseif ($MaxHoldTradeLog) {
