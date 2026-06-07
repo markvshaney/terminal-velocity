@@ -103,6 +103,7 @@ const WEAPON_SECONDARY_ACTIVATION_EVENT_LOG_PREFIX := "TV_WEAPON_SECONDARY_ACTIV
 const WEAPON_MISSION_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_MISSION_CARGO_EVENT"
 const WEAPON_TRADE_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_TRADE_CARGO_EVENT"
 const WEAPON_LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_WEAPON_LEGAL_DOCKING_EVENT"
+const LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT"
 const LIGHT_FREIGHTER_BULK_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_BULK_MARGIN_EVENT"
 const LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT"
 const LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT"
@@ -404,6 +405,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_trade_cargo_log")
 	if OS.get_cmdline_args().has("--tv-weapon-legal-docking-log") or OS.get_cmdline_user_args().has("--tv-weapon-legal-docking-log"):
 		call_deferred("_run_weapon_legal_docking_log")
+	if OS.get_cmdline_args().has("--tv-light-freighter-capacity-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-capacity-trade-log"):
+		call_deferred("_run_light_freighter_capacity_trade_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-bulk-margin-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-bulk-margin-log"):
 		call_deferred("_run_light_freighter_bulk_margin_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-bulk-mission-margin-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-bulk-mission-margin-log"):
@@ -4179,6 +4182,87 @@ func _run_weapon_legal_docking_log() -> void:
 		int(owned_weapons.get(selected_weapon, 0)),
 		credits,
 		denied_message,
+	])
+	get_tree().quit(0)
+
+func _run_light_freighter_capacity_trade_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var accepted_body := _current_body()
+	credits = 65000
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(accepted_body)
+	var selected_ship_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			selected_ship_listing = shipyard_listings[i]
+			break
+	var starting_cargo_space := cargo_space
+	var ship_price := int(selected_ship_listing.get("price", 0))
+	_buy_selected_ship()
+	var bought_light_freighter := player_ship_id == "light_freighter"
+	var upgraded_cargo_space := cargo_space
+	var profitable_commodity := "food"
+	var buy_price := int(_market_prices(current_system.get("name", "")).get(profitable_commodity, {}).get("buy", 0))
+	var sell_price := int(_market_prices("Levo").get(profitable_commodity, {}).get("sell", 0))
+	var margin_per_ton := sell_price - buy_price
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_trade_buy := credits
+	var cargo_before_trade_buy := cargo
+	for _i in range(6):
+		_buy_selected_commodity()
+	var positive_margin_tons_bought := int(commodity_hold.get(profitable_commodity, 0))
+	var positive_margin_lots_bought := int(positive_margin_tons_bought / EV_CLASSIC_COMMODITY_LOT_SIZE)
+	var cargo_after_trade_buy := cargo
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_levo_selected := _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_trade_sale := credits
+	while int(commodity_hold.get(profitable_commodity, 0)) > 0:
+		_sell_selected_commodity()
+	var cargo_after_trade_sale := cargo
+	var held_profitable_after_sale := int(commodity_hold.get(profitable_commodity, 0))
+	var large_hold_trade_cleared := cargo_after_trade_sale == 0 and held_profitable_after_sale == 0
+	var starting_cargo_space_status := "startingCargoSpace=20" if starting_cargo_space == 20 else "startingCargoSpace=%d" % starting_cargo_space
+	var upgraded_cargo_space_status := "upgradedCargoSpace=150" if upgraded_cargo_space == 150 else "upgradedCargoSpace=%d" % upgraded_cargo_space
+	var positive_margin_lots_status := "positiveMarginLotsBought=6" if positive_margin_lots_bought == 6 else "positiveMarginLotsBought=%d" % positive_margin_lots_bought
+	var positive_margin_tons_status := "positiveMarginTonsBought=60" if positive_margin_tons_bought == 60 else "positiveMarginTonsBought=%d" % positive_margin_tons_bought
+	var large_hold_trade_cleared_status := "largeHoldTradeCleared=true" if large_hold_trade_cleared else "largeHoldTradeCleared=false"
+	var final_cargo_status := "finalCargo=0" if cargo_after_trade_sale == 0 else "finalCargo=%d" % cargo_after_trade_sale
+	print("%s startSystem=Levo routeToSolSelected=%s buySystem=Sol sellSystem=Levo routeToLevoSelected=%s boughtLightFreighter=%s %s %s shipPrice=%d profitableCommodity=food buyPrice=%d sellPrice=%d marginPerTon=%d %s %s cargoBeforeTradeBuy=%d cargoAfterTradeBuy=%d creditsBeforeTradeBuy=%d creditsBeforeTradeSale=%d creditsAfterTradeSale=%d %s %s sourceLabel=terminal-velocity-light-freighter-trade-scaffold oracleStatus=light_freighter_trade_pending_classic_runtime_trace status=\"%s\"" % [
+		LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT_LOG_PREFIX,
+		str(route_to_sol_selected).to_lower(),
+		str(route_to_levo_selected).to_lower(),
+		str(bought_light_freighter).to_lower(),
+		starting_cargo_space_status,
+		upgraded_cargo_space_status,
+		ship_price,
+		buy_price,
+		sell_price,
+		margin_per_ton,
+		positive_margin_lots_status,
+		positive_margin_tons_status,
+		cargo_before_trade_buy,
+		cargo_after_trade_buy,
+		credits_before_trade_buy,
+		credits_before_trade_sale,
+		credits,
+		large_hold_trade_cleared_status,
+		final_cargo_status,
+		status_line,
 	])
 	get_tree().quit(0)
 

@@ -1,9 +1,9 @@
 {
   "active_gate": {
-    "reason": "git push origin main failed: missing GitHub HTTPS username/password; gh reports not logged in",
-    "resume_after": "GitHub credentials/remote auth restored for this repo or operator pushes local commit",
-    "type": "credentials",
-    "withheld_action": "push local commit to origin/main, fetch/verify HEAD equals origin/main, create successor, complete t_9362bcf2"
+    "type": "review_push",
+    "reason": "Local commit implements and verifies the Godot Light Freighter capacity-trade probe; integrator review/push gate remains.",
+    "withheld_action": "push/merge public repo state",
+    "resume_after": "integrator reviews committed diff and approves normal push or requests changes"
   },
   "current_milestone": "blocked: tv-commodity-unavailable-recovery-log verified and committed locally; push blocked by missing GitHub credentials.",
   "do_not_redo": [
@@ -95,7 +95,8 @@
     "tv-commodity-sell-blocked-recovery-log local checkpoint pending coordinator integration.",
     "Do not redo tv-commodity-sell-blocked-recovery-log once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "tv-commodity-unavailable-recovery-log local checkpoint verified; pending normal push verification.",
-    "Do not redo tv-commodity-unavailable-recovery-log once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo tv-commodity-unavailable-recovery-log once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "tv-light-freighter-capacity-trade-log"
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -168,17 +169,15 @@
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; commodity buy-blocked recovery probe accepted and pushed",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_unavailable_recovery_log_contract -v -> OK",
-    "./run_godot.sh tv-commodity-unavailable-recovery-log -> TV_COMMODITY_UNAVAILABLE_RECOVERY_EVENT with commodityUnavailableBlocked=true boughtAfterRelocation=true finalCargo=10",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_unavailable_recovery_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_buy_blocked_recovery_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_sell_blocked_recovery_log_contract -v -> OK",
-    "python3 -m unittest discover -s native_ev/tests -p test_*.py -> OK",
-    "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_light_freighter_capacity_trade_log_contract -v -> OK",
+    "./run_godot.sh tv-light-freighter-capacity-trade-log -> TV_LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT ... boughtLightFreighter=true upgradedCargoSpace=150 positiveMarginLotsBought=6 positiveMarginTonsBought=60 largeHoldTradeCleared=true finalCargo=0 ... sourceLabel=terminal-velocity-light-freighter-trade-scaffold oracleStatus=light_freighter_trade_pending_classic_runtime_trace",
+    "python3 tools/run_gameplay_scenarios.py light_freighter_capacity_trade_loop --pretty -> success true, final credits 10858, cargoCapacity 150, cargoUsed 0",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
+    "python3 -m unittest native_ev.tests.test_model -v -> 153 tests OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 249 tests OK",
     "git diff --check -> OK",
-    "sensitive/proprietary added-content scan -> no actionable secrets/proprietary assets found",
-    "git commit -> local commit 5f9a135 before amend",
-    "git push origin main -> FAILED: missing GitHub HTTPS credentials",
-    "gh auth status -> not logged in"
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
+    "git commit --amend --no-edit -> current local commit contains verified light freighter capacity trade probe slice"
   ],
   "local_checkpoint_commit": "feat(godot): expose commodity unavailable recovery probe; SHA-neutral, inspect live HEAD",
   "mandatory_resume_first_actions": [
@@ -189,7 +188,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Restore GitHub auth or push local commit, then run push/fetch/HEAD verification, create exactly one successor continuation card, and complete t_9362bcf2.",
+  "next_resume_action": "Review the current local commit, then push normally if accepted or apply requested changes before pushing.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -222,7 +221,7 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Continue Terminal Velocity from Kanban task t_a7d52f85: review the local tv-light-freighter-refuel-mission-margin-log checkpoint, run or inspect verification as needed, then commit/push under integrator policy or request changes; do not redo verified light-freighter margin probes.",
+  "resume_prompt": "Resume Terminal Velocity from /home/bh/workspaces/loki/terminal-velocity. Inspect git status/log; the current local commit adds tv-light-freighter-capacity-trade-log and passed targeted/full native, Godot probe, all scenarios, self-test, JSON, and diff checks. Review and normal-push only after integrator approval.",
   "runner": {
     "active_task_id": "t_a5e3a030",
     "assignee": "terminal-velocity",
@@ -312,7 +311,7 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "running",
+  "status": "waiting_gate",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -333,5 +332,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T05:01:49Z"
+  "updated_at": "2026-06-07T05:30:43Z"
 }

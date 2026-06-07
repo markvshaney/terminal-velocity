@@ -384,6 +384,14 @@ Trade margin choice scenario contract:
 - `sourceLabel=terminal-velocity-trade-margin-choice-scaffold`; `oracleStatus=trade_margin_choice_pending_classic_runtime_trace`.
 - This is a Terminal Velocity scaffold for deterministic autoresearch coverage; exact EV Classic commodity-choice UI, price reasoning, and player-facing margin prompts remain pending Classic runtime evidence.
 
+Light Freighter capacity trade scenario contract:
+
+- `RunGodot.ps1 -LightFreighterCapacityTradeLog` / `--tv-light-freighter-capacity-trade-log`
+- Exercises the Terminal Velocity Light Freighter capacity scaffold where the pilot upgrades at Earth, confirms the hold expands from the 20-ton Shuttle capacity to the 150-ton Light Freighter capacity, buys six profitable Food lots, returns to Levo, and sells the larger-than-Shuttle cargo load back down to an empty hold.
+- Logs `boughtLightFreighter=true`, `startingCargoSpace=20`, `upgradedCargoSpace=150`, `positiveMarginLotsBought=6`, `positiveMarginTonsBought=60`, `largeHoldTradeCleared=true`, and `finalCargo=0` plus route, ship-price, cargo, credit, and margin counters.
+- `sourceLabel=terminal-velocity-light-freighter-trade-scaffold`; `oracleStatus=light_freighter_trade_pending_classic_runtime_trace`.
+- This is a Terminal Velocity scaffold for deterministic autoresearch coverage; exact EV Classic shipyard transfer UI, Light Freighter pricing, and player-facing cargo-capacity prompts remain pending Classic runtime evidence.
+
 Light Freighter bulk margin scenario contract:
 
 - `RunGodot.ps1 -LightFreighterBulkMarginLog` / `--tv-light-freighter-bulk-margin-log`

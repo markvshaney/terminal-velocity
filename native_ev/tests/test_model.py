@@ -1313,6 +1313,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_WEAPON_MISSION_CARGO_EVENT',
             'TV_WEAPON_TRADE_CARGO_EVENT',
             'TV_WEAPON_LEGAL_DOCKING_EVENT',
+            'TV_LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT',
             'TV_LIGHT_FREIGHTER_BULK_MARGIN_EVENT',
             'TV_LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT',
             'TV_LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT',
@@ -2387,6 +2388,32 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-trade-margin-choice-log', run_script)
         self.assertIn('tv-trade-margin-choice-log', wrapper)
         self.assertIn('Trade margin choice scenario contract', plan)
+
+    def test_godot_light_freighter_capacity_trade_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-light-freighter-capacity-trade-log',
+            'func _run_light_freighter_capacity_trade_log',
+            'TV_LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT',
+            'boughtLightFreighter=true',
+            'startingCargoSpace=20',
+            'upgradedCargoSpace=150',
+            'positiveMarginLotsBought=6',
+            'positiveMarginTonsBought=60',
+            'largeHoldTradeCleared=true',
+            'finalCargo=0',
+            'sourceLabel=terminal-velocity-light-freighter-trade-scaffold',
+            'oracleStatus=light_freighter_trade_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$LightFreighterCapacityTradeLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-light-freighter-capacity-trade-log', run_script)
+        self.assertIn('tv-light-freighter-capacity-trade-log', wrapper)
+        self.assertIn('Light Freighter capacity trade scenario contract', plan)
 
     def test_godot_light_freighter_bulk_margin_log_contract(self):
         root = Path(__file__).resolve().parents[2]
