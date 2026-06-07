@@ -42,6 +42,7 @@ const MAX_HOLD_TRADE_EVENT_LOG_PREFIX := "TV_MAX_HOLD_TRADE_EVENT"
 const TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX := "TV_TRADE_REFUEL_PROFIT_EVENT"
 const CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX := "TV_CARGO_EXPANSION_TRADE_EVENT"
 const FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX := "TV_FUEL_RESERVE_UPGRADE_EVENT"
+const BALANCED_UPGRADE_TRADE_EVENT_LOG_PREFIX := "TV_BALANCED_UPGRADE_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
@@ -272,6 +273,8 @@ func _ready() -> void:
 		call_deferred("_run_cargo_expansion_trade_log")
 	if OS.get_cmdline_args().has("--tv-fuel-reserve-upgrade-log") or OS.get_cmdline_user_args().has("--tv-fuel-reserve-upgrade-log"):
 		call_deferred("_run_fuel_reserve_upgrade_log")
+	if OS.get_cmdline_args().has("--tv-balanced-upgrade-trade-log") or OS.get_cmdline_user_args().has("--tv-balanced-upgrade-trade-log"):
+		call_deferred("_run_balanced_upgrade_trade_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
@@ -1493,6 +1496,84 @@ func _run_fuel_reserve_upgrade_log() -> void:
 	var return_status := "returnHopCompleted=true" if completed_return_hop else "returnHopCompleted=false"
 	var final_reserve_status := "finalFuelOneHopBelowExpandedMax=true" if player_fuel == max_fuel_after_upgrade - 1 else "finalFuelOneHopBelowExpandedMax=false"
 	print("%s startSystem=%s serviceSystem=%s serviceBody=\"%s\" finalSystem=%s finalBody=\"%s\" routeToServiceSystemSelected=%s routeToStartSystemSelected=%s landedAtServicePort=%s %s %s %s %s %s %s startingFuelMax=%d maxFuelBeforeUpgrade=%d maxFuelAfterUpgrade=%d fuelBeforeBlockedReturn=%d fuelBeforeUpgrade=%d fuelAfterUpgrade=%d fuelAfterRefuel=%d finalFuel=%d creditsBeforeUpgrade=%d creditsAfterUpgrade=%d sourceLabel=terminal-velocity-fuel-reserve-upgrade-scaffold oracleStatus=fuel_reserve_upgrade_pending_classic_runtime_trace status=\"%s\"" % [FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX, start_system, service_system, service_body, final_system, final_body, str(route_to_service_system_selected), str(route_to_start_system_selected), str(landed_at_service_port), blocked_status, bought_status, max_status, refuel_status, return_status, final_reserve_status, starting_fuel_max, max_fuel_before_upgrade, max_fuel_after_upgrade, fuel_before_blocked_return, fuel_before_upgrade, fuel_after_upgrade, fuel_after_refuel, player_fuel, credits_before_upgrade, credits, status_line])
+	get_tree().quit(0)
+
+func _run_balanced_upgrade_trade_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var trade_commodity := "food"
+	var buy_system := "Sol"
+	var sell_system := "Levo"
+	var lot_size := EV_CLASSIC_COMMODITY_LOT_SIZE
+	var starting_cargo_space := cargo_space
+	var starting_fuel_max := _max_player_fuel()
+	var starting_max_hull := _max_player_hull()
+	var starting_credits := 3700
+	credits = starting_credits
+	var route_to_upgrade_system_selected := _select_map_route_to_system(buy_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var upgrade_system := str(current_system.get("name", "?"))
+	var upgrade_body := str(_current_body().get("name", "?"))
+	var credits_before_cargo_pod := credits
+	var bought_cargo_pod := _buy_outfit_or_weapon_by_id("cargo_pod")
+	var cargo_space_after_pod := cargo_space
+	var credits_before_aux_tank := credits
+	var bought_aux_tank := _buy_outfit_or_weapon_by_id("fuel_tank")
+	var max_fuel_after_tank := _max_player_fuel()
+	var credits_before_blocked_hull := credits
+	var hull_plating_before_block := int(owned_outfits.get("hull_plating", 0))
+	var blocked_hull_buy := not _buy_outfit_or_weapon_by_id("hull_plating")
+	var hull_plating_initially_blocked := blocked_hull_buy and int(owned_outfits.get("hull_plating", 0)) == hull_plating_before_block and credits == credits_before_blocked_hull
+	landing_tab = 1
+	selected_landing_item = 0
+	var buy_price := int(_market_prices(buy_system).get(trade_commodity, {}).get("buy", 0))
+	var sell_price := int(_market_prices(sell_system).get(trade_commodity, {}).get("sell", 0))
+	var profit_per_ton := sell_price - buy_price
+	var funding_target_tons := lot_size * 2
+	var credits_before_funding_buy := credits
+	while int(commodity_hold.get(trade_commodity, 0)) < funding_target_tons and cargo + lot_size <= cargo_space:
+		_buy_selected_commodity()
+	var tons_after_funding_buy := int(commodity_hold.get(trade_commodity, 0))
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_sell_system_selected := _select_map_route_to_system(sell_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_funding_sale := credits
+	while int(commodity_hold.get(trade_commodity, 0)) > 0:
+		_sell_selected_commodity()
+	var held_after_funding_sale := int(commodity_hold.get(trade_commodity, 0))
+	var cargo_after_funding_sale := cargo
+	var funding_trade_completed := tons_after_funding_buy == funding_target_tons and held_after_funding_sale == 0 and cargo_after_funding_sale == 0 and credits == credits_before_funding_sale + (sell_price * funding_target_tons)
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_back_to_upgrade_system_selected := _select_map_route_to_system(buy_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var credits_before_hull_plating := credits
+	var bought_hull_plating := _buy_outfit_or_weapon_by_id("hull_plating")
+	var max_hull_after_plating := _max_player_hull()
+	player_hull = max(1, _max_player_hull() - 5)
+	var hull_before_repair := player_hull
+	var credits_before_repair := credits
+	var repaired_final_hull := _repair_current_hull()
+	var bought_cargo_status := "boughtCargoPod=true" if bought_cargo_pod and cargo_space_after_pod > starting_cargo_space else "boughtCargoPod=false"
+	var bought_fuel_status := "boughtAuxFuelTank=true" if bought_aux_tank and max_fuel_after_tank > starting_fuel_max else "boughtAuxFuelTank=false"
+	var hull_blocked_status := "hullPlatingInitiallyBlocked=true" if hull_plating_initially_blocked else "hullPlatingInitiallyBlocked=false"
+	var funding_status := "fundingTradeCompleted=true" if funding_trade_completed else "fundingTradeCompleted=false"
+	var bought_hull_status := "boughtHullPlatingAfterFunding=true" if bought_hull_plating and max_hull_after_plating > starting_max_hull else "boughtHullPlatingAfterFunding=false"
+	var repaired_status := "repairedFinalHullRefit=true" if repaired_final_hull and player_hull == _max_player_hull() else "repairedFinalHullRefit=false"
+	var final_cargo_status := "finalCargo=0" if cargo == 0 else "finalCargo=%d" % cargo
+	print("%s startSystem=Levo upgradeSystem=%s upgradeBody=\"%s\" sellSystem=%s routeToUpgradeSystemSelected=%s routeToSellSystemSelected=%s routeBackToUpgradeSystemSelected=%s commodity=%s buyPrice=%d sellPrice=%d profitPerTon=%d lotSize=%d fundingTargetTons=%d startingCredits=%d creditsBeforeCargoPod=%d creditsBeforeAuxFuelTank=%d creditsBeforeBlockedHull=%d creditsBeforeFundingBuy=%d creditsBeforeFundingSale=%d creditsBeforeHullPlating=%d creditsBeforeRepair=%d creditsAfterRepair=%d startingCargoSpace=%d cargoSpaceAfterPod=%d startingFuelMax=%d maxFuelAfterTank=%d startingMaxHull=%d maxHullAfterPlating=%d hullBeforeRepair=%d finalHull=%d tonsAfterFundingBuy=%d heldAfterFundingSale=%d %s %s %s %s %s %s %s sourceLabel=terminal-velocity-balanced-upgrade-trade-scaffold repairSourceLabel=terminal-velocity-repair-service-scaffold oracleStatus=balanced_upgrade_budget_pending_classic_runtime_trace status=\"%s\"" % [BALANCED_UPGRADE_TRADE_EVENT_LOG_PREFIX, upgrade_system, upgrade_body, sell_system, str(route_to_upgrade_system_selected), str(route_to_sell_system_selected), str(route_back_to_upgrade_system_selected), trade_commodity, buy_price, sell_price, profit_per_ton, lot_size, funding_target_tons, starting_credits, credits_before_cargo_pod, credits_before_aux_tank, credits_before_blocked_hull, credits_before_funding_buy, credits_before_funding_sale, credits_before_hull_plating, credits_before_repair, credits, starting_cargo_space, cargo_space_after_pod, starting_fuel_max, max_fuel_after_tank, starting_max_hull, max_hull_after_plating, hull_before_repair, player_hull, tons_after_funding_buy, held_after_funding_sale, bought_cargo_status, bought_fuel_status, hull_blocked_status, funding_status, bought_hull_status, repaired_status, final_cargo_status, status_line])
 	get_tree().quit(0)
 
 func _run_mission_offer_scan_log() -> void:

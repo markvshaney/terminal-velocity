@@ -579,6 +579,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-fuel-reserve-upgrade-log', run_script)
         self.assertIn('[switch]$FuelReserveUpgradeLog', windows_script)
 
+    def test_godot_balanced_upgrade_trade_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_BALANCED_UPGRADE_TRADE_EVENT',
+            '--tv-balanced-upgrade-trade-log',
+            'func _run_balanced_upgrade_trade_log() -> void:',
+            'boughtCargoPod=true',
+            'boughtAuxFuelTank=true',
+            'hullPlatingInitiallyBlocked=true',
+            'fundingTradeCompleted=true',
+            'boughtHullPlatingAfterFunding=true',
+            'repairedFinalHullRefit=true',
+            'sourceLabel=terminal-velocity-balanced-upgrade-trade-scaffold',
+            'repairSourceLabel=terminal-velocity-repair-service-scaffold',
+            'oracleStatus=balanced_upgrade_budget_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-balanced-upgrade-trade-log', run_script)
+        self.assertIn('[switch]$BalancedUpgradeTradeLog', windows_script)
+
     def test_godot_starting_equipment_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
