@@ -24,6 +24,7 @@ param(
     [switch]$FuelReserveUpgradeLog,
     [switch]$BalancedUpgradeTradeLog,
     [switch]$UpgradeReadinessLog,
+    [switch]$UpgradeAffordabilityLog,
     [switch]$MissionOfferScanLog,
     [switch]$MissionChainOfferLog,
     [switch]$MissionChainLockLog,
@@ -166,6 +167,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-balanced-upgrade-trade-log
 } elseif ($UpgradeReadinessLog) {
     & $Godot --headless --path $Project -- --tv-upgrade-readiness-log
+} elseif ($UpgradeAffordabilityLog) {
+    & $Godot --headless --path $Project -- --tv-upgrade-affordability-log
 } elseif ($MissionOfferScanLog) {
     & $Godot --headless --path $Project -- --tv-mission-offer-scan-log
 } elseif ($MissionChainOfferLog) {

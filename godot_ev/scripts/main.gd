@@ -47,6 +47,7 @@ const CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX := "TV_CARGO_EXPANSION_TRADE_EVENT"
 const FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX := "TV_FUEL_RESERVE_UPGRADE_EVENT"
 const BALANCED_UPGRADE_TRADE_EVENT_LOG_PREFIX := "TV_BALANCED_UPGRADE_TRADE_EVENT"
 const UPGRADE_READINESS_EVENT_LOG_PREFIX := "TV_UPGRADE_READINESS_EVENT"
+const UPGRADE_AFFORDABILITY_EVENT_LOG_PREFIX := "TV_UPGRADE_AFFORDABILITY_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
@@ -289,6 +290,8 @@ func _ready() -> void:
 		call_deferred("_run_balanced_upgrade_trade_log")
 	if OS.get_cmdline_args().has("--tv-upgrade-readiness-log") or OS.get_cmdline_user_args().has("--tv-upgrade-readiness-log"):
 		call_deferred("_run_upgrade_readiness_log")
+	if OS.get_cmdline_args().has("--tv-upgrade-affordability-log") or OS.get_cmdline_user_args().has("--tv-upgrade-affordability-log"):
+		call_deferred("_run_upgrade_affordability_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
@@ -1677,6 +1680,92 @@ func _run_upgrade_readiness_log() -> void:
 	var ship_status := "lightFreighterBought=true" if light_freighter_bought else "lightFreighterBought=false"
 	var player_info_status := "playerInfoUpgradeVisible=true" if player_info_upgrade_visible else "playerInfoUpgradeVisible=false"
 	print("%s startSystem=%s serviceSystem=%s serviceBody=\"%s\" routeToServiceSystemSelected=%s %s %s %s %s %s services=%s startingShip=%s finalShip=%s startingCargoSpace=%d cargoSpaceAfterPod=%d upgradedCargoSpace=%d shipPrice=%d creditsBeforeCargoPod=%d creditsBeforeLaser=%d creditsBeforeShip=%d creditsAfter=%d playerInfoLines=%s sourceLabel=terminal-velocity-upgrade-readiness-strategy-scaffold oracleStatus=upgrade_strategy_progression_pending_ev_family_source_trace status=\"%s\"" % [UPGRADE_READINESS_EVENT_LOG_PREFIX, start_system, service_system, service_body_name, str(route_to_service_system_selected), service_scout_status, cargo_pod_status, laser_status, ship_status, player_info_status, JSON.stringify(services), starting_player_ship_id, player_ship_id, starting_cargo_space, cargo_space_after_pod, upgraded_cargo_space, ship_price, credits_before_cargo_pod, credits_before_laser, credits_before_ship, credits, JSON.stringify(player_info_lines), status_line])
+	get_tree().quit(0)
+
+func _run_upgrade_affordability_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var trade_commodity := "food"
+	var buy_system := "Sol"
+	var sell_system := "Levo"
+	var lot_size := EV_CLASSIC_COMMODITY_LOT_SIZE
+	var route_to_upgrade_system_selected := _select_map_route_to_system(buy_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var upgrade_system := str(current_system.get("name", "?"))
+	var upgrade_body := str(_current_body().get("name", "?"))
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(_current_body())
+	var selected_ship_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			selected_ship_listing = shipyard_listings[i]
+			break
+	var ship_price := int(selected_ship_listing.get("price", 0))
+	var buy_price := int(_market_prices(buy_system).get(trade_commodity, {}).get("buy", 0))
+	var sell_price := int(_market_prices(sell_system).get(trade_commodity, {}).get("sell", 0))
+	var profit_per_ton := sell_price - buy_price
+	var funding_target_tons := lot_size * 2
+	var starting_credits: int = max(buy_price * funding_target_tons, ship_price - (profit_per_ton * funding_target_tons))
+	credits = starting_credits
+	var starting_ship := player_ship_id
+	var starting_cargo_space := cargo_space
+	var credits_before_blocked_ship := credits
+	_buy_selected_ship()
+	var blocked_status := status_line
+	var initial_light_freighter_blocked := player_ship_id == starting_ship and credits == credits_before_blocked_ship and blocked_status == "Not enough credits"
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_funding_buy := credits
+	while int(commodity_hold.get(trade_commodity, 0)) < funding_target_tons and cargo + lot_size <= cargo_space:
+		_buy_selected_commodity()
+	var tons_after_funding_buy := int(commodity_hold.get(trade_commodity, 0))
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_sell_system_selected := _select_map_route_to_system(sell_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_funding_sale := credits
+	while int(commodity_hold.get(trade_commodity, 0)) > 0:
+		_sell_selected_commodity()
+	var held_after_funding_sale := int(commodity_hold.get(trade_commodity, 0))
+	var funding_trade_completed := tons_after_funding_buy == funding_target_tons and held_after_funding_sale == 0 and cargo == 0 and credits == credits_before_funding_sale + (sell_price * funding_target_tons)
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_back_to_upgrade_system_selected := _select_map_route_to_system(buy_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	landing_tab = 3
+	shipyard_listings = _shipyard_listings(_current_body())
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			break
+	var credits_before_ship_after_funding := credits
+	_buy_selected_ship()
+	var light_freighter_bought_after_funding := player_ship_id == "light_freighter" and credits == credits_before_ship_after_funding - ship_price
+	player_hull = _max_player_hull()
+	var player_info_lines := _player_inventory_lines()
+	var player_info_hull_visible := false
+	for line in player_info_lines:
+		if line.contains("hull"):
+			player_info_hull_visible = true
+			break
+	var initial_block_status := "initialLightFreighterBlocked=true" if initial_light_freighter_blocked else "initialLightFreighterBlocked=false"
+	var funding_status := "fundingTradeCompleted=true" if funding_trade_completed else "fundingTradeCompleted=false"
+	var ship_status := "lightFreighterBoughtAfterFunding=true" if light_freighter_bought_after_funding else "lightFreighterBoughtAfterFunding=false"
+	var player_info_status := "playerInfoHullVisible=true" if player_info_hull_visible else "playerInfoHullVisible=false"
+	var final_cargo_status := "finalCargo=0" if cargo == 0 else "finalCargo=%d" % cargo
+	print("%s startSystem=Levo upgradeSystem=%s upgradeBody=\"%s\" sellSystem=%s routeToUpgradeSystemSelected=%s routeToSellSystemSelected=%s routeBackToUpgradeSystemSelected=%s commodity=%s buyPrice=%d sellPrice=%d profitPerTon=%d lotSize=%d fundingTargetTons=%d startingCredits=%d shipPrice=%d creditsBeforeBlockedShip=%d creditsBeforeFundingBuy=%d creditsBeforeFundingSale=%d creditsBeforeShipAfterFunding=%d creditsAfterShip=%d startingShip=%s finalShip=%s startingCargoSpace=%d finalCargoSpace=%d tonsAfterFundingBuy=%d heldAfterFundingSale=%d %s %s %s %s %s playerInfoLines=%s sourceLabel=terminal-velocity-upgrade-affordability-strategy-scaffold oracleStatus=upgrade_affordability_progression_pending_ev_family_source_trace blockedStatus=\"%s\" status=\"%s\"" % [UPGRADE_AFFORDABILITY_EVENT_LOG_PREFIX, upgrade_system, upgrade_body, sell_system, str(route_to_upgrade_system_selected), str(route_to_sell_system_selected), str(route_back_to_upgrade_system_selected), trade_commodity, buy_price, sell_price, profit_per_ton, lot_size, funding_target_tons, starting_credits, ship_price, credits_before_blocked_ship, credits_before_funding_buy, credits_before_funding_sale, credits_before_ship_after_funding, credits, starting_ship, player_ship_id, starting_cargo_space, cargo_space, tons_after_funding_buy, held_after_funding_sale, initial_block_status, funding_status, ship_status, player_info_status, final_cargo_status, JSON.stringify(player_info_lines), blocked_status, status_line])
 	get_tree().quit(0)
 
 func _run_balanced_upgrade_trade_log() -> void:
@@ -9367,6 +9456,8 @@ func _buy_selected_ship() -> void:
 	player_frame_offsets = player_frame_set["offsets"]
 	cargo_space = int(player_ship.get("cargoSpace", cargo_space))
 	cargo = min(cargo, cargo_space)
+	player_fuel = min(player_fuel, _max_player_fuel())
+	_reset_player_combat_stats()
 	_set_status("Bought ship: " + ship_id)
 	_play_sound("ui_click")
 

@@ -1313,6 +1313,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-upgrade-readiness-log', run_script)
         self.assertIn('[switch]$UpgradeReadinessLog', windows_script)
 
+    def test_godot_upgrade_affordability_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        for symbol in [
+            'TV_UPGRADE_AFFORDABILITY_EVENT',
+            '--tv-upgrade-affordability-log',
+            'func _run_upgrade_affordability_log',
+            'sourceLabel=terminal-velocity-upgrade-affordability-strategy-scaffold',
+            'oracleStatus=upgrade_affordability_progression_pending_ev_family_source_trace',
+            'initialLightFreighterBlocked=true',
+            'fundingTradeCompleted=true',
+            'lightFreighterBoughtAfterFunding=true',
+            'playerInfoHullVisible=true',
+            'finalCargo=0',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-upgrade-affordability-log', run_script)
+        self.assertIn('[switch]$UpgradeAffordabilityLog', windows_script)
+
     def test_godot_legal_status_surface_is_scaffold_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
