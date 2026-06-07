@@ -94,6 +94,7 @@
     "contraband_trade_funds_clemency_loop",
     "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
+    "pirate_avoidance_mission_trade_escape_loop",
     "disposable_combat_placeholder"
   ],
   "scenarios": {
@@ -180,6 +181,10 @@
     "pirate_avoidance_escape_route": {
       "purpose": "Pirate-avoidance loop: detect a symbolic pirate intercept, choose a linked safe-port jump, land, and verify combat remains unexecuted while preserving scaffold/source-boundary labels.",
       "surface": "noncombat escape / disposable combat-prep scaffold"
+    },
+    "pirate_avoidance_mission_trade_escape_loop": {
+      "purpose": "Loaded-cargo pirate-avoidance loop: carry mission-reserved cargo plus a legal trade lot through a symbolic noncombat intercept, return to Levo, and verify cargo/source-boundary preservation while combat remains unexecuted.",
+      "surface": "noncombat escape with mission/trade cargo preservation scaffold"
     },
     "disposable_combat_placeholder": {
       "purpose": "Combat/piracy guardrail scaffold only; records stop conditions without executing destructive tests.",

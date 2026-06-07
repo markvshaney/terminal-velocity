@@ -108,6 +108,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'contraband_trade_funds_clemency_loop',
                 'legal_clemency_insufficient_credit_guardrail',
                 'pirate_avoidance_escape_route',
+                'pirate_avoidance_mission_trade_escape_loop',
                 'disposable_combat_placeholder',
             ],
         )
@@ -2080,6 +2081,25 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(avoidance['sourceLabel'], 'terminal-velocity-pirate-avoidance-scaffold')
         self.assertEqual(avoidance['oracleStatus'], 'pirate_avoidance_pending_ev_classic_combat_trace')
         self.assertEqual(avoidance['decision'], 'jump_to_linked_safe_port')
+
+    def test_pirate_avoidance_mission_trade_escape_loop_preserves_loaded_cargo(self):
+        result = run_scripted_scenario('pirate_avoidance_mission_trade_escape_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertFalse(result['state']['combatExecuted'])
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['cargoHold'].get('food'), 10)
+        self.assertEqual(result['state']['cargoUsed'], 15)
+        self.assertEqual(result['checks']['escaped_loaded_route_without_combat'], 'passed')
+        self.assertEqual(result['checks']['preserved_mission_and_trade_cargo_after_evasion'], 'passed')
+        self.assertEqual(result['checks']['recorded_pirate_loaded_cargo_source_boundary'], 'passed')
+        avoidance = [event for event in result['trace'] if event['type'] == 'avoid_pirate_contact'][-1]
+        self.assertEqual(avoidance['missionCargoBeforeEscape'], 5)
+        self.assertEqual(avoidance['tradeCargoBeforeEscape'], 10)
+        self.assertEqual(avoidance['cargoUsedAfterEscape'], 15)
+        self.assertEqual(avoidance['sourceLabel'], 'terminal-velocity-pirate-avoidance-loaded-cargo-scaffold')
+        self.assertEqual(avoidance['oracleStatus'], 'pirate_avoidance_loaded_cargo_pending_ev_classic_combat_trace')
 
     def test_disposable_combat_placeholder_defines_guardrails_without_combat_execution(self):
         result = run_scripted_scenario('disposable_combat_placeholder')

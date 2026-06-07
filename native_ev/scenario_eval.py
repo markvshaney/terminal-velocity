@@ -127,6 +127,7 @@ SCENARIO_CURRICULUM = [
     'contraband_trade_funds_clemency_loop',
     'legal_clemency_insufficient_credit_guardrail',
     'pirate_avoidance_escape_route',
+    'pirate_avoidance_mission_trade_escape_loop',
     'disposable_combat_placeholder',
 ]
 
@@ -918,16 +919,25 @@ def _avoid_pirate_contact(state: dict[str, Any], action: dict[str, Any], trace: 
     state['combatExecuted'] = False
     state['threatPosture'] = 'evaded'
     destination = str(action.get('safeDestinationSystem', 'Sol'))
-    trace.append({
+    mission_cargo_before_escape = sum(int(job.get('reservedCargoTons', job.get('tons', 0))) for job in state.get('activeJobs', []))
+    trade_cargo_before_escape = max(0, int(state.get('cargoUsed', 0)) - mission_cargo_before_escape)
+    event = {
         'type': 'avoid_pirate_contact',
         'threat': action.get('threat', 'pirate_intercept'),
         'originSystem': state['currentSystem'],
         'safeDestinationSystem': destination,
         'decision': 'jump_to_linked_safe_port',
         'combatExecuted': False,
-        'sourceLabel': 'terminal-velocity-pirate-avoidance-scaffold',
-        'oracleStatus': 'pirate_avoidance_pending_ev_classic_combat_trace',
-    })
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-pirate-avoidance-scaffold'),
+        'oracleStatus': action.get('oracleStatus', 'pirate_avoidance_pending_ev_classic_combat_trace'),
+    }
+    if action.get('recordCargoContext') is True:
+        event.update({
+            'missionCargoBeforeEscape': mission_cargo_before_escape,
+            'tradeCargoBeforeEscape': trade_cargo_before_escape,
+            'cargoUsedAfterEscape': int(state.get('cargoUsed', 0)),
+        })
+    trace.append(event)
     return _jump(state, {'destinationSystem': destination}, trace)
 
 
@@ -2713,6 +2723,18 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'avoid_pirate_contact', 'threat': 'pirate_intercept', 'safeDestinationSystem': 'Sol'},
             {'type': 'land', 'body': 'Earth'},
         ]
+    if name == 'pirate_avoidance_mission_trade_escape_loop':
+        source_label = 'terminal-velocity-pirate-avoidance-loaded-cargo-scaffold'
+        oracle_status = 'pirate_avoidance_loaded_cargo_pending_ev_classic_combat_trace'
+        return [
+            {'type': 'buy_commodity_lot', 'commodity': 'food'},
+            {'type': 'accept_cargo_job', 'destinationSystem': 'Sol', 'destinationBody': 'Earth', 'tons': 5, 'id': 'loaded_escape_cargo_001'},
+            {'type': 'depart'},
+            {'type': 'avoid_pirate_contact', 'threat': 'pirate_intercept_loaded_cargo', 'safeDestinationSystem': 'Sol', 'recordCargoContext': True, 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Levo'},
+            {'type': 'land', 'body': 'Levo Spaceport'},
+        ]
     if name == 'disposable_combat_placeholder':
         return [
             {'type': 'combat_placeholder_guardrail'},
@@ -3552,6 +3574,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'detected_pirate_threat': 'passed' if any(event.get('type') == 'avoid_pirate_contact' and event.get('threat') == 'pirate_intercept' for event in trace) else 'failed',
             'escaped_without_combat': 'passed' if state.get('combatExecuted') is False and state.get('threatPosture') == 'evaded' and any(event.get('type') == 'jump' and event.get('destinationSystem') == 'Sol' for event in trace) else 'failed',
             'landed_at_safe_port': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' else 'failed',
+        })
+    elif name == 'pirate_avoidance_mission_trade_escape_loop':
+        source_label = 'terminal-velocity-pirate-avoidance-loaded-cargo-scaffold'
+        oracle_status = 'pirate_avoidance_loaded_cargo_pending_ev_classic_combat_trace'
+        evasion = next((event for event in trace if event.get('type') == 'avoid_pirate_contact'), {})
+        checks.update({
+            'escaped_loaded_route_without_combat': 'passed' if state.get('combatExecuted') is False and state.get('threatPosture') == 'evaded' and evasion.get('threat') == 'pirate_intercept_loaded_cargo' and any(event.get('type') == 'jump' and event.get('destinationSystem') == 'Sol' for event in trace) else 'failed',
+            'preserved_mission_and_trade_cargo_after_evasion': 'passed' if state.get('currentSystem') == 'Levo' and state.get('landedBody') == 'Levo Spaceport' and state.get('cargoHold', {}).get('food') == 10 and state.get('cargoUsed') == 15 and sum(int(job.get('reservedCargoTons', job.get('tons', 0))) for job in state.get('activeJobs', [])) == 5 else 'failed',
+            'recorded_pirate_loaded_cargo_source_boundary': 'passed' if evasion.get('missionCargoBeforeEscape') == 5 and evasion.get('tradeCargoBeforeEscape') == 10 and evasion.get('cargoUsedAfterEscape') == 15 and evasion.get('sourceLabel') == source_label and evasion.get('oracleStatus') == oracle_status else 'failed',
         })
     elif name == 'disposable_combat_placeholder':
         stop_conditions = next((event.get('stopConditions', []) for event in trace if event.get('type') == 'combat_placeholder_guardrail'), [])

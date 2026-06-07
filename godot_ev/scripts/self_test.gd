@@ -223,6 +223,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"contraband_trade_funds_clemency_loop",
 		"legal_clemency_insufficient_credit_guardrail",
 		"pirate_avoidance_escape_route",
+		"pirate_avoidance_mission_trade_escape_loop",
 		"disposable_combat_placeholder",
 	]
 	if scenario_order != required:
