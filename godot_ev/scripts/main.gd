@@ -87,6 +87,7 @@ const WEAPON_REPUTATION_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_REPUTATION_GATE_EVEN
 const WEAPON_CREDIT_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_CREDIT_GATE_EVENT"
 const WEAPON_AVAILABILITY_GATE_EVENT_LOG_PREFIX := "TV_WEAPON_AVAILABILITY_GATE_EVENT"
 const WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX := "TV_WEAPON_INVENTORY_STACK_EVENT"
+const WEAPON_SECONDARY_ACTIVATION_EVENT_LOG_PREFIX := "TV_WEAPON_SECONDARY_ACTIVATION_EVENT"
 const WEAPON_MISSION_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_MISSION_CARGO_EVENT"
 const WEAPON_TRADE_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_TRADE_CARGO_EVENT"
 const WEAPON_LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_WEAPON_LEGAL_DOCKING_EVENT"
@@ -357,6 +358,8 @@ func _ready() -> void:
 		call_deferred("_run_weapon_availability_gate_log")
 	if OS.get_cmdline_args().has("--tv-weapon-inventory-stack-log") or OS.get_cmdline_user_args().has("--tv-weapon-inventory-stack-log"):
 		call_deferred("_run_weapon_inventory_stack_log")
+	if OS.get_cmdline_args().has("--tv-weapon-secondary-activation-log") or OS.get_cmdline_user_args().has("--tv-weapon-secondary-activation-log"):
+		call_deferred("_run_weapon_secondary_activation_log")
 	if OS.get_cmdline_args().has("--tv-weapon-mission-cargo-log") or OS.get_cmdline_user_args().has("--tv-weapon-mission-cargo-log"):
 		call_deferred("_run_weapon_mission_cargo_log")
 	if OS.get_cmdline_args().has("--tv-weapon-trade-cargo-log") or OS.get_cmdline_user_args().has("--tv-weapon-trade-cargo-log"):
@@ -3325,6 +3328,48 @@ func _run_weapon_inventory_stack_log() -> void:
 	var weapon_stack_count_after_second := int(owned_weapons.get(selected_weapon, 0))
 	var weapon_stack_preserved := first_weapon_buy_succeeded and second_weapon_buy_succeeded and weapon_stack_count_after_first == 1 and weapon_stack_count_after_second == 2
 	print("%s system=%s body=\"%s\" government=\"%s\" selectedWeapon=%s firstWeaponBuySucceeded=%s secondWeaponBuySucceeded=%s weaponStackCountAfterFirst=%d weaponStackCountAfterSecond=%d weaponStackPreserved=%s creditsAfterFirst=%d creditsAfterSecond=%d sourceLabel=terminal-velocity-weapon-inventory-stack-scaffold oracleStatus=classic_runtime_multiple_weapon_purchase_inventory_pending" % [WEAPON_INVENTORY_STACK_EVENT_LOG_PREFIX, system_name, body_name, government_name, selected_weapon, str(first_weapon_buy_succeeded), str(second_weapon_buy_succeeded), weapon_stack_count_after_first, weapon_stack_count_after_second, str(weapon_stack_preserved), credits_after_first, credits])
+	get_tree().quit(0)
+
+func _run_weapon_secondary_activation_log() -> void:
+	_reset_deterministic_motion_state()
+	_reset_combat_targets()
+	projectiles.clear()
+	status_messages.clear()
+	owned_weapons.clear()
+	selected_secondary_weapon_index = 0
+	secondary_weapon_cooldown_frames = 0.0
+	var selected_weapon := "pulse_cannon"
+	var system_name := "Sirius"
+	var body_name := "Sirius Station"
+	current_system_index = _system_index_by_name(system_name, current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	landed = true
+	for body in current_system.get("bodies", []):
+		if str(body.get("name", "")) == body_name:
+			pos = Vector2(float(body.get("x", 0)), float(body.get("y", 0)))
+			break
+	var government_name := _current_government_name()
+	legal_records[government_name] = 0
+	reputation_scores[government_name] = 6
+	credits = 10000
+	_fire_secondary_weapon()
+	var unavailable_message := "Secondary weapon not loaded; primary combat scaffold available with Tab"
+	var secondary_unavailable_before_purchase := status_messages.has(unavailable_message) and _installed_secondary_weapon_ids().is_empty()
+	status_messages.clear()
+	var secondary_bought_before_activation := _buy_outfit_or_weapon_by_id(selected_weapon)
+	var weapon_count_after_purchase := int(owned_weapons.get(selected_weapon, 0))
+	_change_secondary_weapon()
+	var weapon := _secondary_weapon_stats()
+	var secondary_cycle_selected_after_purchase := status_messages.has("Secondary weapon selected: %s" % str(weapon.get("name", selected_weapon)))
+	var shield_before := int(target_shields.get(selected_target_index, 0))
+	var secondary_projectile_spawned_after_purchase := _spawn_secondary_projectile()
+	for _i in range(120):
+		_advance_projectiles(1.0 / 60.0)
+		_advance_explosion_events(1.0 / 60.0)
+	var shield_after := int(target_shields.get(selected_target_index, 0))
+	var secondary_target_damaged_after_purchase := shield_after < shield_before
+	var secondary_hud_fragment := _secondary_weapon_hud_fragment()
+	print("%s system=%s body=\"%s\" government=\"%s\" selectedWeapon=%s secondaryUnavailableBeforePurchase=%s secondaryBoughtBeforeActivation=%s weaponCountAfterPurchase=%d secondaryCycleSelectedAfterPurchase=%s secondaryProjectileSpawnedAfterPurchase=%s secondaryTargetDamagedAfterPurchase=%s selectedSecondaryId=%s selectedSecondaryName=\"%s\" secondaryHudFragment=\"%s\" targetShieldBefore=%d targetShieldAfter=%d sourceLabel=terminal-velocity-weapon-secondary-activation-scaffold oracleStatus=classic_runtime_secondary_weapon_activation_pending" % [WEAPON_SECONDARY_ACTIVATION_EVENT_LOG_PREFIX, system_name, body_name, government_name, selected_weapon, str(secondary_unavailable_before_purchase).to_lower(), str(secondary_bought_before_activation).to_lower(), weapon_count_after_purchase, str(secondary_cycle_selected_after_purchase).to_lower(), str(secondary_projectile_spawned_after_purchase).to_lower(), str(secondary_target_damaged_after_purchase).to_lower(), str(weapon.get("id", "")), str(weapon.get("name", "")), secondary_hud_fragment, shield_before, shield_after])
 	get_tree().quit(0)
 
 func _run_weapon_mission_cargo_log() -> void:

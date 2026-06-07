@@ -1051,6 +1051,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_WEAPON_CREDIT_GATE_EVENT',
             'TV_WEAPON_AVAILABILITY_GATE_EVENT',
             'TV_WEAPON_INVENTORY_STACK_EVENT',
+            'TV_WEAPON_SECONDARY_ACTIVATION_EVENT',
             'TV_WEAPON_MISSION_CARGO_EVENT',
             'TV_WEAPON_TRADE_CARGO_EVENT',
             'TV_WEAPON_LEGAL_DOCKING_EVENT',
@@ -1075,6 +1076,9 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-weapon-reputation-gate-log',
             '--tv-weapon-credit-gate-log',
             '--tv-weapon-availability-gate-log',
+            '--tv-weapon-inventory-stack-log',
+            '--tv-weapon-secondary-activation-log',
+            '--tv-weapon-mission-cargo-log',
             '--tv-weapon-trade-cargo-log',
             '--tv-weapon-legal-docking-log',
             '--tv-light-freighter-bulk-margin-log',
@@ -1095,6 +1099,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_weapon_credit_gate_log',
             'func _run_weapon_availability_gate_log',
             'func _run_weapon_inventory_stack_log',
+            'func _run_weapon_secondary_activation_log',
             'func _run_weapon_mission_cargo_log',
             'func _run_weapon_trade_cargo_log',
             'func _run_weapon_legal_docking_log',
@@ -1190,6 +1195,7 @@ class NativeEvModelTests(unittest.TestCase):
             'sourceLabel=terminal-velocity-weapon-credit-gate-scaffold',
             'sourceLabel=terminal-velocity-weapon-availability-gate-scaffold',
             'sourceLabel=terminal-velocity-weapon-inventory-stack-scaffold',
+            'sourceLabel=terminal-velocity-weapon-secondary-activation-scaffold',
             'sourceLabel=terminal-velocity-weapon-mission-cargo-scaffold',
             'sourceLabel=terminal-velocity-weapon-trade-cargo-scaffold',
             'sourceLabel=terminal-velocity-weapon-legal-docking-scaffold',
@@ -1205,6 +1211,10 @@ class NativeEvModelTests(unittest.TestCase):
             'secondWeaponBuySucceeded=%s',
             'weaponStackCountAfterFirst=%d',
             'weaponStackCountAfterSecond=%d',
+            'secondaryUnavailableBeforePurchase=%s',
+            'secondaryBoughtBeforeActivation=%s',
+            'secondaryCycleSelectedAfterPurchase=%s',
+            'secondaryProjectileSpawnedAfterPurchase=%s',
             'activeMissionCargoBefore=%d',
             'activeMissionCargoAfter=%d',
             'cargoUsedAfterWeapon=%d',
@@ -1252,6 +1262,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-weapon-credit-gate-log', run_script)
         self.assertIn('tv-weapon-availability-gate-log', run_script)
         self.assertIn('tv-weapon-inventory-stack-log', run_script)
+        self.assertIn('tv-weapon-secondary-activation-log', run_script)
         self.assertIn('tv-weapon-mission-cargo-log', run_script)
         self.assertIn('tv-weapon-trade-cargo-log', run_script)
         self.assertIn('tv-weapon-legal-docking-log', run_script)
@@ -1277,6 +1288,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$WeaponCreditGateLog', windows_script)
         self.assertIn('[switch]$WeaponAvailabilityGateLog', windows_script)
         self.assertIn('[switch]$WeaponInventoryStackLog', windows_script)
+        self.assertIn('[switch]$WeaponSecondaryActivationLog', windows_script)
         self.assertIn('[switch]$WeaponMissionCargoLog', windows_script)
         self.assertIn('[switch]$WeaponTradeCargoLog', windows_script)
         self.assertIn('[switch]$WeaponLegalDockingLog', windows_script)
