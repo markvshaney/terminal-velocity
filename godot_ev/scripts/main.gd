@@ -41,6 +41,7 @@ const CROSS_MARKET_TRADE_EVENT_LOG_PREFIX := "TV_CROSS_MARKET_TRADE_EVENT"
 const MAX_HOLD_TRADE_EVENT_LOG_PREFIX := "TV_MAX_HOLD_TRADE_EVENT"
 const TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX := "TV_TRADE_REFUEL_PROFIT_EVENT"
 const CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX := "TV_CARGO_EXPANSION_TRADE_EVENT"
+const FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX := "TV_FUEL_RESERVE_UPGRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
@@ -269,6 +270,8 @@ func _ready() -> void:
 		call_deferred("_run_trade_refuel_profit_log")
 	if OS.get_cmdline_args().has("--tv-cargo-expansion-trade-log") or OS.get_cmdline_user_args().has("--tv-cargo-expansion-trade-log"):
 		call_deferred("_run_cargo_expansion_trade_log")
+	if OS.get_cmdline_args().has("--tv-fuel-reserve-upgrade-log") or OS.get_cmdline_user_args().has("--tv-fuel-reserve-upgrade-log"):
+		call_deferred("_run_fuel_reserve_upgrade_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
@@ -1441,6 +1444,55 @@ func _run_cargo_expansion_trade_log() -> void:
 	var profit_status := "finalProfitOk=true" if final_profit_ok else "finalProfitOk=false"
 	var final_cargo_status := "finalCargo=0" if final_cargo == 0 else "finalCargo=%d" % final_cargo
 	print("%s startSystem=Levo buySystem=Sol sellSystem=Levo routeToBuySystemSelected=%s routeToSellSystemSelected=%s commodity=%s buyPrice=%d sellPrice=%d profitPerTon=%d lotSize=%d startingCargoSpace=%d cargoSpaceAfterUpgrade=%d expandedTargetTons=%d tonsBeforeUpgrade=%d tonsAfterExpandedBuy=%d heldAfterExpandedSale=%d creditsBeforeTradeProbe=%d creditsAfterTradeProbe=%d creditsAfterProbeSale=%d creditsBeforeUpgrade=%d creditsBeforeExpandedBuy=%d creditsBeforeExpandedSale=%d creditsAfterExpandedSale=%d expectedFinalCredits=%d %s %s %s %s %s %s %s thirdLotBlockedStatus=\"%s\" sourceLabel=terminal-velocity-cargo-expansion-trade-scaffold oracleStatus=cargo_expansion_trade_pending_classic_runtime_trace status=\"%s\"" % [CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX, str(route_to_buy_system_selected), str(route_to_sell_system_selected), trade_commodity, buy_price, sell_price, profit_per_ton, lot_size, starting_cargo_space, cargo_space_after_upgrade, expanded_target_tons, tons_before_upgrade, tons_after_expanded_buy, held_after_expanded_sale, credits_before_trade_probe, credits_after_trade_probe, credits_after_probe_sale, credits_before_upgrade, credits_before_expanded_buy, credits_before_expanded_sale, credits, expected_final_credits, bought_status, expanded_status, blocked_status, filled_status, sold_status, profit_status, final_cargo_status, third_lot_blocked_status, status_line])
+	get_tree().quit(0)
+
+func _run_fuel_reserve_upgrade_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var starting_fuel_max := _max_player_fuel()
+	var route_to_service_system_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var service_system := str(current_system.get("name", "?"))
+	var service_body := str(_current_body().get("name", "?"))
+	var landed_at_service_port := landed and service_system == "Sol" and service_body == "Earth"
+	player_fuel = 0
+	var fuel_before_blocked_return := player_fuel
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_start_system_selected := _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var empty_reserve_return_blocked := service_system == str(current_system.get("name", "?")) and player_fuel == fuel_before_blocked_return and status_line == "Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route"
+	_position_at_body("Earth")
+	_try_land()
+	var credits_before_upgrade := credits
+	var fuel_before_upgrade := player_fuel
+	var max_fuel_before_upgrade := _max_player_fuel()
+	var bought_aux_tank := _buy_outfit_or_weapon_by_id("fuel_tank")
+	var max_fuel_after_upgrade := _max_player_fuel()
+	var fuel_after_upgrade := player_fuel
+	var fuel_tank_owned := owned_outfits.has("fuel_tank") and int(owned_outfits.get("fuel_tank", 0)) > 0
+	var refuel_succeeded := _refuel_current_ship()
+	var fuel_after_refuel := player_fuel
+	_ev_land_or_launch()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	var final_system := str(current_system.get("name", "?"))
+	var final_body := str(_current_body().get("name", "?"))
+	var completed_return_hop := final_system == start_system and final_body == "Levo Spaceport" and player_fuel == max_fuel_after_upgrade - 1
+	var bought_status := "boughtAuxFuelTank=true" if bought_aux_tank and fuel_tank_owned else "boughtAuxFuelTank=false"
+	var max_status := "maxFuelExpanded=true" if max_fuel_after_upgrade > max_fuel_before_upgrade else "maxFuelExpanded=false"
+	var blocked_status := "emptyReserveReturnBlocked=true" if empty_reserve_return_blocked else "emptyReserveReturnBlocked=false"
+	var refuel_status := "refueledToExpandedReserve=true" if refuel_succeeded and fuel_after_refuel == max_fuel_after_upgrade else "refueledToExpandedReserve=false"
+	var return_status := "returnHopCompleted=true" if completed_return_hop else "returnHopCompleted=false"
+	var final_reserve_status := "finalFuelOneHopBelowExpandedMax=true" if player_fuel == max_fuel_after_upgrade - 1 else "finalFuelOneHopBelowExpandedMax=false"
+	print("%s startSystem=%s serviceSystem=%s serviceBody=\"%s\" finalSystem=%s finalBody=\"%s\" routeToServiceSystemSelected=%s routeToStartSystemSelected=%s landedAtServicePort=%s %s %s %s %s %s %s startingFuelMax=%d maxFuelBeforeUpgrade=%d maxFuelAfterUpgrade=%d fuelBeforeBlockedReturn=%d fuelBeforeUpgrade=%d fuelAfterUpgrade=%d fuelAfterRefuel=%d finalFuel=%d creditsBeforeUpgrade=%d creditsAfterUpgrade=%d sourceLabel=terminal-velocity-fuel-reserve-upgrade-scaffold oracleStatus=fuel_reserve_upgrade_pending_classic_runtime_trace status=\"%s\"" % [FUEL_RESERVE_UPGRADE_EVENT_LOG_PREFIX, start_system, service_system, service_body, final_system, final_body, str(route_to_service_system_selected), str(route_to_start_system_selected), str(landed_at_service_port), blocked_status, bought_status, max_status, refuel_status, return_status, final_reserve_status, starting_fuel_max, max_fuel_before_upgrade, max_fuel_after_upgrade, fuel_before_blocked_return, fuel_before_upgrade, fuel_after_upgrade, fuel_after_refuel, player_fuel, credits_before_upgrade, credits, status_line])
 	get_tree().quit(0)
 
 func _run_mission_offer_scan_log() -> void:

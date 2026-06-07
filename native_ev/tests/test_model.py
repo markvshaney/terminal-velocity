@@ -556,6 +556,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-cargo-expansion-trade-log', run_script)
         self.assertIn('[switch]$CargoExpansionTradeLog', windows_script)
 
+    def test_godot_fuel_reserve_upgrade_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_FUEL_RESERVE_UPGRADE_EVENT',
+            '--tv-fuel-reserve-upgrade-log',
+            'func _run_fuel_reserve_upgrade_log() -> void:',
+            'boughtAuxFuelTank=true',
+            'maxFuelExpanded=true',
+            'emptyReserveReturnBlocked=true',
+            'refueledToExpandedReserve=true',
+            'returnHopCompleted=true',
+            'finalFuelOneHopBelowExpandedMax=true',
+            'sourceLabel=terminal-velocity-fuel-reserve-upgrade-scaffold',
+            'oracleStatus=fuel_reserve_upgrade_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-fuel-reserve-upgrade-log', run_script)
+        self.assertIn('[switch]$FuelReserveUpgradeLog', windows_script)
+
     def test_godot_starting_equipment_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

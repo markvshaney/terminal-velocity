@@ -18,6 +18,7 @@ param(
     [switch]$MaxHoldTradeLog,
     [switch]$TradeRefuelProfitLog,
     [switch]$CargoExpansionTradeLog,
+    [switch]$FuelReserveUpgradeLog,
     [switch]$MissionOfferScanLog,
     [switch]$MissionChainOfferLog,
     [switch]$MissionChainLockLog,
@@ -145,6 +146,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-trade-refuel-profit-log
 } elseif ($CargoExpansionTradeLog) {
     & $Godot --headless --path $Project -- --tv-cargo-expansion-trade-log
+} elseif ($FuelReserveUpgradeLog) {
+    & $Godot --headless --path $Project -- --tv-fuel-reserve-upgrade-log
 } elseif ($MissionOfferScanLog) {
     & $Godot --headless --path $Project -- --tv-mission-offer-scan-log
 } elseif ($MissionChainOfferLog) {
