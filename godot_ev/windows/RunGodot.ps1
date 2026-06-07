@@ -14,6 +14,7 @@ param(
     [switch]$LowFuelJumpLog,
     [switch]$NearCenterJumpLog,
     [switch]$CommodityTradeLog,
+    [switch]$LevoSamePortSellbackLog,
     [switch]$CommodityBuyBlockedRecoveryLog,
     [switch]$CommoditySellBlockedRecoveryLog,
     [switch]$CommodityUnavailableRecoveryLog,
@@ -151,6 +152,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-near-center-jump-log
 } elseif ($CommodityTradeLog) {
     & $Godot --headless --path $Project -- --tv-commodity-trade-log
+} elseif ($LevoSamePortSellbackLog) {
+    & $Godot --headless --path $Project -- --tv-levo-same-port-sellback-log
 } elseif ($CommodityBuyBlockedRecoveryLog) {
     & $Godot --headless --path $Project -- --tv-commodity-buy-blocked-recovery-log
 } elseif ($CommoditySellBlockedRecoveryLog) {

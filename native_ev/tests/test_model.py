@@ -4222,6 +4222,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-commodity-trade-log', run_script)
         self.assertIn('tv-commodity-trade-log', launcher)
 
+    def test_godot_levo_same_port_sellback_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            'const LEVO_SAME_PORT_SELLBACK_EVENT_LOG_PREFIX := "TV_LEVO_SAME_PORT_SELLBACK_EVENT"',
+            '--tv-levo-same-port-sellback-log',
+            'func _run_levo_same_port_sellback_log() -> void:',
+            'boughtOriginalObservedLot=true',
+            'soldSamePortLot=true',
+            'creditsRestored=true',
+            'cargoCleared=true',
+            'buyPrice=120',
+            'sellPrice=120',
+            'sourceLabel=original-runtime-observed',
+            'oracleStatus=levo_same_port_sellback_observed',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$LevoSamePortSellbackLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-levo-same-port-sellback-log', run_script)
+        self.assertIn('tv-levo-same-port-sellback-log', launcher)
+        self.assertIn('Levo same-port sellback scenario contract', plan)
+
     def test_godot_commodity_sell_blocked_recovery_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

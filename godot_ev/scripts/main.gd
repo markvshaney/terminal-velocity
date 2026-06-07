@@ -38,6 +38,7 @@ const REPAIR_CREDIT_RECOVERY_EVENT_LOG_PREFIX := "TV_REPAIR_CREDIT_RECOVERY_EVEN
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
+const LEVO_SAME_PORT_SELLBACK_EVENT_LOG_PREFIX := "TV_LEVO_SAME_PORT_SELLBACK_EVENT"
 const COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_BUY_BLOCKED_RECOVERY_EVENT"
 const COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_SELL_BLOCKED_RECOVERY_EVENT"
 const COMMODITY_UNAVAILABLE_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_UNAVAILABLE_RECOVERY_EVENT"
@@ -274,6 +275,8 @@ func _ready() -> void:
 		call_deferred("_run_near_center_jump_log")
 	if OS.get_cmdline_args().has("--tv-commodity-trade-log") or OS.get_cmdline_user_args().has("--tv-commodity-trade-log"):
 		call_deferred("_run_commodity_trade_log")
+	if OS.get_cmdline_args().has("--tv-levo-same-port-sellback-log") or OS.get_cmdline_user_args().has("--tv-levo-same-port-sellback-log"):
+		call_deferred("_run_levo_same_port_sellback_log")
 	if OS.get_cmdline_args().has("--tv-commodity-buy-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-buy-blocked-recovery-log"):
 		call_deferred("_run_commodity_buy_blocked_recovery_log")
 	if OS.get_cmdline_args().has("--tv-commodity-sell-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-sell-blocked-recovery-log"):
@@ -1276,6 +1279,40 @@ func _run_commodity_trade_log() -> void:
 	var sell_status := "sellSucceeded=true" if sell_succeeded else "sellSucceeded=false"
 	var visible_status := "roundTripVisible=true" if round_trip_visible else "roundTripVisible=false"
 	print("%s system=%s commodity=%s buyPrice=%d sellPrice=%d %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBeforeBuy=%d cargoAfterBuy=%d cargoAfterSell=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=original-runtime-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [COMMODITY_TRADE_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, sell_price, buy_status, sell_status, visible_status, credits_before_buy, credits_after_buy, credits_after_sell, cargo_before_buy, cargo_after_buy, cargo_after_sell, held_after_buy, held_after_sell, status_line])
+	get_tree().quit(0)
+
+func _run_levo_same_port_sellback_log() -> void:
+	_reset_travel_state()
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var commodity_id := "food"
+	var commodity_name := "Food"
+	var system_name := str(current_system.get("name", "?"))
+	var body_name := str(_current_body().get("name", "?"))
+	var buy_price := int(_market_prices(system_name).get(commodity_id, {}).get("buy", 0))
+	var sell_price := _commodity_sell_price(commodity_id)
+	var credits_before_buy := credits
+	var cargo_before_buy := cargo
+	_buy_selected_commodity()
+	var credits_after_buy := credits
+	var cargo_after_buy := cargo
+	var held_after_buy := int(commodity_hold.get(commodity_id, 0))
+	var bought_original_observed_lot := system_name == START_SYSTEM_NAME and body_name == "Levo Spaceport" and buy_price == 120 and held_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo_after_buy == cargo_before_buy + EV_CLASSIC_COMMODITY_LOT_SIZE and credits_after_buy == credits_before_buy - (buy_price * EV_CLASSIC_COMMODITY_LOT_SIZE) and status_messages.has("Bought %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	_sell_selected_commodity()
+	var credits_after_sell := credits
+	var cargo_after_sell := cargo
+	var held_after_sell := int(commodity_hold.get(commodity_id, 0))
+	var sold_same_port_lot := sell_price == 120 and held_after_sell == 0 and credits_after_sell == credits_after_buy + (sell_price * EV_CLASSIC_COMMODITY_LOT_SIZE) and status_messages.has("Sold %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	var credits_restored := credits_after_sell == credits_before_buy
+	var cargo_cleared := cargo_after_sell == cargo_before_buy and held_after_sell == 0
+	var bought_status := "boughtOriginalObservedLot=true" if bought_original_observed_lot else "boughtOriginalObservedLot=false"
+	var sold_status := "soldSamePortLot=true" if sold_same_port_lot else "soldSamePortLot=false"
+	var credit_status := "creditsRestored=true" if credits_restored else "creditsRestored=false"
+	var cargo_status := "cargoCleared=true" if cargo_cleared else "cargoCleared=false"
+	var buy_price_status := "buyPrice=120" if buy_price == 120 else "buyPrice=%d" % buy_price
+	var sell_price_status := "sellPrice=120" if sell_price == 120 else "sellPrice=%d" % sell_price
+	print("%s system=%s body=\"%s\" commodity=%s %s %s lotSize=%d %s %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBeforeBuy=%d cargoAfterBuy=%d cargoAfterSell=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=original-runtime-observed oracleStatus=levo_same_port_sellback_observed status=\"%s\"" % [LEVO_SAME_PORT_SELLBACK_EVENT_LOG_PREFIX, system_name, body_name, commodity_id, buy_price_status, sell_price_status, EV_CLASSIC_COMMODITY_LOT_SIZE, bought_status, sold_status, credit_status, cargo_status, credits_before_buy, credits_after_buy, credits_after_sell, cargo_before_buy, cargo_after_buy, cargo_after_sell, held_after_buy, held_after_sell, status_line])
 	get_tree().quit(0)
 
 func _run_commodity_buy_blocked_recovery_log() -> void:

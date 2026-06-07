@@ -360,6 +360,14 @@ Mission trade destination-sale scenario contract:
 - `sourceLabel=terminal-velocity-mission-trade-destination-sale-scaffold`; `oracleStatus=mission_trade_destination_sale_pending_classic_runtime_trace`.
 - This is a Terminal Velocity mission/trade destination-sale scaffold; exact EV Classic mixed mission/trade UI and market behavior remain pending Classic runtime evidence.
 
+Levo same-port sellback scenario contract:
+
+- `RunGodot.ps1 -LevoSamePortSellbackLog` / `--tv-levo-same-port-sellback-log`
+- Exercises the source-backed Levo Commodity Exchange loop where the starting Shuttle buys one observed 10-ton Food lot at Levo, sells it back without leaving the port, and verifies the starting credits/cargo state is restored.
+- Logs `boughtOriginalObservedLot=true`, `soldSamePortLot=true`, `creditsRestored=true`, and `cargoCleared=true` with `buyPrice=120`, `sellPrice=120`, `lotSize=10`, and held-cargo/credit counters.
+- `sourceLabel=original-runtime-observed`; `oracleStatus=levo_same_port_sellback_observed`.
+- This probe is source-backed for the observed Levo same-port Food transaction; broader economy spread rules and partial-capacity edge cases remain separate Classic-runtime candidates.
+
 Chapter-one trade carryover scenario contract:
 
 - `RunGodot.ps1 -ChapterOneTradeCarryoverLog` / `--tv-chapter-one-trade-carryover-log`
