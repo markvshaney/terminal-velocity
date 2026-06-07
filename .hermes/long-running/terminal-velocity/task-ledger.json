@@ -1,11 +1,6 @@
 {
-  "active_gate": {
-    "reason": "Code/docs/test changes are verified and locally committed; review is required before push/board completion.",
-    "resume_after": "review approves or requests changes via kanban unblock/comment",
-    "type": "review-required",
-    "withheld_action": "push/complete kanban task"
-  },
-  "current_milestone": "Route fuel reserve/margin guidance local slice verified; pending review/commit/push.",
+  "active_gate": null,
+  "current_milestone": "Route fuel reserve/margin guidance pushed and verified; successor continuation dispatched/pending dispatch for next safe source-aligned slice.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -127,7 +122,8 @@
     "tv-legal-service-gate-log inferred clemency service recovery local checkpoint; do not redo once accepted/pushed.",
     "Do not redo commodity partial-hold recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo service-purchase launch recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo mission persistence recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo mission persistence recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo route fuel reserve/margin guidance surface; pushed and verified in normal TV repo path with HEAD == origin/main."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -135,8 +131,8 @@
     "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
     "origin_main": "inspect current SHA with git rev-parse origin/main",
-    "status": "normal push/fetch verification pending for coordinator-accepted mission persistence help surface",
-    "status_short": "## main...origin/main [ahead 1] before push"
+    "status": "route fuel reserve/margin guidance pushed/verified; successor continuation ready/running",
+    "status_short": "## main...origin/main clean after push"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -155,13 +151,13 @@
     "7_do_not_redo": "recorded in do_not_redo"
   },
   "kanban": {
-    "active_task_id": "t_f257bc21",
-    "last_completed_task_id": "t_292f94f2",
-    "last_successor_task_id": "t_f257bc21"
+    "active_task_id": "t_c021e195",
+    "last_completed_task_id": "t_23760ebf",
+    "last_successor_task_id": "t_c021e195"
   },
   "last_checkpoint_commit": "local commit feat(godot): expose Levo sellback probe; SHA-neutral because ledger metadata may be amended into the commit.",
   "last_checkpoint_commit_note": "Inspect live HEAD with git rev-parse HEAD; exact embedded SHAs are intentionally avoided for amended ledger commits.",
-  "last_checkpoint_summary": "F10 help now exposes hasMissionPersistenceRecoveryHelp=true for the existing pilot save/resume probe: after accepting a job and saving, reopen the pilot from the title screen and verify Mission Log/Player Info still show active cargo, route/status, strict-play, and upgrade checkpoints before changing cargo plans.",
+  "last_checkpoint_summary": "Godot route/fuel status surfaces signed reserve margin in player-facing G/Shift-click route hints, and navigation guardrail probe logs routeFuelMargin under Terminal Velocity scaffold / Classic route UI pending labels.",
   "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -179,12 +175,13 @@
   "last_completed_slice": "route fuel reserve/margin guidance surface",
   "last_process_checkpoint": "Local slice adds signed route reserve/margin to Godot route fuel hints, Shift-click route status, navigation guardrail log contract, and EV Classic fidelity backlog note; native model tests pass.",
   "last_process_checkpoint_commit": "included in local worker checkpoint commit; inspect git log -1",
-  "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; service-purchase launch recovery help surface pushed and verified with HEAD == origin/main.",
+  "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; route fuel reserve/margin guidance surface pushed and verified with HEAD == origin/main.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_navigation_blocked_reasons_are_player_guidance_contract -v -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_route_planner_refuel_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_navigation_blocked_reasons_are_player_guidance_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_route_jump_land_refuel_autoresearch_log_contract -v -> 3 tests OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_map_route_autoresearch_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK after aligning contracts",
-    "python3 -m unittest native_ev.tests.test_model -v -> Ran 165 tests OK"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_navigation_blocked_reasons_are_player_guidance_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_map_route_autoresearch_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 261 tests OK",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=92 failed=0 total=92",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
+    "git push origin main; git fetch origin; HEAD == origin/main -> OK"
   ],
   "local_checkpoint_commit": "pushed/verified in normal TV repo path; inspect current SHA with git rev-parse HEAD",
   "mandatory_resume_first_actions": [
@@ -195,7 +192,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review the route fuel reserve/margin guidance local commit, then run standard broader TV verification as needed before normal non-force push; do not redo route fuel reserve/margin guidance once accepted.",
+  "next_resume_action": "Dispatch or continue Kanban task t_c021e195 from clean origin/main; choose the strongest next safe source-aligned Terminal Velocity gameplay/fidelity slice and do not redo route fuel reserve/margin guidance surface.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -208,11 +205,11 @@
   },
   "repo_state": {
     "branch": "main",
-    "dirty": true,
+    "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
     "origin_main": "inspect current SHA with git rev-parse origin/main",
-    "status": "local verified checkpoint committed pending review/push",
-    "status_short": "## main...origin/main with local modifications"
+    "status": "route fuel reserve/margin guidance pushed/verified; successor continuation ready/running",
+    "status_short": "## main...origin/main clean after push"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -328,7 +325,7 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "waiting_gate",
+  "status": "running",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -349,5 +346,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T11:24:18Z"
+  "updated_at": "2026-06-07T11:32:07Z"
 }
