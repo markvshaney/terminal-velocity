@@ -137,6 +137,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"levo_same_port_sellback_loop",
 		"commodity_sell_blocked_recovery_loop",
 		"commodity_buy_blocked_recovery_loop",
+		"commodity_exact_credit_sellback_rebuy_loop",
 		"cross_market_trade_spread_scout",
 		"max_hold_trade_route_scout",
 		"trade_route_refuel_profit_loop",
