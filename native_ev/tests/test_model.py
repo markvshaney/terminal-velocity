@@ -2675,6 +2675,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-outfitter-shipyard-log', run_script)
         self.assertIn('tv-outfitter-shipyard-log', wrapper)
 
+    def test_godot_shipyard_cargo_guardrail_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            '--tv-shipyard-cargo-guardrail-log',
+            'func _run_shipyard_cargo_guardrail_log() -> void:',
+            'TV_SHIPYARD_CARGO_GUARDRAIL_EVENT',
+            'overfullShipyardBlocked=%s',
+            'overfullCargoPreserved=%s',
+            'recoveryBoughtSmallerShip=%s',
+            'blockedShip=shuttlecraft',
+            'sourceLabel=terminal-velocity-shipyard-cargo-guardrail-scaffold',
+            'oracleStatus=shipyard_cargo_transfer_pending_ev_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$ShipyardCargoGuardrailLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-shipyard-cargo-guardrail-log', run_script)
+        self.assertIn('tv-shipyard-cargo-guardrail-log', wrapper)
+
     def test_godot_outfitter_purchase_guardrail_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

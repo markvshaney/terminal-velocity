@@ -78,6 +78,7 @@ const MISSION_LOG_HISTORY_EVENT_LOG_PREFIX := "TV_MISSION_LOG_HISTORY_EVENT"
 const FIRST_MISSION_DELIVERY_EVENT_LOG_PREFIX := "TV_FIRST_MISSION_DELIVERY_EVENT"
 const PILOT_SAVE_RESUME_EVENT_LOG_PREFIX := "TV_PILOT_SAVE_RESUME_EVENT"
 const OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX := "TV_OUTFITTER_SHIPYARD_EVENT"
+const SHIPYARD_CARGO_GUARDRAIL_EVENT_LOG_PREFIX := "TV_SHIPYARD_CARGO_GUARDRAIL_EVENT"
 const OUTFITTER_PURCHASE_GUARDRAIL_EVENT_LOG_PREFIX := "TV_OUTFITTER_PURCHASE_GUARDRAIL_EVENT"
 const GAMEPLAY_CURRICULUM_HELP_LOG_PREFIX := "TV_GAMEPLAY_CURRICULUM_HELP"
 const STARTING_EQUIPMENT_EVENT_LOG_PREFIX := "TV_STARTING_EQUIPMENT_EVENT"
@@ -357,6 +358,8 @@ func _ready() -> void:
 		call_deferred("_run_pilot_save_resume_log")
 	if OS.get_cmdline_args().has("--tv-outfitter-shipyard-log") or OS.get_cmdline_user_args().has("--tv-outfitter-shipyard-log"):
 		call_deferred("_run_outfitter_shipyard_log")
+	if OS.get_cmdline_args().has("--tv-shipyard-cargo-guardrail-log") or OS.get_cmdline_user_args().has("--tv-shipyard-cargo-guardrail-log"):
+		call_deferred("_run_shipyard_cargo_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-outfitter-purchase-guardrail-log") or OS.get_cmdline_user_args().has("--tv-outfitter-purchase-guardrail-log"):
 		call_deferred("_run_outfitter_purchase_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-repair-service-log") or OS.get_cmdline_user_args().has("--tv-repair-service-log"):
@@ -3202,6 +3205,44 @@ func _run_outfitter_shipyard_log() -> void:
 	var cargo_space_status := "cargoSpaceIncreased=true" if cargo_space_increased else "cargoSpaceIncreased=false"
 	var shipyard_art_status := "shipyardArtLoaded=true" if shipyard_art_loaded else "shipyardArtLoaded=false"
 	print("%s routeToSolSelected=%s system=%s body=%s %s %s %s %s %s overfullShipyardBlocked=%s overfullCargoPreserved=%s overfullRecoveryBoughtSmallerShip=%s startingCargoSpace=%d cargoAfterOutfit=%d finalCargoSpace=%d cargoAfterOverfullRecovery=%d creditsAfter=%d sourceLabel=terminal-velocity-outfitter-shipyard-scaffold cargoGuardrailSourceLabel=terminal-velocity-shipyard-cargo-guardrail-scaffold oracleStatus=outfitter_shipyard_pending_ev_classic_purchase_trace cargoGuardrailOracleStatus=shipyard_cargo_transfer_pending_ev_classic_runtime_trace status=\"%s\"" % [OUTFITTER_SHIPYARD_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), landed_body, cargo_pod_status, laser_status, light_freighter_status, cargo_space_status, shipyard_art_status, str(overfull_shipyard_blocked), str(overfull_cargo_preserved), str(overfull_recovery_bought_smaller_ship), starting_cargo_space, cargo_space_after_outfit, cargo_space, cargo, credits, status_line])
+	get_tree().quit(0)
+
+func _run_shipyard_cargo_guardrail_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var landed_body := str(_current_body().get("name", ""))
+	credits = 100000
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(_current_body())
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			break
+	_buy_selected_ship()
+	var upgraded_to_light_freighter := player_ship_id == "light_freighter" and cargo_space == 150
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "shuttlecraft":
+			selected_landing_item = i
+			break
+	var starting_ship := player_ship_id
+	var starting_cargo_capacity := cargo_space
+	cargo = 30
+	var cargo_before_block := cargo
+	var credits_before_block := credits
+	status_messages.clear()
+	_buy_selected_ship()
+	var blocked_status := status_line
+	var overfull_shipyard_blocked := player_ship_id == starting_ship and cargo_space == starting_cargo_capacity and credits == credits_before_block and blocked_status == "Cannot buy shuttlecraft: cargo 30 exceeds target capacity 20"
+	var overfull_cargo_preserved := cargo == cargo_before_block
+	cargo = 10
+	status_messages.clear()
+	_buy_selected_ship()
+	var recovery_bought_smaller_ship := player_ship_id == "shuttlecraft" and cargo_space == 20 and cargo == 10
+	print("%s routeToSolSelected=%s system=%s body=\"%s\" upgradedToLightFreighter=%s blockedShip=shuttlecraft overfullShipyardBlocked=%s overfullCargoPreserved=%s recoveryBoughtSmallerShip=%s cargoBeforeBlock=%d targetCargoCapacity=20 cargoAfterRecovery=%d finalShip=%s sourceLabel=terminal-velocity-shipyard-cargo-guardrail-scaffold oracleStatus=shipyard_cargo_transfer_pending_ev_classic_runtime_trace status=\"%s\"" % [SHIPYARD_CARGO_GUARDRAIL_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), landed_body, str(upgraded_to_light_freighter), str(overfull_shipyard_blocked), str(overfull_cargo_preserved), str(recovery_bought_smaller_ship), cargo_before_block, cargo, player_ship_id, blocked_status])
 	get_tree().quit(0)
 
 func _run_outfitter_purchase_guardrail_log() -> void:
