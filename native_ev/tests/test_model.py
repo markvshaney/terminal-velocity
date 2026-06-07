@@ -673,6 +673,35 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-pirate-avoidance-log', run_script)
         self.assertIn('[switch]$PirateAvoidanceLog', windows_script)
 
+    def test_godot_pirate_loaded_cargo_avoidance_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_PIRATE_AVOIDANCE_EVENT',
+            '--tv-pirate-loaded-cargo-avoidance-log',
+            'func _run_pirate_loaded_cargo_avoidance_log() -> void:',
+            'Pirate intercept detected with mission/trade cargo; preserving loaded route by escaping to a safe port (TV scaffold)',
+            'threat=pirate_intercept_loaded_cargo',
+            'missionCargoBeforeEscape=%d',
+            'tradeCargoBeforeEscape=%d',
+            'cargoUsedAfterEscape=%d',
+            'preservedMissionCargoAfterEscape=%s',
+            'preservedTradeCargoAfterEscape=%s',
+            'returnedToOriginalPort=%s',
+            'loadedCargoPreserved=%s',
+            'combatExecuted=%s',
+            'evasionSucceeded=%s',
+            'decision=jump_to_linked_safe_port_then_return_loaded',
+            'sourceLabel=terminal-velocity-pirate-avoidance-loaded-cargo-scaffold',
+            'oracleStatus=pirate_avoidance_loaded_cargo_pending_ev_classic_combat_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-pirate-loaded-cargo-avoidance-log', run_script)
+        self.assertIn('[switch]$PirateLoadedCargoAvoidanceLog', windows_script)
+
     def test_godot_primary_combat_is_playable_scaffold_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

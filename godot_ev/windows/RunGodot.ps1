@@ -53,6 +53,7 @@ param(
     [switch]$GameplayCurriculumHelpLog,
     [switch]$StartingEquipmentLog,
     [switch]$PirateAvoidanceLog,
+    [switch]$PirateLoadedCargoAvoidanceLog,
     [switch]$CombatLog,
     [switch]$CombatRewardLog,
     [switch]$CombatRewardSalvageLog,
@@ -217,6 +218,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-starting-equipment-log
 } elseif ($PirateAvoidanceLog) {
     & $Godot --headless --path $Project -- --tv-pirate-avoidance-log
+} elseif ($PirateLoadedCargoAvoidanceLog) {
+    & $Godot --headless --path $Project -- --tv-pirate-loaded-cargo-avoidance-log
 } elseif ($CombatLog) {
     & $Godot --headless --path $Project -- --tv-combat-log
 } elseif ($CombatRewardLog) {

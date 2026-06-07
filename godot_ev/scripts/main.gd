@@ -341,6 +341,8 @@ func _ready() -> void:
 		call_deferred("_run_starting_equipment_log")
 	if OS.get_cmdline_args().has("--tv-pirate-avoidance-log") or OS.get_cmdline_user_args().has("--tv-pirate-avoidance-log"):
 		call_deferred("_run_pirate_avoidance_log")
+	if OS.get_cmdline_args().has("--tv-pirate-loaded-cargo-avoidance-log") or OS.get_cmdline_user_args().has("--tv-pirate-loaded-cargo-avoidance-log"):
+		call_deferred("_run_pirate_loaded_cargo_avoidance_log")
 	if OS.get_cmdline_args().has("--tv-combat-log") or OS.get_cmdline_user_args().has("--tv-combat-log"):
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-reward-log") or OS.get_cmdline_user_args().has("--tv-combat-reward-log"):
@@ -2932,6 +2934,54 @@ func _run_pirate_avoidance_log() -> void:
 	var combat_executed := not projectiles.is_empty() or not explosion_events.is_empty()
 	var evasion_succeeded := threat_detected and route_selected and low_fuel_escape_blocked and refueled_before_escape and final_system == destination and landed_at_safe_port and not combat_executed
 	print("%s startSystem=%s threat=pirate_intercept threatDetected=%s threatMessageVisible=%s routeSelected=%s destination=%s finalSystem=%s landedAtSafePort=%s lowFuelEscapeBlocked=%s refueledBeforeEscape=%s landedBody=\"%s\" combatExecuted=%s evasionSucceeded=%s decision=jump_to_linked_safe_port sourceLabel=terminal-velocity-pirate-avoidance-scaffold oracleStatus=pirate_avoidance_pending_ev_classic_combat_trace status=\"%s\"" % [PIRATE_AVOIDANCE_EVENT_LOG_PREFIX, start_system, str(threat_detected).to_lower(), str(threat_message_visible).to_lower(), str(route_selected).to_lower(), destination, final_system, str(landed_at_safe_port).to_lower(), str(low_fuel_escape_blocked).to_lower(), str(refueled_before_escape).to_lower(), str(landed_body.get("name", "None")), str(combat_executed).to_lower(), str(evasion_succeeded).to_lower(), status_line])
+	get_tree().quit(0)
+
+func _run_pirate_loaded_cargo_avoidance_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	var mission_id := "freeport_return_earth"
+	active_missions.append(mission_id)
+	mission_acceptance_days[mission_id] = current_day
+	cargo += int(_mission_by_id(mission_id).get("cargoTons", 0))
+	commodity_hold["food"] = 10
+	cargo += int(commodity_hold.get("food", 0))
+	var mission_cargo_before_escape := _mission_reserved_cargo_tons()
+	var trade_cargo_before_escape := int(commodity_hold.get("food", 0))
+	var cargo_used_before_escape := cargo
+	var threat_detected := true
+	_set_status("Pirate intercept detected with mission/trade cargo; preserving loaded route by escaping to a safe port (TV scaffold)")
+	var threat_message_visible := status_messages.has("Pirate intercept detected with mission/trade cargo; preserving loaded route by escaping to a safe port (TV scaffold)")
+	var route_selected := _select_map_route_to_system("Sol")
+	var destination := _selected_destination_name()
+	player_fuel = _max_player_fuel()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var escaped_system := str(current_system.get("name", "?"))
+	_position_at_body("Earth")
+	_try_land()
+	var escaped_landed_body := _current_body()
+	var landed_at_safe_port := landed and escaped_system == "Sol" and str(escaped_landed_body.get("name", "")) == "Earth"
+	var mission_cargo_after_escape := _mission_reserved_cargo_tons()
+	var trade_cargo_after_escape := int(commodity_hold.get("food", 0))
+	var preserved_mission_cargo_after_escape := mission_cargo_after_escape == mission_cargo_before_escape
+	var preserved_trade_cargo_after_escape := trade_cargo_after_escape == trade_cargo_before_escape
+	landed = false
+	map_visible = true
+	var return_route_selected := _select_map_route_to_system(start_system)
+	var return_destination := _selected_destination_name()
+	player_fuel = _max_player_fuel()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var final_system := str(current_system.get("name", "?"))
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	var final_landed_body := _current_body()
+	var returned_to_original_port := landed and final_system == start_system and str(final_landed_body.get("name", "")) == "Levo Spaceport"
+	var loaded_cargo_preserved := preserved_mission_cargo_after_escape and preserved_trade_cargo_after_escape and cargo == cargo_used_before_escape
+	var combat_executed := not projectiles.is_empty() or not explosion_events.is_empty()
+	var evasion_succeeded := threat_detected and route_selected and destination == "Sol" and landed_at_safe_port and return_route_selected and return_destination == start_system and returned_to_original_port and loaded_cargo_preserved and not combat_executed
+	print("%s startSystem=%s threat=pirate_intercept_loaded_cargo threatDetected=%s threatMessageVisible=%s routeSelected=%s destination=%s escapedSystem=%s landedAtSafePort=%s escapedLandedBody=\"%s\" missionCargoBeforeEscape=%d tradeCargoBeforeEscape=%d cargoUsedAfterEscape=%d preservedMissionCargoAfterEscape=%s preservedTradeCargoAfterEscape=%s returnRouteSelected=%s returnDestination=%s finalSystem=%s returnedToOriginalPort=%s finalLandedBody=\"%s\" loadedCargoPreserved=%s combatExecuted=%s evasionSucceeded=%s decision=jump_to_linked_safe_port_then_return_loaded sourceLabel=terminal-velocity-pirate-avoidance-loaded-cargo-scaffold oracleStatus=pirate_avoidance_loaded_cargo_pending_ev_classic_combat_trace status=\"%s\"" % [PIRATE_AVOIDANCE_EVENT_LOG_PREFIX, start_system, str(threat_detected).to_lower(), str(threat_message_visible).to_lower(), str(route_selected).to_lower(), destination, escaped_system, str(landed_at_safe_port).to_lower(), str(escaped_landed_body.get("name", "None")), mission_cargo_before_escape, trade_cargo_before_escape, cargo, str(preserved_mission_cargo_after_escape).to_lower(), str(preserved_trade_cargo_after_escape).to_lower(), str(return_route_selected).to_lower(), return_destination, final_system, str(returned_to_original_port).to_lower(), str(final_landed_body.get("name", "None")), str(loaded_cargo_preserved).to_lower(), str(combat_executed).to_lower(), str(evasion_succeeded).to_lower(), status_line])
 	get_tree().quit(0)
 
 func _run_combat_log() -> void:
