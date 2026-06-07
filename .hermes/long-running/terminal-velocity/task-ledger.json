@@ -155,18 +155,23 @@
       "git diff --check -> OK"
     ]
   },
-  "last_process_checkpoint": "Godot weapon secondary activation probe accepted by integrator after targeted/full verification; pending local commit and normal push.",
+  "last_process_checkpoint": "Coordinator accepted stale review-required halt for commodity buy-blocked recovery as coherent normal TV work; preparing normal commit/push and successor dispatch.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; tv-pirate-loaded-cargo-avoidance-log accepted and pushed",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_balanced_upgrade_trade_log_contract -v -> OK",
-    "./run_godot.sh tv-balanced-upgrade-trade-log -> expected TV_BALANCED_UPGRADE_TRADE_EVENT true fields",
-    "git diff --check -> OK before push",
-    "sensitive added-content scan -> 0 hits",
-    "git push origin main -> OK at 39f5df1",
-    "git fetch origin && test HEAD == origin/main -> OK"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_buy_blocked_recovery_log_contract -v -> OK",
+    "./run_godot.sh tv-commodity-buy-blocked-recovery-log -> TV_COMMODITY_BUY_BLOCKED_RECOVERY_EVENT with inSpaceBuyBlocked=true, insufficientCreditsBlocked=true, fullHoldBuyBlocked=true, buyRecoveredCargo=true, finalCargo=10",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_buy_blocked_recovery_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_sell_blocked_recovery_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_commodity_buy_sell_affordance_contract -v -> OK",
+    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_commodity_buy_blocked_recovery_loop_labels_blockers_and_recovers -v -> OK",
+    "python3 tools/run_gameplay_scenarios.py commodity_buy_blocked_recovery_loop --pretty -> success true; checks passed; final credits 8800/cargoUsed 10",
+    "python3 tools/run_gameplay_scenarios.py --all --pretty -> scenarios=92 failed=0",
+    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> 247 tests OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
+    "git diff --check -> OK",
+    "JSON validation for task-ledger.json and events.jsonl -> OK",
+    "npm test/build not applicable in current checkout: no package.json at repo root; Windows npm is first on PATH"
   ],
-  "local_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
+  "local_checkpoint_commit": "feat(godot): expose commodity buy-blocked recovery probe; SHA-neutral, inspect live HEAD",
   "mandatory_resume_first_actions": [
     "Load long-running-task-harness, source-and-fidelity, artifact-governance, ev-terminal-velocity-play, and any slice-specific TV skill references.",
     "Run git status --short --branch in /home/bh/workspaces/loki/terminal-velocity.",
@@ -175,7 +180,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Commit/push tv-commodity-sell-blocked-recovery-log under normal TV policy, complete t_f60f44f5, create/dispatch exactly one successor continuation task, then continue next safe source-aligned slice.",
+  "next_resume_action": "Commit and normally push the verified commodity buy-blocked recovery probe, complete t_18894bf7, create/dispatch exactly one successor continuation card, then verify exactly one running TV task.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -318,5 +323,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T04:47:03Z"
+  "updated_at": "2026-06-07T05:00:47Z"
 }

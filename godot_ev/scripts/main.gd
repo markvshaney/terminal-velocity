@@ -37,6 +37,7 @@ const REPAIR_SERVICE_EVENT_LOG_PREFIX := "TV_REPAIR_SERVICE_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
+const COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_BUY_BLOCKED_RECOVERY_EVENT"
 const COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_SELL_BLOCKED_RECOVERY_EVENT"
 const CROSS_MARKET_TRADE_EVENT_LOG_PREFIX := "TV_CROSS_MARKET_TRADE_EVENT"
 const MAX_HOLD_TRADE_EVENT_LOG_PREFIX := "TV_MAX_HOLD_TRADE_EVENT"
@@ -264,6 +265,8 @@ func _ready() -> void:
 		call_deferred("_run_near_center_jump_log")
 	if OS.get_cmdline_args().has("--tv-commodity-trade-log") or OS.get_cmdline_user_args().has("--tv-commodity-trade-log"):
 		call_deferred("_run_commodity_trade_log")
+	if OS.get_cmdline_args().has("--tv-commodity-buy-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-buy-blocked-recovery-log"):
+		call_deferred("_run_commodity_buy_blocked_recovery_log")
 	if OS.get_cmdline_args().has("--tv-commodity-sell-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-sell-blocked-recovery-log"):
 		call_deferred("_run_commodity_sell_blocked_recovery_log")
 	if OS.get_cmdline_args().has("--tv-cross-market-trade-log") or OS.get_cmdline_user_args().has("--tv-cross-market-trade-log"):
@@ -1213,6 +1216,45 @@ func _run_commodity_trade_log() -> void:
 	var sell_status := "sellSucceeded=true" if sell_succeeded else "sellSucceeded=false"
 	var visible_status := "roundTripVisible=true" if round_trip_visible else "roundTripVisible=false"
 	print("%s system=%s commodity=%s buyPrice=%d sellPrice=%d %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBeforeBuy=%d cargoAfterBuy=%d cargoAfterSell=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=original-runtime-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [COMMODITY_TRADE_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, sell_price, buy_status, sell_status, visible_status, credits_before_buy, credits_after_buy, credits_after_sell, cargo_before_buy, cargo_after_buy, cargo_after_sell, held_after_buy, held_after_sell, status_line])
+	get_tree().quit(0)
+
+func _run_commodity_buy_blocked_recovery_log() -> void:
+	_reset_travel_state()
+	landing_tab = 1
+	selected_landing_item = 0
+	var commodities: Array = economy.get("commodities", [])
+	var commodity: Dictionary = commodities[0] if not commodities.is_empty() else {}
+	var commodity_id := str(commodity.get("id", "none"))
+	var commodity_name := str(commodity.get("name", commodity_id))
+	var buy_price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("buy", 0))
+	var credits_before := credits
+	var cargo_before := cargo
+	_buy_selected_commodity()
+	var in_space_status := status_line
+	var in_space_buy_blocked := cargo == cargo_before and int(commodity_hold.get(commodity_id, 0)) == 0 and in_space_status == "Land before trading commodities"
+	_try_land()
+	var landed_for_recovery := landed
+	credits = max(0, buy_price - 1)
+	_buy_selected_commodity()
+	var insufficient_credit_status := status_line
+	var insufficient_credits_blocked := cargo == cargo_before and int(commodity_hold.get(commodity_id, 0)) == 0 and insufficient_credit_status == "Not enough credits"
+	credits = credits_before
+	cargo = cargo_space
+	_buy_selected_commodity()
+	var full_hold_block_status := status_line
+	var full_hold_buy_blocked := cargo == cargo_space and int(commodity_hold.get(commodity_id, 0)) == 0 and full_hold_block_status == "Cargo hold full"
+	cargo = cargo_before
+	credits = credits_before
+	_buy_selected_commodity()
+	var credits_after_buy := credits
+	var held_after_buy := int(commodity_hold.get(commodity_id, 0))
+	var buy_recovered_cargo := landed_for_recovery and buy_price > 0 and held_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo == cargo_before + EV_CLASSIC_COMMODITY_LOT_SIZE and credits_after_buy == credits_before - (buy_price * EV_CLASSIC_COMMODITY_LOT_SIZE) and status_messages.has("Bought %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	var in_space_blocked_status := "inSpaceBuyBlocked=true" if in_space_buy_blocked else "inSpaceBuyBlocked=false"
+	var insufficient_credits_status := "insufficientCreditsBlocked=true" if insufficient_credits_blocked else "insufficientCreditsBlocked=false"
+	var full_hold_status_field := "fullHoldBuyBlocked=true" if full_hold_buy_blocked else "fullHoldBuyBlocked=false"
+	var buy_recovered_status := "buyRecoveredCargo=true" if buy_recovered_cargo else "buyRecoveredCargo=false"
+	var final_cargo_status := "finalCargo=10" if cargo == EV_CLASSIC_COMMODITY_LOT_SIZE else "finalCargo=%d" % cargo
+	print("%s system=%s commodity=%s buyPrice=%d %s %s %s %s %s creditsBefore=%d creditsAfterBuy=%d cargoBefore=%d heldAfterBuy=%d sourceLabel=terminal-velocity-commodity-buy-blocked-recovery-scaffold oracleStatus=commodity_buy_blocked_recovery_pending_classic_runtime_trace inSpaceStatus=\"%s\" creditStatus=\"%s\" fullHoldStatus=\"%s\" status=\"%s\"" % [COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, in_space_blocked_status, insufficient_credits_status, full_hold_status_field, buy_recovered_status, final_cargo_status, credits_before, credits_after_buy, cargo_before, held_after_buy, in_space_status, insufficient_credit_status, full_hold_block_status, status_line])
 	get_tree().quit(0)
 
 func _run_commodity_sell_blocked_recovery_log() -> void:
@@ -8829,6 +8871,9 @@ func _accept_selected_mission() -> void:
 func _buy_selected_commodity() -> void:
 	if _disabled_player_action_blocked():
 		return
+	if not landed:
+		_set_status("Land before trading commodities")
+		return
 	var commodities: Array = economy.get("commodities", [])
 	if commodities.is_empty():
 		_set_status("No commodities available")
@@ -8859,6 +8904,9 @@ func _buy_selected_commodity() -> void:
 
 func _sell_selected_commodity() -> void:
 	if _disabled_player_action_blocked():
+		return
+	if not landed:
+		_set_status("Land before trading commodities")
 		return
 	var commodities: Array = economy.get("commodities", [])
 	if commodities.is_empty():
