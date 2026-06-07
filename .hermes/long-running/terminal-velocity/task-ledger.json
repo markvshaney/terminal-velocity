@@ -1,9 +1,9 @@
 {
   "active_gate": {
-    "reason": null,
-    "resume_after": null,
-    "type": null,
-    "withheld_action": null
+    "type": "credential/push",
+    "reason": "git push origin main failed because HTTPS GitHub credentials are unavailable in this worker session: could not read Username for GitHub HTTPS remote",
+    "withheld_action": "Remote push, fetch verification, Kanban completion, and successor creation.",
+    "resume_after": "GitHub push credentials are restored/provided or a human pushes the local legal-service-threshold commit to origin/main and unblocks this task."
   },
   "current_milestone": "Contraband bribe recovery probe pushed and verified; successor continuation card created for the next safe local slice.",
   "do_not_redo": [
@@ -121,7 +121,8 @@
     "tv-mission-legal-eligibility-log legalMax threshold boundary",
     "tv-mission-legal-eligibility-log legalMax threshold boundary broad-verified locally",
     "Do not redo tv-contraband-risk-log bribe visibility boundary once accepted/pushed; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo tv-contraband-bribe-recovery-log once accepted/pushed; continue from the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo tv-contraband-bribe-recovery-log once accepted/pushed; continue from the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo tv-legal-service-gate-log threshold/recovery once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -175,14 +176,13 @@
   "last_process_checkpoint_commit": "not committed before checkpoint update; inspect live git status/diff",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; HEAD == origin/main verified after normal push",
   "last_verified_commands": [
-    "git diff --check -> OK",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_bribe_recovery_log_contract -v -> OK",
-    "./run_godot.sh tv-contraband-bribe-recovery-log -> OK; actualBribeAction=bribe bribeCreditsDelta=-750 creditsAfterBribe=0 bribeCargoPreserved=true bribeLegalPreserved=true bribeStatusVisible=true",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_legal_status_surface_is_scaffold_contract -v -> OK",
+    "./run_godot.sh tv-legal-service-gate-log -> OK; serviceLegalMinScore=-60 legalScoreJustBelowServiceMin=-61 serviceBlockedJustBelowMin=true outfitterRecoveredAtMin=true shipyardRecoveredAtMin=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 261 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=92 failed=0 total=92",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
-    "git push origin main; git fetch origin; HEAD == origin/main -> OK",
-    "kanban complete t_528d411e and create successor t_a68077ea -> OK"
+    "git diff --check -> OK",
+    "git push origin main -> FAILED: could not read Username for GitHub HTTPS remote (credential gate)"
   ],
   "local_checkpoint_commit": "pushed/verified in normal TV repo path; inspect current SHA with git rev-parse HEAD",
   "mandatory_resume_first_actions": [
@@ -193,7 +193,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Dispatch t_a68077ea and verify exactly one running Terminal Velocity task; worker should choose the next source-aligned safe local slice and not redo tv-contraband-bribe-recovery-log.",
+  "next_resume_action": "After credentials/push are restored, run git push origin main; git fetch origin; verify HEAD == origin/main; then complete t_a68077ea and create exactly one successor. Do not redo tv-legal-service-gate-log threshold/recovery.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -276,6 +276,12 @@
     "updated_at": "2026-06-07T10:32:45Z"
   },
   "safe_backlog": [
+    {
+      "id": "tv-legal-service-gate-log-threshold-recovery",
+      "description": "Verified pending commit/push: Godot legal service gate probe now records service min boundary and one-below denial/recovery for outfitter + shipyard; exact Classic thresholds/UI remain pending.",
+      "sourceLabel": "terminal-velocity-legal-service-gate-scaffold",
+      "oracleStatus": "legal_service_denial_pending_ev_classic_confirmation"
+    },
     "combat_reward_salvage_recovery_help verified pending review/local commit: F10 help now exposes hasCombatRewardSalvageRecoveryHelp=true for combined reward-history visibility plus full-hold salvage recovery guidance; sourceLabel=terminal-velocity-combat-reward-salvage-recovery-help-scaffold; oracleStatus=classic_runtime_bounty_loot_coupling_pending; help_surface_pending_playtest.",
     "balanced_upgrade_recovery_help verified pending review/local commit: F10 help surface now exposes hasBalancedUpgradeRecoveryHelp=true for existing balanced_upgrade_trade_loop; sourceLabel=terminal-velocity-balanced-upgrade-trade-scaffold; oracleStatus=balanced_upgrade_budget_pending_classic_runtime_trace; help_surface_pending_playtest.",
     {
@@ -319,7 +325,7 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "running",
+  "status": "waiting_gate",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -340,5 +346,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T10:25:34.316109Z"
+  "updated_at": "2026-06-07T10:42:48.309287Z"
 }

@@ -4351,13 +4351,20 @@ func _run_legal_service_gate_log() -> void:
 	_try_land()
 	var body_name := str(_current_body().get("name", ""))
 	var government_name := _current_government_name()
-	legal_records[government_name] = -75
+	var service_min_score := _service_legal_min_score("outfitter", government_name)
+	var legal_score_just_below_service_min := service_min_score - 1
+	legal_records[government_name] = legal_score_just_below_service_min
 	status_messages.clear()
 	landing_tab = 2
 	selected_landing_item = 0
 	credits = 100000
 	_buy_selected_outfit_or_weapon()
 	landing_tab = 3
+	var blocked_shipyard_listings := _shipyard_listings(_current_body())
+	for i in range(blocked_shipyard_listings.size()):
+		if str(blocked_shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			break
 	_buy_selected_ship()
 	var service_blocked_message := _legal_service_blocked_message(government_name)
 	var blocked_count := 0
@@ -4367,7 +4374,21 @@ func _run_legal_service_gate_log() -> void:
 	var blocked_outfitter := blocked_count >= 1
 	var blocked_shipyard := blocked_count >= 2
 	var no_purchase := not owned_outfits.has("cargo_pod") and player_ship_id != "light_freighter"
-	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" legalScore=%d blockedOutfitter=%s blockedShipyard=%s noPurchase=%s serviceBlockedMessage=\"%s\" sourceLabel=terminal-velocity-legal-service-gate-scaffold oracleStatus=legal_service_denial_pending_ev_classic_confirmation" % [LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, int(legal_records.get(government_name, 0)), str(blocked_outfitter), str(blocked_shipyard), str(no_purchase), service_blocked_message])
+	legal_records[government_name] = service_min_score
+	status_messages.clear()
+	landing_tab = 2
+	selected_landing_item = 0
+	_buy_selected_outfit_or_weapon()
+	var outfitter_recovered_at_min := owned_outfits.has("cargo_pod")
+	landing_tab = 3
+	var recovered_shipyard_listings := _shipyard_listings(_current_body())
+	for i in range(recovered_shipyard_listings.size()):
+		if str(recovered_shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			break
+	_buy_selected_ship()
+	var shipyard_recovered_at_min := player_ship_id == "light_freighter"
+	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" legalScore=%d blockedOutfitter=%s blockedShipyard=%s noPurchase=%s serviceLegalMinScore=%d legalScoreJustBelowServiceMin=%d serviceBlockedJustBelowMin=%s legalScoreAtServiceMin=%d outfitterRecoveredAtMin=%s shipyardRecoveredAtMin=%s serviceBlockedMessage=\"%s\" sourceLabel=terminal-velocity-legal-service-gate-scaffold oracleStatus=legal_service_denial_pending_ev_classic_confirmation" % [LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, legal_score_just_below_service_min, str(blocked_outfitter), str(blocked_shipyard), str(no_purchase), service_min_score, legal_score_just_below_service_min, str(blocked_outfitter and blocked_shipyard), service_min_score, str(outfitter_recovered_at_min), str(shipyard_recovered_at_min), service_blocked_message])
 	get_tree().quit(0)
 
 func _run_weapon_reputation_gate_log() -> void:
@@ -7706,15 +7727,19 @@ func _government_crime_tolerance_score(government_name: String) -> int:
 func _legal_service_access_allowed(government_name: String) -> bool:
 	return _service_access_allowed("outfitter", government_name)
 
+func _service_legal_min_score(service_name: String, government_name: String) -> int:
+	var requirements: Dictionary = reputation.get("mechanics", {}).get("serviceRequirements", {}).get(service_name, {})
+	var legal_min: Dictionary = requirements.get("legalMin", {})
+	if legal_min.has(government_name):
+		return int(legal_min.get(government_name, 0))
+	return int(legal_min.get("*", _government_docking_min_score(government_name)))
+
 func _service_access_allowed(service_name: String, government_name: String) -> bool:
 	if not _government_docking_allowed(government_name):
 		return false
+	if int(legal_records.get(government_name, 0)) < _service_legal_min_score(service_name, government_name):
+		return false
 	var requirements: Dictionary = reputation.get("mechanics", {}).get("serviceRequirements", {}).get(service_name, {})
-	var legal_min: Dictionary = requirements.get("legalMin", {})
-	for key in legal_min.keys():
-		if str(key) == "*" or str(key) == government_name:
-			if int(legal_records.get(government_name, 0)) < int(legal_min.get(key, 0)):
-				return false
 	var reputation_by_government: Dictionary = requirements.get("reputationMinByGovernment", {})
 	var reputation_min: Dictionary = reputation_by_government.get(government_name, {})
 	for key in reputation_min.keys():
