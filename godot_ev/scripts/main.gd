@@ -70,6 +70,7 @@ const STARTING_EQUIPMENT_EVENT_LOG_PREFIX := "TV_STARTING_EQUIPMENT_EVENT"
 const PIRATE_AVOIDANCE_EVENT_LOG_PREFIX := "TV_PIRATE_AVOIDANCE_EVENT"
 const COMBAT_EVENT_LOG_PREFIX := "TV_COMBAT_EVENT"
 const COMBAT_REWARD_EVENT_LOG_PREFIX := "TV_COMBAT_REWARD_EVENT"
+const COMBAT_REWARD_SALVAGE_EVENT_LOG_PREFIX := "TV_COMBAT_REWARD_SALVAGE_EVENT"
 const COMBAT_GUARDRAIL_EVENT_LOG_PREFIX := "TV_COMBAT_GUARDRAIL_EVENT"
 const PLAYER_DISABLED_EVENT_LOG_PREFIX := "TV_PLAYER_DISABLED_EVENT"
 const SHIELD_RECHARGE_EVENT_LOG_PREFIX := "TV_SHIELD_RECHARGE_EVENT"
@@ -325,6 +326,8 @@ func _ready() -> void:
 		call_deferred("_run_combat_log")
 	if OS.get_cmdline_args().has("--tv-combat-reward-log") or OS.get_cmdline_user_args().has("--tv-combat-reward-log"):
 		call_deferred("_run_combat_reward_log")
+	if OS.get_cmdline_args().has("--tv-combat-reward-salvage-log") or OS.get_cmdline_user_args().has("--tv-combat-reward-salvage-log"):
+		call_deferred("_run_combat_reward_salvage_log")
 	if OS.get_cmdline_args().has("--tv-combat-guardrail-log") or OS.get_cmdline_user_args().has("--tv-combat-guardrail-log"):
 		call_deferred("_run_combat_guardrail_log")
 	if OS.get_cmdline_args().has("--tv-player-disabled-log") or OS.get_cmdline_user_args().has("--tv-player-disabled-log"):
@@ -2733,6 +2736,43 @@ func _run_combat_reward_log() -> void:
 	var destroyed_target_blocked := not _spawn_primary_projectile()
 	var retargeted_after_destroyed := status_messages.has("Target already disabled; retargeting to next active contact")
 	print("%s destroyProjectileSpawned=%s targetDestroyed=%s combatRewardPaid=%s combatRewardAmount=25 actualCombatRewardAmount=%d combatRewardRecorded=%s combatRewardSaved=%s combatRewardResumeVisible=%s combatRewardInventoryVisible=%s combatRewardHudVisible=%s combatRewardStatusVisible=%s creditsBeforeDestroy=%d creditsAfterDestroy=%d destroyedTargetBlocked=%s retargetedAfterDestroyed=%s sourceLabel=terminal-velocity-combat-reward-scaffold oracleStatus=classic_runtime_combat_reward_behavior_pending status=\"%s\"" % [COMBAT_REWARD_EVENT_LOG_PREFIX, str(destroy_projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(combat_reward_paid).to_lower(), combat_reward_amount, str(combat_reward_recorded).to_lower(), str(combat_reward_saved).to_lower(), str(combat_reward_resume_visible).to_lower(), str(combat_reward_inventory_visible).to_lower(), str(combat_reward_hud_visible).to_lower(), str(combat_reward_status_visible).to_lower(), credits_before_destroy, credits_after_destroy, str(destroyed_target_blocked).to_lower(), str(retargeted_after_destroyed).to_lower(), status_line])
+	get_tree().quit(0)
+
+
+func _run_combat_reward_salvage_log() -> void:
+	_reset_travel_state()
+	status_messages.clear()
+	combat_reward_history.clear()
+	explosion_events.clear()
+	cargo_salvage_pickups.clear()
+	projectiles.clear()
+	pos = Vector2.ZERO
+	vel = Vector2.ZERO
+	_select_closest_target()
+	var target_index := selected_target_index
+	var primary_weapon := _primary_weapon_stats()
+	target_shields[target_index] = 0
+	target_hulls[target_index] = _weapon_hull_damage(primary_weapon)
+	primary_weapon_cooldown_frames = 0.0
+	var cargo_before_destroy := cargo
+	var equipment_before_destroy := int(commodity_hold.get("equipment", 0))
+	var credits_before_destroy := credits
+	var destroy_projectile_spawned := _spawn_primary_projectile()
+	for _i in range(90):
+		_advance_projectiles(1.0 / 60.0)
+	var target_destroyed := _target_destroyed(target_index)
+	var credits_after_destroy := credits
+	var combat_reward_amount := credits_after_destroy - credits_before_destroy
+	var combat_reward_paid := combat_reward_amount > 0
+	var salvage_created_before_pickup := not cargo_salvage_pickups.is_empty()
+	var combat_reward_inventory_visible := _player_inventory_lines().has(_combat_reward_inventory_line()) and _combat_reward_inventory_line().contains("Combat rewards: 1 disable(s), 25 credits")
+	if salvage_created_before_pickup:
+		pos = cargo_salvage_pickups[0].get("position", pos)
+		_advance_cargo_salvage_pickups()
+	var salvage_scooped_after_reward := int(commodity_hold.get("equipment", 0)) > equipment_before_destroy and cargo > cargo_before_destroy
+	var salvage_status_visible := status_messages.has("Recovered 2 tons of Equipment salvage (TV scaffold; Classic loot behavior pending)")
+	var reward_and_salvage_coexisted := target_destroyed and combat_reward_paid and salvage_created_before_pickup and salvage_scooped_after_reward and combat_reward_inventory_visible and salvage_status_visible
+	print("%s destroyProjectileSpawned=%s targetDestroyed=%s combatRewardPaid=%s combatRewardAmount=%d salvageCreatedBeforePickup=%s salvageScoopedAfterReward=%s rewardAndSalvageCoexisted=%s combatRewardInventoryVisible=%s salvageStatusVisible=%s salvageCommodity=equipment cargoBeforeDestroy=%d cargoAfterPickup=%d equipmentBefore=%d equipmentAfter=%d creditsBeforeDestroy=%d creditsAfterDestroy=%d sourceLabel=terminal-velocity-combat-reward-salvage-scaffold rewardSourceLabel=terminal-velocity-combat-reward-scaffold salvageSourceLabel=terminal-velocity-combat-salvage-scaffold oracleStatus=classic_runtime_reward_loot_coupling_pending status=\"%s\"" % [COMBAT_REWARD_SALVAGE_EVENT_LOG_PREFIX, str(destroy_projectile_spawned).to_lower(), str(target_destroyed).to_lower(), str(combat_reward_paid).to_lower(), combat_reward_amount, str(salvage_created_before_pickup).to_lower(), str(salvage_scooped_after_reward).to_lower(), str(reward_and_salvage_coexisted).to_lower(), str(combat_reward_inventory_visible).to_lower(), str(salvage_status_visible).to_lower(), cargo_before_destroy, cargo, equipment_before_destroy, int(commodity_hold.get("equipment", 0)), credits_before_destroy, credits_after_destroy, status_line])
 	get_tree().quit(0)
 
 

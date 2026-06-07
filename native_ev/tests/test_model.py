@@ -1030,6 +1030,33 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-cargo-salvage-log', run_script)
         self.assertIn('[switch]$CargoSalvageLog', windows_script)
 
+    def test_godot_combat_reward_salvage_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_COMBAT_REWARD_SALVAGE_EVENT',
+            '--tv-combat-reward-salvage-log',
+            'func _run_combat_reward_salvage_log() -> void:',
+            'combatRewardPaid=%s',
+            'combatRewardAmount=%d',
+            'salvageCreatedBeforePickup=%s',
+            'salvageScoopedAfterReward=%s',
+            'rewardAndSalvageCoexisted=%s',
+            'combatRewardInventoryVisible=%s',
+            'salvageStatusVisible=%s',
+            'salvageCommodity=equipment',
+            'sourceLabel=terminal-velocity-combat-reward-salvage-scaffold',
+            'rewardSourceLabel=terminal-velocity-combat-reward-scaffold',
+            'salvageSourceLabel=terminal-velocity-combat-salvage-scaffold',
+            'oracleStatus=classic_runtime_reward_loot_coupling_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-combat-reward-salvage-log', run_script)
+        self.assertIn('[switch]$CombatRewardSalvageLog', windows_script)
+
     def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
