@@ -400,6 +400,14 @@ Light Freighter bulk margin scenario contract:
 - `sourceLabel=terminal-velocity-light-freighter-bulk-margin-scaffold`; `oracleStatus=light_freighter_bulk_margin_pending_classic_runtime_trace`.
 - This is a Terminal Velocity scaffold for deterministic autoresearch coverage; exact EV Classic bulk-hold price reasoning and commodity-choice UI remain pending Classic runtime evidence.
 
+Light Freighter deadline/refuel delivery scenario contract:
+
+- `RunGodot.ps1 -LightFreighterDeadlineRefuelDeliveryLog` / `--tv-light-freighter-deadline-refuel-delivery-log`
+- Exercises the Terminal Velocity Light Freighter deadline/refuel delivery scaffold where the pilot upgrades at Earth, accepts a 120-ton timed bulk delivery, hits a zero-fuel jump block while fully loaded, refuels at Earth, reaches Levo on the final allowed scaffold day, and completes the mission before deadline failure can release cargo.
+- Logs `boughtLightFreighter=true`, `missionAccepted=true`, `missionCargoTons=120`, `fuelBeforeDeliveryJump=0`, `blockedLoadedDeliveryForRefuel=true`, `refuelSucceeded=true`, `fuelAfterRefuel=300`, `deliveredOnDeadlineDay=true`, `deadlineFailurePrevented=true`, and `completedMission=levo_bulk_deadline_refuel_supply` plus route, cargo, day, fuel, and credit counters.
+- `sourceLabel=terminal-velocity-light-freighter-deadline-refuel-delivery-scaffold`; `oracleStatus=light_freighter_deadline_refuel_delivery_pending_classic_runtime_trace`.
+- This is a Terminal Velocity scaffold for deterministic autoresearch coverage; exact EV Classic final-day mission completion, refuel UX, and deadline failure UI remain pending Classic runtime evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`

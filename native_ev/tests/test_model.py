@@ -2446,6 +2446,35 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-light-freighter-bulk-margin-log', wrapper)
         self.assertIn('Light Freighter bulk margin scenario contract', plan)
 
+    def test_godot_light_freighter_deadline_refuel_delivery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-light-freighter-deadline-refuel-delivery-log',
+            'func _run_light_freighter_deadline_refuel_delivery_log',
+            'TV_LIGHT_FREIGHTER_DEADLINE_REFUEL_DELIVERY_EVENT',
+            'boughtLightFreighter=true',
+            'missionAccepted=true',
+            'missionCargoTons=120',
+            'fuelBeforeDeliveryJump=0',
+            'blockedLoadedDeliveryForRefuel=true',
+            'refuelSucceeded=true',
+            'fuelAfterRefuel=300',
+            'deliveredOnDeadlineDay=true',
+            'deadlineFailurePrevented=true',
+            'completedMission=levo_bulk_deadline_refuel_supply',
+            'sourceLabel=terminal-velocity-light-freighter-deadline-refuel-delivery-scaffold',
+            'oracleStatus=light_freighter_deadline_refuel_delivery_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$LightFreighterDeadlineRefuelDeliveryLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-light-freighter-deadline-refuel-delivery-log', run_script)
+        self.assertIn('tv-light-freighter-deadline-refuel-delivery-log', wrapper)
+        self.assertIn('Light Freighter deadline/refuel delivery scenario contract', plan)
+
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

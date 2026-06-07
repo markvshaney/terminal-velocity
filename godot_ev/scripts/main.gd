@@ -107,6 +107,7 @@ const LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_CAP
 const LIGHT_FREIGHTER_BULK_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_BULK_MARGIN_EVENT"
 const LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT"
 const LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT"
+const LIGHT_FREIGHTER_DEADLINE_REFUEL_DELIVERY_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_DEADLINE_REFUEL_DELIVERY_EVENT"
 const LIGHT_FREIGHTER_MISSION_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_MISSION_TRADE_EVENT"
 const LIGHT_FREIGHTER_REPAIR_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REPAIR_TRADE_EVENT"
 const LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT"
@@ -413,6 +414,8 @@ func _ready() -> void:
 		call_deferred("_run_light_freighter_bulk_mission_margin_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-refuel-mission-margin-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-refuel-mission-margin-log"):
 		call_deferred("_run_light_freighter_refuel_mission_margin_log")
+	if OS.get_cmdline_args().has("--tv-light-freighter-deadline-refuel-delivery-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-deadline-refuel-delivery-log"):
+		call_deferred("_run_light_freighter_deadline_refuel_delivery_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-mission-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-mission-trade-log"):
 		call_deferred("_run_light_freighter_mission_trade_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-repair-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-repair-trade-log"):
@@ -4742,6 +4745,125 @@ func _run_light_freighter_refuel_mission_margin_log() -> void:
 		cargo_after_delivery,
 		str(retained_trade_sold_after_delivery).to_lower(),
 		cargo_after_trade_sell,
+		credits,
+		status_line,
+	])
+	get_tree().quit(0)
+
+func _run_light_freighter_deadline_refuel_delivery_log() -> void:
+	# Contract tokens: boughtLightFreighter=true missionAccepted=true missionCargoTons=120 fuelBeforeDeliveryJump=0 blockedLoadedDeliveryForRefuel=true refuelSucceeded=true fuelAfterRefuel=300 deliveredOnDeadlineDay=true deadlineFailurePrevented=true completedMission=levo_bulk_deadline_refuel_supply
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var accepted_body := _current_body()
+	credits = 100000
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(accepted_body)
+	var selected_ship_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			selected_ship_listing = shipyard_listings[i]
+			break
+	var starting_cargo_space := cargo_space
+	var ship_price := int(selected_ship_listing.get("price", 0))
+	_buy_selected_ship()
+	var bought_light_freighter := player_ship_id == "light_freighter"
+	var upgraded_cargo_space := cargo_space
+	var bulk_mission := {
+		"id": "levo_bulk_deadline_refuel_supply",
+		"title": "Deadline Refuel Bulk Supply to Levo",
+		"originSystem": "Sol",
+		"originBody": "Earth",
+		"destinationSystem": "Levo",
+		"destinationBody": "Levo Spaceport",
+		"cargoTons": 120,
+		"reward": 6200,
+		"description": "Terminal Velocity scaffold probe for final-day low-fuel recovery before delivering a Light Freighter bulk mission.",
+		"requiresFlags": [],
+		"excludesFlags": [],
+		"setsFlags": ["light_freighter_deadline_refuel_supply_started"],
+		"completionFlags": ["light_freighter_deadline_refuel_supply_complete"],
+		"choiceGroup": null,
+		"next": null,
+		"reputationEvent": null,
+		"requirements": {},
+		"timeLimitDays": 5,
+		"sourceLabel": "terminal-velocity-light-freighter-deadline-refuel-delivery-scaffold",
+		"oracleStatus": "light_freighter_deadline_refuel_delivery_pending_classic_runtime_trace",
+	}
+	missions["missions"].insert(0, bulk_mission)
+	landing_tab = 0
+	selected_landing_item = 0
+	var mission_cargo_tons := int(bulk_mission.get("cargoTons", 0))
+	var cargo_before_accept := cargo
+	_accept_selected_mission()
+	var mission_accepted := active_missions.has(str(bulk_mission.get("id")))
+	var accepted_day := int(mission_acceptance_days.get(str(bulk_mission.get("id")), current_day))
+	var cargo_after_accept := cargo
+	var available_after_accept := _cargo_available_tons()
+	var mission_cargo_reserved := cargo_after_accept == cargo_before_accept + mission_cargo_tons
+	player_fuel = 0
+	var fuel_before_delivery_jump := player_fuel
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_levo_selected := _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var blocked_loaded_delivery_for_refuel: bool = current_system.get("name", "") == "Sol" and status_line.find("Insufficient fuel") >= 0 and cargo == mission_cargo_tons
+	_position_at_body("Earth")
+	_try_land()
+	var refuel_succeeded := _refuel_current_ship()
+	var fuel_after_refuel := player_fuel
+	_ev_land_or_launch()
+	selected_route.clear()
+	route_to_levo_selected = _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	current_day = accepted_day + int(bulk_mission.get("timeLimitDays", 0))
+	var current_day_before_delivery := current_day
+	var completed_ids := _complete_arrived_missions()
+	var mission_delivered := completed_ids.has(str(bulk_mission.get("id"))) and completed_missions.has(str(bulk_mission.get("id")))
+	var late_failure_attempted := false
+	if not mission_delivered:
+		late_failure_attempted = _fail_mission_deadline(bulk_mission, accepted_day, current_day)
+	var delivered_on_deadline_day := mission_delivered and current_day_before_delivery == accepted_day + int(bulk_mission.get("timeLimitDays", 0))
+	var deadline_failure_prevented := mission_delivered and not late_failure_attempted and failed_mission_history.is_empty()
+	var cargo_after_delivery := cargo
+	print("%s routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" boughtLightFreighter=%s startingCargoSpace=%d upgradedCargoSpace=%d shipPrice=%d acceptedMission=%s completedMission=%s missionAccepted=%s missionCargoTons=%d missionCargoReserved=%s cargoBeforeAccept=%d cargoAfterAccept=%d availableAfterAccept=%d acceptedDay=%d currentDayBeforeDelivery=%d timeLimitDays=%d routeToLevoSelected=%s fuelBeforeDeliveryJump=%d blockedLoadedDeliveryForRefuel=%s refuelSucceeded=%s fuelAfterRefuel=%d deliveredOnDeadlineDay=%s deadlineFailurePrevented=%s failedHistoryCount=%d cargoAfterDelivery=%d creditsAfterDelivery=%d sourceLabel=terminal-velocity-light-freighter-deadline-refuel-delivery-scaffold oracleStatus=light_freighter_deadline_refuel_delivery_pending_classic_runtime_trace status=\"%s\"" % [
+		LIGHT_FREIGHTER_DEADLINE_REFUEL_DELIVERY_EVENT_LOG_PREFIX,
+		str(route_to_sol_selected).to_lower(),
+		str(accepted_body.get("name", "None")),
+		str(bought_light_freighter).to_lower(),
+		starting_cargo_space,
+		upgraded_cargo_space,
+		ship_price,
+		str(bulk_mission.get("id")),
+		str(bulk_mission.get("id")) if mission_delivered else "None",
+		str(mission_accepted).to_lower(),
+		mission_cargo_tons,
+		str(mission_cargo_reserved).to_lower(),
+		cargo_before_accept,
+		cargo_after_accept,
+		available_after_accept,
+		accepted_day,
+		current_day_before_delivery,
+		int(bulk_mission.get("timeLimitDays", 0)),
+		str(route_to_levo_selected).to_lower(),
+		fuel_before_delivery_jump,
+		str(blocked_loaded_delivery_for_refuel).to_lower(),
+		str(refuel_succeeded).to_lower(),
+		fuel_after_refuel,
+		str(delivered_on_deadline_day).to_lower(),
+		str(deadline_failure_prevented).to_lower(),
+		failed_mission_history.size(),
+		cargo_after_delivery,
 		credits,
 		status_line,
 	])
