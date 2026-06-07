@@ -6,6 +6,8 @@ Purpose: improve Terminal Velocity development method using external game-develo
 
 This is a process artifact, not an EV Classic behavior source. It governs how to develop faster without letting secondary sources or convenient scaffolds become fidelity claims.
 
+Canonical summary: this page is part of the Terminal Velocity development compendium. Read `docs/research/terminal-velocity-development-compendium.md` first for current doctrine; keep this page as the detailed source hierarchy and gameplay-development method rationale.
+
 ## Sources checked
 
 ### Project-local sources

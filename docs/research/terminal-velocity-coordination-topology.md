@@ -5,6 +5,8 @@ Source: Loki Game Telegram post at 2026-06-06 15:27:45 EDT, message stored in pr
 
 Purpose: preserve the coordination/worker-efficiency recommendation as a durable Terminal Velocity process artifact. This is a process artifact, not an EV Classic behavior source.
 
+Canonical summary: this page is part of the Terminal Velocity development compendium. Read `docs/research/terminal-velocity-development-compendium.md` first for current doctrine; keep this page as the detailed coordination topology, manifest, and worker-resource rationale.
+
 ## Decision
 
 Do **not** start by adding a larger autonomous worker pool. Start by making Terminal Velocity work easier to coordinate safely:

@@ -5,6 +5,8 @@ Source: Loki Game Telegram assistant post at 2026-06-07 09:20:26 EDT, message st
 
 Purpose: preserve the long acceleration/process recommendation as a durable Terminal Velocity process artifact so it is not lost in chat. This is a process artifact, not an EV Classic behavior source.
 
+Canonical summary: this page is part of the Terminal Velocity development compendium. Read `docs/research/terminal-velocity-development-compendium.md` first for current doctrine; keep this page as the acceleration synthesis and deficiency/improvement rationale.
+
 ## Decision
 
 The strongest acceleration plan is **source-aligned vertical slices + cheap evaluators + parallel read-only support + one-writer coordination**, not a broad increase in autonomous coding workers.
