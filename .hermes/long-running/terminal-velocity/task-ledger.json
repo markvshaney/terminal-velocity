@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Service-purchase launch recovery help surface pushed/verified; successor queued for next safe source-aligned slice.",
+  "current_milestone": "Mission persistence recovery help surface accepted by coordinator after stale review-required gate; normal push/successor dispatch in progress.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -121,7 +121,8 @@
     "tv-legal-service-gate-log threshold/recovery; pushed and verified in normal TV repo path with HEAD == origin/main.",
     "tv-legal-service-gate-log inferred clemency service recovery local checkpoint; do not redo once accepted/pushed.",
     "Do not redo commodity partial-hold recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo service-purchase launch recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
+    "Do not redo service-purchase launch recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
+    "Do not redo mission persistence recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -129,8 +130,8 @@
     "dirty": false,
     "head": "inspect current SHA with git rev-parse HEAD",
     "origin_main": "inspect current SHA with git rev-parse origin/main",
-    "status": "HEAD == origin/main after normal push; successor queued before dispatch",
-    "status_short": "## main...origin/main"
+    "status": "normal push/fetch verification pending for coordinator-accepted mission persistence help surface",
+    "status_short": "## main...origin/main [ahead 1] before push"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -155,7 +156,7 @@
   },
   "last_checkpoint_commit": "local commit feat(godot): expose Levo sellback probe; SHA-neutral because ledger metadata may be amended into the commit.",
   "last_checkpoint_commit_note": "Inspect live HEAD with git rev-parse HEAD; exact embedded SHAs are intentionally avoided for amended ledger commits.",
-  "last_checkpoint_summary": "F10 help now exposes hasOutfitterShipyardLaunchRecoveryHelp=true for the existing outfitter/shipyard purchase guardrail: if B is blocked in space, land at the intended service port, preserve the purchase goal, then retry after checking credits and local stock.",
+  "last_checkpoint_summary": "F10 help now exposes hasMissionPersistenceRecoveryHelp=true for the existing pilot save/resume probe: after accepting a job and saving, reopen the pilot from the title screen and verify Mission Log/Player Info still show active cargo, route/status, strict-play, and upgrade checkpoints before changing cargo plans.",
   "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -170,14 +171,15 @@
     "local checkpoint: Expose mission deadline abort Godot log",
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
-  "last_completed_slice": "service-purchase launch recovery help surface",
-  "last_process_checkpoint": "Coordinator accepted tv-contraband-bribe-recovery-log after rerunning focused contract and Godot probe; backlog provenance added.",
+  "last_completed_slice": "mission persistence recovery help surface",
+  "last_process_checkpoint": "Coordinator accepted mission persistence recovery help surface after rerunning targeted help contract, Godot help/save probes, native tests, gameplay scenarios, Godot self-test, diff, JSON, and sensitive scans.",
   "last_process_checkpoint_commit": "not committed before checkpoint update; inspect live git status/diff",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; service-purchase launch recovery help surface pushed and verified with HEAD == origin/main.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK after RED failure",
-    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hasOutfitterShipyardLaunchRecoveryHelp=true",
-    "./run_godot.sh tv-outfitter-purchase-guardrail-log -> OK; inSpaceOutfitBlocked=true; known non-failing ObjectDB leak warning at exit",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> FAIL before help surface was added (missing mission persistence line)",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hasMissionPersistenceRecoveryHelp=true",
+    "./run_godot.sh tv-pilot-save-resume-log -> OK; missionRoundTrip=true strictPlayRoundTrip=true statusRoundTrip=true resumedUpgradePlayerInfoVisible=true",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 261 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=92 failed=0 total=92",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
@@ -193,7 +195,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Dispatch t_f257bc21 and verify exactly one running Terminal Velocity task; worker should choose the next source-aligned safe local slice and not redo service-purchase launch recovery help surface.",
+  "next_resume_action": "After normal push verification, complete t_f257bc21 and create/dispatch exactly one successor continuation task from current origin/main; do not redo mission persistence recovery help surface.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -347,5 +349,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T11:10:28.227377Z"
+  "updated_at": "2026-06-07T11:17:21.136773Z"
 }
