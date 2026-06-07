@@ -92,6 +92,7 @@ const WEAPON_TRADE_CARGO_EVENT_LOG_PREFIX := "TV_WEAPON_TRADE_CARGO_EVENT"
 const WEAPON_LEGAL_DOCKING_EVENT_LOG_PREFIX := "TV_WEAPON_LEGAL_DOCKING_EVENT"
 const LIGHT_FREIGHTER_BULK_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_BULK_MARGIN_EVENT"
 const LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT"
+const LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT"
 const LIGHT_FREIGHTER_MISSION_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_MISSION_TRADE_EVENT"
 const LIGHT_FREIGHTER_REPAIR_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REPAIR_TRADE_EVENT"
 const LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT_LOG_PREFIX := "TV_LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT"
@@ -366,6 +367,8 @@ func _ready() -> void:
 		call_deferred("_run_light_freighter_bulk_margin_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-bulk-mission-margin-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-bulk-mission-margin-log"):
 		call_deferred("_run_light_freighter_bulk_mission_margin_log")
+	if OS.get_cmdline_args().has("--tv-light-freighter-refuel-mission-margin-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-refuel-mission-margin-log"):
+		call_deferred("_run_light_freighter_refuel_mission_margin_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-mission-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-mission-trade-log"):
 		call_deferred("_run_light_freighter_mission_trade_log")
 	if OS.get_cmdline_args().has("--tv-light-freighter-repair-trade-log") or OS.get_cmdline_user_args().has("--tv-light-freighter-repair-trade-log"):
@@ -3774,6 +3777,150 @@ func _run_light_freighter_bulk_mission_margin_log() -> void:
 		cargo_after_trade_buy,
 		str(combined_load_fits).to_lower(),
 		str(route_to_levo_selected).to_lower(),
+		str(mission_delivered_before_trade_sale).to_lower(),
+		trade_cargo_after_delivery,
+		cargo_after_delivery,
+		str(retained_trade_sold_after_delivery).to_lower(),
+		cargo_after_trade_sell,
+		credits,
+		status_line,
+	])
+	get_tree().quit(0)
+
+func _run_light_freighter_refuel_mission_margin_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var accepted_body := _current_body()
+	credits = 100000
+	landing_tab = 3
+	var shipyard_listings := _shipyard_listings(accepted_body)
+	var selected_ship_listing := {}
+	for i in range(shipyard_listings.size()):
+		if str(shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			selected_ship_listing = shipyard_listings[i]
+			break
+	var starting_cargo_space := cargo_space
+	var ship_price := int(selected_ship_listing.get("price", 0))
+	_buy_selected_ship()
+	var bought_light_freighter := player_ship_id == "light_freighter"
+	var upgraded_cargo_space := cargo_space
+	var bulk_mission := {
+		"id": "levo_bulk_refuel_margin_supply",
+		"title": "Levo Refuel Margin Bulk Supply",
+		"originSystem": "Sol",
+		"originBody": "Earth",
+		"destinationSystem": "Levo",
+		"destinationBody": "Levo Spaceport",
+		"cargoTons": 120,
+		"reward": 6200,
+		"description": "Terminal Velocity scaffold probe for low-fuel recovery after filling remaining Light Freighter hold with positive-margin trade cargo around a bulk delivery.",
+		"requiresFlags": [],
+		"excludesFlags": [],
+		"setsFlags": ["light_freighter_refuel_margin_supply_started"],
+		"completionFlags": ["light_freighter_refuel_margin_supply_complete"],
+		"choiceGroup": null,
+		"next": null,
+		"reputationEvent": null,
+		"requirements": {},
+		"timeLimitDays": 5,
+		"sourceLabel": "terminal-velocity-light-freighter-refuel-mission-margin-scaffold",
+		"oracleStatus": "light_freighter_refuel_mission_margin_pending_classic_runtime_trace",
+	}
+	missions["missions"].insert(0, bulk_mission)
+	landing_tab = 0
+	selected_landing_item = 0
+	var mission_cargo_tons := int(bulk_mission.get("cargoTons", 0))
+	var profitable_commodity := "food"
+	var unprofitable_commodity := "equipment"
+	var profitable_buy_price := int(_market_prices(current_system.get("name", "")).get(profitable_commodity, {}).get("buy", 0))
+	var profitable_sell_price := int(_market_prices("Levo").get(profitable_commodity, {}).get("sell", 0))
+	var profitable_margin_per_ton := profitable_sell_price - profitable_buy_price
+	var negative_buy_price := int(_market_prices("Levo").get(unprofitable_commodity, {}).get("buy", 0))
+	var negative_sell_price := int(_market_prices("Sol").get(unprofitable_commodity, {}).get("sell", 0))
+	var negative_margin_per_ton := negative_sell_price - negative_buy_price
+	var cargo_before_accept := cargo
+	_accept_selected_mission()
+	var mission_accepted := active_missions.has(str(bulk_mission.get("id")))
+	var cargo_after_accept := cargo
+	var available_after_accept := _cargo_available_tons()
+	landing_tab = 1
+	selected_landing_item = 0
+	while _cargo_available_tons() >= EV_CLASSIC_COMMODITY_LOT_SIZE:
+		_buy_selected_commodity()
+	var positive_margin_tons_bought := int(commodity_hold.get(profitable_commodity, 0))
+	var positive_margin_lots_bought := int(positive_margin_tons_bought / EV_CLASSIC_COMMODITY_LOT_SIZE)
+	var held_unprofitable_after_eval := int(commodity_hold.get(unprofitable_commodity, 0))
+	var negative_margin_skipped := negative_margin_per_ton < 0 and held_unprofitable_after_eval == 0
+	var cargo_after_trade_buy := cargo
+	var combined_load_fits := cargo_after_trade_buy == mission_cargo_tons + positive_margin_tons_bought and cargo_after_trade_buy <= upgraded_cargo_space
+	player_fuel = 0
+	var fuel_before_delivery_jump := player_fuel
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_levo_selected := _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var blocked_loaded_delivery_for_refuel: bool = current_system.get("name", "") == "Sol" and status_line.find("Insufficient fuel") >= 0
+	_position_at_body("Earth")
+	_try_land()
+	var refuel_succeeded := _refuel_current_ship()
+	var fuel_after_refuel := player_fuel
+	_ev_land_or_launch()
+	selected_route.clear()
+	route_to_levo_selected = _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	var completed_ids := _complete_arrived_missions()
+	var mission_delivered := completed_ids.has(str(bulk_mission.get("id"))) and completed_missions.has(str(bulk_mission.get("id")))
+	var trade_cargo_after_delivery := int(commodity_hold.get(profitable_commodity, 0))
+	var cargo_after_delivery := cargo
+	var mission_delivered_before_trade_sale := mission_delivered and trade_cargo_after_delivery == positive_margin_tons_bought and cargo_after_delivery == positive_margin_tons_bought
+	landing_tab = 1
+	selected_landing_item = 0
+	while int(commodity_hold.get(profitable_commodity, 0)) > 0:
+		_sell_selected_commodity()
+	var trade_cargo_after_sell := int(commodity_hold.get(profitable_commodity, 0))
+	var cargo_after_trade_sell := cargo
+	var retained_trade_sold_after_delivery := trade_cargo_after_sell == 0 and cargo_after_trade_sell == 0
+	print("%s routeToSolSelected=%s acceptedAtSystem=Sol acceptedAtBody=\"%s\" boughtLightFreighter=%s startingCargoSpace=%d upgradedCargoSpace=%d shipPrice=%d acceptedMission=%s missionAccepted=%s missionCargoTons=%d cargoBeforeAccept=%d cargoAfterAccept=%d availableAfterAccept=%d profitableCommodity=food unprofitableCommodity=equipment profitableBuyPrice=%d profitableSellPrice=%d profitableMarginPerTon=%d negativeBuyPrice=%d negativeSellPrice=%d negativeMarginPerTon=%d negativeMarginSkipped=%s heldUnprofitableAfterEval=%d positiveMarginLotsBought=%d positiveMarginTonsBought=%d cargoAfterTradeBuy=%d combinedLoadFits=%s routeToLevoSelected=%s fuelBeforeDeliveryJump=%d blockedLoadedDeliveryForRefuel=%s refuelSucceeded=%s fuelAfterRefuel=%d missionDeliveredBeforeTradeSale=%s tradeCargoAfterDelivery=%d cargoAfterDelivery=%d retainedTradeSoldAfterDelivery=%s cargoAfterTradeSell=%d creditsAfter=%d sourceLabel=terminal-velocity-light-freighter-refuel-mission-margin-scaffold oracleStatus=light_freighter_refuel_mission_margin_pending_classic_runtime_trace status=\"%s\"" % [
+		LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT_LOG_PREFIX,
+		str(route_to_sol_selected).to_lower(),
+		str(accepted_body.get("name", "None")),
+		str(bought_light_freighter).to_lower(),
+		starting_cargo_space,
+		upgraded_cargo_space,
+		ship_price,
+		str(bulk_mission.get("id")),
+		str(mission_accepted).to_lower(),
+		mission_cargo_tons,
+		cargo_before_accept,
+		cargo_after_accept,
+		available_after_accept,
+		profitable_buy_price,
+		profitable_sell_price,
+		profitable_margin_per_ton,
+		negative_buy_price,
+		negative_sell_price,
+		negative_margin_per_ton,
+		str(negative_margin_skipped).to_lower(),
+		held_unprofitable_after_eval,
+		positive_margin_lots_bought,
+		positive_margin_tons_bought,
+		cargo_after_trade_buy,
+		str(combined_load_fits).to_lower(),
+		str(route_to_levo_selected).to_lower(),
+		fuel_before_delivery_jump,
+		str(blocked_loaded_delivery_for_refuel).to_lower(),
+		str(refuel_succeeded).to_lower(),
+		fuel_after_refuel,
 		str(mission_delivered_before_trade_sale).to_lower(),
 		trade_cargo_after_delivery,
 		cargo_after_delivery,

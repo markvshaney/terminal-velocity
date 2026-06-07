@@ -71,6 +71,7 @@ param(
     [switch]$WeaponLegalDockingLog,
     [switch]$LightFreighterBulkMarginLog,
     [switch]$LightFreighterBulkMissionMarginLog,
+    [switch]$LightFreighterRefuelMissionMarginLog,
     [switch]$LightFreighterMissionTradeLog,
     [switch]$LightFreighterRepairTradeLog,
     [switch]$LightFreighterRepairMissionTradeLog,
@@ -242,6 +243,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-light-freighter-bulk-margin-log
 } elseif ($LightFreighterBulkMissionMarginLog) {
     & $Godot --headless --path $Project -- --tv-light-freighter-bulk-mission-margin-log
+} elseif ($LightFreighterRefuelMissionMarginLog) {
+    & $Godot --headless --path $Project -- --tv-light-freighter-refuel-mission-margin-log
 } elseif ($LightFreighterMissionTradeLog) {
     & $Godot --headless --path $Project -- --tv-light-freighter-mission-trade-log
 } elseif ($LightFreighterRepairTradeLog) {

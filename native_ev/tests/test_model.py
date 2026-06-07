@@ -1056,6 +1056,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_WEAPON_LEGAL_DOCKING_EVENT',
             'TV_LIGHT_FREIGHTER_BULK_MARGIN_EVENT',
             'TV_LIGHT_FREIGHTER_BULK_MISSION_MARGIN_EVENT',
+            'TV_LIGHT_FREIGHTER_REFUEL_MISSION_MARGIN_EVENT',
             'TV_LIGHT_FREIGHTER_MISSION_TRADE_EVENT',
             'TV_LIGHT_FREIGHTER_REPAIR_TRADE_EVENT',
             'TV_LIGHT_FREIGHTER_REPAIR_MISSION_TRADE_EVENT',
@@ -1078,6 +1079,7 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-weapon-legal-docking-log',
             '--tv-light-freighter-bulk-margin-log',
             '--tv-light-freighter-bulk-mission-margin-log',
+            '--tv-light-freighter-refuel-mission-margin-log',
             '--tv-light-freighter-mission-trade-log',
             '--tv-light-freighter-repair-trade-log',
             '--tv-light-freighter-repair-mission-trade-log',
@@ -1098,6 +1100,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_weapon_legal_docking_log',
             'func _run_light_freighter_bulk_margin_log',
             'func _run_light_freighter_bulk_mission_margin_log',
+            'func _run_light_freighter_refuel_mission_margin_log',
             'func _run_light_freighter_mission_trade_log',
             'func _run_light_freighter_repair_trade_log',
             'func _run_light_freighter_repair_mission_trade_log',
@@ -1219,9 +1222,13 @@ class NativeEvModelTests(unittest.TestCase):
             'oracleStatus=light_freighter_repair_margin_pending_classic_runtime_trace',
             'sourceLabel=terminal-velocity-light-freighter-bulk-mission-margin-scaffold',
             'oracleStatus=light_freighter_bulk_mission_margin_pending_classic_runtime_trace',
+            'sourceLabel=terminal-velocity-light-freighter-refuel-mission-margin-scaffold',
+            'oracleStatus=light_freighter_refuel_mission_margin_pending_classic_runtime_trace',
             'positiveMarginLotsBought=%d',
             'missionDeliveredBeforeTradeSale=%s',
             'retainedTradeSoldAfterDelivery=%s',
+            'blockedLoadedDeliveryForRefuel=%s',
+            'refuelSucceeded=%s',
             'sourceLabel=terminal-velocity-light-freighter-repair-mission-margin-scaffold',
             'oracleStatus=light_freighter_repair_mission_margin_pending_classic_runtime_trace',
             'repairSourceLabel=terminal-velocity-repair-service-scaffold',
@@ -1250,6 +1257,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-weapon-legal-docking-log', run_script)
         self.assertIn('tv-light-freighter-mission-trade-log', run_script)
         self.assertIn('tv-light-freighter-bulk-mission-margin-log', run_script)
+        self.assertIn('tv-light-freighter-refuel-mission-margin-log', run_script)
         self.assertIn('tv-light-freighter-repair-trade-log', run_script)
         self.assertIn('tv-light-freighter-repair-mission-trade-log', run_script)
         self.assertIn('tv-light-freighter-repair-refuel-mission-trade-log', run_script)
@@ -1274,6 +1282,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$WeaponLegalDockingLog', windows_script)
         self.assertIn('[switch]$LightFreighterMissionTradeLog', windows_script)
         self.assertIn('[switch]$LightFreighterBulkMissionMarginLog', windows_script)
+        self.assertIn('[switch]$LightFreighterRefuelMissionMarginLog', windows_script)
         self.assertIn('[switch]$LightFreighterRepairTradeLog', windows_script)
         self.assertIn('[switch]$LightFreighterRepairMissionTradeLog', windows_script)
         self.assertIn('[switch]$LightFreighterRepairRefuelMissionTradeLog', windows_script)
