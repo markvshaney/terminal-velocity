@@ -123,6 +123,7 @@
     "Alignment return contracts: after choosing a chapter branch, scan Mission Computer for remaining non-branch return contracts before assuming the story chain is complete. TV timing scaffold pending Classic UI evidence.",
     "Alignment return completion recovery: after finishing either chapter branch, re-scan Mission Computer for leftover return contracts, accept only after free cargo is confirmed, complete the cleanup haul, and verify Mission Log/Player Info cargo release before treating the branch hub as cleared. TV mission scaffold; Classic branch cleanup UI pending.",
     "Pilot persistence: F6 saves current pilot progress for title-screen Open Pilot resume.",
+    "Upgrade persistence recovery: after buying outfits, weapons, or a new hull, press F6, reopen the pilot from the title screen, and verify Player Info still shows the purchased ship/outfits/weapons before taking riskier jobs. TV save/resume scaffold; exact Classic pilot-file UX pending.",
     "Player info: P toggles player info with ship, cargo, fuel, shields/hull, outfits, and weapons.",
     "Landing: F1 Mission Computer, F2 Commodity Exchange, F3 Outfitter, F4 Shipyard.",
     "Buying/selling: Enter accepts selected mission; B buys selected commodity, outfit, or ship; S sells selected cargo.",
@@ -726,6 +727,11 @@
       "flag": "hasPilotPersistenceHelp",
       "source": "help",
       "contains": "Pilot persistence: F6 saves current pilot progress"
+    },
+    {
+      "flag": "hasUpgradePersistenceRecoveryHelp",
+      "source": "help",
+      "contains": "Upgrade persistence recovery: after buying outfits, weapons, or a new hull"
     },
     {
       "flag": "hasPlayerInfoHelp",
