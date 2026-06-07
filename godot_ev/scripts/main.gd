@@ -5891,13 +5891,24 @@ func _run_legal_patrol_posture_log() -> void:
 	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var government_name := _current_government_name()
-	legal_records[government_name] = -75
+	var crime_tolerance_score := _government_crime_tolerance_score(government_name)
+	var legal_score_just_below_tolerance := crime_tolerance_score - 1
+	var legal_score_at_tolerance := crime_tolerance_score
+	legal_records[government_name] = legal_score_just_below_tolerance
 	status_messages.clear()
 	_emit_legal_patrol_warning_if_needed()
 	_select_closest_target()
 	var patrol_warning := status_messages.has(_legal_patrol_warning_message(government_name))
 	var hostile_posture := _legal_patrol_hostile_posture_active(government_name)
-	print("%s routeToSolSelected=%s system=%s government=\"%s\" legalScore=%d patrolWarning=%s hostilePosture=%s combatExecuted=false targetStatus=\"%s\" sourceLabel=terminal-velocity-classic-resource-patrol-semantics oracleStatus=classic_runtime_combat_timing_pending" % [LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, int(legal_records.get(government_name, 0)), str(patrol_warning), str(hostile_posture), status_line])
+	var hostile_target_status := status_line
+	legal_records[government_name] = legal_score_at_tolerance
+	status_messages.clear()
+	_emit_legal_patrol_warning_if_needed()
+	_select_closest_target()
+	var patrol_warning_at_tolerance := status_messages.has(_legal_patrol_warning_message(government_name))
+	var hostile_posture_at_tolerance := _legal_patrol_hostile_posture_active(government_name)
+	var patrol_recovered_at_tolerance := not patrol_warning_at_tolerance and not hostile_posture_at_tolerance
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" legalScore=%d crimeToleranceLegalScore=%d patrolWarning=%s hostilePosture=%s legalScoreJustBelowTolerance=%d patrolHostileJustBelowTolerance=%s legalScoreAtTolerance=%d patrolRecoveredAtTolerance=%s combatExecuted=false targetStatus=\"%s\" sourceLabel=terminal-velocity-classic-resource-patrol-semantics oracleStatus=classic_runtime_combat_timing_pending" % [LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, legal_score_just_below_tolerance, crime_tolerance_score, str(patrol_warning), str(hostile_posture), legal_score_just_below_tolerance, str(hostile_posture), legal_score_at_tolerance, str(patrol_recovered_at_tolerance), hostile_target_status])
 	get_tree().quit(0)
 
 func _run_mission_legal_eligibility_log() -> void:
