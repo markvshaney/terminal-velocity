@@ -141,6 +141,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"commodity_exact_credit_sellback_rebuy_loop",
 		"commodity_exact_credit_full_hold_sellback_loop",
 		"cross_market_trade_spread_scout",
+		"cross_market_exact_credit_profit_loop",
 		"max_hold_trade_route_scout",
 		"trade_route_refuel_profit_loop",
 		"trade_route_margin_choice_loop",

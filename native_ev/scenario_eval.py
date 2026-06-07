@@ -45,6 +45,7 @@ SCENARIO_CURRICULUM = [
     'commodity_exact_credit_sellback_rebuy_loop',
     'commodity_exact_credit_full_hold_sellback_loop',
     'cross_market_trade_spread_scout',
+    'cross_market_exact_credit_profit_loop',
     'max_hold_trade_route_scout',
     'trade_route_refuel_profit_loop',
     'trade_route_margin_choice_loop',
@@ -1257,6 +1258,21 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
                 'sourceLabel': 'terminal-velocity-cross-market-trade-scaffold',
                 'oracleStatus': 'classic_runtime_cross_market_spread_pending',
             },
+        ]
+    if name == 'cross_market_exact_credit_profit_loop':
+        source_label = 'terminal-velocity-cross-market-exact-credit-profit-scaffold'
+        oracle_status = 'cross_market_exact_credit_profit_pending_classic_runtime_trace'
+        return [
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': 'Sol'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'set_state', 'values': {'credits': 420, 'cargoUsed': 0, 'cargoHold': {}}},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'buy_commodity_lot', 'commodity': 'food', 'expectBlocked': True, 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'depart'},
+            {'type': 'jump', 'destinationSystem': START_SYSTEM},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'sell_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
     if name == 'max_hold_trade_route_scout':
         return [
@@ -2852,6 +2868,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'sold_high_at_levo': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('unitPrice') == 120 for event in trade_events) else 'failed',
             'returned_to_levo_with_profit': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == STARTING_CREDITS + ((120 - 42) * COMMODITY_LOT_SIZE) and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 else 'failed',
             'recorded_cross_market_source_boundary': 'passed' if trade_events and all(event.get('sourceLabel') == 'terminal-velocity-cross-market-trade-scaffold' and event.get('oracleStatus') == 'classic_runtime_cross_market_spread_pending' for event in trade_events) else 'failed',
+        })
+    elif name == 'cross_market_exact_credit_profit_loop':
+        trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
+        blocked_buy_events = [event for event in trace if event.get('type') == 'blocked_buy_commodity_lot']
+        source_events = trade_events + blocked_buy_events
+        checks.update({
+            'exact_credit_sol_buy_left_zero_credits': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('commodity') == 'food' and event.get('unitPrice') == 42 and event.get('creditsAfter') == 0 and event.get('cargoUsed') == COMMODITY_LOT_SIZE for event in trade_events) else 'failed',
+            'blocked_second_sol_buy_without_credits': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('commodity') == 'food' for event in blocked_buy_events) else 'failed',
+            'sold_profitable_lot_after_zero_credit_return': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('body') == START_BODY and event.get('commodity') == 'food' and event.get('unitPrice') == 120 and event.get('creditsAfter') == 1200 and event.get('cargoUsed') == 0 for event in trade_events) and state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('credits') == 1200 and state.get('cargoUsed') == 0 and state.get('cargoHold') == {} else 'failed',
+            'recorded_cross_market_exact_credit_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-cross-market-exact-credit-profit-scaffold' and event.get('oracleStatus') == 'cross_market_exact_credit_profit_pending_classic_runtime_trace' for event in source_events) else 'failed',
         })
     elif name == 'max_hold_trade_route_scout':
         trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
