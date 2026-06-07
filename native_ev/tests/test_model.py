@@ -483,6 +483,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-gameplay-curriculum-help-log', run_script)
         self.assertIn('[switch]$GameplayCurriculumHelpLog', windows_script)
 
+    def test_godot_max_hold_trade_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_MAX_HOLD_TRADE_EVENT',
+            '--tv-max-hold-trade-log',
+            'func _run_max_hold_trade_log() -> void:',
+            'buySystem=Sol',
+            'sellSystem=Levo',
+            'lotsBought=%d',
+            'tonsBought=%d',
+            'maxHoldFilled=true',
+            'allLotsSold=true',
+            'finalProfitOk=true',
+            'finalCargo=0',
+            'sourceLabel=terminal-velocity-max-hold-trade-scaffold',
+            'oracleStatus=classic_runtime_multi_lot_trade_spread_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-max-hold-trade-log', run_script)
+        self.assertIn('[switch]$MaxHoldTradeLog', windows_script)
+
     def test_godot_starting_equipment_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
