@@ -4269,6 +4269,7 @@ func _run_navigation_guardrail_log() -> void:
 	map_visible = true
 	_select_first_linked_map_route()
 	player_fuel = 0
+	var route_fuel_margin := _route_fuel_margin()
 	_move_to_scripted_hyperspace_distance()
 	_jump()
 	var fuel_guidance := status_messages.has("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route")
@@ -4300,7 +4301,7 @@ func _run_navigation_guardrail_log() -> void:
 	_refuel_current_ship()
 	original_bodies[0] = original_body
 	var refuel_guidance := status_messages.has("Refuel unavailable here; choose a port with refuel service")
-	print("%s noRouteGuidance=%s fuelGuidance=%s tooCloseGuidance=%s noPortGuidance=%s approachGuidance=%s refuelGuidance=%s sourceLabel=terminal-velocity-navigation-guardrail-scaffold oracleStatus=navigation_blocked_feedback_pending_playtest messages=%s" % [NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX, str(no_route_guidance), str(fuel_guidance), str(too_close_guidance), str(no_port_guidance), str(approach_guidance), str(refuel_guidance), JSON.stringify(status_messages)])
+	print("%s noRouteGuidance=%s fuelGuidance=%s routeFuelMargin=%d tooCloseGuidance=%s noPortGuidance=%s approachGuidance=%s refuelGuidance=%s sourceLabel=terminal-velocity-navigation-guardrail-scaffold oracleStatus=navigation_blocked_feedback_pending_playtest messages=%s" % [NAVIGATION_GUARDRAIL_EVENT_LOG_PREFIX, str(no_route_guidance), str(fuel_guidance), route_fuel_margin, str(too_close_guidance), str(no_port_guidance), str(approach_guidance), str(refuel_guidance), JSON.stringify(status_messages)])
 	get_tree().quit(0)
 
 func _run_legal_status_log() -> void:
@@ -6727,16 +6728,20 @@ func _queued_route_hops() -> int:
 func _route_fuel_warning_active(route_hops := -1) -> bool:
 	return _route_fuel_cost(route_hops) > player_fuel
 
+func _route_fuel_margin(route_hops := -1) -> int:
+	return player_fuel - _route_fuel_cost(route_hops)
+
 func _route_fuel_hint_line(route_hops := -1) -> String:
 	var hops := _queued_route_hops() if route_hops < 0 else route_hops
 	var cost := _route_fuel_cost(hops)
+	var margin := _route_fuel_margin(hops)
 	var warning := ""
 	if cost > player_fuel:
 		warning = " — refuel before full route"
 		var refuel_body := _nearest_refuel_body_name()
 		if refuel_body != "":
 			warning += " at " + refuel_body
-	return "Route fuel: %d hop(s), cost %d, fuel %d/%d%s" % [hops, cost, player_fuel, _max_player_fuel(), warning]
+	return "Route fuel: %d hop(s), cost %d, fuel %d/%d, reserve %+d%s" % [hops, cost, player_fuel, _max_player_fuel(), margin, warning]
 
 func _nearest_refuel_body_name() -> String:
 	for body in current_system.get("bodies", []):
@@ -7569,14 +7574,15 @@ func _append_map_route_at_position(click_position: Vector2) -> bool:
 		var route_text := " → ".join(route_preview)
 		var route_hops := route_preview.size() - 1
 		var route_cost := route_hops * _jump_fuel_cost()
+		var route_margin := player_fuel - route_cost
 		if selected_route.is_empty():
 			var current_links: Array = current_system.get("links", [])
 			selected_link_index = current_links.find(linked_name)
 			if selected_link_index < 0:
 				selected_link_index = 0
-			status_line = "Route selected: %s — fuel cost %d, fuel %d/%d — press J to jump" % [route_text, route_cost, player_fuel, _max_player_fuel()]
+			status_line = "Route selected: %s — fuel cost %d, fuel %d/%d, reserve %+d — press J to jump" % [route_text, route_cost, player_fuel, _max_player_fuel(), route_margin]
 		else:
-			status_line = "Route appended: %s — fuel cost %d, fuel %d/%d" % [route_text, route_cost, player_fuel, _max_player_fuel()]
+			status_line = "Route appended: %s — fuel cost %d, fuel %d/%d, reserve %+d" % [route_text, route_cost, player_fuel, _max_player_fuel(), route_margin]
 		selected_route.append(linked_name)
 		_play_sound("ui_click")
 		return true
