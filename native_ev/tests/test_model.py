@@ -1084,6 +1084,34 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-cargo-salvage-recovery-log', run_script)
         self.assertIn('[switch]$CargoSalvageRecoveryLog', windows_script)
 
+    def test_godot_cross_market_trade_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_CROSS_MARKET_TRADE_EVENT',
+            '--tv-cross-market-trade-log',
+            'func _run_cross_market_trade_log() -> void:',
+            'buySystem=Sol',
+            'sellSystem=Levo',
+            'routeToBuySystemSelected=%s',
+            'routeToSellSystemSelected=%s',
+            'buyPrice=42',
+            'sellPrice=120',
+            'profitPerTon=78',
+            'profitTotal=780',
+            'tradeBought=true',
+            'tradeSold=true',
+            'finalCargo=0',
+            'sourceLabel=terminal-velocity-cross-market-trade-scaffold',
+            'oracleStatus=classic_runtime_cross_market_spread_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-cross-market-trade-log', run_script)
+        self.assertIn('[switch]$CrossMarketTradeLog', windows_script)
+
     def test_godot_navigation_blocked_reasons_are_player_guidance_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

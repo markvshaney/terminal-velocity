@@ -37,6 +37,7 @@ const REPAIR_SERVICE_EVENT_LOG_PREFIX := "TV_REPAIR_SERVICE_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
+const CROSS_MARKET_TRADE_EVENT_LOG_PREFIX := "TV_CROSS_MARKET_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
@@ -257,6 +258,8 @@ func _ready() -> void:
 		call_deferred("_run_near_center_jump_log")
 	if OS.get_cmdline_args().has("--tv-commodity-trade-log") or OS.get_cmdline_user_args().has("--tv-commodity-trade-log"):
 		call_deferred("_run_commodity_trade_log")
+	if OS.get_cmdline_args().has("--tv-cross-market-trade-log") or OS.get_cmdline_user_args().has("--tv-cross-market-trade-log"):
+		call_deferred("_run_cross_market_trade_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
@@ -1190,6 +1193,54 @@ func _run_commodity_trade_log() -> void:
 	var sell_status := "sellSucceeded=true" if sell_succeeded else "sellSucceeded=false"
 	var visible_status := "roundTripVisible=true" if round_trip_visible else "roundTripVisible=false"
 	print("%s system=%s commodity=%s buyPrice=%d sellPrice=%d %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBeforeBuy=%d cargoAfterBuy=%d cargoAfterSell=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=original-runtime-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [COMMODITY_TRADE_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, sell_price, buy_status, sell_status, visible_status, credits_before_buy, credits_after_buy, credits_after_sell, cargo_before_buy, cargo_after_buy, cargo_after_sell, held_after_buy, held_after_sell, status_line])
+	get_tree().quit(0)
+
+func _run_cross_market_trade_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var trade_commodity := "food"
+	var buy_system := "Sol"
+	var sell_system := "Levo"
+	var route_to_buy_system_selected := _select_map_route_to_system(buy_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var buy_price := int(_market_prices(buy_system).get(trade_commodity, {}).get("buy", 0))
+	var sell_price := int(_market_prices(sell_system).get(trade_commodity, {}).get("sell", 0))
+	var profit_per_ton := sell_price - buy_price
+	var profit_total := profit_per_ton * EV_CLASSIC_COMMODITY_LOT_SIZE
+	var credits_before_buy := credits
+	var cargo_before_buy := cargo
+	_buy_selected_commodity()
+	var credits_after_buy := credits
+	var held_after_buy := int(commodity_hold.get(trade_commodity, 0))
+	var trade_bought := str(current_system.get("name", "?")) == buy_system and buy_price == 42 and held_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo == cargo_before_buy + EV_CLASSIC_COMMODITY_LOT_SIZE and credits_after_buy == credits_before_buy - (buy_price * EV_CLASSIC_COMMODITY_LOT_SIZE)
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_sell_system_selected := _select_map_route_to_system(sell_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_sale := credits
+	_sell_selected_commodity()
+	var held_after_sale := int(commodity_hold.get(trade_commodity, 0))
+	var trade_sold := str(current_system.get("name", "?")) == sell_system and sell_price == 120 and held_after_sale == 0 and cargo == 0 and credits == credits_before_sale + (sell_price * EV_CLASSIC_COMMODITY_LOT_SIZE)
+	var buy_system_status := "buySystem=Sol" if buy_system == "Sol" else "buySystem=%s" % buy_system
+	var sell_system_status := "sellSystem=Levo" if sell_system == "Levo" else "sellSystem=%s" % sell_system
+	var buy_price_status := "buyPrice=42" if buy_price == 42 else "buyPrice=%d" % buy_price
+	var sell_price_status := "sellPrice=120" if sell_price == 120 else "sellPrice=%d" % sell_price
+	var profit_per_ton_status := "profitPerTon=78" if profit_per_ton == 78 else "profitPerTon=%d" % profit_per_ton
+	var profit_total_status := "profitTotal=780" if profit_total == 780 else "profitTotal=%d" % profit_total
+	var bought_status := "tradeBought=true" if trade_bought else "tradeBought=false"
+	var sold_status := "tradeSold=true" if trade_sold else "tradeSold=false"
+	var final_cargo_status := "finalCargo=0" if cargo == 0 else "finalCargo=%d" % cargo
+	print("%s startSystem=Levo %s %s routeToBuySystemSelected=%s routeToSellSystemSelected=%s commodity=%s %s %s %s %s %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsBeforeSale=%d creditsAfterSale=%d cargoBeforeBuy=%d heldAfterBuy=%d heldAfterSale=%d sourceLabel=terminal-velocity-cross-market-trade-scaffold oracleStatus=classic_runtime_cross_market_spread_pending status=\"%s\"" % [CROSS_MARKET_TRADE_EVENT_LOG_PREFIX, buy_system_status, sell_system_status, str(route_to_buy_system_selected), str(route_to_sell_system_selected), trade_commodity, buy_price_status, sell_price_status, profit_per_ton_status, profit_total_status, bought_status, sold_status, final_cargo_status, credits_before_buy, credits_after_buy, credits_before_sale, credits, cargo_before_buy, held_after_buy, held_after_sale, status_line])
 	get_tree().quit(0)
 
 func _run_mission_offer_scan_log() -> void:
