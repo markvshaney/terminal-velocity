@@ -4388,7 +4388,30 @@ func _run_legal_service_gate_log() -> void:
 			break
 	_buy_selected_ship()
 	var shipyard_recovered_at_min := player_ship_id == "light_freighter"
-	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" legalScore=%d blockedOutfitter=%s blockedShipyard=%s noPurchase=%s serviceLegalMinScore=%d legalScoreJustBelowServiceMin=%d serviceBlockedJustBelowMin=%s legalScoreAtServiceMin=%d outfitterRecoveredAtMin=%s shipyardRecoveredAtMin=%s serviceBlockedMessage=\"%s\" sourceLabel=terminal-velocity-legal-service-gate-scaffold oracleStatus=legal_service_denial_pending_ev_classic_confirmation" % [LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, legal_score_just_below_service_min, str(blocked_outfitter), str(blocked_shipyard), str(no_purchase), service_min_score, legal_score_just_below_service_min, str(blocked_outfitter and blocked_shipyard), service_min_score, str(outfitter_recovered_at_min), str(shipyard_recovered_at_min), service_blocked_message])
+	owned_outfits.erase("cargo_pod")
+	_set_player_ship_by_id("shuttlecraft")
+	cargo = 0
+	legal_records[government_name] = legal_score_just_below_service_min
+	var clemency_min_reputation := int(reputation.get("mechanics", {}).get("clemencyMinReputation", 10))
+	reputation_scores[government_name] = clemency_min_reputation
+	credits = 100000
+	landed = true
+	status_messages.clear()
+	var service_clemency_paid := _pay_legal_clemency()
+	var legal_after_service_clemency := int(legal_records.get(government_name, 0))
+	landing_tab = 2
+	selected_landing_item = 0
+	_buy_selected_outfit_or_weapon()
+	var outfitter_recovered_after_clemency := owned_outfits.has("cargo_pod")
+	landing_tab = 3
+	var clemency_shipyard_listings := _shipyard_listings(_current_body())
+	for i in range(clemency_shipyard_listings.size()):
+		if str(clemency_shipyard_listings[i].get("shipId", "")) == "light_freighter":
+			selected_landing_item = i
+			break
+	_buy_selected_ship()
+	var shipyard_recovered_after_clemency := player_ship_id == "light_freighter"
+	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" legalScore=%d blockedOutfitter=%s blockedShipyard=%s noPurchase=%s serviceLegalMinScore=%d legalScoreJustBelowServiceMin=%d serviceBlockedJustBelowMin=%s legalScoreAtServiceMin=%d outfitterRecoveredAtMin=%s shipyardRecoveredAtMin=%s serviceClemencyPaid=%s legalAfterServiceClemency=%d outfitterRecoveredAfterClemency=%s shipyardRecoveredAfterClemency=%s serviceBlockedMessage=\"%s\" sourceLabel=terminal-velocity-legal-service-gate-scaffold oracleStatus=legal_service_denial_pending_ev_classic_confirmation clemencySourceLabel=terminal-velocity-inferred-clemency-scaffold clemencyOracleStatus=classic_runtime_clemency_location_pending" % [LEGAL_SERVICE_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, legal_score_just_below_service_min, str(blocked_outfitter), str(blocked_shipyard), str(no_purchase), service_min_score, legal_score_just_below_service_min, str(blocked_outfitter and blocked_shipyard), service_min_score, str(outfitter_recovered_at_min), str(shipyard_recovered_at_min), str(service_clemency_paid), legal_after_service_clemency, str(outfitter_recovered_after_clemency), str(shipyard_recovered_after_clemency), service_blocked_message])
 	get_tree().quit(0)
 
 func _run_weapon_reputation_gate_log() -> void:
