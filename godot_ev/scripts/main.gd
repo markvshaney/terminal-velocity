@@ -40,6 +40,7 @@ const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
 const CROSS_MARKET_TRADE_EVENT_LOG_PREFIX := "TV_CROSS_MARKET_TRADE_EVENT"
 const MAX_HOLD_TRADE_EVENT_LOG_PREFIX := "TV_MAX_HOLD_TRADE_EVENT"
 const TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX := "TV_TRADE_REFUEL_PROFIT_EVENT"
+const CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX := "TV_CARGO_EXPANSION_TRADE_EVENT"
 const MISSION_OFFER_SCAN_EVENT_LOG_PREFIX := "TV_MISSION_OFFER_SCAN_EVENT"
 const MISSION_CHAIN_OFFER_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_OFFER_EVENT"
 const MISSION_CHAIN_LOCK_EVENT_LOG_PREFIX := "TV_MISSION_CHAIN_LOCK_EVENT"
@@ -266,6 +267,8 @@ func _ready() -> void:
 		call_deferred("_run_max_hold_trade_log")
 	if OS.get_cmdline_args().has("--tv-trade-refuel-profit-log") or OS.get_cmdline_user_args().has("--tv-trade-refuel-profit-log"):
 		call_deferred("_run_trade_refuel_profit_log")
+	if OS.get_cmdline_args().has("--tv-cargo-expansion-trade-log") or OS.get_cmdline_user_args().has("--tv-cargo-expansion-trade-log"):
+		call_deferred("_run_cargo_expansion_trade_log")
 	if OS.get_cmdline_args().has("--tv-mission-offer-scan-log") or OS.get_cmdline_user_args().has("--tv-mission-offer-scan-log"):
 		call_deferred("_run_mission_offer_scan_log")
 	if OS.get_cmdline_args().has("--tv-mission-chain-offer-log") or OS.get_cmdline_user_args().has("--tv-mission-chain-offer-log"):
@@ -1367,6 +1370,77 @@ func _run_trade_refuel_profit_log() -> void:
 	var profit_status := "finalProfitOk=true" if final_profit_ok else "finalProfitOk=false"
 	var final_cargo_status := "finalCargo=0" if cargo_after_sale == 0 else "finalCargo=%d" % cargo_after_sale
 	print("%s startSystem=Levo buySystem=Sol sellSystem=Levo routeToBuySystemSelected=%s routeToSellSystemSelected=%s returnRouteSelected=%s commodity=%s buyPrice=%d sellPrice=%d lotSize=%d lotsBought=%d tonsBought=%d profitPerTon=%d expectedProfitTotal=%d %s %s %s %s %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsBeforeSale=%d creditsAfterSale=%d expectedFinalCredits=%d heldAfterBuys=%d heldAfterSale=%d fuelBeforeRefuel=%d fuelAfterRefuel=%d fuelMax=%d refuelBody=\"%s\" sourceLabel=terminal-velocity-refuel-trade-route-scaffold oracleStatus=classic_runtime_trade_route_refuel_pending status=\"%s\"" % [TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX, str(route_to_buy_system_selected), str(route_to_sell_system_selected), str(return_route_selected), trade_commodity, buy_price, sell_price, lot_size, lots_bought, expected_tons, profit_per_ton, expected_profit_total, filled_status, sold_status, fuel_before_blocked_status, low_fuel_status, refuel_status, profit_status, final_cargo_status, credits_before_buy, credits_after_buy, credits_before_sale, credits, credits_before_buy + expected_profit_total, held_after_buys, held_after_sale, fuel_before_refuel, fuel_after_refuel, _max_player_fuel(), str(refuel_body.get("name", "?")), status_line])
+	get_tree().quit(0)
+
+func _run_cargo_expansion_trade_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var trade_commodity := "food"
+	var buy_system := "Sol"
+	var sell_system := "Levo"
+	var lot_size := EV_CLASSIC_COMMODITY_LOT_SIZE
+	var starting_cargo_space := cargo_space
+	var route_to_buy_system_selected := _select_map_route_to_system(buy_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var buy_price := int(_market_prices(buy_system).get(trade_commodity, {}).get("buy", 0))
+	var sell_price := int(_market_prices(sell_system).get(trade_commodity, {}).get("sell", 0))
+	var profit_per_ton := sell_price - buy_price
+	var credits_before_trade_probe := credits
+	_buy_selected_commodity()
+	_buy_selected_commodity()
+	_buy_selected_commodity()
+	var third_lot_blocked_status := status_line
+	var tons_before_upgrade := int(commodity_hold.get(trade_commodity, 0))
+	var third_lot_initially_blocked := tons_before_upgrade == starting_cargo_space and cargo == starting_cargo_space and third_lot_blocked_status == "Cargo hold full"
+	var credits_after_trade_probe := credits
+	_sell_selected_commodity()
+	_sell_selected_commodity()
+	var credits_after_probe_sale := credits
+	landing_tab = 2
+	selected_landing_item = 0
+	var credits_before_upgrade := credits
+	_buy_selected_outfit_or_weapon()
+	var bought_cargo_pod := owned_outfits.has("cargo_pod") and int(owned_outfits.get("cargo_pod", 0)) > 0
+	var cargo_space_after_upgrade := cargo_space
+	var capacity_expanded := bought_cargo_pod and cargo_space_after_upgrade > starting_cargo_space
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_expanded_buy := credits
+	var expanded_target_tons := starting_cargo_space + lot_size
+	while cargo + lot_size <= expanded_target_tons:
+		_buy_selected_commodity()
+	var tons_after_expanded_buy := int(commodity_hold.get(trade_commodity, 0))
+	var expanded_hold_filled := capacity_expanded and tons_after_expanded_buy == expanded_target_tons and cargo == expanded_target_tons
+	_ev_land_or_launch()
+	selected_route.clear()
+	var route_to_sell_system_selected := _select_map_route_to_system(sell_system)
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Levo Spaceport")
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var credits_before_expanded_sale := credits
+	while int(commodity_hold.get(trade_commodity, 0)) > 0:
+		_sell_selected_commodity()
+	var held_after_expanded_sale := int(commodity_hold.get(trade_commodity, 0))
+	var final_cargo := cargo
+	var all_expanded_cargo_sold := held_after_expanded_sale == 0 and final_cargo == 0 and credits == credits_before_expanded_sale + (sell_price * expanded_target_tons)
+	var expected_final_credits := credits_before_expanded_buy - (buy_price * expanded_target_tons) + (sell_price * expanded_target_tons)
+	var final_profit_ok := credits == expected_final_credits
+	var bought_status := "boughtCargoPod=true" if bought_cargo_pod else "boughtCargoPod=false"
+	var expanded_status := "capacityExpanded=true" if capacity_expanded else "capacityExpanded=false"
+	var blocked_status := "thirdLotInitiallyBlocked=true" if third_lot_initially_blocked else "thirdLotInitiallyBlocked=false"
+	var filled_status := "expandedHoldFilled=true" if expanded_hold_filled else "expandedHoldFilled=false"
+	var sold_status := "allExpandedCargoSold=true" if all_expanded_cargo_sold else "allExpandedCargoSold=false"
+	var profit_status := "finalProfitOk=true" if final_profit_ok else "finalProfitOk=false"
+	var final_cargo_status := "finalCargo=0" if final_cargo == 0 else "finalCargo=%d" % final_cargo
+	print("%s startSystem=Levo buySystem=Sol sellSystem=Levo routeToBuySystemSelected=%s routeToSellSystemSelected=%s commodity=%s buyPrice=%d sellPrice=%d profitPerTon=%d lotSize=%d startingCargoSpace=%d cargoSpaceAfterUpgrade=%d expandedTargetTons=%d tonsBeforeUpgrade=%d tonsAfterExpandedBuy=%d heldAfterExpandedSale=%d creditsBeforeTradeProbe=%d creditsAfterTradeProbe=%d creditsAfterProbeSale=%d creditsBeforeUpgrade=%d creditsBeforeExpandedBuy=%d creditsBeforeExpandedSale=%d creditsAfterExpandedSale=%d expectedFinalCredits=%d %s %s %s %s %s %s %s thirdLotBlockedStatus=\"%s\" sourceLabel=terminal-velocity-cargo-expansion-trade-scaffold oracleStatus=cargo_expansion_trade_pending_classic_runtime_trace status=\"%s\"" % [CARGO_EXPANSION_TRADE_EVENT_LOG_PREFIX, str(route_to_buy_system_selected), str(route_to_sell_system_selected), trade_commodity, buy_price, sell_price, profit_per_ton, lot_size, starting_cargo_space, cargo_space_after_upgrade, expanded_target_tons, tons_before_upgrade, tons_after_expanded_buy, held_after_expanded_sale, credits_before_trade_probe, credits_after_trade_probe, credits_after_probe_sale, credits_before_upgrade, credits_before_expanded_buy, credits_before_expanded_sale, credits, expected_final_credits, bought_status, expanded_status, blocked_status, filled_status, sold_status, profit_status, final_cargo_status, third_lot_blocked_status, status_line])
 	get_tree().quit(0)
 
 func _run_mission_offer_scan_log() -> void:

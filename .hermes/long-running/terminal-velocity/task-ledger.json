@@ -1,11 +1,11 @@
 {
   "active_gate": {
-    "reason": "No active gate after normal push/fetch verification and successor card creation.",
-    "resume_after": "Dispatch successor and continue next safe local slice.",
+    "reason": "Stale review-required gate resolved locally under normal coherent TV push policy.",
+    "resume_after": "Commit/push/successor flow.",
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "pushed/verified: tv-trade-refuel-profit-log exposes the existing two-lot trade/refuel/profit scaffold in Godot fast-eval; successor continuation card created.",
+  "current_milestone": "accepted locally: tv-cargo-expansion-trade-log exposes the existing Cargo Pod capacity-expanded trade scaffold in Godot fast-eval; pending commit/push/successor flow.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -83,7 +83,8 @@
     "Do not redo combat reward/salvage recovery F10 help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo tv-cross-market-trade-log once present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "tv-max-hold-trade-log; pushed and verified in normal TV repo path with HEAD == origin/main.",
-    "tv-trade-refuel-profit-log; coordinator accepted/verified locally, pending commit/push and successor dispatch."
+    "tv-trade-refuel-profit-log; coordinator accepted/verified locally, pending commit/push and successor dispatch.",
+    "tv-cargo-expansion-trade-log; accepted locally by coordinator after review-required gate was classified as stale normal TV workflow gate; pending normal push verification."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -116,7 +117,7 @@
   },
   "last_checkpoint_commit": "feat(godot): expose max hold trade probe; SHA-neutral, inspect live HEAD",
   "last_checkpoint_commit_note": "Ledger intentionally uses SHA-neutral wording for the current local checkpoint because commits containing this checkpoint stale exact embedded HEAD values when amended.",
-  "last_checkpoint_summary": "accepted/pushed: tv-max-hold-trade-log verifies two-lot max-hold Sol Food -> Levo trade scaffold in Godot fast-eval lane.",
+  "last_checkpoint_summary": "accepted locally: tv-cargo-expansion-trade-log verifies Cargo Pod capacity-expanded Sol Food -> Levo trade scaffold in Godot fast-eval lane.",
   "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -132,48 +133,33 @@
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
   "last_completed_slice": {
-    "id": "max_hold_trade_godot_probe",
-    "kanban_task_id": "t_60f59f17",
-    "pushed_at": "2026-06-07T03:19:19Z",
-    "pushed_commit": "4f4f0400b53e0f3926894cec8b89e3d001357cc2",
+    "id": "cargo_expansion_trade_godot_probe",
+    "kanban_task_id": "t_b027dfaf",
     "review_required": false,
     "source_fidelity_labels": [
-      "terminal-velocity-max-hold-trade-scaffold",
-      "classic_runtime_multi_lot_trade_spread_pending"
+      "terminal-velocity-cargo-expansion-trade-scaffold",
+      "cargo_expansion_trade_pending_classic_runtime_trace"
     ],
-    "summary": "Godot fast-eval lane now exposes tv-max-hold-trade-log for the two-lot Sol Food -> Levo max-hold trade scaffold.",
+    "summary": "Godot fast-eval lane now exposes tv-cargo-expansion-trade-log for the Cargo Pod capacity-expanded trade scaffold.",
     "verification": [
-      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_max_hold_trade_log_contract -v -> OK",
-      "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_max_hold_trade_route_scout_fills_hold_and_sells_two_lots -v -> OK",
-      "python3 tools/run_gameplay_scenarios.py max_hold_trade_route_scout --pretty -> success true",
-      "./run_godot.sh tv-max-hold-trade-log -> TV_MAX_HOLD_TRADE_EVENT maxHoldFilled=true allLotsSold=true finalProfitOk=true finalCargo=0",
-      "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 240 tests OK",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_cargo_expansion_trade_log_contract -v -> OK",
+      "./run_godot.sh tv-cargo-expansion-trade-log -> TV_CARGO_EXPANSION_TRADE_EVENT boughtCargoPod=true capacityExpanded=true thirdLotInitiallyBlocked=true expandedHoldFilled=true allExpandedCargoSold=true finalProfitOk=true finalCargo=0",
+      "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 242 tests OK",
       "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
       "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
       "git diff --check -> OK",
-      "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
-      ".hermes/long-running/terminal-velocity/events.jsonl json-lines parse -> OK",
-      "sensitive added-content scan -> 0 hits",
-      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_max_hold_trade_log_contract -v -> OK (coordinator recheck)",
-      "git diff --check origin/main..HEAD -> OK before push",
-      "sensitive added-content scan -> 0 hits (coordinator recheck)",
-      "git push origin main -> OK",
-      "git fetch origin && HEAD == origin/main -> OK"
+      "sensitive added-content scan -> 0 hits"
     ]
   },
   "last_process_checkpoint": "Godot weapon secondary activation probe accepted by integrator after targeted/full verification; pending local commit and normal push.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_max_hold_trade_log_contract -v -> OK",
-    "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_max_hold_trade_route_scout_fills_hold_and_sells_two_lots -v -> OK",
-    "python3 tools/run_gameplay_scenarios.py max_hold_trade_route_scout --pretty -> success true",
-    "./run_godot.sh tv-max-hold-trade-log -> TV_MAX_HOLD_TRADE_EVENT maxHoldFilled=true allLotsSold=true finalProfitOk=true finalCargo=0",
-    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 240 tests OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_cargo_expansion_trade_log_contract -v -> OK",
+    "./run_godot.sh tv-cargo-expansion-trade-log -> TV_CARGO_EXPANSION_TRADE_EVENT boughtCargoPod=true capacityExpanded=true thirdLotInitiallyBlocked=true expandedHoldFilled=true allExpandedCargoSold=true finalProfitOk=true finalCargo=0",
+    "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> 242 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
     "git diff --check -> OK",
-    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
-    ".hermes/long-running/terminal-velocity/events.jsonl json-lines parse -> OK",
     "sensitive added-content scan -> 0 hits"
   ],
   "local_checkpoint_commit": "feat(godot): expose mission abort reaccept probe; SHA-neutral, inspect live HEAD",
@@ -185,7 +171,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Dispatch Kanban task t_b027dfaf and verify exactly one running Terminal Velocity worker.",
+  "next_resume_action": "Commit and normal-push tv-cargo-expansion-trade-log, fetch/verify HEAD == origin/main, complete Kanban t_b027dfaf, then create/dispatch exactly one successor continuation task.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -328,5 +314,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T03:34:59.295188Z"
+  "updated_at": "2026-06-07T03:48:13.010902Z"
 }

@@ -532,6 +532,30 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-trade-refuel-profit-log', run_script)
         self.assertIn('[switch]$TradeRefuelProfitLog', windows_script)
 
+    def test_godot_cargo_expansion_trade_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_CARGO_EXPANSION_TRADE_EVENT',
+            '--tv-cargo-expansion-trade-log',
+            'func _run_cargo_expansion_trade_log() -> void:',
+            'boughtCargoPod=true',
+            'capacityExpanded=true',
+            'thirdLotInitiallyBlocked=true',
+            'expandedHoldFilled=true',
+            'allExpandedCargoSold=true',
+            'finalProfitOk=true',
+            'finalCargo=0',
+            'sourceLabel=terminal-velocity-cargo-expansion-trade-scaffold',
+            'oracleStatus=cargo_expansion_trade_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-cargo-expansion-trade-log', run_script)
+        self.assertIn('[switch]$CargoExpansionTradeLog', windows_script)
+
     def test_godot_starting_equipment_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
