@@ -4320,13 +4320,23 @@ func _run_legal_docking_log() -> void:
 	_jump()
 	_position_at_body("Earth")
 	var government_name := _current_government_name()
-	legal_records[government_name] = -75
+	var dock_min_score := _government_docking_min_score(government_name)
+	var legal_score_just_below_dock_min := dock_min_score - 1
+	legal_records[government_name] = legal_score_just_below_dock_min
+	var denied_message := _legal_docking_denied_message(government_name)
+	landed = false
 	status_messages.clear()
 	_try_land()
-	var denied_message := _legal_docking_denied_message(government_name)
-	var legal_docking_denied := status_messages.has(denied_message)
+	var docking_denied_just_below_min := status_messages.has(denied_message) and not landed
+	var legal_docking_denied := docking_denied_just_below_min
 	var patrol_hostile := _legal_patrol_hostile_posture_active(government_name)
-	print("%s routeToSolSelected=%s system=%s government=\"%s\" legalScore=%d legalDockingDenied=%s landed=%s patrolsHostile=%s message=\"%s\" sourceLabel=terminal-velocity-legal-docking-scaffold oracleStatus=classic_runtime_docking_denial_ui_pending" % [LEGAL_DOCKING_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, int(legal_records.get(government_name, 0)), str(legal_docking_denied), str(landed), str(patrol_hostile), denied_message])
+	_position_at_body("Earth")
+	legal_records[government_name] = dock_min_score
+	landed = false
+	status_messages.clear()
+	_try_land()
+	var docking_recovered_at_min := landed
+	print("%s routeToSolSelected=%s system=%s government=\"%s\" legalScore=%d legalDockingDenied=%s dockMinLegalScore=%d legalScoreJustBelowDockMin=%d dockingDeniedJustBelowMin=%s legalScoreAtDockMin=%d dockingRecoveredAtMin=%s landed=%s patrolsHostile=%s message=\"%s\" sourceLabel=terminal-velocity-legal-docking-scaffold oracleStatus=classic_runtime_docking_denial_ui_pending" % [LEGAL_DOCKING_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, legal_score_just_below_dock_min, str(legal_docking_denied), dock_min_score, legal_score_just_below_dock_min, str(docking_denied_just_below_min), dock_min_score, str(docking_recovered_at_min), str(landed), str(patrol_hostile), denied_message])
 	get_tree().quit(0)
 
 func _run_legal_service_gate_log() -> void:
@@ -7611,11 +7621,13 @@ func _legal_status_for_government(government_name: String) -> String:
 			best_min = min_score
 	return best_status
 
-func _government_docking_allowed(government_name: String) -> bool:
+func _government_docking_min_score(government_name: String) -> int:
 	var mechanics: Dictionary = reputation.get("mechanics", {})
 	var min_by_government: Dictionary = mechanics.get("dockMinLegalScoreByGovernment", {})
-	var min_score := int(min_by_government.get(government_name, mechanics.get("defaultDockMinLegalScore", -60)))
-	return int(legal_records.get(government_name, 0)) >= min_score
+	return int(min_by_government.get(government_name, mechanics.get("defaultDockMinLegalScore", -60)))
+
+func _government_docking_allowed(government_name: String) -> bool:
+	return int(legal_records.get(government_name, 0)) >= _government_docking_min_score(government_name)
 
 func _legal_docking_denied_message(government_name: String) -> String:
 	return "%s docking denied by %s legal status; TV scaffold, exact Classic landing denial UI pending" % [government_name, _legal_status_for_government(government_name)]
