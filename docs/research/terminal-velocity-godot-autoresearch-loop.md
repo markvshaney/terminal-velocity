@@ -286,6 +286,15 @@ Mission scan-failure scenario contract:
   - `oracleStatus=classic_runtime_scan_failure_ui_pending`.
 - This is a decoded-resource-backed Terminal Velocity guardrail for mission scan state; exact EV Classic scan cadence, dialog/status text, and stock mission mapping remain gated on original-runtime/resource evidence.
 
+Mission scan-failure recovery scenario contract:
+
+- `RunGodot.ps1 -MissionScanRecoveryLog` / `--tv-mission-scan-recovery-log`
+- Exercises the existing Terminal Velocity scan-failure recovery scaffold in the Godot fast-eval lane while preserving the Resource Bible-backed scan-failure boundary.
+- Seeds deterministic active mission `scan_failure_probe`, applies a matching Federation cargo scan that fails it and releases its 4 reserved tons, then accepts and delivers follow-up mission `scan_recovery_followup` at Luna.
+- Logs scan failure, cargo-release, follow-up acceptance, follow-up delivery, and failed-history preservation booleans (`scanFailureRecorded=true`, `reservedCargoReleased=true`, `followupAccepted=true`, `followupDelivered=true`, `failedHistoryPreserved=true`), mission ids, cargo/credit counters, and latest failure/completion records.
+- `sourceLabel=terminal-velocity-mission-scan-recovery-scaffold`; `oracleStatus=scan_failure_recovery_pending_classic_runtime_or_manual_trace`.
+- This is a Terminal Velocity recovery scaffold; exact EV Classic post-scan failure UI, offer refresh timing, and stock mission mapping remain pending original-runtime/resource evidence.
+
 Mission deadline failure scenario contract:
 
 - `RunGodot.ps1 -MissionDeadlineFailureLog` / `--tv-mission-deadline-failure-log`

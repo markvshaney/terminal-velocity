@@ -70,6 +70,7 @@ const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EV
 const MISSION_ABORT_PENALTY_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_PENALTY_EVENT"
 const MISSION_AUTO_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_AUTO_ABORT_EVENT"
 const MISSION_SCAN_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_SCAN_FAILURE_EVENT"
+const MISSION_SCAN_RECOVERY_EVENT_LOG_PREFIX := "TV_MISSION_SCAN_RECOVERY_EVENT"
 const MISSION_DEADLINE_FAILURE_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_FAILURE_EVENT"
 const MISSION_DEADLINE_LAST_DAY_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_LAST_DAY_EVENT"
 const MISSION_DEADLINE_COMPLETED_EVENT_LOG_PREFIX := "TV_MISSION_DEADLINE_COMPLETED_EVENT"
@@ -343,6 +344,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_auto_abort_log")
 	if OS.get_cmdline_args().has("--tv-mission-scan-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-scan-failure-log"):
 		call_deferred("_run_mission_scan_failure_log")
+	if OS.get_cmdline_args().has("--tv-mission-scan-recovery-log") or OS.get_cmdline_user_args().has("--tv-mission-scan-recovery-log"):
+		call_deferred("_run_mission_scan_recovery_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-failure-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-failure-log"):
 		call_deferred("_run_mission_deadline_failure_log")
 	if OS.get_cmdline_args().has("--tv-mission-deadline-last-day-log") or OS.get_cmdline_user_args().has("--tv-mission-deadline-last-day-log"):
@@ -2861,6 +2864,58 @@ func _run_mission_scan_failure_log() -> void:
 	var cargo_released_status := "reservedCargoReleased=true" if cargo == 0 else "reservedCargoReleased=false"
 	var flag_status := "failureFlagSet=true" if story_flags.has("fail_mission_bit_44") else "failureFlagSet=false"
 	print("%s acceptedMission=%s scanGovernment=%s failIfScanned=%s cargoAfterAccept=%d clearScanGovernment=Independent cargoAfterClearScan=%d %s matchingScanGovernment=Federation cargoAfterFailureScan=%d %s %s %s activeMissions=%s failedHistoryCount=%d latestFailure=%s sourceLabel=ev-classic-resource-bible-backed-mission-scan-failure-scaffold oracleStatus=classic_runtime_scan_failure_ui_pending status=\"%s\"" % [MISSION_SCAN_FAILURE_EVENT_LOG_PREFIX, str(probe_mission.get("id")), str(probe_mission.get("scanGovernment", "")), str(probe_mission.get("failIfScanned", false)), cargo_after_accept, cargo_after_clear_scan, clear_status, cargo, failure_status, cargo_released_status, flag_status, JSON.stringify(active_missions), failed_mission_history.size(), JSON.stringify(latest_failure), status_line])
+	get_tree().quit(0)
+
+func _run_mission_scan_recovery_log() -> void:
+	_reset_travel_state()
+	var failed_mission := {
+		"id": "scan_failure_probe",
+		"title": "Scan Failure Probe",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 4,
+		"scanGovernment": "Federation",
+		"failIfScanned": true,
+		"failureBitSet": 44,
+		"sourceLabel": "ev-classic-resource-bible-backed-mission-scan-failure-scaffold",
+		"oracleStatus": "classic_runtime_scan_failure_ui_pending",
+	}
+	var followup_mission := {
+		"id": "scan_recovery_followup",
+		"title": "Scan Recovery Followup",
+		"destinationSystem": "Centauri",
+		"destinationBody": "Luna",
+		"cargoTons": 2,
+		"reward": 900,
+		"sourceLabel": "terminal-velocity-mission-scan-recovery-scaffold",
+		"oracleStatus": "scan_failure_recovery_pending_classic_runtime_or_manual_trace",
+	}
+	missions["missions"].append(failed_mission)
+	missions["missions"].append(followup_mission)
+	active_missions.append(str(failed_mission.get("id")))
+	mission_acceptance_days[str(failed_mission.get("id"))] = current_day
+	cargo = int(failed_mission.get("cargoTons", 0))
+	var cargo_after_failed_accept := cargo
+	var scan_result := _apply_mission_cargo_scan("Federation")
+	var cargo_after_scan_failure := cargo
+	active_missions.append(str(followup_mission.get("id")))
+	mission_acceptance_days[str(followup_mission.get("id"))] = current_day
+	cargo += int(followup_mission.get("cargoTons", 0))
+	var cargo_after_followup_accept := cargo
+	current_system_index = _system_index_by_name("Centauri", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	pos = Vector2(-520.0, -300.0)
+	landed = true
+	var credits_before_followup := credits
+	var completed_ids := _complete_arrived_missions()
+	var latest_failure := JSON.stringify(failed_mission_history[failed_mission_history.size() - 1]) if not failed_mission_history.is_empty() else "{}"
+	var latest_completion := JSON.stringify(completed_mission_history[completed_mission_history.size() - 1]) if not completed_mission_history.is_empty() else "{}"
+	var scan_failure_status := "scanFailureRecorded=true" if bool(scan_result.get("failed", false)) and failed_mission_history.size() == 1 and story_flags.has("fail_mission_bit_44") else "scanFailureRecorded=false"
+	var cargo_release_status := "reservedCargoReleased=true" if cargo_after_scan_failure == 0 and cargo == 0 else "reservedCargoReleased=false"
+	var followup_accept_status := "followupAccepted=true" if cargo_after_followup_accept == int(followup_mission.get("cargoTons", 0)) else "followupAccepted=false"
+	var followup_delivered_status := "followupDelivered=true" if completed_ids.has(str(followup_mission.get("id"))) and completed_missions.has(str(followup_mission.get("id"))) and credits == credits_before_followup + int(followup_mission.get("reward", 0)) else "followupDelivered=false"
+	var failed_history_status := "failedHistoryPreserved=true" if failed_mission_history.size() == 1 and str(failed_mission_history[0].get("id", "")) == str(failed_mission.get("id")) else "failedHistoryPreserved=false"
+	print("%s failedMission=%s followupMission=%s scanGovernment=Federation cargoAfterFailedAccept=%d cargoAfterScanFailure=%d cargoAfterFollowupAccept=%d cargoAfterFollowupDelivery=%d %s %s %s %s %s creditsBeforeFollowup=%d creditsAfterFollowup=%d activeMissions=%s failedHistoryCount=%d completedMissions=%s latestFailure=%s latestCompletion=%s sourceLabel=terminal-velocity-mission-scan-recovery-scaffold oracleStatus=scan_failure_recovery_pending_classic_runtime_or_manual_trace status=\"%s\"" % [MISSION_SCAN_RECOVERY_EVENT_LOG_PREFIX, str(failed_mission.get("id")), str(followup_mission.get("id")), cargo_after_failed_accept, cargo_after_scan_failure, cargo_after_followup_accept, cargo, scan_failure_status, cargo_release_status, followup_accept_status, followup_delivered_status, failed_history_status, credits_before_followup, credits, JSON.stringify(active_missions), failed_mission_history.size(), JSON.stringify(completed_missions), latest_failure, latest_completion, status_line])
 	get_tree().quit(0)
 
 func _run_mission_deadline_failure_log() -> void:
