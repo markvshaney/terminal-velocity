@@ -107,6 +107,7 @@ param(
     [switch]$MissionLegalEligibilityLog,
     [switch]$MissionStoryGateLog,
     [switch]$MissionAlignmentGateLog,
+    [switch]$MissionAlignmentRequirementLog,
     [switch]$LegalConsequenceLog,
     [switch]$LegalClemencyLog,
     [switch]$ContrabandScanLog,
@@ -341,6 +342,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-story-gate-log
 } elseif ($MissionAlignmentGateLog) {
     & $Godot --headless --path $Project -- --tv-mission-alignment-gate-log
+} elseif ($MissionAlignmentRequirementLog) {
+    & $Godot --headless --path $Project -- --tv-mission-alignment-requirement-log
 } elseif ($LegalConsequenceLog) {
     & $Godot --headless --path $Project -- --tv-legal-consequence-log
 } elseif ($LegalClemencyLog) {

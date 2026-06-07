@@ -1418,6 +1418,7 @@ class NativeEvModelTests(unittest.TestCase):
             'TV_MISSION_LEGAL_ELIGIBILITY_EVENT',
             'TV_MISSION_STORY_GATE_EVENT',
             'TV_MISSION_ALIGNMENT_GATE_EVENT',
+            'TV_MISSION_ALIGNMENT_REQUIREMENT_EVENT',
             'TV_CONTRABAND_CLEMENCY_FUNDING_EVENT',
             '--tv-legal-status-log',
             '--tv-mission-alignment-gate-log',
@@ -1443,6 +1444,7 @@ class NativeEvModelTests(unittest.TestCase):
             '--tv-legal-patrol-posture-log',
             '--tv-mission-legal-eligibility-log',
             '--tv-mission-story-gate-log',
+            '--tv-mission-alignment-requirement-log',
             'func _run_legal_status_log',
             'func _run_legal_docking_log',
             'func _run_legal_service_gate_log',
@@ -1466,6 +1468,7 @@ class NativeEvModelTests(unittest.TestCase):
             'func _run_mission_legal_eligibility_log',
             'func _run_mission_story_gate_log',
             'func _run_mission_alignment_gate_log',
+            'func _run_mission_alignment_requirement_log',
             'func _run_contraband_clemency_funding_log',
             'func _current_government_name() -> String:',
             'func _legal_status_for_government(government_name: String) -> String:',
@@ -1541,7 +1544,11 @@ class NativeEvModelTests(unittest.TestCase):
             'alignmentRequirementBlocked=%s',
             'alignmentLegalBlocked=%s',
             'alignmentRecoveredAfterGates=%s',
+            'alignmentOffersBlockedBelowRequirements=%s',
+            'alignmentOffersRecoveredAtThresholds=%s',
             'oracleStatus=classic_runtime_alignment_offer_gate_ui_pending',
+            'sourceLabel=terminal-velocity-mission-alignment-requirement-scaffold',
+            'oracleStatus=classic_runtime_alignment_offer_requirement_ui_pending',
             'preservedFoodSoldForClemency=%s',
             'clemencyFundedAfterTrade=%s',
             'sourceLabel=terminal-velocity-weapon-reputation-gate-scaffold',
@@ -1629,6 +1636,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-legal-patrol-posture-log', run_script)
         self.assertIn('tv-mission-legal-eligibility-log', run_script)
         self.assertIn('tv-mission-alignment-gate-log', run_script)
+        self.assertIn('tv-mission-alignment-requirement-log', run_script)
         self.assertIn('tv-legal-consequence-log', run_script)
         self.assertIn('tv-legal-clemency-log', run_script)
         self.assertIn('tv-contraband-scan-log', run_script)
@@ -1655,6 +1663,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('[switch]$LegalPatrolPostureLog', windows_script)
         self.assertIn('[switch]$MissionLegalEligibilityLog', windows_script)
         self.assertIn('[switch]$MissionAlignmentGateLog', windows_script)
+        self.assertIn('[switch]$MissionAlignmentRequirementLog', windows_script)
         self.assertIn('[switch]$LegalConsequenceLog', windows_script)
         self.assertIn('[switch]$LegalClemencyLog', windows_script)
         self.assertIn('[switch]$ContrabandScanLog', windows_script)

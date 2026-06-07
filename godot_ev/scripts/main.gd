@@ -127,6 +127,7 @@ const LEGAL_PATROL_POSTURE_EVENT_LOG_PREFIX := "TV_LEGAL_PATROL_POSTURE_EVENT"
 const MISSION_LEGAL_ELIGIBILITY_EVENT_LOG_PREFIX := "TV_MISSION_LEGAL_ELIGIBILITY_EVENT"
 const MISSION_STORY_GATE_EVENT_LOG_PREFIX := "TV_MISSION_STORY_GATE_EVENT"
 const MISSION_ALIGNMENT_GATE_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_GATE_EVENT"
+const MISSION_ALIGNMENT_REQUIREMENT_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_REQUIREMENT_EVENT"
 const LEGAL_CONSEQUENCE_EVENT_LOG_PREFIX := "TV_LEGAL_CONSEQUENCE_EVENT"
 const LEGAL_CLEMENCY_EVENT_LOG_PREFIX := "TV_LEGAL_CLEMENCY_EVENT"
 const CONTRABAND_SCAN_EVENT_LOG_PREFIX := "TV_CONTRABAND_SCAN_EVENT"
@@ -464,6 +465,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_story_gate_log")
 	if OS.get_cmdline_args().has("--tv-mission-alignment-gate-log") or OS.get_cmdline_user_args().has("--tv-mission-alignment-gate-log"):
 		call_deferred("_run_mission_alignment_gate_log")
+	if OS.get_cmdline_args().has("--tv-mission-alignment-requirement-log") or OS.get_cmdline_user_args().has("--tv-mission-alignment-requirement-log"):
+		call_deferred("_run_mission_alignment_requirement_log")
 	if OS.get_cmdline_args().has("--tv-legal-consequence-log") or OS.get_cmdline_user_args().has("--tv-legal-consequence-log"):
 		call_deferred("_run_legal_consequence_log")
 	if OS.get_cmdline_args().has("--tv-legal-clemency-log") or OS.get_cmdline_user_args().has("--tv-legal-clemency-log"):
@@ -6040,6 +6043,31 @@ func _run_mission_alignment_gate_log() -> void:
 	var help_text := "\n".join(_help_overlay_lines())
 	var alignment_help_visible := help_text.contains("Alignment gates: story offers may require prior flags")
 	print("%s routeToSolSelected=%s system=%s body=%s government=\"%s\" alignmentRequirementBlocked=%s alignmentLegalBlocked=%s alignmentRecoveredAfterGates=%s alignmentGateHelpVisible=%s blockedWithoutStory=%s blockedForLegal=%s recoveredOffers=%s sourceLabel=terminal-velocity-mission-alignment-gate-scaffold oracleStatus=classic_runtime_alignment_offer_gate_ui_pending sourceBasis=EV Classic Resource Bible: mission AvailRecord/ScanGovt/PayVal plus Terminal Velocity requirement scaffolds" % [MISSION_ALIGNMENT_GATE_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), body_name, government_name, str(alignment_requirement_blocked), str(alignment_legal_blocked), str(alignment_recovered_after_gates), str(alignment_help_visible), JSON.stringify(blocked_without_story), JSON.stringify(blocked_for_legal), JSON.stringify(recovered_offer_ids)])
+	get_tree().quit(0)
+
+func _run_mission_alignment_requirement_log() -> void:
+	_reset_travel_state()
+	current_system_index = _system_index_by_name("Sirius", current_system_index)
+	current_system = universe.get("systems", [])[current_system_index]
+	_position_at_body("Sirius Station")
+	landed = true
+	landing_tab = 0
+	story_flags = ["frontier_samples_delivered"]
+	completed_missions = ["freeport_return_earth"]
+	reputation_scores = {"Federation": 3, "Independent": 5}
+	legal_records = {"Federation": -21, "Independent": -91}
+	var body := _current_body()
+	var blocked_offer_ids := _mission_ids(_available_missions(body))
+	var blocked_reasons := _blocked_mission_reasons(body)
+	var federation_blocked_for_requirement := blocked_reasons.any(func(reason): return str(reason).contains("Report Sirius Contacts") and (str(reason).contains("reputation") or str(reason).contains("legal score")))
+	var freeport_blocked_for_requirement := blocked_reasons.any(func(reason): return str(reason).contains("Sirius Quiet Pact") and (str(reason).contains("reputation") or str(reason).contains("legal score")))
+	reputation_scores = {"Federation": 4, "Independent": 6}
+	legal_records = {"Federation": -20, "Independent": -90}
+	var recovered_offer_ids := _mission_ids(_available_missions(body))
+	var expected_recovered := ["federation_report_freeport", "freeport_pact_smugglers"]
+	var alignment_offers_blocked_below_requirements := blocked_offer_ids == [] and federation_blocked_for_requirement and freeport_blocked_for_requirement
+	var alignment_offers_recovered_at_thresholds := recovered_offer_ids == expected_recovered
+	print("%s scanSystem=%s scanBody=\"%s\" alignmentOffersBlockedBelowRequirements=%s alignmentOffersRecoveredAtThresholds=%s federationRequirementBlocked=%s freeportRequirementBlocked=%s blockedOffers=%s recoveredOffers=%s blockedReasons=%s reputationBelow=%s legalBelow=%s reputationRecovered=%s legalRecovered=%s sourceLabel=terminal-velocity-mission-alignment-requirement-scaffold oracleStatus=classic_runtime_alignment_offer_requirement_ui_pending sourceBasis=EV Classic Resource Bible mission AvailRecord fields plus Terminal Velocity branch requirement scaffold" % [MISSION_ALIGNMENT_REQUIREMENT_EVENT_LOG_PREFIX, current_system.get("name", "?"), str(body.get("name", "None")), str(alignment_offers_blocked_below_requirements), str(alignment_offers_recovered_at_thresholds), str(federation_blocked_for_requirement), str(freeport_blocked_for_requirement), JSON.stringify(blocked_offer_ids), JSON.stringify(recovered_offer_ids), JSON.stringify(blocked_reasons), JSON.stringify({"Federation": 3, "Independent": 5}), JSON.stringify({"Federation": -21, "Independent": -91}), JSON.stringify(reputation_scores), JSON.stringify(legal_records)])
 	get_tree().quit(0)
 
 func _run_legal_consequence_log() -> void:
