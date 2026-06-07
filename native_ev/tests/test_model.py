@@ -4025,6 +4025,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('--headless --path $Project -- --tv-commodity-trade-log', run_script)
         self.assertIn('tv-commodity-trade-log', launcher)
 
+    def test_godot_commodity_sell_blocked_recovery_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        launcher = (root / 'run_godot.sh').read_text()
+        for symbol in [
+            'const COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_SELL_BLOCKED_RECOVERY_EVENT"',
+            '--tv-commodity-sell-blocked-recovery-log',
+            'func _run_commodity_sell_blocked_recovery_log() -> void:',
+            'sellBlockedBeforeCargo=true',
+            'buyRecoveredCargo=true',
+            'sellRecoveredCargo=true',
+            'finalCargo=0',
+            'sourceLabel=terminal-velocity-commodity-sell-blocked-recovery-scaffold',
+            'oracleStatus=commodity_sell_blocked_recovery_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$CommoditySellBlockedRecoveryLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-commodity-sell-blocked-recovery-log', run_script)
+        self.assertIn('tv-commodity-sell-blocked-recovery-log', launcher)
+
     def test_godot_commodity_route_hint_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

@@ -14,6 +14,7 @@ param(
     [switch]$LowFuelJumpLog,
     [switch]$NearCenterJumpLog,
     [switch]$CommodityTradeLog,
+    [switch]$CommoditySellBlockedRecoveryLog,
     [switch]$CrossMarketTradeLog,
     [switch]$MaxHoldTradeLog,
     [switch]$TradeRefuelProfitLog,
@@ -140,6 +141,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-near-center-jump-log
 } elseif ($CommodityTradeLog) {
     & $Godot --headless --path $Project -- --tv-commodity-trade-log
+} elseif ($CommoditySellBlockedRecoveryLog) {
+    & $Godot --headless --path $Project -- --tv-commodity-sell-blocked-recovery-log
 } elseif ($CrossMarketTradeLog) {
     & $Godot --headless --path $Project -- --tv-cross-market-trade-log
 } elseif ($MaxHoldTradeLog) {

@@ -37,6 +37,7 @@ const REPAIR_SERVICE_EVENT_LOG_PREFIX := "TV_REPAIR_SERVICE_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
 const NEAR_CENTER_JUMP_EVENT_LOG_PREFIX := "TV_NEAR_CENTER_JUMP_EVENT"
 const COMMODITY_TRADE_EVENT_LOG_PREFIX := "TV_COMMODITY_TRADE_EVENT"
+const COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX := "TV_COMMODITY_SELL_BLOCKED_RECOVERY_EVENT"
 const CROSS_MARKET_TRADE_EVENT_LOG_PREFIX := "TV_CROSS_MARKET_TRADE_EVENT"
 const MAX_HOLD_TRADE_EVENT_LOG_PREFIX := "TV_MAX_HOLD_TRADE_EVENT"
 const TRADE_REFUEL_PROFIT_EVENT_LOG_PREFIX := "TV_TRADE_REFUEL_PROFIT_EVENT"
@@ -263,6 +264,8 @@ func _ready() -> void:
 		call_deferred("_run_near_center_jump_log")
 	if OS.get_cmdline_args().has("--tv-commodity-trade-log") or OS.get_cmdline_user_args().has("--tv-commodity-trade-log"):
 		call_deferred("_run_commodity_trade_log")
+	if OS.get_cmdline_args().has("--tv-commodity-sell-blocked-recovery-log") or OS.get_cmdline_user_args().has("--tv-commodity-sell-blocked-recovery-log"):
+		call_deferred("_run_commodity_sell_blocked_recovery_log")
 	if OS.get_cmdline_args().has("--tv-cross-market-trade-log") or OS.get_cmdline_user_args().has("--tv-cross-market-trade-log"):
 		call_deferred("_run_cross_market_trade_log")
 	if OS.get_cmdline_args().has("--tv-max-hold-trade-log") or OS.get_cmdline_user_args().has("--tv-max-hold-trade-log"):
@@ -1210,6 +1213,39 @@ func _run_commodity_trade_log() -> void:
 	var sell_status := "sellSucceeded=true" if sell_succeeded else "sellSucceeded=false"
 	var visible_status := "roundTripVisible=true" if round_trip_visible else "roundTripVisible=false"
 	print("%s system=%s commodity=%s buyPrice=%d sellPrice=%d %s %s %s creditsBeforeBuy=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBeforeBuy=%d cargoAfterBuy=%d cargoAfterSell=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=original-runtime-observed oracleStatus=terminal_velocity_eval_pending_original_trace status=\"%s\"" % [COMMODITY_TRADE_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, sell_price, buy_status, sell_status, visible_status, credits_before_buy, credits_after_buy, credits_after_sell, cargo_before_buy, cargo_after_buy, cargo_after_sell, held_after_buy, held_after_sell, status_line])
+	get_tree().quit(0)
+
+func _run_commodity_sell_blocked_recovery_log() -> void:
+	_reset_travel_state()
+	_try_land()
+	landing_tab = 1
+	selected_landing_item = 0
+	var commodities: Array = economy.get("commodities", [])
+	var commodity: Dictionary = commodities[0] if not commodities.is_empty() else {}
+	var commodity_id := str(commodity.get("id", "none"))
+	var commodity_name := str(commodity.get("name", commodity_id))
+	var buy_price := int(_market_prices(current_system.get("name", "")).get(commodity_id, {}).get("buy", 0))
+	var sell_price := _commodity_sell_price(commodity_id)
+	var credits_before := credits
+	var cargo_before := cargo
+	_sell_selected_commodity()
+	var sell_block_status := status_line
+	var sell_blocked_before_cargo := cargo == cargo_before and int(commodity_hold.get(commodity_id, 0)) == 0 and sell_block_status == "No cargo to sell"
+	_buy_selected_commodity()
+	var credits_after_buy := credits
+	var cargo_after_buy := cargo
+	var held_after_buy := int(commodity_hold.get(commodity_id, 0))
+	var buy_recovered_cargo := buy_price > 0 and held_after_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo_after_buy == cargo_before + EV_CLASSIC_COMMODITY_LOT_SIZE and status_messages.has("Bought %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	_sell_selected_commodity()
+	var credits_after_sell := credits
+	var cargo_after_sell := cargo
+	var held_after_sell := int(commodity_hold.get(commodity_id, 0))
+	var sell_recovered_cargo := sell_price > 0 and held_after_sell == 0 and cargo_after_sell == cargo_before and status_messages.has("Sold %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	var sell_blocked_status := "sellBlockedBeforeCargo=true" if sell_blocked_before_cargo else "sellBlockedBeforeCargo=false"
+	var buy_recovered_status := "buyRecoveredCargo=true" if buy_recovered_cargo else "buyRecoveredCargo=false"
+	var sell_recovered_status := "sellRecoveredCargo=true" if sell_recovered_cargo else "sellRecoveredCargo=false"
+	var final_cargo_status := "finalCargo=0" if cargo_after_sell == 0 else "finalCargo=%d" % cargo_after_sell
+	print("%s system=%s commodity=%s buyPrice=%d sellPrice=%d %s %s %s %s creditsBefore=%d creditsAfterBuy=%d creditsAfterSell=%d cargoBefore=%d cargoAfterBuy=%d heldAfterBuy=%d heldAfterSell=%d sourceLabel=terminal-velocity-commodity-sell-blocked-recovery-scaffold oracleStatus=commodity_sell_blocked_recovery_pending_classic_runtime_trace blockedStatus=\"%s\" status=\"%s\"" % [COMMODITY_SELL_BLOCKED_RECOVERY_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, sell_price, sell_blocked_status, buy_recovered_status, sell_recovered_status, final_cargo_status, credits_before, credits_after_buy, credits_after_sell, cargo_before, cargo_after_buy, held_after_buy, held_after_sell, sell_block_status, status_line])
 	get_tree().quit(0)
 
 func _run_cross_market_trade_log() -> void:
