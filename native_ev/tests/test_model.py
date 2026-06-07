@@ -4304,6 +4304,8 @@ class NativeEvModelTests(unittest.TestCase):
             'insufficientCreditsBlocked=true',
             'fullHoldBuyBlocked=true',
             'buyRecoveredCargo=true',
+            'exactCreditBuySucceeded=true',
+            'creditsAfterExactBuy=%d',
             'finalCargo=10',
             'Land before trading commodities',
             'sourceLabel=terminal-velocity-commodity-buy-blocked-recovery-scaffold',

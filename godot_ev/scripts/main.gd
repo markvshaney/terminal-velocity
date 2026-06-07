@@ -1344,6 +1344,13 @@ func _run_commodity_buy_blocked_recovery_log() -> void:
 	var full_hold_block_status := status_line
 	var full_hold_buy_blocked := cargo == cargo_space and int(commodity_hold.get(commodity_id, 0)) == 0 and full_hold_block_status == "Cargo hold full"
 	cargo = cargo_before
+	credits = buy_price * EV_CLASSIC_COMMODITY_LOT_SIZE
+	_buy_selected_commodity()
+	var credits_after_exact_buy := credits
+	var held_after_exact_buy := int(commodity_hold.get(commodity_id, 0))
+	var exact_credit_buy_succeeded := buy_price > 0 and held_after_exact_buy == EV_CLASSIC_COMMODITY_LOT_SIZE and cargo == cargo_before + EV_CLASSIC_COMMODITY_LOT_SIZE and credits_after_exact_buy == 0 and status_messages.has("Bought %d tons of %s" % [EV_CLASSIC_COMMODITY_LOT_SIZE, commodity_name])
+	commodity_hold.clear()
+	cargo = cargo_before
 	credits = credits_before
 	_buy_selected_commodity()
 	var credits_after_buy := credits
@@ -1353,8 +1360,9 @@ func _run_commodity_buy_blocked_recovery_log() -> void:
 	var insufficient_credits_status := "insufficientCreditsBlocked=true" if insufficient_credits_blocked else "insufficientCreditsBlocked=false"
 	var full_hold_status_field := "fullHoldBuyBlocked=true" if full_hold_buy_blocked else "fullHoldBuyBlocked=false"
 	var buy_recovered_status := "buyRecoveredCargo=true" if buy_recovered_cargo else "buyRecoveredCargo=false"
+	var exact_credit_status := "exactCreditBuySucceeded=true" if exact_credit_buy_succeeded else "exactCreditBuySucceeded=false"
 	var final_cargo_status := "finalCargo=10" if cargo == EV_CLASSIC_COMMODITY_LOT_SIZE else "finalCargo=%d" % cargo
-	print("%s system=%s commodity=%s buyPrice=%d %s %s %s %s %s creditsBefore=%d creditsAfterBuy=%d cargoBefore=%d heldAfterBuy=%d sourceLabel=terminal-velocity-commodity-buy-blocked-recovery-scaffold oracleStatus=commodity_buy_blocked_recovery_pending_classic_runtime_trace inSpaceStatus=\"%s\" creditStatus=\"%s\" fullHoldStatus=\"%s\" status=\"%s\"" % [COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, in_space_blocked_status, insufficient_credits_status, full_hold_status_field, buy_recovered_status, final_cargo_status, credits_before, credits_after_buy, cargo_before, held_after_buy, in_space_status, insufficient_credit_status, full_hold_block_status, status_line])
+	print("%s system=%s commodity=%s buyPrice=%d %s %s %s %s %s %s creditsBefore=%d creditsAfterExactBuy=%d creditsAfterBuy=%d cargoBefore=%d heldAfterExactBuy=%d heldAfterBuy=%d sourceLabel=terminal-velocity-commodity-buy-blocked-recovery-scaffold oracleStatus=commodity_buy_blocked_recovery_pending_classic_runtime_trace inSpaceStatus=\"%s\" creditStatus=\"%s\" fullHoldStatus=\"%s\" status=\"%s\"" % [COMMODITY_BUY_BLOCKED_RECOVERY_EVENT_LOG_PREFIX, str(current_system.get("name", "?")), commodity_id, buy_price, in_space_blocked_status, insufficient_credits_status, full_hold_status_field, buy_recovered_status, exact_credit_status, final_cargo_status, credits_before, credits_after_exact_buy, credits_after_buy, cargo_before, held_after_exact_buy, held_after_buy, in_space_status, insufficient_credit_status, full_hold_block_status, status_line])
 	get_tree().quit(0)
 
 func _run_commodity_partial_hold_recovery_log() -> void:
