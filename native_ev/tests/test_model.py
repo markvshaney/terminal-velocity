@@ -1708,6 +1708,13 @@ class NativeEvModelTests(unittest.TestCase):
             'Legal risk: no current %s contraband flag',
             'finePerTon=%d',
             'bribeAllowed=%s',
+            'bribePerTon=%d',
+            'bribeCost=%d',
+            'bribeHintVisible=%s',
+            'routeToSiriusSelected=%s',
+            'bribeCostVisible=%s',
+            'Legal risk: %s is contraband under %s scans; finePerTon=%d bribeAllowed=%s bribePerTon=%d',
+            'Contraband risk: %d ton(s) flagged by %s scans (%s), fine %d cr/ton, bribe %d cr/ton',
             'sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface',
             'oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending',
         ]:

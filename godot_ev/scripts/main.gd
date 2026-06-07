@@ -6215,7 +6215,25 @@ func _run_contraband_risk_log() -> void:
 	var is_contraband := _commodity_is_contraband_for_government(commodity_id, government_name)
 	var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
 	var inventory_risk_visible := inventory_risk_line.contains("equipment x10") and inventory_risk_line.contains("fine %d cr/ton" % int(policy.get("finePerTon", 0)))
-	print("%s routeToSolSelected=%s system=%s government=\"%s\" commodity=%s isContraband=%s finePerTon=%d bribeAllowed=%s heldContrabandInventoryVisible=%s hint=\"%s\" inventoryHint=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending" % [CONTRABAND_RISK_EVENT_LOG_PREFIX, str(route_to_sol_selected), current_system.get("name", "?"), government_name, commodity_id, str(is_contraband), int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), str(inventory_risk_visible), risk_line, inventory_risk_line])
+	var enforcement_system_name := str(current_system.get("name", "?"))
+	var route_to_sirius_selected := _select_map_route_to_system("Sirius")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var bribe_government_name := _current_government_name()
+	var bribe_commodity_id := "medical"
+	commodity_hold.clear()
+	commodity_hold[bribe_commodity_id] = EV_CLASSIC_COMMODITY_LOT_SIZE
+	cargo = EV_CLASSIC_COMMODITY_LOT_SIZE
+	var bribe_policy: Dictionary = governments.get("governments", {}).get(bribe_government_name, {})
+	var bribe_per_ton := int(bribe_policy.get("bribePerTon", 0))
+	var bribe_cost := bribe_per_ton * EV_CLASSIC_COMMODITY_LOT_SIZE
+	var bribe_risk_line := _commodity_legal_hint_line(bribe_commodity_id)
+	var bribe_inventory_line := _contraband_inventory_line()
+	var bribe_hint_visible := bribe_risk_line.contains("bribePerTon=%d" % bribe_per_ton) and bribe_risk_line.contains("bribeAllowed=true")
+	var bribe_cost_visible := bribe_inventory_line.contains("bribe %d cr/ton" % bribe_per_ton)
+	var primary_bribe_per_ton := int(policy.get("bribePerTon", 0))
+	var primary_bribe_cost := primary_bribe_per_ton * EV_CLASSIC_COMMODITY_LOT_SIZE
+	print("%s routeToSolSelected=%s routeToSiriusSelected=%s system=%s government=\"%s\" commodity=%s isContraband=%s finePerTon=%d bribeAllowed=%s bribePerTon=%d bribeCost=%d heldContrabandInventoryVisible=%s bribeHintVisible=%s bribeCostVisible=%s hint=\"%s\" inventoryHint=\"%s\" bribableSystem=%s bribableGovernment=\"%s\" bribableCommodity=%s bribableBribePerTon=%d bribableBribeCost=%d bribableHint=\"%s\" bribableInventoryHint=\"%s\" sourceLabel=terminal-velocity-classic-resource-smuggling-risk-surface oracleStatus=classic_runtime_scan_frequency_and_ui_wording_pending" % [CONTRABAND_RISK_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(route_to_sirius_selected), enforcement_system_name, government_name, commodity_id, str(is_contraband), int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), primary_bribe_per_ton, primary_bribe_cost, str(inventory_risk_visible), str(bribe_hint_visible), str(bribe_cost_visible), risk_line, inventory_risk_line, current_system.get("name", "?"), bribe_government_name, bribe_commodity_id, bribe_per_ton, bribe_cost, bribe_risk_line, bribe_inventory_line])
 	get_tree().quit(0)
 
 func _run_contraband_scan_trade_log() -> void:
@@ -8926,6 +8944,9 @@ func _contraband_inventory_line() -> String:
 		parts.append("%s x%d" % [str(commodity_id), tons])
 	parts.sort()
 	var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
+	var bribe_per_ton := int(policy.get("bribePerTon", 0))
+	if bool(policy.get("bribeAllowed", false)) and bribe_per_ton > 0:
+		return "Contraband risk: %d ton(s) flagged by %s scans (%s), fine %d cr/ton, bribe %d cr/ton — TV legal-risk scaffold; Classic scan/bribe UI pending" % [total_tons, government_name, ", ".join(parts), int(policy.get("finePerTon", 0)), bribe_per_ton]
 	return "Contraband risk: %d ton(s) flagged by %s scans (%s), fine %d cr/ton — TV legal-risk scaffold; Classic scan UI pending" % [total_tons, government_name, ", ".join(parts), int(policy.get("finePerTon", 0))]
 
 func _salvage_pickup_inventory_line() -> String:
@@ -9425,7 +9446,7 @@ func _commodity_legal_hint_line(commodity_id: String) -> String:
 	var government_name := _current_government_name()
 	if _commodity_is_contraband_for_government(commodity_id, government_name):
 		var policy: Dictionary = governments.get("governments", {}).get(government_name, {})
-		return "Legal risk: %s is contraband under %s scans; finePerTon=%d bribeAllowed=%s" % [commodity_id, government_name, int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false))]
+		return "Legal risk: %s is contraband under %s scans; finePerTon=%d bribeAllowed=%s bribePerTon=%d" % [commodity_id, government_name, int(policy.get("finePerTon", 0)), str(policy.get("bribeAllowed", false)), int(policy.get("bribePerTon", 0))]
 	return "Legal risk: no current %s contraband flag under %s; TV scaffold, scan wording pending" % [commodity_id, government_name]
 
 func _commodity_is_contraband_for_government(commodity_id: String, government_name: String) -> bool:
