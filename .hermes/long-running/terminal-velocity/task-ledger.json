@@ -1,9 +1,6 @@
 {
-  "active_gate": {
-    "reason": "No active gate after normal push/fetch verification.",
-    "type": null
-  },
-  "current_milestone": "local checkpoint pending review/coordinator integration: tv-pirate-loaded-cargo-avoidance-log Godot fast-eval probe.",
+  "active_gate": null,
+  "current_milestone": "accepted/pushed: tv-pirate-loaded-cargo-avoidance-log Godot fast-eval probe.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -161,6 +158,7 @@
   },
   "last_process_checkpoint": "Godot weapon secondary activation probe accepted by integrator after targeted/full verification; pending local commit and normal push.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
+  "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; tv-pirate-loaded-cargo-avoidance-log accepted and pushed",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_balanced_upgrade_trade_log_contract -v -> OK",
     "./run_godot.sh tv-balanced-upgrade-trade-log -> expected TV_BALANCED_UPGRADE_TRADE_EVENT true fields",
@@ -178,7 +176,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review/integrate the tv-pirate-loaded-cargo-avoidance-log local checkpoint, then continue the next source-aligned safe local slice without redoing pirate loaded-cargo avoidance.",
+  "next_resume_action": "Complete Kanban t_dc57f94f, create and dispatch exactly one successor continuation card from current origin/main; do not redo tv-pirate-loaded-cargo-avoidance-log.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -321,5 +319,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T04:28:52.492922Z"
+  "updated_at": "2026-06-07T04:33:23.698389Z"
 }
