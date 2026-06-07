@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "Route fuel reserve/margin guidance pushed and verified; successor continuation dispatched/pending dispatch for next safe source-aligned slice.",
+  "current_milestone": "Commodity buy-blocked recovery help surface implemented locally and verified; pending review/coordinator integration.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -123,7 +123,8 @@
     "Do not redo commodity partial-hold recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo service-purchase launch recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
     "Do not redo mission persistence recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice.",
-    "Do not redo route fuel reserve/margin guidance surface; pushed and verified in normal TV repo path with HEAD == origin/main."
+    "Do not redo route fuel reserve/margin guidance surface; pushed and verified in normal TV repo path with HEAD == origin/main.",
+    "Do not redo commodity buy-blocked recovery help-surface work if already present and verified; continue from review comments or the next source-aligned safe local gameplay/fidelity slice."
   ],
   "done_condition": "Terminal Velocity reaches an agreed playable/completion milestone with verified build/play/eval artifacts, or the user explicitly changes/stops the target.",
   "git_state": {
@@ -157,7 +158,7 @@
   },
   "last_checkpoint_commit": "local commit feat(godot): expose Levo sellback probe; SHA-neutral because ledger metadata may be amended into the commit.",
   "last_checkpoint_commit_note": "Inspect live HEAD with git rev-parse HEAD; exact embedded SHAs are intentionally avoided for amended ledger commits.",
-  "last_checkpoint_summary": "Godot route/fuel status surfaces signed reserve margin in player-facing G/Shift-click route hints, and navigation guardrail probe logs routeFuelMargin under Terminal Velocity scaffold / Classic route UI pending labels.",
+  "last_checkpoint_summary": "F10 help exposes hasCommodityBuyBlockedRecoveryHelp=true for the existing commodity buy-blocked recovery lane: land, free 10 tons, and budget exactly the displayed full-lot price before retrying.",
   "last_commit": "7153a86 docs: add automatic gameplay topology source pass; includes prior 89a9ed8 feat(godot): expose mission abort reaccept probe",
   "last_commits": [
     "2079829 feat(godot): preserve trade cargo in mission route probe",
@@ -172,16 +173,17 @@
     "local checkpoint: Expose mission deadline abort Godot log",
     "local checkpoint: Expose mission auto-abort Godot log"
   ],
-  "last_completed_slice": "route fuel reserve/margin guidance surface",
-  "last_process_checkpoint": "Local slice adds signed route reserve/margin to Godot route fuel hints, Shift-click route status, navigation guardrail log contract, and EV Classic fidelity backlog note; native model tests pass.",
+  "last_completed_slice": "commodity buy-blocked recovery help surface",
+  "last_process_checkpoint": "Local slice adds player-facing F10 recovery help for commodity buy blockers, verifies the help contract and Godot help probe, and records the pending Classic UI boundary.",
   "last_process_checkpoint_commit": "included in local worker checkpoint commit; inspect git log -1",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; route fuel reserve/margin guidance surface pushed and verified with HEAD == origin/main.",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_navigation_blocked_reasons_are_player_guidance_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_map_route_autoresearch_log_contract native_ev.tests.test_model.NativeEvModelTests.test_godot_mission_destination_route_hint_log_contract -v -> OK",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_help_exposes_gameplay_curriculum_hints_contract -v -> OK after RED failure for hasCommodityBuyBlockedRecoveryHelp",
+    "./run_godot.sh tv-gameplay-curriculum-help-log -> OK; hasCommodityBuyBlockedRecoveryHelp=true sourceLabel=terminal-velocity-curriculum-scaffold oracleStatus=help_surface_pending_playtest",
     "python3 -m unittest discover -s native_ev/tests -p 'test_*.py' -> Ran 261 tests OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> summary passed=92 failed=0 total=92",
     "./run_godot.sh self-test -> GODOT SELFTEST OK gameplayScenarios=92",
-    "git push origin main; git fetch origin; HEAD == origin/main -> OK"
+    "git diff --check -> OK"
   ],
   "local_checkpoint_commit": "pushed/verified in normal TV repo path; inspect current SHA with git rev-parse HEAD",
   "mandatory_resume_first_actions": [
@@ -192,7 +194,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Dispatch or continue Kanban task t_c021e195 from clean origin/main; choose the strongest next safe source-aligned Terminal Velocity gameplay/fidelity slice and do not redo route fuel reserve/margin guidance surface.",
+  "next_resume_action": "Review/accept or revise the local commodity buy-blocked recovery help-surface checkpoint; if accepted, commit/push normally, then choose the next source-aligned safe local gameplay/fidelity slice without redoing this help surface.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -275,6 +277,7 @@
     "updated_at": "2026-06-07T10:32:45Z"
   },
   "safe_backlog": [
+    "commodity buy-blocked recovery help surface local checkpoint verified pending review/local commit: F10 help now exposes hasCommodityBuyBlockedRecoveryHelp=true for existing commodity buy blocked recovery; sourceLabel=terminal-velocity-curriculum-scaffold; oracleStatus=help_surface_pending_playtest; underlying scaffold=terminal-velocity-commodity-buy-blocked-recovery-scaffold.",
     {
       "description": "Verified pending commit/push: Godot legal service gate probe now records service min boundary and one-below denial/recovery for outfitter + shipyard; exact Classic thresholds/UI remain pending.",
       "id": "tv-legal-service-gate-log-threshold-recovery",
@@ -346,5 +349,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T11:32:07Z"
+  "updated_at": "2026-06-07T11:34:15.389408Z"
 }
