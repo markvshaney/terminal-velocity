@@ -131,6 +131,7 @@
     "Trade route helper: linked-market profit hints are Terminal Velocity scaffold.",
     "Shipyard/outfitter: listings show local manifest deltas/effects before buying.",
     "Outfitter/shipyard recovery: if B is blocked, check landed service, selected listing, credits, reputation/legal gates, and cargo transfer limits before retrying.",
+    "Outfitter/shipyard launch recovery: if B is blocked because you are in space, land at the intended service port first, keep the selected purchase goal, then retry only after checking credits and local stock. TV service-purchase guardrail scaffold; Classic purchase UI pending.",
     "Shipyard cargo transfer: if trading down is blocked, sell or deliver cargo until the target hull capacity fits before retrying; exact Classic transfer UI pending.",
     "Service provisioning scout: newly reached ports need service/store checks before buying; Levo no-outfitter evidence is Classic-observed, other service matrices stay TV scaffold until confirmed.",
     "Ship ladder planning: compare cargo, fuel, hull, outfits, and weapon slots before trading up; TV scaffold pending Classic store/stat trace.",
@@ -718,6 +719,11 @@
       "flag": "hasOutfitterGuardrailHelp",
       "source": "help",
       "contains": "Outfitter/shipyard recovery: if B is blocked"
+    },
+    {
+      "flag": "hasOutfitterShipyardLaunchRecoveryHelp",
+      "source": "help",
+      "contains": "Outfitter/shipyard launch recovery: if B is blocked because you are in space"
     },
     {
       "flag": "hasShipyardCargoTransferHelp",
