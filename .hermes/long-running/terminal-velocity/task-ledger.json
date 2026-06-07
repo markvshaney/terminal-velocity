@@ -5,7 +5,7 @@
     "type": null,
     "withheld_action": null
   },
-  "current_milestone": "Godot contraband risk probe now separates Federation no-bribe enforcement from Independent bribe-per-ton/cost hint visibility; local verification passed, pending review/commit decision.",
+  "current_milestone": "Contraband bribe visibility boundary accepted, pushed, and verified; successor continuation card created for the next safe local slice.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -174,10 +174,13 @@
   "last_process_checkpoint_commit": "not committed before checkpoint update; inspect live git status/diff",
   "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; HEAD == origin/main verified after normal push",
   "last_verified_commands": [
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_risk_surface_contract -v (OK)",
-    "./run_godot.sh tv-contraband-risk-log (emitted Federation bribePerTon=0/bribeCost=0 and Independent bribableBribePerTon=75/bribableBribeCost=750)",
-    "git diff --check (OK)",
-    "./run_godot.sh self-test (GODOT SELFTEST OK, gameplayScenarios=92)"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_contraband_risk_surface_contract -v -> OK",
+    "./run_godot.sh tv-contraband-risk-log -> OK; event includes Federation bribeAllowed=false/bribePerTon=0/bribeCost=0 and Independent bribableBribePerTon=75/bribableBribeCost=750",
+    "git diff --check -> OK",
+    "python3 -m json.tool .hermes/long-running/terminal-velocity/task-ledger.json -> OK",
+    "events.jsonl json.loads line scan -> OK",
+    "./run_godot.sh self-test -> GODOT SELFTEST OK, gameplayScenarios=92",
+    "git push origin main; git fetch origin; HEAD == origin/main -> OK"
   ],
   "local_checkpoint_commit": "pushed/verified in normal TV repo path; inspect current SHA with git rev-parse HEAD",
   "mandatory_resume_first_actions": [
@@ -188,7 +191,7 @@
     "Inspect current dirty worktree/diff and finish/cohere it before starting a new slice.",
     "Run the cheapest current verifier relevant to the current/next slice, then continue the strongest safe local slice."
   ],
-  "next_resume_action": "Review/accept or revise the local tv-contraband-risk-log bribe visibility boundary; if accepted, commit/push normally, then choose the next source-aligned safe local gameplay/fidelity slice from the backlog without redoing this probe.",
+  "next_resume_action": "Dispatch t_528d411e and verify exactly one running Terminal Velocity task; worker should choose the next source-aligned safe local slice and not redo tv-contraband-risk-log bribe visibility boundary.",
   "objective": "Develop Terminal Velocity to completion as a durable long-running game-development workflow modeled on Escape Velocity through Basilisk-observed fidelity evidence.",
   "operational_owner_candidate": "terminal-velocity Kanban board via loki-game gateway dispatcher",
   "repo": {
@@ -221,9 +224,9 @@
     "docs/checklists/agent-continuation-process-failure-remediation.md",
     "docs/checklists/long-running-game-development-harness-audit.md"
   ],
-  "resume_prompt": "Read this ledger, events.jsonl, git status/diff, and docs/checklists/ev-classic-fidelity-implementation-backlog.md. Continue from the local Godot contraband-risk bribe visibility checkpoint: verify any review comments, commit/push if accepted, then proceed to the next bounded source-aligned Terminal Velocity gameplay/fidelity slice.",
+  "resume_prompt": "Continue Terminal Velocity EV Classic fidelity work from the current worktree. Inspect git status and the backlog, preserve exact sourceLabel/oracleStatus boundaries, avoid redoing tv-contraband-risk-log bribe visibility boundary, and take one small verified scaffold slice.",
   "runner": {
-    "active_task_id": "t_6d364c92",
+    "active_task_id": "t_528d411e",
     "assignee": "terminal-velocity",
     "board": "terminal-velocity",
     "cron_role": "script-only watchdog/coordinator; no repo implementation",
@@ -314,7 +317,7 @@
     ],
     "rule": "Source/fidelity findings do not live only in chat; record them in repo docs/checklists/backlog with explicit provenance labels."
   },
-  "status": "checkpointed_not_scheduled",
+  "status": "running",
   "stopping_state_contract": {
     "allowed_terminal_report_states": [
       "waiting_gate",
@@ -335,5 +338,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T10:21:59.253648+00:00"
+  "updated_at": "2026-06-07T10:25:34.316109Z"
 }
