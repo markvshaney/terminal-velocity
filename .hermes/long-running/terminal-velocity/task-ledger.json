@@ -1,6 +1,6 @@
 {
   "active_gate": null,
-  "current_milestone": "accepted/pushed: tv-light-freighter-capacity-trade-log verified and normal-pushed; HEAD == origin/main.",
+  "current_milestone": "accepted/pushed: tv-light-freighter-capacity-trade-log verified and normal-pushed; inspect current SHA with git rev-parse HEAD and verify against origin/main.",
   "do_not_redo": [
     "Do not redo pirate_avoidance_mission_trade_escape_loop once pushed/verified; continue from the next source-aligned safe local gameplay/fidelity slice.",
     "tv-mission-trade-return-margin-log",
@@ -98,9 +98,11 @@
   "git_state": {
     "branch": "main",
     "dirty": false,
-    "head": "859de8cd1734af738f600cf80bd973b72a554f8b",
-    "origin_main": "859de8cd1734af738f600cf80bd973b72a554f8b",
-    "status_short": "## main...origin/main"
+    "head": "inspect current SHA with git rev-parse HEAD",
+    "origin_main": "inspect current SHA with git rev-parse origin/main",
+    "status_short": "clean at origin/main after normal push verification; re-run git status --short --branch for live state",
+    "ahead": "0",
+    "behind": "0"
   },
   "heartbeat_status": {
     "note": "send_message tool unavailable in this cron surface; fallback heartbeat JSON written; run ended before 10-minute progress heartbeat threshold",
@@ -161,7 +163,7 @@
   },
   "last_process_checkpoint": "Commodity unavailable recovery probe verified and committed locally; push blocked by missing GitHub HTTPS credentials and gh not logged in.",
   "last_process_checkpoint_commit": "inspect current SHA with `git rev-parse HEAD`; process checkpoint intentionally avoids self-staling SHA metadata",
-  "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; light freighter capacity trade probe accepted and pushed",
+  "last_pushed_commit": "inspect current SHA with git rev-parse HEAD; light freighter capacity trade probe and process checkpoint accepted and pushed",
   "last_verified_commands": [
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_light_freighter_capacity_trade_log_contract -v -> OK",
     "./run_godot.sh tv-light-freighter-capacity-trade-log -> TV_LIGHT_FREIGHTER_CAPACITY_TRADE_EVENT ... boughtLightFreighter=true upgradedCargoSpace=150 positiveMarginLotsBought=6 positiveMarginTonsBought=60 largeHoldTradeCleared=true finalCargo=0 ... sourceLabel=terminal-velocity-light-freighter-trade-scaffold oracleStatus=light_freighter_trade_pending_classic_runtime_trace",
@@ -172,7 +174,8 @@
     "git diff --check -> OK",
     "python3 tools/run_gameplay_scenarios.py --all --pretty -> 92/92 scenarios passed",
     "git commit --amend --no-edit -> current local commit contains verified light freighter capacity trade probe slice",
-    "git push origin main; git fetch origin; git rev-parse HEAD/origin/main -> equal 859de8cd1734af738f600cf80bd973b72a554f8b"
+    "git push origin main; git fetch origin; git rev-parse HEAD/origin/main -> equal 859de8cd1734af738f600cf80bd973b72a554f8b",
+    "git push origin main; git fetch origin; HEAD == origin/main verified after light freighter capacity slice and process checkpoint (inspect live SHA)"
   ],
   "local_checkpoint_commit": "feat(godot): expose commodity unavailable recovery probe; SHA-neutral, inspect live HEAD",
   "mandatory_resume_first_actions": [
@@ -191,14 +194,19 @@
     "dirty": false,
     "ahead": "0",
     "behind": "0",
-    "head": "859de8cd1734af738f600cf80bd973b72a554f8b",
-    "origin_main": "859de8cd1734af738f600cf80bd973b72a554f8b",
-    "status_short": "## main...origin/main"
+    "head": "inspect current SHA with git rev-parse HEAD",
+    "origin_main": "inspect current SHA with git rev-parse origin/main",
+    "status_short": "clean at origin/main after normal push verification; re-run git status --short --branch for live state"
   },
   "repo_state": {
     "branch": "main",
     "dirty": false,
-    "status": "clean at origin/main after normal push"
+    "status": "clean at origin/main after normal push",
+    "head": "inspect current SHA with git rev-parse HEAD",
+    "origin_main": "inspect current SHA with git rev-parse origin/main",
+    "status_short": "clean at origin/main after normal push verification; re-run git status --short --branch for live state",
+    "ahead": "0",
+    "behind": "0"
   },
   "required_skill_candidates": [
     "source-and-fidelity",
@@ -325,5 +333,5 @@
     "near_cap_action": "write checkpoint/update next_resume_action, then allow the next 5-minute continuous tick to resume without asking for approval",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-07T05:35:33Z"
+  "updated_at": "2026-06-07T05:35:55Z"
 }
