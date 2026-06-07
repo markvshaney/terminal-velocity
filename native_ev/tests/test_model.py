@@ -460,6 +460,7 @@ class NativeEvModelTests(unittest.TestCase):
             'hasBalancedUpgradeRecoveryHelp',
             'hasHullPlatingRepairRecoveryHelp',
             'hasCommodityRecoveryHelp',
+            'hasCommodityPartialHoldRecoveryHelp',
             'hasTradeRouteHelp',
             'hasMapServiceHelp',
             'hasServiceProvisioningHelp',
