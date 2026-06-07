@@ -33,6 +33,7 @@ const ROUTE_CLEAR_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_EVENT"
 const ROUTE_CLEAR_RESELECT_EVENT_LOG_PREFIX := "TV_ROUTE_CLEAR_RESELECT_EVENT"
 const ROUTE_JUMP_EVENT_LOG_PREFIX := "TV_ROUTE_JUMP_EVENT"
 const ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_LAND_REFUEL_EVENT"
+const ROUTE_PLANNER_REFUEL_EVENT_LOG_PREFIX := "TV_ROUTE_PLANNER_REFUEL_EVENT"
 const REPAIR_SERVICE_EVENT_LOG_PREFIX := "TV_REPAIR_SERVICE_EVENT"
 const REPAIR_CREDIT_RECOVERY_EVENT_LOG_PREFIX := "TV_REPAIR_CREDIT_RECOVERY_EVENT"
 const LOW_FUEL_JUMP_EVENT_LOG_PREFIX := "TV_LOW_FUEL_JUMP_EVENT"
@@ -270,6 +271,8 @@ func _ready() -> void:
 		call_deferred("_run_route_jump_log")
 	if OS.get_cmdline_args().has("--tv-route-land-refuel-log") or OS.get_cmdline_user_args().has("--tv-route-land-refuel-log"):
 		call_deferred("_run_route_land_refuel_log")
+	if OS.get_cmdline_args().has("--tv-route-planner-refuel-log") or OS.get_cmdline_user_args().has("--tv-route-planner-refuel-log"):
+		call_deferred("_run_route_planner_refuel_log")
 	if OS.get_cmdline_args().has("--tv-low-fuel-jump-log") or OS.get_cmdline_user_args().has("--tv-low-fuel-jump-log"):
 		call_deferred("_run_low_fuel_jump_log")
 	if OS.get_cmdline_args().has("--tv-near-center-jump-log") or OS.get_cmdline_user_args().has("--tv-near-center-jump-log"):
@@ -1149,6 +1152,34 @@ func _run_route_land_refuel_log() -> void:
 	var refuel_status := "refuelAvailable=true" if refuel_available else "refuelAvailable=false"
 	var loop_status := "travelLoopComplete=true" if travel_loop_complete else "travelLoopComplete=false"
 	print("%s startSystem=%s destination=%s finalSystem=%s routeSelected=%s %s %s landedBody=\"%s\" %s refuelSucceeded=%s %s fuelBeforeJump=%d fuelAfterJump=%d fuelBeforeRefuel=%d fuelAfterRefuel=%d fuelMax=%d landed=%s position=(%.1f,%.1f) sourceLabel=terminal-velocity-observed oracleStatus=user_demonstrated_pending_original_trace status=\"%s\"" % [ROUTE_LAND_REFUEL_EVENT_LOG_PREFIX, start_system, destination, final_system, str(route_selected), jump_status, landing_status, str(landed_body.get("name", "None")), refuel_status, str(refuel_succeeded), loop_status, fuel_before_jump, fuel_after_jump, fuel_before_refuel, fuel_after_refuel, _max_player_fuel(), str(landed), pos.x, pos.y, status_line])
+	get_tree().quit(0)
+
+func _run_route_planner_refuel_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var start_system := str(current_system.get("name", "?"))
+	player_fuel = _jump_fuel_cost()
+	var fuel_before_jump := player_fuel
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	var after_first_jump_system := str(current_system.get("name", "?"))
+	var fuel_after_first_jump := player_fuel
+	var spent_fuel_to_sol := route_to_sol_selected and after_first_jump_system == "Sol" and fuel_after_first_jump == 0
+	map_visible = true
+	var return_route_selected := _select_map_route_to_system("Levo")
+	_move_to_scripted_hyperspace_distance()
+	status_messages.clear()
+	_jump()
+	var empty_return_blocked := status_messages.has("Insufficient fuel for hyperspace; land at a port with refuel service or choose a closer route") and str(current_system.get("name", "?")) == "Sol" and player_fuel == 0
+	_position_at_body("Earth")
+	_try_land()
+	var landed_for_refuel := landed and str(_current_body().get("name", "")) == "Earth"
+	var fuel_before_refuel := player_fuel
+	status_messages.clear()
+	var refueled_before_retry := _refuel_current_ship()
+	var fuel_after_refuel := player_fuel
+	print("%s startSystem=%s afterFirstJumpSystem=%s routeToSolSelected=%s returnRouteSelected=%s spentFuelToSol=%s emptyReturnBlocked=%s landedForRefuel=%s refueledBeforeRetry=%s fuelBeforeJump=%d fuelAfterFirstJump=%d fuelBeforeRefuel=%d fuelAfterRefuel=%d sourceLabel=terminal-velocity-route-planner-refuel-scaffold oracleStatus=classic_runtime_route_refuel_loop_pending status=\"%s\"" % [ROUTE_PLANNER_REFUEL_EVENT_LOG_PREFIX, start_system, after_first_jump_system, str(route_to_sol_selected), str(return_route_selected), str(spent_fuel_to_sol), str(empty_return_blocked), str(landed_for_refuel), str(refueled_before_retry), fuel_before_jump, fuel_after_first_jump, fuel_before_refuel, fuel_after_refuel, status_line])
 	get_tree().quit(0)
 
 func _run_repair_service_log() -> void:

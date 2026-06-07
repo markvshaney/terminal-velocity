@@ -675,6 +675,29 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-service-provisioning-log', run_script)
         self.assertIn('[switch]$ServiceProvisioningLog', windows_script)
 
+    def test_godot_route_planner_refuel_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'run_godot.sh').read_text()
+        windows_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+
+        for symbol in [
+            'TV_ROUTE_PLANNER_REFUEL_EVENT',
+            '--tv-route-planner-refuel-log',
+            'func _run_route_planner_refuel_log() -> void:',
+            'routeToSolSelected=%s',
+            'spentFuelToSol=%s',
+            'emptyReturnBlocked=%s',
+            'landedForRefuel=%s',
+            'refueledBeforeRetry=%s',
+            'fuelAfterRefuel=%d',
+            'sourceLabel=terminal-velocity-route-planner-refuel-scaffold',
+            'oracleStatus=classic_runtime_route_refuel_loop_pending',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('tv-route-planner-refuel-log', run_script)
+        self.assertIn('[switch]$RoutePlannerRefuelLog', windows_script)
+
     def test_godot_pirate_avoidance_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)
