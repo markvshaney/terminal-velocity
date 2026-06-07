@@ -368,6 +368,14 @@ Chapter-one trade carryover scenario contract:
 - `sourceLabel=terminal-velocity-chapter-one-trade-carryover-scaffold`; `oracleStatus=chapter_one_trade_carryover_pending_classic_runtime_trace`.
 - This is a Terminal Velocity chapter-one mission/trade carryover scaffold; exact EV Classic story-chain, mixed mission/trade UI, and market behavior remain pending Classic runtime evidence.
 
+Mission trade return-margin scenario contract:
+
+- `RunGodot.ps1 -MissionTradeReturnMarginLog` / `--tv-mission-trade-return-margin-log`
+- Exercises the Terminal Velocity chapter-one return-leg guardrail where the player completes the intro courier and Frontier Sample Transfer, sells the preserved outbound Food lot at Sirius Station, evaluates Sirius Equipment for resale back at Sol, skips it when the Sol return margin is not positive, then accepts and completes the Freeport Return Dispatch to Earth.
+- Logs `introMissionDelivered=true`, `secondMissionDelivered=true`, `returnTradeSkippedForMargin=true`, `heldReturnTradeAfterMarginEval=0`, `returnMissionAccepted=true`, and `returnMissionDelivered=true` plus return price/margin, cargo, completed-mission, and story-flag counters.
+- `sourceLabel=terminal-velocity-mission-trade-return-margin-scaffold`; `oracleStatus=chapter_one_return_trade_margin_pending_classic_runtime_trace`.
+- This is a Terminal Velocity return-leg trade-margin scaffold; exact EV Classic story-chain, mixed mission/trade UI, and market behavior remain pending Classic runtime evidence.
+
 Mission log history scenario contract:
 
 - `RunGodot.ps1 -MissionLogHistoryLog` / `--tv-mission-log-history-log`

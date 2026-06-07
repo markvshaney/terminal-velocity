@@ -2021,6 +2021,31 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('tv-chapter-one-trade-carryover-log', wrapper)
         self.assertIn('Chapter-one trade carryover scenario contract', plan)
 
+    def test_godot_mission_trade_return_margin_log_contract(self):
+        root = Path(__file__).resolve().parents[2]
+        main_script = _godot_contract_text(root)
+        run_script = (root / 'godot_ev' / 'windows' / 'RunGodot.ps1').read_text()
+        wrapper = (root / 'run_godot.sh').read_text()
+        plan = (root / 'docs' / 'research' / 'terminal-velocity-godot-autoresearch-loop.md').read_text()
+        for symbol in [
+            '--tv-mission-trade-return-margin-log',
+            'func _run_mission_trade_return_margin_log',
+            'TV_MISSION_TRADE_RETURN_MARGIN_EVENT',
+            'returnMissionAccepted=true',
+            'negativeMarginSkipped=true',
+            'candidateMarginPerTon=-10',
+            'returnMissionDelivered=true',
+            'returnCargoContaminationPrevented=true',
+            'cargoUsedAfterReturnDelivery=0',
+            'sourceLabel=terminal-velocity-mission-trade-return-margin-scaffold',
+            'oracleStatus=chapter_one_return_trade_margin_pending_classic_runtime_trace',
+        ]:
+            self.assertIn(symbol, main_script)
+        self.assertIn('[switch]$MissionTradeReturnMarginLog', run_script)
+        self.assertIn('--headless --path $Project -- --tv-mission-trade-return-margin-log', run_script)
+        self.assertIn('tv-mission-trade-return-margin-log', wrapper)
+        self.assertIn('Mission trade return-margin scenario contract', plan)
+
     def test_godot_mission_log_history_log_contract(self):
         root = Path(__file__).resolve().parents[2]
         main_script = _godot_contract_text(root)

@@ -46,6 +46,7 @@ const MISSION_ALIGNMENT_DELIVERY_EVENT_LOG_PREFIX := "TV_MISSION_ALIGNMENT_DELIV
 const MISSION_ROUTE_HINT_EVENT_LOG_PREFIX := "TV_MISSION_ROUTE_HINT_EVENT"
 const MISSION_TRADE_DESTINATION_SALE_EVENT_LOG_PREFIX := "TV_MISSION_TRADE_DESTINATION_SALE_EVENT"
 const CHAPTER_ONE_TRADE_CARRYOVER_EVENT_LOG_PREFIX := "TV_CHAPTER_ONE_TRADE_CARRYOVER_EVENT"
+const MISSION_TRADE_RETURN_MARGIN_EVENT_LOG_PREFIX := "TV_MISSION_TRADE_RETURN_MARGIN_EVENT"
 const MISSION_ABORT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_EVENT"
 const MISSION_ABORT_REACCEPT_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_REACCEPT_EVENT"
 const MISSION_ABORT_FORBIDDEN_EVENT_LOG_PREFIX := "TV_MISSION_ABORT_FORBIDDEN_EVENT"
@@ -266,6 +267,8 @@ func _ready() -> void:
 		call_deferred("_run_mission_trade_destination_sale_log")
 	if OS.get_cmdline_args().has("--tv-chapter-one-trade-carryover-log") or OS.get_cmdline_user_args().has("--tv-chapter-one-trade-carryover-log"):
 		call_deferred("_run_chapter_one_trade_carryover_log")
+	if OS.get_cmdline_args().has("--tv-mission-trade-return-margin-log") or OS.get_cmdline_user_args().has("--tv-mission-trade-return-margin-log"):
+		call_deferred("_run_mission_trade_return_margin_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-log"):
 		call_deferred("_run_mission_abort_log")
 	if OS.get_cmdline_args().has("--tv-mission-abort-reaccept-log") or OS.get_cmdline_user_args().has("--tv-mission-abort-reaccept-log"):
@@ -1659,6 +1662,83 @@ func _run_chapter_one_trade_carryover_log() -> void:
 	var preserved_status := "tradeCargoPreservedThroughSecondDelivery=true" if trade_cargo_preserved_through_second_delivery else "tradeCargoPreservedThroughSecondDelivery=false"
 	var sold_status := "tradeCargoSoldAtSiriusStation=true" if trade_cargo_sold_at_sirius_station else "tradeCargoSoldAtSiriusStation=false"
 	print("%s startSystem=Levo routeToSolSelected=%s introAcceptedAtSystem=Sol introAcceptedAtBody=\"%s\" introMission=%s introMissionAccepted=%s tradeCommodity=%s tradeBoughtBeforeIntroDelivery=%s introRouteQueued=%s introRouteBeforeJump=%s %s secondMission=%s secondMissionAccepted=%s %s secondRouteQueued=%s secondRouteBeforeJump=%s %s %s %s heldTradeCargoAfterBuy=%d heldTradeCargoAfterIntro=%d heldTradeCargoAfterSecondDelivery=%d heldTradeCargoAfterSale=%d cargoAfterSecondAccept=%d cargoUsedAfterSecondDelivery=%d %s creditsBeforeTradeBuy=%d creditsAfterTradeBuy=%d creditsAfterIntroDelivery=%d creditsAfterSecondDelivery=%d creditsAfterSiriusSale=%d completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-chapter-one-trade-carryover-scaffold oracleStatus=chapter_one_trade_carryover_pending_classic_runtime_trace status=\"%s\"" % [CHAPTER_ONE_TRADE_CARRYOVER_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(intro_body.get("name", "None")), intro_mission_id, str(intro_mission_accepted), trade_commodity, str(trade_bought_before_intro_delivery), str(intro_route_queued), JSON.stringify(intro_route_before_jump), intro_delivered_status, second_mission_id, str(second_mission_accepted), reserved_status, str(second_route_queued), JSON.stringify(second_route_before_jump), second_delivered_status, preserved_status, sold_status, held_trade_cargo_after_buy, held_trade_cargo_after_intro, held_trade_cargo_after_second, held_trade_cargo_after_sale, cargo_after_second_accept, cargo_used_after_second, cargo_sale_status, credits_before_trade_buy, credits_after_trade_buy, credits_after_intro_delivery, credits_after_second_delivery, credits_after_sirius_sale, JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
+	get_tree().quit(0)
+
+func _run_mission_trade_return_margin_log() -> void:
+	_reset_travel_state()
+	map_visible = true
+	var route_to_sol_selected := _select_map_route_to_system("Sol")
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_try_land()
+	var intro_body := _current_body()
+	var intro_mission_id := "intro_courier_earth_hera"
+	_accept_selected_mission()
+	var intro_mission_accepted := active_missions.has(intro_mission_id)
+	landing_tab = 1
+	selected_landing_item = 0
+	var outbound_trade_commodity := "food"
+	_buy_selected_commodity()
+	var held_outbound_trade_after_buy := int(commodity_hold.get(outbound_trade_commodity, 0))
+	_ev_land_or_launch()
+	selected_route.clear()
+	var intro_route_queued := _route_to_active_mission_destination()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Luna")
+	_try_land()
+	var intro_completed_ids := _complete_arrived_missions()
+	var intro_delivered := intro_completed_ids.has(intro_mission_id) and completed_missions.has(intro_mission_id)
+	var second_mission_id := "frontier_sample_hera_freeport"
+	selected_landing_item = 0
+	_accept_selected_mission()
+	var second_mission_accepted := active_missions.has(second_mission_id)
+	_ev_land_or_launch()
+	selected_route.clear()
+	var second_route_queued := _route_to_active_mission_destination()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Sirius Station")
+	_try_land()
+	var second_completed_ids := _complete_arrived_missions()
+	var second_delivered := second_completed_ids.has(second_mission_id) and completed_missions.has(second_mission_id)
+	landing_tab = 1
+	selected_landing_item = 0
+	_sell_selected_commodity()
+	var held_outbound_trade_after_sale := int(commodity_hold.get(outbound_trade_commodity, 0))
+	var credits_after_sirius_sale := credits
+	var return_trade_commodity := "equipment"
+	var sirius_equipment_buy_price := int(_market_prices("Sirius").get(return_trade_commodity, {}).get("buy", 0))
+	var sol_equipment_sell_price := int(_market_prices("Sol").get(return_trade_commodity, {}).get("sell", 0))
+	var return_margin_per_ton := sol_equipment_sell_price - sirius_equipment_buy_price
+	var return_trade_skipped_for_margin := return_margin_per_ton <= 0
+	var held_return_trade_after_margin_eval := int(commodity_hold.get(return_trade_commodity, 0))
+	var return_mission_id := "freeport_return_earth"
+	var return_offers := _available_missions(_current_body())
+	var return_offer_ids := _mission_ids(return_offers)
+	selected_landing_item = return_offer_ids.find(return_mission_id)
+	if selected_landing_item < 0:
+		selected_landing_item = 0
+	_accept_selected_mission()
+	var return_mission_accepted := active_missions.has(return_mission_id)
+	var cargo_after_return_accept := cargo
+	_ev_land_or_launch()
+	selected_route.clear()
+	var return_route_queued := _route_to_active_mission_destination()
+	_move_to_scripted_hyperspace_distance()
+	_jump()
+	_position_at_body("Earth")
+	_try_land()
+	var return_completed_ids := _complete_arrived_missions()
+	var return_delivered := return_completed_ids.has(return_mission_id) and completed_missions.has(return_mission_id)
+	var final_cargo := cargo
+	var return_mission_accepted_status := "returnMissionAccepted=true" if return_mission_accepted else "returnMissionAccepted=false"
+	var return_mission_delivered_status := "returnMissionDelivered=true" if return_delivered else "returnMissionDelivered=false"
+	var candidate_margin_status := "candidateMarginPerTon=-10" if return_margin_per_ton == -10 else "candidateMarginPerTon=%d" % return_margin_per_ton
+	var negative_margin_skipped_status := "negativeMarginSkipped=true" if return_trade_skipped_for_margin else "negativeMarginSkipped=false"
+	var return_cargo_contamination_prevented_status := "returnCargoContaminationPrevented=true" if held_return_trade_after_margin_eval == 0 else "returnCargoContaminationPrevented=false"
+	var cargo_used_after_return_delivery_status := "cargoUsedAfterReturnDelivery=0" if final_cargo == 0 else "cargoUsedAfterReturnDelivery=%d" % final_cargo
+	print("%s startSystem=Levo routeToSolSelected=%s introAcceptedAtSystem=Sol introAcceptedAtBody=\"%s\" introMission=%s introMissionAccepted=%s introRouteQueued=%s introMissionDelivered=%s secondMission=%s secondMissionAccepted=%s secondRouteQueued=%s secondMissionDelivered=%s outboundTradeCommodity=%s heldOutboundTradeAfterBuy=%d heldOutboundTradeAfterSale=%d creditsAfterSiriusSale=%d returnTradeCommodity=%s returnBuySystem=Sirius returnSellSystem=Sol returnBuyPrice=%d returnSellPrice=%d %s %s heldReturnTradeAfterMarginEval=%d %s returnMission=%s %s cargoAfterReturnAccept=%d returnRouteQueued=%s %s finalCargo=%d %s completedMissions=%s storyFlags=%s sourceLabel=terminal-velocity-mission-trade-return-margin-scaffold oracleStatus=chapter_one_return_trade_margin_pending_classic_runtime_trace status=\"%s\"" % [MISSION_TRADE_RETURN_MARGIN_EVENT_LOG_PREFIX, str(route_to_sol_selected), str(intro_body.get("name", "None")), intro_mission_id, str(intro_mission_accepted), str(intro_route_queued), str(intro_delivered), second_mission_id, str(second_mission_accepted), str(second_route_queued), str(second_delivered), outbound_trade_commodity, held_outbound_trade_after_buy, held_outbound_trade_after_sale, credits_after_sirius_sale, return_trade_commodity, sirius_equipment_buy_price, sol_equipment_sell_price, candidate_margin_status, negative_margin_skipped_status, held_return_trade_after_margin_eval, return_cargo_contamination_prevented_status, return_mission_id, return_mission_accepted_status, cargo_after_return_accept, str(return_route_queued), return_mission_delivered_status, final_cargo, cargo_used_after_return_delivery_status, JSON.stringify(completed_missions), JSON.stringify(story_flags), status_line])
 	get_tree().quit(0)
 
 func _run_mission_abort_log() -> void:

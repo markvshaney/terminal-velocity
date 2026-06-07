@@ -23,6 +23,7 @@ param(
     [switch]$MissionRouteHintLog,
     [switch]$MissionTradeDestinationSaleLog,
     [switch]$ChapterOneTradeCarryoverLog,
+    [switch]$MissionTradeReturnMarginLog,
     [switch]$MissionAbortLog,
     [switch]$MissionAbortReacceptLog,
     [switch]$MissionAbortForbiddenLog,
@@ -142,6 +143,8 @@ if ($SelfTest) {
     & $Godot --headless --path $Project -- --tv-mission-trade-destination-sale-log
 } elseif ($ChapterOneTradeCarryoverLog) {
     & $Godot --headless --path $Project -- --tv-chapter-one-trade-carryover-log
+} elseif ($MissionTradeReturnMarginLog) {
+    & $Godot --headless --path $Project -- --tv-mission-trade-return-margin-log
 } elseif ($MissionAbortLog) {
     & $Godot --headless --path $Project -- --tv-mission-abort-log
 } elseif ($MissionAbortReacceptLog) {
