@@ -90,6 +90,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'repair_service_recovery_loop',
                 'repair_insufficient_credit_guardrail',
                 'disabled_player_recovery_loop',
+                'static_topology_source_readiness_scout',
                 'system_service_provisioning_scout',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
@@ -1792,6 +1793,25 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(recovery['hullAfter'], 100)
         self.assertEqual(recovery['sourceLabel'], 'terminal-velocity-player-disabled-scaffold')
         self.assertEqual(recovery['oracleStatus'], 'classic_runtime_player_death_pending_strict_play_safe_trace')
+
+    def test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary(self):
+        result = run_scripted_scenario('static_topology_source_readiness_scout')
+
+        self.assertTrue(result['success'], result)
+        for check in [
+            'found_67_syst_like_primitive_records',
+            'kept_runtime_universe_subset_unchanged',
+            'recorded_name_seed_inputs',
+            'recorded_static_topology_source_boundary',
+        ]:
+            self.assertEqual(result['checks'][check], 'passed')
+        readiness = [event for event in result['trace'] if event['type'] == 'static_topology_source_readiness'][-1]
+        self.assertEqual(readiness['systLikeRecords'], 67)
+        self.assertEqual(readiness['recordSize'], 88)
+        self.assertEqual(readiness['runtimeSystemSubsetCount'], 10)
+        self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')
+        self.assertEqual(readiness['oracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
+        self.assertTrue(result['state']['sourceReadiness']['staticTopology']['promotionSafeNext'])
 
     def test_system_service_provisioning_scout_records_service_matrix_boundaries(self):
         result = run_scripted_scenario('system_service_provisioning_scout')

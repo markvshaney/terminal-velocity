@@ -205,6 +205,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"repair_service_recovery_loop",
 		"repair_insufficient_credit_guardrail",
 		"disabled_player_recovery_loop",
+		"static_topology_source_readiness_scout",
 		"system_service_provisioning_scout",
 		"shift_click_multi_stop_route_queue",
 		"route_queue_invalid_stop_guardrail",

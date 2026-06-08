@@ -23,6 +23,8 @@ from native_ev.model import (
     outfit_manifest,
     reputation_manifest,
     ship_manifest,
+    sourced_ev_names_manifest,
+    sourced_ev_structures_manifest,
     station_inventory,
     weapon_manifest,
     system_distance,
@@ -109,6 +111,7 @@ SCENARIO_CURRICULUM = [
     'repair_service_recovery_loop',
     'repair_insufficient_credit_guardrail',
     'disabled_player_recovery_loop',
+    'static_topology_source_readiness_scout',
     'system_service_provisioning_scout',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
@@ -378,6 +381,46 @@ def _scan_station_services(state: dict[str, Any], action: dict[str, Any], trace:
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-service-provisioning-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'classic_runtime_service_matrix_pending'),
     })
+    return True
+
+
+def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    """Record read-only topology source readiness without changing runtime universe behavior."""
+    structures = sourced_ev_structures_manifest()
+    names = sourced_ev_names_manifest()
+    syst_run = next((run for run in structures.get('runs', []) if run.get('candidateType') == 'syst-like'), None)
+    if syst_run is None:
+        trace.append({
+            'type': 'blocked_static_topology_source_readiness',
+            'reason': 'missing syst-like run',
+            'sourceLabel': 'decoded-resource-backed',
+            'oracleStatus': 'static_topology_source_readiness_blocked',
+        })
+        return False
+    records = syst_run.get('records', [])
+    system_names = names.get('systemNames', [])
+    landing_names = names.get('landingNames', [])
+    runtime_system_count = len(load_universe().get('systems', []))
+    trace.append({
+        'type': 'static_topology_source_readiness',
+        'systLikeRecords': len(records),
+        'recordSize': syst_run.get('recordSize'),
+        'primitiveRunConfidence': syst_run.get('confidence'),
+        'heuristicSystemNameSeeds': len(system_names),
+        'landingNameSeeds': len(landing_names),
+        'runtimeSystemSubsetCount': runtime_system_count,
+        'nextPromotionFamily': action.get('nextPromotionFamily', 'ids/names before coordinates/links'),
+        'sourceLabel': 'decoded-resource-backed-static-readiness',
+        'oracleStatus': 'topology_semantic_promotion_pending_field_family_mapping',
+    })
+    state.setdefault('sourceReadiness', {})['staticTopology'] = {
+        'systLikeRecords': len(records),
+        'recordSize': syst_run.get('recordSize'),
+        'heuristicSystemNameSeeds': len(system_names),
+        'landingNameSeeds': len(landing_names),
+        'runtimeSystemSubsetCount': runtime_system_count,
+        'promotionSafeNext': len(records) >= 60 and syst_run.get('recordSize') == 88,
+    }
     return True
 
 
@@ -2802,6 +2845,10 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Levo'},
             {'type': 'land', 'body': 'Levo Spaceport'},
         ]
+    if name == 'static_topology_source_readiness_scout':
+        return [
+            {'type': 'scan_static_topology_source', 'nextPromotionFamily': 'ids/names before coordinates/links'},
+        ]
     if name == 'disposable_combat_placeholder':
         return [
             {'type': 'combat_placeholder_guardrail'},
@@ -3517,6 +3564,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recovered_player_scaffold': 'passed' if state.get('playerDisabled') is False and state.get('currentHull') == state.get('maxHull') and any(event.get('type') == 'recover_disabled_player' and event.get('hullAfter') == state.get('maxHull') for event in trace) else 'failed',
             'recorded_disabled_recovery_source_boundary': 'passed' if disabled_events and all(event.get('sourceLabel') == 'terminal-velocity-player-disabled-scaffold' and event.get('oracleStatus') == 'classic_runtime_player_death_pending_strict_play_safe_trace' for event in disabled_events) else 'failed',
         })
+    elif name == 'static_topology_source_readiness_scout':
+        readiness = next((event for event in trace if event.get('type') == 'static_topology_source_readiness'), {})
+        static_state = state.get('sourceReadiness', {}).get('staticTopology', {})
+        checks.update({
+            'found_67_syst_like_primitive_records': 'passed' if readiness.get('systLikeRecords') == 67 and readiness.get('recordSize') == 88 else 'failed',
+            'kept_runtime_universe_subset_unchanged': 'passed' if readiness.get('runtimeSystemSubsetCount') == 10 and static_state.get('runtimeSystemSubsetCount') == 10 else 'failed',
+            'recorded_name_seed_inputs': 'passed' if readiness.get('heuristicSystemNameSeeds', 0) >= 9 and readiness.get('landingNameSeeds', 0) >= 70 else 'failed',
+            'recorded_static_topology_source_boundary': 'passed' if readiness.get('sourceLabel') == 'decoded-resource-backed-static-readiness' and readiness.get('oracleStatus') == 'topology_semantic_promotion_pending_field_family_mapping' else 'failed',
+        })
     elif name == 'system_service_provisioning_scout':
         scans = {(event.get('system'), event.get('body')): event for event in trace if event.get('type') == 'scan_station_services'}
         levo = scans.get(('Levo', 'Levo Spaceport'), {})
@@ -3746,6 +3802,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'append_route_stop': _append_route_stop,
         'clear_route_queue': _clear_route_queue,
         'scan_station_services': _scan_station_services,
+        'scan_static_topology_source': _scan_static_topology_source,
         'route_to_active_mission_destination': _route_to_active_mission_destination,
         'scan_mission_offers': _scan_mission_offers,
         'accept_manifest_mission': _accept_manifest_mission,

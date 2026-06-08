@@ -82,6 +82,13 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Implementation: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` records live-state preflight, resource claim levels, five candidate lane contracts, worktree/branch registry, four Basilisk lane records, next-burst coordination manifest, automatic-gameplay additions, and Kanban/cron boundaries.
   - Rule: use the manifest before multi-worker bursts, durable Kanban/dependency tracking, parallel Basilisk evidence, scheduled mutation, or cross-lane fan-in; do not use it to block single safe-local acceleration slices, static/source semantic promotion, labeled scaffolds, or cheap verifier improvements.
 
+- [x] Add Lane A/E static topology readiness fast-evaluator packet
+  - Status: `verified acceleration slice`
+  - Source/rationale: acceleration plan Lane A (`static galaxy topology semantics`) plus Lane E (`deterministic evaluator and playtest evidence packets`).
+  - Implementation: symbolic scenario `static_topology_source_readiness_scout` reads `sourced_ev_structures_manifest()` and `sourced_ev_names_manifest()` without mutating runtime universe data, confirms the 67-record `syst-like` / 88-byte primitive run, records 9 heuristic system-name seeds and 72 landing-name seeds, and preserves the current 10-system runtime subset boundary.
+  - Verification: `python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty`; focused scenario/model tests. Source label: `decoded-resource-backed-static-readiness`; oracle status: `topology_semantic_promotion_pending_field_family_mapping`.
+  - Next action: promote Lane A IDs/names as a proper semantic manifest before coordinates/links and before broad universe replacement.
+
 - [x] Mine exposed original-game variables before treating manuals as complete authority
   - Status: `verified workflow rule`
   - Source: user correction on 2026-05-29.
