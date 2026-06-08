@@ -15,6 +15,8 @@ Non-blocking acceleration rule: the lane-contract audit, Kanban, extra worktrees
 
 Current implementation packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` converts this plan into live lane contracts, resource claims, Basilisk records, and worktree activation commands for the next burst.
 
+Current automatic-gameplay worker application: `docs/research/2026-06-08-automatic-gameplay-worker-application.md` deepens the external automation/game-testing source stack and applies it to worker lane types, failure packets, and Lane E semantic-Godot vs capture-driven-Basilisk splitting.
+
 This artifact carries only the current acceleration doctrine. Superseded compendium-doc versions are retained outside the repo at `/home/bh/workspaces/loki/terminal-velocity-doc-archives/2026-06-08-superseded-compendium-docs/`.
 
 Operationally:

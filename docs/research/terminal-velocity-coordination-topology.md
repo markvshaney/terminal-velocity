@@ -170,7 +170,7 @@ Sources checked for this pass:
 - Tencent GAutomator README: SDK-integrated mobile-game test automation through engine elements/GameObjects.
 - SerpentAI README: older Python game-agent framework lead; useful as architecture history, lower priority due to age/status.
 
-Topology updates from those sources:
+Topology updates from those sources and the 2026-06-08 deep-dive (`docs/research/2026-06-08-automatic-gameplay-worker-application.md`):
 
 1. **Two automation lanes, not one.** Keep `symbolic/semantic Godot probes` separate from `screen/capture-driven Basilisk or UI automation`. Semantic hooks can write stable JSON event logs and scenario results; capture-driven automation must attach screenshots, OCR/vision notes, and uncertainty labels.
 2. **Curriculum requires an execution surface.** For repeated or autonomous gameplay loops, define a scenario registry, objective queue, skill/macro library location, environment-feedback schema, and promotion rule from discovered macro → regression/test/backlog entry. One-off deterministic probes may proceed with a named command and recorded output.

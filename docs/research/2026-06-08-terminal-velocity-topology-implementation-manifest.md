@@ -40,7 +40,8 @@ Use this manifest when the next action is one of:
 - scheduled/watchdog mutation;
 - cross-lane fan-in.
 
-Do not use this manifest as a reason to stop a single source/static semantic promotion, labeled scaffold, or cheap verifier improvement.
+- Do not use this manifest as a reason to stop a single source/static semantic promotion, labeled scaffold, or cheap verifier improvement.
+- For automatic-gameplay worker launch details, also read `docs/research/2026-06-08-automatic-gameplay-worker-application.md`; it supplies the lane types, failure packet schema, and semantic-Godot vs capture-driven-Basilisk split for applying external automation sources to workers.
 
 ## 3. Resource claim levels
 

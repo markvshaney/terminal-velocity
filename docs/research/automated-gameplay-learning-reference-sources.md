@@ -98,6 +98,34 @@ Purpose: reusable reference list for general game-agent/autonomous-task research
   - Evidence checked: search results expose many small Python/OpenCV/mss/PyAutoGUI bots plus broader testing frameworks.
   - Use for Terminal Velocity: discovery surface for implementation examples; individual repos should be inspected before borrowing patterns.
 
+## 2026-06-08 worker-application source additions
+
+- **LMGame Bench / GamingAgent**
+  - Label: `automation-design`
+  - URL: https://github.com/lmgame-org/GamingAgent
+  - Paper: https://arxiv.org/abs/2505.15146
+  - Evidence checked: README describes standardized interactive gaming environments, LLM/VLM gaming agents, and a computer-use gaming agent workflow; arXiv abstract describes a unified Gym-style API, lightweight perception/memory scaffolds, and brittleness from direct LLM-in-game evaluation due to vision perception, prompt sensitivity, and contamination risk.
+  - Use for Terminal Velocity: keep automated-play workers on stable task/scenario APIs with perception/memory scaffolds; do not rely on raw prompt-and-pixel play as a verifier.
+
+- **TITAN / Leveraging LLM Agents for Automated Video Game Testing**
+  - Label: `automation-design`
+  - URL: https://arxiv.org/abs/2509.22170
+  - Evidence checked: arXiv abstract describes state abstraction, action optimization/prioritization, long-horizon trace memory, reflective self-correction, and LLM-based diagnostic bug oracles for MMORPG testing.
+  - Use for Terminal Velocity: add action regulation, trace memory, and typed diagnostic failure packets to worker contracts; keep bug-oracle claims as diagnostic hints requiring integration-owner verification.
+
+- **MIMIC-Py: An Extensible Tool for Personality-Driven Automated Game Testing with Large Language Models**
+  - Label: `automation-design`
+  - URL: https://arxiv.org/abs/2604.07752
+  - Project page: https://mimic-persona.github.io/MIMIC-Py-Home-Page/
+  - Evidence checked: arXiv abstract describes a reusable Python framework that decouples planning, execution, memory, and game-specific logic, with configurable traits and API/synthesized-code interaction.
+  - Use for Terminal Velocity: structure gameplay workers around decoupled planner/executor/memory/game-adapter packets; optionally use role/profile variation for coverage only after deterministic scenario contracts exist.
+
+## Worker application artifact
+
+- `docs/research/2026-06-08-automatic-gameplay-worker-application.md`
+  - Label: `automation-design`
+  - Use for Terminal Velocity: concrete lane types, failure packet schema, worker packet template, and immediate application rules for applying automatic gameplay sources to workers.
+
 ## Guardrail
 
 These sources justify automation architecture and evaluation design only. Original EV Classic runtime observation, decoded EV Classic resources, manuals, and bounded Basilisk traces remain the fidelity sources for game behavior.

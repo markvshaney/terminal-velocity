@@ -105,7 +105,8 @@ Use Kanban when work has durable independent lanes, must survive context resets,
 
 Use isolated worktrees for parallel coding. Record each branch/worktree path, file/resource claim, merge order, cleanup plan, and final integrated verification. Do not require extra worktrees for one checkout doing one safe slice.
 
-Current executable topology packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` implements the first lane-contract audit and is the starting point for any worker burst. It defines five ready lane contracts: static galaxy topology semantics, system service/store provisioning, economy/commodity semantic expansion, mission-family semantic promotion, and deterministic evaluator/playtest packets. Refresh its live-state preflight before launching workers; do not refresh it just to perform one safe-local slice.
+- Current automated gameplay worker application: `docs/research/2026-06-08-automatic-gameplay-worker-application.md` turns the automatic-gameplay/game-testing source stack into concrete worker lane types, typed failure packets, packet templates, and immediate Lane E split guidance. Treat it as `automation-design`, not EV Classic behavior proof.
+- Current executable topology packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` implements the first lane-contract audit and is the starting point for any worker burst. It defines five ready lane contracts: static galaxy topology semantics, system service/store provisioning, economy/commodity semantic expansion, mission-family semantic promotion, and deterministic evaluator/playtest packets. Refresh its live-state preflight before launching workers; do not refresh it just to perform one safe-local slice.
 
 ## WIP and fan-in defaults
 

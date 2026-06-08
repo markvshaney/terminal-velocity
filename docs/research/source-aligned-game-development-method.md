@@ -17,7 +17,9 @@ Current topology implementation: `docs/research/2026-06-08-terminal-velocity-top
 - `docs/research/ev-automated-gameplay-learning-synthesis.md`
   - Strongest existing recommendation: use a symbolic/LLM-controller gameplay loop with structured state, bounded actions, cheap verification, scoring, and reusable tactics.
 - `docs/research/automated-gameplay-learning-reference-sources.md`
-  - Automation references: Voyager, Go-Explore, GVGAI, Google Research game-agent loop, VPT, BrowserGym, WebArena, OSWorld.
+  - Automation references: Voyager, Go-Explore, GVGAI, Google Research game-agent loop, VPT, BrowserGym, WebArena, OSWorld, Airtest/Poco, Stable-Retro, Wuji, GAutomator, LMGame/GamingAgent, TITAN, and MIMIC-Py.
+- `docs/research/2026-06-08-automatic-gameplay-worker-application.md`
+  - Current worker application artifact for automatic gameplay sources: lane types, failure packet schema, worker packet template, and immediate semantic-Godot vs capture-driven-Basilisk split.
 - `docs/checklists/ev-classic-fidelity-implementation-backlog.md`
   - Existing live execution surface for source-backed/candidate/needs-evidence gameplay work.
 
