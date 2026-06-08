@@ -111,7 +111,7 @@ Use direct TDD for small dependent changes. Use Kanban and isolated worktrees wh
 
 Each parallel/durable lane needs an owner, expected writable surfaces, verifier, source-label policy, merge contract, and rollback/cleanup plan. Avoid Kanban for line-level patches, while debugging a single failing test, or when one checkout can safely complete the next acceleration slice.
 
-The current implemented lane-contract packet names five candidate burst lanes: static galaxy topology semantics, system service/store provisioning, economy/commodity semantic expansion, mission-family semantic promotion, and deterministic evaluator/playtest packets. Treat those as worker-burst starting points, not as a requirement before ordinary source-labeled TDD. As of the Lane A/B promotion slice, system ID/name-seed readiness and the Terminal Velocity service-matrix scaffold/source seeds have durable manifests; remaining A/B work is coordinates/links and decoded Classic service field mapping.
+The current implemented lane-contract packet names five candidate burst lanes: static galaxy topology semantics, system service/store provisioning, economy/commodity semantic expansion, mission-family semantic promotion, and deterministic evaluator/playtest packets. Treat those as worker-burst starting points, not as a requirement before ordinary source-labeled TDD. As of the Lane A/B promotion slice, system ID/name-seed readiness, candidate hyperspace-link field-family readiness, and the Terminal Velocity service-matrix scaffold/source seeds have durable manifests; remaining A/B work is coordinates/exact record-to-name/runtime topology and decoded Classic service field mapping.
 
 ### 5. Maintain linked build and fidelity backlogs
 

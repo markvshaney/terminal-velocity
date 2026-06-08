@@ -266,9 +266,9 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-map-v1':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-link-candidate-map-v1':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
-    if data.get('sourceBasis') != 'local primitive BRGR syst-like structure decode plus heuristic EV Data.rez system-name seed list':
+    if data.get('sourceBasis') != 'EV Classic Resource Bible syst x/y and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
     run = data.get('recordRun', {})
     if run.get('candidateType') != 'syst-like' or run.get('recordSize') != 88 or run.get('count') != 67:
@@ -280,15 +280,21 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     if ids != list(range(128, 195)):
         raise ValueError('sourced EV systems manifest resource ids are not contiguous Classic system ids')
     for system in systems:
-        for key in ['resourceId', 'ordinal', 'chunkIndex', 'byteOffset', 'size', 'semanticStatus', 'sourceRecord']:
+        for key in ['resourceId', 'ordinal', 'chunkIndex', 'byteOffset', 'size', 'semanticStatus', 'semanticFields', 'sourceRecord']:
             if key not in system:
                 raise ValueError(f'sourced EV system missing {key}')
-        if system['semanticStatus'] != 'ids_promoted_names_seeded_fields_pending':
+        if system['semanticStatus'] != 'ids_promoted_names_seeded_links_candidate_fields_pending':
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected semantic status")
+        links = system['semanticFields'].get('candidateHyperspaceLinks', {})
+        if links.get('wordIndices') != list(range(4, 20)):
+            raise ValueError(f"sourced EV system {system['resourceId']} has unexpected link candidate indices")
+        for link_id in links.get('linkedSystemResourceIds', []):
+            if link_id < 128 or link_id > 1127:
+                raise ValueError(f"sourced EV system {system['resourceId']} has out-of-range link candidate")
     seeds = data.get('systemNameSeeds', [])
     if len(seeds) < 9 or 'Sol' not in {seed.get('name') for seed in seeds}:
         raise ValueError('sourced EV systems manifest missing expected heuristic name seeds')
-    if 'coordinates, links, services' not in data.get('promotionBoundary', ''):
+    if 'candidate hyperspace link fields' not in data.get('promotionBoundary', ''):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
     return data
 

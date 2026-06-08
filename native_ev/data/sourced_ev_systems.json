@@ -6,14 +6,39 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-map-v1",
-  "sourceBasis": "local primitive BRGR syst-like structure decode plus heuristic EV Data.rez system-name seed list",
+  "method": "ev-classic-static-system-id-name-seed-link-candidate-map-v1",
+  "sourceBasis": "EV Classic Resource Bible syst x/y and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list",
   "resourceIdBase": 128,
   "recordRun": {
     "candidateType": "syst-like",
     "recordSize": 88,
     "count": 67,
     "confidence": "decoded-resource-backed-id-ordering"
+  },
+  "fieldFamilies": {
+    "candidateHyperspaceLinks": {
+      "wordIndices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "resourceBibleFieldFamily": "syst Con1-Con16",
+      "valueDomain": "-1 for no link; 128-1127 for linked system resource IDs",
+      "confidence": "decoded-pattern-plus-resource-bible-field-family-candidate"
+    }
   },
   "systemNameSeeds": [
     {
@@ -78,7 +103,60 @@
       "chunkIndex": 652,
       "byteOffset": 189047,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            128,
+            129,
+            130,
+            131,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            128,
+            129,
+            130,
+            131
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -92,7 +170,60 @@
       "chunkIndex": 653,
       "byteOffset": 189135,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            135,
+            147,
+            133,
+            134,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            135,
+            147,
+            133,
+            134
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -106,7 +237,60 @@
       "chunkIndex": 654,
       "byteOffset": 189223,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            141,
+            142,
+            144,
+            144,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            141,
+            142,
+            144,
+            144
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -120,7 +304,60 @@
       "chunkIndex": 655,
       "byteOffset": 189311,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            132,
+            129,
+            129,
+            145,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            132,
+            129,
+            129,
+            145
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -134,7 +371,60 @@
       "chunkIndex": 656,
       "byteOffset": 189399,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            138,
+            138,
+            138,
+            146,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            138,
+            138,
+            138,
+            146
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -148,7 +438,60 @@
       "chunkIndex": 657,
       "byteOffset": 189487,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            131,
+            151,
+            132,
+            145,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            131,
+            151,
+            132,
+            145
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -162,7 +505,60 @@
       "chunkIndex": 658,
       "byteOffset": 189575,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            132,
+            146,
+            151,
+            143,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            132,
+            146,
+            151,
+            143
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -176,7 +572,60 @@
       "chunkIndex": 659,
       "byteOffset": 189663,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            146,
+            132,
+            138,
+            137,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            146,
+            132,
+            138,
+            137
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -190,7 +639,60 @@
       "chunkIndex": 660,
       "byteOffset": 189751,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            136,
+            132,
+            138,
+            146,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            136,
+            132,
+            138,
+            146
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -204,7 +706,60 @@
       "chunkIndex": 661,
       "byteOffset": 189839,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            135,
+            135,
+            147,
+            147,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            135,
+            135,
+            147,
+            147
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -218,7 +773,60 @@
       "chunkIndex": 662,
       "byteOffset": 189927,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            144,
+            144,
+            144,
+            144,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            144,
+            144,
+            144,
+            144
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -232,7 +840,60 @@
       "chunkIndex": 663,
       "byteOffset": 190015,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            139,
+            139,
+            140,
+            140,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            139,
+            139,
+            140,
+            140
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -246,7 +907,60 @@
       "chunkIndex": 664,
       "byteOffset": 190103,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            140,
+            140,
+            140,
+            139,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            140,
+            140,
+            140,
+            139
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -260,7 +974,60 @@
       "chunkIndex": 665,
       "byteOffset": 190191,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            139,
+            139,
+            139,
+            139,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            139,
+            139,
+            139,
+            139
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -274,7 +1041,60 @@
       "chunkIndex": 666,
       "byteOffset": 190279,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            129,
+            129,
+            129,
+            129,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            129,
+            129,
+            129,
+            129
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -288,7 +1108,60 @@
       "chunkIndex": 667,
       "byteOffset": 190367,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            135,
+            135,
+            135,
+            133,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            135,
+            135,
+            135,
+            133
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -302,7 +1175,60 @@
       "chunkIndex": 668,
       "byteOffset": 190455,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            132,
+            132,
+            132,
+            132,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            132,
+            132,
+            132,
+            132
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -316,7 +1242,60 @@
       "chunkIndex": 669,
       "byteOffset": 190543,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            130,
+            130,
+            130,
+            130,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            130,
+            130,
+            130,
+            130
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -330,7 +1309,60 @@
       "chunkIndex": 670,
       "byteOffset": 190631,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            130,
+            130,
+            130,
+            130,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            130,
+            130,
+            130,
+            130
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -344,7 +1376,60 @@
       "chunkIndex": 671,
       "byteOffset": 190719,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            135,
+            135,
+            135,
+            135,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            135,
+            135,
+            135,
+            135
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -358,7 +1443,60 @@
       "chunkIndex": 672,
       "byteOffset": 190807,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            141,
+            141,
+            142,
+            142,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            141,
+            141,
+            142,
+            142
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -372,7 +1510,60 @@
       "chunkIndex": 673,
       "byteOffset": 190895,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            135,
+            135,
+            135,
+            135,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            135,
+            135,
+            135,
+            135
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -386,7 +1577,60 @@
       "chunkIndex": 674,
       "byteOffset": 190983,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            146,
+            132,
+            138,
+            137,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            146,
+            132,
+            138,
+            137
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -400,7 +1644,60 @@
       "chunkIndex": 675,
       "byteOffset": 191071,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            136,
+            132,
+            138,
+            146,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            136,
+            132,
+            138,
+            146
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -414,7 +1711,60 @@
       "chunkIndex": 676,
       "byteOffset": 191159,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            136,
+            136,
+            137,
+            137,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            136,
+            136,
+            137,
+            137
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -428,7 +1778,60 @@
       "chunkIndex": 677,
       "byteOffset": 191247,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            142,
+            142,
+            142,
+            142,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            142,
+            142,
+            142,
+            142
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -442,7 +1845,60 @@
       "chunkIndex": 678,
       "byteOffset": 191335,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            130,
+            130,
+            130,
+            130,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            130,
+            130,
+            130,
+            130
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -456,7 +1912,60 @@
       "chunkIndex": 679,
       "byteOffset": 191423,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            138,
+            138,
+            138,
+            138,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            138,
+            138,
+            138,
+            138
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -470,7 +1979,60 @@
       "chunkIndex": 680,
       "byteOffset": 191511,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            136,
+            136,
+            136,
+            136,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            136,
+            136,
+            136,
+            136
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -484,7 +2046,60 @@
       "chunkIndex": 681,
       "byteOffset": 191599,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            133,
+            133,
+            133,
+            133,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            133,
+            133,
+            133,
+            133
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -498,7 +2113,60 @@
       "chunkIndex": 682,
       "byteOffset": 191687,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            141,
+            141,
+            141,
+            141,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            141,
+            141,
+            141,
+            141
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -512,7 +2180,60 @@
       "chunkIndex": 683,
       "byteOffset": 191775,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            146,
+            146,
+            146,
+            146,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            146,
+            146,
+            146,
+            146
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -526,7 +2247,60 @@
       "chunkIndex": 684,
       "byteOffset": 191863,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            129,
+            129,
+            129,
+            129,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            129,
+            129,
+            129,
+            129
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -540,7 +2314,60 @@
       "chunkIndex": 685,
       "byteOffset": 191951,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            143,
+            143,
+            143,
+            143,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            143,
+            143,
+            143,
+            143
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -554,7 +2381,60 @@
       "chunkIndex": 686,
       "byteOffset": 192039,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            136,
+            136,
+            137,
+            137,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            136,
+            136,
+            137,
+            137
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -568,7 +2448,60 @@
       "chunkIndex": 687,
       "byteOffset": 192127,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            139,
+            139,
+            139,
+            139,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            139,
+            139,
+            139,
+            139
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -582,7 +2515,60 @@
       "chunkIndex": 688,
       "byteOffset": 192215,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            132,
+            132,
+            132,
+            132,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            132,
+            132,
+            132,
+            132
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -596,7 +2582,60 @@
       "chunkIndex": 689,
       "byteOffset": 192303,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            137,
+            137,
+            138,
+            145,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            137,
+            137,
+            138,
+            145
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -610,7 +2649,60 @@
       "chunkIndex": 690,
       "byteOffset": 192391,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            131,
+            131,
+            131,
+            131,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            131,
+            131,
+            131,
+            131
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -624,7 +2716,60 @@
       "chunkIndex": 691,
       "byteOffset": 192479,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            131,
+            131,
+            131,
+            131,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            131,
+            131,
+            131,
+            131
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -638,7 +2783,60 @@
       "chunkIndex": 692,
       "byteOffset": 192567,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            131,
+            138,
+            138,
+            145,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            131,
+            138,
+            138,
+            145
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -652,7 +2850,60 @@
       "chunkIndex": 693,
       "byteOffset": 192655,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            138,
+            138,
+            138,
+            138,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            138,
+            138,
+            138,
+            138
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -666,7 +2917,60 @@
       "chunkIndex": 694,
       "byteOffset": 192743,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            149,
+            149,
+            149,
+            149,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            149,
+            149,
+            149,
+            149
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -680,7 +2984,60 @@
       "chunkIndex": 695,
       "byteOffset": 192831,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            141,
+            141,
+            141,
+            141,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            141,
+            141,
+            141,
+            141
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -694,7 +3051,60 @@
       "chunkIndex": 696,
       "byteOffset": 192919,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            150,
+            150,
+            150,
+            150,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            150,
+            150,
+            150,
+            150
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -708,7 +3118,60 @@
       "chunkIndex": 697,
       "byteOffset": 193007,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            137,
+            137,
+            137,
+            137,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            137,
+            137,
+            137,
+            137
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -722,7 +3185,60 @@
       "chunkIndex": 698,
       "byteOffset": 193095,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            144,
+            144,
+            144,
+            144,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            144,
+            144,
+            144,
+            144
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -736,7 +3252,60 @@
       "chunkIndex": 699,
       "byteOffset": 193183,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            141,
+            142,
+            144,
+            144,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            141,
+            142,
+            144,
+            144
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -750,7 +3319,60 @@
       "chunkIndex": 700,
       "byteOffset": 193271,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            133,
+            133,
+            133,
+            133,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            133,
+            133,
+            133,
+            133
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -764,7 +3386,60 @@
       "chunkIndex": 701,
       "byteOffset": 193359,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            141,
+            141,
+            141,
+            141,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            141,
+            141,
+            141,
+            141
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -778,7 +3453,60 @@
       "chunkIndex": 702,
       "byteOffset": 193447,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            142,
+            142,
+            142,
+            142,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            142,
+            142,
+            142,
+            142
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -792,7 +3520,60 @@
       "chunkIndex": 703,
       "byteOffset": 193535,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            135,
+            135,
+            147,
+            147,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            135,
+            135,
+            147,
+            147
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -806,7 +3587,60 @@
       "chunkIndex": 704,
       "byteOffset": 193623,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            134,
+            134,
+            134,
+            134,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            134,
+            134,
+            134,
+            134
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -820,7 +3654,60 @@
       "chunkIndex": 705,
       "byteOffset": 193711,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            131,
+            131,
+            131,
+            131,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            131,
+            131,
+            131,
+            131
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -834,7 +3721,60 @@
       "chunkIndex": 706,
       "byteOffset": 193799,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            143,
+            143,
+            146,
+            146,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            143,
+            143,
+            146,
+            146
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -848,7 +3788,60 @@
       "chunkIndex": 707,
       "byteOffset": 193887,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            143,
+            143,
+            146,
+            146,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            143,
+            143,
+            146,
+            146
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -862,7 +3855,60 @@
       "chunkIndex": 708,
       "byteOffset": 193975,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            144,
+            144,
+            144,
+            144,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            144,
+            144,
+            144,
+            144
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -876,7 +3922,60 @@
       "chunkIndex": 709,
       "byteOffset": 194063,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            144,
+            144,
+            144,
+            141,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            144,
+            144,
+            144,
+            141
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -890,7 +3989,60 @@
       "chunkIndex": 710,
       "byteOffset": 194151,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            131,
+            138,
+            138,
+            145,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            131,
+            138,
+            138,
+            145
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -904,7 +4056,60 @@
       "chunkIndex": 711,
       "byteOffset": 194239,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            133,
+            133,
+            134,
+            134,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            133,
+            133,
+            134,
+            134
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -918,7 +4123,60 @@
       "chunkIndex": 712,
       "byteOffset": 194327,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            141,
+            141,
+            142,
+            142,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            141,
+            141,
+            142,
+            142
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -932,7 +4190,60 @@
       "chunkIndex": 713,
       "byteOffset": 194415,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            135,
+            135,
+            135,
+            135,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            135,
+            135,
+            135,
+            135
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -946,7 +4257,60 @@
       "chunkIndex": 714,
       "byteOffset": 194503,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            133,
+            133,
+            133,
+            133,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            133,
+            133,
+            133,
+            133
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -960,7 +4324,60 @@
       "chunkIndex": 715,
       "byteOffset": 194591,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            129,
+            129,
+            129,
+            129,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            129,
+            129,
+            129,
+            129
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -974,7 +4391,60 @@
       "chunkIndex": 716,
       "byteOffset": 194679,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            136,
+            136,
+            136,
+            136,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            136,
+            136,
+            136,
+            136
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -988,7 +4458,60 @@
       "chunkIndex": 717,
       "byteOffset": 194767,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            153,
+            153,
+            153,
+            153,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            153,
+            153,
+            153,
+            153
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -1002,7 +4525,60 @@
       "chunkIndex": 718,
       "byteOffset": 194855,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "semanticStatus": "ids_promoted_names_seeded_links_candidate_fields_pending",
+      "semanticFields": {
+        "candidateHyperspaceLinks": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "rawValues": [
+            129,
+            129,
+            129,
+            129,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+          ],
+          "linkedSystemResourceIds": [
+            129,
+            129,
+            129,
+            129
+          ],
+          "noLinkSentinel": -1,
+          "validResourceRange": [
+            128,
+            1127
+          ],
+          "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
+          "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending."
+        }
+      },
       "sourceRecord": {
         "candidateType": "syst-like",
         "recordSize": 88,
@@ -1011,5 +4587,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering and heuristic name seeds only; coordinates, links, services, hazards, governments, and exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, and candidate hyperspace link fields are promoted; coordinates, services, hazards, governments, and exact record-to-name mapping remain pending."
 }

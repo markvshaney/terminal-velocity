@@ -3413,7 +3413,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-map-v1')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-link-candidate-map-v1')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3421,12 +3421,16 @@ class NativeEvModelTests(unittest.TestCase):
         first = systems[0]
         self.assertEqual(first['resourceId'], 128)
         self.assertEqual(first['ordinal'], 0)
-        self.assertEqual(first['semanticStatus'], 'ids_promoted_names_seeded_fields_pending')
+        self.assertEqual(first['semanticStatus'], 'ids_promoted_names_seeded_links_candidate_fields_pending')
         self.assertIn('chunkIndex', first)
         self.assertIn('byteOffset', first)
+        self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
+        self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
+        self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['linkedSystemResourceIds'][:4], [128, 129, 130, 131])
+        self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['sourceConfidence'], 'decoded-pattern-plus-resource-bible-field-family-candidate')
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering and heuristic name seeds only; coordinates, links, services, hazards, governments, and exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, and candidate hyperspace link fields are promoted; coordinates, services, hazards, governments, and exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()

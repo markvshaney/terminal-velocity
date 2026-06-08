@@ -93,7 +93,7 @@ Selected lanes for the next safe acceleration burst. These lanes are independent
 - Track: `fidelity-gate / static-source-mined`.
 - Backlog anchor: `Fuller EV Classic galaxy topology and coordinates`.
 - Owner/card: `TV-TOP-A-static-galaxy-topology`.
-- Current status: ready for static semantic promotion; no Basilisk dependency.
+- Current status: IDs/name seeds and candidate hyperspace-link field family promoted; remaining coordinate/exact topology mapping has no Basilisk dependency until ambiguity spot checks.
 - Writable surfaces if activated:
   - `tools/extract_ev_system_topology.py` or focused existing extractor extension;
   - `native_ev/data/sourced_ev_systems.json`;
@@ -102,7 +102,7 @@ Selected lanes for the next safe acceleration burst. These lanes are independent
 - Read/review surfaces: source manifests and compendium docs.
 - Source-label policy: `decoded-resource-backed` for raw field mapping, `manual/docs-backed` only where Resource Bible field definitions are used, `terminal-velocity-observed` only after runtime verifier output.
 - Verifier: JSON parse; extractor deterministic output; focused native tests; `python3 tools/run_gameplay_scenarios.py --all --pretty` if runtime-facing data changes.
-- Merge contract: promote one field family at a time: IDs/names -> coordinates -> links -> ports/hazards/government. Do not replace the 10-system runtime subset in one broad edit.
+- Merge contract: promote one field family at a time: IDs/names -> candidate links -> coordinates/exact record-to-name runtime topology -> ports/hazards/government. Do not replace the 10-system runtime subset in one broad edit.
 - Gate: no exact Classic routing behavior claim from static fields alone.
 - Rollback/cleanup: revert generated manifest plus extractor/test/docs commit chunk together.
 
