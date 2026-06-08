@@ -52,6 +52,8 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 Terminal Velocity uses **parallel build lanes with strict fidelity promotion**.
 
+Non-blocking acceleration rule: coordination artifacts should accelerate work, not make every local change wait for topology setup. Use Kanban, extra worktrees, lane-contract audits, and Basilisk lane records when work genuinely splits into durable independent lanes or parallel original-runtime evidence. For one safe-local slice, proceed with direct TDD/source labeling and cheap verification.
+
 ### 1. Split build work from fidelity promotion
 
 Use two linked tracks:
@@ -103,7 +105,7 @@ Use direct TDD for small dependent changes. Use Kanban and isolated worktrees wh
 - source/resource mining;
 - Basilisk original-runtime observation lanes.
 
-Each lane needs an owner, expected writable surfaces, verifier, source-label policy, merge contract, and rollback/cleanup plan. Avoid Kanban for line-level patches or while debugging a single failing test.
+Each parallel/durable lane needs an owner, expected writable surfaces, verifier, source-label policy, merge contract, and rollback/cleanup plan. Avoid Kanban for line-level patches, while debugging a single failing test, or when one checkout can safely complete the next acceleration slice.
 
 ### 5. Maintain linked build and fidelity backlogs
 
@@ -172,4 +174,4 @@ Required labels:
 2. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay increment stabilizes. Source basis: Godot best-practice/project-organization docs.
 3. Continue adding playtest/run records for manual Godot sessions and no-human probes under `docs/research/playtest-runs/`; first section-7 safe-local record added 2026-06-08. Source basis: playtesting source plus VPT/action-trace references.
 4. Add branch/faction/legal scenarios before combat. Source basis: EV-family mission/legal/faction records and current safety policy.
-5. Assign Basilisk evidence work to the 4 emulator lanes with explicit disk/prefs/window/input/capture/restore records.
+5. Assign Basilisk evidence work to the 4 emulator lanes with explicit disk/prefs/window/input/capture/restore records when the next acceleration question actually needs original-runtime evidence; otherwise keep moving through source/static, Godot scenario, and build-track lanes.

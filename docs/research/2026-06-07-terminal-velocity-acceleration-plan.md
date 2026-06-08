@@ -11,15 +11,17 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 The strongest acceleration plan is now **parallel executable lanes + fast evaluators + batched integration + fidelity gates**.
 
+Non-blocking acceleration rule: the lane-contract audit, Kanban, extra worktrees, and Basilisk lane records are setup steps for worker bursts and parallel original-runtime evidence, not prerequisites for every improvement. A single safe-local acceleration slice should proceed immediately with source/fidelity labels and a cheap verifier.
+
 This artifact carries only the current acceleration doctrine. Superseded compendium-doc versions are retained outside the repo at `/home/bh/workspaces/loki/terminal-velocity-doc-archives/2026-06-08-superseded-compendium-docs/`.
 
 Operationally:
 
 1. keep one integration owner for fan-in, final verification, commit, and normal non-force push;
-2. run 3-5 mutating worker lanes in isolated worktrees once lane contracts exist;
+2. run 3-5 mutating worker lanes in isolated worktrees once lane contracts exist, while continuing single safe-local slices without waiting for the burst setup;
 3. give each lane an owner, writable surface, verifier, source/fidelity label policy, merge contract, and rollback path;
 4. use deterministic TV scenario/evaluator coverage as the velocity lane;
-5. use the **4 Basilisk emulator lanes** for bounded original-runtime evidence, with lane records for disk/prefs/window/input/capture/restore state;
+5. use the **4 Basilisk emulator lanes** for bounded original-runtime evidence, with lane records for disk/prefs/window/input/capture/restore state when Basilisk evidence is the lane;
 6. let build-track scaffolds proceed with explicit labels when original-runtime evidence is missing;
 7. run static/source-mined **semantic-promotion and integration** lanes in parallel for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data; these lanes are source/data limited, not Basilisk-speed limited. Primitive/resource inventory is already learned for many of these surfaces; the remaining work is field-family semantics, cross-links, runtime-facing import, and tests. Current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records;
 8. reserve Basilisk for behavioral confirmation, ambiguity resolution, UI/state-transition checks, and timing/feel checks;
@@ -30,7 +32,7 @@ Reasonable planning target: **6-10 months to meaningfully playable TV** under th
 
 ## First safe step
 
-Run the **accelerated lane-contract audit** before starting the next worker burst.
+Run the **accelerated lane-contract audit** before starting the next worker burst. Do not use this audit as a reason to stop ordinary single-writer acceleration work.
 
 Audit each candidate lane for:
 
@@ -45,7 +47,7 @@ Audit each candidate lane for:
 - rollback/cleanup path;
 - gates/blockers.
 
-Then start a bounded batch:
+Then start a bounded batch when the goal is a worker burst:
 
 - 1 integration owner;
 - 3 initial mutating worker lanes;

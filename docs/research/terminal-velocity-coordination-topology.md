@@ -11,6 +11,8 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 Use **accelerated parallel lanes with one integration owner** as the default coordination topology once lane contracts exist.
 
+Non-blocking acceleration rule: topology setup is an accelerator, not a waiting room. Lane-contract audits, coordination manifests, Kanban cards, extra worktrees, and Basilisk lane records are required only for multi-worker bursts, durable dependency tracking, parallel mutating work, or parallel original-runtime evidence collection. They do **not** block a single safe-local acceleration slice, source/static semantic promotion, labeled build-track scaffold, or cheap verifier improvement.
+
 1. Keep one integration owner for fan-in, final diff review, integrated verification, commit, and normal non-force push.
 2. Use multiple mutating worker lanes in isolated worktrees when each lane has an owner, writable surface, verifier, source/fidelity label policy, merge contract, and rollback path.
 3. Use Kanban for durable multi-lane work and context survival, not for line-level patches.
@@ -30,7 +32,7 @@ Use this for most Terminal Velocity development once a lane contract exists:
 - **Verifier lanes:** scenario/test/probe workers produce executable checks and failure packets.
 - **Reviewer lanes:** inspect fidelity/spec/test risks and consolidation opportunities.
 
-One-writer discipline applies at integration and per-resource ownership boundaries, not as a blanket ban on parallel writing.
+One-writer discipline applies at integration and per-resource ownership boundaries, not as a blanket ban on parallel writing or a reason to delay unrelated safe-local work.
 
 ### Build-track lane classes
 
@@ -48,7 +50,7 @@ Valid mutating or semi-mutating lanes include:
 - source/resource mining and provenance docs;
 - Basilisk original-runtime observation lanes.
 
-Each lane must name owner/card, worktree if mutating, writable surfaces, source/fidelity label policy, verifier, merge contract, and cleanup/rollback plan.
+For multi-worker or durable lanes, name owner/card, worktree if mutating, writable surfaces, source/fidelity label policy, verifier, merge contract, and cleanup/rollback plan. For a single local slice, keep the contract implicit and proceed with the usual inspect → edit → verify loop.
 
 ### Fidelity gate lanes
 
@@ -70,7 +72,7 @@ The local runtime setup has **4 Basilisk emulator lanes**. Do not describe this 
 
 Basilisk is not the universal fidelity bottleneck. Use it for behavioral confirmation, ambiguity resolution, UI/state-transition observations, and timing/feel checks. Use decoded-resource/manual/local-source lanes first for static data such as maps, planets, stations, commodities, ships, outfits, weapons, descriptions/text, and decoded mission/resource data.
 
-Each Basilisk lane record must include:
+Each Basilisk lane used for parallel or claim-supporting original-runtime evidence must record:
 
 - emulator/lane ID;
 - owning worker/card;
@@ -83,11 +85,11 @@ Each Basilisk lane record must include:
 - allowed mutations;
 - status: `ready`, `blocked`, `dirty`, or `needs reset`.
 
-A worker may own one emulator lane. If a specific lane lacks isolation records, that lane setup is incomplete; the emulator count remains 4.
+A worker may own one emulator lane. If a specific lane lacks isolation records, that lane setup is incomplete for Basilisk evidence work; it does not block decoded-resource/manual/local-source work or Terminal Velocity scaffolds. The emulator count remains 4.
 
 ### Worktree and merge rule
 
-For parallel coding:
+For parallel coding only:
 
 - each coding worker gets an isolated branch/worktree;
 - each worker has explicit file/resource claims;
@@ -98,7 +100,7 @@ For parallel coding:
 
 ### Coordination manifest template
 
-Before any bigger/multi-worker slice, write a short manifest with:
+For bigger/multi-worker slices, write a short manifest with:
 
 - Objective:
 - Track: `build`, `fidelity-gate`, or `mixed`:
@@ -143,11 +145,11 @@ This artifact is source-backed process guidance, not an EV Classic behavior sour
 
 Deficiencies found in the first draft and corrective rules:
 
-1. **Missing live-state preflight.** Before any topology decision, inspect the live repo state, current branch, dirty files, active long-running TV workers, existing Kanban/cron/watchdog state, and available Hermes profiles. Do not assign Kanban profiles by invented names.
+1. **Missing live-state preflight.** Before a multi-lane topology decision, inspect the live repo state, current branch, dirty files, active long-running TV workers, existing Kanban/cron/watchdog state, and available Hermes profiles. Do not assign Kanban profiles by invented names. For a single safe-local slice, the normal repo/status preflight is enough; do not turn this checklist into a blocker.
 2. **Manifest too prose-heavy for collisions.** Add explicit resource claims for files, directories, generated data, local captures, cron jobs, Kanban cards, skills/memory, and external side effects. Use `read`, `review-only`, `write-exclusive`, or `external-effect` claim levels.
 3. **Parallel coding needs workspace verification, not just intent.** For true parallel coding, record the actual branch/worktree path for each writer, verify it exists, and require merge-one-at-a-time fan-in. Clean up linked worktrees deliberately after use.
 4. **Subagent output is evidence, not proof.** Read-only scouts/reviewers may summarize, but the coordinator must verify returned paths/claims against live files, `git diff`, and real tests before reporting success.
-5. **Kanban needs profile discovery and dependency links.** Use Kanban only after `hermes profile list` or equivalent profile discovery. Independent lanes may fan out; dependent lanes must be created with parent links so implementation/review cannot start before evidence exists.
+5. **Kanban needs profile discovery and dependency links.** Use Kanban only after `hermes profile list` or equivalent profile discovery, and only when durable multi-lane coordination is actually needed. Independent lanes may fan out; dependent lanes need parent links so implementation/review ordering is clear. Do not wait for Kanban to run a single safe acceleration slice.
 6. **Cron/watchdogs are approval-gated runtime topology.** Keep proposed watchdogs report-only, quiet-on-no-change, and preferably script-only/no-agent. Do not let scheduled LLM runners mutate the same repo surface as a live serial implementer unless a manifest and gate explicitly say so.
 7. **Autoresearch is not just “more agents.”** If a TV workflow becomes iterative optimization, define goal, metric, baseline, mutable surface, trusted surface, fixed budget, experiment log, and keep/revert rule before running it. Otherwise treat it as normal source-aligned development or read-only discovery.
 8. **Source separation must stay visible.** External agent/workflow sources may improve process only. They do not justify EV Classic behavior claims; EV behavior still requires original runtime, decoded resources, manuals/Bibles, or explicitly labeled EV-family/community evidence.
@@ -169,8 +171,8 @@ Sources checked for this pass:
 Topology updates from those sources:
 
 1. **Two automation lanes, not one.** Keep `symbolic/semantic Godot probes` separate from `screen/capture-driven Basilisk or UI automation`. Semantic hooks can write stable JSON event logs and scenario results; capture-driven automation must attach screenshots, OCR/vision notes, and uncertainty labels.
-2. **Curriculum requires an execution surface.** Before automatic gameplay loops, define a scenario registry, objective queue, skill/macro library location, environment-feedback schema, and promotion rule from discovered macro → regression/test/backlog entry.
-3. **State archive before exploration.** Go-Explore/Stable-Retro-style patterns only apply when a state can be named and returned to. For Terminal Velocity, record save/pilot/scenario seed, system/location, fuel/cargo/mission state, route, and expected restore command before branching exploration.
+2. **Curriculum requires an execution surface.** For repeated or autonomous gameplay loops, define a scenario registry, objective queue, skill/macro library location, environment-feedback schema, and promotion rule from discovered macro → regression/test/backlog entry. One-off deterministic probes may proceed with a named command and recorded output.
+3. **State archive for branching exploration.** Go-Explore/Stable-Retro-style patterns only apply when a state can be named and returned to. For Terminal Velocity branching exploration, record save/pilot/scenario seed, system/location, fuel/cargo/mission state, route, and expected restore command. This does not block ordinary deterministic scenario probes.
 4. **Failure artifacts are first-class.** Automation runs should produce durable failure packets: command/macro, starting state, observed state, expected predicate, screenshot/log path when available, and whether the failure is `automation-flake`, `TV-bug`, `source-gap`, or `fidelity-pending`.
 5. **Engine-integrated APIs are preferred in Godot, unavailable in Basilisk.** Poco/GAutomator-style hierarchy access supports adding Godot semantic probes/UI contracts; original EV Classic/Basilisk should remain capture/input based unless a real emulator/object-state bridge is built.
 6. **RL/evolutionary exploration stays gated.** Wuji/Stable-Retro-style mutation-heavy exploration needs a bounded mutable surface, restoreable states, metric, run budget, and keep/revert rule. Until those exist, use read-only scouting and deterministic Godot scenario probes.
@@ -194,7 +196,7 @@ For any gameplay-agent or automated-play slice, add these fields to the coordina
 
 ## First safe step
 
-Run an **accelerated lane-contract audit** before starting the next worker burst.
+Run an **accelerated lane-contract audit** before starting the next worker burst. This audit is not required before a single safe-local acceleration slice.
 
 Scope:
 

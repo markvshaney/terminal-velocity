@@ -16,6 +16,8 @@ This compendium summarizes the current operating doctrine. Detailed rationale an
 
 The default Terminal Velocity development system is **parallel executable lanes + fast evaluators + batched integration + fidelity gates**.
 
+Non-blocking acceleration rule: coordination structure exists to increase throughput, not to delay safe work. Lane-contract audits, Kanban, coordination manifests, isolated worktrees, and Basilisk lane records gate only multi-worker bursts, durable dependency tracking, parallel mutating work, scheduled/watchdog mutation, or parallel original-runtime evidence collection. They do **not** block a single safe-local acceleration slice, source/static semantic promotion, labeled build-track scaffold, or cheap verifier improvement.
+
 Use two coordinated tracks:
 
 1. **Build track** — finish a broad playable Terminal Velocity implementation quickly. Multiple Kanban workers may write in isolated worktrees when each lane has an owner, writable surface, verifier, source/fidelity label policy, and merge contract. Build-track work may be labeled `scaffold`, `terminal-velocity-observed`, `source-grounded EV-family`, or `needs original confirmation` without blocking implementation.
@@ -74,7 +76,7 @@ A verified increment is a checkpoint, not necessarily a stop.
 
 ## Backlog executability rule
 
-Before assigning a worker lane, make the candidate executable enough to avoid collision and drift:
+Before assigning a multi-worker lane, make the candidate executable enough to avoid collision and drift:
 
 - status;
 - source/evidence label;
@@ -85,7 +87,7 @@ Before assigning a worker lane, make the candidate executable enough to avoid co
 - merge contract;
 - gates/blockers.
 
-Backlog grooming is a lane-contract tool, not a reason to fall back to serial development. Prefer grooming existing `ready` / `needs evidence` items into worker-ready lane contracts before adding fresh ideas. The fidelity backlog remains the execution surface; process docs explain method and rationale.
+Backlog grooming is a lane-contract tool, not a reason to fall back to serial development or pause a safe single-writer slice. Prefer grooming existing `ready` / `needs evidence` items into worker-ready lane contracts before adding fresh ideas when parallelizing. The fidelity backlog remains the execution surface; process docs explain method and rationale.
 
 ## Worker and coordination rules
 
@@ -100,7 +102,7 @@ Default accelerated mode:
 
 Use Kanban when work has durable independent lanes, must survive context resets, or needs dependency tracking across evidence → implementation → review → docs. Do not use Kanban for line-level patches or a single failing test.
 
-Use isolated worktrees for parallel coding. Record each branch/worktree path, file/resource claim, merge order, cleanup plan, and final integrated verification.
+Use isolated worktrees for parallel coding. Record each branch/worktree path, file/resource claim, merge order, cleanup plan, and final integrated verification. Do not require extra worktrees for one checkout doing one safe slice.
 
 ## WIP and fan-in defaults
 
@@ -112,7 +114,7 @@ Default accelerated limits until a manifest says otherwise:
 - Basilisk/original-runtime emulator lanes: 4;
 - unresolved worker/scout/reviewer reports awaiting integration-owner verification: up to 3.
 
-For Basilisk work, do not write vague capacity language such as “up to 4” or “probably supports four.” The local operating fact is **4 Basilisk emulator lanes**. If a specific lane lacks disk/prefs/window/input/capture/state isolation, mark that lane blocked and fix the lane setup; do not lower the documented emulator count.
+For Basilisk work, do not write vague capacity language such as “up to 4” or “probably supports four.” The local operating fact is **4 Basilisk emulator lanes**. If a specific lane lacks disk/prefs/window/input/capture/state isolation, mark that Basilisk lane blocked and fix the lane setup; do not lower the documented emulator count, and do not block non-Basilisk source/static or Godot-scenario acceleration work.
 
 If fan-in exceeds the limit, stop spawning and integrate/verify existing outputs first.
 
@@ -137,7 +139,7 @@ Semantic Godot probes should produce stable JSON/event outputs when possible. Ba
 
 Basilisk is the original-runtime evidence surface. The local runtime setup has **4 Basilisk emulator lanes**.
 
-Each Basilisk lane needs an unambiguous lane record:
+Each Basilisk lane used for parallel or claim-supporting original-runtime evidence needs an unambiguous lane record:
 
 - emulator/lane ID;
 - worker/card owner;
@@ -158,7 +160,7 @@ If Basilisk freezes, stalls, foreground/input wedges, or behaves ambiguously:
 
 Split Basilisk debugging into a separate lane when the failure class repeats, the fix is larger than the current evidence task, TV-side development can proceed without that specific original-runtime evidence, or all useful Basilisk observation is blocked.
 
-Parallel original-runtime observations can support fidelity claims only when each observation packet names its lane record and evidence path. Missing lane records are a setup defect; the emulator count remains 4.
+Parallel original-runtime observations can support fidelity claims only when each observation packet names its lane record and evidence path. Missing lane records are a setup defect for those Basilisk lanes, not a general build-track blocker; the emulator count remains 4.
 
 ## Watchdog and automation acceptance criteria
 
@@ -173,7 +175,7 @@ A TV watchdog should be:
 - specific about the changed file/card/gate/test;
 - bounded by an owner, disable path, and noise threshold.
 
-Mutation-heavy exploration, autoresearch, RL/evolutionary loops, or scheduled LLM mutation require a manifest with goal, metric, baseline, mutable surface, trusted surface, budget, experiment log, keep/revert rule, and human gates.
+Mutation-heavy exploration, autoresearch, RL/evolutionary loops, or scheduled LLM mutation require a manifest with goal, metric, baseline, mutable surface, trusted surface, budget, experiment log, keep/revert rule, and human gates. Ordinary deterministic probes and single safe-local slices do not require this manifest.
 
 ## Acceleration metrics
 
@@ -195,13 +197,13 @@ These are process indicators, not EV fidelity evidence.
 
 - Read this compendium first for current doctrine.
 - Read `source-aligned-game-development-method.md` when source hierarchy, vertical-slice method, or playtest/evidence labels matter. Dated section-7 playtest/run records live under `docs/research/playtest-runs/`.
-- Read `terminal-velocity-coordination-topology.md` before multi-worker work, Kanban, worktrees, cron/watchdogs, or any coordination manifest.
+- Read `terminal-velocity-coordination-topology.md` before multi-worker work, Kanban, extra worktrees, cron/watchdogs, or any coordination manifest; do not treat it as a prerequisite for every single local slice.
 - Read `2026-06-07-terminal-velocity-acceleration-plan.md` when evaluating acceleration tradeoffs, metrics, and deficiencies/improvements.
 - Use `ev-classic-fidelity-implementation-backlog.md` for concrete executable tasks.
 
 ## Coordination manifest pointer
 
-Before bigger/multi-worker work, use the manifest template in `docs/research/terminal-velocity-coordination-topology.md` and include at minimum:
+For bigger/multi-worker work, use the manifest template in `docs/research/terminal-velocity-coordination-topology.md` and include at minimum:
 
 - objective;
 - source/fidelity boundary;
