@@ -76,6 +76,12 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Kanban rule: use direct TDD inside a tight single-slice loop; use Kanban only at feature/lane boundaries such as Godot UI, symbolic model, original EV observation, source/fidelity docs, and review.
   - Fidelity guardrail: general game-development and automation sources improve method only; they do not justify EV Classic behavior claims.
 
+- [x] Implement accelerated topology packet for safe worker bursts
+  - Status: `verified process artifact`
+  - Source/rationale: `docs/research/terminal-velocity-coordination-topology.md` plus user request on 2026-06-08 to implement all topology sections in safe steps expeditiously.
+  - Implementation: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` records live-state preflight, resource claim levels, five candidate lane contracts, worktree/branch registry, four Basilisk lane records, next-burst coordination manifest, automatic-gameplay additions, and Kanban/cron boundaries.
+  - Rule: use the manifest before multi-worker bursts, durable Kanban/dependency tracking, parallel Basilisk evidence, scheduled mutation, or cross-lane fan-in; do not use it to block single safe-local acceleration slices, static/source semantic promotion, labeled scaffolds, or cheap verifier improvements.
+
 - [x] Mine exposed original-game variables before treating manuals as complete authority
   - Status: `verified workflow rule`
   - Source: user correction on 2026-05-29.

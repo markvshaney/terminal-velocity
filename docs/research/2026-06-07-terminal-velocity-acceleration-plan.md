@@ -32,7 +32,7 @@ Reasonable planning target: **6-10 months to meaningfully playable TV** under th
 
 ## First safe step
 
-Run the **accelerated lane-contract audit** before starting the next worker burst. Do not use this audit as a reason to stop ordinary single-writer acceleration work.
+The first **accelerated lane-contract audit** is now implemented in `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md`. Refresh its live-state preflight before starting a later worker burst. Do not use this audit as a reason to stop ordinary single-writer acceleration work.
 
 Audit each candidate lane for:
 

@@ -8,6 +8,7 @@ This compendium summarizes the current operating doctrine. Detailed rationale an
 
 - `docs/research/source-aligned-game-development-method.md` — source hierarchy and gameplay-development method.
 - `docs/research/terminal-velocity-coordination-topology.md` — worker/resource topology, manifest, Kanban/worktree rules.
+- `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` — current safe-local topology application: live preflight, resource claims, lane contracts, Basilisk lane records, and next-burst manifest.
 - `docs/research/2026-06-07-terminal-velocity-acceleration-plan.md` — acceleration synthesis and source-cross-check improvement candidates.
 - `docs/research/2026-06-07-static-source-fidelity-learning-pass-1.md` — current static/source-mined fidelity inventory and semantic-promotion boundaries.
 - `docs/checklists/ev-classic-fidelity-implementation-backlog.md` — execution surface for concrete work items.
