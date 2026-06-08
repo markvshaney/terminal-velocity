@@ -15,7 +15,7 @@ Non-blocking acceleration rule: the lane-contract audit, Kanban, extra worktrees
 
 Current implementation packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` converts this plan into live lane contracts, resource claims, Basilisk records, and worktree activation commands for the next burst.
 
-Current automatic-gameplay worker application: `docs/research/2026-06-08-automatic-gameplay-worker-application.md` deepens the external automation/game-testing source stack and applies it to worker lane types, failure packets, and Lane E semantic-Godot vs capture-driven-Basilisk splitting. The first combined Lane A/E safe evaluator packet is `static_topology_source_readiness_scout`, which confirms static topology source readiness without importing the full galaxy.
+Current automatic-gameplay worker application: `docs/research/2026-06-08-automatic-gameplay-worker-application.md` deepens the external automation/game-testing source stack and applies it to worker lane types, failure packets, and Lane E semantic-Godot vs capture-driven-Basilisk splitting. The first combined Lane A/E safe evaluator packet is `static_topology_source_readiness_scout`, which confirms static topology source readiness without importing the full galaxy: 67 decoded `syst-like` records, 88-byte record size, 9 heuristic system-name seeds, 72 landing-name seeds, and an unchanged 10-system runtime subset.
 
 This artifact carries only the current acceleration doctrine. Superseded compendium-doc versions are retained outside the repo at `/home/bh/workspaces/loki/terminal-velocity-doc-archives/2026-06-08-superseded-compendium-docs/`.
 

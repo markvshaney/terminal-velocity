@@ -40,7 +40,7 @@ One-writer discipline applies at integration and per-resource ownership boundari
 
 Valid mutating or semi-mutating lanes include:
 
-- static/source-mined fidelity: semantic-promotion and integration lanes for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data. Much of the primitive/resource inventory is already learned; remaining work is field-family semantics, cross-links, runtime-facing import, and tests. Current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records;
+- static/source-mined fidelity: semantic-promotion and integration lanes for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data. Much of the primitive/resource inventory is already learned; remaining work is field-family semantics, cross-links, runtime-facing import, and tests. Current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records. The latest Lane A/E checkpoint is the verified `static_topology_source_readiness_scout` fast evaluator: it confirms the decoded 67-record `syst-like` / 88-byte primitive run and name-seed inputs without importing the full galaxy;
 - missions/story chains;
 - economy/commodity trade;
 - map/routing/hyperspace;
