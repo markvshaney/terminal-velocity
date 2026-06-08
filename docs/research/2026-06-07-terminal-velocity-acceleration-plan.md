@@ -13,6 +13,8 @@ The strongest acceleration plan is now **parallel executable lanes + fast evalua
 
 Non-blocking acceleration rule: the lane-contract audit, Kanban, extra worktrees, and Basilisk lane records are setup steps for worker bursts and parallel original-runtime evidence, not prerequisites for every improvement. A single safe-local acceleration slice should proceed immediately with source/fidelity labels and a cheap verifier.
 
+Current implementation packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` converts this plan into live lane contracts, resource claims, Basilisk records, and worktree activation commands for the next burst.
+
 This artifact carries only the current acceleration doctrine. Superseded compendium-doc versions are retained outside the repo at `/home/bh/workspaces/loki/terminal-velocity-doc-archives/2026-06-08-superseded-compendium-docs/`.
 
 Operationally:
@@ -50,7 +52,8 @@ Audit each candidate lane for:
 Then start a bounded batch when the goal is a worker burst:
 
 - 1 integration owner;
-- 3 initial mutating worker lanes;
+- start from the implemented lanes in `2026-06-08-terminal-velocity-topology-implementation-manifest.md`: static galaxy topology, service/store provisioning, economy/commodity semantics, mission-family semantics, and evaluator/playtest packets;
+- 3 initial mutating worker lanes, selected from that packet or a refreshed equivalent;
 - 1 static/source-mined fidelity lane for map/planet/station/commerce/ship/outfit/resource data; current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records;
 - 1 read-only reviewer/scenario scout if useful;
 - 4 Basilisk emulator lanes available for evidence tasks with lane records.
@@ -60,6 +63,7 @@ Scale to 5 mutating workers only after clean integration flow is proven.
 ## Relationship to existing process artifacts
 
 - Extends `docs/research/terminal-velocity-coordination-topology.md` with lane-contract parallelism and one integration owner.
+- Implemented by `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` for the current safe next-burst packet.
 - Reinforces `docs/research/source-aligned-game-development-method.md`, especially build-track scaffolds versus fidelity-track promotion.
 - Uses `docs/checklists/ev-classic-fidelity-implementation-backlog.md` as the execution surface for lane contracts and fidelity gates.
 - Aligns with `docs/research/terminal-velocity-development-compendium.md`, the canonical short doctrine.

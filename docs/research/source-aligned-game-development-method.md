@@ -8,6 +8,8 @@ This is a process artifact, not an EV Classic behavior source. It governs how to
 
 Canonical summary: this page is part of the Terminal Velocity development compendium. Read `docs/research/terminal-velocity-development-compendium.md` first for current doctrine; keep this page as the detailed source hierarchy and gameplay-development method rationale.
 
+Current topology implementation: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` applies the acceleration/topology doctrine as an executable worker-burst packet. Use it when coordinating multiple lanes; do not use it to delay one safe-local vertical increment.
+
 ## Sources checked
 
 ### Project-local sources
@@ -107,6 +109,8 @@ Use direct TDD for small dependent changes. Use Kanban and isolated worktrees wh
 
 Each parallel/durable lane needs an owner, expected writable surfaces, verifier, source-label policy, merge contract, and rollback/cleanup plan. Avoid Kanban for line-level patches, while debugging a single failing test, or when one checkout can safely complete the next acceleration slice.
 
+The current implemented lane-contract packet names five candidate burst lanes: static galaxy topology semantics, system service/store provisioning, economy/commodity semantic expansion, mission-family semantic promotion, and deterministic evaluator/playtest packets. Treat those as worker-burst starting points, not as a requirement before ordinary source-labeled TDD.
+
 ### 5. Maintain linked build and fidelity backlogs
 
 - Live execution checklist: `docs/checklists/ev-classic-fidelity-implementation-backlog.md`.
@@ -165,13 +169,13 @@ Required labels:
 - Promote parallel executable lanes as the default development topology, with vertical increments as the quality unit for each lane.
 - Preserve strict source hierarchy for fidelity promotion, exact-text claims, physics/economy constants, mission behavior, and Classic quirk decisions.
 - Use the existing fidelity backlog as the execution/fidelity surface rather than creating isolated chat-only recommendations.
-- Use Kanban/worktrees when work splits across subsystem, observation, verifier, docs, or review lanes.
+- Use Kanban/worktrees when work splits across subsystem, observation, verifier, docs, or review lanes; the current burst packet records concrete lane contracts and worktree activation commands in `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md`.
 - Treat missing original evidence as a fidelity gate, not a global build-track stop.
 
 ## Next candidate improvements
 
-1. Convert the current high-value backlog items into lane contracts: owner, writable surface, verifier, source-label policy, merge contract, and gate.
+1. Activate Lane A or Lane E from `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` when the goal is accelerated source/static progress or fastest evaluator/playtest evidence; proceed single-writer if only one safe slice is needed.
 2. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay increment stabilizes. Source basis: Godot best-practice/project-organization docs.
 3. Continue adding playtest/run records for manual Godot sessions and no-human probes under `docs/research/playtest-runs/`; first section-7 safe-local record added 2026-06-08. Source basis: playtesting source plus VPT/action-trace references.
 4. Add branch/faction/legal scenarios before combat. Source basis: EV-family mission/legal/faction records and current safety policy.
-5. Assign Basilisk evidence work to the 4 emulator lanes with explicit disk/prefs/window/input/capture/restore records when the next acceleration question actually needs original-runtime evidence; otherwise keep moving through source/static, Godot scenario, and build-track lanes.
+5. Use the four recorded Basilisk lanes only when the next acceleration question actually needs original-runtime evidence; first verify pilot/save/restore/window/input state for the chosen lane. Otherwise keep moving through source/static, Godot scenario, and build-track lanes.

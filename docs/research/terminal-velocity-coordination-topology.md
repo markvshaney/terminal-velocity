@@ -7,7 +7,7 @@ Purpose: preserve the coordination/worker-efficiency recommendation as a durable
 
 Canonical summary: this page is part of the Terminal Velocity development compendium. Read `docs/research/terminal-velocity-development-compendium.md` first for current doctrine; keep this page as the detailed coordination topology, manifest, and worker-resource rationale.
 
-Current implementation packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` records the live-state preflight, lane-contract audit, resource claims, four Basilisk lane records, and next-burst coordination manifest for applying this topology safely.
+Current implementation packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` records the live-state preflight, lane-contract audit, resource claims, four Basilisk lane records, worktree/branch registry, and next-burst coordination manifest for applying this topology safely. Refresh its live-state preflight before launching workers; do not use it as a blocker for one safe-local slice.
 
 ## Decision
 
@@ -199,6 +199,14 @@ For any gameplay-agent or automated-play slice, add these fields to the coordina
 ## First safe step
 
 The first **accelerated lane-contract audit** has been implemented in `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md`. Refresh that manifest's live-state preflight before starting any later worker burst. This audit is not required before a single safe-local acceleration slice.
+
+Implemented candidate lanes:
+
+- static galaxy topology semantics;
+- system service/store provisioning;
+- economy and commodity semantic expansion;
+- mission-family semantic promotion;
+- deterministic evaluator and playtest evidence packets.
 
 Scope:
 

@@ -105,6 +105,8 @@ Use Kanban when work has durable independent lanes, must survive context resets,
 
 Use isolated worktrees for parallel coding. Record each branch/worktree path, file/resource claim, merge order, cleanup plan, and final integrated verification. Do not require extra worktrees for one checkout doing one safe slice.
 
+Current executable topology packet: `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md` implements the first lane-contract audit and is the starting point for any worker burst. It defines five ready lane contracts: static galaxy topology semantics, system service/store provisioning, economy/commodity semantic expansion, mission-family semantic promotion, and deterministic evaluator/playtest packets. Refresh its live-state preflight before launching workers; do not refresh it just to perform one safe-local slice.
+
 ## WIP and fan-in defaults
 
 Default accelerated limits until a manifest says otherwise:
@@ -199,12 +201,13 @@ These are process indicators, not EV fidelity evidence.
 - Read this compendium first for current doctrine.
 - Read `source-aligned-game-development-method.md` when source hierarchy, vertical-slice method, or playtest/evidence labels matter. Dated section-7 playtest/run records live under `docs/research/playtest-runs/`.
 - Read `terminal-velocity-coordination-topology.md` before multi-worker work, Kanban, extra worktrees, cron/watchdogs, or any coordination manifest; do not treat it as a prerequisite for every single local slice.
+- Read `2026-06-08-terminal-velocity-topology-implementation-manifest.md` when actually activating or reviewing the current topology packet: live preflight, resource claims, lane contracts, Basilisk lane records, worktree registry, and next-burst manifest.
 - Read `2026-06-07-terminal-velocity-acceleration-plan.md` when evaluating acceleration tradeoffs, metrics, and deficiencies/improvements.
 - Use `ev-classic-fidelity-implementation-backlog.md` for concrete executable tasks.
 
 ## Coordination manifest pointer
 
-For bigger/multi-worker work, use the manifest template in `docs/research/terminal-velocity-coordination-topology.md` and include at minimum:
+For bigger/multi-worker work, start from the implemented manifest in `docs/research/2026-06-08-terminal-velocity-topology-implementation-manifest.md`, refreshing live state before launch. For a new or different burst, use the manifest template in `docs/research/terminal-velocity-coordination-topology.md` and include at minimum:
 
 - objective;
 - source/fidelity boundary;
