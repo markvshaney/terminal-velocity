@@ -9,15 +9,18 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 ## Decision
 
-Do **not** start by adding a larger autonomous worker pool. Start by making Terminal Velocity work easier to coordinate safely:
+Use **accelerated parallel lanes with one integration owner** as the default coordination topology once lane contracts exist.
 
-1. keep the normal implementation loop serial unless work naturally splits;
-2. use parallel workers first for read-only scouting/review/test-design;
-3. use Kanban only for durable multi-lane work;
-4. use a coordination manifest before any multi-worker coding slice;
-5. keep one writer per file/resource surface unless using isolated worktrees and a clear merge plan.
+1. Keep one integration owner for fan-in, final diff review, integrated verification, commit, and normal non-force push.
+2. Use multiple mutating worker lanes in isolated worktrees when each lane has an owner, writable surface, verifier, source/fidelity label policy, merge contract, and rollback path.
+3. Use Kanban for durable multi-lane work and context survival, not for line-level patches.
+4. Use a coordination manifest before any multi-worker coding slice.
+5. Keep one writer per file/resource surface by assigning lane ownership; do not enforce global serial development merely to avoid collisions.
+6. Treat the local runtime setup as **4 Basilisk emulator lanes** with per-lane disk/prefs/window/input/capture/restore records.
 
 ## Source post preserved
+
+The preserved 2026-06-06 post below is historical context. Its serial/read-only default has been superseded by the accelerated lane-contract topology in this artifact and the compendium.
 
 > Yes. Biggest efficiency wins are not just “more workers”; they’re **better partitioning + fewer collisions + stronger reusable patterns**.
 >
@@ -150,57 +153,112 @@ Do **not** start by adding a larger autonomous worker pool. Start by making Term
 
 ## Coordination topology
 
-### Default mode: serial implementation, parallel read-only support
+### Default mode: accelerated parallel lanes with one integration owner
 
-Use this for most Terminal Velocity slices:
+Use this for most Terminal Velocity development once a lane contract exists:
 
-- Coordinator/implementer owns repo mutation in the active checkout.
-- Read-only scouts can inspect sources, backlog, code, and tests.
-- Read-only reviewers can propose test cases, fidelity risks, and consolidation opportunities.
-- Coordinator performs all file edits, final verification, commits, and normal non-force pushes.
+- **Integration owner:** owns final fan-in, diff review, integrated verification, commit, and normal non-force push.
+- **Mutating worker lanes:** may write in isolated worktrees within assigned surfaces.
+- **Evidence lanes:** source/resource/manual/Basilisk observations produce labeled evidence packets. Static/source-mined fidelity lanes should not wait on emulator speed when decoded resources or manuals can answer the question.
+- **Verifier lanes:** scenario/test/probe workers produce executable checks and failure packets.
+- **Reviewer lanes:** inspect fidelity/spec/test risks and consolidation opportunities.
 
-### Multi-lane Kanban mode
+The old one-writer rule now applies at integration and per-resource ownership boundaries, not as a blanket ban on parallel writing.
 
-Use Kanban when the slice has durable independent lanes or must survive context resets:
+### Build-track lane classes
 
-- Evidence/source lane: EV Classic runtime/resources/manuals/EV-family sources; read-only unless updating source/provenance docs.
-- Implementation lane: one player-visible or symbolic behavior with explicit file ownership.
-- Verifier/evaluator lane: scenario/test/probe design and review; preferably read-only until handed to the coordinator.
-- Docs/provenance lane: backlog, quirk ledger, source labels, and continuation notes.
-- Fan-in review lane: final diff review, repeated-pattern detection, missing-test scan, and one consolidation recommendation.
+Valid mutating or semi-mutating lanes include:
 
-### True parallel coding mode
+- static/source-mined fidelity: map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data;
+- missions/story chains;
+- economy/commodity trade;
+- map/routing/hyperspace;
+- landed UI/services;
+- combat/AI;
+- ships/outfits/weapons/data import;
+- tutorial/help/player guidance;
+- scenario/evaluator harness;
+- source/resource mining and provenance docs;
+- Basilisk original-runtime observation lanes.
 
-Use only after a manifest exists and only when scopes are non-overlapping or isolated worktrees are available:
+Each lane must name owner/card, worktree if mutating, writable surfaces, source/fidelity label policy, verifier, merge contract, and cleanup/rollback plan.
 
-- Each coding worker gets an isolated branch/worktree.
-- Each worker has explicit file/resource claims.
-- Coordinator merges one branch at a time.
-- Coordinator runs final integrated tests and resolves conflicts.
-- No worker pushes independently unless the coordinator explicitly assigns that publication role.
+### Fidelity gate lanes
 
-## Coordination manifest template
+Fidelity promotion remains strict. Use fidelity gate lanes for:
+
+- original-runtime claims;
+- decoded-resource constants;
+- exact UI text;
+- mission/economy behavior;
+- movement/physics tuning;
+- Classic quirks vs intentional TV divergences;
+- canonical checklist/backlog/source-doc promotion.
+
+Build-track scaffolds may proceed with `scaffold`, `terminal-velocity-observed`, `source-grounded EV-family`, or `needs original confirmation` labels. They do not become EV Classic fidelity claims until a fidelity gate accepts the evidence.
+
+### Basilisk emulator topology
+
+The local runtime setup has **4 Basilisk emulator lanes**. Do not describe this as “up to 4” or “probably four.”
+
+Basilisk is not the universal fidelity bottleneck. Use it for behavioral confirmation, ambiguity resolution, UI/state-transition observations, and timing/feel checks. Use decoded-resource/manual/local-source lanes first for static data such as maps, planets, stations, commodities, ships, outfits, weapons, descriptions/text, and decoded mission/resource data.
+
+Each Basilisk lane record must include:
+
+- emulator/lane ID;
+- owning worker/card;
+- guest disk image or disk copy;
+- prefs file;
+- pilot/save/restore state;
+- window title/process/input target;
+- capture directory;
+- assigned evidence question;
+- allowed mutations;
+- status: `ready`, `blocked`, `dirty`, or `needs reset`.
+
+A worker may own one emulator lane. If a specific lane lacks isolation records, that lane setup is incomplete; the emulator count remains 4.
+
+### Worktree and merge rule
+
+For parallel coding:
+
+- each coding worker gets an isolated branch/worktree;
+- each worker has explicit file/resource claims;
+- each worker runs its lane verifier before handoff;
+- coordinator/integration owner merges one branch at a time or in an explicit batch;
+- coordinator runs final integrated tests and resolves conflicts;
+- no worker pushes independently unless the coordinator explicitly assigns that publication role.
+
+### Coordination manifest template
 
 Before any bigger/multi-worker slice, write a short manifest with:
 
 - Objective:
+- Track: `build`, `fidelity-gate`, or `mixed`:
 - Source/fidelity boundary:
 - Live-state preflight:
   - branch/status checked:
   - active TV workers/processes checked:
   - Kanban/cron/watchdog state checked:
   - available Hermes profiles checked:
+  - WSL/host capacity assumptions checked when relevant:
 - Worker lanes:
-- Resource claims:
-  - `read` surfaces:
-  - `review-only` surfaces:
-  - `write-exclusive` file/directory/resource claims:
-  - `external-effect` claims and approval gate:
-- Workspaces for any mutating worker:
-  - branch:
-  - worktree path:
-  - cleanup/merge plan:
-- Read-only reviewers:
+  - owner/card:
+  - lane class:
+  - worktree/branch:
+  - writable surfaces:
+  - read/review-only surfaces:
+  - source/fidelity label policy:
+  - verifier command:
+  - merge contract:
+  - cleanup/rollback plan:
+- Basilisk lane record, if any:
+  - emulator ID:
+  - disk/prefs/pilot/save:
+  - window/input target:
+  - capture path:
+  - restore method:
+  - allowed mutations:
 - Required verification:
 - Human gates:
 - Fan-in/integration owner:
@@ -249,7 +307,7 @@ Topology updates from those sources:
 4. **Failure artifacts are first-class.** Automation runs should produce durable failure packets: command/macro, starting state, observed state, expected predicate, screenshot/log path when available, and whether the failure is `automation-flake`, `TV-bug`, `source-gap`, or `fidelity-pending`.
 5. **Engine-integrated APIs are preferred in Godot, unavailable in Basilisk.** Poco/GAutomator-style hierarchy access supports adding Godot semantic probes/UI contracts; original EV Classic/Basilisk should remain capture/input based unless a real emulator/object-state bridge is built.
 6. **RL/evolutionary exploration stays gated.** Wuji/Stable-Retro-style mutation-heavy exploration needs a bounded mutable surface, restoreable states, metric, run budget, and keep/revert rule. Until those exist, use read-only scouting and deterministic Godot scenario probes.
-7. **Single writer still wins.** Gameplay agents may generate candidate macros, traces, or bug reports, but repo mutation still funnels through the coordinator unless a manifest assigns isolated worktrees and write-exclusive claims.
+7. **Lane ownership still wins.** Gameplay agents may generate candidate macros, traces, bug reports, or code/data changes inside assigned worktrees. Repo mutation funnels through lane ownership and the integration owner: workers may write only their claimed surfaces, and fan-in requires manifest-backed merge/review/verification.
 8. **Source labels must travel with automation output.** Every automatic gameplay finding should say whether it is `terminal-velocity-observed`, `automation-design`, `original-runtime-observed`, `decoded-resource`, `manual-backed`, or `external-adaptation-observed`.
 
 ### Automatic-gameplay manifest additions
@@ -269,27 +327,27 @@ For any gameplay-agent or automated-play slice, add these fields to the coordina
 
 ## First safe step
 
-Run a **read-only backlog executability audit** before adding more workers.
+Run an **accelerated lane-contract audit** before starting the next worker burst.
 
 Scope:
 
 - Inspect the live fidelity backlog and current continuation ledger.
-- Identify items missing any of: status, source/evidence, concrete next action, verifier, expected touched files, or gate.
-- Pick one candidate multi-lane slice where parallel read-only scouting would help and file/resource ownership is clean.
-- Produce a coordination manifest for that one slice.
-- Do **not** create more autonomous coding workers yet.
-- Do **not** mutate the active worker’s code files while the current TV worker is running.
+- Select 3-5 candidate build-track lanes that can proceed in isolated worktrees.
+- For each lane, fill in owner/card, writable surfaces, verifier, source-label policy, merge contract, and gate.
+- Assign Basilisk work to the **4 emulator lanes** only with disk/prefs/window/input/capture/restore records.
+- Keep one integration owner for final fan-in, verification, commit, and normal non-force push.
+- Do not mutate a file/resource surface already owned by another active worker.
 
 Why this first:
 
-- It improves coordination without increasing collision risk.
-- It gives workers clearer contracts before adding capacity.
-- It can be done read-only even while the current serial TV development worker is active.
-- It turns the prior Telegram recommendation into an executable next decision rather than a broad process wish.
+- It turns acceleration into executable lane contracts instead of vague “more workers.”
+- It uses parallel writers where ownership is clear.
+- It preserves fidelity gates without blocking scaffolded build-track progress.
+- It gives another LLM or worker enough structure to review, continue, or reject the topology.
 
 ## Relationship to existing process artifacts
 
-- Extends `docs/research/source-aligned-game-development-method.md`, especially its rule to keep the inner loop direct and use Kanban at feature boundaries.
-- Paired acceleration synthesis: `docs/research/2026-06-07-terminal-velocity-acceleration-plan.md` preserves the 2026-06-07 09:20 EDT post tying this topology to vertical slices, cheap evaluators, Basilisk inline-blocker policy, watchdogs, and fan-in review.
+- Extends `docs/research/source-aligned-game-development-method.md`, especially its split between build-track scaffolds and fidelity-track promotion.
+- Paired acceleration synthesis: `docs/research/2026-06-07-terminal-velocity-acceleration-plan.md` preserves the original 2026-06-07 conservative recommendation as historical source-post context, then supersedes it with the accelerated doctrine.
 - Uses `docs/checklists/ev-classic-fidelity-implementation-backlog.md` as the execution surface, not this artifact.
-- This artifact is the coordination rationale and template; concrete work items should still land in the backlog or Kanban board.
+- Summarized by `docs/research/terminal-velocity-development-compendium.md` as the canonical entry point.

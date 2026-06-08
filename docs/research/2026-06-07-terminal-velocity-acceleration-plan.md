@@ -9,16 +9,24 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 ## Decision
 
-The strongest acceleration plan is **source-aligned vertical slices + cheap evaluators + parallel read-only support + one-writer coordination**, not a broad increase in autonomous coding workers.
+The strongest acceleration plan is now **parallel executable lanes + fast evaluators + batched integration + fidelity gates**.
+
+This supersedes the preserved 2026-06-07 conservative recommendation below. The source post remains in this artifact as historical rationale, but it should not be read as current throttle policy.
 
 Operationally:
 
-1. keep one serial implementer/coordinator for repo mutation;
-2. use parallel agents primarily for read-only scouting, review, source mining, and test design;
-3. make backlog items executable before adding more worker lanes;
+1. keep one integration owner for fan-in, final verification, commit, and normal non-force push;
+2. run 3-5 mutating worker lanes in isolated worktrees once lane contracts exist;
+3. give each lane an owner, writable surface, verifier, source/fidelity label policy, merge contract, and rollback path;
 4. use deterministic TV scenario/evaluator coverage as the velocity lane;
-5. use Basilisk as a bounded source oracle and inline blocker surface, not the main velocity loop;
-6. use Kanban, worktrees, and watchdogs only where the coordination cost is justified.
+5. use the **4 Basilisk emulator lanes** for bounded original-runtime evidence, with lane records for disk/prefs/window/input/capture/restore state;
+6. let build-track scaffolds proceed with explicit labels when original-runtime evidence is missing;
+7. run static/source-mined fidelity lanes in parallel for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data; these lanes are source/data limited, not Basilisk-speed limited;
+8. reserve Basilisk for behavioral confirmation, ambiguity resolution, UI/state-transition checks, and timing/feel checks;
+9. reserve strict source gates for fidelity promotion, exact claims, constants, and Classic quirk/intentional-divergence decisions;
+10. integrate in coherent batches rather than one tiny serial slice at a time.
+
+Reasonable planning target: **6-10 months to meaningfully playable TV** under this accelerated topology. The old globally serial model risks **18-24+ months**.
 
 ## Source post preserved
 
@@ -196,22 +204,35 @@ Copied exact from the stored Telegram-session message content.
 
 ## First safe step
 
-Run the **read-only backlog executability audit** before adding more workers or scheduling new mutation-capable automation.
+Run the **accelerated lane-contract audit** before starting the next worker burst.
 
-Audit each candidate backlog item for:
+Audit each candidate lane for:
 
-- status;
-- source/evidence label;
+- track: `build`, `fidelity-gate`, or `mixed`;
+- owner/card;
+- source/evidence label policy;
 - concrete next action;
 - verifier or scenario/evaluator;
-- expected touched files;
+- expected touched files/resources;
+- worktree/branch;
+- merge contract;
+- rollback/cleanup path;
 - gates/blockers.
 
-Then pick the next clean vertical slice with source label, verifier, expected files, and gates already clear.
+Then start a bounded batch:
+
+- 1 integration owner;
+- 3 initial mutating worker lanes;
+- 1 static/source-mined fidelity lane for map/planet/station/commerce/ship/outfit/resource data;
+- 1 read-only reviewer/scenario scout if useful;
+- 4 Basilisk emulator lanes available for evidence tasks with lane records.
+
+Scale to 5 mutating workers only after clean integration flow is proven.
 
 ## Relationship to existing process artifacts
 
-- Extends `docs/research/terminal-velocity-coordination-topology.md` by preserving the later acceleration synthesis that ties topology, vertical slices, evaluators, Basilisk policy, and watchdog/fan-in review together.
-- Reinforces `docs/research/source-aligned-game-development-method.md`, especially small source-aligned playable slices with cheap verification.
-- Uses `docs/checklists/ev-classic-fidelity-implementation-backlog.md` as the execution surface for the backlog executability audit and next slice selection.
-- Aligns with `docs/research/2026-05-20-basilisk-freeze-input-debug.md` for Basilisk as an inline blocker/source-oracle surface, not a permanently separate velocity lane.
+- Extends `docs/research/terminal-velocity-coordination-topology.md` by replacing the serial/read-only default with lane-contract parallelism and one integration owner.
+- Reinforces `docs/research/source-aligned-game-development-method.md`, especially build-track scaffolds versus fidelity-track promotion.
+- Uses `docs/checklists/ev-classic-fidelity-implementation-backlog.md` as the execution surface for lane contracts and fidelity gates.
+- Aligns with `docs/research/terminal-velocity-development-compendium.md`, the canonical short doctrine.
+- Keeps `docs/research/2026-05-20-basilisk-freeze-input-debug.md` relevant for per-lane Basilisk recovery, while recognizing the fixed 4-emulator topology.

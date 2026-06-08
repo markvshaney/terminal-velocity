@@ -50,59 +50,86 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 ## Recommended operating method
 
-### 1. Build in vertical playable slices
+Terminal Velocity uses **parallel build lanes with strict fidelity promotion**, not a globally serial vertical-slice throttle.
 
-Optimize for one complete player-visible loop at a time:
+### 1. Split build work from fidelity promotion
+
+Use two linked tracks:
+
+- **Build track:** implement playable Terminal Velocity behavior quickly with explicit labels such as `scaffold`, `terminal-velocity-observed`, `source-grounded EV-family`, or `needs original confirmation`.
+- **Fidelity gate track:** promote behavior to EV Classic faithful only after original-runtime, decoded-resource, manual/docs, or explicitly weaker evidence is recorded.
+
+This lets incomplete evidence block fidelity claims without blocking broad game completion.
+
+### 2. Classify fidelity learning by bottleneck
+
+Not all fidelity work waits on original-runtime speed.
+
+- **Static/source-mined fidelity:** map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data. These should move through decoded-resource/manual/local-source lanes and structured import/compare pipelines. Basilisk spot-checks ambiguity; it is not the primary data source.
+- **UI/state-transition fidelity:** mission board flow, spaceport bar offers, commodity buy/sell semantics, landing/refueling, shipyard/outfitter availability, route setting, hyperspace outcomes, and dialog progression. These can use Basilisk, including accelerated runs after lane-specific reliability checks.
+- **Timing/feel fidelity:** acceleration, turn rate, weapon cadence, projectile speed, combat feel, animation timing, input responsiveness, and frame/tick-linked recharge/drain claims. These require 1x confirmation or explicit 1x-vs-accelerated comparison before promotion.
+
+### 3. Build in vertical increments, not serial global slices
+
+Optimize each lane for complete player-visible or system-visible increments:
 
 - map route selection → jump → land → refuel;
 - scan offers → accept mission → reserve cargo → deliver → reward;
 - choose faction branch → incompatible branch blocked;
-- outfitter/shipyard comparison → purchase → changed capability.
+- outfitter/shipyard comparison → purchase → changed capability;
+- commodity buy/sell → cargo/credits update → scenario assertion.
 
-A slice is done only when it has:
+An increment is done when it has:
 
 - a player-visible Godot behavior or explicit symbolic surrogate;
-- a symbolic scenario/evaluator;
+- a symbolic scenario/evaluator/probe;
 - a cheap verification command;
 - a source/fidelity label;
-- a backlog/docs update if it affects future behavior.
+- a docs/backlog update if it affects future behavior;
+- a mergeable lane handoff when developed in parallel.
 
-### 2. Keep the inner loop direct, but use Kanban at feature boundaries
+### 4. Use Kanban/worktrees for owned executable lanes
 
-Use direct TDD for small dependent changes. Use Kanban when work splits into independent lanes:
+Use direct TDD for small dependent changes. Use Kanban and isolated worktrees when work splits into independent lanes:
 
-- Godot runtime/UI lane;
-- symbolic model/curriculum lane;
-- original EV observation lane;
-- source research/fidelity-doc lane;
-- verification/review lane.
+- missions/story chains;
+- economy/commodity trade;
+- map/routing/hyperspace;
+- landed UI/services;
+- combat/AI;
+- ships/outfits/weapons/data import;
+- tutorial/help/player guidance;
+- scenario/evaluator harness;
+- source/resource mining;
+- Basilisk original-runtime observation lanes.
 
-Avoid Kanban for line-level patches or while debugging a single failing test. Use it when multiple cards can run independently or when human-gated observation/review matters.
+Each lane needs an owner, expected writable surfaces, verifier, source-label policy, merge contract, and rollback/cleanup plan. Avoid Kanban for line-level patches or while debugging a single failing test.
 
-### 3. Maintain two linked backlogs
+### 5. Maintain linked build and fidelity backlogs
 
 - Live execution checklist: `docs/checklists/ev-classic-fidelity-implementation-backlog.md`.
-- Source/process rationale: this artifact and the existing automation synthesis.
+- Source/process rationale: this artifact and the acceleration/topology artifacts.
 
 Every durable source-driven recommendation should land in the checklist as one of:
 
 - `candidate` — plausible but not ready;
-- `needs evidence` — source gap blocks fidelity claim;
-- `ready` — enough evidence to implement safely;
+- `needs evidence` — source gap blocks fidelity claim, not necessarily scaffold implementation;
+- `ready` — enough evidence to implement or promote safely;
 - `implemented` — code exists but may need stronger verification;
 - `verified` — implementation and verification evidence exist.
 
-### 4. Add scenario/evaluator coverage before broad systems
+### 6. Add scenario/evaluator coverage as the speed layer
 
 General game-agent sources favor task suites, state archives, and evaluator separation. For Terminal Velocity this means:
 
-- add one named scenario per capability;
+- add named scenarios per capability;
 - keep action traces structured;
 - record blocked reasons, not just success/failure;
 - prefer multi-scenario curriculum progress over one large vague “AI play” goal;
-- use scenario outcomes to decide what should become player tutorial/hint UI.
+- use scenario outcomes to decide what should become player tutorial/hint UI;
+- require workers to return verifier output with their handoff.
 
-### 5. Use playtesting as evidence, not just feel
+### 7. Use playtesting as evidence, not just feel
 
 For each playtest/manual run, record:
 
@@ -115,7 +142,7 @@ For each playtest/manual run, record:
 
 Do not let a fun Terminal Velocity scaffold become an EV Classic fidelity claim unless a primary source supports it.
 
-### 6. Protect source alignment with explicit labels in artifacts and logs
+### 8. Protect source alignment with explicit labels in artifacts and logs
 
 Required labels:
 
@@ -131,14 +158,16 @@ Required labels:
 
 ## Immediate process changes applied
 
-- Promote the current curriculum approach as the default development method for gameplay systems: one vertical slice, one scenario, one verifier, one source label.
-- Use the existing fidelity backlog as the execution surface rather than creating isolated chat-only recommendations.
-- Add Kanban only when work splits across observation/model/Godot/docs/review lanes.
+- Promote parallel executable lanes as the default development topology, with vertical increments as the quality unit for each lane.
+- Preserve strict source hierarchy for fidelity promotion, exact-text claims, physics/economy constants, mission behavior, and Classic quirk decisions.
+- Use the existing fidelity backlog as the execution/fidelity surface rather than creating isolated chat-only recommendations.
+- Use Kanban/worktrees when work splits across subsystem, observation, verifier, docs, or review lanes.
+- Treat missing original evidence as a fidelity gate, not a global build-track stop.
 
 ## Next candidate improvements
 
-1. Run the read-only backlog executability audit from `docs/research/terminal-velocity-coordination-topology.md` before adding more autonomous workers. Source basis: Loki Game Telegram coordination recommendation preserved in that artifact, plus its 2026-06-06 coordination-source cross-check against Claude Code worktrees/subagents, Git worktrees, Karpathy autoresearch, and Hermes local coordination guidance.
-2. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay slice stabilizes. Source basis: Godot best-practice/project-organization docs.
+1. Convert the current high-value backlog items into lane contracts: owner, writable surface, verifier, source-label policy, merge contract, and gate.
+2. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay increment stabilizes. Source basis: Godot best-practice/project-organization docs.
 3. Add playtest/run records for manual Godot sessions, not just automated self-tests. Source basis: playtesting source plus VPT/action-trace references.
 4. Add branch/faction/legal scenarios before combat. Source basis: EV-family mission/legal/faction records and current safety policy.
-5. Create Kanban cards only for multi-lane work: e.g. “observe original EV mission surfaces” can run separately from “implement TV mission log UI.”
+5. Assign Basilisk evidence work to the 4 emulator lanes with explicit disk/prefs/window/input/capture/restore records.
