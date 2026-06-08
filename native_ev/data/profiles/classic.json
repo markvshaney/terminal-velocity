@@ -21,6 +21,7 @@
     "sourcedEvStructures": "native_ev/data/sourced_ev_structures.json",
     "sourcedEvMissions": "native_ev/data/sourced_ev_missions.json",
     "sourcedEvGovernments": "native_ev/data/sourced_ev_governments.json",
+    "sourcedEvJunk": "native_ev/data/sourced_ev_junk.json",
     "sourcedEvGraphics": "native_ev/data/sourced_ev_graphics.json",
     "sourcedEvSounds": "native_ev/data/sourced_ev_sounds.json",
     "sourcedEvWeapons": "native_ev/data/sourced_ev_weapons.json"

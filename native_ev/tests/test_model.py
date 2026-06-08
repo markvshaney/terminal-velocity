@@ -40,6 +40,7 @@ from native_ev.model import (
     sound_manifest,
     sourced_ev_graphics_manifest,
     sourced_ev_governments_manifest,
+    sourced_ev_junk_manifest,
     sourced_ev_missions_manifest,
     sourced_ev_names_manifest,
     sourced_ev_sounds_manifest,
@@ -153,6 +154,7 @@ class NativeEvModelTests(unittest.TestCase):
             'sourcedEvStructures',
             'sourcedEvMissions',
             'sourcedEvGovernments',
+            'sourcedEvJunk',
             'sourcedEvGraphics',
             'sourcedEvSounds',
             'sourcedEvWeapons',
@@ -3444,6 +3446,26 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(militia['killPenalty'], 20)
         self.assertIn('EV Classic Resource Bible gövt fields', by_id[128]['fieldSource'])
         self.assertEqual(confed['shootPenaltyRuntimeNote'], 'EV Classic Resource Bible says ShootPenalty is currently ignored')
+
+    def test_sourced_ev_junk_manifest_maps_specialized_commodity_fields(self):
+        data = sourced_ev_junk_manifest()
+        self.assertEqual(data['method'], 'ev-classic-resource-bible-junk-field-map-v1')
+        self.assertEqual(data['sourceBasis'], 'EV Classic Resource Bible jünk field definitions plus local primitive BRGR structure decode')
+        self.assertEqual(data['recordRun']['candidateType'], 'commodity-like')
+        self.assertEqual(data['recordRun']['recordSize'], 676)
+        self.assertEqual(len(data['junkCommodities']), 19)
+        by_id = {entry['resourceId']: entry for entry in data['junkCommodities']}
+        stembolts = by_id[128]
+        self.assertEqual(stembolts['displayName'], 'self-sealing stembolts')
+        self.assertEqual(stembolts['shortName'], 'Bolts')
+        self.assertEqual(stembolts['semanticFields']['soldAtStellarId'], 174)
+        self.assertEqual(stembolts['semanticFields']['boughtAtStellarId'], 129)
+        self.assertEqual(stembolts['semanticFields']['basePrice'], 50)
+        self.assertEqual(stembolts['semanticFields']['flagsUnsigned'], 0)
+        parrots = by_id[143]
+        self.assertEqual(parrots['displayName'], 'parrots')
+        self.assertEqual(parrots['semanticFields']['boughtAtStellarId'], None)
+        self.assertEqual(parrots['semanticFields']['flagNames'], ['tribblesMultiplication'])
 
     def test_sourced_ev_missions_manifest_maps_classic_resource_bible_fields(self):
         data = sourced_ev_missions_manifest()

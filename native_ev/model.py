@@ -17,6 +17,7 @@ REPUTATION_PATH = ROOT / 'data' / 'reputation.json'
 SOURCED_EV_NAMES_PATH = ROOT / 'data' / 'sourced_ev_names.json'
 SOURCED_EV_STRUCTURES_PATH = ROOT / 'data' / 'sourced_ev_structures.json'
 SOURCED_EV_GOVERNMENTS_PATH = ROOT / 'data' / 'sourced_ev_governments.json'
+SOURCED_EV_JUNK_PATH = ROOT / 'data' / 'sourced_ev_junk.json'
 SOURCED_EV_MISSIONS_PATH = ROOT / 'data' / 'sourced_ev_missions.json'
 SOURCED_EV_GRAPHICS_PATH = ROOT / 'data' / 'sourced_ev_graphics.json'
 SOURCED_EV_SOUNDS_PATH = ROOT / 'data' / 'sourced_ev_sounds.json'
@@ -46,7 +47,7 @@ def profile_manifest(profile_id='classic', profiles_root=PROFILES_ROOT):
         if not (ROOT.parent / rel).exists():
             raise ValueError(f'profile {profile_id} data manifest {key} missing at {rel}')
     sources = data.get('sourceManifests', {})
-    for key in ['sourcedEvStructures', 'sourcedEvMissions', 'sourcedEvGovernments', 'sourcedEvGraphics', 'sourcedEvSounds', 'sourcedEvWeapons']:
+    for key in ['sourcedEvStructures', 'sourcedEvMissions', 'sourcedEvGovernments', 'sourcedEvJunk', 'sourcedEvGraphics', 'sourcedEvSounds', 'sourcedEvWeapons']:
         rel = sources.get(key)
         if not rel:
             raise ValueError(f'profile {profile_id} missing source manifest {key}')
@@ -353,6 +354,39 @@ def sourced_ev_governments_manifest(path=SOURCED_EV_GOVERNMENTS_PATH):
         raise ValueError('Confed government semantics do not match Classic Resource Bible field map expectations')
     if pirate['crimeTolerance'] != -20 or 'xenophobicWarshipsAttackNonAllies' not in pirate.get('flagNames', []):
         raise ValueError('Pirate government semantics do not match Classic Resource Bible field map expectations')
+    return data
+
+
+def sourced_ev_junk_manifest(path=SOURCED_EV_JUNK_PATH):
+    data = json.loads(path.read_text())
+    if data.get('schemaVersion') != 1:
+        raise ValueError('sourced EV junk manifest has unexpected schema version')
+    if data.get('method') != 'ev-classic-resource-bible-junk-field-map-v1':
+        raise ValueError('sourced EV junk manifest has unexpected extraction method')
+    if data.get('sourceBasis') != 'EV Classic Resource Bible jünk field definitions plus local primitive BRGR structure decode':
+        raise ValueError('sourced EV junk manifest has unexpected source basis')
+    run = data.get('recordRun', {})
+    if run.get('candidateType') != 'commodity-like' or run.get('recordSize') != 676:
+        raise ValueError('sourced EV junk manifest has unexpected record run')
+    commodities = data.get('junkCommodities', [])
+    if len(commodities) != 19:
+        raise ValueError('sourced EV junk manifest has unexpected commodity count')
+    by_id = {entry.get('resourceId'): entry for entry in commodities}
+    for expected_id in [128, 129, 143]:
+        if expected_id not in by_id:
+            raise ValueError(f'sourced EV junk manifest missing resource {expected_id}')
+    for entry in commodities:
+        for key in ['resourceId', 'ordinal', 'chunkIndex', 'byteOffset', 'displayName', 'shortName', 'fieldSource', 'semanticFields']:
+            if key not in entry:
+                raise ValueError(f'sourced EV junk entry missing {key}')
+        fields = entry.get('semanticFields', {})
+        for key in ['soldAtStellarId', 'boughtAtStellarId', 'basePrice', 'flagsUnsigned', 'flagNames']:
+            if key not in fields:
+                raise ValueError(f"sourced EV junk {entry.get('resourceId')} missing {key}")
+    if by_id[128]['displayName'] != 'self-sealing stembolts' or by_id[128]['semanticFields']['basePrice'] != 50:
+        raise ValueError('sourced EV junk first commodity semantics do not match decoded resource')
+    if by_id[143]['semanticFields']['boughtAtStellarId'] is not None or 'tribblesMultiplication' not in by_id[143]['semanticFields']['flagNames']:
+        raise ValueError('sourced EV junk tribbles/parrots flag semantics not decoded')
     return data
 
 

@@ -1,0 +1,351 @@
+{
+  "schemaVersion": 1,
+  "sourceFile": "source-assets/ev-classic/Nova Files/EV Data.rez",
+  "sourceSha256": "e5e8b5c667409b1c950a49e6aeb3a771609126e205959ef81e9328beabf2ba2f",
+  "sourceManifest": "native_ev/data/sourced_ev_structures.json",
+  "method": "ev-classic-resource-bible-junk-field-map-v1",
+  "sourceBasis": "EV Classic Resource Bible jünk field definitions plus local primitive BRGR structure decode",
+  "resourceIdBase": 128,
+  "recordRun": {
+    "candidateType": "commodity-like",
+    "recordSize": 676,
+    "count": 19,
+    "confidence": "manual-backed-field-map"
+  },
+  "fieldIndex": {
+    "soldAt": 0,
+    "boughtAt": 8,
+    "basePrice": 16,
+    "flags": 17
+  },
+  "flagBits": {
+    "0x0001": "tribblesMultiplication"
+  },
+  "junkCommodities": [
+    {
+      "resourceId": 128,
+      "ordinal": 0,
+      "chunkIndex": 763,
+      "byteOffset": 205557,
+      "displayName": "self-sealing stembolts",
+      "shortName": "Bolts",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 174,
+        "boughtAtStellarId": 129,
+        "basePrice": 50,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 129,
+      "ordinal": 1,
+      "chunkIndex": 764,
+      "byteOffset": 206233,
+      "displayName": "Martian keychains",
+      "shortName": "Keych.",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 130,
+        "boughtAtStellarId": 187,
+        "basePrice": 8,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 130,
+      "ordinal": 2,
+      "chunkIndex": 765,
+      "byteOffset": 206909,
+      "displayName": "seafood",
+      "shortName": "Seafood",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 134,
+        "boughtAtStellarId": 163,
+        "basePrice": 40,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 131,
+      "ordinal": 3,
+      "chunkIndex": 766,
+      "byteOffset": 207585,
+      "displayName": "Junga root extract",
+      "shortName": "Extract",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 138,
+        "boughtAtStellarId": 183,
+        "basePrice": 50,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 132,
+      "ordinal": 4,
+      "chunkIndex": 767,
+      "byteOffset": 208261,
+      "displayName": "lobsters",
+      "shortName": "Lobsters",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 139,
+        "boughtAtStellarId": 188,
+        "basePrice": 80,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 133,
+      "ordinal": 5,
+      "chunkIndex": 768,
+      "byteOffset": 208937,
+      "displayName": "viral serum",
+      "shortName": "Serum",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 156,
+        "boughtAtStellarId": 142,
+        "basePrice": 680,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 134,
+      "ordinal": 6,
+      "chunkIndex": 769,
+      "byteOffset": 209613,
+      "displayName": "workdroids",
+      "shortName": "Droids",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 144,
+        "boughtAtStellarId": 137,
+        "basePrice": 340,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 135,
+      "ordinal": 7,
+      "chunkIndex": 770,
+      "byteOffset": 210289,
+      "displayName": "wood products",
+      "shortName": "Wood",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 205,
+        "boughtAtStellarId": 147,
+        "basePrice": 270,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 136,
+      "ordinal": 8,
+      "chunkIndex": 771,
+      "byteOffset": 210965,
+      "displayName": "Playbeing Magazine",
+      "shortName": "Magaz.",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 233,
+        "boughtAtStellarId": 149,
+        "basePrice": 10,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 137,
+      "ordinal": 9,
+      "chunkIndex": 772,
+      "byteOffset": 211641,
+      "displayName": "camels",
+      "shortName": "Camels",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 194,
+        "boughtAtStellarId": 150,
+        "basePrice": 25,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 138,
+      "ordinal": 10,
+      "chunkIndex": 773,
+      "byteOffset": 212317,
+      "displayName": "expensive appetizers",
+      "shortName": "Appetiz.",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 168,
+        "boughtAtStellarId": 159,
+        "basePrice": 150,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 139,
+      "ordinal": 11,
+      "chunkIndex": 774,
+      "byteOffset": 212993,
+      "displayName": "t-shirts",
+      "shortName": "T-Shirts",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 175,
+        "boughtAtStellarId": 229,
+        "basePrice": 15,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 140,
+      "ordinal": 12,
+      "chunkIndex": 775,
+      "byteOffset": 213669,
+      "displayName": "Diphidia seaweed",
+      "shortName": "Seaweed",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 176,
+        "boughtAtStellarId": 137,
+        "basePrice": 38,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 141,
+      "ordinal": 13,
+      "chunkIndex": 776,
+      "byteOffset": 214345,
+      "displayName": "ancient computers",
+      "shortName": "Computers",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 210,
+        "boughtAtStellarId": 181,
+        "basePrice": 45,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 142,
+      "ordinal": 14,
+      "chunkIndex": 777,
+      "byteOffset": 215021,
+      "displayName": "Persean bug juice",
+      "shortName": "BugJuice",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 189,
+        "boughtAtStellarId": 207,
+        "basePrice": 20,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 143,
+      "ordinal": 15,
+      "chunkIndex": 778,
+      "byteOffset": 215697,
+      "displayName": "parrots",
+      "shortName": "Parrots",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 198,
+        "boughtAtStellarId": null,
+        "basePrice": 10,
+        "flagsSigned": 1,
+        "flagsUnsigned": 1,
+        "flagNames": [
+          "tribblesMultiplication"
+        ]
+      }
+    },
+    {
+      "resourceId": 144,
+      "ordinal": 16,
+      "chunkIndex": 779,
+      "byteOffset": 216373,
+      "displayName": "banderfrog hides",
+      "shortName": "Hides",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 208,
+        "boughtAtStellarId": 146,
+        "basePrice": 42,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 145,
+      "ordinal": 17,
+      "chunkIndex": 780,
+      "byteOffset": 217049,
+      "displayName": "grain products",
+      "shortName": "Grain",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 212,
+        "boughtAtStellarId": 152,
+        "basePrice": 26,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    },
+    {
+      "resourceId": 146,
+      "ordinal": 18,
+      "chunkIndex": 781,
+      "byteOffset": 217725,
+      "displayName": "vegetables",
+      "shortName": "Veggies",
+      "fieldSource": "EV Classic Resource Bible jünk fields, lines 237-247 of extracted text",
+      "semanticFields": {
+        "soldAtStellarId": 214,
+        "boughtAtStellarId": 150,
+        "basePrice": 17,
+        "flagsSigned": 0,
+        "flagsUnsigned": 0,
+        "flagNames": []
+      }
+    }
+  ]
+}
