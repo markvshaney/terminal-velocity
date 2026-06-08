@@ -50,7 +50,7 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 ## Recommended operating method
 
-Terminal Velocity uses **parallel build lanes with strict fidelity promotion**, not a globally serial vertical-slice throttle.
+Terminal Velocity uses **parallel build lanes with strict fidelity promotion**.
 
 ### 1. Split build work from fidelity promotion
 
@@ -65,7 +65,7 @@ This lets incomplete evidence block fidelity claims without blocking broad game 
 
 Not all fidelity work waits on original-runtime speed.
 
-- **Static/source-mined fidelity:** map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data. These should move through decoded-resource/manual/local-source lanes and structured import/compare pipelines. Basilisk spot-checks ambiguity; it is not the primary data source.
+- **Static/source-mined fidelity:** map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data. These should move through decoded-resource/manual/local-source lanes and structured import/compare pipelines. Basilisk spot-checks ambiguity; it is not the primary data source. Much of the primitive/resource inventory is already learned; remaining static work is semantic promotion, cross-linking, runtime-facing import, and tests. Current promoted semantic manifests include government, mission, weapon, and specialized `jünk` commodity records; broader topology/service/economy promotion remains backlog/static-pass work.
 - **UI/state-transition fidelity:** mission board flow, spaceport bar offers, commodity buy/sell semantics, landing/refueling, shipyard/outfitter availability, route setting, hyperspace outcomes, and dialog progression. These can use Basilisk, including accelerated runs after lane-specific reliability checks.
 - **Timing/feel fidelity:** acceleration, turn rate, weapon cadence, projectile speed, combat feel, animation timing, input responsiveness, and frame/tick-linked recharge/drain claims. These require 1x confirmation or explicit 1x-vs-accelerated comparison before promotion.
 
@@ -140,6 +140,8 @@ For each playtest/manual run, record:
 - problems and bright spots;
 - whether observation is source truth, EV-family hypothesis, or Terminal Velocity-only design.
 
+Current run-record surface: `docs/research/playtest-runs/`. The first applied section-7 safe-local pass is `docs/research/playtest-runs/2026-06-08-section-7-playtest-evidence.md`.
+
 Do not let a fun Terminal Velocity scaffold become an EV Classic fidelity claim unless a primary source supports it.
 
 ### 8. Protect source alignment with explicit labels in artifacts and logs
@@ -168,6 +170,6 @@ Required labels:
 
 1. Convert the current high-value backlog items into lane contracts: owner, writable surface, verifier, source-label policy, merge contract, and gate.
 2. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay increment stabilizes. Source basis: Godot best-practice/project-organization docs.
-3. Add playtest/run records for manual Godot sessions, not just automated self-tests. Source basis: playtesting source plus VPT/action-trace references.
+3. Continue adding playtest/run records for manual Godot sessions and no-human probes under `docs/research/playtest-runs/`; first section-7 safe-local record added 2026-06-08. Source basis: playtesting source plus VPT/action-trace references.
 4. Add branch/faction/legal scenarios before combat. Source basis: EV-family mission/legal/faction records and current safety policy.
 5. Assign Basilisk evidence work to the 4 emulator lanes with explicit disk/prefs/window/input/capture/restore records.

@@ -9,6 +9,7 @@ This compendium summarizes the current operating doctrine. Detailed rationale an
 - `docs/research/source-aligned-game-development-method.md` — source hierarchy and gameplay-development method.
 - `docs/research/terminal-velocity-coordination-topology.md` — worker/resource topology, manifest, Kanban/worktree rules.
 - `docs/research/2026-06-07-terminal-velocity-acceleration-plan.md` — acceleration synthesis and source-cross-check improvement candidates.
+- `docs/research/2026-06-07-static-source-fidelity-learning-pass-1.md` — current static/source-mined fidelity inventory and semantic-promotion boundaries.
 - `docs/checklists/ev-classic-fidelity-implementation-backlog.md` — execution surface for concrete work items.
 
 ## Operating doctrine
@@ -46,7 +47,7 @@ Required labels include `original-runtime-observed`, `decoded-resource-backed`, 
 
 Do not treat all fidelity learning as emulator-speed limited.
 
-1. **Static/source-mined fidelity** is source/data limited, not Basilisk-speed limited. Map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data should primarily move through decoded-resource/manual/local-source lanes and structured import/compare pipelines. Basilisk is a spot-check and ambiguity-resolution oracle for these surfaces, not the main data source.
+1. **Static/source-mined fidelity** is source/data limited, not Basilisk-speed limited. Map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data should primarily move through decoded-resource/manual/local-source lanes and structured import/compare pipelines. Basilisk is a spot-check and ambiguity-resolution oracle for these surfaces, not the main data source. Much of the primitive/resource inventory is already learned; remaining work is semantic promotion, cross-linking, runtime-facing import, and tests. Current promoted static-source semantics include government, mission, weapon, and specialized `jünk` commodity manifests; remaining broad topology/service/economy promotions are tracked in the fidelity backlog and static learning pass.
 2. **UI/state-transition fidelity** is partly runtime-speed limited. Mission board flow, spaceport bar offers, commodity buy/sell semantics, landing/refueling, shipyard/outfitter availability, route setting, hyperspace outcomes, and dialog progression can use Basilisk, including accelerated runs after lane-specific reliability checks.
 3. **Timing/feel fidelity** is speed-sensitive. Acceleration, turn rate, weapon cadence, projectile speed, combat feel, animation timing, input responsiveness, and frame/tick-linked recharge/drain claims require 1x confirmation or explicit 1x-vs-accelerated comparison before promotion.
 
@@ -193,7 +194,7 @@ These are process indicators, not EV fidelity evidence.
 ## Which artifact to read
 
 - Read this compendium first for current doctrine.
-- Read `source-aligned-game-development-method.md` when source hierarchy, vertical-slice method, or playtest/evidence labels matter.
+- Read `source-aligned-game-development-method.md` when source hierarchy, vertical-slice method, or playtest/evidence labels matter. Dated section-7 playtest/run records live under `docs/research/playtest-runs/`.
 - Read `terminal-velocity-coordination-topology.md` before multi-worker work, Kanban, worktrees, cron/watchdogs, or any coordination manifest.
 - Read `2026-06-07-terminal-velocity-acceleration-plan.md` when evaluating acceleration tradeoffs, metrics, and deficiencies/improvements.
 - Use `ev-classic-fidelity-implementation-backlog.md` for concrete executable tasks.

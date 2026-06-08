@@ -18,139 +18,6 @@ Use **accelerated parallel lanes with one integration owner** as the default coo
 5. Keep one writer per file/resource surface by assigning lane ownership; do not enforce global serial development merely to avoid collisions.
 6. Treat the local runtime setup as **4 Basilisk emulator lanes** with per-lane disk/prefs/window/input/capture/restore records.
 
-## Source post preserved
-
-The preserved 2026-06-06 post below is historical context. Its serial/read-only default has been superseded by the accelerated lane-contract topology in this artifact and the compendium.
-
-> Yes. Biggest efficiency wins are not just “more workers”; they’re **better partitioning + fewer collisions + stronger reusable patterns**.
->
-> Recommended order:
->
-> 1. **Make the backlog executable, not descriptive**
->    - Each item should have: status, source/evidence, concrete next action, verifier, expected touched files.
->    - Prefer grooming existing `ready` / `needs evidence` items before adding fresh ideas.
->    - This prevents rediscovery and “interesting but inert” backlog growth.
->
-> 2. **Split TV work into stable lanes**
->    Good lanes for Terminal Velocity:
->    - **Source/evidence mining**: EV Classic, EV Bible, plug-in manuals, exposed variables, quirks ledger.
->    - **Implementation slice**: one player-visible behavior or fidelity fix at a time.
->    - **Verifier/evaluator**: scenario tests, regressions, Godot/tool smoke, behavior comparison.
->    - **Docs/provenance**: update source-backed notes, backlog, quirk ledger.
->    - **Review/consolidation**: after commit trains, inspect pattern repetition, noisy diffs, missing tests.
->
-> 3. **Use parallel workers only where resource ownership is clean**
->    Parallel is useful when tasks touch different resources:
->    - Worker A: read-only evidence mining.
->    - Worker B: implementation in specific files.
->    - Worker C: read-only review/test design.
->    - Coordinator: final diff review, tests, commit/push.
->
->    Avoid parallel writers on the same subsystem unless using isolated worktrees and a clear merge plan.
->
-> 4. **Introduce a coordination manifest for bigger slices**
->    Before dispatching workers, write a short manifest:
->    - Objective.
->    - Worker lanes.
->    - One-writer file/resource claims.
->    - Read-only reviewers.
->    - Required verification.
->    - Human gates.
->    - Fan-in rule: who integrates and verifies.
->
->    This is cheap and prevents agent collision.
->
-> 5. **Use Kanban for durable multi-worker work**
->    Use Kanban when:
->    - Work should survive context resets.
->    - Multiple profiles/workers should operate asynchronously.
->    - There are natural dependencies: `evidence → implement → review → docs`.
->    - You want auditability.
->
->    Don’t use Kanban just because “faster”; if the next action is one integrated implementation slice, a normal serial loop is cleaner.
->
-> 6. **Use `delegate_task` for synchronous bursts**
->    Best for:
->    - Read-only codebase inspection.
->    - Independent research.
->    - Second-opinion review.
->    - Test-plan generation.
->    - Spec compliance review after a change.
->
->    Pattern:
->    - Main agent owns repo mutation.
->    - Subagents scout/review.
->    - Main agent verifies with actual tests and git diff.
->
-> 7. **Use isolated worktrees for true parallel coding**
->    If two workers both need to edit code:
->    - Spawn with Hermes `-w` worktree mode or manually create separate git worktrees.
->    - Assign non-overlapping scopes.
->    - Merge one branch at a time.
->    - Coordinator runs final tests and resolves conflicts.
->
-> 8. **Generalize repeated bug fixes into skills or checklists**
->    Any repeated pattern should become durable:
->    - EV source-mining procedure.
->    - TV verifier workflow.
->    - Godot smoke-test recipe.
->    - “Classic quirk vs bug” decision checklist.
->    - Commit-train consolidation checklist.
->
->    This reduces future steering more than adding raw worker count.
->
-> 9. **Add lightweight automated watchdogs**
->    Useful no-agent/script cron jobs:
->    - Dirty repo / unpushed commit detector.
->    - Backlog items missing next action.
->    - Docs/provenance drift detector.
->    - Test smoke runner on a cadence.
->    - “Open gates” summary.
->
->    These should report only actionable deltas, not noisy status.
->
-> 10. **Separate discovery from mutation**
->    Most efficient safe pattern:
->    - First worker reads and reports evidence.
->    - Main/implementer mutates.
->    - Reviewer checks against source + tests.
->    - Coordinator commits/pushes.
->
->    This avoids the common agent failure mode: changing code while still unsure what the source of truth says.
->
-> 11. **Use smaller, player-visible vertical slices**
->    For TV specifically, the most productive loop is:
->    - Pick one behavior/fidelity gap.
->    - Find source truth.
->    - Implement smallest visible change.
->    - Add verifier/regression.
->    - Update provenance/backlog.
->    - Commit.
->    - Continue.
->
->    Big multi-system rewrites are less efficient unless we first decompose them into these slices.
->
-> 12. **Add a “fan-in reviewer” role**
->    After multiple workers or several commits:
->    - Inspect all touched files.
->    - Check whether docs/tests/source ledger agree.
->    - Look for duplicated logic.
->    - Identify reusable abstractions.
->    - Recommend one consolidation slice.
->
->    This is where pattern generalization should happen, not during every tiny implementation.
->
-> My strongest recommendation: **start with a concrete TV coordination topology**, not a larger worker pool immediately.
->
-> Default topology:
-> - **Serial implementer/coordinator**: me in this thread.
-> - **Parallel read-only scouts**: evidence mining, code inspection, test design.
-> - **Occasional reviewer**: spec/fidelity and quality review before push.
-> - **Kanban only for durable multi-lane backlog work.**
-> - **Cron/watchdogs only for stale-state detection, not autonomous overlapping repo mutation.**
->
-> If you want, the next safe action is for me to inspect the live TV repo/backlog/profile setup and propose a concrete worker/cron/Kanban topology with exact lanes, gates, and “do not collide” file ownership rules.
-
 ## Coordination topology
 
 ### Default mode: accelerated parallel lanes with one integration owner
@@ -163,13 +30,13 @@ Use this for most Terminal Velocity development once a lane contract exists:
 - **Verifier lanes:** scenario/test/probe workers produce executable checks and failure packets.
 - **Reviewer lanes:** inspect fidelity/spec/test risks and consolidation opportunities.
 
-The old one-writer rule now applies at integration and per-resource ownership boundaries, not as a blanket ban on parallel writing.
+One-writer discipline applies at integration and per-resource ownership boundaries, not as a blanket ban on parallel writing.
 
 ### Build-track lane classes
 
 Valid mutating or semi-mutating lanes include:
 
-- static/source-mined fidelity: map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data;
+- static/source-mined fidelity: semantic-promotion and integration lanes for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data. Much of the primitive/resource inventory is already learned; remaining work is field-family semantics, cross-links, runtime-facing import, and tests. Current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records;
 - missions/story chains;
 - economy/commodity trade;
 - map/routing/hyperspace;
@@ -348,6 +215,6 @@ Why this first:
 ## Relationship to existing process artifacts
 
 - Extends `docs/research/source-aligned-game-development-method.md`, especially its split between build-track scaffolds and fidelity-track promotion.
-- Paired acceleration synthesis: `docs/research/2026-06-07-terminal-velocity-acceleration-plan.md` preserves the original 2026-06-07 conservative recommendation as historical source-post context, then supersedes it with the accelerated doctrine.
+- Paired acceleration synthesis: `docs/research/2026-06-07-terminal-velocity-acceleration-plan.md` carries the current accelerated doctrine only; superseded compendium-doc versions are retained outside the repo at `/home/bh/workspaces/loki/terminal-velocity-doc-archives/2026-06-08-superseded-compendium-docs/`.
 - Uses `docs/checklists/ev-classic-fidelity-implementation-backlog.md` as the execution surface, not this artifact.
 - Summarized by `docs/research/terminal-velocity-development-compendium.md` as the canonical entry point.
