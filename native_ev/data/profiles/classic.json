@@ -20,6 +20,8 @@
   "sourceManifests": {
     "sourcedEvStructures": "native_ev/data/sourced_ev_structures.json",
     "sourcedEvMissions": "native_ev/data/sourced_ev_missions.json",
+    "sourcedEvSystems": "native_ev/data/sourced_ev_systems.json",
+    "sourcedEvServices": "native_ev/data/sourced_ev_services.json",
     "sourcedEvGovernments": "native_ev/data/sourced_ev_governments.json",
     "sourcedEvJunk": "native_ev/data/sourced_ev_junk.json",
     "sourcedEvGraphics": "native_ev/data/sourced_ev_graphics.json",

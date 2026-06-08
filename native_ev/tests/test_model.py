@@ -43,8 +43,10 @@ from native_ev.model import (
     sourced_ev_junk_manifest,
     sourced_ev_missions_manifest,
     sourced_ev_names_manifest,
+    sourced_ev_services_manifest,
     sourced_ev_sounds_manifest,
     sourced_ev_structures_manifest,
+    sourced_ev_systems_manifest,
     sourced_ev_weapons_manifest,
     ship_graphics_crosswalk,
     ev_classic_data_ship_manifest,
@@ -153,6 +155,8 @@ class NativeEvModelTests(unittest.TestCase):
         for key in [
             'sourcedEvStructures',
             'sourcedEvMissions',
+            'sourcedEvSystems',
+            'sourcedEvServices',
             'sourcedEvGovernments',
             'sourcedEvJunk',
             'sourcedEvGraphics',
@@ -3406,6 +3410,39 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(first_spob['fields'][0]['byteOffsetInRecord'], 0)
         self.assertGreater(first_system['byteOffset'], 0)
         self.assertGreater(first_spob['byteOffset'], first_system['byteOffset'])
+
+    def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
+        data = sourced_ev_systems_manifest()
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-map-v1')
+        self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
+        self.assertEqual(data['recordRun']['recordSize'], 88)
+        systems = data['systems']
+        self.assertEqual(len(systems), 67)
+        first = systems[0]
+        self.assertEqual(first['resourceId'], 128)
+        self.assertEqual(first['ordinal'], 0)
+        self.assertEqual(first['semanticStatus'], 'ids_promoted_names_seeded_fields_pending')
+        self.assertIn('chunkIndex', first)
+        self.assertIn('byteOffset', first)
+        self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
+        self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering and heuristic name seeds only; coordinates, links, services, hazards, governments, and exact record-to-name mapping remain pending.')
+
+    def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
+        data = sourced_ev_services_manifest()
+        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v1')
+        self.assertEqual(data['spobRecordRun']['candidateType'], 'spob-like')
+        self.assertEqual(data['spobRecordRun']['recordSize'], 400)
+        self.assertEqual(data['spobRecordRun']['count'], 219)
+        self.assertGreaterEqual(len(data['landingNameSeeds']), 72)
+        by_key = {(entry['systemName'], entry['bodyName']): entry for entry in data['serviceMatrix']}
+        levo = by_key[('Levo', 'Levo')]
+        self.assertIn('original-runtime-observed', levo['sourceLabels'])
+        self.assertNotIn('outfitter', levo['services'])
+        earth = by_key[('Sol', 'Earth')]
+        self.assertIn('outfitter', earth['services'])
+        self.assertIn('shipyard', earth['services'])
+        self.assertEqual(data['promotionBoundary'], 'Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Classic-wide decoded service fields remain pending.')
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

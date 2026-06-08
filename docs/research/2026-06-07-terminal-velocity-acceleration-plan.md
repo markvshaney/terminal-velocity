@@ -27,7 +27,7 @@ Operationally:
 4. use deterministic TV scenario/evaluator coverage as the velocity lane;
 5. use the **4 Basilisk emulator lanes** for bounded original-runtime evidence, with lane records for disk/prefs/window/input/capture/restore state when Basilisk evidence is the lane; Basilisk K speeds EV by at least **2x**, so original-runtime evidence lanes should start there, try speeds significantly higher when the lane has restore/capture/input checks and the run is not breaking, and test afterward rather than holding back preemptively;
 6. let build-track scaffolds proceed with explicit labels when original-runtime evidence is missing;
-7. run static/source-mined **semantic-promotion and integration** lanes in parallel for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data; these lanes are source/data limited, not Basilisk-speed limited. Primitive/resource inventory is already learned for many of these surfaces; the remaining work is field-family semantics, cross-links, runtime-facing import, and tests. Current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records;
+7. run static/source-mined **semantic-promotion and integration** lanes in parallel for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data; these lanes are source/data limited, not Basilisk-speed limited. Primitive/resource inventory is already learned for many of these surfaces; the remaining work is field-family semantics, cross-links, runtime-facing import, and tests. Current promoted semantic manifests cover system ID/name-seed readiness, service-matrix scaffold/source seeds, government, mission, weapon, and specialized `jünk` commodity records;
 8. use Basilisk aggressively for behavioral confirmation, ambiguity resolution, UI/state-transition checks, and timing/feel exploration; slow down only after capture/input drift, contradictory evidence, failed post-run checks, or canonical promotion proves slower/1x evidence is required;
 9. reserve strict source gates for fidelity promotion, exact claims, constants, and Classic quirk/intentional-divergence decisions, not for permission to try faster safe-local routes;
 10. integrate in coherent batches rather than one tiny serial slice at a time.
@@ -56,7 +56,7 @@ Then start a bounded batch when the goal is a worker burst:
 - 1 integration owner;
 - start from the implemented lanes in `2026-06-08-terminal-velocity-topology-implementation-manifest.md`: static galaxy topology, service/store provisioning, economy/commodity semantics, mission-family semantics, and evaluator/playtest packets;
 - 3 initial mutating worker lanes, selected from that packet or a refreshed equivalent;
-- 1 static/source-mined fidelity lane for map/planet/station/commerce/ship/outfit/resource data; current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records;
+- 1 static/source-mined fidelity lane for map/planet/station/commerce/ship/outfit/resource data; current promoted semantic manifests cover system ID/name-seed readiness, service-matrix scaffold/source seeds, government, mission, weapon, and specialized `jünk` commodity records;
 - 1 read-only reviewer/scenario scout if useful;
 - 4 Basilisk emulator lanes available for evidence tasks with lane records.
 

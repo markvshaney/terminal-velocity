@@ -19,6 +19,8 @@ SOURCED_EV_STRUCTURES_PATH = ROOT / 'data' / 'sourced_ev_structures.json'
 SOURCED_EV_GOVERNMENTS_PATH = ROOT / 'data' / 'sourced_ev_governments.json'
 SOURCED_EV_JUNK_PATH = ROOT / 'data' / 'sourced_ev_junk.json'
 SOURCED_EV_MISSIONS_PATH = ROOT / 'data' / 'sourced_ev_missions.json'
+SOURCED_EV_SYSTEMS_PATH = ROOT / 'data' / 'sourced_ev_systems.json'
+SOURCED_EV_SERVICES_PATH = ROOT / 'data' / 'sourced_ev_services.json'
 SOURCED_EV_GRAPHICS_PATH = ROOT / 'data' / 'sourced_ev_graphics.json'
 SOURCED_EV_SOUNDS_PATH = ROOT / 'data' / 'sourced_ev_sounds.json'
 SOURCED_EV_WEAPONS_PATH = ROOT / 'data' / 'sourced_ev_weapons.json'
@@ -47,7 +49,7 @@ def profile_manifest(profile_id='classic', profiles_root=PROFILES_ROOT):
         if not (ROOT.parent / rel).exists():
             raise ValueError(f'profile {profile_id} data manifest {key} missing at {rel}')
     sources = data.get('sourceManifests', {})
-    for key in ['sourcedEvStructures', 'sourcedEvMissions', 'sourcedEvGovernments', 'sourcedEvJunk', 'sourcedEvGraphics', 'sourcedEvSounds', 'sourcedEvWeapons']:
+    for key in ['sourcedEvStructures', 'sourcedEvMissions', 'sourcedEvSystems', 'sourcedEvServices', 'sourcedEvGovernments', 'sourcedEvJunk', 'sourcedEvGraphics', 'sourcedEvSounds', 'sourcedEvWeapons']:
         rel = sources.get(key)
         if not rel:
             raise ValueError(f'profile {profile_id} missing source manifest {key}')
@@ -257,6 +259,66 @@ def sourced_ev_structures_manifest(path=SOURCED_EV_STRUCTURES_PATH):
                 raise ValueError(f'sourced EV structures {candidate} record has no decoded fields')
             if record.get('fieldsComplete') is not True:
                 raise ValueError(f'sourced EV structures {candidate} record is not fully decoded')
+    return data
+
+
+def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
+    data = json.loads(path.read_text())
+    if data.get('schemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest has unexpected schema version')
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-map-v1':
+        raise ValueError('sourced EV systems manifest has unexpected extraction method')
+    if data.get('sourceBasis') != 'local primitive BRGR syst-like structure decode plus heuristic EV Data.rez system-name seed list':
+        raise ValueError('sourced EV systems manifest has unexpected source basis')
+    run = data.get('recordRun', {})
+    if run.get('candidateType') != 'syst-like' or run.get('recordSize') != 88 or run.get('count') != 67:
+        raise ValueError('sourced EV systems manifest has unexpected record run')
+    systems = data.get('systems', [])
+    if len(systems) != 67:
+        raise ValueError('sourced EV systems manifest has unexpected system count')
+    ids = [system.get('resourceId') for system in systems]
+    if ids != list(range(128, 195)):
+        raise ValueError('sourced EV systems manifest resource ids are not contiguous Classic system ids')
+    for system in systems:
+        for key in ['resourceId', 'ordinal', 'chunkIndex', 'byteOffset', 'size', 'semanticStatus', 'sourceRecord']:
+            if key not in system:
+                raise ValueError(f'sourced EV system missing {key}')
+        if system['semanticStatus'] != 'ids_promoted_names_seeded_fields_pending':
+            raise ValueError(f"sourced EV system {system['resourceId']} has unexpected semantic status")
+    seeds = data.get('systemNameSeeds', [])
+    if len(seeds) < 9 or 'Sol' not in {seed.get('name') for seed in seeds}:
+        raise ValueError('sourced EV systems manifest missing expected heuristic name seeds')
+    if 'coordinates, links, services' not in data.get('promotionBoundary', ''):
+        raise ValueError('sourced EV systems manifest missing promotion boundary')
+    return data
+
+
+def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
+    data = json.loads(path.read_text())
+    if data.get('schemaVersion') != 1:
+        raise ValueError('sourced EV services manifest has unexpected schema version')
+    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v1':
+        raise ValueError('sourced EV services manifest has unexpected extraction method')
+    run = data.get('spobRecordRun', {})
+    if run.get('candidateType') != 'spob-like' or run.get('recordSize') != 400 or run.get('count') != 219:
+        raise ValueError('sourced EV services manifest has unexpected spob run')
+    seeds = data.get('landingNameSeeds', [])
+    if len(seeds) < 72 or 'Earth' not in {seed.get('name') for seed in seeds}:
+        raise ValueError('sourced EV services manifest missing landing name seeds')
+    matrix = data.get('serviceMatrix', [])
+    if len(matrix) < 20:
+        raise ValueError('sourced EV services manifest has too few service rows')
+    by_key = {(entry.get('systemName'), entry.get('bodyName')): entry for entry in matrix}
+    if ('Levo', 'Levo') not in by_key or ('Sol', 'Earth') not in by_key:
+        raise ValueError('sourced EV services manifest missing representative service rows')
+    levo = by_key[('Levo', 'Levo')]
+    if 'original-runtime-observed' not in levo.get('sourceLabels', []) or 'outfitter' in levo.get('services', []):
+        raise ValueError('Levo service row does not preserve original-runtime no-outfitter boundary')
+    earth = by_key[('Sol', 'Earth')]
+    if not {'outfitter', 'shipyard', 'commodities', 'missions'}.issubset(set(earth.get('services', []))):
+        raise ValueError('Earth service scaffold row missing expected current TV services')
+    if 'Classic-wide decoded service fields remain pending' not in data.get('promotionBoundary', ''):
+        raise ValueError('sourced EV services manifest missing promotion boundary')
     return data
 
 

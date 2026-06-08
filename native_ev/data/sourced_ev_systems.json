@@ -1,0 +1,1015 @@
+{
+  "schemaVersion": 1,
+  "sourceFile": "source-assets/ev-classic/Nova Files/EV Data.rez",
+  "sourceSha256": "e5e8b5c667409b1c950a49e6aeb3a771609126e205959ef81e9328beabf2ba2f",
+  "sourceManifests": {
+    "structures": "native_ev/data/sourced_ev_structures.json",
+    "names": "native_ev/data/sourced_ev_names.json"
+  },
+  "method": "ev-classic-static-system-id-name-seed-map-v1",
+  "sourceBasis": "local primitive BRGR syst-like structure decode plus heuristic EV Data.rez system-name seed list",
+  "resourceIdBase": 128,
+  "recordRun": {
+    "candidateType": "syst-like",
+    "recordSize": 88,
+    "count": 67,
+    "confidence": "decoded-resource-backed-id-ordering"
+  },
+  "systemNameSeeds": [
+    {
+      "name": "Sol",
+      "byteOffset": 134259,
+      "confidence": "medium",
+      "evidence": "Sol. The Rebel liason, after carefully safeguarding the stolen data, informs you of your payment: “In addition to the small fortune that we’ve put into your ban"
+    },
+    {
+      "name": "Centauri",
+      "byteOffset": 24415,
+      "confidence": "medium",
+      "evidence": "Centauri Spacelines ships visit Capella each year. Dune is a parched desert world. The few people who live on this planet sa"
+    },
+    {
+      "name": "Sirius",
+      "byteOffset": 26130,
+      "confidence": "medium",
+      "evidence": "Sirius III - a gas giant. Sirius Station is the main operating base of the Sirius Cybernetics Corporation, makers of fine cy"
+    },
+    {
+      "name": "Tau Ceti",
+      "byteOffset": 26345,
+      "confidence": "medium",
+      "evidence": "Tau Ceti IV was first visited by the colony ship Marathon. Merlin is the largest moon of Tau Ceti IV. Its size is sufficent"
+    },
+    {
+      "name": "Enyo",
+      "byteOffset": 27016,
+      "confidence": "medium",
+      "evidence": "Enyo’s World The Enyo Orbital Fuel Refinery is one of the largest producers of processed fuel products in the galaxy. It mak"
+    },
+    {
+      "name": "Antares",
+      "byteOffset": 28605,
+      "confidence": "medium",
+      "evidence": "Antares system, the Confederation has constructed this small orbital garrison. It serves as a refuelling base for Confederation patrol ships, as well as a vangu"
+    },
+    {
+      "name": "Alkaid",
+      "byteOffset": 30346,
+      "confidence": "medium",
+      "evidence": "Alkaid Alkaidion is the second moon of Alkaid, and the only one capable of supporting life. Its businesses make a huge profi"
+    },
+    {
+      "name": "Zaxted",
+      "byteOffset": 31065,
+      "confidence": "medium",
+      "evidence": "Zaxted Starport is a bustling center of trade and commerce. Zaxted Clotho Prime is often"
+    },
+    {
+      "name": "Clotho",
+      "byteOffset": 31204,
+      "confidence": "medium",
+      "evidence": "Clotho Prime is often visited by Rebel warships, as the Rebellion maintains a repair and refuelling base on the surface of the planet."
+    }
+  ],
+  "systems": [
+    {
+      "resourceId": 128,
+      "ordinal": 0,
+      "chunkIndex": 652,
+      "byteOffset": 189047,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 129,
+      "ordinal": 1,
+      "chunkIndex": 653,
+      "byteOffset": 189135,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 130,
+      "ordinal": 2,
+      "chunkIndex": 654,
+      "byteOffset": 189223,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 131,
+      "ordinal": 3,
+      "chunkIndex": 655,
+      "byteOffset": 189311,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 132,
+      "ordinal": 4,
+      "chunkIndex": 656,
+      "byteOffset": 189399,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 133,
+      "ordinal": 5,
+      "chunkIndex": 657,
+      "byteOffset": 189487,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 134,
+      "ordinal": 6,
+      "chunkIndex": 658,
+      "byteOffset": 189575,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 135,
+      "ordinal": 7,
+      "chunkIndex": 659,
+      "byteOffset": 189663,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 136,
+      "ordinal": 8,
+      "chunkIndex": 660,
+      "byteOffset": 189751,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 137,
+      "ordinal": 9,
+      "chunkIndex": 661,
+      "byteOffset": 189839,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 138,
+      "ordinal": 10,
+      "chunkIndex": 662,
+      "byteOffset": 189927,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 139,
+      "ordinal": 11,
+      "chunkIndex": 663,
+      "byteOffset": 190015,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 140,
+      "ordinal": 12,
+      "chunkIndex": 664,
+      "byteOffset": 190103,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 141,
+      "ordinal": 13,
+      "chunkIndex": 665,
+      "byteOffset": 190191,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 142,
+      "ordinal": 14,
+      "chunkIndex": 666,
+      "byteOffset": 190279,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 143,
+      "ordinal": 15,
+      "chunkIndex": 667,
+      "byteOffset": 190367,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 144,
+      "ordinal": 16,
+      "chunkIndex": 668,
+      "byteOffset": 190455,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 145,
+      "ordinal": 17,
+      "chunkIndex": 669,
+      "byteOffset": 190543,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 146,
+      "ordinal": 18,
+      "chunkIndex": 670,
+      "byteOffset": 190631,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 147,
+      "ordinal": 19,
+      "chunkIndex": 671,
+      "byteOffset": 190719,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 148,
+      "ordinal": 20,
+      "chunkIndex": 672,
+      "byteOffset": 190807,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 149,
+      "ordinal": 21,
+      "chunkIndex": 673,
+      "byteOffset": 190895,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 150,
+      "ordinal": 22,
+      "chunkIndex": 674,
+      "byteOffset": 190983,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 151,
+      "ordinal": 23,
+      "chunkIndex": 675,
+      "byteOffset": 191071,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 152,
+      "ordinal": 24,
+      "chunkIndex": 676,
+      "byteOffset": 191159,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 153,
+      "ordinal": 25,
+      "chunkIndex": 677,
+      "byteOffset": 191247,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 154,
+      "ordinal": 26,
+      "chunkIndex": 678,
+      "byteOffset": 191335,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 155,
+      "ordinal": 27,
+      "chunkIndex": 679,
+      "byteOffset": 191423,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 156,
+      "ordinal": 28,
+      "chunkIndex": 680,
+      "byteOffset": 191511,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 157,
+      "ordinal": 29,
+      "chunkIndex": 681,
+      "byteOffset": 191599,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 158,
+      "ordinal": 30,
+      "chunkIndex": 682,
+      "byteOffset": 191687,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 159,
+      "ordinal": 31,
+      "chunkIndex": 683,
+      "byteOffset": 191775,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 160,
+      "ordinal": 32,
+      "chunkIndex": 684,
+      "byteOffset": 191863,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 161,
+      "ordinal": 33,
+      "chunkIndex": 685,
+      "byteOffset": 191951,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 162,
+      "ordinal": 34,
+      "chunkIndex": 686,
+      "byteOffset": 192039,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 163,
+      "ordinal": 35,
+      "chunkIndex": 687,
+      "byteOffset": 192127,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 164,
+      "ordinal": 36,
+      "chunkIndex": 688,
+      "byteOffset": 192215,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 165,
+      "ordinal": 37,
+      "chunkIndex": 689,
+      "byteOffset": 192303,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 166,
+      "ordinal": 38,
+      "chunkIndex": 690,
+      "byteOffset": 192391,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 167,
+      "ordinal": 39,
+      "chunkIndex": 691,
+      "byteOffset": 192479,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 168,
+      "ordinal": 40,
+      "chunkIndex": 692,
+      "byteOffset": 192567,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 169,
+      "ordinal": 41,
+      "chunkIndex": 693,
+      "byteOffset": 192655,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 170,
+      "ordinal": 42,
+      "chunkIndex": 694,
+      "byteOffset": 192743,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 171,
+      "ordinal": 43,
+      "chunkIndex": 695,
+      "byteOffset": 192831,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 172,
+      "ordinal": 44,
+      "chunkIndex": 696,
+      "byteOffset": 192919,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 173,
+      "ordinal": 45,
+      "chunkIndex": 697,
+      "byteOffset": 193007,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 174,
+      "ordinal": 46,
+      "chunkIndex": 698,
+      "byteOffset": 193095,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 175,
+      "ordinal": 47,
+      "chunkIndex": 699,
+      "byteOffset": 193183,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 176,
+      "ordinal": 48,
+      "chunkIndex": 700,
+      "byteOffset": 193271,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 177,
+      "ordinal": 49,
+      "chunkIndex": 701,
+      "byteOffset": 193359,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 178,
+      "ordinal": 50,
+      "chunkIndex": 702,
+      "byteOffset": 193447,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 179,
+      "ordinal": 51,
+      "chunkIndex": 703,
+      "byteOffset": 193535,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 180,
+      "ordinal": 52,
+      "chunkIndex": 704,
+      "byteOffset": 193623,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 181,
+      "ordinal": 53,
+      "chunkIndex": 705,
+      "byteOffset": 193711,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 182,
+      "ordinal": 54,
+      "chunkIndex": 706,
+      "byteOffset": 193799,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 183,
+      "ordinal": 55,
+      "chunkIndex": 707,
+      "byteOffset": 193887,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 184,
+      "ordinal": 56,
+      "chunkIndex": 708,
+      "byteOffset": 193975,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 185,
+      "ordinal": 57,
+      "chunkIndex": 709,
+      "byteOffset": 194063,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 186,
+      "ordinal": 58,
+      "chunkIndex": 710,
+      "byteOffset": 194151,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 187,
+      "ordinal": 59,
+      "chunkIndex": 711,
+      "byteOffset": 194239,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 188,
+      "ordinal": 60,
+      "chunkIndex": 712,
+      "byteOffset": 194327,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 189,
+      "ordinal": 61,
+      "chunkIndex": 713,
+      "byteOffset": 194415,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 190,
+      "ordinal": 62,
+      "chunkIndex": 714,
+      "byteOffset": 194503,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 191,
+      "ordinal": 63,
+      "chunkIndex": 715,
+      "byteOffset": 194591,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 192,
+      "ordinal": 64,
+      "chunkIndex": 716,
+      "byteOffset": 194679,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 193,
+      "ordinal": 65,
+      "chunkIndex": 717,
+      "byteOffset": 194767,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    },
+    {
+      "resourceId": 194,
+      "ordinal": 66,
+      "chunkIndex": 718,
+      "byteOffset": 194855,
+      "size": 88,
+      "semanticStatus": "ids_promoted_names_seeded_fields_pending",
+      "sourceRecord": {
+        "candidateType": "syst-like",
+        "recordSize": 88,
+        "fieldCount": 44,
+        "fieldsComplete": true
+      }
+    }
+  ],
+  "promotionBoundary": "IDs/resource ordering and heuristic name seeds only; coordinates, links, services, hazards, governments, and exact record-to-name mapping remain pending."
+}

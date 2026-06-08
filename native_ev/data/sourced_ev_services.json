@@ -1,0 +1,1166 @@
+{
+  "schemaVersion": 1,
+  "sourceFile": "source-assets/ev-classic/Nova Files/EV Data.rez",
+  "sourceSha256": "e5e8b5c667409b1c950a49e6aeb3a771609126e205959ef81e9328beabf2ba2f",
+  "sourceManifests": {
+    "structures": "native_ev/data/sourced_ev_structures.json",
+    "names": "native_ev/data/sourced_ev_names.json",
+    "runtimeUniverse": "native_ev/data/universe.json"
+  },
+  "method": "terminal-velocity-service-matrix-scaffold-plus-source-seeds-v1",
+  "sourceBasis": "Terminal Velocity runtime universe service matrix plus Levo original-runtime observation, sourced landing-name seeds, and local primitive spob-like structure decode",
+  "spobRecordRun": {
+    "candidateType": "spob-like",
+    "recordSize": 400,
+    "count": 219,
+    "confidence": "decoded-resource-backed-record-family-readiness"
+  },
+  "landingNameSeeds": [
+    {
+      "name": "Earth",
+      "chunkIndex": 6,
+      "resourceId": 0,
+      "byteOffset": 23037,
+      "size": 149,
+      "confidence": "high",
+      "evidence": "As every schoolkid knows, Earth is the homeworld of the human race. It is also the capital of the Confederation."
+    },
+    {
+      "name": "Stardock Alpha",
+      "chunkIndex": 7,
+      "resourceId": 0,
+      "byteOffset": 23186,
+      "size": 125,
+      "confidence": "high",
+      "evidence": "Stardock Alpha is the Confederation Navy’s primary spacedock and ship refitting complex."
+    },
+    {
+      "name": "Mars",
+      "chunkIndex": 8,
+      "resourceId": 0,
+      "byteOffset": 23311,
+      "size": 194,
+      "confidence": "high",
+      "evidence": "Mars is the human race’s second-oldest colony world. It was first settled in the middle of the 21st century, and is now home to nearly a billion inhabitants."
+    },
+    {
+      "name": "Landfall",
+      "chunkIndex": 9,
+      "resourceId": 0,
+      "byteOffset": 23505,
+      "size": 153,
+      "confidence": "high",
+      "evidence": "Landfall was the first extrasolar planet settled by colony ships from Earth. Today it is a booming industrial world."
+    },
+    {
+      "name": "Luna",
+      "chunkIndex": 10,
+      "resourceId": 0,
+      "byteOffset": 23658,
+      "size": 209,
+      "confidence": "high",
+      "evidence": "Luna is Earth’s only moon. Terran Naval yards has its main shipyard facilities here, as Luna’s low gravity and near-perfect vacuum are ideal for heavy warship construction."
+    },
+    {
+      "name": "Levo",
+      "chunkIndex": 11,
+      "resourceId": 0,
+      "byteOffset": 23867,
+      "size": 227,
+      "confidence": "high",
+      "evidence": "Levo is an independent world that has resisted joining the Confederation. Anyone is welcome at the tiny but neutral Levo Spaceport, located on the island of Locanda in Levo’s southern ocean."
+    },
+    {
+      "name": "New Britain",
+      "chunkIndex": 12,
+      "resourceId": 0,
+      "byteOffset": 24094,
+      "size": 244,
+      "confidence": "high",
+      "evidence": "New Britain is a populous island world, and one of the first worlds settled during the Great Expansion. Much of New Britain’s exports are food products, as its oceans are teeming with plant and animal life."
+    },
+    {
+      "name": "Capella",
+      "chunkIndex": 13,
+      "resourceId": 0,
+      "byteOffset": 24338,
+      "size": 164,
+      "confidence": "high",
+      "evidence": "Capella is a lush, beautiful planet that attracts many tourists. Hundreds of Centauri Spacelines ships visit Capella each year."
+    },
+    {
+      "name": "Dune",
+      "chunkIndex": 14,
+      "resourceId": 0,
+      "byteOffset": 24502,
+      "size": 140,
+      "confidence": "high",
+      "evidence": "Dune is a parched desert world. The few people who live on this planet say they do so for the solitude."
+    },
+    {
+      "name": "Spica",
+      "chunkIndex": 15,
+      "resourceId": 0,
+      "byteOffset": 24642,
+      "size": 268,
+      "confidence": "high",
+      "evidence": "Spica is a world shrouded by toxic clouds and a choking atmosphere. The uridium miners who work here have the highest fatality rate of any in the galaxy, as even a brief accidental exposure to Spica’s atmosphere is insta"
+    },
+    {
+      "name": "Maxwell’s Purchase",
+      "chunkIndex": 16,
+      "resourceId": 0,
+      "byteOffset": 24910,
+      "size": 207,
+      "confidence": "high",
+      "evidence": "Maxwell’s Purchase is a peaceful, independent world dedicated mainly to farming and some light manufacturing. The delicious junga root is grown primarily on this planet."
+    },
+    {
+      "name": "Hodgson’s World",
+      "chunkIndex": 17,
+      "resourceId": 0,
+      "byteOffset": 25117,
+      "size": 103,
+      "confidence": "high",
+      "evidence": "Hodgson’s World is home to some of the best lobster in the galaxy."
+    },
+    {
+      "name": "Master’s Planet",
+      "chunkIndex": 19,
+      "resourceId": 0,
+      "byteOffset": 25472,
+      "size": 237,
+      "confidence": "high",
+      "evidence": "Master’s Planet is a strange world with few known inhabitants. The occasional visitor has been known to disappear on Master’s Planet, though so far no explanation has been found for these occurrances."
+    },
+    {
+      "name": "Sirius III",
+      "chunkIndex": 21,
+      "resourceId": 0,
+      "byteOffset": 26130,
+      "size": 62,
+      "confidence": "high",
+      "evidence": "Sirius III - a gas giant."
+    },
+    {
+      "name": "Sirius Station",
+      "chunkIndex": 22,
+      "resourceId": 0,
+      "byteOffset": 26192,
+      "size": 153,
+      "confidence": "high",
+      "evidence": "Sirius Station is the main operating base of the Sirius Cybernetics Corporation, makers of fine cybernetic products."
+    },
+    {
+      "name": "Tau Ceti IV",
+      "chunkIndex": 23,
+      "resourceId": 0,
+      "byteOffset": 26345,
+      "size": 95,
+      "confidence": "high",
+      "evidence": "Tau Ceti IV was first visited by the colony ship Marathon."
+    },
+    {
+      "name": "Merlin",
+      "chunkIndex": 24,
+      "resourceId": 0,
+      "byteOffset": 26440,
+      "size": 284,
+      "confidence": "high",
+      "evidence": "Merlin is the largest moon of Tau Ceti IV. Its size is sufficent to hold an atmosphere, and conditions on Merlin are quite Earthlike, save for the somewhat lower gravity. The inhabitants of Merlin hold human-powered air"
+    },
+    {
+      "name": "Tabletop",
+      "chunkIndex": 25,
+      "resourceId": 0,
+      "byteOffset": 26724,
+      "size": 292,
+      "confidence": "high",
+      "evidence": "Tabletop is a planet almost completely devoid of trees. Raw timber and wood products fetch a high price in Tabletop’s commodity exchange. There is even a flourishing black market, which provides Tabletop’s residents with"
+    },
+    {
+      "name": "New Sahara",
+      "chunkIndex": 28,
+      "resourceId": 0,
+      "byteOffset": 27382,
+      "size": 210,
+      "confidence": "high",
+      "evidence": "New Sahara is a hot, dry, flat, and highly uninteresting planet. Its main feature is its resemblance to Earth’s Sahara desert. The planet has only a few nomadic inhabitants."
+    },
+    {
+      "name": "Samson’s Planet",
+      "chunkIndex": 29,
+      "resourceId": 0,
+      "byteOffset": 27592,
+      "size": 174,
+      "confidence": "high",
+      "evidence": "Samson’s Planet is a grim and uninteresting ball of dirty ice. However, underneath the glaciers are large deposits of valuable metal ore."
+    },
+    {
+      "name": "Plateau",
+      "chunkIndex": 30,
+      "resourceId": 0,
+      "byteOffset": 27766,
+      "size": 263,
+      "confidence": "high",
+      "evidence": "Plateau is a planet composed entirely of mesa-like islands. All the land is flat, and where it isn’t, it’s underwater. Plateau’s inhabitants live in isolated island communities, claiming they find life on this planet pea"
+    },
+    {
+      "name": "New Providence",
+      "chunkIndex": 32,
+      "resourceId": 0,
+      "byteOffset": 28257,
+      "size": 279,
+      "confidence": "high",
+      "evidence": "New Providence is a peaceful world, founded long ago during the Great Expansion. During the Great War, the Confederation converted the once-agrarian colony into a huge mining operation, run by the Confederation-loyal Ast"
+    },
+    {
+      "name": "New Istanbul",
+      "chunkIndex": 34,
+      "resourceId": 0,
+      "byteOffset": 28876,
+      "size": 174,
+      "confidence": "high",
+      "evidence": "New Istanbul is a major source of prosthetic SynthFlesh and other medical goods, as Flood Medical Technologies has its main factory here."
+    },
+    {
+      "name": "George’s World",
+      "chunkIndex": 35,
+      "resourceId": 0,
+      "byteOffset": 29050,
+      "size": 313,
+      "confidence": "high",
+      "evidence": "George’s World is perodically rocked by violent earthquakes, and a deep rumbling can be heard at all times, all over the planet. No one has yet postulated an explanation for this phenomenon, but settlers are reluctant to"
+    },
+    {
+      "name": "P-8457",
+      "chunkIndex": 36,
+      "resourceId": 0,
+      "byteOffset": 29363,
+      "size": 134,
+      "confidence": "high",
+      "evidence": "P-8457 is a Marslike desert world with a thin atmosphere and low temperatures. It is uninhabited."
+    },
+    {
+      "name": "Beeblebrox",
+      "chunkIndex": 37,
+      "resourceId": 0,
+      "byteOffset": 29497,
+      "size": 249,
+      "confidence": "high",
+      "evidence": "Beeblebrox is a wild world, a world of wild parties and wild people. If you have two heads, three arms, and an ego problem, don’t travel to Beeblebrox; you will be laughed at and considered boring and unoriginal."
+    },
+    {
+      "name": "Turin V",
+      "chunkIndex": 38,
+      "resourceId": 0,
+      "byteOffset": 29746,
+      "size": 316,
+      "confidence": "high",
+      "evidence": "Turin V is an arid, barren world, characterized by freezing temperatures and fierce winds. The colony ship Sojourner II was the first ship to reach this planet, and was forced to crash-land in the desert when its propuls"
+    },
+    {
+      "name": "Palshife",
+      "chunkIndex": 39,
+      "resourceId": 0,
+      "byteOffset": 30062,
+      "size": 284,
+      "confidence": "high",
+      "evidence": "Palshife is a beautiful world of rocky islands and gorgeous skies. It was one of the galaxy’s more popular vacation spots, before the Great War. Now, it is home to the Rebel High Command and the Rebellion’s main troop-tr"
+    },
+    {
+      "name": "Alkaidion",
+      "chunkIndex": 41,
+      "resourceId": 0,
+      "byteOffset": 30389,
+      "size": 461,
+      "confidence": "high",
+      "evidence": "Alkaidion is the second moon of Alkaid, and the only one capable of supporting life. Its businesses make a huge profit each year through the export of advanced quasiconductor devices constructed in the colony’s high-tech"
+    },
+    {
+      "name": "Regulus II",
+      "chunkIndex": 42,
+      "resourceId": 0,
+      "byteOffset": 30850,
+      "size": 215,
+      "confidence": "high",
+      "evidence": "Regulus II is a Confederation penal colony. Some of the most outspoken opponents of Confederation rule were shipped here after the Great War, and none have been heard from since."
+    },
+    {
+      "name": "Zaxted Starport",
+      "chunkIndex": 43,
+      "resourceId": 0,
+      "byteOffset": 31065,
+      "size": 96,
+      "confidence": "high",
+      "evidence": "Zaxted Starport is a bustling center of trade and commerce."
+    },
+    {
+      "name": "Clotho Prime",
+      "chunkIndex": 45,
+      "resourceId": 0,
+      "byteOffset": 31204,
+      "size": 171,
+      "confidence": "high",
+      "evidence": "Clotho Prime is often visited by Rebel warships, as the Rebellion maintains a repair and refuelling base on the surface of the planet."
+    },
+    {
+      "name": "Clotho II",
+      "chunkIndex": 46,
+      "resourceId": 0,
+      "byteOffset": 31375,
+      "size": 223,
+      "confidence": "high",
+      "evidence": "Clotho II is a dismal world, wreathed by perpetual storm clouds. The planet was colonized so that the Delahanty plant, a spicy delicacy that grows only on this world, could be harvested."
+    },
+    {
+      "name": "Hunter",
+      "chunkIndex": 48,
+      "resourceId": 0,
+      "byteOffset": 31640,
+      "size": 86,
+      "confidence": "high",
+      "evidence": "Hunter is home to the famous Orion Trouser Snake."
+    },
+    {
+      "name": "Atropos",
+      "chunkIndex": 49,
+      "resourceId": 0,
+      "byteOffset": 31726,
+      "size": 142,
+      "confidence": "high",
+      "evidence": "Atropos features some of the best hoverskiing in the galaxy. Just watch out for the perpetual avalanches."
+    },
+    {
+      "name": "New Scotland’s motto",
+      "chunkIndex": 51,
+      "resourceId": 0,
+      "byteOffset": 31915,
+      "size": 137,
+      "confidence": "high",
+      "evidence": "New Scotland’s motto is “It’s Our Bloody Moon, We Can Play The Bagpipes And Eat Haggis All We Want!”"
+    },
+    {
+      "name": "New France",
+      "chunkIndex": 53,
+      "resourceId": 0,
+      "byteOffset": 32244,
+      "size": 234,
+      "confidence": "high",
+      "evidence": "New France was colonized during the Great Expansion as a center of culture, learning, and enlightenment. Now, it has the highest number of gift shops and burger bars per capita of any known planet."
+    },
+    {
+      "name": "Diphidia II",
+      "chunkIndex": 54,
+      "resourceId": 0,
+      "byteOffset": 32478,
+      "size": 266,
+      "confidence": "high",
+      "evidence": "Diphidia II is a major exporter of fish and ocean products. Diphidia seaweed, which grows only in Diphidia’s oceans, is renowned for its remarkable strength and durability; no synthetic fiber has yet matched its tensile"
+    },
+    {
+      "name": "Quake",
+      "chunkIndex": 56,
+      "resourceId": 0,
+      "byteOffset": 32925,
+      "size": 297,
+      "confidence": "high",
+      "evidence": "Quake is a world continually shaken by seismic tremors. Anyone who lands here immediately blasts off again and heads for Opal, Quake’s sister world and a far more calming place. Of course, anyone with any sense at all wo"
+    },
+    {
+      "name": "Armstrong",
+      "chunkIndex": 57,
+      "resourceId": 0,
+      "byteOffset": 33222,
+      "size": 183,
+      "confidence": "high",
+      "evidence": "Armstrong has a large number of shipyards and repair facilities, and the planet also has the most extensive museum of space history in the galaxy."
+    },
+    {
+      "name": "Rupert",
+      "chunkIndex": 59,
+      "resourceId": 0,
+      "byteOffset": 33455,
+      "size": 146,
+      "confidence": "high",
+      "evidence": "Rupert is a small moon that is home to a colony of religous fanatics, followers of the Order of the Holy Mac."
+    },
+    {
+      "name": "Blackthorne",
+      "chunkIndex": 61,
+      "resourceId": 0,
+      "byteOffset": 33644,
+      "size": 309,
+      "confidence": "high",
+      "evidence": "Blackthorne is an extremely dangerous place for a law-abiding citizen to hang out. If you don’t actually get your cargo stolen, you’ll at least get your pocket picked. Still, Blackthorne is the place to come if you’re lo"
+    },
+    {
+      "name": "New Japan",
+      "chunkIndex": 63,
+      "resourceId": 0,
+      "byteOffset": 33999,
+      "size": 105,
+      "confidence": "high",
+      "evidence": "New Japan is a peaceful island world, and a well-established colony."
+    },
+    {
+      "name": "Ursa Minor Beta",
+      "chunkIndex": 66,
+      "resourceId": 0,
+      "byteOffset": 34390,
+      "size": 203,
+      "confidence": "high",
+      "evidence": "Ursa Minor Beta is a luxury world, full of tourists and wealthy citizens. Their membership in the Rebellion is more a matter of location than of political sympathies."
+    },
+    {
+      "name": "Perseus II",
+      "chunkIndex": 67,
+      "resourceId": 0,
+      "byteOffset": 34593,
+      "size": 156,
+      "confidence": "high",
+      "evidence": "Perseus II is a hot but pleasant world. Persean Bug Juice is distilled here, and exported to planets across the galaxy."
+    },
+    {
+      "name": "Pegasus",
+      "chunkIndex": 68,
+      "resourceId": 0,
+      "byteOffset": 34749,
+      "size": 113,
+      "confidence": "high",
+      "evidence": "Pegasus is a small mining and research colony on a moon orbiting Perseus II."
+    },
+    {
+      "name": "Sauron",
+      "chunkIndex": 69,
+      "resourceId": 0,
+      "byteOffset": 34862,
+      "size": 196,
+      "confidence": "high",
+      "evidence": "Sauron is the only inhabited world in this small region of space, as it is convienently located to serve as a refuelling and outfitting base for passing ships."
+    },
+    {
+      "name": "New Bavaria",
+      "chunkIndex": 71,
+      "resourceId": 0,
+      "byteOffset": 35428,
+      "size": 222,
+      "confidence": "high",
+      "evidence": "New Bavaria is a lovely planet, and its inhabitants are proud of their Germanic heritage. This is one of the few planets in the galaxy where Galactic Standard is not the first language."
+    },
+    {
+      "name": "Port Oread",
+      "chunkIndex": 74,
+      "resourceId": 0,
+      "byteOffset": 35970,
+      "size": 128,
+      "confidence": "high",
+      "evidence": "Port Oread is a stopover point for passing freighters of many governments and corporations."
+    },
+    {
+      "name": "Lauralee",
+      "chunkIndex": 76,
+      "resourceId": 0,
+      "byteOffset": 36290,
+      "size": 145,
+      "confidence": "high",
+      "evidence": "Lauralee is a beautiful world, with many exotic plant and animal species visible from the spaceport windows."
+    },
+    {
+      "name": "Murphy's World",
+      "chunkIndex": 77,
+      "resourceId": 0,
+      "byteOffset": 36435,
+      "size": 346,
+      "confidence": "high",
+      "evidence": "Murphy's World is a planet of terrible luck. Most of the islands on this ocean world are of volcanic origin, with many still active. Forecasting the frequent eruptions is a huge task, and many people are caught off guard"
+    },
+    {
+      "name": "Sentinel Station",
+      "chunkIndex": 79,
+      "resourceId": 0,
+      "byteOffset": 37048,
+      "size": 262,
+      "confidence": "high",
+      "evidence": "Sentinel Station used to serve as a base for the patrol ships that escorted bulk freighters full of luxury goods out of the Adhara system - now it functions as the Rebellion’s primary staging platform in this region of s"
+    },
+    {
+      "name": "Zeus",
+      "chunkIndex": 80,
+      "resourceId": 0,
+      "byteOffset": 37310,
+      "size": 168,
+      "confidence": "high",
+      "evidence": "Zeus is a large planet with high gravity. Violent thunderstorms jolt the desert bluffs with lightning during Zeus’s monsoon season."
+    },
+    {
+      "name": "Endor",
+      "chunkIndex": 83,
+      "resourceId": 0,
+      "byteOffset": 37847,
+      "size": 156,
+      "confidence": "high",
+      "evidence": "Endor is a small moon with low gravity. As a result, the trees that cover this forest world grow to incredible heights."
+    },
+    {
+      "name": "Virgo",
+      "chunkIndex": 86,
+      "resourceId": 0,
+      "byteOffset": 38499,
+      "size": 244,
+      "confidence": "high",
+      "evidence": "Virgo is almost all swamp, so the inhabitants are forced to live in the sparsely-dotted mountain ranges. Virgo’s main export is the Virgo Banderfrog, whose hide is highly valued for its toughness and beauty."
+    },
+    {
+      "name": "Sirgil",
+      "chunkIndex": 87,
+      "resourceId": 0,
+      "byteOffset": 38743,
+      "size": 131,
+      "confidence": "high",
+      "evidence": "Sirgil is a major industrial world, dotted with metropolitan cities and manufacturing centers."
+    },
+    {
+      "name": "Sirgil Starport",
+      "chunkIndex": 88,
+      "resourceId": 0,
+      "byteOffset": 38874,
+      "size": 157,
+      "confidence": "high",
+      "evidence": "Sirgil Starport is an orbital market, established as a commodity exchange for the products produced by the planet below."
+    },
+    {
+      "name": "Scorpio",
+      "chunkIndex": 89,
+      "resourceId": 0,
+      "byteOffset": 39031,
+      "size": 104,
+      "confidence": "high",
+      "evidence": "Scorpio has the largest number of crab species in the known galaxy."
+    },
+    {
+      "name": "Deneb III",
+      "chunkIndex": 90,
+      "resourceId": 0,
+      "byteOffset": 39135,
+      "size": 128,
+      "confidence": "high",
+      "evidence": "Deneb III is a major agricultural world, specializing in the production of grain and fruit."
+    },
+    {
+      "name": "New Cydonia",
+      "chunkIndex": 91,
+      "resourceId": 0,
+      "byteOffset": 39263,
+      "size": 257,
+      "confidence": "high",
+      "evidence": "New Cydonia was founded by natives of the Mars Colony, who claimed that Mars was too civilized and terraformed for their tastes. The Aries system is currently at war with its neighboring system, Lethe, over water rights."
+    },
+    {
+      "name": "Opal",
+      "chunkIndex": 93,
+      "resourceId": 0,
+      "byteOffset": 39740,
+      "size": 107,
+      "confidence": "high",
+      "evidence": "Opal is a tranquil island world, much preferable to neighboring Quake."
+    },
+    {
+      "name": "Nexus Outpost",
+      "chunkIndex": 94,
+      "resourceId": 0,
+      "byteOffset": 39847,
+      "size": 127,
+      "confidence": "high",
+      "evidence": "Nexus Outpost serves as a monitoring station for traffic passing through the Nexus system."
+    },
+    {
+      "name": "Pirate’s Cove",
+      "chunkIndex": 96,
+      "resourceId": 0,
+      "byteOffset": 40055,
+      "size": 138,
+      "confidence": "high",
+      "evidence": "Pirate’s Cove is a haven for privateers, bucaneers, brigands, and others from the scum of the galaxy."
+    },
+    {
+      "name": "Astrodyne Outpost",
+      "chunkIndex": 97,
+      "resourceId": 0,
+      "byteOffset": 40193,
+      "size": 347,
+      "confidence": "high",
+      "evidence": "Astrodyne Outpost is an abandoned research base that was once used as a weapons testing facility by the Confederation. When a mysterious accident killed the entire crew of the station, the Confederation covered up the in"
+    },
+    {
+      "name": "P-6564",
+      "chunkIndex": 98,
+      "resourceId": 0,
+      "byteOffset": 40540,
+      "size": 142,
+      "confidence": "high",
+      "evidence": "P-6564 is a planet shrouded by a corrosive atmosphere. Better not stay too long, or your ship might melt."
+    },
+    {
+      "name": "Ruby",
+      "chunkIndex": 99,
+      "resourceId": 0,
+      "byteOffset": 40682,
+      "size": 177,
+      "confidence": "high",
+      "evidence": "Ruby is completely red: red ground, red sky, red planet in the background. This moon is a testing ground for many new Confederation weapons."
+    },
+    {
+      "name": "Listening Post 94",
+      "chunkIndex": 100,
+      "resourceId": 0,
+      "byteOffset": 40859,
+      "size": 134,
+      "confidence": "high",
+      "evidence": "Listening Post 94 was set up to monitor communications traffic from pirates and suspected rebels."
+    },
+    {
+      "name": "Listening Post 95",
+      "chunkIndex": 101,
+      "resourceId": 0,
+      "byteOffset": 40993,
+      "size": 134,
+      "confidence": "high",
+      "evidence": "Listening Post 95 was set up to monitor communications traffic from pirates and suspected rebels."
+    },
+    {
+      "name": "Evildrome",
+      "chunkIndex": 107,
+      "resourceId": 0,
+      "byteOffset": 41607,
+      "size": 219,
+      "confidence": "high",
+      "evidence": "Evildrome is a pirate’s favorite stopover, not so much for the wide selection of illegal goods to be found here as for the Evildrome Boozarama, ostensibly the best bar in the galaxy."
+    },
+    {
+      "name": "A grim, snowy world",
+      "chunkIndex": 108,
+      "resourceId": 0,
+      "byteOffset": 41826,
+      "size": 57,
+      "confidence": "high",
+      "evidence": "A grim, snowy world."
+    },
+    {
+      "name": "New Antigua",
+      "chunkIndex": 111,
+      "resourceId": 0,
+      "byteOffset": 42066,
+      "size": 206,
+      "confidence": "high",
+      "evidence": "New Antigua was founded in the spirit of Earth’s Caribbean islands. Like their predecessors, the islands of New Antigua are home to some of the most evil pirates around."
+    },
+    {
+      "name": "Liberty Station",
+      "chunkIndex": 112,
+      "resourceId": 0,
+      "byteOffset": 42272,
+      "size": 285,
+      "confidence": "high",
+      "evidence": "Liberty Station was constructed to serve as an ore processing center and a refuelling base for the ships that mine valuable ores from the floating debris of the Trugati asteroid belt, a region of the galaxy thick with sp"
+    }
+  ],
+  "serviceMatrix": [
+    {
+      "systemName": "Levo",
+      "bodyName": "Levo",
+      "runtimeBodyId": "Levo Spaceport",
+      "services": [
+        "commodities",
+        "jobs",
+        "missions"
+      ],
+      "outfitsForSale": [],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "original-runtime-observed",
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": "Original EV Classic Levo landed screen shows Spaceport Bar, Mission Computer, Commodity Exchange, and Leave; no visible outfitter button.",
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Sol",
+      "bodyName": "Earth",
+      "runtimeBodyId": "Earth",
+      "services": [
+        "repairs",
+        "outfitter",
+        "shipyard",
+        "weapons",
+        "commodities",
+        "jobs",
+        "missions"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "hull_plating",
+        "fuel_tank"
+      ],
+      "shipsForSale": [
+        "shuttlecraft",
+        "light_freighter",
+        "courier",
+        "clipper",
+        "patrol_ship",
+        "corvette"
+      ],
+      "weaponsForSale": [
+        "laser_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Sol",
+      "bodyName": "Stardock Alpha",
+      "runtimeBodyId": "Stardock Alpha",
+      "services": [
+        "repairs",
+        "outfitter",
+        "weapons",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "fuel_tank"
+      ],
+      "shipsForSale": [],
+      "weaponsForSale": [
+        "laser_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Sol",
+      "bodyName": "Mars",
+      "runtimeBodyId": "Mars",
+      "services": [
+        "repairs",
+        "outfitter",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "hull_plating"
+      ],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Centauri",
+      "bodyName": "Landfall",
+      "runtimeBodyId": "Landfall",
+      "services": [
+        "repairs",
+        "outfitter",
+        "shipyard",
+        "commodities",
+        "jobs",
+        "missions"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "hull_plating",
+        "fuel_tank"
+      ],
+      "shipsForSale": [
+        "shuttlecraft",
+        "argosy",
+        "bulk_freighter",
+        "luxury_liner",
+        "exec_transport"
+      ],
+      "weaponsForSale": [
+        "laser_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Centauri",
+      "bodyName": "Luna",
+      "runtimeBodyId": "Luna",
+      "services": [
+        "repairs",
+        "outfitter",
+        "commodities",
+        "jobs",
+        "missions"
+      ],
+      "outfitsForSale": [
+        "fuel_tank"
+      ],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Sirius",
+      "bodyName": "Sirius Station",
+      "runtimeBodyId": "Sirius Station",
+      "services": [
+        "repairs",
+        "outfitter",
+        "shipyard",
+        "weapons",
+        "commodities",
+        "jobs",
+        "missions"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "fuel_tank"
+      ],
+      "shipsForSale": [
+        "shuttlecraft",
+        "lightning",
+        "kestrel",
+        "rapier",
+        "confed_gunboat",
+        "manta"
+      ],
+      "weaponsForSale": [
+        "pulse_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Sirius",
+      "bodyName": "Sirius III",
+      "runtimeBodyId": "Sirius III",
+      "services": [
+        "repairs",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Tau Ceti",
+      "bodyName": "Tau Ceti IV",
+      "runtimeBodyId": "Tau Ceti IV",
+      "services": [
+        "repairs",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Tau Ceti",
+      "bodyName": "Merlin",
+      "runtimeBodyId": "Merlin",
+      "services": [
+        "repairs",
+        "outfitter",
+        "shipyard",
+        "weapons",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "hull_plating"
+      ],
+      "shipsForSale": [
+        "shuttlecraft",
+        "light_freighter",
+        "bulk_freighter",
+        "clipper",
+        "courier"
+      ],
+      "weaponsForSale": [
+        "laser_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Enyo",
+      "bodyName": "Enyo Orbital Fuel Refinery",
+      "runtimeBodyId": "Enyo Orbital Fuel Refinery",
+      "services": [
+        "repairs",
+        "outfitter",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "fuel_tank"
+      ],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Enyo",
+      "bodyName": "Enyo’s World",
+      "runtimeBodyId": "Enyo’s World",
+      "services": [
+        "repairs",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Antares",
+      "bodyName": "Antares Outpost",
+      "runtimeBodyId": "Antares Outpost",
+      "services": [
+        "repairs",
+        "outfitter",
+        "shipyard",
+        "weapons",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "hull_plating",
+        "fuel_tank"
+      ],
+      "shipsForSale": [
+        "shuttlecraft",
+        "defender",
+        "patrol_ship",
+        "corvette",
+        "confed_cruiser",
+        "confed_frigate"
+      ],
+      "weaponsForSale": [
+        "laser_cannon",
+        "pulse_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Antares",
+      "bodyName": "New Providence",
+      "runtimeBodyId": "New Providence",
+      "services": [
+        "repairs",
+        "outfitter",
+        "weapons",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "hull_plating"
+      ],
+      "shipsForSale": [],
+      "weaponsForSale": [
+        "laser_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Alkaid",
+      "bodyName": "Alkaidion",
+      "runtimeBodyId": "Alkaidion",
+      "services": [
+        "repairs",
+        "outfitter",
+        "shipyard",
+        "weapons",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "fuel_tank"
+      ],
+      "shipsForSale": [
+        "shuttlecraft",
+        "hawk",
+        "alien_fighter",
+        "alien_cruiser",
+        "rebel_cruiser",
+        "rebel_destroyer"
+      ],
+      "weaponsForSale": [
+        "pulse_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Alkaid",
+      "bodyName": "Regulus II",
+      "runtimeBodyId": "Regulus II",
+      "services": [
+        "repairs",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Zaxted",
+      "bodyName": "Zaxted Starport",
+      "runtimeBodyId": "Zaxted Starport",
+      "services": [
+        "repairs",
+        "outfitter",
+        "shipyard",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "fuel_tank"
+      ],
+      "shipsForSale": [
+        "shuttlecraft",
+        "scoutship",
+        "courier",
+        "kestrel"
+      ],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Zaxted",
+      "bodyName": "Zaxted",
+      "runtimeBodyId": "Zaxted",
+      "services": [
+        "repairs",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Clotho",
+      "bodyName": "Clotho Prime",
+      "runtimeBodyId": "Clotho Prime",
+      "services": [
+        "repairs",
+        "outfitter",
+        "weapons",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [
+        "cargo_pod",
+        "fuel_tank"
+      ],
+      "shipsForSale": [],
+      "weaponsForSale": [
+        "pulse_cannon"
+      ],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    },
+    {
+      "systemName": "Clotho",
+      "bodyName": "Clotho II",
+      "runtimeBodyId": "Clotho II",
+      "services": [
+        "repairs",
+        "commodities",
+        "jobs"
+      ],
+      "outfitsForSale": [],
+      "shipsForSale": [],
+      "weaponsForSale": [],
+      "sourceLabels": [
+        "terminal-velocity-service-provisioning-scaffold"
+      ],
+      "sourceEvidence": null,
+      "oracleStatus": "classic_runtime_service_matrix_pending"
+    }
+  ],
+  "promotionBoundary": "Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Classic-wide decoded service fields remain pending."
+}
