@@ -15,7 +15,7 @@ This compendium summarizes the current operating doctrine. Detailed rationale an
 
 ## Operating doctrine
 
-The default Terminal Velocity development system is **parallel executable lanes + fast evaluators + batched integration + fidelity gates**.
+The default Terminal Velocity development system is **parallel executable lanes + fast evaluators + batched integration + fidelity gates**, operated aggressively rather than conservatively.
 
 Non-blocking acceleration rule: coordination structure exists to increase throughput, not to delay safe work. Lane-contract audits, Kanban, coordination manifests, isolated worktrees, and Basilisk lane records gate only multi-worker bursts, durable dependency tracking, parallel mutating work, scheduled/watchdog mutation, or parallel original-runtime evidence collection. They do **not** block a single safe-local acceleration slice, source/static semantic promotion, labeled build-track scaffold, or cheap verifier improvement.
 
@@ -24,7 +24,7 @@ Use two coordinated tracks:
 1. **Build track** — finish a broad playable Terminal Velocity implementation quickly. Multiple Kanban workers may write in isolated worktrees when each lane has an owner, writable surface, verifier, source/fidelity label policy, and merge contract. Build-track work may be labeled `scaffold`, `terminal-velocity-observed`, `source-grounded EV-family`, or `needs original confirmation` without blocking implementation.
 2. **Fidelity gate track** — decide what can be called EV Classic faithful. Strict evidence remains required for original-runtime claims, decoded-resource constants, exact UI text, mission behavior, economy values, movement/physics tuning, and Classic quirk/intentional-TV-divergence decisions.
 
-Vertical slices remain the unit of quality: each worker should still produce player-visible or symbolic behavior with a cheap verifier and source/fidelity label. They are not the global speed limit. Do not serialize all development merely because a fidelity question remains open; label the uncertainty, keep the scaffold moving, and promote only when evidence supports promotion.
+Vertical slices remain the unit of quality: each worker should still produce player-visible or symbolic behavior with a cheap verifier and source/fidelity label. They are not the global speed limit. Do not serialize all development merely because a fidelity question remains open; label the uncertainty, keep the scaffold moving, and promote only when evidence supports promotion. Default posture is try-first/test-after for safe-local acceleration: attempt the faster build/evidence route, then use verifiers, source labels, and targeted confirmation to decide what can be promoted.
 
 ## Source hierarchy
 
@@ -51,8 +51,8 @@ Required labels include `original-runtime-observed`, `decoded-resource-backed`, 
 Do not treat all fidelity learning as emulator-speed limited.
 
 1. **Static/source-mined fidelity** is source/data limited, not Basilisk-speed limited. Map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data should primarily move through decoded-resource/manual/local-source lanes and structured import/compare pipelines. Basilisk is a spot-check and ambiguity-resolution oracle for these surfaces, not the main data source. Much of the primitive/resource inventory is already learned; remaining work is semantic promotion, cross-linking, runtime-facing import, and tests. Current promoted static-source semantics include government, mission, weapon, and specialized `jünk` commodity manifests; remaining broad topology/service/economy promotions are tracked in the fidelity backlog and static learning pass.
-2. **UI/state-transition fidelity** is partly runtime-speed limited. Mission board flow, spaceport bar offers, commodity buy/sell semantics, landing/refueling, shipyard/outfitter availability, route setting, hyperspace outcomes, and dialog progression can use Basilisk, including accelerated runs after lane-specific reliability checks.
-3. **Timing/feel fidelity** is speed-sensitive. Acceleration, turn rate, weapon cadence, projectile speed, combat feel, animation timing, input responsiveness, and frame/tick-linked recharge/drain claims require 1x confirmation or explicit 1x-vs-accelerated comparison before promotion.
+2. **UI/state-transition fidelity** is partly runtime-speed limited. Mission board flow, spaceport bar offers, commodity buy/sell semantics, landing/refueling, shipyard/outfitter availability, route setting, hyperspace outcomes, and dialog progression should use Basilisk aggressively: the Basilisk K setup speeds EV by at least 2x, and evidence/exploration lanes should try that or faster settings first when lane state can be restored. Test afterward with screenshots/traces/scenarios; reserve slower confirmation for disagreements, flaky capture/input behavior, or canonical promotion.
+3. **Timing/feel fidelity** is speed-sensitive. Acceleration, turn rate, weapon cadence, projectile speed, combat feel, animation timing, input responsiveness, and frame/tick-linked recharge/drain claims may still be explored at accelerated speed, but require 1x confirmation or explicit 1x-vs-accelerated comparison before promotion.
 
 ## Definition of Done
 
@@ -117,7 +117,7 @@ Default accelerated limits until a manifest says otherwise:
 - Basilisk/original-runtime emulator lanes: 4;
 - unresolved worker/scout/reviewer reports awaiting integration-owner verification: up to 3.
 
-For Basilisk work, do not write vague capacity language such as “up to 4” or “probably supports four.” The local operating fact is **4 Basilisk emulator lanes**. If a specific lane lacks disk/prefs/window/input/capture/state isolation, mark that Basilisk lane blocked and fix the lane setup; do not lower the documented emulator count, and do not block non-Basilisk source/static or Godot-scenario acceleration work.
+For Basilisk work, do not write vague capacity language such as “up to 4” or “probably supports four.” The local operating fact is **4 Basilisk emulator lanes**, and Basilisk K speeds EV by at least **2x**. Prefer accelerated original-runtime exploration by default; increase speed further when restore state, capture/input reliability, and post-run checks preserve the needed fidelity. If a specific lane lacks disk/prefs/window/input/capture/state isolation, mark that Basilisk lane blocked and fix the lane setup; do not lower the documented emulator count, and do not block non-Basilisk source/static or Godot-scenario acceleration work.
 
 If fan-in exceeds the limit, stop spawning and integrate/verify existing outputs first.
 
@@ -140,7 +140,7 @@ Semantic Godot probes should produce stable JSON/event outputs when possible. Ba
 
 ## Basilisk/original-runtime policy
 
-Basilisk is the original-runtime evidence surface. The local runtime setup has **4 Basilisk emulator lanes**.
+Basilisk is the original-runtime evidence surface. The local runtime setup has **4 Basilisk emulator lanes**; Basilisk K speeds EV by at least **2x**, and faster settings should be attempted when fidelity can be checked afterward.
 
 Each Basilisk lane used for parallel or claim-supporting original-runtime evidence needs an unambiguous lane record:
 

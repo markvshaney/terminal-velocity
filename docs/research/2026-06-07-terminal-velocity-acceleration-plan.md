@@ -9,7 +9,7 @@ Canonical summary: this page is part of the Terminal Velocity development compen
 
 ## Decision
 
-The strongest acceleration plan is now **parallel executable lanes + fast evaluators + batched integration + fidelity gates**.
+The strongest acceleration plan is now **parallel executable lanes + fast evaluators + batched integration + fidelity gates**, with aggressive try-first/test-after acceleration rather than conservative waiting.
 
 Non-blocking acceleration rule: the lane-contract audit, Kanban, extra worktrees, and Basilisk lane records are setup steps for worker bursts and parallel original-runtime evidence, not prerequisites for every improvement. A single safe-local acceleration slice should proceed immediately with source/fidelity labels and a cheap verifier.
 
@@ -23,11 +23,11 @@ Operationally:
 2. run 3-5 mutating worker lanes in isolated worktrees once lane contracts exist, while continuing single safe-local slices without waiting for the burst setup;
 3. give each lane an owner, writable surface, verifier, source/fidelity label policy, merge contract, and rollback path;
 4. use deterministic TV scenario/evaluator coverage as the velocity lane;
-5. use the **4 Basilisk emulator lanes** for bounded original-runtime evidence, with lane records for disk/prefs/window/input/capture/restore state when Basilisk evidence is the lane;
+5. use the **4 Basilisk emulator lanes** for bounded original-runtime evidence, with lane records for disk/prefs/window/input/capture/restore state when Basilisk evidence is the lane; Basilisk K speeds EV by at least **2x**, so original-runtime evidence lanes should start there or faster when post-run checks can preserve the relevant fidelity;
 6. let build-track scaffolds proceed with explicit labels when original-runtime evidence is missing;
 7. run static/source-mined **semantic-promotion and integration** lanes in parallel for map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data; these lanes are source/data limited, not Basilisk-speed limited. Primitive/resource inventory is already learned for many of these surfaces; the remaining work is field-family semantics, cross-links, runtime-facing import, and tests. Current promoted semantic manifests cover government, mission, weapon, and specialized `jünk` commodity records;
-8. reserve Basilisk for behavioral confirmation, ambiguity resolution, UI/state-transition checks, and timing/feel checks;
-9. reserve strict source gates for fidelity promotion, exact claims, constants, and Classic quirk/intentional-divergence decisions;
+8. use Basilisk aggressively for behavioral confirmation, ambiguity resolution, UI/state-transition checks, and timing/feel exploration; slow down only when capture/input drift, contradictory evidence, or canonical promotion requires it;
+9. reserve strict source gates for fidelity promotion, exact claims, constants, and Classic quirk/intentional-divergence decisions, not for permission to try faster safe-local routes;
 10. integrate in coherent batches rather than one tiny serial slice at a time.
 
 Reasonable planning target: **6-10 months to meaningfully playable TV** under this accelerated topology.

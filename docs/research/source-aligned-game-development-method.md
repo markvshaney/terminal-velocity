@@ -52,9 +52,9 @@ Current topology implementation: `docs/research/2026-06-08-terminal-velocity-top
 
 ## Recommended operating method
 
-Terminal Velocity uses **parallel build lanes with strict fidelity promotion**.
+Terminal Velocity uses **parallel build lanes with strict fidelity promotion**, with an aggressive try-first/test-after posture for safe-local acceleration.
 
-Non-blocking acceleration rule: coordination artifacts should accelerate work, not make every local change wait for topology setup. Use Kanban, extra worktrees, lane-contract audits, and Basilisk lane records when work genuinely splits into durable independent lanes or parallel original-runtime evidence. For one safe-local slice, proceed with direct TDD/source labeling and cheap verification.
+Non-blocking acceleration rule: coordination artifacts should accelerate work, not make every local change wait for topology setup. Use Kanban, extra worktrees, lane-contract audits, and Basilisk lane records when work genuinely splits into durable independent lanes or parallel original-runtime evidence. For one safe-local slice, proceed with direct TDD/source labeling and cheap verification. When the safe path is faster but not yet proven, try it first, keep labels honest, and let tests/evidence decide what gets promoted.
 
 ### 1. Split build work from fidelity promotion
 
@@ -70,8 +70,8 @@ This lets incomplete evidence block fidelity claims without blocking broad game 
 Not all fidelity work waits on original-runtime speed.
 
 - **Static/source-mined fidelity:** map topology, planets/systems, stations, landing services, commodities, ships, outfits, weapons, descriptions/text resources, and decoded mission/resource data. These should move through decoded-resource/manual/local-source lanes and structured import/compare pipelines. Basilisk spot-checks ambiguity; it is not the primary data source. Much of the primitive/resource inventory is already learned; remaining static work is semantic promotion, cross-linking, runtime-facing import, and tests. Current promoted semantic manifests include government, mission, weapon, and specialized `jünk` commodity records; broader topology/service/economy promotion remains backlog/static-pass work.
-- **UI/state-transition fidelity:** mission board flow, spaceport bar offers, commodity buy/sell semantics, landing/refueling, shipyard/outfitter availability, route setting, hyperspace outcomes, and dialog progression. These can use Basilisk, including accelerated runs after lane-specific reliability checks.
-- **Timing/feel fidelity:** acceleration, turn rate, weapon cadence, projectile speed, combat feel, animation timing, input responsiveness, and frame/tick-linked recharge/drain claims. These require 1x confirmation or explicit 1x-vs-accelerated comparison before promotion.
+- **UI/state-transition fidelity:** mission board flow, spaceport bar offers, commodity buy/sell semantics, landing/refueling, shipyard/outfitter availability, route setting, hyperspace outcomes, and dialog progression. These should use Basilisk aggressively: Basilisk K speeds EV by at least 2x, and original-runtime evidence lanes should try that or faster settings first when save/restore and capture/input checks can catch drift afterward.
+- **Timing/feel fidelity:** acceleration, turn rate, weapon cadence, projectile speed, combat feel, animation timing, input responsiveness, and frame/tick-linked recharge/drain claims. These can be explored at accelerated speed, but require 1x confirmation or explicit 1x-vs-accelerated comparison before promotion.
 
 ### 3. Build in vertical increments, not serial global slices
 
@@ -178,4 +178,4 @@ Required labels:
 2. Split Godot’s growing `main.gd` into source-backed scene/script modules once the next gameplay increment stabilizes. Source basis: Godot best-practice/project-organization docs.
 3. Continue adding playtest/run records for manual Godot sessions and no-human probes under `docs/research/playtest-runs/`; first section-7 safe-local record added 2026-06-08. Source basis: playtesting source plus VPT/action-trace references.
 4. Add branch/faction/legal scenarios before combat. Source basis: EV-family mission/legal/faction records and current safety policy.
-5. Use the four recorded Basilisk lanes only when the next acceleration question actually needs original-runtime evidence; first verify pilot/save/restore/window/input state for the chosen lane. Otherwise keep moving through source/static, Godot scenario, and build-track lanes.
+5. Use the four recorded Basilisk lanes when the next acceleration question actually needs original-runtime evidence; start from Basilisk K, which speeds EV by at least 2x, and push faster if restore/capture/input checks can preserve the needed fidelity. Otherwise keep moving through source/static, Godot scenario, and build-track lanes.

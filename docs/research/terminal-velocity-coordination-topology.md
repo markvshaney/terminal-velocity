@@ -11,7 +11,7 @@ Current implementation packet: `docs/research/2026-06-08-terminal-velocity-topol
 
 ## Decision
 
-Use **accelerated parallel lanes with one integration owner** as the default coordination topology once lane contracts exist.
+Use **accelerated parallel lanes with one integration owner** as the default coordination topology once lane contracts exist, and bias safe-local execution toward aggressive try-first/test-after acceleration rather than conservative waiting.
 
 Non-blocking acceleration rule: topology setup is an accelerator, not a waiting room. Lane-contract audits, coordination manifests, Kanban cards, extra worktrees, and Basilisk lane records are required only for multi-worker bursts, durable dependency tracking, parallel mutating work, or parallel original-runtime evidence collection. They do **not** block a single safe-local acceleration slice, source/static semantic promotion, labeled build-track scaffold, or cheap verifier improvement.
 
@@ -20,7 +20,7 @@ Non-blocking acceleration rule: topology setup is an accelerator, not a waiting 
 3. Use Kanban for durable multi-lane work and context survival, not for line-level patches.
 4. Use a coordination manifest before any multi-worker coding slice.
 5. Keep one writer per file/resource surface by assigning lane ownership; do not enforce global serial development merely to avoid collisions.
-6. Treat the local runtime setup as **4 Basilisk emulator lanes** with per-lane disk/prefs/window/input/capture/restore records.
+6. Treat the local runtime setup as **4 Basilisk emulator lanes** with per-lane disk/prefs/window/input/capture/restore records; Basilisk K speeds EV by at least **2x**, and lanes should try that or faster settings first when fidelity can be checked afterward.
 
 ## Coordination topology
 
@@ -70,9 +70,9 @@ Build-track scaffolds may proceed with `scaffold`, `terminal-velocity-observed`,
 
 ### Basilisk emulator topology
 
-The local runtime setup has **4 Basilisk emulator lanes**. Do not describe this as “up to 4” or “probably four.”
+The local runtime setup has **4 Basilisk emulator lanes**. Do not describe this as “up to 4” or “probably four.” Basilisk K speeds EV by at least **2x**; original-runtime lanes should start there, then push faster when save/restore, capture/input, and post-run checks keep the required fidelity intact.
 
-Basilisk is not the universal fidelity bottleneck. Use it for behavioral confirmation, ambiguity resolution, UI/state-transition observations, and timing/feel checks. Use decoded-resource/manual/local-source lanes first for static data such as maps, planets, stations, commodities, ships, outfits, weapons, descriptions/text, and decoded mission/resource data.
+Basilisk is not the universal fidelity bottleneck. Use it aggressively for behavioral confirmation, ambiguity resolution, UI/state-transition observations, and timing/feel exploration, then test and slow down only when evidence disagrees or fidelity promotion requires 1x comparison. Use decoded-resource/manual/local-source lanes first for static data such as maps, planets, stations, commodities, ships, outfits, weapons, descriptions/text, and decoded mission/resource data.
 
 Each Basilisk lane used for parallel or claim-supporting original-runtime evidence must record:
 
