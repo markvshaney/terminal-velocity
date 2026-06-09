@@ -8,15 +8,15 @@ You are running under the `loki-game` Hermes profile for Terminal Velocity.
 Objective: implement `docs/research/tv-spec.md` as an executable long-running development workflow for `/home/bh/workspaces/loki/terminal-velocity`, not merely as a documented policy. Each invocation should perform one or more adjacent safe, source-labeled, verified increments that advance the live backlog under the tv-spec contracts.
 
 Required first actions every invocation:
-1. Follow this embedded runner contract first. Do not spend a fresh invocation loading full skills by default; use the repo prompt, ledger, event tail, `docs/research/tv-spec.md`, and the live backlog as the current authority. Load or consult additional skills/docs only when the invocation crosses a new surface not covered by this prompt, hits a gate/runner/process change, or needs original-runtime/gameplay/operator procedure.
-2. Inspect live repo state at invocation start: `git status --short --branch`, current branch, `HEAD`, and `origin/main`.
-3. Read with line numbers the minimum current-state surfaces needed to resume safely:
-   - `.hermes/long-running/tv-spec-implementation/task-ledger.json`
-   - the latest tail of `.hermes/long-running/tv-spec-implementation/events.jsonl`
-   - relevant section(s) of `docs/research/tv-spec.md`
-   - relevant section(s) of `docs/checklists/ev-classic-fidelity-implementation-backlog.md`
-4. If the worktree is dirty, understand and stabilize the existing slice/batch before starting a new one. Do not overwrite or abandon unknown dirty work.
-   - Known runner state exception: untracked `.hermes/long-running/tv-spec-implementation/continuous-runner.lock` by itself is active-wrapper state, not a development dirty batch. Do not wait for or monitor the continuous-runner process from inside a runner invocation; proceed with repo/backlog work unless other dirty files, a ledger gate, or a real blocker is present.
+1. Follow this embedded runner contract first. Do not spend a fresh invocation loading full skills by default; use the repo prompt, ledger, latest runner summary, event tail, `docs/research/tv-spec.md`, and the live backlog as the current authority. Load or consult additional skills/docs only when the invocation crosses a new surface not covered by this prompt, hits a gate/runner/process change, or needs original-runtime/gameplay/operator procedure.
+2. Fast-start skim order:
+   1. inspect `.hermes/long-running/tv-spec-implementation/task-ledger.json` for status, active gate, and next action;
+   2. inspect `.hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json` when present;
+   3. inspect live repo state: `git status --short --branch`, current branch, `HEAD`, and `origin/main`;
+   4. inspect the latest 20 lines of `.hermes/long-running/tv-spec-implementation/events.jsonl`;
+   5. read only the relevant section(s) of `docs/research/tv-spec.md`, `docs/checklists/ev-classic-fidelity-implementation-backlog.md`, and touched source surfaces needed for the current slice.
+3. If the worktree is dirty, understand and stabilize the existing slice/batch before starting a new one. Do not overwrite or abandon unknown dirty work.
+   - Known runner state exception: ignored `.hermes/long-running/tv-spec-implementation/continuous-runner/`, `STOP_CONTINUOUS_RUNNER`, `continuous-runner.lock`, and `continuous-runner.lock.json` are wrapper state, not a development dirty batch. Do not wait for or monitor the continuous-runner process from inside a runner invocation; proceed with repo/backlog work unless other dirty files, a ledger gate, or a real blocker is present.
 
 Task loop:
 - Prefer current actionable backlog items that already expose `next_action`, `lane_class`, `oracle_class`, `source_basis`, `verifier`, `blocked_reason`, and `promotion_status`.
@@ -42,6 +42,7 @@ Verification defaults:
 Gates:
 - Stop and record `waiting_gate` only for: destructive/risky original-EV tests, Strict Play, hard-to-restore/save-corrupting original pilot mutation, raw proprietary asset publication, external/account/config/provider/gateway changes, changing other scheduled jobs, force-push/history rewrite, deletion/merge/release/settings changes, non-TV repo/public/social side effects, missing evidence required for a fidelity claim, or unsafe dirty state that cannot be separated.
 - A completed safe increment is a checkpoint, not task completion. Continue through adjacent safe increments in the same invocation when possible, then on the next recurrence unless the ledger `done_condition` is met or a real gate/blocker/no-safe-slice state is recorded.
+- Tool/time/context caps are checkpoint boundaries, not task completion. Before stopping for a cap, preserve the next resume action and enough verifier/source state for the next invocation.
 
 Closeout for each invocation:
 - Final response should be local-only concise: status (`productive batch`, `checkpoint`, `waiting_gate`, `blocked`, or `no-op with reason`), increment count/summary, files touched, verification output, source/fidelity labels, next resume action, and any gate.

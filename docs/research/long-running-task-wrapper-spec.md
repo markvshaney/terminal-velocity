@@ -14,7 +14,12 @@ Primary implementation surfaces:
 - Event stream: `.hermes/long-running/tv-spec-implementation/events.jsonl`
 - Invocation prompt: `docs/prompts/tv-spec-implementation-long-task-prompt.md`
 - Per-invocation logs: `.hermes/long-running/tv-spec-implementation/continuous-runner/run-*.log`
+- Per-invocation summaries: `.hermes/long-running/tv-spec-implementation/continuous-runner/run-*.summary.json`
+- Latest summary sidecar: `.hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json`
+- Runner index: `.hermes/long-running/tv-spec-implementation/continuous-runner/index.jsonl`
+- Runner state: `.hermes/long-running/tv-spec-implementation/continuous-runner/runner-state.json`
 - Lock file: `.hermes/long-running/tv-spec-implementation/continuous-runner.lock`
+- Lock metadata: `.hermes/long-running/tv-spec-implementation/continuous-runner.lock.json`
 - Stop file: `.hermes/long-running/tv-spec-implementation/STOP_CONTINUOUS_RUNNER`
 - Paused cron fallback: job `5430276bcaa5`, `Terminal Velocity tv-spec implementation loop`
 
@@ -32,22 +37,24 @@ A completed safe increment is a checkpoint, not task completion.
 
 ## Wrapper lifecycle
 
-The wrapper is a single Bash process with a PID lock.
+The wrapper is a single Bash process with an atomic `flock` lock and lock metadata.
 
 Startup contract:
 
 1. Create `.hermes/long-running/tv-spec-implementation/continuous-runner/` if needed.
-2. If `continuous-runner.lock` exists and its PID is alive, print `TV_SPEC_CONTINUOUS_ALREADY_RUNNING` and exit `0`.
-3. Otherwise write the wrapper PID to `continuous-runner.lock`.
-4. Remove the lock on process exit via shell trap.
-5. Change directory to `/home/bh/workspaces/loki/terminal-velocity`.
-6. Enter the zero-sleep invocation loop.
+2. Open `continuous-runner.lock` and acquire a non-blocking `flock`.
+3. If the lock is already held, print `TV_SPEC_CONTINUOUS_ALREADY_RUNNING` with the metadata PID when available and exit `0`.
+4. Write `continuous-runner.lock.json` metadata: `pid`, `ppid`, `host`, `started_at`, `workdir`, `cmdline`, and `lock_kind`.
+5. Remove lock metadata and lock file on process exit via shell trap.
+6. Change directory to `/home/bh/workspaces/loki/terminal-velocity`.
+7. Enter the zero-sleep invocation loop.
 
 Loop contract:
 
 1. If `STOP_CONTINUOUS_RUNNER` exists before an invocation starts, print `TV_SPEC_CONTINUOUS_STOP_FILE` and exit `0`.
-2. Build a prompt from `docs/prompts/tv-spec-implementation-long-task-prompt.md` plus the wrapper overlay.
-3. Run Hermes with:
+2. Generate a fast-start context sidecar containing ledger status/gate/next action, `latest-summary.json` highlights, `git status --short --branch`, and the last 20 event lines.
+3. Build a prompt from `docs/prompts/tv-spec-implementation-long-task-prompt.md`, the fast-start context sidecar, and the wrapper overlay.
+4. Run Hermes with:
 
    ```bash
    /home/bh/.hermes/profiles/loki-game/home/.local/bin/hermes \
@@ -55,10 +62,14 @@ Loop contract:
      chat -Q --source tv-spec-continuous-runner -t terminal,file,messaging -q "$prompt"
    ```
 
-4. Write stdout/stderr to `.hermes/long-running/tv-spec-implementation/continuous-runner/run-<UTCSTAMP>-<ITERATION>.log`.
-5. After Hermes exits, read `.hermes/long-running/tv-spec-implementation/task-ledger.json`.
-6. Stop if the Hermes command failed, the ledger is unreadable, the ledger status is terminal/gated, or `active_gate` is set.
-7. Otherwise immediately start the next loop iteration with no intentional polling sleep.
+   Test-only overrides are supported for wrapper smoke tests: `TV_SPEC_HERMES_BIN` can point at a fake Hermes-compatible command, and `TV_SPEC_MAX_ITERATIONS=1` stops after one completed iteration.
+
+5. Write stdout/stderr to `.hermes/long-running/tv-spec-implementation/continuous-runner/run-<UTCSTAMP>-<ITERATION>.log`.
+6. On known transient transport/provider/time-limit failures, retry up to the configured short retry limit with short backoff; do not retry ledger parse failure, explicit gate, unsafe dirty state, verifier failure, or unknown nonzero exit.
+7. After Hermes exits, write `run-<UTCSTAMP>-<ITERATION>.summary.json`, update `latest-summary.json`, append `index.jsonl`, and append one idempotent local `runner_invocation_summary` event keyed by `tv-spec-continuous-runner:<UTCSTAMP>:<ITERATION>:summary`.
+8. Read `.hermes/long-running/tv-spec-implementation/task-ledger.json`.
+9. Stop if the Hermes command failed after retry classification, the ledger is unreadable, the ledger status is terminal/gated, `active_gate` is set, or the progress token is unchanged for the configured no-progress limit.
+10. Otherwise immediately start the next loop iteration with no intentional polling sleep.
 
 Ledger statuses that stop the wrapper:
 
@@ -68,9 +79,23 @@ Ledger statuses that stop the wrapper:
 - `complete`
 - any truthy `active_gate`
 
+Progress-token stop:
+
+- The wrapper computes `last_progress_token` from ledger status, active gate, next action, `HEAD`, material git status, material event count, and last material event digest. Material git status excludes generated continuous-runner summaries/index/lock/stop files; material events exclude wrapper `runner_invocation_summary` rows.
+- Material progress means at least one of: new verified event ID, changed git tree/commit, changed ledger status, changed active gate, changed next action, or changed verification result.
+- If an invocation exits cleanly but the material progress token is unchanged for the configured limit, the wrapper records `status=blocked` with `blocked_reason=no_material_progress_detected_by_continuous_runner` and stops.
+
 ## Invocation policy
 
-Each Hermes invocation must treat the repo prompt, ledger, event tail, `docs/research/tv-spec.md`, and live backlog as the current operating authority.
+Each Hermes invocation must treat the repo prompt, ledger, latest summary, event tail, `docs/research/tv-spec.md`, and live backlog as the current operating authority.
+
+Fast-start skim order:
+
+1. ledger status / active gate / next action;
+2. `continuous-runner/latest-summary.json`;
+3. `git status --short --branch`, `HEAD`, and `origin/main`;
+4. last 20 event lines;
+5. only the relevant source/backlog/source-code surface needed for the current slice.
 
 Default context policy:
 
@@ -86,14 +111,23 @@ Throughput policy:
 - Do not stop just because one safe increment completed.
 - Do not inspect or wait on the wrapper process from inside a runner invocation.
 - Treat `continuous-runner.lock` as known wrapper state, not development dirty work.
+- A tool/time/context cap is a checkpoint boundary, not task completion.
+- Gates are resumable states and require status/gate/next-action checkpointing before stop.
 
 ## Reporting policy
 
 Local reporting:
 
 - Every invocation gets a local log under `.hermes/long-running/tv-spec-implementation/continuous-runner/`.
+- Every invocation gets a machine-readable summary sidecar under `.hermes/long-running/tv-spec-implementation/continuous-runner/`.
+- `latest-summary.json` is the compact current-state entrypoint for the next invocation.
+- `index.jsonl` records one summary row per invocation and is the retention-safe log index.
 - Routine increment history goes to `.hermes/long-running/tv-spec-implementation/events.jsonl`.
 - The ledger is rewritten only when resumable state changes: current status, active gate, next action, last verification summary, runner policy, or resume prompt.
+
+Summary sidecar fields include: exit code, retry classification, ledger status, active gate boolean/type, `reported_touched_files`, `git_dirty_summary`, `commits_created`, `pushed_commits`, verifier commands, material next action, `delivery_status`, whether repo changes occurred, progress token/change status, summary/log paths, and retention policy.
+
+Log retention policy: do not delete old full logs until summary/event evidence is sufficient and deletion is explicitly approved. Adding `index.jsonl` bounds inspection cost without deleting task evidence.
 
 Telegram/GameTV reporting:
 
@@ -106,6 +140,7 @@ Telegram/GameTV reporting:
   - periodic material batch summary.
 - Do not send routine wrapper iteration starts.
 - Do not send every small verified increment if those increments are part of a coherent local batch.
+- Use `delivery_status` in the summary sidecar rather than a channel-specific field name.
 
 Process-manager reporting:
 
@@ -123,8 +158,8 @@ Preferred safe stop:
 
 Restart:
 
-1. Ensure no live wrapper PID owns `continuous-runner.lock`.
-2. Remove stale stop/lock files if safe.
+1. Ensure no live wrapper process owns the `flock` on `continuous-runner.lock`; use `continuous-runner.lock.json` only as metadata, not as proof by itself.
+2. Remove stale stop/lock/lock-metadata files if safe.
 3. Start the wrapper as a background process without watch patterns:
 
    ```bash
@@ -166,11 +201,13 @@ After changing the wrapper, verify:
 
 - `bash -n /home/bh/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh`
 - `git status --short --branch` in `/home/bh/workspaces/loki/terminal-velocity`
-- lock owner PID and live process tree, when wrapper is running
+- lock owner metadata and live process tree, when wrapper is running
 - current `run-*.log` exists and is being written during active invocation
+- `latest-summary.json` and any new `run-*.summary.json` parse as JSON
+- `index.jsonl` parses line-by-line as JSONL
 - `task-ledger.json` parses as JSON
 - `events.jsonl` parses line-by-line as JSONL
-- cron fallback `5430276bcaa5` remains paused unless intentionally resumed
+- cron fallback `5430276bcaa5` live state is checked and remains paused unless intentionally resumed
 
 ## Non-goals
 
