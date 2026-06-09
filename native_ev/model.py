@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-raw-long-levo-name-map-v3':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -293,8 +293,11 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         if coordinates.get('wordIndices') != [0, 1, 2, 3]:
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected coordinate word indices")
         for axis in ['xPos', 'yPos']:
-            if len(coordinates.get(axis, {}).get('rawWords', [])) != 2:
+            axis_data = coordinates.get(axis, {})
+            if len(axis_data.get('rawWords', [])) != 2:
                 raise ValueError(f"sourced EV system {system['resourceId']} has incomplete {axis} raw words")
+            if 'signedLongCandidate' not in axis_data or 'rawHex32' not in axis_data:
+                raise ValueError(f"sourced EV system {system['resourceId']} missing {axis} raw signed-long coordinate candidate")
         links = system['semanticFields'].get('candidateHyperspaceLinks', {})
         if links.get('wordIndices') != list(range(4, 20)):
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected link candidate indices")

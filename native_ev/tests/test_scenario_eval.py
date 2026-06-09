@@ -1802,6 +1802,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'found_67_syst_like_primitive_records',
             'kept_runtime_universe_subset_unchanged',
             'recorded_name_seed_inputs',
+            'recorded_coordinate_raw_long_candidate',
             'recorded_candidate_link_family',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
@@ -1811,6 +1812,10 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['systLikeRecords'], 67)
         self.assertEqual(readiness['recordSize'], 88)
         self.assertEqual(readiness['runtimeSystemSubsetCount'], 10)
+        self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
+        self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)
+        self.assertEqual(readiness['candidateCoordinateYRawLongResource128'], 8327168)
+        self.assertEqual(readiness['candidateCoordinateSourceConfidence'], 'resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate')
         self.assertEqual(readiness['candidateLinkWordIndices'], list(range(4, 20)))
         self.assertEqual(readiness['candidateLinkedSystemIdsForResource128'][:4], [128, 129, 130, 131])
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')

@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-raw-long-levo-name-map-v3'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs plus signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -43,6 +43,13 @@ def _syst_run(structures: dict) -> dict:
 
 def _word(record: dict, index: int) -> int:
     return int(record['fields'][index]['value'])
+
+
+def _signed_long_from_words(words: list[int]) -> int:
+    raw = ((int(words[0]) & 0xFFFF) << 16) | (int(words[1]) & 0xFFFF)
+    if raw >= 0x80000000:
+        raw -= 0x100000000
+    return raw
 
 
 def _link_slot(record: dict, slot_index: int, resource_ids: set[int]) -> dict:
@@ -88,9 +95,12 @@ def _candidate_links(record: dict, resource_ids: set[int]) -> dict:
 
 def _raw_coordinate_pair(record: dict, first_word_index: int) -> dict:
     words = [_word(record, first_word_index), _word(record, first_word_index + 1)]
+    signed_long = _signed_long_from_words(words)
     return {
         'wordIndices': [first_word_index, first_word_index + 1],
         'rawWords': words,
+        'signedLongCandidate': signed_long,
+        'rawHex32': f'0x{signed_long & 0xFFFFFFFF:08X}',
         'byteOffsetsInRecord': [
             record['fields'][first_word_index]['byteOffsetInRecord'],
             record['fields'][first_word_index + 1]['byteOffsetInRecord'],
@@ -103,8 +113,8 @@ def _map_coordinates(record: dict) -> dict:
         'wordIndices': COORDINATE_WORD_INDICES,
         'xPos': _raw_coordinate_pair(record, 0),
         'yPos': _raw_coordinate_pair(record, 2),
-        'sourceConfidence': 'resource-bible-field-family-plus-decoded-raw-word-pair',
-        'sourceNote': 'EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation.',
+        'sourceConfidence': 'resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate',
+        'sourceNote': 'EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending.',
     }
 
 
@@ -173,8 +183,8 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             'mapCoordinates': {
                 'wordIndices': COORDINATE_WORD_INDICES,
                 'resourceBibleFieldFamily': 'syst xPos/yPos',
-                'valueDomain': 'map coordinate fields; raw two-word payload preserved pending numeric-unit confirmation',
-                'confidence': 'resource-bible-field-family-plus-decoded-raw-word-pair',
+                'valueDomain': 'map coordinate fields; raw two-word payload and signed 32-bit big-endian raw-long candidate preserved pending display-unit/map-scaling confirmation',
+                'confidence': 'resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate',
             },
             'candidateHyperspaceLinks': {
                 'wordIndices': LINK_WORD_INDICES,

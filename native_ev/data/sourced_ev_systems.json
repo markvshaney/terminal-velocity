@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2",
+  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-raw-long-levo-name-map-v3",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -24,8 +24,8 @@
         3
       ],
       "resourceBibleFieldFamily": "syst xPos/yPos",
-      "valueDomain": "map coordinate fields; raw two-word payload preserved pending numeric-unit confirmation",
-      "confidence": "resource-bible-field-family-plus-decoded-raw-word-pair"
+      "valueDomain": "map coordinate fields; raw two-word payload and signed 32-bit big-endian raw-long candidate preserved pending display-unit/map-scaling confirmation",
+      "confidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate"
     },
     "candidateHyperspaceLinks": {
       "wordIndices": [
@@ -164,6 +164,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -178,13 +180,15 @@
               127,
               4096
             ],
+            "signedLongCandidate": 8327168,
+            "rawHex32": "0x007F1000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -447,6 +451,8 @@
               3,
               128
             ],
+            "signedLongCandidate": 196736,
+            "rawHex32": "0x00030080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -461,13 +467,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -718,6 +726,8 @@
               3,
               129
             ],
+            "signedLongCandidate": 196737,
+            "rawHex32": "0x00030081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -732,13 +742,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -989,6 +1001,8 @@
               2,
               128
             ],
+            "signedLongCandidate": 131200,
+            "rawHex32": "0x00020080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -1003,13 +1017,15 @@
               127,
               8192
             ],
+            "signedLongCandidate": 8331264,
+            "rawHex32": "0x007F2000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -1260,6 +1276,8 @@
               4,
               133
             ],
+            "signedLongCandidate": 262277,
+            "rawHex32": "0x00040085",
             "byteOffsetsInRecord": [
               0,
               2
@@ -1274,13 +1292,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -1531,6 +1551,8 @@
               2,
               -1
             ],
+            "signedLongCandidate": 196607,
+            "rawHex32": "0x0002FFFF",
             "byteOffsetsInRecord": [
               0,
               2
@@ -1545,13 +1567,15 @@
               127,
               28672
             ],
+            "signedLongCandidate": 8351744,
+            "rawHex32": "0x007F7000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -1802,6 +1826,8 @@
               3,
               130
             ],
+            "signedLongCandidate": 196738,
+            "rawHex32": "0x00030082",
             "byteOffsetsInRecord": [
               0,
               2
@@ -1816,13 +1842,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -2073,6 +2101,8 @@
               3,
               131
             ],
+            "signedLongCandidate": 196739,
+            "rawHex32": "0x00030083",
             "byteOffsetsInRecord": [
               0,
               2
@@ -2087,13 +2117,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -2344,6 +2376,8 @@
               3,
               132
             ],
+            "signedLongCandidate": 196740,
+            "rawHex32": "0x00030084",
             "byteOffsetsInRecord": [
               0,
               2
@@ -2358,13 +2392,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -2615,6 +2651,8 @@
               4,
               128
             ],
+            "signedLongCandidate": 262272,
+            "rawHex32": "0x00040080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -2629,13 +2667,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -2886,6 +2926,8 @@
               4,
               129
             ],
+            "signedLongCandidate": 262273,
+            "rawHex32": "0x00040081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -2900,13 +2942,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -3157,6 +3201,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -3171,13 +3217,15 @@
               72,
               -32768
             ],
+            "signedLongCandidate": 4751360,
+            "rawHex32": "0x00488000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -3428,6 +3476,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -3442,13 +3492,15 @@
               72,
               -32768
             ],
+            "signedLongCandidate": 4751360,
+            "rawHex32": "0x00488000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -3699,6 +3751,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -3713,13 +3767,15 @@
               72,
               -32768
             ],
+            "signedLongCandidate": 4751360,
+            "rawHex32": "0x00488000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -3970,6 +4026,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -3984,13 +4042,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -4241,6 +4301,8 @@
               3,
               128
             ],
+            "signedLongCandidate": 196736,
+            "rawHex32": "0x00030080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -4255,13 +4317,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -4512,6 +4576,8 @@
               2,
               -1
             ],
+            "signedLongCandidate": 196607,
+            "rawHex32": "0x0002FFFF",
             "byteOffsetsInRecord": [
               0,
               2
@@ -4526,13 +4592,15 @@
               127,
               28672
             ],
+            "signedLongCandidate": 8351744,
+            "rawHex32": "0x007F7000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -4783,6 +4851,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -4797,13 +4867,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -5054,6 +5126,8 @@
               1,
               135
             ],
+            "signedLongCandidate": 65671,
+            "rawHex32": "0x00010087",
             "byteOffsetsInRecord": [
               0,
               2
@@ -5068,13 +5142,15 @@
               18,
               -32768
             ],
+            "signedLongCandidate": 1212416,
+            "rawHex32": "0x00128000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -5325,6 +5401,8 @@
               4,
               135
             ],
+            "signedLongCandidate": 262279,
+            "rawHex32": "0x00040087",
             "byteOffsetsInRecord": [
               0,
               2
@@ -5339,13 +5417,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -5596,6 +5676,8 @@
               4,
               129
             ],
+            "signedLongCandidate": 262273,
+            "rawHex32": "0x00040081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -5610,13 +5692,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -5867,6 +5951,8 @@
               3,
               128
             ],
+            "signedLongCandidate": 196736,
+            "rawHex32": "0x00030080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -5881,13 +5967,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -6138,6 +6226,8 @@
               4,
               131
             ],
+            "signedLongCandidate": 262275,
+            "rawHex32": "0x00040083",
             "byteOffsetsInRecord": [
               0,
               2
@@ -6152,13 +6242,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -6409,6 +6501,8 @@
               4,
               132
             ],
+            "signedLongCandidate": 262276,
+            "rawHex32": "0x00040084",
             "byteOffsetsInRecord": [
               0,
               2
@@ -6423,13 +6517,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -6680,6 +6776,8 @@
               3,
               137
             ],
+            "signedLongCandidate": 196745,
+            "rawHex32": "0x00030089",
             "byteOffsetsInRecord": [
               0,
               2
@@ -6694,13 +6792,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -6951,6 +7051,8 @@
               3,
               129
             ],
+            "signedLongCandidate": 196737,
+            "rawHex32": "0x00030081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -6965,13 +7067,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -7222,6 +7326,8 @@
               1,
               129
             ],
+            "signedLongCandidate": 65665,
+            "rawHex32": "0x00010081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -7236,13 +7342,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -7493,6 +7601,8 @@
               4,
               -1
             ],
+            "signedLongCandidate": 327679,
+            "rawHex32": "0x0004FFFF",
             "byteOffsetsInRecord": [
               0,
               2
@@ -7507,13 +7617,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -7764,6 +7876,8 @@
               4,
               -1
             ],
+            "signedLongCandidate": 327679,
+            "rawHex32": "0x0004FFFF",
             "byteOffsetsInRecord": [
               0,
               2
@@ -7778,13 +7892,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -8035,6 +8151,8 @@
               4,
               128
             ],
+            "signedLongCandidate": 262272,
+            "rawHex32": "0x00040080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -8049,13 +8167,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -8306,6 +8426,8 @@
               4,
               129
             ],
+            "signedLongCandidate": 262273,
+            "rawHex32": "0x00040081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -8320,13 +8442,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -8577,6 +8701,8 @@
               3,
               130
             ],
+            "signedLongCandidate": 196738,
+            "rawHex32": "0x00030082",
             "byteOffsetsInRecord": [
               0,
               2
@@ -8591,13 +8717,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -8848,6 +8976,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -8862,13 +8992,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -9119,6 +9251,8 @@
               3,
               130
             ],
+            "signedLongCandidate": 196738,
+            "rawHex32": "0x00030082",
             "byteOffsetsInRecord": [
               0,
               2
@@ -9133,13 +9267,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -9390,6 +9526,8 @@
               3,
               130
             ],
+            "signedLongCandidate": 196738,
+            "rawHex32": "0x00030082",
             "byteOffsetsInRecord": [
               0,
               2
@@ -9404,13 +9542,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -9661,6 +9801,8 @@
               1,
               128
             ],
+            "signedLongCandidate": 65664,
+            "rawHex32": "0x00010080",
             "byteOffsetsInRecord": [
               0,
               2
@@ -9675,13 +9817,15 @@
               72,
               -32768
             ],
+            "signedLongCandidate": 4751360,
+            "rawHex32": "0x00488000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -9932,6 +10076,8 @@
               3,
               130
             ],
+            "signedLongCandidate": 196738,
+            "rawHex32": "0x00030082",
             "byteOffsetsInRecord": [
               0,
               2
@@ -9946,13 +10092,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -10203,6 +10351,8 @@
               3,
               130
             ],
+            "signedLongCandidate": 196738,
+            "rawHex32": "0x00030082",
             "byteOffsetsInRecord": [
               0,
               2
@@ -10217,13 +10367,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -10474,6 +10626,8 @@
               2,
               138
             ],
+            "signedLongCandidate": 131210,
+            "rawHex32": "0x0002008A",
             "byteOffsetsInRecord": [
               0,
               2
@@ -10488,13 +10642,15 @@
               127,
               1
             ],
+            "signedLongCandidate": 8323073,
+            "rawHex32": "0x007F0001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -10745,6 +10901,8 @@
               2,
               139
             ],
+            "signedLongCandidate": 131211,
+            "rawHex32": "0x0002008B",
             "byteOffsetsInRecord": [
               0,
               2
@@ -10759,13 +10917,15 @@
               127,
               1
             ],
+            "signedLongCandidate": 8323073,
+            "rawHex32": "0x007F0001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -11016,6 +11176,8 @@
               3,
               139
             ],
+            "signedLongCandidate": 196747,
+            "rawHex32": "0x0003008B",
             "byteOffsetsInRecord": [
               0,
               2
@@ -11030,13 +11192,15 @@
               0,
               1
             ],
+            "signedLongCandidate": 1,
+            "rawHex32": "0x00000001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -11287,6 +11451,8 @@
               4,
               139
             ],
+            "signedLongCandidate": 262283,
+            "rawHex32": "0x0004008B",
             "byteOffsetsInRecord": [
               0,
               2
@@ -11301,13 +11467,15 @@
               0,
               1
             ],
+            "signedLongCandidate": 1,
+            "rawHex32": "0x00000001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -11558,6 +11726,8 @@
               4,
               140
             ],
+            "signedLongCandidate": 262284,
+            "rawHex32": "0x0004008C",
             "byteOffsetsInRecord": [
               0,
               2
@@ -11572,13 +11742,15 @@
               0,
               1
             ],
+            "signedLongCandidate": 1,
+            "rawHex32": "0x00000001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -11829,6 +12001,8 @@
               3,
               129
             ],
+            "signedLongCandidate": 196737,
+            "rawHex32": "0x00030081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -11843,13 +12017,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -12100,6 +12276,8 @@
               4,
               140
             ],
+            "signedLongCandidate": 262284,
+            "rawHex32": "0x0004008C",
             "byteOffsetsInRecord": [
               0,
               2
@@ -12114,13 +12292,15 @@
               0,
               1
             ],
+            "signedLongCandidate": 1,
+            "rawHex32": "0x00000001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -12371,6 +12551,8 @@
               3,
               130
             ],
+            "signedLongCandidate": 196738,
+            "rawHex32": "0x00030082",
             "byteOffsetsInRecord": [
               0,
               2
@@ -12385,13 +12567,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -12642,6 +12826,8 @@
               3,
               146
             ],
+            "signedLongCandidate": 196754,
+            "rawHex32": "0x00030092",
             "byteOffsetsInRecord": [
               0,
               2
@@ -12656,13 +12842,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -12913,6 +13101,8 @@
               3,
               146
             ],
+            "signedLongCandidate": 196754,
+            "rawHex32": "0x00030092",
             "byteOffsetsInRecord": [
               0,
               2
@@ -12927,13 +13117,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -13184,6 +13376,8 @@
               3,
               143
             ],
+            "signedLongCandidate": 196751,
+            "rawHex32": "0x0003008F",
             "byteOffsetsInRecord": [
               0,
               2
@@ -13198,13 +13392,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -13455,6 +13651,8 @@
               3,
               144
             ],
+            "signedLongCandidate": 196752,
+            "rawHex32": "0x00030090",
             "byteOffsetsInRecord": [
               0,
               2
@@ -13469,13 +13667,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -13726,6 +13926,8 @@
               3,
               144
             ],
+            "signedLongCandidate": 196752,
+            "rawHex32": "0x00030090",
             "byteOffsetsInRecord": [
               0,
               2
@@ -13740,13 +13942,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -13997,6 +14201,8 @@
               3,
               145
             ],
+            "signedLongCandidate": 196753,
+            "rawHex32": "0x00030091",
             "byteOffsetsInRecord": [
               0,
               2
@@ -14011,13 +14217,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -14268,6 +14476,8 @@
               3,
               145
             ],
+            "signedLongCandidate": 196753,
+            "rawHex32": "0x00030091",
             "byteOffsetsInRecord": [
               0,
               2
@@ -14282,13 +14492,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -14539,6 +14751,8 @@
               2,
               136
             ],
+            "signedLongCandidate": 131208,
+            "rawHex32": "0x00020088",
             "byteOffsetsInRecord": [
               0,
               2
@@ -14553,13 +14767,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -14810,6 +15026,8 @@
               4,
               142
             ],
+            "signedLongCandidate": 262286,
+            "rawHex32": "0x0004008E",
             "byteOffsetsInRecord": [
               0,
               2
@@ -14824,13 +15042,15 @@
               133,
               4096
             ],
+            "signedLongCandidate": 8720384,
+            "rawHex32": "0x00851000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -15081,6 +15301,8 @@
               4,
               139
             ],
+            "signedLongCandidate": 262283,
+            "rawHex32": "0x0004008B",
             "byteOffsetsInRecord": [
               0,
               2
@@ -15095,13 +15317,15 @@
               0,
               1
             ],
+            "signedLongCandidate": 1,
+            "rawHex32": "0x00000001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -15352,6 +15576,8 @@
               3,
               144
             ],
+            "signedLongCandidate": 196752,
+            "rawHex32": "0x00030090",
             "byteOffsetsInRecord": [
               0,
               2
@@ -15366,13 +15592,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -15623,6 +15851,8 @@
               3,
               146
             ],
+            "signedLongCandidate": 196754,
+            "rawHex32": "0x00030092",
             "byteOffsetsInRecord": [
               0,
               2
@@ -15637,13 +15867,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -15894,6 +16126,8 @@
               3,
               139
             ],
+            "signedLongCandidate": 196747,
+            "rawHex32": "0x0003008B",
             "byteOffsetsInRecord": [
               0,
               2
@@ -15908,13 +16142,15 @@
               0,
               1
             ],
+            "signedLongCandidate": 1,
+            "rawHex32": "0x00000001",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -16165,6 +16401,8 @@
               3,
               143
             ],
+            "signedLongCandidate": 196751,
+            "rawHex32": "0x0003008F",
             "byteOffsetsInRecord": [
               0,
               2
@@ -16179,13 +16417,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -16436,6 +16676,8 @@
               3,
               146
             ],
+            "signedLongCandidate": 196754,
+            "rawHex32": "0x00030092",
             "byteOffsetsInRecord": [
               0,
               2
@@ -16450,13 +16692,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -16707,6 +16951,8 @@
               3,
               148
             ],
+            "signedLongCandidate": 196756,
+            "rawHex32": "0x00030094",
             "byteOffsetsInRecord": [
               0,
               2
@@ -16721,13 +16967,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -16978,6 +17226,8 @@
               2,
               149
             ],
+            "signedLongCandidate": 131221,
+            "rawHex32": "0x00020095",
             "byteOffsetsInRecord": [
               0,
               2
@@ -16992,13 +17242,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -17249,6 +17501,8 @@
               1,
               136
             ],
+            "signedLongCandidate": 65672,
+            "rawHex32": "0x00010088",
             "byteOffsetsInRecord": [
               0,
               2
@@ -17263,13 +17517,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -17520,6 +17776,8 @@
               3,
               152
             ],
+            "signedLongCandidate": 196760,
+            "rawHex32": "0x00030098",
             "byteOffsetsInRecord": [
               0,
               2
@@ -17534,13 +17792,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -17791,6 +18051,8 @@
               3,
               146
             ],
+            "signedLongCandidate": 196754,
+            "rawHex32": "0x00030092",
             "byteOffsetsInRecord": [
               0,
               2
@@ -17805,13 +18067,15 @@
               0,
               -32768
             ],
+            "signedLongCandidate": 32768,
+            "rawHex32": "0x00008000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -18062,6 +18326,8 @@
               1,
               129
             ],
+            "signedLongCandidate": 65665,
+            "rawHex32": "0x00010081",
             "byteOffsetsInRecord": [
               0,
               2
@@ -18076,13 +18342,15 @@
               127,
               -32768
             ],
+            "signedLongCandidate": 8355840,
+            "rawHex32": "0x007F8000",
             "byteOffsetsInRecord": [
               4,
               6
             ]
           },
-          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair",
-          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation."
+          "sourceConfidence": "resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate",
+          "sourceNote": "EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending."
         },
         "candidateHyperspaceLinks": {
           "wordIndices": [
@@ -18310,5 +18578,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs plus signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }
