@@ -12,7 +12,7 @@
   },
   "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T15:22:30Z",
+  "updated_at": "2026-06-09T15:24:48Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified increments until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable ledger/event checkpointing.",
   "active_gate": null,
@@ -68,9 +68,10 @@
     "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_coordinate_raw_long_candidate passed; recorded_static_topology_source_boundary passed",
     "extractor temp-output cmp against native_ev/data/sourced_ev_systems.json -> exit 0",
     "JSON parse for task ledger, events JSONL, native_ev/data/*.json, native_ev/data/profiles/*.json -> json_ok",
-    "git diff --check -> no output / exit 0"
+    "git diff --check -> no output / exit 0",
+    "git push origin main -> 198a530..d04c13b main -> main; git fetch origin main --quiet && test HEAD == origin/main -> d04c13ba14e7719e6cab53c9f8ece40bb21fe89a; final status only untracked continuous-runner.lock"
   ],
-  "next_resume_action": "Continue Lane A with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion; stabilize/push this coherent raw-long candidate slice first if the next runner sees these intended dirty files.",
+  "next_resume_action": "Continue Lane A with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion.",
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation equals one coherent safe slice; send concise slice reports to telegram:Loki GameTV; do not stop between safe slices.",
   "runner": {
     "kind": "continuous-background-loop",
