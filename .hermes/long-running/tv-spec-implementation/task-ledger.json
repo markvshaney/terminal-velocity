@@ -12,7 +12,7 @@
   },
   "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T15:59:52Z",
+  "updated_at": "2026-06-09T16:01:20Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified adjacent increment batches until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable event/checkpoint policy.",
   "active_gate": null,
@@ -61,16 +61,13 @@
     }
   ],
   "last_verified_commands": [
-    "git status --short --branch -> ## main...origin/main with tracked Lane A reciprocity/self-link slice dirt; untracked continuous-runner.lock owned by active wrapper PID 1947054",
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-reciprocity-levo-name-map-v7",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> OK (3 tests)",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_candidate_link_graph_summary passed; reciprocalDirectedLinkCount=8; nonReciprocalDirectedLinkCount=109; uniqueSelfLinkResourceIds=[128,136,139,140]",
-    "extractor temp-output cmp against native_ev/data/sourced_ev_systems.json -> exit 0",
-    "JSON parse for task ledger, events JSONL, native_ev/data/*.json, native_ev/data/profiles/*.json -> json_ok",
-    "git diff --check -> no output / exit 0",
-    "ps -p 1947054 -o pid=,stat=,cmd= -> active bash tv_spec_continuous_runner.sh"
+    "git commit -m \"Promote EV syst link reciprocity stats\" -> 6913c41",
+    "git fetch origin main --quiet && git merge-base --is-ancestor origin/main HEAD -> passed",
+    "git push origin main -> a1a3c6c..6913c41 main -> main",
+    "git fetch origin main --quiet && test HEAD == origin/main -> passed (6913c41a7b5c23418ec7304419d4c5cf1e20db81)",
+    "git status --short --branch -> ## main...origin/main plus untracked continuous-runner.lock only"
   ],
-  "next_resume_action": "Continue Lane A with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion. The current v7 reciprocity/self-link statistics batch is verified and ready for normal checkpoint integration when checkpoint policy triggers; preserve untracked continuous-runner.lock as active wrapper state.",
+  "next_resume_action": "Continue Lane A with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; preserve untracked continuous-runner.lock as active wrapper state.",
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments; send Telegram/progress only at material boundaries; do not stop between adjacent safe increments.",
   "runner": {
     "kind": "continuous-background-loop",
