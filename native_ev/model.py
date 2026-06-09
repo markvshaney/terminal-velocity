@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-raw-long-levo-name-map-v3':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-domain-levo-name-map-v4':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -319,6 +319,19 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     seeds = data.get('systemNameSeeds', [])
     if len(seeds) < 9 or 'Sol' not in {seed.get('name') for seed in seeds}:
         raise ValueError('sourced EV systems manifest missing expected heuristic name seeds')
+    domain = data.get('coordinateDomainSummary', {})
+    if domain.get('sourceLabel') != 'decoded-resource-backed-coordinate-domain-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate domain summary source label')
+    if domain.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate domain summary should keep display scaling pending')
+    if domain.get('recordCount') != 67:
+        raise ValueError('sourced EV systems manifest coordinate domain summary has unexpected record count')
+    if domain.get('xPos', {}).get('highWordDistinctValues') != [1, 2, 3, 4]:
+        raise ValueError('sourced EV systems manifest coordinate domain summary has unexpected x high-word domain')
+    if domain.get('yPos', {}).get('highWordDistinctValues') != [0, 18, 72, 127, 133]:
+        raise ValueError('sourced EV systems manifest coordinate domain summary has unexpected y high-word domain')
+    if 'not-promoted' not in domain.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate domain summary must not promote display units')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')

@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-raw-long-levo-name-map-v3'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-domain-levo-name-map-v4'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs plus signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -113,8 +113,42 @@ def _map_coordinates(record: dict) -> dict:
         'wordIndices': COORDINATE_WORD_INDICES,
         'xPos': _raw_coordinate_pair(record, 0),
         'yPos': _raw_coordinate_pair(record, 2),
-        'sourceConfidence': 'resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate',
-        'sourceNote': 'EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload and a signed 32-bit big-endian raw-long candidate. Display units/map scaling remain pending.',
+        'sourceConfidence': 'resource-bible-field-family-plus-decoded-raw-word-pair-domain-summary-plus-raw-signed-long-candidate',
+        'sourceNote': 'EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload, a signed 32-bit big-endian raw-long candidate, and a run-level component-domain summary. Display units/map scaling remain pending.',
+    }
+
+
+def _axis_range(systems: list[dict], axis: str, key: str) -> list[int]:
+    values = [system['semanticFields']['mapCoordinates'][axis][key] for system in systems]
+    return [min(values), max(values)]
+
+
+def _axis_word_range(systems: list[dict], axis: str, word_index: int) -> list[int]:
+    values = [system['semanticFields']['mapCoordinates'][axis]['rawWords'][word_index] for system in systems]
+    return [min(values), max(values)]
+
+
+def _coordinate_domain_summary(systems: list[dict]) -> dict:
+    x_high_words = sorted({system['semanticFields']['mapCoordinates']['xPos']['rawWords'][0] for system in systems})
+    y_high_words = sorted({system['semanticFields']['mapCoordinates']['yPos']['rawWords'][0] for system in systems})
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-domain-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'recordCount': len(systems),
+        'xPos': {
+            'highWordDistinctValues': x_high_words,
+            'highWordRange': _axis_word_range(systems, 'xPos', 0),
+            'lowWordRange': _axis_word_range(systems, 'xPos', 1),
+            'signedLongCandidateRange': _axis_range(systems, 'xPos', 'signedLongCandidate'),
+        },
+        'yPos': {
+            'highWordDistinctValues': y_high_words,
+            'highWordRange': _axis_word_range(systems, 'yPos', 0),
+            'lowWordRange': _axis_word_range(systems, 'yPos', 1),
+            'signedLongCandidateRange': _axis_range(systems, 'yPos', 'signedLongCandidate'),
+        },
+        'displayUnitInterpretationStatus': 'not-promoted; raw coordinate component domain is preserved for a later map display scaling/topology pass',
+        'sourceNote': 'This summary is computed from the decoded syst-like coordinate payloads and supports the next display-unit/map-scaling interpretation pass. It does not claim EV Classic map pixel units, projection, centering, or route layout fidelity.',
     }
 
 
@@ -183,8 +217,8 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             'mapCoordinates': {
                 'wordIndices': COORDINATE_WORD_INDICES,
                 'resourceBibleFieldFamily': 'syst xPos/yPos',
-                'valueDomain': 'map coordinate fields; raw two-word payload and signed 32-bit big-endian raw-long candidate preserved pending display-unit/map-scaling confirmation',
-                'confidence': 'resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate',
+                'valueDomain': 'map coordinate fields; raw two-word payload, coordinate word-domain summary, and signed 32-bit big-endian raw-long candidate preserved pending display-unit/map-scaling confirmation',
+                'confidence': 'resource-bible-field-family-plus-decoded-raw-word-pair-domain-summary-plus-raw-signed-long-candidate',
             },
             'candidateHyperspaceLinks': {
                 'wordIndices': LINK_WORD_INDICES,
@@ -195,6 +229,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             },
         },
         'systemNameSeeds': names.get('systemNames', []),
+        'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

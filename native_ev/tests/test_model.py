@@ -3413,7 +3413,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-raw-long-levo-name-map-v3')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-domain-levo-name-map-v4')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3434,7 +3434,20 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(first['semanticFields']['mapCoordinates']['xPos']['rawHex32'], '0x00010080')
         self.assertEqual(first['semanticFields']['mapCoordinates']['yPos']['signedLongCandidate'], 8327168)
         self.assertEqual(first['semanticFields']['mapCoordinates']['yPos']['rawHex32'], '0x007F1000')
-        self.assertEqual(first['semanticFields']['mapCoordinates']['sourceConfidence'], 'resource-bible-field-family-plus-decoded-raw-word-pair-plus-raw-signed-long-candidate')
+        self.assertEqual(first['semanticFields']['mapCoordinates']['sourceConfidence'], 'resource-bible-field-family-plus-decoded-raw-word-pair-domain-summary-plus-raw-signed-long-candidate')
+        domain = data['coordinateDomainSummary']
+        self.assertEqual(domain['sourceLabel'], 'decoded-resource-backed-coordinate-domain-scout')
+        self.assertEqual(domain['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(domain['recordCount'], 67)
+        self.assertEqual(domain['xPos']['highWordDistinctValues'], [1, 2, 3, 4])
+        self.assertEqual(domain['xPos']['highWordRange'], [1, 4])
+        self.assertEqual(domain['xPos']['lowWordRange'], [-1, 152])
+        self.assertEqual(domain['xPos']['signedLongCandidateRange'], [65664, 327679])
+        self.assertEqual(domain['yPos']['highWordDistinctValues'], [0, 18, 72, 127, 133])
+        self.assertEqual(domain['yPos']['highWordRange'], [0, 133])
+        self.assertEqual(domain['yPos']['lowWordRange'], [-32768, 28672])
+        self.assertEqual(domain['yPos']['signedLongCandidateRange'], [1, 8720384])
+        self.assertIn('not-promoted', domain['displayUnitInterpretationStatus'])
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['slotNames'], [f'Con{index}' for index in range(1, 17)])
         self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
@@ -3463,7 +3476,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs plus signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
