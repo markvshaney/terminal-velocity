@@ -8,6 +8,8 @@ Anti-staleness rule: before choosing fresh work, prefer an existing `ready`, `im
 
 Rationale/source record: `docs/decisions/2026-05-19-ev-classic-observation-to-implementation-workflow.md`.
 
+Dispatch index: `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` is generated from this markdown backlog for cheap runner dispatch. Do not edit the JSON by hand. After changing actionable backlog items or dispatch fields, run `python3 tools/backlog_dispatch_index.py build` and verify with `python3 tools/backlog_dispatch_index.py check`.
+
 Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verified`, `deferred`, `blocked`.
 
 ## Active / recurring workflow

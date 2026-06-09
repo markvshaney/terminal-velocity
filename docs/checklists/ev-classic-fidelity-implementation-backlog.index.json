@@ -1,0 +1,484 @@
+{
+  "generated_from": "markdown-backlog-derived; do not edit by hand",
+  "item_count": 18,
+  "items": [
+    {
+      "blocked_reason": "Classic progression/strategy exactness still needs original-runtime, decoded-resource, or manual/source evidence before fidelity promotion.",
+      "id": "player-strategy-skills-as-distinct-progression-loops",
+      "item_body_sha256": "fc3b412473453e91dc1f6ed97d7ca1a6012a2b4304d9754e9ab7b8b03f794829",
+      "lane_class": "Lane E: deterministic evaluator/playtest packets",
+      "line_range": [
+        104,
+        155
+      ],
+      "markdown_anchor": "#player-strategy-skills-as-distinct-progression-loops",
+      "next_action": "Gather original-runtime evidence for mission/trade/navigation first, then split remaining strategy loops into narrow UI/data tickets only when a concrete player-visible scaffold or evidence packet is ready.",
+      "oracle_class": "tv-scaffold",
+      "promotion_status": "scaffold",
+      "risk_gate": "original_runtime_destructive",
+      "source_basis": [
+        "terminal-velocity-observed",
+        "tv-scaffold"
+      ],
+      "status": "candidate",
+      "title": "Player strategy skills as distinct progression loops",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "docs/plans/2026-05-20-player-strategy-niches.md",
+        "native_ev/tests",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`python3 tools/run_gameplay_scenarios.py strategy_skill_rotation_loop --pretty`; relevant Godot help/probe for the specific strategy lane touched."
+    },
+    {
+      "blocked_reason": "Exact record-to-name/runtime topology mapping is not fully promoted; do not implement from adaptation data alone.",
+      "id": "fuller-ev-classic-galaxy-topology-and-coordinates",
+      "item_body_sha256": "e046363efc4ba9a091d7d73b9f507fc89207442ba2544aad803ea53c6d076c3c",
+      "lane_class": "Lane A: static galaxy topology semantics",
+      "line_range": [
+        156,
+        181
+      ],
+      "markdown_anchor": "#fuller-ev-classic-galaxy-topology-and-coordinates",
+      "next_action": "Continue promoting the `syst-like` primitive run one field family at a time: next highest-value families are coordinate display-unit/map-scaling interpretation, exact record-to-name/runtime topology mapping, then hazards/government/ports before broad universe changes.",
+      "oracle_class": "static-resource",
+      "promotion_status": "needs evidence",
+      "risk_gate": "none",
+      "source_basis": [
+        "decoded-record-family",
+        "decoded-original-variable",
+        "resource-bible-field"
+      ],
+      "status": "partial semantic promotion from static source records / coordinate raw-word/raw-long and Con1-Con16 link-slot families promoted",
+      "title": "Fuller EV Classic galaxy topology and coordinates",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "native_ev/data/sourced_ev_systems.json",
+        "tools/extract_ev_system_semantics.py",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`python3 tools/extract_ev_system_semantics.py` plus focused sourced-system manifest tests."
+    },
+    {
+      "blocked_reason": "Starting HUD does not prove full primary/outfit inventory.",
+      "id": "exact-starting-primary-weapons-outfits",
+      "item_body_sha256": "6f11a5a3924d4cc0e7278368b84f30ee0114122f06e436efb620cba74f730313",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        199,
+        214
+      ],
+      "markdown_anchor": "#exact-starting-primary-weapons-outfits",
+      "next_action": "Open a non-mutating Classic Player Info or outfitter/status surface to confirm primary weapons/outfits beyond the starting HUD.",
+      "oracle_class": "runtime-ui",
+      "promotion_status": "needs evidence",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "needs evidence / player-facing uncertainty helper and deterministic starting-equipment contract added",
+      "title": "Exact starting primary weapons/outfits",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "`./run_godot.sh tv-starting-equipment-log` plus archived before/after Classic capture notes for the non-mutating status surface."
+    },
+    {
+      "blocked_reason": "Classic-wide service/store matrices are not fully decoded into runtime-facing data.",
+      "id": "system-by-system-original-service-store-provisioning",
+      "item_body_sha256": "7db9ba460c2998bf95b21188d860df89290e02fdd47584836d6b0527231cd3f6",
+      "lane_class": "Lane B: service/store provisioning",
+      "line_range": [
+        226,
+        240
+      ],
+      "markdown_anchor": "#system-by-system-original-service-store-provisioning",
+      "next_action": "Promote a static service/store manifest from decoded landing/body/resource records and graphics/source manifests; spot-check ambiguous UI-sensitive surfaces in Basilisk only when needed.",
+      "oracle_class": "static-resource",
+      "promotion_status": "needs evidence",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "decoded-record-family",
+        "decoded-original-variable",
+        "resource-bible-field"
+      ],
+      "status": "needs semantic promotion from static source records / Terminal Velocity scouting scaffold added",
+      "title": "System-by-system original service/store provisioning",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "tools/extract_ev_service_semantics.py",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`python3 tools/extract_ev_service_semantics.py` plus focused service manifest/model tests and `./run_godot.sh tv-service-provisioning-log` for the current TV scaffold."
+    },
+    {
+      "blocked_reason": "Levo sell-back proves one same-port case only; global formulas/spreads remain unpromoted.",
+      "id": "economy-wide-buy-sell-display-and-spread-rules",
+      "item_body_sha256": "e80f07a96167b3e6832d0146ba653a6a70e0d4e516a509968001925b916bc2ff",
+      "lane_class": "Lane C: economy/commodity semantics",
+      "line_range": [
+        241,
+        265
+      ],
+      "markdown_anchor": "#economy-wide-buy-sell-display-and-spread-rules",
+      "next_action": "Observe additional ports or decode commodity/economy resources before changing global formula assumptions.",
+      "oracle_class": "static-resource",
+      "promotion_status": "needs evidence",
+      "risk_gate": "none",
+      "source_basis": [
+        "decoded-record-family",
+        "decoded-original-variable",
+        "resource-bible-field"
+      ],
+      "status": "candidate / needs semantic promotion from static economy records / Terminal Velocity cross-market scaffold added",
+      "title": "Economy-wide buy/sell display and spread rules",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "native_ev/tests",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "focused sourced-economy/commodity tests plus the relevant trade probe, e.g. `./run_godot.sh tv-cross-market-trade-log`."
+    },
+    {
+      "blocked_reason": "No current implementation blocker; future prefs behavior needs separate exact evidence.",
+      "id": "ev-classic-prefs-screen-fidelity",
+      "item_body_sha256": "37f1d6feeb140417f1dbd4e6ab300aa5d925083eabdd490a119c6b533d4f1459",
+      "lane_class": "Lane E: deterministic evaluator/playtest packets",
+      "line_range": [
+        266,
+        281
+      ],
+      "markdown_anchor": "#ev-classic-prefs-screen-fidelity",
+      "next_action": "Keep as a regression surface; add a new narrow item only if another prefs control needs exact behavior beyond visual layout.",
+      "oracle_class": "runtime-ui",
+      "promotion_status": "fidelity-promoted",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "implemented / regression tightened",
+      "title": "EV Classic prefs screen fidelity",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "`python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_godot_prefs_modal_matches_original_ev_classic_observation -v`; `./run_godot.sh self-test`."
+    },
+    {
+      "blocked_reason": "Decoded sprite sheets are integrated but runtime frame-order/facing behavior is not observed.",
+      "id": "ship-facing-frame-order-runtime-confirmation",
+      "item_body_sha256": "4de5835d628cb121929414d0aca35cdfc44c473ed2e0d94665c6002c8ddf121e",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        289,
+        301
+      ],
+      "markdown_anchor": "#ship-facing-frame-order-runtime-confirmation",
+      "next_action": "Capture deterministic original-runtime turning/facing sequence and compare against Terminal Velocity movement log.",
+      "oracle_class": "timing-feel",
+      "promotion_status": "needs evidence",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "needs evidence",
+      "title": "Ship facing/frame-order runtime confirmation",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "Classic capture packet plus `./run_godot.sh tv-movement-log` or the matching movement-log wrapper output."
+    },
+    {
+      "blocked_reason": "Terminal Velocity is instrumented; exact Classic movement curves remain unmeasured.",
+      "id": "movement-tuning-turn-rate-acceleration-curve-max-speed-inertial-drift",
+      "item_body_sha256": "ff08571187660f8ad57649e032963148261dfa6afd217e60203ef3073def223b",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        302,
+        315
+      ],
+      "markdown_anchor": "#movement-tuning-turn-rate-acceleration-curve-max-speed-inertial-drift",
+      "next_action": "Capture original-runtime acceleration/max-speed/drift against the same deterministic scenario shape, then tune Terminal Velocity if logs diverge.",
+      "oracle_class": "timing-feel",
+      "promotion_status": "needs evidence",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "instrumented / needs original comparison",
+      "title": "Movement tuning: turn rate, acceleration curve, max speed, inertial drift",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "Classic movement packet plus `RunGodot.ps1 -MovementLog` / `./run_godot.sh tv-movement-log` output comparison."
+    },
+    {
+      "blocked_reason": "Afterburner key is observed, but multiplier, fuel/energy consumption, sound, and failure behavior are unconfirmed.",
+      "id": "afterburner-acceleration-and-fuel-use-behavior",
+      "item_body_sha256": "da31cfcef07c67dcd85b56969e24a670c5f6227648d231d2ee74ddf7e61c287f",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        316,
+        330
+      ],
+      "markdown_anchor": "#afterburner-acceleration-and-fuel-use-behavior",
+      "next_action": "Capture or decode EV Classic afterburner acceleration/fuel behavior before promoting constants beyond scaffold status.",
+      "oracle_class": "timing-feel",
+      "promotion_status": "scaffold",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "implemented Terminal Velocity scaffold / needs Classic confirmation",
+      "title": "Afterburner acceleration and fuel-use behavior",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "`./run_godot.sh tv-afterburner-log` plus Classic afterburner capture/source packet."
+    },
+    {
+      "blocked_reason": "Autopilot key is observed, but target choice, speed management, aborts, and landing interaction are unconfirmed.",
+      "id": "autopilot-behavior-and-port-approach-assist",
+      "item_body_sha256": "637c71e9f4bfd421baabcdf8b93be14d041d976b94e6b40470561ef33fc83698",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        331,
+        345
+      ],
+      "markdown_anchor": "#autopilot-behavior-and-port-approach-assist",
+      "next_action": "Capture or decode EV Classic autopilot behavior before promoting target/speed constants or UI wording beyond scaffold status.",
+      "oracle_class": "runtime-ui",
+      "promotion_status": "scaffold",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "implemented Terminal Velocity scaffold / needs Classic confirmation",
+      "title": "Autopilot behavior and port approach assist",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "`./run_godot.sh tv-autopilot-log` plus Classic autopilot capture/source packet."
+    },
+    {
+      "blocked_reason": "Current Godot event log exists; successful Classic transit/timing/sound capture is still missing.",
+      "id": "land-takeoff-and-hyperspace-timing-sound-animation-fidelity",
+      "item_body_sha256": "5b9abf68a1efd061468e4f7141942fa1183f7c557cd319d923a7ccf600ac0d79",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        346,
+        360
+      ],
+      "markdown_anchor": "#land-takeoff-and-hyperspace-timing-sound-animation-fidelity",
+      "next_action": "Use a fresh non-strict original EV session or alternate input route that proves reliable hotkey receipt, then capture successful hyperspace transit and compare to Godot event logs.",
+      "oracle_class": "timing-feel",
+      "promotion_status": "needs evidence",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "instrumented / needs original comparison",
+      "title": "Land/takeoff and hyperspace timing/sound/animation fidelity",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "`./run_godot.sh tv-travel-event-log` plus Classic transition capture/log packet."
+    },
+    {
+      "blocked_reason": "Levo visible services are observed; broader service/store/click-through matrix needs Classic or decoded static evidence.",
+      "id": "landed-service-button-matrix-bar-mission-computer-commodities-outfitter-shipyard-gambling",
+      "item_body_sha256": "b712ed96f48df89e79fc005382e46d43202082c784ffad1a89393548cc30039a",
+      "lane_class": "Lane B: service/store provisioning",
+      "line_range": [
+        361,
+        376
+      ],
+      "markdown_anchor": "#landed-service-button-matrix-bar-mission-computer-commodities-outfitter-shipyard-gambling",
+      "next_action": "Run bounded original EV click-through starting at Levo and then an outfitter/shipyard/gambling-capable early port, using disposable/non-strict state and before/after captures for every mutating option.",
+      "oracle_class": "runtime-ui",
+      "promotion_status": "needs evidence",
+      "risk_gate": "original_runtime_destructive",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "instrumented / needs original click-through",
+      "title": "Landed service/button matrix: bar, mission computer, commodities, outfitter, shipyard, gambling",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`./run_godot.sh tv-route-land-refuel-log`; `./run_godot.sh tv-service-provisioning-log`; Classic click-through capture packet."
+    },
+    {
+      "blocked_reason": "Source-mined combat scaffold is playable, but exact Classic timing/effects/reward/death/legal behavior remains unconfirmed.",
+      "id": "basic-combat-fidelity-fire-rate-projectile-speed-lifetime-damage-target-selection-explosions",
+      "item_body_sha256": "e8b922d360151bf114d34394b77e2c3cca7a08184f630ccb5fc34ebdd4f96c39",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        377,
+        418
+      ],
+      "markdown_anchor": "#basic-combat-fidelity-fire-rate-projectile-speed-lifetime-damage-target-selection-explosions",
+      "next_action": "Capture original runtime combat behavior for exact fire cadence, projectile motion, explosions, AI retaliation cadence, rewards, deaths, and legal consequences before promoting the scaffold to Classic fidelity.",
+      "oracle_class": "combat-cadence",
+      "promotion_status": "scaffold",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "implemented Terminal Velocity source-mined combat scaffold / stock weapon name-field crosswalk added / exact Classic combat timing and effects need evidence",
+      "title": "Basic combat fidelity: fire rate, projectile speed/lifetime/damage, target selection, explosions",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "native_ev/data/help_overlay.json",
+        "native_ev/data/sourced_ev_structures.json",
+        "native_ev/data/sourced_ev_weapons.json",
+        "native_ev/data/weapons.json",
+        "native_ev/tests",
+        "tools/extract_ev_weapon_semantics.py",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`./run_godot.sh tv-combat-log`; focused combat probes such as `tv-retaliation-log`, `tv-projectile-motion-log`, `tv-explosion-log`, plus Classic combat capture packet."
+    },
+    {
+      "blocked_reason": "EV Override/Nova/community/open-source sources are hypothesis/design-learning inputs unless independently verified against Classic.",
+      "id": "ev-family-gameplay-learning-source-integration",
+      "item_body_sha256": "8b7847b14e56117914c3ff7067a423eac1ef42ecefb31729633b5286d73f8b45",
+      "lane_class": "Lane E: deterministic evaluator/playtest packets",
+      "line_range": [
+        419,
+        434
+      ],
+      "markdown_anchor": "#ev-family-gameplay-learning-source-integration",
+      "next_action": "Convert the source-grounded model into small implementation plans or UI/data tickets, starting with mission state/log, map arrows/fuel feedback, per-government legal state, cargo reservation, and ship/outfit comparison.",
+      "oracle_class": "manual-backed",
+      "promotion_status": "needs evidence",
+      "risk_gate": "none",
+      "source_basis": [
+        "manual-doc-backed"
+      ],
+      "status": "candidate",
+      "title": "EV-family gameplay learning source integration",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "docs/research/ev-family-gameplay-source-deep-dive.md"
+      ],
+      "verifier": "readback of derived plan/ticket plus relevant targeted scenario/Godot probe for any implementation slice."
+    },
+    {
+      "blocked_reason": "Mission scaffold is broad and tested, but exact Classic UI/timing/stock mapping is not fully promoted.",
+      "id": "mission-state-log-and-mission-surface-model",
+      "item_body_sha256": "f2dbbbe3d649e2f245b5d7cf7245d7a79920998d3acce9e104d873d2fb38a396",
+      "lane_class": "Lane D: mission-family semantic promotion",
+      "line_range": [
+        435,
+        482
+      ],
+      "markdown_anchor": "#mission-state-log-and-mission-surface-model",
+      "next_action": "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties.",
+      "oracle_class": "manual-backed",
+      "promotion_status": "scaffold",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "manual-doc-backed"
+      ],
+      "status": "implemented Terminal Velocity scaffold / abort semantics pending Classic confirmation",
+      "title": "Mission state/log and mission-surface model",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "docs/references/ev-family/ev-classic-resource-bible.txt:462-470",
+        "docs/research/ev-family-gameplay-source-deep-dive.md",
+        "native_ev/data/sourced_ev_missions.json",
+        "native_ev/tests",
+        "tools/extract_ev_mission_semantics.py",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`python3 tools/extract_ev_mission_semantics.py`; focused mission scenario tests; relevant Godot mission probe such as `./run_godot.sh tv-mission-abort-log` or `tv-mission-deadline-failure-log`."
+    },
+    {
+      "blocked_reason": "Current capture did not show original EV auto-drawing active mission objective routes; helper behavior must not be represented as Classic fidelity.",
+      "id": "map-objective-arrows-fuel-range-and-hyperspace-feedback",
+      "item_body_sha256": "500733133804311983e780f4f93eaadc508141054a94b63f335082eb9d5b1975",
+      "lane_class": "Basilisk runtime lane",
+      "line_range": [
+        483,
+        505
+      ],
+      "markdown_anchor": "#map-objective-arrows-fuel-range-and-hyperspace-feedback",
+      "next_action": "Keep mission route hint/fuel precheck/navigation recovery as opt-in helper scaffolds; promote only after stronger Classic map/fuel/jump/land/refuel capture, especially multi-hop Shift-click toward non-direct destinations.",
+      "oracle_class": "runtime-ui",
+      "promotion_status": "scaffold",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "original-runtime-observed"
+      ],
+      "status": "implemented Terminal Velocity scaffold / original mission-map auto-objective not observed",
+      "title": "Map objective arrows, fuel/range, and hyperspace feedback",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "docs/research/original-ev-classic-runtime-observations.md",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`./run_godot.sh tv-mission-route-hint-log`; `./run_godot.sh tv-map-route-log`; Classic map/fuel/jump capture packet."
+    },
+    {
+      "blocked_reason": "Formulas, exact thresholds, combat/legal resolution, and original UI wording need Classic confirmation before promotion.",
+      "id": "per-government-legal-reputation-and-ai-behavior-model",
+      "item_body_sha256": "d28ef85b55c99ce9e9072f25ea128164c883ac767d53316f0e9a2066dcb4dfc6",
+      "lane_class": "Lane D: mission-family semantic promotion",
+      "line_range": [
+        506,
+        551
+      ],
+      "markdown_anchor": "#per-government-legal-reputation-and-ai-behavior-model",
+      "next_action": "Compare inferred mechanics against EV Classic runtime and EV/Override/Nova plugin-manual/Bible fields such as government crime tolerance, scan fines, contraband, bribery, and mission legal availability; tune labels/thresholds from evidence without blocking current playable scaffolds.",
+      "oracle_class": "manual-backed",
+      "promotion_status": "scaffold",
+      "risk_gate": "original_runtime_non_mutating",
+      "source_basis": [
+        "manual-doc-backed"
+      ],
+      "status": "implemented Classic Resource Bible-backed legal/resource semantics scaffold / exact stock values and runtime/UI timing unconfirmed",
+      "title": "Per-government legal/reputation and AI behavior model",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+        "docs/references/ev-family/",
+        "docs/research/ev-classic-resource-bible-legal-field-map.md",
+        "native_ev/data/governments.json",
+        "native_ev/data/reputation.json",
+        "native_ev/data/sourced_ev_governments.json",
+        "native_ev/data/sourced_ev_missions.json",
+        "native_ev/data/sourced_ev_structures.json",
+        "tools/extract_ev_government_semantics.py",
+        "tools/extract_ev_mission_semantics.py",
+        "tools/run_gameplay_scenarios.py"
+      ],
+      "verifier": "`python3 tools/extract_ev_government_semantics.py`; `python3 tools/extract_ev_mission_semantics.py`; focused legal/Godot probes such as `./run_godot.sh tv-legal-status-log`, `tv-contraband-risk-log`, and `tv-mission-legal-eligibility-log`."
+    },
+    {
+      "blocked_reason": "External adaptations are not EV Classic truth.",
+      "id": "external-adaptation-comparisons",
+      "item_body_sha256": "45bfe2ceac3657f120b5949ed9f7a303487e6dc572c2b8f6634e02d935ad603f",
+      "lane_class": "Lane E: deterministic evaluator/playtest packets",
+      "line_range": [
+        674,
+        685
+      ],
+      "markdown_anchor": "#external-adaptation-comparisons",
+      "next_action": "Use only as hypothesis input when a specific implementation question needs comparison; require original runtime, decoded resources, manual/docs, or Terminal Velocity instrumentation before implementation.",
+      "oracle_class": "user-decision",
+      "promotion_status": "blocked",
+      "risk_gate": "external_action",
+      "source_basis": [
+        "user-decision"
+      ],
+      "status": "deferred",
+      "title": "External adaptation comparisons",
+      "touched_surfaces": [
+        "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+      ],
+      "verifier": "none until a specific comparison target is selected; then record source and independent confirmation path."
+    }
+  ],
+  "schema_version": 1,
+  "source_path": "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+}

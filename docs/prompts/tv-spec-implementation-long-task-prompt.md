@@ -14,12 +14,12 @@ Required first actions every invocation:
    2. inspect `.hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json` when present;
    3. inspect live repo state: `git status --short --branch`, current branch, `HEAD`, and `origin/main`;
    4. inspect the latest 20 lines of `.hermes/long-running/tv-spec-implementation/events.jsonl`;
-   5. read only the relevant section(s) of `docs/research/tv-spec.md`, `docs/checklists/ev-classic-fidelity-implementation-backlog.md`, and touched source surfaces needed for the current slice.
+   5. inspect `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` first for dispatch candidates, then read only the relevant section(s) of `docs/research/tv-spec.md`, `docs/checklists/ev-classic-fidelity-implementation-backlog.md`, and touched source surfaces needed for the current slice.
 3. If the worktree is dirty, understand and stabilize the existing slice/batch before starting a new one. Do not overwrite or abandon unknown dirty work.
    - Known runner state exception: ignored `.hermes/long-running/tv-spec-implementation/continuous-runner/`, `STOP_CONTINUOUS_RUNNER`, `continuous-runner.lock`, and `continuous-runner.lock.json` are wrapper state, not a development dirty batch. Do not wait for or monitor the continuous-runner process from inside a runner invocation; proceed with repo/backlog work unless other dirty files, a ledger gate, or a real blocker is present.
 
 Task loop:
-- Prefer current actionable backlog items that already expose `next_action`, `lane_class`, `oracle_class`, `source_basis`, `verifier`, `blocked_reason`, and `promotion_status`.
+- Prefer current actionable backlog items from the generated dispatch index when it is fresh. The markdown backlog remains canonical; if the index is stale or missing after a backlog edit, run `python3 tools/backlog_dispatch_index.py build` and `python3 tools/backlog_dispatch_index.py check` before dispatching new work.
 - Default initial lane, if the repo is clean and no stronger live blocker exists: Lane A static galaxy topology semantics from the backlog item “Fuller EV Classic galaxy topology and coordinates,” continuing one field family at a time after the current `syst` coordinate/link-slot static promotions.
 - Use the tv-spec routing decision tree:
   - static-resource/manual-backed items: decoded resources, Resource Bible/manuals, extractor/model tests;
