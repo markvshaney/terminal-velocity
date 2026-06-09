@@ -266,9 +266,9 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-map-v1':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
-    if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list':
+    if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
     run = data.get('recordRun', {})
     if run.get('candidateType') != 'syst-like' or run.get('recordSize') != 88 or run.get('count') != 67:
@@ -283,7 +283,11 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         for key in ['resourceId', 'ordinal', 'chunkIndex', 'byteOffset', 'size', 'semanticStatus', 'semanticFields', 'sourceRecord']:
             if key not in system:
                 raise ValueError(f'sourced EV system missing {key}')
-        if system['semanticStatus'] != 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending':
+        allowed_system_statuses = {
+            'ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending',
+            'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending',
+        }
+        if system['semanticStatus'] not in allowed_system_statuses:
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected semantic status")
         coordinates = system['semanticFields'].get('mapCoordinates', {})
         if coordinates.get('wordIndices') != [0, 1, 2, 3]:
@@ -312,7 +316,15 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     seeds = data.get('systemNameSeeds', [])
     if len(seeds) < 9 or 'Sol' not in {seed.get('name') for seed in seeds}:
         raise ValueError('sourced EV systems manifest missing expected heuristic name seeds')
-    if 'Con1-Con16 link slot names' not in data.get('promotionBoundary', ''):
+    mappings = data.get('exactSystemNameMappings', [])
+    if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
+        raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')
+    first_exact_name = systems[0]['semanticFields'].get('exactSystemName', {})
+    if first_exact_name.get('systemName') != 'Levo' or first_exact_name.get('resourceId') != 128:
+        raise ValueError('sourced EV systems manifest first system is not mapped to Levo')
+    if 'original-runtime-observed' not in first_exact_name.get('sourceBasis', []):
+        raise ValueError('sourced EV systems manifest Levo mapping missing runtime source basis')
+    if 'Con1-Con16 link slot names' not in data.get('promotionBoundary', '') or 'resource ID 128 to Levo' not in data.get('promotionBoundary', ''):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
     return data
 

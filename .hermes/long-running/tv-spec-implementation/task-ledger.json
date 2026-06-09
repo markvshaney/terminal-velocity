@@ -12,13 +12,13 @@
   },
   "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T15:05:31Z",
-  "operational_owner_candidate": "loki-game cron job running in repo workdir with local-only delivery, plus normal TV repo integration policy",
+  "updated_at": "2026-06-09T15:11:39Z",
+  "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified increments until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable ledger/event checkpointing.",
   "active_gate": null,
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
-    "near_cap_action": "Stabilize current slice, update ledger/events, record next_resume_action, and let the next recurrence resume."
+    "near_cap_action": "Stabilize current slice, update ledger/events, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop."
   },
   "required_start_artifacts": [
     ".hermes/long-running/tv-spec-implementation/task-ledger.json",
@@ -61,28 +61,30 @@
     }
   ],
   "last_verified_commands": [
-    "git status --short --branch -> ## main...origin/main",
-    "git rev-parse HEAD && git rev-parse origin/main -> f191d2201fb6164ada9c7c04fddda222fd0fcbe0 for both",
-    "read docs/research/tv-spec.md lines 1-333",
-    "read docs/checklists/ev-classic-fidelity-implementation-backlog.md lines 1-180 including live use contract and Lane A next action"
+    "git status --short --branch && git branch --show-current && git fetch origin main --quiet && git rev-parse HEAD && git rev-parse origin/main -> ## main...origin/main; main; 2835ee395225118af99ea356ace96b2113ec2b95 for both",
+    "read .hermes/long-running/tv-spec-implementation/task-ledger.json; tail events.jsonl; docs/prompts/tv-spec-implementation-long-task-prompt.md; docs/research/tv-spec.md; Lane A backlog section lines 154-168",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v -> OK (2 tests)",
+    "git diff --check -> no output / exit 0",
+    "native_ev/data/sourced_ev_systems.json and task ledger JSON parse -> ok"
   ],
-  "next_resume_action": "On first recurrence, inspect live repo/ledger/backlog, then start the strongest safe tv-spec implementation slice. If still clean, default to Lane A coordinate numeric-unit interpretation or exact record-to-name/runtime topology mapping with extractor/model tests and backlog packet update.",
-  "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md. Implement one verified tv-spec-governed Terminal Velocity increment per run, update .hermes/long-running/tv-spec-implementation/task-ledger.json and events.jsonl, and continue on future recurrences until a real gate/blocker/no-safe-slice condition is recorded.",
+  "next_resume_action": "Continue Lane A with exact coordinate numeric-unit interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion; stabilize/push this coherent slice first if the next runner sees these intended dirty files.",
+  "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation equals one coherent safe slice; send concise slice reports to telegram:Loki GameTV; do not stop between safe slices.",
   "runner": {
-    "kind": "cron",
-    "schedule": "every 15m",
-    "deliver": "local",
+    "kind": "continuous-background-loop",
+    "script": "/home/bh/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh",
+    "delivery": "telegram:Loki GameTV via per-slice messaging tool; local logs under .hermes/long-running/tv-spec-implementation/continuous-runner/",
     "profile": "loki-game",
     "workdir": "/home/bh/workspaces/loki/terminal-velocity",
     "enabled_toolsets": [
       "terminal",
       "file",
-      "skills"
+      "skills",
+      "messaging"
     ],
-    "cron_job_id": "5430276bcaa5",
-    "cron_job_name": "Terminal Velocity tv-spec implementation loop",
-    "state": "scheduled",
-    "next_run_at": "2026-06-09T11:05:31.902762-04:00"
+    "replaces_paused_cron_job_id": "5430276bcaa5",
+    "cron_fallback_state": "paused to avoid overlapping writers",
+    "loop_policy": "zero intentional polling gap: after one invocation exits cleanly and ledger has no gate/terminal status, immediately invoke the next slice"
   },
   "source_artifact_policy": {
     "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec.",

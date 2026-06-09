@@ -16,12 +16,25 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-map-v1'
-SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and exact record-to-name mapping remain pending.'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2'
+SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
+EXACT_SYSTEM_NAME_MAPPINGS = {
+    128: {
+        'systemName': 'Levo',
+        'confidence': 'fidelity-promoted-for-resource-128-start-system-name',
+        'sourceBasis': [
+            'resource-bible-field',
+            'manual-doc-backed',
+            'original-runtime-observed',
+            'decoded-record-family',
+        ],
+        'sourceNote': 'EV Classic Resource Bible says system ID #128 is the player start/rescue system; original EV Classic runtime observation starts the player in the Levo system; the decoded syst-like resource run is contiguous from resource ID 128, so resource ID 128 maps to Levo. This promotes only that exact record-to-name mapping, not the remaining 66 names or runtime topology.',
+    },
+}
 
 
 def _syst_run(structures: dict) -> dict:
@@ -95,6 +108,16 @@ def _map_coordinates(record: dict) -> dict:
     }
 
 
+def _exact_system_name_mapping(resource_id: int) -> dict | None:
+    mapping = EXACT_SYSTEM_NAME_MAPPINGS.get(resource_id)
+    if mapping is None:
+        return None
+    return {
+        'resourceId': resource_id,
+        **mapping,
+    }
+
+
 def derive(structures_path: Path, names_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -103,17 +126,25 @@ def derive(structures_path: Path, names_path: Path) -> dict:
     systems = []
     for record in run['records']:
         ordinal = int(record['ordinal'])
+        resource_id = 128 + ordinal
+        exact_name = _exact_system_name_mapping(resource_id)
+        semantic_fields = {
+            'mapCoordinates': _map_coordinates(record),
+            'candidateHyperspaceLinks': _candidate_links(record, resource_ids),
+        }
+        if exact_name is not None:
+            semantic_fields['exactSystemName'] = exact_name
+        semantic_status = 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending'
+        if exact_name is not None:
+            semantic_status = 'ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending'
         systems.append({
-            'resourceId': 128 + ordinal,
+            'resourceId': resource_id,
             'ordinal': ordinal,
             'chunkIndex': int(record['chunkIndex']),
             'byteOffset': int(record['byteOffset']),
             'size': int(record['size']),
-            'semanticStatus': 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending',
-            'semanticFields': {
-                'mapCoordinates': _map_coordinates(record),
-                'candidateHyperspaceLinks': _candidate_links(record, resource_ids),
-            },
+            'semanticStatus': semantic_status,
+            'semanticFields': semantic_fields,
             'sourceRecord': {
                 'candidateType': run['candidateType'],
                 'recordSize': run['recordSize'],
@@ -154,6 +185,10 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             },
         },
         'systemNameSeeds': names.get('systemNames', []),
+        'exactSystemNameMappings': [
+            _exact_system_name_mapping(resource_id)
+            for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)
+        ],
         'systems': systems,
         'promotionBoundary': PROMOTION_BOUNDARY,
     }

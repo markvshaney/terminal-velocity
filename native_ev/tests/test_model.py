@@ -3413,7 +3413,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-map-v1')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3421,7 +3421,7 @@ class NativeEvModelTests(unittest.TestCase):
         first = systems[0]
         self.assertEqual(first['resourceId'], 128)
         self.assertEqual(first['ordinal'], 0)
-        self.assertEqual(first['semanticStatus'], 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending')
+        self.assertEqual(first['semanticStatus'], 'ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending')
         self.assertIn('chunkIndex', first)
         self.assertIn('byteOffset', first)
         self.assertEqual(data['fieldFamilies']['mapCoordinates']['wordIndices'], [0, 1, 2, 3])
@@ -3437,6 +3437,11 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['linkedSystemResourceIds'][:4], [128, 129, 130, 131])
         self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['sourceConfidence'], 'decoded-pattern-plus-resource-bible-field-family-candidate')
         first_link_slots = first['semanticFields']['candidateHyperspaceLinks']['linkSlots']
+        exact_name = first['semanticFields']['exactSystemName']
+        self.assertEqual(exact_name['resourceId'], 128)
+        self.assertEqual(exact_name['systemName'], 'Levo')
+        self.assertIn('original-runtime-observed', exact_name['sourceBasis'])
+        self.assertEqual(data['exactSystemNameMappings'][0]['systemName'], 'Levo')
         self.assertEqual(len(first_link_slots), 16)
         self.assertEqual(first_link_slots[0], {
             'slotNumber': 1,
@@ -3454,7 +3459,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()

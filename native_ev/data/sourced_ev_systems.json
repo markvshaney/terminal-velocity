@@ -6,8 +6,8 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-map-v1",
-  "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list",
+  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2",
+  "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
     "candidateType": "syst-like",
@@ -125,6 +125,20 @@
       "evidence": "Clotho Prime is often visited by Rebel warships, as the Rebellion maintains a repair and refuelling base on the surface of the planet."
     }
   ],
+  "exactSystemNameMappings": [
+    {
+      "resourceId": 128,
+      "systemName": "Levo",
+      "confidence": "fidelity-promoted-for-resource-128-start-system-name",
+      "sourceBasis": [
+        "resource-bible-field",
+        "manual-doc-backed",
+        "original-runtime-observed",
+        "decoded-record-family"
+      ],
+      "sourceNote": "EV Classic Resource Bible says system ID #128 is the player start/rescue system; original EV Classic runtime observation starts the player in the Levo system; the decoded syst-like resource run is contiguous from resource ID 128, so resource ID 128 maps to Levo. This promotes only that exact record-to-name mapping, not the remaining 66 names or runtime topology."
+    }
+  ],
   "systems": [
     {
       "resourceId": 128,
@@ -132,7 +146,7 @@
       "chunkIndex": 652,
       "byteOffset": 189047,
       "size": 88,
-      "semanticStatus": "ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending",
+      "semanticStatus": "ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending",
       "semanticFields": {
         "mapCoordinates": {
           "wordIndices": [
@@ -388,6 +402,18 @@
           ],
           "sourceConfidence": "decoded-pattern-plus-resource-bible-field-family-candidate",
           "sourceNote": "EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, so this manifest preserves slot names, raw values, and in-run target resource/ordinal cross-links. Exact record-to-name and runtime route topology mapping remain pending."
+        },
+        "exactSystemName": {
+          "resourceId": 128,
+          "systemName": "Levo",
+          "confidence": "fidelity-promoted-for-resource-128-start-system-name",
+          "sourceBasis": [
+            "resource-bible-field",
+            "manual-doc-backed",
+            "original-runtime-observed",
+            "decoded-record-family"
+          ],
+          "sourceNote": "EV Classic Resource Bible says system ID #128 is the player start/rescue system; original EV Classic runtime observation starts the player in the Levo system; the decoded syst-like resource run is contiguous from resource ID 128, so resource ID 128 maps to Levo. This promotes only that exact record-to-name mapping, not the remaining 66 names or runtime topology."
         }
       },
       "sourceRecord": {
@@ -18284,5 +18310,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }
