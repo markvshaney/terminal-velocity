@@ -1802,6 +1802,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'found_67_syst_like_primitive_records',
             'kept_runtime_universe_subset_unchanged',
             'recorded_name_seed_inputs',
+            'recorded_system_name_seed_summary',
             'recorded_coordinate_raw_long_candidate',
             'recorded_coordinate_domain_summary',
             'recorded_coordinate_display_candidate_summary',
@@ -1817,6 +1818,13 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['systLikeRecords'], 67)
         self.assertEqual(readiness['recordSize'], 88)
         self.assertEqual(readiness['runtimeSystemSubsetCount'], 10)
+        self.assertEqual(readiness['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
+        self.assertEqual(readiness['systemNameSeedSummaryOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
+        self.assertEqual(readiness['systemNameSeedSummarySeedCount'], 9)
+        self.assertEqual(readiness['systemNameSeedSummarySeedNames'][:3], ['Sol', 'Centauri', 'Sirius'])
+        self.assertEqual(readiness['systemNameSeedSummaryExactMappedNames'], ['Levo'])
+        self.assertEqual(readiness['systemNameSeedSummaryUnjoinedSeedCount'], 9)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
         self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)
         self.assertEqual(readiness['candidateCoordinateYRawLongResource128'], 8327168)

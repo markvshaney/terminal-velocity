@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-levo-name-map-v9':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-name-seed-summary-levo-name-map-v10':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -319,6 +319,15 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     seeds = data.get('systemNameSeeds', [])
     if len(seeds) < 9 or 'Sol' not in {seed.get('name') for seed in seeds}:
         raise ValueError('sourced EV systems manifest missing expected heuristic name seeds')
+    seed_summary = data.get('systemNameSeedSummary', {})
+    if seed_summary.get('sourceLabel') != 'decoded-resource-backed-system-name-seed-join-scout':
+        raise ValueError('sourced EV systems manifest missing system-name seed summary source label')
+    if seed_summary.get('oracleStatus') != 'exact_record_name_runtime_topology_mapping_pending':
+        raise ValueError('sourced EV systems manifest system-name seed summary should keep runtime topology pending')
+    if seed_summary.get('systemNameSeedCount') != len(seeds) or seed_summary.get('systemNameSeedNames', [])[:3] != ['Sol', 'Centauri', 'Sirius']:
+        raise ValueError('sourced EV systems manifest system-name seed summary has unexpected seed coverage')
+    if seed_summary.get('exactMappedSystemNames') != ['Levo'] or seed_summary.get('unjoinedSystemNameSeedCount') != len(seeds):
+        raise ValueError('sourced EV systems manifest system-name seed summary has unexpected exact mapping boundary')
     domain = data.get('coordinateDomainSummary', {})
     if domain.get('sourceLabel') != 'decoded-resource-backed-coordinate-domain-scout':
         raise ValueError('sourced EV systems manifest missing coordinate domain summary source label')

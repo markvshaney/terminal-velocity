@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-levo-name-map-v9'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-name-seed-summary-levo-name-map-v10'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, and candidate graph distance/hop statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -359,6 +359,24 @@ def _candidate_graph_distance_summary(systems: list[dict]) -> dict:
     }
 
 
+def _system_name_seed_summary(names: dict) -> dict:
+    """Summarize heuristic name seeds without claiming record-to-name joins."""
+    system_seeds = names.get('systemNames', [])
+    landing_seed_names = {seed.get('name') for seed in names.get('landingNames', [])}
+    system_seed_names = [seed.get('name') for seed in system_seeds]
+    exact_mapped_names = [mapping['systemName'] for mapping in EXACT_SYSTEM_NAME_MAPPINGS.values()]
+    return {
+        'sourceLabel': 'decoded-resource-backed-system-name-seed-join-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'systemNameSeedCount': len(system_seeds),
+        'systemNameSeedNames': system_seed_names,
+        'systemSeedNamesAlsoPresentAsLandingSeeds': sorted(set(system_seed_names) & landing_seed_names),
+        'exactMappedSystemNames': exact_mapped_names,
+        'unjoinedSystemNameSeedCount': len([name for name in system_seed_names if name not in exact_mapped_names]),
+        'sourceNote': 'Heuristic system-name text seeds are preserved for later record-to-name joins, but they are not assigned to syst resource IDs by this summary. The only exact current system-name mapping remains resource ID 128 to Levo from Resource Bible start-system plus original-runtime start observation.',
+    }
+
+
 def _exact_system_name_mapping(resource_id: int) -> dict | None:
     mapping = EXACT_SYSTEM_NAME_MAPPINGS.get(resource_id)
     if mapping is None:
@@ -436,6 +454,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             },
         },
         'systemNameSeeds': names.get('systemNames', []),
+        'systemNameSeedSummary': _system_name_seed_summary(names),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
