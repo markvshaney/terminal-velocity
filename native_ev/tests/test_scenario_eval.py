@@ -1809,6 +1809,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_candidate_summary',
             'recorded_coordinate_display_bounds_summary',
             'recorded_coordinate_display_normalized_summary',
+            'recorded_coordinate_display_transform_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -1852,6 +1853,11 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayNormalizedResource128']['yPos']['minNormalizedSignedLongCandidate'], 8327167)
         self.assertEqual(readiness['coordinateDisplayNormalizedResource128']['yPos']['unitIntervalCandidate'], 0.954908)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayNormalizedSourceLabel'], 'decoded-resource-backed-coordinate-display-normalized-scout')
+        self.assertEqual(readiness['coordinateDisplayTransformSourceLabel'], 'decoded-resource-backed-coordinate-display-transform-scout')
+        self.assertIn('signed-long y-axis inversion candidate', readiness['coordinateDisplayTransformCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayTransformAxisSpanRatioYOverX'], 33.281999)
+        self.assertEqual(readiness['coordinateDisplayTransformResource128']['yPos']['invertedUnitIntervalCandidate'], 0.045092)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayTransformSourceLabel'], 'decoded-resource-backed-coordinate-display-transform-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])

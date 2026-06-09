@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v13':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v14':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -354,6 +354,26 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected y spans')
     if display_bounds.get('xPos', {}).get('signedLongCandidateBounds') != [65664, 327679] or display_bounds.get('yPos', {}).get('signedLongCandidateBounds') != [1, 8720384]:
         raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected signed-long bounds')
+    display_normalized = data.get('coordinateDisplayNormalizedSummary', {})
+    if display_normalized.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-normalized-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display-normalized summary source label')
+    if display_normalized.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display-normalized summary should keep display scaling pending')
+    if display_normalized.get('xPos', {}).get('minNormalizedSignedLongCandidateRange') != [0, 262015] or display_normalized.get('yPos', {}).get('minNormalizedSignedLongCandidateRange') != [0, 8720383]:
+        raise ValueError('sourced EV systems manifest coordinate display-normalized summary has unexpected ranges')
+    if display_normalized.get('resource128', {}).get('yPos', {}).get('unitIntervalCandidate') != 0.954908:
+        raise ValueError('sourced EV systems manifest coordinate display-normalized summary has unexpected Levo y unit interval')
+    display_transform = data.get('coordinateDisplayTransformSummary', {})
+    if display_transform.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-transform-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display-transform summary source label')
+    if display_transform.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display-transform summary should keep display scaling pending')
+    if 'not-promoted' not in display_transform.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display-transform summary must not promote display units')
+    if display_transform.get('signedLongAxisSpanRatioYOverX') != 33.281999:
+        raise ValueError('sourced EV systems manifest coordinate display-transform summary has unexpected axis span ratio')
+    if display_transform.get('resource128', {}).get('yPos', {}).get('invertedUnitIntervalCandidate') != 0.045092:
+        raise ValueError('sourced EV systems manifest coordinate display-transform summary has unexpected Levo inverted y unit interval')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')

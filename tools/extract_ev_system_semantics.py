@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v13'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v14'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -263,6 +263,36 @@ def _coordinate_display_normalized_summary(systems: list[dict]) -> dict:
         },
         'resource128': _normalized_for(systems[0]),
         'sourceNote': 'This normalizes decoded signed-long coordinate candidates against run minima so later map-scaling work can compare relative layout to original-runtime map evidence. It still does not promote Classic display units, projection, centering, axis inversion, or pixel scale.',
+    }
+
+
+def _coordinate_display_transform_summary(systems: list[dict]) -> dict:
+    """Preserve axis transform candidates without promoting display projection/scaling."""
+    normalized = _coordinate_display_normalized_summary(systems)
+    x_span = normalized['xPos']['minNormalizedSignedLongCandidateRange'][1]
+    y_span = normalized['yPos']['minNormalizedSignedLongCandidateRange'][1]
+    resource_128 = normalized['resource128']
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-transform-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'recordCount': len(systems),
+        'candidateFamilies': [
+            'signed-long unit-interval transform candidate',
+            'signed-long y-axis inversion candidate',
+            'signed-long axis-span aspect-ratio candidate',
+        ],
+        'signedLongAxisSpanRatioYOverX': round(y_span / x_span, 6) if x_span else None,
+        'resource128': {
+            'xPos': {
+                'unitIntervalCandidate': resource_128['xPos']['unitIntervalCandidate'],
+            },
+            'yPos': {
+                'unitIntervalCandidate': resource_128['yPos']['unitIntervalCandidate'],
+                'invertedUnitIntervalCandidate': round(1 - resource_128['yPos']['unitIntervalCandidate'], 6),
+            },
+        },
+        'displayUnitInterpretationStatus': 'not-promoted; transform candidates are analysis inputs for later Classic map projection, centering, axis inversion, and pixel-scale evidence',
+        'sourceNote': 'This packages normalized signed-long coordinate candidates into transform/aspect-ratio analysis inputs. It does not claim EV Classic map display units, projection, centering, y-axis orientation, or pixel scale.',
     }
 
 
@@ -582,6 +612,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'coordinateDisplayBoundsSummary': _coordinate_display_bounds_summary(systems),
         'coordinateDisplayNormalizedSummary': _coordinate_display_normalized_summary(systems),
+        'coordinateDisplayTransformSummary': _coordinate_display_transform_summary(systems),
         'coordinateDisplayExtremaSummary': _coordinate_display_extrema_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),

@@ -12,10 +12,15 @@
   },
   "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T16:59:48Z",
+  "updated_at": "2026-06-09T20:04:53Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified adjacent increment batches until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable event/checkpoint policy.",
-  "active_gate": null,
+  "active_gate": {
+    "type": "external_auth",
+    "reason": "git push origin main failed because HTTPS GitHub credentials were unavailable in this headless worker",
+    "withheld_action": "normal non-force push of local commit e756899 to origin/main",
+    "resume_after": "GitHub credentials or an authenticated remote path are available, or a human pushes the local commit."
+  },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop."
@@ -61,12 +66,16 @@
     }
   ],
   "last_verified_commands": [
-    "git commit -m \"Promote EV syst coordinate display extrema\" -> bf9411b",
-    "git push origin main -> efdc900..bf9411b main -> main",
-    "git fetch origin main --quiet && test HEAD == origin/main -> passed (bf9411b)",
-    "git status --short --branch -> ## main...origin/main plus modified docs/research/long-running-task-wrapper-spec.md and untracked continuous-runner.lock"
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v14",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> 3/3 OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_coordinate_display_transform_summary passed",
+    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "json/jsonl parse -> task-ledger.json, events.jsonl, sourced_ev_systems.json, backlog dispatch index ok",
+    "git diff --check -> passed",
+    "git commit -m \"Promote EV syst coordinate display transform stats\" -> e756899",
+    "git push origin main -> failed: HTTPS GitHub credentials unavailable in headless worker"
   ],
-  "next_resume_action": "Stabilize or intentionally preserve the existing modified docs/research/long-running-task-wrapper-spec.md process-doc edit before starting another Lane A slice; then continue coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping. Preserve untracked continuous-runner.lock as active wrapper state.",
+  "next_resume_action": "Resolve GitHub push authentication or manually push local commit e756899; then fetch/verify HEAD == origin/main and continue Lane A coordinate display-unit/map-scaling interpretation plus exact record-to-name/runtime topology mapping before runtime universe expansion.",
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments. Optimize for development throughput: avoid default full-skill loads, avoid runner self-inspection, avoid routine ledger rewrites, and report externally only at material boundaries.",
   "runner": {
     "kind": "continuous-background-loop",
