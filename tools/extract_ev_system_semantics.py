@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Promote EV Classic static system resource IDs and candidate link fields.
+"""Promote EV Classic static system resource IDs, coordinates, and link fields.
 
-This intentionally does not map coordinates, governments, hazards, services,
-or exact record-to-name joins yet. It packages the already verified syst-like
-primitive run into a stable semantic manifest and promotes the field family
-whose values match the EV Classic Resource Bible hyperspace-link domain.
+This intentionally does not map coordinate numeric units, governments, hazards,
+services, or exact record-to-name joins yet. It packages the already verified
+syst-like primitive run into a stable semantic manifest and promotes the field
+families whose values match Resource Bible map coordinate and hyperspace-link
+semantics.
 """
 from __future__ import annotations
 
@@ -15,11 +16,12 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-candidate-map-v1'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-map-v1'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, and candidate hyperspace link fields are promoted; coordinate numeric units, services, hazards, governments, and exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate numeric units, services, hazards, governments, and exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
+LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
 
 
 def _syst_run(structures: dict) -> dict:
@@ -30,16 +32,44 @@ def _word(record: dict, index: int) -> int:
     return int(record['fields'][index]['value'])
 
 
-def _candidate_links(record: dict) -> dict:
+def _link_slot(record: dict, slot_index: int, resource_ids: set[int]) -> dict:
+    word_index = LINK_WORD_INDICES[slot_index]
+    raw_value = _word(record, word_index)
+    slot = {
+        'slotNumber': slot_index + 1,
+        'slotName': LINK_SLOT_NAMES[slot_index],
+        'wordIndex': word_index,
+        'byteOffsetInRecord': record['fields'][word_index]['byteOffsetInRecord'],
+        'rawValue': raw_value,
+    }
+    if raw_value == -1:
+        slot['status'] = 'no-link'
+    elif 128 <= raw_value <= 1127:
+        slot.update({
+            'status': 'linked-system',
+            'targetResourceId': raw_value,
+            'targetOrdinal': raw_value - 128,
+            'targetPresentInSystRun': raw_value in resource_ids,
+        })
+    else:
+        slot['status'] = 'out-of-domain'
+    return slot
+
+
+def _candidate_links(record: dict, resource_ids: set[int]) -> dict:
     raw = [_word(record, index) for index in LINK_WORD_INDICES]
+    link_slots = [_link_slot(record, slot_index, resource_ids) for slot_index in range(len(LINK_WORD_INDICES))]
     return {
         'wordIndices': LINK_WORD_INDICES,
+        'slotNames': LINK_SLOT_NAMES,
         'rawValues': raw,
+        'linkSlots': link_slots,
         'linkedSystemResourceIds': [value for value in raw if value != -1],
+        'linkedSystemResourceIdsInRun': [slot['targetResourceId'] for slot in link_slots if slot.get('targetPresentInSystRun')],
         'noLinkSentinel': -1,
         'validResourceRange': [128, 1127],
         'sourceConfidence': 'decoded-pattern-plus-resource-bible-field-family-candidate',
-        'sourceNote': 'EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, but exact coordinate/government/hazard field alignment remains pending.',
+        'sourceNote': 'EV Classic Resource Bible defines syst Con1-Con16 as -1/no link or 128-1127 system IDs; these 16 local word slots match that value domain across the syst-like run, so this manifest preserves slot names, raw values, and in-run target resource/ordinal cross-links. Exact record-to-name and runtime route topology mapping remain pending.',
     }
 
 
@@ -69,6 +99,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
     run = _syst_run(structures)
+    resource_ids = {128 + int(record['ordinal']) for record in run['records']}
     systems = []
     for record in run['records']:
         ordinal = int(record['ordinal'])
@@ -81,7 +112,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             'semanticStatus': 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending',
             'semanticFields': {
                 'mapCoordinates': _map_coordinates(record),
-                'candidateHyperspaceLinks': _candidate_links(record),
+                'candidateHyperspaceLinks': _candidate_links(record, resource_ids),
             },
             'sourceRecord': {
                 'candidateType': run['candidateType'],
@@ -116,6 +147,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             },
             'candidateHyperspaceLinks': {
                 'wordIndices': LINK_WORD_INDICES,
+                'slotNames': LINK_SLOT_NAMES,
                 'resourceBibleFieldFamily': 'syst Con1-Con16',
                 'valueDomain': '-1 for no link; 128-1127 for linked system resource IDs',
                 'confidence': 'decoded-pattern-plus-resource-bible-field-family-candidate',

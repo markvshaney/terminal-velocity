@@ -152,19 +152,19 @@ Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verif
   - Do not implement piracy/legal/faction consequences from inference alone; require original runtime, decoded resources, or manual/source evidence.
 
 - [ ] Fuller EV Classic galaxy topology and coordinates
-  - Status: `partial semantic promotion from static source records / coordinate raw-word family promoted`
+  - Status: `partial semantic promotion from static source records / coordinate raw-word and Con1-Con16 link-slot families promoted`
   - Dispatch fields:
-    - `next_action`: Continue promoting the `syst-like` primitive run one field family at a time: next highest-value families are exact coordinate numeric-unit interpretation, Con1-Con16 link classification/name crosswalk, then hazards/government/ports before broad universe changes.
+    - `next_action`: Continue promoting the `syst-like` primitive run one field family at a time: next highest-value families are exact coordinate numeric-unit interpretation, exact record-to-name/runtime topology mapping, then hazards/government/ports before broad universe changes.
     - `lane_class`: Lane A: static galaxy topology semantics
     - `oracle_class`: static-resource
     - `source_basis`: [decoded-record-family, decoded-original-variable, resource-bible-field]
     - `verifier`: `python3 tools/extract_ev_system_semantics.py` plus focused sourced-system manifest tests.
     - `blocked_reason`: Exact record-to-name/runtime topology mapping is not fully promoted; do not implement from adaptation data alone.
     - `promotion_status`: needs evidence
-  - Source: current Levo bridge is intentionally minimal; local-only static/source-mined evidence provenance under `/home/bh/workspaces/loki/terminal-velocity-doc-archive/2026-06-09-tv-spec-supporting-docs/2026-06-07-static-source-fidelity-learning-pass-1.md` verifies local `EV Data.rez` and notes 67 `syst-like` primitive records are present. The current sourced system manifest now preserves IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, and candidate hyperspace link fields; coordinate numeric units, services, hazards, governments, ports, and exact record-to-name/runtime topology mapping remain pending.
-  - Implementation addendum: 2026-06-09 promoted the Resource Bible `syst xPos/yPos` field family into `native_ev/data/sourced_ev_systems.json` as `semanticFields.mapCoordinates`, preserving x/y raw two-word payloads with source byte offsets for all 67 `syst-like` records under method `ev-classic-static-system-id-name-seed-coordinate-link-candidate-map-v1`. This is static/data semantics only, not runtime map layout fidelity.
+  - Source: current Levo bridge is intentionally minimal; local-only static/source-mined evidence provenance under `/home/bh/workspaces/loki/terminal-velocity-doc-archive/2026-06-09-tv-spec-supporting-docs/2026-06-07-static-source-fidelity-learning-pass-1.md` verifies local `EV Data.rez` and notes 67 `syst-like` primitive records are present. The current sourced system manifest now preserves IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, Con1-Con16 link slot names/raw values, and in-run target resource/ordinal cross-links; coordinate numeric units, services, hazards, governments, ports, and exact record-to-name/runtime topology mapping remain pending.
+  - Implementation addendum: 2026-06-09 promoted the Resource Bible `syst xPos/yPos` field family into `native_ev/data/sourced_ev_systems.json` as `semanticFields.mapCoordinates`, preserving x/y raw two-word payloads with source byte offsets for all 67 `syst-like` records. A follow-on static pass promoted the Resource Bible `syst Con1-Con16` field family into per-slot `linkSlots` under method `ev-classic-static-system-id-name-seed-coordinate-link-slot-map-v1`, preserving slot names, word offsets, raw values, no-link status, and target resource/ordinal presence inside the 67-record run. This is static/data semantics only, not runtime map layout fidelity.
   - Verification: `python3 tools/extract_ev_system_semantics.py`; `python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v`.
-  - Next action: continue with exact coordinate numeric-unit interpretation and/or Con1-Con16 link classification/name crosswalk before runtime universe expansion.
+  - Next action: continue with exact coordinate numeric-unit interpretation and/or exact record-to-name/runtime topology mapping before runtime universe expansion.
   - Do not implement from adaptation data alone.
 
 - [x] EV Classic map multi-stop Shift-click route planning

@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-candidate-map-v1':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-map-v1':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -294,13 +294,25 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         links = system['semanticFields'].get('candidateHyperspaceLinks', {})
         if links.get('wordIndices') != list(range(4, 20)):
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected link candidate indices")
+        if links.get('slotNames') != [f'Con{index}' for index in range(1, 17)]:
+            raise ValueError(f"sourced EV system {system['resourceId']} has unexpected link slot names")
+        link_slots = links.get('linkSlots', [])
+        if len(link_slots) != 16:
+            raise ValueError(f"sourced EV system {system['resourceId']} has unexpected link slot count")
+        for slot_number, slot in enumerate(link_slots, start=1):
+            if slot.get('slotNumber') != slot_number or slot.get('slotName') != f'Con{slot_number}' or slot.get('wordIndex') != slot_number + 3:
+                raise ValueError(f"sourced EV system {system['resourceId']} has malformed link slot metadata")
+            if slot.get('status') == 'linked-system' and slot.get('targetResourceId') != slot.get('rawValue'):
+                raise ValueError(f"sourced EV system {system['resourceId']} has malformed link target metadata")
+            if slot.get('status') == 'no-link' and slot.get('rawValue') != -1:
+                raise ValueError(f"sourced EV system {system['resourceId']} has malformed no-link slot")
         for link_id in links.get('linkedSystemResourceIds', []):
             if link_id < 128 or link_id > 1127:
                 raise ValueError(f"sourced EV system {system['resourceId']} has out-of-range link candidate")
     seeds = data.get('systemNameSeeds', [])
     if len(seeds) < 9 or 'Sol' not in {seed.get('name') for seed in seeds}:
         raise ValueError('sourced EV systems manifest missing expected heuristic name seeds')
-    if 'candidate hyperspace link fields' not in data.get('promotionBoundary', ''):
+    if 'Con1-Con16 link slot names' not in data.get('promotionBoundary', ''):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
     return data
 
