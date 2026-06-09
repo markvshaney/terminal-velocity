@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "task_id": "tv-spec-implementation",
+  "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled vertical increments, live backlog dispatch fields, verified packets, durable checkpoints, and normal coherent integration.",
+  "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity only. Use loki-game profile. Do not modify other profiles, gateway supervision, providers, credentials, non-TV repos, or public/social surfaces except the existing preapproved normal non-force TV push path after checks.",
+  "repo": {
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
+    "branch": "main",
+    "head_at_creation": "f191d2201fb6164ada9c7c04fddda222fd0fcbe0",
+    "origin_main_at_creation": "f191d2201fb6164ada9c7c04fddda222fd0fcbe0",
+    "status_at_creation": "## main...origin/main"
+  },
+  "status": "running",
+  "created_at": "2026-06-09T14:48:45Z",
+  "updated_at": "2026-06-09T15:05:31Z",
+  "operational_owner_candidate": "loki-game cron job running in repo workdir with local-only delivery, plus normal TV repo integration policy",
+  "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified increments until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable ledger/event checkpointing.",
+  "active_gate": null,
+  "tool_caps_policy": {
+    "rule": "Tool/time/context caps are per-run budgets, not task completion.",
+    "near_cap_action": "Stabilize current slice, update ledger/events, record next_resume_action, and let the next recurrence resume."
+  },
+  "required_start_artifacts": [
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+    "docs/research/tv-spec.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+  ],
+  "required_skill_candidates": [
+    "long-running-task-harness",
+    "source-and-fidelity",
+    "artifact-governance",
+    "living-backlog-governance",
+    "ev-terminal-velocity-play"
+  ],
+  "safe_backlog": [
+    {
+      "id": "lane-a-coordinate-runtime-topology-mapping",
+      "description": "Continue Lane A static galaxy topology semantics after the current coordinate/link-slot static promotions: exact coordinate numeric-unit interpretation and/or exact record-to-name/runtime topology mapping before broad universe replacement.",
+      "source": "docs/checklists/ev-classic-fidelity-implementation-backlog.md Fuller EV Classic galaxy topology and coordinates",
+      "lane_class": "Lane A: static galaxy topology semantics",
+      "oracle_class": "static-resource",
+      "source_basis": [
+        "decoded-record-family",
+        "decoded-original-variable",
+        "resource-bible-field"
+      ],
+      "promotion_status": "needs evidence",
+      "default_verifier": "python3 tools/extract_ev_system_semantics.py plus focused sourced-system manifest tests"
+    },
+    {
+      "id": "backlog-dispatch-contract-grooming",
+      "description": "When a candidate is selected for work, ensure it exposes current tv-spec dispatch fields: next_action, lane_class, oracle_class, source_basis, verifier, blocked_reason, promotion_status.",
+      "lane_class": "process / backlog governance",
+      "oracle_class": "tv-scaffold",
+      "source_basis": [
+        "tv-scaffold"
+      ],
+      "promotion_status": "scaffold"
+    }
+  ],
+  "last_verified_commands": [
+    "git status --short --branch -> ## main...origin/main",
+    "git rev-parse HEAD && git rev-parse origin/main -> f191d2201fb6164ada9c7c04fddda222fd0fcbe0 for both",
+    "read docs/research/tv-spec.md lines 1-333",
+    "read docs/checklists/ev-classic-fidelity-implementation-backlog.md lines 1-180 including live use contract and Lane A next action"
+  ],
+  "next_resume_action": "On first recurrence, inspect live repo/ledger/backlog, then start the strongest safe tv-spec implementation slice. If still clean, default to Lane A coordinate numeric-unit interpretation or exact record-to-name/runtime topology mapping with extractor/model tests and backlog packet update.",
+  "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md. Implement one verified tv-spec-governed Terminal Velocity increment per run, update .hermes/long-running/tv-spec-implementation/task-ledger.json and events.jsonl, and continue on future recurrences until a real gate/blocker/no-safe-slice condition is recorded.",
+  "runner": {
+    "kind": "cron",
+    "schedule": "every 15m",
+    "deliver": "local",
+    "profile": "loki-game",
+    "workdir": "/home/bh/workspaces/loki/terminal-velocity",
+    "enabled_toolsets": [
+      "terminal",
+      "file",
+      "skills"
+    ],
+    "cron_job_id": "5430276bcaa5",
+    "cron_job_name": "Terminal Velocity tv-spec implementation loop",
+    "state": "scheduled",
+    "next_run_at": "2026-06-09T11:05:31.902762-04:00"
+  },
+  "source_artifact_policy": {
+    "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec.",
+    "live_backlog": "docs/checklists/ev-classic-fidelity-implementation-backlog.md is the live execution surface.",
+    "local_only_boundary": "Raw proprietary screenshots/assets stay local-only unless explicitly approved.",
+    "rule": "Source/fidelity findings and task state must be recorded in repo docs/checklists/ledger with explicit provenance labels, not left only in chat."
+  },
+  "human_gates": [
+    "destructive/risky original-EV tests",
+    "Strict Play",
+    "hard-to-restore/save-corrupting original pilot mutation",
+    "raw proprietary asset publication",
+    "external/account/config/provider/gateway changes",
+    "changing other scheduled cron/watchdog jobs",
+    "force-push/history rewrite",
+    "deletion/merge/release/settings changes",
+    "non-TV repo/public/social side effects",
+    "missing evidence required for a fidelity claim",
+    "unsafe dirty state that cannot be separated"
+  ],
+  "do_not_redo": [
+    "Do not depend on superseded supporting workflow drafts as execution authority; promote needed claims into repo docs/backlog instead.",
+    "Do not treat EV-family/community/adaptation evidence or Godot logs as Classic truth.",
+    "Do not stop merely because one safe slice completed; checkpoint and continue on recurrence unless a real gate/blocker/no-safe-slice exists.",
+    "Do not force-push or rewrite history; normal coherent non-force TV pushes are allowed after the established checks."
+  ]
+}
