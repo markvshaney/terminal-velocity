@@ -5,7 +5,7 @@ Status: canonical compact workflow spec
 
 Purpose: define the current Terminal Velocity development workflow. This is a process artifact, not an EV Classic behavior source. EV Classic behavior claims still require source/fidelity promotion.
 
-Archived supporting workflow drafts are outside the repo at:
+This file is authoritative for workflow. Superseded supporting drafts are local-only provenance, not required execution inputs; if archived draft material becomes needed for project work, promote the relevant claim into repo docs/backlog instead of depending on the local archive path. Local provenance pointer:
 
 `/home/bh/workspaces/loki/terminal-velocity-doc-archive/2026-06-09-tv-spec-supporting-docs/`
 
@@ -40,6 +40,33 @@ Use these labels on behavior, backlog items, probes, and handoffs:
 - `original-runtime-observed` — supported by Basilisk/original EV observation.
 - `needs original confirmation` — plausible but not promoted.
 - `fidelity-promoted` — evidence-backed enough for current Classic-faithful claim.
+
+`source/fidelity label` means the human-readable evidence label from this section. `source_basis` is the normalized provenance vocabulary; it records substrate type and does not imply promotion by itself.
+
+## Promotion rubric
+
+A behavior may be marked `fidelity-promoted` only when the increment packet names:
+
+- the exact claim being promoted;
+- `oracle_class`;
+- `source_basis` list;
+- source/fidelity label;
+- evidence path(s), capture(s), decoded manifest(s), or manual/resource reference(s);
+- verifier command and actual result;
+- remaining uncertainty, or `none`;
+- promotion owner / integration owner;
+- backlog or provenance artifact updated.
+
+Promotion thresholds:
+
+- **Static/resource semantics**: decoded EV Classic resources plus Resource Bible/manual field interpretation may promote field/data semantics, but not runtime UI/timing behavior unless separately observed or accepted as a surrogate.
+- **Runtime UI/state transitions**: require original-runtime observation or a clearly documented accepted surrogate. Accepted surrogates require a backlog/provenance note naming the surrogate, scope, verifier, uncertainty, and owner; materially consequential surrogates require user decision. One observation may promote only the exact observed claim when capture quality, state setup, and verifier are recorded; broader generalization needs additional evidence.
+- **Timing/feel/combat cadence**: require Basilisk/original-runtime evidence, with 1x sentinel or contradiction check before canonical timing promotion.
+- **TV scaffolds**: cannot become `fidelity-promoted` without a later promotion packet.
+- **EV-family/community/adaptation evidence**: may generate hypotheses or implementation scaffolds, but cannot by itself promote exact EV Classic fidelity.
+- **Quirk/bug cases**: require quirk-ledger classification and user decision when preservation vs cleanup is materially consequential.
+
+Conflict/staleness rule: if newer evidence conflicts with an existing source/fidelity label, `source_basis`, promoted claim, backlog status, worker packet, runtime capture, EV-family/community hypothesis, or Terminal Velocity scaffold assumption, reopen the relevant backlog/provenance entry and demote the affected claim or task to `needs evidence` or `blocked` until resolved. Do not keep stale labels or promotion status just because an older packet verified successfully.
 
 ## Routing decision tree
 
@@ -78,7 +105,7 @@ Classify every item before acting:
 
 ## Oracle classes
 
-Every backlog item or task packet must carry one `oracle_class`:
+Every backlog item or task packet must carry one `oracle_class` for high-level routing:
 
 - `static-resource`
 - `manual-backed`
@@ -88,6 +115,22 @@ Every backlog item or task packet must carry one `oracle_class`:
 - `tv-scaffold`
 - `quirk-review`
 - `user-decision`
+
+Every backlog item, task packet, increment packet, scenario/probe, and promotion packet must also carry `source_basis`: a normalized list of evidence/provenance substrates. `source_basis` records what kind of source supports the claim; it does not imply promotion by itself. Allowed values:
+
+- `decoded-record-family`
+- `decoded-original-variable`
+- `resource-bible-field`
+- `manual-doc-backed`
+- `original-runtime-observed`
+- `terminal-velocity-observed`
+- `ev-family-transfer`
+- `community-guide`
+- `external-adaptation-observed`
+- `tv-scaffold`
+- `user-decision`
+
+Use a list when a claim has multiple bases, for example `source_basis: [decoded-original-variable, resource-bible-field]`. EV-family, community, adaptation, Terminal Velocity scaffold, and user-decision bases may route or justify implementation work only under the promotion rubric; they do not by themselves promote exact EV Classic fidelity claims. `user-decision` is a policy/quirk-review basis, not fidelity proof.
 
 Basilisk is chosen only when the `oracle_class` requires original-runtime evidence or resolves ambiguity.
 
@@ -154,6 +197,7 @@ Every completed increment must include:
 
 - behavior or explicit symbolic surrogate;
 - `oracle_class`;
+- `source_basis` list;
 - lane class;
 - source/fidelity label;
 - verifier command and actual result;
@@ -168,7 +212,7 @@ A verified increment is a checkpoint, not necessarily a stop.
 Scenarios and probes must record:
 
 - scenario id/name;
-- `oracle_class` and source/fidelity label;
+- `oracle_class`, `source_basis` list, and source/fidelity label;
 - starting state / restore method;
 - action sequence or macro source;
 - expected predicate/success metric;
@@ -187,7 +231,7 @@ A handoff is invalid unless it includes:
 
 - lane id;
 - exact files/captures/logs;
-- `oracle_class` and source/fidelity labels;
+- `oracle_class`, `source_basis` list, and source/fidelity labels;
 - verifier command/result;
 - exact claim being made;
 - promotion requested or explicitly not requested;
@@ -227,6 +271,7 @@ It is not an idea dump. Each actionable backlog item should expose:
 next_action:
 lane_class:
 oracle_class:
+source_basis:
 verifier:
 blocked_reason:
 promotion_status:
@@ -247,13 +292,13 @@ Use this loop:
 2. Pick oracle: decoded resource / manual / Godot-Python evaluator / Basilisk / user decision.
 3. Pick lane: A, B, C, D, E, or Basilisk runtime lane.
 4. Execute smallest vertical increment.
-5. Emit packet with files, command output, labels, promotion status, uncertainty, and gates.
+5. Emit packet with files, command output, `oracle_class`, `source_basis`, evidence label, promotion status, uncertainty, and gates.
 6. Integrate: one owner verifies, updates backlog/provenance, commits/pushes when policy allows.
 7. Continue unless a real gate is reached.
 
 ## Autoresearch boundary
 
-Normal TV work is vertical/parallel implementation with fidelity gates. Mutation-heavy exploration, autoresearch, RL/evolutionary loops, and scheduled LLM mutation are excluded unless separately gated with goal, metric, baseline, mutable surface, trusted surface, budget, experiment log, keep/revert rule, and human gates.
+Normal TV work is vertical/parallel implementation with fidelity gates. Mutation-heavy exploration, autoresearch, RL/evolutionary loops, and scheduled LLM mutation are excluded unless separately gated with goal, metric, baseline, mutable surface, trusted evaluator or verification surface, budget, experiment log, keep/revert rule, and human gates.
 
 ## Human gates
 
@@ -279,7 +324,10 @@ Not gated:
 A TV workflow slice is complete only when the report can state:
 
 - files inspected and modified;
+- `oracle_class`;
+- `source_basis`;
+- evidence/source-fidelity label used;
+- `promotion_status`;
 - verifier command and actual result;
-- source/fidelity labels used;
 - backlog/provenance update or explicit `none` with reason;
 - remaining blocker/gate, if any.
