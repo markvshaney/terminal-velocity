@@ -403,7 +403,9 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
     system_names = names.get('systemNames', [])
     landing_names = names.get('landingNames', [])
     first_system = systems_manifest.get('systems', [{}])[0]
-    first_links = first_system.get('semanticFields', {}).get('candidateHyperspaceLinks', {})
+    first_fields = first_system.get('semanticFields', {})
+    first_links = first_fields.get('candidateHyperspaceLinks', {})
+    exact_name = first_fields.get('exactSystemName', {})
     runtime_system_count = len(load_universe().get('systems', []))
     trace.append({
         'type': 'static_topology_source_readiness',
@@ -415,6 +417,8 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'candidateLinkWordIndices': first_links.get('wordIndices', []),
         'candidateLinkedSystemIdsForResource128': first_links.get('linkedSystemResourceIds', []),
         'candidateLinkSourceConfidence': first_links.get('sourceConfidence'),
+        'exactSystemNameResource128': exact_name.get('systemName'),
+        'exactSystemNameSourceBasis': exact_name.get('sourceBasis', []),
         'runtimeSystemSubsetCount': runtime_system_count,
         'nextPromotionFamily': action.get('nextPromotionFamily', 'coordinates before runtime topology replacement; candidate links are promoted but not exact runtime links'),
         'sourceLabel': 'decoded-resource-backed-static-readiness',
@@ -427,6 +431,7 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'landingNameSeeds': len(landing_names),
         'candidateLinkWordIndices': first_links.get('wordIndices', []),
         'candidateLinkedSystemIdsForResource128': first_links.get('linkedSystemResourceIds', []),
+        'exactSystemNameResource128': exact_name.get('systemName'),
         'runtimeSystemSubsetCount': runtime_system_count,
         'promotionSafeNext': len(records) >= 60 and syst_run.get('recordSize') == 88,
     }
@@ -3581,6 +3586,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'kept_runtime_universe_subset_unchanged': 'passed' if readiness.get('runtimeSystemSubsetCount') == 10 and static_state.get('runtimeSystemSubsetCount') == 10 else 'failed',
             'recorded_name_seed_inputs': 'passed' if readiness.get('heuristicSystemNameSeeds', 0) >= 9 and readiness.get('landingNameSeeds', 0) >= 70 else 'failed',
             'recorded_candidate_link_family': 'passed' if readiness.get('candidateLinkWordIndices') == list(range(4, 20)) and readiness.get('candidateLinkedSystemIdsForResource128', [])[:4] == [128, 129, 130, 131] and readiness.get('candidateLinkSourceConfidence') == 'decoded-pattern-plus-resource-bible-field-family-candidate' else 'failed',
+            'recorded_exact_start_system_mapping': 'passed' if readiness.get('exactSystemNameResource128') == 'Levo' and 'original-runtime-observed' in readiness.get('exactSystemNameSourceBasis', []) and static_state.get('exactSystemNameResource128') == 'Levo' else 'failed',
             'recorded_static_topology_source_boundary': 'passed' if readiness.get('sourceLabel') == 'decoded-resource-backed-static-readiness' and readiness.get('oracleStatus') == 'topology_semantic_promotion_pending_field_family_mapping' else 'failed',
         })
     elif name == 'system_service_provisioning_scout':

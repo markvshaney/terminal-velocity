@@ -1803,6 +1803,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'kept_runtime_universe_subset_unchanged',
             'recorded_name_seed_inputs',
             'recorded_candidate_link_family',
+            'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
             self.assertEqual(result['checks'][check], 'passed')
@@ -1812,6 +1813,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['runtimeSystemSubsetCount'], 10)
         self.assertEqual(readiness['candidateLinkWordIndices'], list(range(4, 20)))
         self.assertEqual(readiness['candidateLinkedSystemIdsForResource128'][:4], [128, 129, 130, 131])
+        self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
+        self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')
         self.assertEqual(readiness['oracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
         self.assertTrue(result['state']['sourceReadiness']['staticTopology']['promotionSafeNext'])
