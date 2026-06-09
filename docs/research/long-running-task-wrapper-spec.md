@@ -200,6 +200,8 @@ Normal coherent non-force TV pushes remain governed by the existing TV project p
 After changing the wrapper, verify:
 
 - `bash -n /home/bh/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh`
+- `python3 -m unittest native_ev.tests.test_tv_spec_continuous_runner -v`
+- the fake-Hermes single-iteration smoke test creates and parses `run-*.summary.json`, `latest-summary.json`, `index.jsonl`, and `runner-state.json` in an isolated temp fixture, not the live task directory
 - `git status --short --branch` in `/home/bh/workspaces/loki/terminal-velocity`
 - lock owner metadata and live process tree, when wrapper is running
 - current `run-*.log` exists and is being written during active invocation
