@@ -205,7 +205,7 @@ Every completed increment must include:
 - backlog/provenance update or explicit `none` with reason;
 - promotion status: `scaffold`, `needs evidence`, `fidelity-promoted`, `blocked`, or `user-gated`.
 
-A verified increment is a local work checkpoint, not a required commit/push boundary and not necessarily a stop.
+A verified increment is a local work checkpoint, not a required commit/push boundary and not necessarily a stop. A single long-running invocation may complete multiple adjacent verified increments when they share the same lane, source-basis family, verifier surface, and understandable dirty working set.
 
 ## Scenario/evaluator contract
 
@@ -300,6 +300,17 @@ Run the full commit/push procedure only when one of these is true:
 
 Otherwise, keep the slice verified locally and continue. Fidelity discipline comes from source labels, verifiers, and backlog/provenance updates, not from remote publication after every slice.
 
+## Long-running efficiency policy
+
+Optimize the continuous workflow for accumulated development time without weakening source/fidelity claims:
+
+- **Batch adjacent increments in one invocation.** Continue inside the same invocation while work remains in the same lane/subsystem, uses the same source-basis family and verifier surface, has no real gate or failed verifier, stays below context/tool cap pressure, and the dirty working set remains understandable. Stop at gates, failures, subsystem switches, risky original-runtime steps, checkpoint-policy triggers, or cap/handoff boundaries.
+- **Report externally only at material boundaries.** Send Telegram/progress reports for gates, failures, checkpoint commits/pushes, fidelity promotions/demotions, explicit user requests, or periodic batch summaries. Routine verified increments can be recorded locally in the ledger/events log and summarized together.
+- **Update backlog/provenance only when future execution changes.** Use migration-on-touch. Patch the live backlog/provenance when next action, verifier, blocker/gate, source basis, promotion status, or future dispatch would otherwise be stale; otherwise record `none` with reason in the increment packet/event.
+- **Match verifier breadth to risk.** Each increment needs the narrowest verifier that proves the changed claim. Broad repo hygiene, JSON/JSONL parse sweeps, secret scans, remote checks, full scenario suites, and Godot self-tests run at checkpoint/handoff/risk boundaries or when their surface was touched, not automatically after every local increment.
+- **Use event log for routine history and ledger for resumable state.** Append compact events for ordinary increment history. Rewrite the ledger only for current status, active gate, next action, last verification summary, changed runner policy, and self-contained resume prompt.
+- **Avoid workers/subagents for mechanical sequential lanes.** Use direct tools/scripts for linear source-mining, extractor/model/test loops, and tightly coupled dirty work. Spawn workers only for genuinely independent parallel lanes where the expected parallelism beats fan-in and verification overhead.
+
 ## Normal workflow
 
 Use this loop:
@@ -307,10 +318,10 @@ Use this loop:
 1. Classify item: build scaffold / fidelity promotion / static semantic / runtime UI / timing-feel / quirk.
 2. Pick oracle: decoded resource / manual / Godot-Python evaluator / Basilisk / user decision.
 3. Pick lane: A, B, C, D, E, or Basilisk runtime lane.
-4. Execute smallest vertical increment.
-5. Emit packet with files, command output, `oracle_class`, `source_basis`, evidence label, promotion status, uncertainty, and gates.
-6. Integrate: one owner verifies, updates backlog/provenance, and commits/pushes only when the Git checkpoint policy is triggered.
-7. Continue unless a real gate is reached.
+4. Execute the smallest vertical increment, then continue through adjacent increments under the long-running efficiency policy when safe.
+5. Emit or locally record increment packets with files, command output, `oracle_class`, `source_basis`, evidence label, promotion status, uncertainty, and gates; batch routine external reports.
+6. Integrate: one owner verifies, updates backlog/provenance only when future execution state changes, and commits/pushes only when the Git checkpoint policy is triggered.
+7. Continue unless a real gate, cap/handoff boundary, failed verifier, unsafe dirty state, or no-safe-local-slice condition is reached.
 
 ## Autoresearch boundary
 
@@ -337,7 +348,7 @@ Not gated:
 
 ## Completion definition
 
-A TV workflow slice is complete only when the report can state:
+A TV workflow increment is complete only when its packet or event can state:
 
 - files inspected and modified;
 - `oracle_class`;
@@ -347,3 +358,5 @@ A TV workflow slice is complete only when the report can state:
 - verifier command and actual result;
 - backlog/provenance update or explicit `none` with reason;
 - remaining blocker/gate, if any.
+
+The user-facing report may summarize a batch of completed increments instead of repeating every packet, provided the durable ledger/events retain enough detail to resume safely.

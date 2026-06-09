@@ -5,17 +5,17 @@ Purpose: durable prompt for a recurring Loki Game task that implements `docs/res
 ```text
 You are running under the `loki-game` Hermes profile for Terminal Velocity.
 
-Objective: implement `docs/research/tv-spec.md` as an executable long-running development workflow for `/home/bh/workspaces/loki/terminal-velocity`, not merely as a documented policy. Each run should perform one safe, source-labeled, verified increment that advances the live backlog under the tv-spec contracts.
+Objective: implement `docs/research/tv-spec.md` as an executable long-running development workflow for `/home/bh/workspaces/loki/terminal-velocity`, not merely as a documented policy. Each invocation should perform one or more adjacent safe, source-labeled, verified increments that advance the live backlog under the tv-spec contracts.
 
-Required first actions every run:
-1. Load/follow these skills when available: `long-running-task-harness`, `source-and-fidelity`, `artifact-governance`, `living-backlog-governance`, `ev-terminal-velocity-play`.
-2. Inspect live repo state: `git status --short --branch`, current branch, `HEAD`, and `origin/main`.
-3. Read with line numbers:
+Required first actions every invocation:
+1. Load/follow these skills when available unless already loaded in the same invocation and the task surface has not changed: `long-running-task-harness`, `source-and-fidelity`, `artifact-governance`, `living-backlog-governance`, `ev-terminal-velocity-play`.
+2. Inspect live repo state at invocation start: `git status --short --branch`, current branch, `HEAD`, and `origin/main`.
+3. Read with line numbers the minimum current-state surfaces needed to resume safely:
    - `.hermes/long-running/tv-spec-implementation/task-ledger.json`
    - the latest tail of `.hermes/long-running/tv-spec-implementation/events.jsonl`
-   - `docs/research/tv-spec.md`
+   - relevant section(s) of `docs/research/tv-spec.md`
    - relevant section(s) of `docs/checklists/ev-classic-fidelity-implementation-backlog.md`
-4. If the worktree is dirty, understand and stabilize the existing slice before starting a new one. Do not overwrite or abandon unknown dirty work.
+4. If the worktree is dirty, understand and stabilize the existing slice/batch before starting a new one. Do not overwrite or abandon unknown dirty work.
 
 Task loop:
 - Prefer current actionable backlog items that already expose `next_action`, `lane_class`, `oracle_class`, `source_basis`, `verifier`, `blocked_reason`, and `promotion_status`.
@@ -24,21 +24,25 @@ Task loop:
   - static-resource/manual-backed items: decoded resources, Resource Bible/manuals, extractor/model tests;
   - runtime-ui/timing/combat items: bounded Basilisk/original-runtime evidence only when safe and explicitly needed;
   - tv-scaffold/evaluator items: Godot/Python deterministic probes with clear scaffold labels.
-- Build one vertical increment per run unless a small adjacent verifier/doc update is needed to stabilize the slice.
-- Each increment packet must record: behavior/claim, `oracle_class`, `source_basis`, lane class, source/fidelity label, verifier command and actual result, files/captures/logs touched, backlog/provenance update or explicit reason, promotion status, uncertainty/gates.
-- Update `.hermes/long-running/tv-spec-implementation/task-ledger.json` and append JSONL events for every slice start, artifact read, edit, verification, checkpoint, gate, and completion.
-- Normal coherent non-force pushes to `markvshaney/terminal-velocity` are preapproved after the established TV checks: inspect status/remotes/branch, stage intended files only, run relevant verification, check no secrets/proprietary/unrelated files, push, fetch, verify local `HEAD == origin/main`, and report concise bundle summary. Do not force-push/rewrite history.
+- Build the smallest vertical increment first; then continue through adjacent safe increments in the same invocation when they share the same lane/subsystem, source-basis family, verifier surface, and understandable dirty working set.
+- Stop the invocation at a real gate, failed verifier, subsystem switch, risky/destructive/original-runtime step, checkpoint-policy trigger, cap/handoff boundary, unsafe dirty state, or no-safe-local-slice condition.
+- Each increment packet/event must record: behavior/claim, `oracle_class`, `source_basis`, lane class, source/fidelity label, verifier command and actual result, files/captures/logs touched, backlog/provenance update or explicit reason, promotion status, uncertainty/gates.
+- Append compact JSONL events for routine increment history. Update `.hermes/long-running/tv-spec-implementation/task-ledger.json` only when current status, active gate, next action, last verification summary, runner policy, or self-contained resume prompt changes.
+- Patch `docs/checklists/ev-classic-fidelity-implementation-backlog.md` only when future execution state changes: next action, verifier, blocker/gate, source basis, promotion status, or dispatch fields. Otherwise record `none` with reason in the increment event/packet.
+- Normal coherent non-force pushes to `markvshaney/terminal-velocity` are preapproved only when the Git checkpoint policy is triggered. After the established TV checks, inspect status/remotes/branch, stage intended files only, run relevant verification, check no secrets/proprietary/unrelated files, push, fetch, verify local `HEAD == origin/main`, and report concise bundle summary. Do not force-push/rewrite history.
+- Avoid workers/subagents for mechanical sequential source-mining, extractor/model/test loops, or tightly coupled dirty work. Use workers only for independent parallel lanes whose fan-in and verification cost is justified.
 
 Verification defaults:
-- Static/model slices: targeted unittest(s), relevant extractor command, JSON parse/idempotence check, and `git diff --check`.
-- Native gameplay scenario slices: targeted unittest(s), targeted `tools/run_gameplay_scenarios.py <scenario> --pretty`, broader native scenario suite when practical.
-- Godot slices: target `./run_godot.sh <mode>`, and `./run_godot.sh self-test` when practical.
-- Always verify the ledger JSON parses and events JSONL parses before closing a run.
+- Static/model increments: targeted unittest(s), relevant extractor command, and targeted JSON parse/idempotence check for touched manifests.
+- Native gameplay scenario increments: targeted unittest(s), targeted `tools/run_gameplay_scenarios.py <scenario> --pretty`; broader native scenario suite at integration/checkpoint or when the touched surface justifies it.
+- Godot increments: target `./run_godot.sh <mode>`; run `./run_godot.sh self-test` at integration/checkpoint or when the touched Godot surface justifies it.
+- Broad repo hygiene, all-data JSON/JSONL parse sweeps, `git diff --check`, secret scans, remote checks, and full scenario/self-test suites run at checkpoint, handoff, risky-step, or touched-surface boundaries rather than after every local increment.
 
 Gates:
 - Stop and record `waiting_gate` only for: destructive/risky original-EV tests, Strict Play, hard-to-restore/save-corrupting original pilot mutation, raw proprietary asset publication, external/account/config/provider/gateway changes, changing other scheduled jobs, force-push/history rewrite, deletion/merge/release/settings changes, non-TV repo/public/social side effects, missing evidence required for a fidelity claim, or unsafe dirty state that cannot be separated.
-- A completed safe slice is a checkpoint, not task completion. Continue on the next recurrence unless the ledger `done_condition` is met or a real gate/blocker/no-safe-slice state is recorded.
+- A completed safe increment is a checkpoint, not task completion. Continue through adjacent safe increments in the same invocation when possible, then on the next recurrence unless the ledger `done_condition` is met or a real gate/blocker/no-safe-slice state is recorded.
 
-Closeout for each run:
-- Final response should be local-only concise: status (`productive slice`, `checkpoint`, `waiting_gate`, `blocked`, or `no-op with reason`), files touched, verification output, source/fidelity labels, next resume action, and any gate.
+Closeout for each invocation:
+- Final response should be local-only concise: status (`productive batch`, `checkpoint`, `waiting_gate`, `blocked`, or `no-op with reason`), increment count/summary, files touched, verification output, source/fidelity labels, next resume action, and any gate.
+- Send Telegram/progress reports only at material boundaries: gate, failure, checkpoint commit/push, fidelity promotion/demotion, explicit user request, or periodic batch summary. Routine verified increments should be recorded locally and summarized together.
 ```
