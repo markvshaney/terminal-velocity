@@ -15,9 +15,10 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-link-candidate-map-v1'
-SOURCE_BASIS = 'EV Classic Resource Bible syst x/y and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, and candidate hyperspace link fields are promoted; coordinates, services, hazards, governments, and exact record-to-name mapping remain pending.'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-candidate-map-v1'
+SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, raw xPos/yPos coordinate word pairs, and candidate hyperspace link fields are promoted; coordinate numeric units, services, hazards, governments, and exact record-to-name mapping remain pending.'
+COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 
 
@@ -42,6 +43,28 @@ def _candidate_links(record: dict) -> dict:
     }
 
 
+def _raw_coordinate_pair(record: dict, first_word_index: int) -> dict:
+    words = [_word(record, first_word_index), _word(record, first_word_index + 1)]
+    return {
+        'wordIndices': [first_word_index, first_word_index + 1],
+        'rawWords': words,
+        'byteOffsetsInRecord': [
+            record['fields'][first_word_index]['byteOffsetInRecord'],
+            record['fields'][first_word_index + 1]['byteOffsetInRecord'],
+        ],
+    }
+
+
+def _map_coordinates(record: dict) -> dict:
+    return {
+        'wordIndices': COORDINATE_WORD_INDICES,
+        'xPos': _raw_coordinate_pair(record, 0),
+        'yPos': _raw_coordinate_pair(record, 2),
+        'sourceConfidence': 'resource-bible-field-family-plus-decoded-raw-word-pair',
+        'sourceNote': 'EV Classic Resource Bible defines the first two syst fields as xPos/yPos map positions. The local primitive decode is word-based, so this manifest preserves each coordinate as its raw two-word field payload pending numeric-unit confirmation.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -55,8 +78,9 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             'chunkIndex': int(record['chunkIndex']),
             'byteOffset': int(record['byteOffset']),
             'size': int(record['size']),
-            'semanticStatus': 'ids_promoted_names_seeded_links_candidate_fields_pending',
+            'semanticStatus': 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending',
             'semanticFields': {
+                'mapCoordinates': _map_coordinates(record),
                 'candidateHyperspaceLinks': _candidate_links(record),
             },
             'sourceRecord': {
@@ -84,6 +108,12 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             'confidence': 'decoded-resource-backed-id-ordering',
         },
         'fieldFamilies': {
+            'mapCoordinates': {
+                'wordIndices': COORDINATE_WORD_INDICES,
+                'resourceBibleFieldFamily': 'syst xPos/yPos',
+                'valueDomain': 'map coordinate fields; raw two-word payload preserved pending numeric-unit confirmation',
+                'confidence': 'resource-bible-field-family-plus-decoded-raw-word-pair',
+            },
             'candidateHyperspaceLinks': {
                 'wordIndices': LINK_WORD_INDICES,
                 'resourceBibleFieldFamily': 'syst Con1-Con16',

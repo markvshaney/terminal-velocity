@@ -266,9 +266,9 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-link-candidate-map-v1':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-candidate-map-v1':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
-    if data.get('sourceBasis') != 'EV Classic Resource Bible syst x/y and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list':
+    if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode and heuristic EV Data.rez system-name seed list':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
     run = data.get('recordRun', {})
     if run.get('candidateType') != 'syst-like' or run.get('recordSize') != 88 or run.get('count') != 67:
@@ -283,8 +283,14 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         for key in ['resourceId', 'ordinal', 'chunkIndex', 'byteOffset', 'size', 'semanticStatus', 'semanticFields', 'sourceRecord']:
             if key not in system:
                 raise ValueError(f'sourced EV system missing {key}')
-        if system['semanticStatus'] != 'ids_promoted_names_seeded_links_candidate_fields_pending':
+        if system['semanticStatus'] != 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending':
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected semantic status")
+        coordinates = system['semanticFields'].get('mapCoordinates', {})
+        if coordinates.get('wordIndices') != [0, 1, 2, 3]:
+            raise ValueError(f"sourced EV system {system['resourceId']} has unexpected coordinate word indices")
+        for axis in ['xPos', 'yPos']:
+            if len(coordinates.get(axis, {}).get('rawWords', [])) != 2:
+                raise ValueError(f"sourced EV system {system['resourceId']} has incomplete {axis} raw words")
         links = system['semanticFields'].get('candidateHyperspaceLinks', {})
         if links.get('wordIndices') != list(range(4, 20)):
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected link candidate indices")
