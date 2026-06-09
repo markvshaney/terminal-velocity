@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-reciprocity-levo-name-map-v7':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-connectivity-levo-name-map-v8':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -347,6 +347,21 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest candidate link-graph summary has unexpected per-system link distribution')
     if link_graph.get('allTargetsPresentInSystRun') is not True or link_graph.get('missingTargetEdges') != []:
         raise ValueError('sourced EV systems manifest candidate link-graph summary has missing targets')
+    connectivity = data.get('candidateGraphConnectivitySummary', {})
+    if connectivity.get('sourceLabel') != 'decoded-resource-backed-candidate-graph-connectivity-scout':
+        raise ValueError('sourced EV systems manifest missing candidate graph connectivity source label')
+    if connectivity.get('oracleStatus') != 'exact_record_name_runtime_topology_mapping_pending':
+        raise ValueError('sourced EV systems manifest candidate graph connectivity should keep runtime topology pending')
+    if connectivity.get('recordCount') != 67 or connectivity.get('weaklyConnectedComponentCount') != 1:
+        raise ValueError('sourced EV systems manifest candidate graph connectivity has unexpected component count')
+    if connectivity.get('resource128WeakComponentSize') != 67 or connectivity.get('resource128DirectedReachableCount') != 21:
+        raise ValueError('sourced EV systems manifest candidate graph connectivity has unexpected resource 128 reachability')
+    if connectivity.get('resource128DirectedUnreachableCount') != 46:
+        raise ValueError('sourced EV systems manifest candidate graph connectivity has unexpected unreachable count')
+    if connectivity.get('uniqueOutDegreeDistribution') != {'1': 39, '2': 14, '3': 6, '4': 8}:
+        raise ValueError('sourced EV systems manifest candidate graph connectivity has unexpected out-degree distribution')
+    if connectivity.get('zeroOutDegreeResourceIds') != []:
+        raise ValueError('sourced EV systems manifest candidate graph connectivity should have no zero-out-degree records')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')

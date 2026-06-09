@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-reciprocity-levo-name-map-v7'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-connectivity-levo-name-map-v8'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, and candidate link reciprocity/self-link statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, and candidate graph connectivity/reachability statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -236,6 +236,78 @@ def _candidate_link_graph_summary(systems: list[dict]) -> dict:
     }
 
 
+def _candidate_graph_connectivity_summary(systems: list[dict]) -> dict:
+    """Summarize candidate graph connectivity without promoting named runtime topology."""
+    resource_ids = [system['resourceId'] for system in systems]
+    directed_adjacency = {resource_id: set() for resource_id in resource_ids}
+    weak_adjacency = {resource_id: set() for resource_id in resource_ids}
+    for system in systems:
+        resource_id = system['resourceId']
+        slots = system['semanticFields']['candidateHyperspaceLinks']['linkSlots']
+        for slot in slots:
+            if slot.get('status') != 'linked-system' or not slot.get('targetPresentInSystRun'):
+                continue
+            target_id = slot['targetResourceId']
+            directed_adjacency[resource_id].add(target_id)
+            weak_adjacency[resource_id].add(target_id)
+            weak_adjacency[target_id].add(resource_id)
+
+    components = []
+    seen = set()
+    for resource_id in resource_ids:
+        if resource_id in seen:
+            continue
+        stack = [resource_id]
+        seen.add(resource_id)
+        component = []
+        while stack:
+            current = stack.pop()
+            component.append(current)
+            for neighbor in weak_adjacency[current]:
+                if neighbor not in seen:
+                    seen.add(neighbor)
+                    stack.append(neighbor)
+        components.append(sorted(component))
+
+    start_resource_id = 128
+    reachable = set()
+    stack = [start_resource_id] if start_resource_id in directed_adjacency else []
+    while stack:
+        current = stack.pop()
+        if current in reachable:
+            continue
+        reachable.add(current)
+        stack.extend(sorted(directed_adjacency[current] - reachable, reverse=True))
+
+    def _distribution(values: list[int]) -> dict[str, int]:
+        return {str(value): values.count(value) for value in sorted(set(values))}
+
+    in_degrees = {resource_id: 0 for resource_id in resource_ids}
+    for targets in directed_adjacency.values():
+        for target_id in targets:
+            in_degrees[target_id] += 1
+    out_degrees = {resource_id: len(targets) for resource_id, targets in directed_adjacency.items()}
+    return {
+        'sourceLabel': 'decoded-resource-backed-candidate-graph-connectivity-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'recordCount': len(systems),
+        'weaklyConnectedComponentCount': len(components),
+        'weaklyConnectedComponentSizes': [len(component) for component in components],
+        'resource128WeakComponentSize': len(next((component for component in components if start_resource_id in component), [])),
+        'resource128DirectedReachableCount': len(reachable),
+        'resource128DirectedReachableResourceIdsSample': sorted(reachable)[:24],
+        'resource128DirectedUnreachableCount': len(set(resource_ids) - reachable),
+        'resource128DirectedUnreachableResourceIdsSample': sorted(set(resource_ids) - reachable)[:24],
+        'uniqueOutDegreeDistribution': _distribution(list(out_degrees.values())),
+        'uniqueInDegreeDistribution': _distribution(list(in_degrees.values())),
+        'zeroInDegreeResourceIdsSample': [resource_id for resource_id in resource_ids if in_degrees[resource_id] == 0][:24],
+        'zeroOutDegreeResourceIds': [resource_id for resource_id in resource_ids if out_degrees[resource_id] == 0],
+        'resource128UniqueOutDegree': out_degrees.get(start_resource_id),
+        'resource128UniqueInDegree': in_degrees.get(start_resource_id),
+        'sourceNote': 'This is a candidate connectivity/reachability summary over unique decoded Con1-Con16 links. It shows that the undirected candidate graph is connected while directed reachability from resource 128 remains partial; exact named route topology and Classic map layout remain pending.',
+    }
+
+
 def _exact_system_name_mapping(resource_id: int) -> dict | None:
     mapping = EXACT_SYSTEM_NAME_MAPPINGS.get(resource_id)
     if mapping is None:
@@ -316,6 +388,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
+        'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

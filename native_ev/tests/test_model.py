@@ -3413,7 +3413,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-reciprocity-levo-name-map-v7')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-connectivity-levo-name-map-v8')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3478,6 +3478,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(link_graph['uniqueSelfLinkCount'], 4)
         self.assertEqual(link_graph['uniqueSelfLinkResourceIds'], [128, 136, 139, 140])
         self.assertEqual(link_graph['resource128LinkedSystemResourceIds'], [128, 129, 130, 131])
+        connectivity = data['candidateGraphConnectivitySummary']
+        self.assertEqual(connectivity['sourceLabel'], 'decoded-resource-backed-candidate-graph-connectivity-scout')
+        self.assertEqual(connectivity['oracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
+        self.assertEqual(connectivity['weaklyConnectedComponentCount'], 1)
+        self.assertEqual(connectivity['weaklyConnectedComponentSizes'], [67])
+        self.assertEqual(connectivity['resource128WeakComponentSize'], 67)
+        self.assertEqual(connectivity['resource128DirectedReachableCount'], 21)
+        self.assertEqual(connectivity['resource128DirectedUnreachableCount'], 46)
+        self.assertEqual(connectivity['uniqueOutDegreeDistribution'], {'1': 39, '2': 14, '3': 6, '4': 8})
+        self.assertEqual(connectivity['zeroOutDegreeResourceIds'], [])
+        self.assertEqual(connectivity['resource128UniqueOutDegree'], 4)
+        self.assertEqual(connectivity['resource128UniqueInDegree'], 1)
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['slotNames'], [f'Con{index}' for index in range(1, 17)])
         self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
@@ -3506,7 +3518,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, and candidate link reciprocity/self-link statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, and candidate graph connectivity/reachability statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
