@@ -5,11 +5,14 @@ import unittest
 from pathlib import Path
 
 from tools.backlog_dispatch_index import (
+    REQUIRED_PLAYABLE_MILESTONES,
     REQUIRED_VERIFIER_IMPACT_SURFACES,
     build_dispatch_index,
     check_dispatch_index,
+    load_playable_milestone_priority_map,
     load_verifier_impact_map,
     validate_dispatch_index,
+    validate_playable_milestone_priority_map,
     validate_verifier_impact_map,
     write_dispatch_index,
 )
@@ -175,6 +178,75 @@ class BacklogDispatchIndexTests(unittest.TestCase):
 
         self.assertFalse(result.ok)
         self.assertIn("missing verifier", "\n".join(result.errors))
+
+    def test_checked_in_playable_milestone_priority_map_is_valid(self):
+        repo = Path(__file__).resolve().parents[2]
+        dispatch_index = json.loads((repo / "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json").read_text())
+        priority_map = load_playable_milestone_priority_map(repo / "docs/checklists/tv-playable-milestone-priority-map.json")
+
+        result = validate_playable_milestone_priority_map(priority_map, dispatch_index)
+
+        self.assertTrue(result.ok, result.errors)
+        self.assertEqual([m["milestone_id"] for m in priority_map["milestones"]], list(REQUIRED_PLAYABLE_MILESTONES))
+        self.assertEqual([m["rank"] for m in priority_map["milestones"]], [1, 2, 3, 4, 5, 6])
+
+    def test_validate_playable_milestone_priority_map_rejects_unknown_backlog_item_ids(self):
+        dispatch_index = {"schema_version": 1, "items": [{"id": "known-item", "promotion_status": "scaffold"}]}
+        priority_map = {
+            "schema_version": 1,
+            "source_path": "docs/research/tv-spec.md",
+            "generated_from": "test",
+            "selection_rule": "test",
+            "milestones": [
+                {
+                    "milestone_id": milestone,
+                    "rank": rank,
+                    "player_payoff": "payoff",
+                    "current_path": "scaffold",
+                    "backlog_item_ids": ["known-item"] if rank == 1 else ["missing-item"],
+                    "required_playable_capability": "capability",
+                    "acceptable_scaffold_boundary": "boundary",
+                    "promotion_gate": "gate",
+                    "preferred_verifier_family": ["verifier"],
+                    "notes": "notes",
+                }
+                for rank, milestone in enumerate(REQUIRED_PLAYABLE_MILESTONES, start=1)
+            ],
+        }
+
+        result = validate_playable_milestone_priority_map(priority_map, dispatch_index)
+
+        self.assertFalse(result.ok)
+        self.assertIn("unknown backlog_item_id", "\n".join(result.errors))
+
+    def test_validate_playable_milestone_priority_map_rejects_unbacked_fidelity_promotion(self):
+        dispatch_index = {"schema_version": 1, "items": [{"id": "known-item", "promotion_status": "scaffold"}]}
+        priority_map = {
+            "schema_version": 1,
+            "source_path": "docs/research/tv-spec.md",
+            "generated_from": "test",
+            "selection_rule": "test",
+            "milestones": [
+                {
+                    "milestone_id": milestone,
+                    "rank": rank,
+                    "player_payoff": "payoff",
+                    "current_path": "fidelity-promoted" if rank == 1 else "scaffold",
+                    "backlog_item_ids": ["known-item"],
+                    "required_playable_capability": "capability",
+                    "acceptable_scaffold_boundary": "boundary",
+                    "promotion_gate": "gate",
+                    "preferred_verifier_family": ["verifier"],
+                    "notes": "notes",
+                }
+                for rank, milestone in enumerate(REQUIRED_PLAYABLE_MILESTONES, start=1)
+            ],
+        }
+
+        result = validate_playable_milestone_priority_map(priority_map, dispatch_index)
+
+        self.assertFalse(result.ok)
+        self.assertIn("fidelity-promoted", "\n".join(result.errors))
 
 
 if __name__ == "__main__":

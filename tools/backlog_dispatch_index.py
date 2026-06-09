@@ -19,7 +19,23 @@ from typing import Any
 BACKLOG_RELATIVE_PATH = Path("docs/checklists/ev-classic-fidelity-implementation-backlog.md")
 INDEX_RELATIVE_PATH = Path("docs/checklists/ev-classic-fidelity-implementation-backlog.index.json")
 VERIFIER_IMPACT_MAP_RELATIVE_PATH = Path("docs/checklists/tv-verifier-impact-map.json")
+PLAYABLE_MILESTONE_PRIORITY_MAP_RELATIVE_PATH = Path("docs/checklists/tv-playable-milestone-priority-map.json")
 SCHEMA_VERSION = 1
+
+REQUIRED_PLAYABLE_MILESTONES = (
+    "playable_travel_loop",
+    "mission_trade_loop",
+    "landed_services_loop",
+    "upgrade_ship_loop",
+    "combat_survival_loop",
+    "classic_promotion_backlog",
+)
+
+VALID_PLAYABLE_MILESTONE_PATHS = {
+    "scaffold",
+    "needs evidence",
+    "fidelity-promoted",
+}
 
 REQUIRED_VERIFIER_IMPACT_SURFACES = (
     "extractor",
@@ -240,6 +256,102 @@ def build_dispatch_index(backlog_path: Path, repo_root: Path | None = None) -> d
     }
 
 
+def load_playable_milestone_priority_map(map_path: Path) -> dict[str, Any]:
+    return json.loads(map_path.read_text())
+
+
+def validate_playable_milestone_priority_map(priority_map: dict[str, Any], dispatch_index: dict[str, Any]) -> CheckResult:
+    errors: list[str] = []
+    warnings: list[str] = []
+    if priority_map.get("schema_version") != SCHEMA_VERSION:
+        errors.append(f"playable milestone priority map schema_version must be {SCHEMA_VERSION}")
+
+    if not isinstance(priority_map.get("source_path"), str) or not priority_map.get("source_path"):
+        errors.append("playable milestone priority map source_path must be a non-empty string")
+    if not isinstance(priority_map.get("generated_from"), str) or not priority_map.get("generated_from"):
+        errors.append("playable milestone priority map generated_from must be a non-empty string")
+    if not isinstance(priority_map.get("selection_rule"), str) or not priority_map.get("selection_rule"):
+        errors.append("playable milestone priority map selection_rule must be a non-empty string")
+
+    milestones = priority_map.get("milestones")
+    if not isinstance(milestones, list):
+        errors.append("playable milestone priority map milestones must be a list")
+        return CheckResult(ok=False, errors=errors, warnings=warnings)
+
+    required = list(REQUIRED_PLAYABLE_MILESTONES)
+    actual_ids = [m.get("milestone_id") if isinstance(m, dict) else None for m in milestones]
+    if actual_ids != required:
+        errors.append(f"playable milestone priority map milestone order must be {required!r}")
+
+    ranks = [m.get("rank") if isinstance(m, dict) else None for m in milestones]
+    expected_ranks = list(range(1, len(required) + 1))
+    if ranks != expected_ranks:
+        errors.append(f"playable milestone priority map ranks must be {expected_ranks!r}")
+
+    index_items = {item.get("id"): item for item in dispatch_index.get("items", []) if isinstance(item, dict)}
+    if not index_items:
+        errors.append("dispatch index has no items for milestone backlog reference validation")
+
+    for position, milestone in enumerate(milestones, start=1):
+        if not isinstance(milestone, dict):
+            errors.append(f"milestone {position}: entry must be an object")
+            continue
+        prefix = f"milestone {position} ({milestone.get('milestone_id', '<missing-id>')})"
+        for key in (
+            "milestone_id",
+            "rank",
+            "player_payoff",
+            "current_path",
+            "backlog_item_ids",
+            "required_playable_capability",
+            "acceptable_scaffold_boundary",
+            "promotion_gate",
+            "preferred_verifier_family",
+            "notes",
+        ):
+            value = milestone.get(key)
+            if value in (None, "", []):
+                errors.append(f"{prefix}: missing {key}")
+
+        current_path = milestone.get("current_path")
+        if current_path and current_path not in VALID_PLAYABLE_MILESTONE_PATHS:
+            errors.append(f"{prefix}: invalid current_path {current_path!r}")
+
+        backlog_item_ids = milestone.get("backlog_item_ids")
+        if not isinstance(backlog_item_ids, list):
+            errors.append(f"{prefix}: backlog_item_ids must be a list")
+            backlog_item_ids = []
+        elif not all(isinstance(item_id, str) and item_id for item_id in backlog_item_ids):
+            errors.append(f"{prefix}: backlog_item_ids values must be non-empty strings")
+
+        for item_id in backlog_item_ids:
+            if item_id not in index_items:
+                errors.append(f"{prefix}: unknown backlog_item_id {item_id!r}")
+
+        verifier_family = milestone.get("preferred_verifier_family")
+        if not isinstance(verifier_family, list):
+            errors.append(f"{prefix}: preferred_verifier_family must be a list")
+        elif not all(isinstance(value, str) and value for value in verifier_family):
+            errors.append(f"{prefix}: preferred_verifier_family values must be non-empty strings")
+
+        if current_path == "fidelity-promoted":
+            promoted_refs = [item_id for item_id in backlog_item_ids if index_items.get(item_id, {}).get("promotion_status") == "fidelity-promoted"]
+            if not promoted_refs:
+                errors.append(f"{prefix}: current_path fidelity-promoted requires at least one referenced backlog item with promotion_status fidelity-promoted")
+            promotion_gate = str(milestone.get("promotion_gate", "")).lower()
+            if "promotion" not in promotion_gate and "fidelity" not in promotion_gate and "evidence" not in promotion_gate:
+                errors.append(f"{prefix}: fidelity-promoted milestone must name evidence/promotion in promotion_gate")
+
+    return CheckResult(ok=not errors, errors=errors, warnings=warnings)
+
+
+def _load_default_priority_map(repo_root: Path) -> dict[str, Any] | None:
+    priority_map_path = repo_root / PLAYABLE_MILESTONE_PRIORITY_MAP_RELATIVE_PATH
+    if not priority_map_path.exists():
+        return None
+    return load_playable_milestone_priority_map(priority_map_path)
+
+
 def load_verifier_impact_map(map_path: Path) -> dict[str, Any]:
     return json.loads(map_path.read_text())
 
@@ -372,9 +484,14 @@ def check_dispatch_index(backlog_path: Path, index_path: Path, repo_root: Path |
     repo_root = repo_root or Path.cwd()
     expected = build_dispatch_index(backlog_path, repo_root=repo_root)
     impact_map = _load_default_impact_map(repo_root)
+    priority_map = _load_default_priority_map(repo_root)
     validation = validate_dispatch_index(expected, impact_map=impact_map)
     errors = list(validation.errors)
     warnings = list(validation.warnings)
+    if priority_map is not None:
+        priority_validation = validate_playable_milestone_priority_map(priority_map, expected)
+        errors.extend(priority_validation.errors)
+        warnings.extend(priority_validation.warnings)
     if not index_path.exists():
         errors.append(f"index missing: {index_path}")
         return CheckResult(ok=False, errors=errors, warnings=warnings)
@@ -418,7 +535,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.mode == "build":
         built = build_dispatch_index(backlog, repo_root=repo)
         impact_map = _load_default_impact_map(repo)
+        priority_map = _load_default_priority_map(repo)
         validation = validate_dispatch_index(built, impact_map=impact_map)
+        if priority_map is not None:
+            priority_validation = validate_playable_milestone_priority_map(priority_map, built)
+            validation = CheckResult(
+                ok=validation.ok and priority_validation.ok,
+                errors=[*validation.errors, *priority_validation.errors],
+                warnings=[*validation.warnings, *priority_validation.warnings],
+            )
         if not validation.ok:
             _print_result(validation)
             return 1

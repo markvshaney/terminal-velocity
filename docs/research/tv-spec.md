@@ -17,12 +17,14 @@ Development must accelerate toward a broadly playable TV, but claims of **EV Cla
 
 ## Operating doctrine
 
-**Parallel executable lanes + fast evaluators + batched integration + fidelity gates.**
+**Parallel executable lanes + fast evaluators + batched integration + fidelity gates + playable-payoff dispatch.**
 
 This means:
 
 - build playable systems before perfect Classic evidence when the behavior is labeled honestly;
 - never let scaffolds become fidelity claims without promotion;
+- use `docs/checklists/tv-playable-milestone-priority-map.json` as a thin priority overlay over the backlog dispatch index so agents prefer broad playable coverage before isolated fidelity fragments unless a gate, conflict, or direct blocker overrides it;
+- keep that overlay backlog-backed and structurally validated; it changes selection order, not source/fidelity authority;
 - use Godot/Python scenario probes for fast TV-side verification;
 - use Basilisk/original EV where runtime behavior matters;
 - use decoded resources/manuals/local source artifacts for static/data semantics where they are stronger than emulator observation;

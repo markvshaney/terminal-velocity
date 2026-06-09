@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "source_path": "docs/research/tv-spec.md",
+  "generated_from": "curated playable payoff dispatch overlay; edit with backlog dispatch validation",
+  "selection_rule": "Choose the highest-ranked milestone with an actionable referenced backlog item unless ledger gates, stale dispatch metadata, dirty worktree stabilization, or a source/fidelity conflict requires another slice. This map changes priority only; it never promotes scaffolded behavior to EV Classic fidelity without a promotion packet.",
+  "milestones": [
+    {
+      "milestone_id": "playable_travel_loop",
+      "rank": 1,
+      "player_payoff": "A player can launch, navigate to objectives, manage fuel/range feedback, hyperspace, land, and recover from common travel blockers.",
+      "current_path": "scaffold",
+      "backlog_item_ids": [
+        "map-objective-arrows-fuel-range-and-hyperspace-feedback",
+        "fuller-ev-classic-galaxy-topology-and-coordinates",
+        "autopilot-behavior-and-port-approach-assist",
+        "land-takeoff-and-hyperspace-timing-sound-animation-fidelity"
+      ],
+      "required_playable_capability": "End-to-end travel loop: route selection, fuel/range affordance, jump, land, and recovery when jump/landing is blocked.",
+      "acceptable_scaffold_boundary": "TV-side route and recovery affordances may be scaffolded when labeled; exact Classic topology, timing, and port approach behavior remain gated by decoded-resource or original-runtime evidence.",
+      "promotion_gate": "Decoded topology/link/coordinate promotion plus original-runtime evidence for UI/timing-sensitive travel transitions before any fidelity-promoted travel claim.",
+      "preferred_verifier_family": [
+        "python3 tools/run_gameplay_scenarios.py <travel-scenario> --pretty",
+        "./run_godot.sh <travel-probe>",
+        "python3 tools/backlog_dispatch_index.py check"
+      ],
+      "notes": "Priority 1 because broad TV playability depends on moving between systems safely; static topology slices are selected when they unblock this loop."
+    },
+    {
+      "milestone_id": "mission_trade_loop",
+      "rank": 2,
+      "player_payoff": "A player can accept a mission, reserve cargo/deadline context, carry profitable spare cargo, deliver, sell, refuel, and understand next objectives.",
+      "current_path": "scaffold",
+      "backlog_item_ids": [
+        "player-strategy-skills-as-distinct-progression-loops",
+        "mission-state-log-and-mission-surface-model",
+        "economy-wide-buy-sell-display-and-spread-rules",
+        "map-objective-arrows-fuel-range-and-hyperspace-feedback"
+      ],
+      "required_playable_capability": "Mission/trade hybrid loop: mission discovery, acceptance, route/objective tracking, cargo reservation, destination delivery, retained-cargo sale, and recovery guidance.",
+      "acceptable_scaffold_boundary": "Strategy/economy helpers may stay TV scaffold while exact EV Classic mission generation, commodity spread formulas, and UI wording remain needs-evidence or promotion-gated.",
+      "promotion_gate": "Original-runtime or decoded/manual-backed mission/economy packets must identify exact claim, evidence, verifier, uncertainty, and backlog update before fidelity promotion.",
+      "preferred_verifier_family": [
+        "python3 tools/run_gameplay_scenarios.py <mission-trade-scenario> --pretty",
+        "./run_godot.sh <mission-trade-probe>",
+        "focused native_ev mission/economy tests"
+      ],
+      "notes": "Priority 2 because travel becomes meaningful when tied to missions, cargo, fuel, deadlines, and credits."
+    },
+    {
+      "milestone_id": "landed_services_loop",
+      "rank": 3,
+      "player_payoff": "A player can land and use visible services consistently: bar, mission computer, commodity exchange, outfitter, shipyard, repairs, gambling or absent-service recovery where applicable.",
+      "current_path": "needs evidence",
+      "backlog_item_ids": [
+        "system-by-system-original-service-store-provisioning",
+        "landed-service-button-matrix-bar-mission-computer-commodities-outfitter-shipyard-gambling",
+        "mission-state-log-and-mission-surface-model",
+        "exact-starting-primary-weapons-outfits"
+      ],
+      "required_playable_capability": "Service matrix loop: landed panels expose only available services, blocked services explain recovery, and service actions mutate player state only when valid.",
+      "acceptable_scaffold_boundary": "Current TV service matrices and guardrails can remain scaffolded by system; Classic-wide service/store claims require decoded resource/static promotion or original-runtime spot checks.",
+      "promotion_gate": "Promote decoded service/store resource fields and use Basilisk only for ambiguous UI-sensitive surfaces before fidelity-promoted service claims.",
+      "preferred_verifier_family": [
+        "python3 tools/extract_ev_service_semantics.py",
+        "./run_godot.sh <service-probe>",
+        "focused service/model tests"
+      ],
+      "notes": "Priority 3 because landed services are the hub connecting travel, missions, economy, upgrades, and recovery."
+    },
+    {
+      "milestone_id": "upgrade_ship_loop",
+      "rank": 4,
+      "player_payoff": "A player can plan, afford, buy, verify, save/resume, and recover from ship/outfit/capacity/fuel/repair upgrades.",
+      "current_path": "scaffold",
+      "backlog_item_ids": [
+        "player-strategy-skills-as-distinct-progression-loops",
+        "exact-starting-primary-weapons-outfits",
+        "system-by-system-original-service-store-provisioning",
+        "mission-state-log-and-mission-surface-model"
+      ],
+      "required_playable_capability": "Upgrade/ship loop: identify service availability, compare purchase goals, enforce credit/cargo/state guardrails, mutate inventory/ship, and verify Player Info/save-resume visibility.",
+      "acceptable_scaffold_boundary": "Upgrade planning, affordability, and recovery guidance may stay TV scaffold; exact Classic starting inventory, shipyard/outfitter stock, stat formulas, and pricing need source-backed promotion.",
+      "promotion_gate": "Non-mutating Classic Player Info/outfitter/shipyard evidence or decoded ship/outfit/resource manifests must back exact inventory/stat/stock claims.",
+      "preferred_verifier_family": [
+        "./run_godot.sh <upgrade-probe>",
+        "python3 tools/run_gameplay_scenarios.py <upgrade-scenario> --pretty",
+        "focused native_ev model/save tests"
+      ],
+      "notes": "Priority 4 because upgrades convert mission/trade progress into durable player capability."
+    },
+    {
+      "milestone_id": "combat_survival_loop",
+      "rank": 5,
+      "player_payoff": "A player can survive or intentionally engage threats with labeled targeting, weapon, damage, repair, legal/reputation, and escape affordances.",
+      "current_path": "scaffold",
+      "backlog_item_ids": [
+        "basic-combat-fidelity-fire-rate-projectile-speed-lifetime-damage-target-selection-explosions",
+        "movement-tuning-turn-rate-acceleration-curve-max-speed-inertial-drift",
+        "afterburner-acceleration-and-fuel-use-behavior",
+        "ship-facing-frame-order-runtime-confirmation",
+        "per-government-legal-reputation-and-ai-behavior-model"
+      ],
+      "required_playable_capability": "Combat/survival loop: targeting, firing, taking/avoiding damage, afterburner/escape, repair recovery, and legal/AI consequences labeled by evidence state.",
+      "acceptable_scaffold_boundary": "Survival affordances and deterministic TV combat probes may be scaffolded; exact cadence, timing, physics feel, target selection, and damage values remain original-runtime/timing evidence gated.",
+      "promotion_gate": "Basilisk/original-runtime timing and combat observations, including 1x sentinel where timing-sensitive, plus decoded/manual support where applicable before fidelity promotion.",
+      "preferred_verifier_family": [
+        "python3 tools/run_gameplay_scenarios.py <combat-survival-scenario> --pretty",
+        "./run_godot.sh <combat-probe>",
+        "Basilisk timing lane only when safe and explicitly needed"
+      ],
+      "notes": "Priority 5 because it is essential to full EV play but has the highest timing/destructive-evidence risk; keep disposable-pilot and Strict-Play gates explicit."
+    },
+    {
+      "milestone_id": "classic_promotion_backlog",
+      "rank": 6,
+      "player_payoff": "Broad scaffolded loops are steadily converted into source-backed EV Classic fidelity without stale labels or unsupported claims.",
+      "current_path": "needs evidence",
+      "backlog_item_ids": [
+        "fuller-ev-classic-galaxy-topology-and-coordinates",
+        "system-by-system-original-service-store-provisioning",
+        "ev-family-gameplay-learning-source-integration",
+        "ev-classic-prefs-screen-fidelity",
+        "external-adaptation-comparisons"
+      ],
+      "required_playable_capability": "Promotion loop: identify scaffolded/high-uncertainty claims, gather the strongest allowed evidence, update manifests/probes/backlog labels, and demote stale claims on conflict.",
+      "acceptable_scaffold_boundary": "Promotion work may be prioritized after playable gaps unless a source/fidelity conflict, stale claim, or gate requires immediate correction.",
+      "promotion_gate": "Each fidelity-promoted claim must satisfy tv-spec promotion packet requirements: exact claim, oracle class, source basis, evidence paths, verifier result, uncertainty, owner, and backlog/provenance update.",
+      "preferred_verifier_family": [
+        "python3 tools/backlog_dispatch_index.py check",
+        "focused extractor/model/runtime verifier for the promoted claim",
+        "git diff --check"
+      ],
+      "notes": "Priority 6 is not low quality; it means promotion normally follows broad playable coverage unless correctness, conflict, or safety requires immediate promotion/demotion work."
+    }
+  ]
+}

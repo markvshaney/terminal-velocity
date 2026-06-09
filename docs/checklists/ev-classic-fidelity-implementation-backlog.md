@@ -10,6 +10,8 @@ Rationale/source record: `docs/decisions/2026-05-19-ev-classic-observation-to-im
 
 Dispatch index: `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` is generated from this markdown backlog for cheap runner dispatch. Do not edit the JSON by hand. After changing actionable backlog items or dispatch fields, run `python3 tools/backlog_dispatch_index.py build` and verify with `python3 tools/backlog_dispatch_index.py check`.
 
+Playable priority overlay: `docs/checklists/tv-playable-milestone-priority-map.json` ranks backlog-backed work by broad playable Terminal Velocity payoff while preserving source/fidelity labels. It is a dispatch overlay, not a fidelity authority: scaffolded milestone paths stay scaffolded until the referenced backlog items satisfy the `tv-spec` promotion rubric. Validate changes with `python3 tools/backlog_dispatch_index.py check`.
+
 Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verified`, `deferred`, `blocked`.
 
 ## Active / recurring workflow
