@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-connectivity-levo-name-map-v8'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-levo-name-map-v9'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, and candidate graph connectivity/reachability statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, and candidate graph distance/hop statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -308,6 +308,57 @@ def _candidate_graph_connectivity_summary(systems: list[dict]) -> dict:
     }
 
 
+def _distance_map(adjacency: dict[int, set[int]], start_resource_id: int) -> dict[int, int]:
+    distances = {start_resource_id: 0}
+    queue = [start_resource_id]
+    while queue:
+        current = queue.pop(0)
+        for neighbor in sorted(adjacency[current]):
+            if neighbor not in distances:
+                distances[neighbor] = distances[current] + 1
+                queue.append(neighbor)
+    return distances
+
+
+def _candidate_graph_distance_summary(systems: list[dict]) -> dict:
+    """Summarize candidate graph hop distances without promoting map topology."""
+    resource_ids = [system['resourceId'] for system in systems]
+    directed_adjacency = {resource_id: set() for resource_id in resource_ids}
+    weak_adjacency = {resource_id: set() for resource_id in resource_ids}
+    for system in systems:
+        resource_id = system['resourceId']
+        for slot in system['semanticFields']['candidateHyperspaceLinks']['linkSlots']:
+            if slot.get('status') != 'linked-system' or not slot.get('targetPresentInSystRun'):
+                continue
+            target_id = slot['targetResourceId']
+            directed_adjacency[resource_id].add(target_id)
+            weak_adjacency[resource_id].add(target_id)
+            weak_adjacency[target_id].add(resource_id)
+
+    def _distribution(values: list[int]) -> dict[str, int]:
+        return {str(value): values.count(value) for value in sorted(set(values))}
+
+    start_resource_id = 128
+    directed_from_start = _distance_map(directed_adjacency, start_resource_id)
+    weak_from_start = _distance_map(weak_adjacency, start_resource_id)
+    weak_eccentricities = [max(_distance_map(weak_adjacency, resource_id).values()) for resource_id in resource_ids]
+    directed_reach_counts = [len(_distance_map(directed_adjacency, resource_id)) for resource_id in resource_ids]
+    return {
+        'sourceLabel': 'decoded-resource-backed-candidate-graph-distance-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'recordCount': len(systems),
+        'resource128DirectedMaxHopDistance': max(directed_from_start.values()),
+        'resource128DirectedHopDistanceDistribution': _distribution(list(directed_from_start.values())),
+        'resource128WeakMaxHopDistance': max(weak_from_start.values()),
+        'resource128WeakHopDistanceDistribution': _distribution(list(weak_from_start.values())),
+        'weakGraphDiameterCandidate': max(weak_eccentricities),
+        'weakEccentricityDistribution': _distribution(weak_eccentricities),
+        'directedReachableCountRange': [min(directed_reach_counts), max(directed_reach_counts)],
+        'directedReachableCountDistribution': _distribution(directed_reach_counts),
+        'sourceNote': 'This is a candidate hop-distance summary over decoded Con1-Con16 links. It preserves route-analysis inputs only; exact Classic named topology, map distances, and display scaling remain pending.',
+    }
+
+
 def _exact_system_name_mapping(resource_id: int) -> dict | None:
     mapping = EXACT_SYSTEM_NAME_MAPPINGS.get(resource_id)
     if mapping is None:
@@ -389,6 +440,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),
+        'candidateGraphDistanceSummary': _candidate_graph_distance_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

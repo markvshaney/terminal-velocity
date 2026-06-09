@@ -1808,6 +1808,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
             'recorded_candidate_graph_connectivity_summary',
+            'recorded_candidate_graph_distance_summary',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
@@ -1848,6 +1849,12 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['candidateGraphResource128DirectedReachableCount'], 21)
         self.assertEqual(readiness['candidateGraphResource128DirectedUnreachableCount'], 46)
         self.assertEqual(readiness['candidateGraphUniqueOutDegreeDistribution'], {'1': 39, '2': 14, '3': 6, '4': 8})
+        self.assertEqual(readiness['candidateGraphDistanceSourceLabel'], 'decoded-resource-backed-candidate-graph-distance-scout')
+        self.assertEqual(readiness['candidateGraphResource128DirectedMaxHopDistance'], 4)
+        self.assertEqual(readiness['candidateGraphResource128WeakMaxHopDistance'], 4)
+        self.assertEqual(readiness['candidateGraphResource128WeakHopDistanceDistribution'], {'0': 1, '1': 3, '2': 19, '3': 31, '4': 13})
+        self.assertEqual(readiness['candidateGraphWeakDiameterCandidate'], 7)
+        self.assertEqual(readiness['candidateGraphDirectedReachableCountRange'], [2, 22])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['candidateLinkGraphDirectedSlotCount'], 268)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['candidateLinkGraphReciprocalDirectedLinkCount'], 8)
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')

@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-connectivity-levo-name-map-v8",
+  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-levo-name-map-v9",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -392,6 +392,47 @@
     "resource128UniqueOutDegree": 4,
     "resource128UniqueInDegree": 1,
     "sourceNote": "This is a candidate connectivity/reachability summary over unique decoded Con1-Con16 links. It shows that the undirected candidate graph is connected while directed reachability from resource 128 remains partial; exact named route topology and Classic map layout remain pending."
+  },
+  "candidateGraphDistanceSummary": {
+    "sourceLabel": "decoded-resource-backed-candidate-graph-distance-scout",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "recordCount": 67,
+    "resource128DirectedMaxHopDistance": 4,
+    "resource128DirectedHopDistanceDistribution": {
+      "0": 1,
+      "1": 3,
+      "2": 9,
+      "3": 6,
+      "4": 2
+    },
+    "resource128WeakMaxHopDistance": 4,
+    "resource128WeakHopDistanceDistribution": {
+      "0": 1,
+      "1": 3,
+      "2": 19,
+      "3": 31,
+      "4": 13
+    },
+    "weakGraphDiameterCandidate": 7,
+    "weakEccentricityDistribution": {
+      "4": 5,
+      "5": 27,
+      "6": 30,
+      "7": 5
+    },
+    "directedReachableCountRange": [
+      2,
+      22
+    ],
+    "directedReachableCountDistribution": {
+      "2": 2,
+      "3": 2,
+      "4": 3,
+      "20": 17,
+      "21": 40,
+      "22": 3
+    },
+    "sourceNote": "This is a candidate hop-distance summary over decoded Con1-Con16 links. It preserves route-analysis inputs only; exact Classic named topology, map distances, and display scaling remain pending."
   },
   "exactSystemNameMappings": [
     {
@@ -18846,5 +18887,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, and candidate graph connectivity/reachability statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, and candidate graph distance/hop statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }
