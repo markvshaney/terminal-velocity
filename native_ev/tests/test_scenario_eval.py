@@ -1808,6 +1808,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_domain_summary',
             'recorded_coordinate_display_candidate_summary',
             'recorded_coordinate_display_bounds_summary',
+            'recorded_coordinate_display_normalized_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -1843,6 +1844,14 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayBoundsXSpanHighLowLong'], [3, 153, 262015])
         self.assertEqual(readiness['coordinateDisplayBoundsYSpanHighLowLong'], [133, 61440, 8720383])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayBoundsSourceLabel'], 'decoded-resource-backed-coordinate-display-bounds-scout')
+        self.assertEqual(readiness['coordinateDisplayNormalizedSourceLabel'], 'decoded-resource-backed-coordinate-display-normalized-scout')
+        self.assertIn('signed-long min-normalized x/y candidates', readiness['coordinateDisplayNormalizedCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayNormalizedXRange'], [0, 262015])
+        self.assertEqual(readiness['coordinateDisplayNormalizedYRange'], [0, 8720383])
+        self.assertEqual(readiness['coordinateDisplayNormalizedResource128']['xPos']['minNormalizedSignedLongCandidate'], 0)
+        self.assertEqual(readiness['coordinateDisplayNormalizedResource128']['yPos']['minNormalizedSignedLongCandidate'], 8327167)
+        self.assertEqual(readiness['coordinateDisplayNormalizedResource128']['yPos']['unitIntervalCandidate'], 0.954908)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayNormalizedSourceLabel'], 'decoded-resource-backed-coordinate-display-normalized-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])
