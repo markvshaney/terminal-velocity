@@ -12,7 +12,7 @@
   },
   "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T15:14:24Z",
+  "updated_at": "2026-06-09T15:16:17Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified increments until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable ledger/event checkpointing.",
   "active_gate": null,
@@ -61,7 +61,7 @@
     }
   ],
   "last_verified_commands": [
-    "git status --short --branch && git branch --show-current && git rev-parse HEAD && git rev-parse origin/main -> dirty intended Lane A follow-up files; main; 74c346dc5d5c6aac2116f8544ea7f83ea36b476b for both",
+    "git status --short --branch && git branch --show-current && git rev-parse HEAD && git rev-parse origin/main -> only untracked continuous-runner.lock remains; main; cd9b2d9d2e90ac50157e2404b7acb60b90819ab4 for both after push",
     "read .hermes/long-running/tv-spec-implementation/task-ledger.json; tail events.jsonl; docs/research/tv-spec.md; Lane A backlog section lines 154-168",
     "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-levo-name-map-v2",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> OK (3 tests)",
@@ -70,7 +70,7 @@
     "JSON parse for task ledger, events JSONL, native_ev/data/*.json, native_ev/data/profiles/*.json -> json_ok",
     "git diff --check -> no output / exit 0"
   ],
-  "next_resume_action": "Continue Lane A with exact coordinate numeric-unit interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion; stabilize/push this coherent slice first if the next runner sees these intended dirty files.",
+  "next_resume_action": "Continue Lane A with exact coordinate numeric-unit interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion.",
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation equals one coherent safe slice; send concise slice reports to telegram:Loki GameTV; do not stop between safe slices.",
   "runner": {
     "kind": "continuous-background-loop",
