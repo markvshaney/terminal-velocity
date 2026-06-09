@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-levo-name-map-v5':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-levo-name-map-v6':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -332,6 +332,17 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate domain summary has unexpected y high-word domain')
     if 'not-promoted' not in domain.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate domain summary must not promote display units')
+    link_graph = data.get('candidateLinkGraphSummary', {})
+    if link_graph.get('sourceLabel') != 'decoded-resource-backed-candidate-link-graph-scout':
+        raise ValueError('sourced EV systems manifest missing candidate link-graph summary source label')
+    if link_graph.get('oracleStatus') != 'exact_record_name_runtime_topology_mapping_pending':
+        raise ValueError('sourced EV systems manifest candidate link-graph summary should keep runtime topology pending')
+    if link_graph.get('recordCount') != 67 or link_graph.get('directedLinkSlotCount') != 268:
+        raise ValueError('sourced EV systems manifest candidate link-graph summary has unexpected link counts')
+    if link_graph.get('linkedSlotsPerSystemRange') != [4, 4] or link_graph.get('systemsWithNoLinkedSlots') != 0:
+        raise ValueError('sourced EV systems manifest candidate link-graph summary has unexpected per-system link distribution')
+    if link_graph.get('allTargetsPresentInSystRun') is not True or link_graph.get('missingTargetEdges') != []:
+        raise ValueError('sourced EV systems manifest candidate link-graph summary has missing targets')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')

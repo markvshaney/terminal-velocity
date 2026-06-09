@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-levo-name-map-v5'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-levo-name-map-v6'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, and candidate link-graph summary statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -187,6 +187,40 @@ def _coordinate_display_candidate_summary(systems: list[dict]) -> dict:
     }
 
 
+def _candidate_link_graph_summary(systems: list[dict]) -> dict:
+    """Summarize candidate Con1-Con16 links without promoting named runtime topology."""
+    directed_edges = []
+    slots_per_system = []
+    missing_targets = []
+    self_links = []
+    for system in systems:
+        resource_id = system['resourceId']
+        slots = system['semanticFields']['candidateHyperspaceLinks']['linkSlots']
+        linked_slots = [slot for slot in slots if slot.get('status') == 'linked-system']
+        slots_per_system.append(len(linked_slots))
+        for slot in linked_slots:
+            target_id = slot['targetResourceId']
+            directed_edges.append([resource_id, target_id])
+            if target_id == resource_id:
+                self_links.append([resource_id, target_id])
+            if not slot.get('targetPresentInSystRun'):
+                missing_targets.append([resource_id, target_id])
+    return {
+        'sourceLabel': 'decoded-resource-backed-candidate-link-graph-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'recordCount': len(systems),
+        'directedLinkSlotCount': len(directed_edges),
+        'uniqueDirectedLinkCount': len({tuple(edge) for edge in directed_edges}),
+        'linkedSlotsPerSystemRange': [min(slots_per_system), max(slots_per_system)],
+        'systemsWithNoLinkedSlots': sum(1 for count in slots_per_system if count == 0),
+        'allTargetsPresentInSystRun': not missing_targets,
+        'missingTargetEdges': missing_targets,
+        'selfLinkSlotCount': len(self_links),
+        'resource128LinkedSystemResourceIds': systems[0]['semanticFields']['candidateHyperspaceLinks']['linkedSystemResourceIds'],
+        'sourceNote': 'This is a candidate graph summary from decoded Resource Bible Con1-Con16 link-slot fields. It preserves graph-analysis statistics only; exact Classic runtime topology remains pending until record-to-name joins and map/layout interpretation are promoted.',
+    }
+
+
 def _exact_system_name_mapping(resource_id: int) -> dict | None:
     mapping = EXACT_SYSTEM_NAME_MAPPINGS.get(resource_id)
     if mapping is None:
@@ -266,6 +300,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systemNameSeeds': names.get('systemNames', []),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
+        'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

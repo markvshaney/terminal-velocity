@@ -1806,6 +1806,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_domain_summary',
             'recorded_coordinate_display_candidate_summary',
             'recorded_candidate_link_family',
+            'recorded_candidate_link_graph_summary',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
@@ -1831,6 +1832,12 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayCandidateSourceLabel'], 'decoded-resource-backed-coordinate-display-candidate')
         self.assertEqual(readiness['candidateLinkWordIndices'], list(range(4, 20)))
         self.assertEqual(readiness['candidateLinkedSystemIdsForResource128'][:4], [128, 129, 130, 131])
+        self.assertEqual(readiness['candidateLinkGraphSourceLabel'], 'decoded-resource-backed-candidate-link-graph-scout')
+        self.assertEqual(readiness['candidateLinkGraphOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
+        self.assertEqual(readiness['candidateLinkGraphDirectedSlotCount'], 268)
+        self.assertEqual(readiness['candidateLinkGraphUniqueDirectedLinkCount'], 117)
+        self.assertTrue(readiness['candidateLinkGraphTargetsInRun'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['candidateLinkGraphDirectedSlotCount'], 268)
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
         self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')

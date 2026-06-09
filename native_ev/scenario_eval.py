@@ -408,6 +408,7 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
     first_coordinates = first_fields.get('mapCoordinates', {})
     coordinate_domain = systems_manifest.get('coordinateDomainSummary', {})
     coordinate_display_candidates = systems_manifest.get('coordinateDisplayCandidateSummary', {})
+    candidate_link_graph = systems_manifest.get('candidateLinkGraphSummary', {})
     exact_name = first_fields.get('exactSystemName', {})
     runtime_system_count = len(load_universe().get('systems', []))
     trace.append({
@@ -431,6 +432,11 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'candidateLinkWordIndices': first_links.get('wordIndices', []),
         'candidateLinkedSystemIdsForResource128': first_links.get('linkedSystemResourceIds', []),
         'candidateLinkSourceConfidence': first_links.get('sourceConfidence'),
+        'candidateLinkGraphSourceLabel': candidate_link_graph.get('sourceLabel'),
+        'candidateLinkGraphOracleStatus': candidate_link_graph.get('oracleStatus'),
+        'candidateLinkGraphDirectedSlotCount': candidate_link_graph.get('directedLinkSlotCount'),
+        'candidateLinkGraphUniqueDirectedLinkCount': candidate_link_graph.get('uniqueDirectedLinkCount'),
+        'candidateLinkGraphTargetsInRun': candidate_link_graph.get('allTargetsPresentInSystRun'),
         'exactSystemNameResource128': exact_name.get('systemName'),
         'exactSystemNameSourceBasis': exact_name.get('sourceBasis', []),
         'runtimeSystemSubsetCount': runtime_system_count,
@@ -453,6 +459,9 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'coordinateDisplayCandidateResource128': coordinate_display_candidates.get('resource128', {}),
         'candidateLinkWordIndices': first_links.get('wordIndices', []),
         'candidateLinkedSystemIdsForResource128': first_links.get('linkedSystemResourceIds', []),
+        'candidateLinkGraphSourceLabel': candidate_link_graph.get('sourceLabel'),
+        'candidateLinkGraphDirectedSlotCount': candidate_link_graph.get('directedLinkSlotCount'),
+        'candidateLinkGraphTargetsInRun': candidate_link_graph.get('allTargetsPresentInSystRun'),
         'exactSystemNameResource128': exact_name.get('systemName'),
         'runtimeSystemSubsetCount': runtime_system_count,
         'promotionSafeNext': len(records) >= 60 and syst_run.get('recordSize') == 88,
@@ -3611,6 +3620,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_coordinate_domain_summary': 'passed' if readiness.get('coordinateDomainSourceLabel') == 'decoded-resource-backed-coordinate-domain-scout' and readiness.get('coordinateDisplayUnitOracleStatus') == 'coordinate_display_units_map_scaling_pending' and readiness.get('coordinateXHighWordDistinctValues') == [1, 2, 3, 4] and readiness.get('coordinateYHighWordDistinctValues') == [0, 18, 72, 127, 133] and static_state.get('coordinateDomainSourceLabel') == 'decoded-resource-backed-coordinate-domain-scout' and static_state.get('coordinateDisplayUnitOracleStatus') == 'coordinate_display_units_map_scaling_pending' else 'failed',
             'recorded_coordinate_display_candidate_summary': 'passed' if readiness.get('coordinateDisplayCandidateSourceLabel') == 'decoded-resource-backed-coordinate-display-candidate' and 'raw high word as coarse grid/band candidate' in readiness.get('coordinateDisplayCandidateFamilies', []) and readiness.get('coordinateDisplayCandidateResource128', {}).get('xPos', {}).get('rawHighWordAsGridBandCandidate') == 1 and readiness.get('coordinateDisplayCandidateResource128', {}).get('yPos', {}).get('rawLowWordAsSubgridOffsetCandidate') == 4096 and static_state.get('coordinateDisplayCandidateSourceLabel') == 'decoded-resource-backed-coordinate-display-candidate' else 'failed',
             'recorded_candidate_link_family': 'passed' if readiness.get('candidateLinkWordIndices') == list(range(4, 20)) and readiness.get('candidateLinkedSystemIdsForResource128', [])[:4] == [128, 129, 130, 131] and readiness.get('candidateLinkSourceConfidence') == 'decoded-pattern-plus-resource-bible-field-family-candidate' else 'failed',
+            'recorded_candidate_link_graph_summary': 'passed' if readiness.get('candidateLinkGraphSourceLabel') == 'decoded-resource-backed-candidate-link-graph-scout' and readiness.get('candidateLinkGraphOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('candidateLinkGraphDirectedSlotCount') == 268 and readiness.get('candidateLinkGraphUniqueDirectedLinkCount') == 117 and readiness.get('candidateLinkGraphTargetsInRun') is True and static_state.get('candidateLinkGraphDirectedSlotCount') == 268 else 'failed',
             'recorded_exact_start_system_mapping': 'passed' if readiness.get('exactSystemNameResource128') == 'Levo' and 'original-runtime-observed' in readiness.get('exactSystemNameSourceBasis', []) and static_state.get('exactSystemNameResource128') == 'Levo' else 'failed',
             'recorded_static_topology_source_boundary': 'passed' if readiness.get('sourceLabel') == 'decoded-resource-backed-static-readiness' and readiness.get('oracleStatus') == 'topology_semantic_promotion_pending_field_family_mapping' else 'failed',
         })
