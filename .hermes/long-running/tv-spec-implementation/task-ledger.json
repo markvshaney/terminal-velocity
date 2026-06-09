@@ -12,7 +12,7 @@
   },
   "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T16:07:49Z",
+  "updated_at": "2026-06-09T16:31:26Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified adjacent increment batches until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable event/checkpoint policy.",
   "active_gate": null,
@@ -68,8 +68,8 @@
     "JSON/JSONL parse -> ok",
     "git diff --check -> exit 0"
   ],
-  "next_resume_action": "Continue Lane A with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion. The current v8 connectivity statistics batch is verified and ready for normal checkpoint integration when checkpoint policy triggers; preserve untracked continuous-runner.lock as active wrapper state.",
-  "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments; send Telegram/progress only at material boundaries; do not stop between adjacent safe increments.",
+  "next_resume_action": "Continue TV spec implementation using the low-overhead continuous runner: embedded prompt first, no default full-skill preload, terminal/file/messaging toolsets only, batch adjacent same-lane increments, use targeted verifiers, and load extra skills/docs only when crossing an uncovered surface, process gate, or original-runtime/gameplay procedure.",
+  "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments. Optimize for development throughput: avoid default full-skill loads, avoid runner self-inspection, avoid routine ledger rewrites, and report externally only at material boundaries.",
   "runner": {
     "kind": "continuous-background-loop",
     "script": "/home/bh/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh",
@@ -79,12 +79,13 @@
     "enabled_toolsets": [
       "terminal",
       "file",
-      "skills",
       "messaging"
     ],
     "replaces_paused_cron_job_id": "5430276bcaa5",
     "cron_fallback_state": "paused to avoid overlapping writers",
-    "loop_policy": "zero intentional polling gap: after one invocation exits cleanly and ledger has no gate/terminal status, immediately invoke the next adjacent-increment batch"
+    "loop_policy": "zero intentional polling gap: after one invocation exits cleanly and ledger has no gate/terminal status, immediately invoke the next adjacent-increment batch",
+    "skill_loading_policy": "No default -s preload in continuous wrapper; prompt embeds standing contract. Load extra skills/docs only for uncovered surfaces, gates/process changes, or original-runtime/gameplay operator procedure.",
+    "cli_flags": "chat -Q --source tv-spec-continuous-runner -t terminal,file,messaging -q <prompt>"
   },
   "source_artifact_policy": {
     "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec.",
@@ -120,7 +121,9 @@
     "external_reporting": "Report externally only for gates, failures, checkpoint commits/pushes, fidelity promotion/demotion, explicit user request, or periodic batch summaries; routine increments stay local.",
     "backlog_provenance": "Migration-on-touch only: patch backlog/provenance when future dispatch state changes; otherwise record none-with-reason in event/packet.",
     "verification": "Use narrow per-increment verifiers; broad hygiene/full suites/remote checks at checkpoint, handoff, risky-step, or touched-surface boundaries.",
-    "ledger_events": "Use JSONL events for routine history; rewrite ledger only for current resumable state, gates, next action, last verification summary, runner policy, or resume prompt.",
-    "workers": "Avoid workers/subagents for mechanical sequential lanes; use them only for independent parallel lanes where fan-in cost is justified."
+    "ledger_events": "Use compact JSONL events for routine history; rewrite ledger only for changed resumable state, gates, next action, runner policy, or verification summaries.",
+    "workers": "Avoid workers/subagents for mechanical sequential lanes; use them only for independent parallel lanes where fan-in cost is justified.",
+    "skill_context": "Avoid paying the full skill-token/startup cost every fresh invocation; rely on embedded runner prompt and durable repo artifacts for routine Lane A/source-mining work.",
+    "runner_self_inspection": "Treat continuous-runner.lock as known wrapper state; do not inspect/wait on the wrapper from inside runner invocations."
   }
 }

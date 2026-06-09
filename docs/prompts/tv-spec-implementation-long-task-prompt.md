@@ -8,7 +8,7 @@ You are running under the `loki-game` Hermes profile for Terminal Velocity.
 Objective: implement `docs/research/tv-spec.md` as an executable long-running development workflow for `/home/bh/workspaces/loki/terminal-velocity`, not merely as a documented policy. Each invocation should perform one or more adjacent safe, source-labeled, verified increments that advance the live backlog under the tv-spec contracts.
 
 Required first actions every invocation:
-1. Load/follow these skills when available unless already loaded in the same invocation and the task surface has not changed: `long-running-task-harness`, `source-and-fidelity`, `artifact-governance`, `living-backlog-governance`, `ev-terminal-velocity-play`.
+1. Follow this embedded runner contract first. Do not spend a fresh invocation loading full skills by default; use the repo prompt, ledger, event tail, `docs/research/tv-spec.md`, and the live backlog as the current authority. Load or consult additional skills/docs only when the invocation crosses a new surface not covered by this prompt, hits a gate/runner/process change, or needs original-runtime/gameplay/operator procedure.
 2. Inspect live repo state at invocation start: `git status --short --branch`, current branch, `HEAD`, and `origin/main`.
 3. Read with line numbers the minimum current-state surfaces needed to resume safely:
    - `.hermes/long-running/tv-spec-implementation/task-ledger.json`
@@ -16,6 +16,7 @@ Required first actions every invocation:
    - relevant section(s) of `docs/research/tv-spec.md`
    - relevant section(s) of `docs/checklists/ev-classic-fidelity-implementation-backlog.md`
 4. If the worktree is dirty, understand and stabilize the existing slice/batch before starting a new one. Do not overwrite or abandon unknown dirty work.
+   - Known runner state exception: untracked `.hermes/long-running/tv-spec-implementation/continuous-runner.lock` by itself is active-wrapper state, not a development dirty batch. Do not wait for or monitor the continuous-runner process from inside a runner invocation; proceed with repo/backlog work unless other dirty files, a ledger gate, or a real blocker is present.
 
 Task loop:
 - Prefer current actionable backlog items that already expose `next_action`, `lane_class`, `oracle_class`, `source_basis`, `verifier`, `blocked_reason`, and `promotion_status`.
@@ -27,7 +28,7 @@ Task loop:
 - Build the smallest vertical increment first; then continue through adjacent safe increments in the same invocation when they share the same lane/subsystem, source-basis family, verifier surface, and understandable dirty working set.
 - Stop the invocation at a real gate, failed verifier, subsystem switch, risky/destructive/original-runtime step, checkpoint-policy trigger, cap/handoff boundary, unsafe dirty state, or no-safe-local-slice condition.
 - Each increment packet/event must record: behavior/claim, `oracle_class`, `source_basis`, lane class, source/fidelity label, verifier command and actual result, files/captures/logs touched, backlog/provenance update or explicit reason, promotion status, uncertainty/gates.
-- Append compact JSONL events for routine increment history. Update `.hermes/long-running/tv-spec-implementation/task-ledger.json` only when current status, active gate, next action, last verification summary, runner policy, or self-contained resume prompt changes.
+- Append compact JSONL events for routine increment history. Update `.hermes/long-running/tv-spec-implementation/task-ledger.json` only when current status, active gate, next action, last verification summary, runner policy, or self-contained resume prompt changes. Do not rewrite the ledger after every small successful command.
 - Patch `docs/checklists/ev-classic-fidelity-implementation-backlog.md` only when future execution state changes: next action, verifier, blocker/gate, source basis, promotion status, or dispatch fields. Otherwise record `none` with reason in the increment event/packet.
 - Normal coherent non-force pushes to `markvshaney/terminal-velocity` are preapproved only when the Git checkpoint policy is triggered. After the established TV checks, inspect status/remotes/branch, stage intended files only, run relevant verification, check no secrets/proprietary/unrelated files, push, fetch, verify local `HEAD == origin/main`, and report concise bundle summary. Do not force-push/rewrite history.
 - Avoid workers/subagents for mechanical sequential source-mining, extractor/model/test loops, or tightly coupled dirty work. Use workers only for independent parallel lanes whose fan-in and verification cost is justified.
