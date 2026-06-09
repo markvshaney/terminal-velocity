@@ -84,6 +84,7 @@
     "route_queue_clear_reselect_guardrail",
     "near_center_jump_block",
     "route_planner_refuel_loop",
+    "manual_route_low_fuel_recovery_landing_loop",
     "low_fuel_jump_recovery",
     "blocked_reason_curriculum",
     "legal_docking_service_gate_recovery",
@@ -495,6 +496,10 @@
     "cross_market_exact_credit_full_hold_profit_loop": {
       "purpose": "Cross-market exact-credit full-hold profit loop: at Sol, spend exactly the displayed two-lot Food budget to fill the starting hold and reach zero credits, block a third buy, return to Levo, and sell both lots to recover spendable credits under explicit pending-Classic economy boundaries.",
       "surface": "commodity exchange/exact-credit full-hold cross-market profit scaffold"
+    },
+    "manual_route_low_fuel_recovery_landing_loop": {
+      "purpose": "Manual route low-fuel recovery landing loop: Shift-click a multi-stop green route, surface insufficient fuel for the full route, block an empty-fuel jump without consuming route state, land/refuel, reselect the route, and reach the final stop under pending-Classic route/fuel UI boundaries.",
+      "surface": "manual map route/fuel warning/recovery landing scaffold"
     }
   }
 }

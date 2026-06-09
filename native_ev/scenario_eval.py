@@ -120,6 +120,7 @@ SCENARIO_CURRICULUM = [
     'route_queue_clear_reselect_guardrail',
     'near_center_jump_block',
     'route_planner_refuel_loop',
+    'manual_route_low_fuel_recovery_landing_loop',
     'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
     'legal_docking_service_gate_recovery',
@@ -338,6 +339,31 @@ def _append_route_stop(state: dict[str, Any], action: dict[str, Any], trace: lis
         'greenRoutePath': [state['currentSystem']] + list(state['routeQueue']),
         'sourceLabel': state['routeSourceLabel'],
         'oracleStatus': action.get('oracleStatus', 'user_demonstrated_pending_original_trace'),
+    })
+    return True
+
+
+def _route_fuel_status(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    route_queue = list(state.get('routeQueue', []))
+    fuel = int(state.get('fuel', 0))
+    required = len(route_queue)
+    if not route_queue:
+        fuel_status = 'no route selected'
+    elif fuel >= required:
+        fuel_status = 'enough fuel for full route'
+    elif fuel > 0:
+        fuel_status = 'insufficient fuel for full route'
+    else:
+        fuel_status = 'empty fuel for route'
+    trace.append({
+        'type': 'route_fuel_status',
+        'routeQueue': route_queue,
+        'greenRoutePath': [state['currentSystem']] + route_queue if route_queue else [],
+        'fuel': fuel,
+        'fuelRequired': required,
+        'fuelStatus': fuel_status,
+        'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-fuel-feedback-scaffold'),
+        'oracleStatus': action.get('oracleStatus', 'classic_runtime_route_fuel_feedback_pending'),
     })
     return True
 
@@ -2825,6 +2851,27 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'jump', 'destinationSystem': 'Levo', 'expectBlocked': True},
             {'type': 'refuel'},
         ]
+    if name == 'manual_route_low_fuel_recovery_landing_loop':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'set_state', 'values': {'fuel': 1}},
+            {'type': 'route_fuel_status'},
+            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'depart'},
+            {'type': 'jump', 'expectBlocked': True},
+            {'type': 'land', 'body': START_BODY},
+            {'type': 'refuel'},
+            {'type': 'clear_route_queue', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'terminal-velocity-route-guardrail'},
+            {'type': 'depart'},
+            {'type': 'jump'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'depart'},
+            {'type': 'jump'},
+            {'type': 'land', 'body': 'Sirius Station'},
+        ]
     if name == 'low_fuel_jump_recovery':
         return [
             {'type': 'set_state', 'values': {'fuel': 0}},
@@ -3760,6 +3807,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_empty_fuel_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
             'refueled_while_landed': 'passed' if any(event.get('type') == 'refuel' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
         })
+    elif name == 'manual_route_low_fuel_recovery_landing_loop':
+        blocked = [event for event in trace if event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel']
+        route_status = [event for event in trace if event.get('type') == 'route_fuel_status']
+        post_recovery_appends = [event for event in trace if event.get('type') == 'append_route_stop' and event.get('sourceLabel') == 'terminal-velocity-route-guardrail']
+        checks.update({
+            'drew_manual_green_route_with_fuel_hint': 'passed' if route_status and route_status[-1].get('greenRoutePath') == ['Levo', 'Sol', 'Sirius'] and route_status[-1].get('fuelStatus') == 'insufficient fuel for full route' else 'failed',
+            'blocked_without_consuming_route_or_fuel': 'passed' if blocked and blocked[-1].get('routeQueue') == ['Sol', 'Sirius'] and any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('fuel') == 0 for event in trace) else 'failed',
+            'recovered_by_refueling_and_reselecting_route': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == START_SYSTEM and event.get('fuelAfter') == STARTING_FUEL for event in trace) and [event.get('destinationSystem') for event in post_recovery_appends] == ['Sol', 'Sirius'] else 'failed',
+            'landed_after_recovery': 'passed' if state.get('currentSystem') == 'Sirius' and state.get('landedBody') == 'Sirius Station' and state.get('routeQueue') == [] and state.get('fuel') == STARTING_FUEL - 2 else 'failed',
+        })
     elif name == 'low_fuel_jump_recovery':
         checks.update({
             'started_with_empty_fuel': 'passed' if any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('fuel') == 0 for event in trace) else 'failed',
@@ -3939,6 +3996,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'recover_disabled_player': _recover_disabled_player,
         'set_state': _set_state,
         'append_route_stop': _append_route_stop,
+        'route_fuel_status': _route_fuel_status,
         'clear_route_queue': _clear_route_queue,
         'scan_station_services': _scan_station_services,
         'scan_static_topology_source': _scan_static_topology_source,

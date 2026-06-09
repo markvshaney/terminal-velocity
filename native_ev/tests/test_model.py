@@ -237,6 +237,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('native_ev/data/gameplay_curriculum.json', self_test_script)
         self.assertIn('gameplayScenarios=%d', self_test_script)
         self.assertIn('_verify_gameplay_curriculum', self_test_script)
+        self.assertIn('manual_route_low_fuel_recovery_landing_loop', manifest['scenarioOrder'])
         self.assertIn('low_fuel_jump_recovery', manifest['scenarioOrder'])
         self.assertIn('blocked_reason_curriculum', manifest['scenarioOrder'])
         self.assertIn('mission_deadline_failure_scaffold', manifest['scenarioOrder'])

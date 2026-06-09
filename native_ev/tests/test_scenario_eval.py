@@ -98,6 +98,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'route_queue_clear_reselect_guardrail',
                 'near_center_jump_block',
                 'route_planner_refuel_loop',
+                'manual_route_low_fuel_recovery_landing_loop',
                 'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
                 'legal_docking_service_gate_recovery',
@@ -1981,6 +1982,26 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             {'type': 'refuel', 'system': 'Sol', 'body': 'Earth', 'fuelAfter': 6},
             result['trace'],
         )
+
+    def test_manual_route_low_fuel_recovery_landing_loop_keeps_route_and_recovers(self):
+        result = run_scripted_scenario('manual_route_low_fuel_recovery_landing_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sirius')
+        self.assertEqual(result['state']['landedBody'], 'Sirius Station')
+        self.assertEqual(result['state']['fuel'], 4)
+        self.assertEqual(result['state']['routeQueue'], [])
+        self.assertEqual(result['metrics']['jumps'], 2)
+        self.assertEqual(result['checks']['drew_manual_green_route_with_fuel_hint'], 'passed')
+        self.assertEqual(result['checks']['blocked_without_consuming_route_or_fuel'], 'passed')
+        self.assertEqual(result['checks']['recovered_by_refueling_and_reselecting_route'], 'passed')
+        self.assertEqual(result['checks']['landed_after_recovery'], 'passed')
+        route_status = [event for event in result['trace'] if event['type'] == 'route_fuel_status']
+        self.assertEqual(route_status[-1]['routeQueue'], ['Sol', 'Sirius'])
+        self.assertEqual(route_status[-1]['fuelStatus'], 'insufficient fuel for full route')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump']
+        self.assertEqual(blocked[-1]['reason'], 'insufficient fuel')
+        self.assertEqual(blocked[-1]['routeQueue'], ['Sol', 'Sirius'])
 
     def test_low_fuel_jump_recovery_blocks_jump_preserves_state_then_refuels(self):
         result = run_scripted_scenario('low_fuel_jump_recovery')

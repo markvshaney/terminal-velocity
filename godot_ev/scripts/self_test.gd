@@ -213,6 +213,7 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"route_queue_clear_reselect_guardrail",
 		"near_center_jump_block",
 		"route_planner_refuel_loop",
+		"manual_route_low_fuel_recovery_landing_loop",
 		"low_fuel_jump_recovery",
 		"blocked_reason_curriculum",
 		"legal_docking_service_gate_recovery",
