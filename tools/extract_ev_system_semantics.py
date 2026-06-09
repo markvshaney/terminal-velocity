@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-levo-name-map-v6'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-reciprocity-levo-name-map-v7'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, and candidate link-graph summary statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, and candidate link reciprocity/self-link statistics are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -205,19 +205,34 @@ def _candidate_link_graph_summary(systems: list[dict]) -> dict:
                 self_links.append([resource_id, target_id])
             if not slot.get('targetPresentInSystRun'):
                 missing_targets.append([resource_id, target_id])
+    unique_directed_edges = {tuple(edge) for edge in directed_edges}
+    reciprocal_directed_edges = sorted(
+        edge for edge in unique_directed_edges
+        if (edge[1], edge[0]) in unique_directed_edges
+    )
+    non_reciprocal_directed_edges = sorted(
+        edge for edge in unique_directed_edges
+        if (edge[1], edge[0]) not in unique_directed_edges
+    )
+    unique_self_links = sorted(edge for edge in unique_directed_edges if edge[0] == edge[1])
     return {
         'sourceLabel': 'decoded-resource-backed-candidate-link-graph-scout',
         'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
         'recordCount': len(systems),
         'directedLinkSlotCount': len(directed_edges),
-        'uniqueDirectedLinkCount': len({tuple(edge) for edge in directed_edges}),
+        'uniqueDirectedLinkCount': len(unique_directed_edges),
+        'reciprocalDirectedLinkCount': len(reciprocal_directed_edges),
+        'nonReciprocalDirectedLinkCount': len(non_reciprocal_directed_edges),
+        'nonReciprocalDirectedLinkSample': [list(edge) for edge in non_reciprocal_directed_edges[:12]],
         'linkedSlotsPerSystemRange': [min(slots_per_system), max(slots_per_system)],
         'systemsWithNoLinkedSlots': sum(1 for count in slots_per_system if count == 0),
         'allTargetsPresentInSystRun': not missing_targets,
         'missingTargetEdges': missing_targets,
         'selfLinkSlotCount': len(self_links),
+        'uniqueSelfLinkCount': len(unique_self_links),
+        'uniqueSelfLinkResourceIds': [edge[0] for edge in unique_self_links],
         'resource128LinkedSystemResourceIds': systems[0]['semanticFields']['candidateHyperspaceLinks']['linkedSystemResourceIds'],
-        'sourceNote': 'This is a candidate graph summary from decoded Resource Bible Con1-Con16 link-slot fields. It preserves graph-analysis statistics only; exact Classic runtime topology remains pending until record-to-name joins and map/layout interpretation are promoted.',
+        'sourceNote': 'This is a candidate graph summary from decoded Resource Bible Con1-Con16 link-slot fields. It preserves graph-analysis, reciprocity, and self-link statistics only; exact Classic runtime topology remains pending until record-to-name joins and map/layout interpretation are promoted.',
     }
 
 
