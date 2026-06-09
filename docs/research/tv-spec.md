@@ -205,7 +205,7 @@ Every completed increment must include:
 - backlog/provenance update or explicit `none` with reason;
 - promotion status: `scaffold`, `needs evidence`, `fidelity-promoted`, `blocked`, or `user-gated`.
 
-A verified increment is a checkpoint, not necessarily a stop.
+A verified increment is a local work checkpoint, not a required commit/push boundary and not necessarily a stop.
 
 ## Scenario/evaluator contract
 
@@ -284,6 +284,22 @@ Before adding fresh work, prefer existing `ready`, narrow `needs evidence`, or s
 - bounded `needs evidence` / blocked next action;
 - quirk-ledger entry requiring user decision.
 
+## Git checkpoint policy
+
+Commit/push is a durability or coordination action, not the unit of development. Do not commit/push merely because a coherent local slice completed.
+
+Run the full commit/push procedure only when one of these is true:
+
+- user explicitly asks for a checkpoint/push;
+- context/tool/reset limit is near and uncommitted work would be costly to reconstruct;
+- work is about to switch to a different subsystem and the current bundle should be sealed;
+- a risky/destructive/original-runtime step is about to begin and the repo needs a rollback anchor;
+- another worker/session needs the work from the remote;
+- work changes project-governing docs/spec/backlog in a way that future sessions are likely to rely on before the next natural checkpoint;
+- local work has accumulated enough that losing it would be painful.
+
+Otherwise, keep the slice verified locally and continue. Fidelity discipline comes from source labels, verifiers, and backlog/provenance updates, not from remote publication after every slice.
+
 ## Normal workflow
 
 Use this loop:
@@ -293,7 +309,7 @@ Use this loop:
 3. Pick lane: A, B, C, D, E, or Basilisk runtime lane.
 4. Execute smallest vertical increment.
 5. Emit packet with files, command output, `oracle_class`, `source_basis`, evidence label, promotion status, uncertainty, and gates.
-6. Integrate: one owner verifies, updates backlog/provenance, commits/pushes when policy allows.
+6. Integrate: one owner verifies, updates backlog/provenance, and commits/pushes only when the Git checkpoint policy is triggered.
 7. Continue unless a real gate is reached.
 
 ## Autoresearch boundary
