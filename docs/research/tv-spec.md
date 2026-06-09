@@ -290,6 +290,21 @@ Before adding fresh work, prefer existing `ready`, narrow `needs evidence`, or s
 - bounded `needs evidence` / blocked next action;
 - quirk-ledger entry requiring user decision.
 
+### Verifier impact map
+
+Maintain `docs/checklists/tv-verifier-impact-map.json` as the canonical routing map from touched surfaces to cheapest sufficient verifier families. Validate it through `python3 tools/backlog_dispatch_index.py check` and `python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v`.
+
+Required surface keys:
+
+- `extractor`
+- `scenario`
+- `godot_probe`
+- `data_manifest`
+- `backlog_dispatch_metadata`
+- `docs_process_only`
+
+For each actionable backlog item with `touched_surfaces`, the dispatch checker requires every touched surface to resolve to one of those keys and requires a non-empty `verifier`. The v1 rule is structural: verifier routing must name a sufficient verifier family; exact command equivalence is not enforced.
+
 ## Git checkpoint policy
 
 Commit/push is a durability or coordination action, not the unit of development. Do not commit/push merely because a coherent local slice completed.

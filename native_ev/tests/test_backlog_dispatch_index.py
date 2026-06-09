@@ -5,8 +5,12 @@ import unittest
 from pathlib import Path
 
 from tools.backlog_dispatch_index import (
+    REQUIRED_VERIFIER_IMPACT_SURFACES,
     build_dispatch_index,
     check_dispatch_index,
+    load_verifier_impact_map,
+    validate_dispatch_index,
+    validate_verifier_impact_map,
     write_dispatch_index,
 )
 
@@ -84,6 +88,93 @@ class BacklogDispatchIndexTests(unittest.TestCase):
 
         self.assertFalse(result.ok)
         self.assertIn("stale", "\n".join(result.errors))
+
+    def test_checked_in_verifier_impact_map_is_valid(self):
+        repo = Path(__file__).resolve().parents[2]
+        impact_map = load_verifier_impact_map(repo / "docs/checklists/tv-verifier-impact-map.json")
+
+        result = validate_verifier_impact_map(impact_map)
+
+        self.assertTrue(result.ok, result.errors)
+        self.assertEqual(set(impact_map["surfaces"]), set(REQUIRED_VERIFIER_IMPACT_SURFACES))
+        for surface in REQUIRED_VERIFIER_IMPACT_SURFACES:
+            self.assertGreater(len(impact_map["surfaces"][surface]["cheap_required"]), 0)
+
+    def test_validate_dispatch_index_rejects_unknown_touched_surface_when_map_is_loaded(self):
+        index = {
+            "schema_version": 1,
+            "source_path": "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+            "generated_from": "test",
+            "item_count": 1,
+            "items": [
+                {
+                    "id": "unknown-surface",
+                    "title": "Unknown surface",
+                    "status": "ready",
+                    "next_action": "Touch an unmapped surface.",
+                    "lane_class": "Lane E: deterministic evaluator/playtest packets",
+                    "oracle_class": "tv-scaffold",
+                    "source_basis": ["tv-scaffold"],
+                    "verifier": "python3 tools/run_gameplay_scenarios.py smoke --pretty",
+                    "blocked_reason": "none",
+                    "promotion_status": "scaffold",
+                    "risk_gate": "none",
+                    "touched_surfaces": ["mystery/runtime/file.xyz"],
+                    "markdown_anchor": "#unknown-surface",
+                    "line_range": [1, 2],
+                    "item_body_sha256": "a" * 64,
+                }
+            ],
+        }
+        impact_map = {
+            "schema_version": 1,
+            "surfaces": {
+                surface: {
+                    "cheap_required": ["focused verifier"],
+                    "checkpoint_optional": [],
+                    "path_prefixes": [],
+                    "path_suffixes": [],
+                    "path_contains": [],
+                    "verifier_hints": ["focused verifier"],
+                    "notes": "test",
+                }
+                for surface in REQUIRED_VERIFIER_IMPACT_SURFACES
+            },
+        }
+
+        result = validate_dispatch_index(index, impact_map=impact_map)
+
+        self.assertFalse(result.ok)
+        self.assertIn("unmapped touched_surface", "\n".join(result.errors))
+
+    def test_validate_dispatch_index_requires_verifier_for_actionable_items_with_touched_surfaces(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            backlog = root / "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+            backlog.parent.mkdir(parents=True)
+            backlog.write_text(SAMPLE_BACKLOG)
+            index = build_dispatch_index(backlog, repo_root=root)
+        index["items"][0]["verifier"] = ""
+        impact_map = {
+            "schema_version": 1,
+            "surfaces": {
+                surface: {
+                    "cheap_required": ["focused verifier"],
+                    "checkpoint_optional": [],
+                    "path_prefixes": ["tools/", "native_ev/data/", "docs/"],
+                    "path_suffixes": [],
+                    "path_contains": [],
+                    "verifier_hints": ["focused verifier"],
+                    "notes": "test",
+                }
+                for surface in REQUIRED_VERIFIER_IMPACT_SURFACES
+            },
+        }
+
+        result = validate_dispatch_index(index, impact_map=impact_map)
+
+        self.assertFalse(result.ok)
+        self.assertIn("missing verifier", "\n".join(result.errors))
 
 
 if __name__ == "__main__":

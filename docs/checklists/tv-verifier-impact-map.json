@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "source_path": "docs/research/tv-spec.md",
+  "generated_from": "curated verifier routing artifact; edit with dispatch-index validation",
+  "surfaces": {
+    "backlog_dispatch_metadata": {
+      "cheap_required": [
+        "python3 tools/backlog_dispatch_index.py check",
+        "python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v"
+      ],
+      "checkpoint_optional": [
+        "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'"
+      ],
+      "path_prefixes": [],
+      "path_suffixes": [
+        "ev-classic-fidelity-implementation-backlog.index.json"
+      ],
+      "path_contains": [
+        "ev-classic-fidelity-implementation-backlog",
+        "backlog_dispatch_index",
+        "tv-verifier-impact-map.json"
+      ],
+      "verifier_hints": [
+        "backlog_dispatch_index.py",
+        "test_backlog_dispatch_index"
+      ],
+      "notes": "Backlog, dispatch-index, and verifier-routing metadata changes require the structural checker and its focused unit tests."
+    },
+    "data_manifest": {
+      "cheap_required": [
+        "python3 -m json.tool <manifest>.json",
+        "python3 -m unittest native_ev.tests.test_model.<focused_descriptor_or_manifest_test> -v"
+      ],
+      "checkpoint_optional": [
+        "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'"
+      ],
+      "path_prefixes": [
+        "native_ev/data/"
+      ],
+      "path_suffixes": [],
+      "path_contains": [
+        "manifest",
+        "sourced_ev_"
+      ],
+      "verifier_hints": [
+        "json.tool",
+        "test_model",
+        "manifest"
+      ],
+      "notes": "Data manifest changes require JSON parsing plus the focused model/profile descriptor or manifest contract test."
+    },
+    "docs_process_only": {
+      "cheap_required": [
+        "git diff --check",
+        "readback/search of the changed doc reference"
+      ],
+      "checkpoint_optional": [
+        "python3 tools/backlog_dispatch_index.py check when backlog/spec verifier routing changes"
+      ],
+      "path_prefixes": [
+        "docs/"
+      ],
+      "path_suffixes": [
+        ".md"
+      ],
+      "path_contains": [
+        "docs/prompts/",
+        "docs/research/",
+        "docs/checklists/"
+      ],
+      "verifier_hints": [
+        "git diff --check",
+        "readback",
+        "search"
+      ],
+      "notes": "Docs-only/process-only changes require whitespace/readback verification; add structural checks when the doc changes dispatch, backlog, or runner behavior."
+    },
+    "extractor": {
+      "cheap_required": [
+        "python3 tools/<extractor>.py",
+        "python3 -m unittest native_ev.tests.test_model.<focused_manifest_test> -v"
+      ],
+      "checkpoint_optional": [
+        "python3 -m unittest discover -s native_ev/tests -p 'test_*.py'"
+      ],
+      "path_prefixes": [],
+      "path_suffixes": [],
+      "path_contains": [
+        "tools/extract_",
+        "tools/ev_",
+        "sourced_ev_"
+      ],
+      "verifier_hints": [
+        "tools/extract_",
+        "test_model",
+        "sourced_ev_"
+      ],
+      "notes": "Extractor changes require rerunning the extractor and the focused manifest/model contract test for the generated artifact."
+    },
+    "godot_probe": {
+      "cheap_required": [
+        "./run_godot.sh <specific-mode>"
+      ],
+      "checkpoint_optional": [
+        "./run_godot.sh self-test"
+      ],
+      "path_prefixes": [
+        "godot_ev/"
+      ],
+      "path_suffixes": [
+        "RunGodot.ps1",
+        "run_godot.sh"
+      ],
+      "path_contains": [
+        "run_godot",
+        "godot",
+        "tv-"
+      ],
+      "verifier_hints": [
+        "./run_godot.sh",
+        "RunGodot.ps1",
+        "self-test"
+      ],
+      "notes": "Godot probe changes require the specific run_godot mode; full self-test is reserved for checkpoint, integration, or broad Godot-surface risk."
+    },
+    "scenario": {
+      "cheap_required": [
+        "python3 tools/run_gameplay_scenarios.py <scenario> --pretty",
+        "focused scenario/unit test when available"
+      ],
+      "checkpoint_optional": [
+        "python3 tools/run_gameplay_scenarios.py --all --pretty"
+      ],
+      "path_prefixes": [
+        "native_ev/scenarios/"
+      ],
+      "path_suffixes": [],
+      "path_contains": [
+        "native_ev/tests",
+        "tools/run_gameplay_scenarios.py",
+        "scenario",
+        "gameplay_scenarios"
+      ],
+      "verifier_hints": [
+        "run_gameplay_scenarios.py",
+        "--pretty",
+        "scenario"
+      ],
+      "notes": "Scenario changes require the named scenario or focused unit coverage; the full scenario suite runs at integration/checkpoint boundaries."
+    }
+  }
+}

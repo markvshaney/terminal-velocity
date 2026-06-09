@@ -18,7 +18,17 @@ from typing import Any
 
 BACKLOG_RELATIVE_PATH = Path("docs/checklists/ev-classic-fidelity-implementation-backlog.md")
 INDEX_RELATIVE_PATH = Path("docs/checklists/ev-classic-fidelity-implementation-backlog.index.json")
+VERIFIER_IMPACT_MAP_RELATIVE_PATH = Path("docs/checklists/tv-verifier-impact-map.json")
 SCHEMA_VERSION = 1
+
+REQUIRED_VERIFIER_IMPACT_SURFACES = (
+    "extractor",
+    "scenario",
+    "godot_probe",
+    "data_manifest",
+    "backlog_dispatch_metadata",
+    "docs_process_only",
+)
 
 REQUIRED_DISPATCH_FIELDS = (
     "next_action",
@@ -230,13 +240,87 @@ def build_dispatch_index(backlog_path: Path, repo_root: Path | None = None) -> d
     }
 
 
-def validate_dispatch_index(index: dict[str, Any]) -> CheckResult:
+def load_verifier_impact_map(map_path: Path) -> dict[str, Any]:
+    return json.loads(map_path.read_text())
+
+
+def validate_verifier_impact_map(impact_map: dict[str, Any]) -> CheckResult:
+    errors: list[str] = []
+    warnings: list[str] = []
+    if impact_map.get("schema_version") != SCHEMA_VERSION:
+        errors.append(f"verifier impact map schema_version must be {SCHEMA_VERSION}")
+
+    surfaces = impact_map.get("surfaces")
+    if not isinstance(surfaces, dict):
+        errors.append("verifier impact map surfaces must be an object")
+        return CheckResult(ok=False, errors=errors, warnings=warnings)
+
+    required = set(REQUIRED_VERIFIER_IMPACT_SURFACES)
+    actual = set(surfaces)
+    for missing in sorted(required - actual):
+        errors.append(f"verifier impact map missing surface {missing!r}")
+    for unknown in sorted(actual - required):
+        errors.append(f"verifier impact map unknown surface {unknown!r}")
+
+    for surface, entry in surfaces.items():
+        prefix = f"verifier impact map surface {surface}"
+        if not isinstance(entry, dict):
+            errors.append(f"{prefix}: entry must be an object")
+            continue
+        for key in ("cheap_required", "checkpoint_optional", "path_prefixes", "path_suffixes", "path_contains", "verifier_hints"):
+            value = entry.get(key)
+            if not isinstance(value, list):
+                errors.append(f"{prefix}: {key} must be a list")
+            elif key == "cheap_required" and not value:
+                errors.append(f"{prefix}: cheap_required must not be empty")
+            elif not all(isinstance(item, str) and item for item in value):
+                errors.append(f"{prefix}: {key} values must be non-empty strings")
+        if not isinstance(entry.get("notes"), str) or not entry.get("notes", "").strip():
+            errors.append(f"{prefix}: notes must be a non-empty string")
+        matchers = []
+        for key in ("path_prefixes", "path_suffixes", "path_contains"):
+            if isinstance(entry.get(key), list):
+                matchers.extend(entry[key])
+        if surface in required and not matchers:
+            errors.append(f"{prefix}: at least one path matcher is required")
+
+    return CheckResult(ok=not errors, errors=errors, warnings=warnings)
+
+
+def _matching_verifier_surfaces(touched_surface: str, impact_map: dict[str, Any]) -> list[str]:
+    matches: list[str] = []
+    surfaces = impact_map.get("surfaces", {})
+    for surface, entry in surfaces.items():
+        if any(touched_surface.startswith(prefix) for prefix in entry.get("path_prefixes", [])):
+            matches.append(surface)
+            continue
+        if any(touched_surface.endswith(suffix) for suffix in entry.get("path_suffixes", [])):
+            matches.append(surface)
+            continue
+        if any(part in touched_surface for part in entry.get("path_contains", [])):
+            matches.append(surface)
+    return matches
+
+
+def _load_default_impact_map(repo_root: Path) -> dict[str, Any] | None:
+    impact_map_path = repo_root / VERIFIER_IMPACT_MAP_RELATIVE_PATH
+    if not impact_map_path.exists():
+        return None
+    return load_verifier_impact_map(impact_map_path)
+
+
+def validate_dispatch_index(index: dict[str, Any], impact_map: dict[str, Any] | None = None) -> CheckResult:
     errors: list[str] = []
     warnings: list[str] = []
     if index.get("schema_version") != SCHEMA_VERSION:
         errors.append(f"schema_version must be {SCHEMA_VERSION}")
     if index.get("item_count") != len(index.get("items", [])):
         errors.append("item_count does not match items length")
+
+    if impact_map is not None:
+        map_validation = validate_verifier_impact_map(impact_map)
+        errors.extend(map_validation.errors)
+        warnings.extend(map_validation.warnings)
 
     seen_ids: set[str] = set()
     for position, item in enumerate(index.get("items", []), start=1):
@@ -263,8 +347,18 @@ def validate_dispatch_index(index: dict[str, Any]) -> CheckResult:
         line_range = item.get("line_range")
         if not (isinstance(line_range, list) and len(line_range) == 2 and all(isinstance(v, int) for v in line_range)):
             errors.append(f"{prefix}: line_range must be [start, end]")
-        if not isinstance(item.get("touched_surfaces"), list):
+        touched_surfaces = item.get("touched_surfaces")
+        if not isinstance(touched_surfaces, list):
             errors.append(f"{prefix}: touched_surfaces must be a list")
+        elif impact_map is not None:
+            if touched_surfaces and not item.get("verifier"):
+                errors.append(f"{prefix}: missing verifier for actionable item with touched_surfaces")
+            for touched_surface in touched_surfaces:
+                if not isinstance(touched_surface, str) or not touched_surface:
+                    errors.append(f"{prefix}: touched_surfaces values must be non-empty strings")
+                    continue
+                if not _matching_verifier_surfaces(touched_surface, impact_map):
+                    errors.append(f"{prefix}: unmapped touched_surface {touched_surface!r}")
 
     return CheckResult(ok=not errors, errors=errors, warnings=warnings)
 
@@ -277,7 +371,8 @@ def write_dispatch_index(index: dict[str, Any], index_path: Path) -> None:
 def check_dispatch_index(backlog_path: Path, index_path: Path, repo_root: Path | None = None) -> CheckResult:
     repo_root = repo_root or Path.cwd()
     expected = build_dispatch_index(backlog_path, repo_root=repo_root)
-    validation = validate_dispatch_index(expected)
+    impact_map = _load_default_impact_map(repo_root)
+    validation = validate_dispatch_index(expected, impact_map=impact_map)
     errors = list(validation.errors)
     warnings = list(validation.warnings)
     if not index_path.exists():
@@ -290,7 +385,7 @@ def check_dispatch_index(backlog_path: Path, index_path: Path, repo_root: Path |
         errors.append(f"index JSON parse failed: {exc}")
         return CheckResult(ok=False, errors=errors, warnings=warnings)
 
-    actual_validation = validate_dispatch_index(actual)
+    actual_validation = validate_dispatch_index(actual, impact_map=impact_map)
     errors.extend(actual_validation.errors)
     warnings.extend(actual_validation.warnings)
     if actual != expected:
@@ -322,7 +417,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.mode == "build":
         built = build_dispatch_index(backlog, repo_root=repo)
-        validation = validate_dispatch_index(built)
+        impact_map = _load_default_impact_map(repo)
+        validation = validate_dispatch_index(built, impact_map=impact_map)
         if not validation.ok:
             _print_result(validation)
             return 1
