@@ -122,9 +122,10 @@ Purpose: reusable reference list for general game-agent/autonomous-task research
 
 ## Worker application artifact
 
-- `docs/research/2026-06-08-automatic-gameplay-worker-application.md`
+- Archived workflow draft: `/home/bh/workspaces/loki/terminal-velocity-doc-archive/2026-06-09-tv-spec-supporting-docs/2026-06-08-automatic-gameplay-worker-application.md`
+  - Current workflow authority: `docs/research/tv-spec.md`
   - Label: `automation-design`
-  - Use for Terminal Velocity: concrete lane types, failure packet schema, worker packet template, and immediate application rules for applying automatic gameplay sources to workers.
+  - Use for Terminal Velocity: concrete lane types, failure packet schema, worker packet template, and immediate application rules are now compacted into the canonical workflow spec.
 
 ## Guardrail
 

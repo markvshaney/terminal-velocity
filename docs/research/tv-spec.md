@@ -1,0 +1,285 @@
+# TV spec
+
+Date: 2026-06-09
+Status: canonical compact workflow spec
+
+Purpose: define the current Terminal Velocity development workflow. This is a process artifact, not an EV Classic behavior source. EV Classic behavior claims still require source/fidelity promotion.
+
+Archived supporting workflow drafts are outside the repo at:
+
+`/home/bh/workspaces/loki/terminal-velocity-doc-archive/2026-06-09-tv-spec-supporting-docs/`
+
+## Controlling goal
+
+Terminal Velocity is an EV Classic fidelity-copy project.
+
+Development must accelerate toward a broadly playable TV, but claims of **EV Classic faithful** require source-backed promotion. Do not independently optimize aesthetics, pacing, balance, “fun,” or generic playability unless the behavior is either EV Classic-supported or explicitly labeled as TV scaffold / temporary build-track behavior.
+
+## Operating doctrine
+
+**Parallel executable lanes + fast evaluators + batched integration + fidelity gates.**
+
+This means:
+
+- build playable systems before perfect Classic evidence when the behavior is labeled honestly;
+- never let scaffolds become fidelity claims without promotion;
+- use Godot/Python scenario probes for fast TV-side verification;
+- use Basilisk/original EV where runtime behavior matters;
+- use decoded resources/manuals/local source artifacts for static/data semantics where they are stronger than emulator observation;
+- integrate in small verified packets and continue until a real gate is reached.
+
+## Evidence labels
+
+Use these labels on behavior, backlog items, probes, and handoffs:
+
+- `scaffold` — useful TV build-track approximation; not Classic truth.
+- `terminal-velocity-observed` — observed in current TV runtime/probes.
+- `source-grounded EV-family` — supported by weaker EV-family/community/adaptation evidence.
+- `decoded-resource-backed` — supported by decoded EV Classic resources.
+- `manual-backed` — supported by EV Classic manuals/docs/Bible/local source artifacts.
+- `original-runtime-observed` — supported by Basilisk/original EV observation.
+- `needs original confirmation` — plausible but not promoted.
+- `fidelity-promoted` — evidence-backed enough for current Classic-faithful claim.
+
+## Routing decision tree
+
+Classify every item before acting:
+
+1. **Static/resource/manual-resolvable**
+   - Oracle: decoded resources, manuals, local source artifacts, structured import/compare pipelines.
+   - Lane: A/B/C/D static path as appropriate.
+   - Basilisk: only spot-check ambiguous UI-sensitive surfaces.
+
+2. **Runtime UI/state transition**
+   - Oracle: Basilisk/original EV production evidence.
+   - Lane: Basilisk runtime lane plus matching implementation lane.
+   - Speed: highest qualified Basilisk speed for the evidence family.
+
+3. **Timing/feel/combat cadence**
+   - Oracle: acceleration-first scout evidence plus 1x sentinel for timing-sensitive promotion.
+   - Lane: Basilisk timing lane plus TV build-track tuning/evaluator lane.
+   - Speed: accelerated scouting allowed; broad 1x waits until late promotion or contradiction.
+
+4. **TV-only scaffold/evaluator**
+   - Oracle: Godot/Python verifier.
+   - Lane: E deterministic evaluator/playtest.
+   - Basilisk: none.
+
+5. **Classic quirk/bug decision**
+   - Oracle: original runtime, decoded resources/manuals, EV-family fix history, user decision.
+   - Lane: quirk ledger + implementation lane only after classification.
+   - Default: preserve intentional/player-legible quirks; do not preserve harmful, invisible, crashy, save-corrupting, misleading, platform-artifact, or implementation-artifact defects by default.
+
+6. **Single safe-local slice**
+   - Use direct edit/test/report. No Kanban/worktree needed.
+
+7. **Durable parallel or multi-writer work**
+   - Require lane contract, isolated worktree for mutating workers, fan-in owner, verifier, rollback path.
+
+## Oracle classes
+
+Every backlog item or task packet must carry one `oracle_class`:
+
+- `static-resource`
+- `manual-backed`
+- `runtime-ui`
+- `timing-feel`
+- `combat-cadence`
+- `tv-scaffold`
+- `quirk-review`
+- `user-decision`
+
+Basilisk is chosen only when the `oracle_class` requires original-runtime evidence or resolves ambiguity.
+
+## Lane classes
+
+Use these lane classes for dispatch:
+
+- **Lane A: static galaxy topology semantics** — system/resource topology, IDs, names, links, coordinates, import semantics.
+- **Lane B: service/store provisioning** — landed services, shipyard/outfitter/store availability, UI-sensitive service surfaces.
+- **Lane C: economy/commodity semantics** — commodity names, prices, spreads, formulas, cargo behavior.
+- **Lane D: mission-family semantic promotion** — mission offers, deadlines, flags, accept/complete/abort/log/story behavior.
+- **Lane E: deterministic evaluator/playtest packets** — fast TV-observed scenarios, probes, failure packets, regression coverage; no Basilisk dependency.
+- **Basilisk runtime lanes** — original-runtime evidence for runtime UI/state/timing/feel/combat and ambiguity resolution.
+
+## Basilisk policy
+
+TV must minimize original-runtime bottlenecks by using the **fastest qualified Basilisk speed per evidence family**. Do not make 1x the default production lane.
+
+1x is limited to:
+
+- tiny sentinel/control probes for timing-sensitive evidence families;
+- targeted contradiction resolution when accelerated lanes disagree or drift;
+- late canonical promotion for timing/feel claims.
+
+The local setup provides **4 Basilisk emulator lanes**. Treat them as concrete original-runtime evidence capacity, not aspirational capacity and not four duplicate uncontrolled workers.
+
+Each Basilisk lane assignment must record:
+
+- emulator lane ID;
+- `oracle_class` / evidence family;
+- speed setting and qualification class;
+- disk/prefs and pilot/save/restore state;
+- window/input target;
+- capture/log path;
+- allowed mutations;
+- post-run verification;
+- integration-owner handoff.
+
+If a lane lacks restore/capture/input/post-run records, classify that lane as `setup-incomplete`; do not reduce the count below four unless physical emulator capacity changes.
+
+### Basilisk speed matrix
+
+Maintain a persistent speed qualification matrix rather than re-reasoning every task:
+
+```text
+basilisk_speed_qualification:
+  evidence_family:
+  lane_id:
+  speed:
+  qualification_class: promotion-grade timing | promotion-grade non-timing | scout-grade | reject/unstable
+  sentinel_used:
+  verifier:
+  last_checked:
+  status:
+```
+
+Use the highest current qualified speed. Requalify only when stale, contradicted, unsafe, or a new evidence family is being introduced.
+
+## Increment packet contract
+
+The quality unit is a vertical increment, not a global serial slice.
+
+Every completed increment must include:
+
+- behavior or explicit symbolic surrogate;
+- `oracle_class`;
+- lane class;
+- source/fidelity label;
+- verifier command and actual result;
+- files/captures/logs touched;
+- backlog/provenance update or explicit `none` with reason;
+- promotion status: `scaffold`, `needs evidence`, `fidelity-promoted`, `blocked`, or `user-gated`.
+
+A verified increment is a checkpoint, not necessarily a stop.
+
+## Scenario/evaluator contract
+
+Scenarios and probes must record:
+
+- scenario id/name;
+- `oracle_class` and source/fidelity label;
+- starting state / restore method;
+- action sequence or macro source;
+- expected predicate/success metric;
+- blocked reason enum;
+- verification command;
+- actual result;
+- failure packet path, or `none` with reason;
+- logs/screenshots/traces/JSON events;
+- promotion rule from finding to regression/backlog entry.
+
+Godot semantic probes should prefer stable JSON/event outputs. Basilisk observations need screenshots/logs and uncertainty labels.
+
+## Worker/Basilisk handoff contract
+
+A handoff is invalid unless it includes:
+
+- lane id;
+- exact files/captures/logs;
+- `oracle_class` and source/fidelity labels;
+- verifier command/result;
+- exact claim being made;
+- promotion requested or explicitly not requested;
+- unresolved uncertainty;
+- rollback/cleanup note.
+
+Subagent/worker output is an unverified claim packet until the integration owner checks returned paths, diffs, tests, and labels against live repo state.
+
+## Parallel limits and fan-in
+
+Default limits:
+
+- 1 integration owner;
+- 3 active mutating worker lanes initially;
+- scale to 5 only after at least two consecutive multi-lane integrations complete without unresolved merge conflicts, unverified returned paths, or failed integrated verification;
+- 1–2 read-only scouts/reviewers;
+- 4 Basilisk emulator lanes;
+- up to 3 unresolved worker/scout/reviewer packets awaiting integration-owner verification.
+
+Rules:
+
+- one integration owner owns fan-in, final diff review, integrated verification, commit, and normal non-force push;
+- mutating workers use isolated worktrees;
+- each lane has owner, writable surface, verifier, source-label policy, merge contract, rollback/cleanup path;
+- one writer per file/resource surface;
+- Kanban/worktrees are for durable multi-lane work, not line-level patches or a single safe-local slice.
+
+## Backlog dispatch contract
+
+The live execution surface is:
+
+`docs/checklists/ev-classic-fidelity-implementation-backlog.md`
+
+It is not an idea dump. Each actionable backlog item should expose:
+
+```text
+next_action:
+lane_class:
+oracle_class:
+verifier:
+blocked_reason:
+promotion_status:
+```
+
+Before adding fresh work, prefer existing `ready`, narrow `needs evidence`, or safely actionable items. New evidence should produce one of:
+
+- small source-backed implementation slice;
+- labeled TV scaffold;
+- bounded `needs evidence` / blocked next action;
+- quirk-ledger entry requiring user decision.
+
+## Normal workflow
+
+Use this loop:
+
+1. Classify item: build scaffold / fidelity promotion / static semantic / runtime UI / timing-feel / quirk.
+2. Pick oracle: decoded resource / manual / Godot-Python evaluator / Basilisk / user decision.
+3. Pick lane: A, B, C, D, E, or Basilisk runtime lane.
+4. Execute smallest vertical increment.
+5. Emit packet with files, command output, labels, promotion status, uncertainty, and gates.
+6. Integrate: one owner verifies, updates backlog/provenance, commits/pushes when policy allows.
+7. Continue unless a real gate is reached.
+
+## Autoresearch boundary
+
+Normal TV work is vertical/parallel implementation with fidelity gates. Mutation-heavy exploration, autoresearch, RL/evolutionary loops, and scheduled LLM mutation are excluded unless separately gated with goal, metric, baseline, mutable surface, trusted surface, budget, experiment log, keep/revert rule, and human gates.
+
+## Human gates
+
+Gated:
+
+- destructive/risky original-EV tests;
+- Strict Play;
+- save-corrupting or hard-to-restore original pilot mutation;
+- raw proprietary asset publication;
+- external/account/config/provider/gateway changes;
+- changing/resuming scheduled cron/watchdog jobs;
+- force-push/history rewrite;
+- deletion, release/settings changes;
+- non-TV repo/public/social side effects.
+
+Not gated:
+
+- ordinary safe-local TV development in the current session;
+- normal coherent non-force TV pushes under the existing repo policy.
+
+## Completion definition
+
+A TV workflow slice is complete only when the report can state:
+
+- files inspected and modified;
+- verifier command and actual result;
+- source/fidelity labels used;
+- backlog/provenance update or explicit `none` with reason;
+- remaining blocker/gate, if any.

@@ -2,7 +2,7 @@
 
 Date: 2026-06-08T00:49:37-04:00
 Source method: safe local no-human Terminal Velocity runs from WSL.
-Controlling method section: `docs/research/source-aligned-game-development-method.md`, section 7, “Use playtesting as evidence, not just feel.”
+Controlling workflow: `docs/research/tv-spec.md`, especially the Scenario/evaluator contract and Increment packet contract.
 
 Purpose: apply the section-7 playtest record shape to current safe local runs. These records are Terminal Velocity evidence only; they are not EV Classic fidelity claims.
 
@@ -17,7 +17,7 @@ Evidence:
 - `hermes profile list` showed multiple profiles, but this task was one local integration-owner lane: inspect section 7, run safe local probes, record evidence, and update docs.
 - `git worktree list` showed only the main checkout.
 
-Reason: no independent durable lanes, no dependency graph, no parallel writable surfaces, and no need for context-survival board state. Per the compendium/topology rule, Kanban is for durable multi-lane work, not this single-writer local record/update pass.
+Reason: no independent durable lanes, no dependency graph, no parallel writable surfaces, and no need for context-survival board state. Per the canonical TV spec rule, Kanban is for durable multi-lane work, not this single-writer local record/update pass.
 
 ## Run record: symbolic scenario curriculum
 

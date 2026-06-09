@@ -100,7 +100,7 @@ Hard requirements:
 
 Current durable context to respect:
 - The backlog is the live execution surface: docs/checklists/ev-classic-fidelity-implementation-backlog.md
-- The source-aligned method is documented in docs/research/source-aligned-game-development-method.md
+- The canonical workflow spec is docs/research/tv-spec.md
 - Original runtime observations live in docs/research/original-ev-classic-runtime-observations.md
 - Existing high-value pending areas include original-runtime comparison for movement/facing, hyperspace/land/takeoff timing, landed service matrices, combat fidelity, legal/reputation/runtime UI confirmation, economy spread/edge cases, topology/service provisioning, and continuing source-mined gameplay scaffolds.
 - If the repo has uncommitted work, finish/cohere/verify that current slice before choosing a fresh one.
