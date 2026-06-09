@@ -1807,6 +1807,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_domain_summary',
             'recorded_coordinate_display_candidate_summary',
             'recorded_coordinate_display_bounds_summary',
+            'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
             'recorded_candidate_graph_connectivity_summary',
@@ -1841,6 +1842,10 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayBoundsXSpanHighLowLong'], [3, 153, 262015])
         self.assertEqual(readiness['coordinateDisplayBoundsYSpanHighLowLong'], [133, 61440, 8720383])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayBoundsSourceLabel'], 'decoded-resource-backed-coordinate-display-bounds-scout')
+        self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
+        self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
+        self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateXHighWordDistinctValues'], [1, 2, 3, 4])
         self.assertEqual(readiness['coordinateYHighWordDistinctValues'], [0, 18, 72, 127, 133])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDomainSourceLabel'], 'decoded-resource-backed-coordinate-domain-scout')

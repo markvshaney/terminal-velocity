@@ -410,6 +410,7 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
     coordinate_domain = systems_manifest.get('coordinateDomainSummary', {})
     coordinate_display_candidates = systems_manifest.get('coordinateDisplayCandidateSummary', {})
     coordinate_display_bounds = systems_manifest.get('coordinateDisplayBoundsSummary', {})
+    coordinate_display_extrema = systems_manifest.get('coordinateDisplayExtremaSummary', {})
     candidate_link_graph = systems_manifest.get('candidateLinkGraphSummary', {})
     candidate_graph_connectivity = systems_manifest.get('candidateGraphConnectivitySummary', {})
     candidate_graph_distances = systems_manifest.get('candidateGraphDistanceSummary', {})
@@ -448,6 +449,15 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
             coordinate_display_bounds.get('yPos', {}).get('rawHighWordCandidateSpan'),
             coordinate_display_bounds.get('yPos', {}).get('rawLowWordCandidateSpan'),
             coordinate_display_bounds.get('yPos', {}).get('signedLongCandidateSpan'),
+        ],
+        'coordinateDisplayExtremaSourceLabel': coordinate_display_extrema.get('sourceLabel'),
+        'coordinateDisplayExtremaXLowWordMinMaxResourceIds': [
+            coordinate_display_extrema.get('xPos', {}).get('rawLowWord', {}).get('minResourceIds', []),
+            coordinate_display_extrema.get('xPos', {}).get('rawLowWord', {}).get('maxResourceIds', []),
+        ],
+        'coordinateDisplayExtremaYSignedLongMinMaxResourceIds': [
+            coordinate_display_extrema.get('yPos', {}).get('signedLongCandidate', {}).get('minResourceIds', []),
+            coordinate_display_extrema.get('yPos', {}).get('signedLongCandidate', {}).get('maxResourceIds', []),
         ],
         'coordinateXHighWordDistinctValues': coordinate_domain.get('xPos', {}).get('highWordDistinctValues', []),
         'coordinateYHighWordDistinctValues': coordinate_domain.get('yPos', {}).get('highWordDistinctValues', []),
@@ -509,6 +519,15 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
             coordinate_display_bounds.get('yPos', {}).get('rawHighWordCandidateSpan'),
             coordinate_display_bounds.get('yPos', {}).get('rawLowWordCandidateSpan'),
             coordinate_display_bounds.get('yPos', {}).get('signedLongCandidateSpan'),
+        ],
+        'coordinateDisplayExtremaSourceLabel': coordinate_display_extrema.get('sourceLabel'),
+        'coordinateDisplayExtremaXLowWordMinMaxResourceIds': [
+            coordinate_display_extrema.get('xPos', {}).get('rawLowWord', {}).get('minResourceIds', []),
+            coordinate_display_extrema.get('xPos', {}).get('rawLowWord', {}).get('maxResourceIds', []),
+        ],
+        'coordinateDisplayExtremaYSignedLongMinMaxResourceIds': [
+            coordinate_display_extrema.get('yPos', {}).get('signedLongCandidate', {}).get('minResourceIds', []),
+            coordinate_display_extrema.get('yPos', {}).get('signedLongCandidate', {}).get('maxResourceIds', []),
         ],
         'candidateLinkWordIndices': first_links.get('wordIndices', []),
         'candidateLinkedSystemIdsForResource128': first_links.get('linkedSystemResourceIds', []),
@@ -3685,6 +3704,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_coordinate_domain_summary': 'passed' if readiness.get('coordinateDomainSourceLabel') == 'decoded-resource-backed-coordinate-domain-scout' and readiness.get('coordinateDisplayUnitOracleStatus') == 'coordinate_display_units_map_scaling_pending' and readiness.get('coordinateXHighWordDistinctValues') == [1, 2, 3, 4] and readiness.get('coordinateYHighWordDistinctValues') == [0, 18, 72, 127, 133] and static_state.get('coordinateDomainSourceLabel') == 'decoded-resource-backed-coordinate-domain-scout' and static_state.get('coordinateDisplayUnitOracleStatus') == 'coordinate_display_units_map_scaling_pending' else 'failed',
             'recorded_coordinate_display_candidate_summary': 'passed' if readiness.get('coordinateDisplayCandidateSourceLabel') == 'decoded-resource-backed-coordinate-display-candidate' and 'raw high word as coarse grid/band candidate' in readiness.get('coordinateDisplayCandidateFamilies', []) and readiness.get('coordinateDisplayCandidateResource128', {}).get('xPos', {}).get('rawHighWordAsGridBandCandidate') == 1 and readiness.get('coordinateDisplayCandidateResource128', {}).get('yPos', {}).get('rawLowWordAsSubgridOffsetCandidate') == 4096 and static_state.get('coordinateDisplayCandidateSourceLabel') == 'decoded-resource-backed-coordinate-display-candidate' else 'failed',
             'recorded_coordinate_display_bounds_summary': 'passed' if readiness.get('coordinateDisplayBoundsSourceLabel') == 'decoded-resource-backed-coordinate-display-bounds-scout' and readiness.get('coordinateDisplayBoundsXSpanHighLowLong') == [3, 153, 262015] and readiness.get('coordinateDisplayBoundsYSpanHighLowLong') == [133, 61440, 8720383] and static_state.get('coordinateDisplayBoundsSourceLabel') == 'decoded-resource-backed-coordinate-display-bounds-scout' else 'failed',
+            'recorded_coordinate_display_extrema_summary': 'passed' if readiness.get('coordinateDisplayExtremaSourceLabel') == 'decoded-resource-backed-coordinate-display-extrema-scout' and readiness.get('coordinateDisplayExtremaXLowWordMinMaxResourceIds') == [[133, 144, 155, 156], [192]] and readiness.get('coordinateDisplayExtremaYSignedLongMinMaxResourceIds') == [[168, 169, 170, 172, 183, 186], [182]] and static_state.get('coordinateDisplayExtremaSourceLabel') == 'decoded-resource-backed-coordinate-display-extrema-scout' else 'failed',
             'recorded_candidate_link_family': 'passed' if readiness.get('candidateLinkWordIndices') == list(range(4, 20)) and readiness.get('candidateLinkedSystemIdsForResource128', [])[:4] == [128, 129, 130, 131] and readiness.get('candidateLinkSourceConfidence') == 'decoded-pattern-plus-resource-bible-field-family-candidate' else 'failed',
             'recorded_candidate_link_graph_summary': 'passed' if readiness.get('candidateLinkGraphSourceLabel') == 'decoded-resource-backed-candidate-link-graph-scout' and readiness.get('candidateLinkGraphOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('candidateLinkGraphDirectedSlotCount') == 268 and readiness.get('candidateLinkGraphUniqueDirectedLinkCount') == 117 and readiness.get('candidateLinkGraphReciprocalDirectedLinkCount') == 8 and readiness.get('candidateLinkGraphNonReciprocalDirectedLinkCount') == 109 and readiness.get('candidateLinkGraphUniqueSelfLinkCount') == 4 and readiness.get('candidateLinkGraphUniqueSelfLinkResourceIds') == [128, 136, 139, 140] and readiness.get('candidateLinkGraphTargetsInRun') is True and static_state.get('candidateLinkGraphDirectedSlotCount') == 268 and static_state.get('candidateLinkGraphReciprocalDirectedLinkCount') == 8 else 'failed',
             'recorded_candidate_graph_connectivity_summary': 'passed' if readiness.get('candidateGraphConnectivitySourceLabel') == 'decoded-resource-backed-candidate-graph-connectivity-scout' and readiness.get('candidateGraphWeaklyConnectedComponentCount') == 1 and readiness.get('candidateGraphResource128WeakComponentSize') == 67 and readiness.get('candidateGraphResource128DirectedReachableCount') == 21 and readiness.get('candidateGraphResource128DirectedUnreachableCount') == 46 and readiness.get('candidateGraphUniqueOutDegreeDistribution') == {'1': 39, '2': 14, '3': 6, '4': 8} and static_state.get('candidateGraphConnectivitySourceLabel') == 'decoded-resource-backed-candidate-graph-connectivity-scout' else 'failed',

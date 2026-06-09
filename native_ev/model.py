@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-bounds-link-graph-distance-name-seed-summary-levo-name-map-v11':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-extrema-link-graph-distance-name-seed-summary-levo-name-map-v12':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -354,6 +354,23 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected y spans')
     if display_bounds.get('xPos', {}).get('signedLongCandidateBounds') != [65664, 327679] or display_bounds.get('yPos', {}).get('signedLongCandidateBounds') != [1, 8720384]:
         raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected signed-long bounds')
+    display_extrema = data.get('coordinateDisplayExtremaSummary', {})
+    if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')
+    if display_extrema.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display-extrema summary should keep display scaling pending')
+    if display_extrema.get('recordCount') != 67:
+        raise ValueError('sourced EV systems manifest coordinate display-extrema summary has unexpected record count')
+    x_extrema = display_extrema.get('xPos', {})
+    y_extrema = display_extrema.get('yPos', {})
+    if x_extrema.get('rawLowWord', {}).get('minResourceIds') != [133, 144, 155, 156] or x_extrema.get('rawLowWord', {}).get('maxResourceIds') != [192]:
+        raise ValueError('sourced EV systems manifest coordinate display-extrema summary has unexpected x low-word extrema')
+    if x_extrema.get('signedLongCandidate', {}).get('minResourceIds', [])[:3] != [128, 139, 140] or x_extrema.get('signedLongCandidate', {}).get('maxResourceIds') != [155, 156]:
+        raise ValueError('sourced EV systems manifest coordinate display-extrema summary has unexpected x signed-long extrema')
+    if y_extrema.get('rawHighWord', {}).get('maxResourceIds') != [182] or y_extrema.get('rawLowWord', {}).get('maxResourceIds') != [133, 144]:
+        raise ValueError('sourced EV systems manifest coordinate display-extrema summary has unexpected y word extrema')
+    if y_extrema.get('signedLongCandidate', {}).get('minResourceIds') != [168, 169, 170, 172, 183, 186] or y_extrema.get('signedLongCandidate', {}).get('maxResourceIds') != [182]:
+        raise ValueError('sourced EV systems manifest coordinate display-extrema summary has unexpected y signed-long extrema')
     link_graph = data.get('candidateLinkGraphSummary', {})
     if link_graph.get('sourceLabel') != 'decoded-resource-backed-candidate-link-graph-scout':
         raise ValueError('sourced EV systems manifest missing candidate link-graph summary source label')

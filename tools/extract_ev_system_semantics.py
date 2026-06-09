@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-bounds-link-graph-distance-name-seed-summary-levo-name-map-v11'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-extrema-link-graph-distance-name-seed-summary-levo-name-map-v12'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -214,6 +214,50 @@ def _coordinate_display_bounds_summary(systems: list[dict]) -> dict:
         'xPos': _axis_values('xPos'),
         'yPos': _axis_values('yPos'),
         'sourceNote': 'This summarizes candidate coordinate bounds/spans from decoded syst xPos/yPos payloads for a later map-scaling pass. It does not promote EV Classic display units, projection, centering, axis inversion, or map pixel scaling.',
+    }
+
+
+def _coordinate_display_extrema_summary(systems: list[dict]) -> dict:
+    """Preserve coordinate candidate extrema records without promoting display units."""
+    def _extrema(axis: str, value_name: str, value_getter) -> dict:
+        entries = [
+            {
+                'resourceId': system['resourceId'],
+                'ordinal': system['ordinal'],
+                'value': value_getter(system['semanticFields']['mapCoordinates'][axis]),
+            }
+            for system in systems
+        ]
+        min_value = min(entry['value'] for entry in entries)
+        max_value = max(entry['value'] for entry in entries)
+        return {
+            'valueName': value_name,
+            'minValue': min_value,
+            'minResourceIds': [entry['resourceId'] for entry in entries if entry['value'] == min_value],
+            'maxValue': max_value,
+            'maxResourceIds': [entry['resourceId'] for entry in entries if entry['value'] == max_value],
+        }
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-extrema-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'recordCount': len(systems),
+        'candidateFamilies': [
+            'raw high-word candidate extrema resource IDs',
+            'raw low-word candidate extrema resource IDs',
+            'signed 32-bit big-endian raw-long candidate extrema resource IDs',
+        ],
+        'xPos': {
+            'rawHighWord': _extrema('xPos', 'rawHighWord', lambda axis: axis['rawWords'][0]),
+            'rawLowWord': _extrema('xPos', 'rawLowWord', lambda axis: axis['rawWords'][1]),
+            'signedLongCandidate': _extrema('xPos', 'signedLongCandidate', lambda axis: axis['signedLongCandidate']),
+        },
+        'yPos': {
+            'rawHighWord': _extrema('yPos', 'rawHighWord', lambda axis: axis['rawWords'][0]),
+            'rawLowWord': _extrema('yPos', 'rawLowWord', lambda axis: axis['rawWords'][1]),
+            'signedLongCandidate': _extrema('yPos', 'signedLongCandidate', lambda axis: axis['signedLongCandidate']),
+        },
+        'sourceNote': 'This identifies which decoded syst records sit at each coordinate candidate extremum. It is analysis input for later map-scaling/name-join work only and does not promote EV Classic display units, projection, centering, axis inversion, or map pixel scaling.',
     }
 
 
@@ -488,6 +532,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'coordinateDisplayBoundsSummary': _coordinate_display_bounds_summary(systems),
+        'coordinateDisplayExtremaSummary': _coordinate_display_extrema_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),
         'candidateGraphDistanceSummary': _candidate_graph_distance_summary(systems),

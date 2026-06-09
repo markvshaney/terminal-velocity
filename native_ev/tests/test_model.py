@@ -3413,7 +3413,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-bounds-link-graph-distance-name-seed-summary-levo-name-map-v11')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-extrema-link-graph-distance-name-seed-summary-levo-name-map-v12')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3472,6 +3472,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(display_bounds['yPos']['rawHighWordCandidateSpan'], 133)
         self.assertEqual(display_bounds['yPos']['rawLowWordCandidateSpan'], 61440)
         self.assertEqual(display_bounds['yPos']['signedLongCandidateSpan'], 8720383)
+        display_extrema = data['coordinateDisplayExtremaSummary']
+        self.assertEqual(display_extrema['sourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
+        self.assertEqual(display_extrema['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(display_extrema['recordCount'], 67)
+        self.assertIn('raw low-word candidate extrema resource IDs', display_extrema['candidateFamilies'])
+        self.assertEqual(display_extrema['xPos']['rawLowWord']['minResourceIds'], [133, 144, 155, 156])
+        self.assertEqual(display_extrema['xPos']['rawLowWord']['maxResourceIds'], [192])
+        self.assertEqual(display_extrema['xPos']['signedLongCandidate']['maxResourceIds'], [155, 156])
+        self.assertEqual(display_extrema['yPos']['rawHighWord']['maxResourceIds'], [182])
+        self.assertEqual(display_extrema['yPos']['rawLowWord']['maxResourceIds'], [133, 144])
+        self.assertEqual(display_extrema['yPos']['signedLongCandidate']['minResourceIds'], [168, 169, 170, 172, 183, 186])
+        self.assertEqual(display_extrema['yPos']['signedLongCandidate']['maxResourceIds'], [182])
         seed_summary = data['systemNameSeedSummary']
         self.assertEqual(seed_summary['sourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
         self.assertEqual(seed_summary['oracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
@@ -3549,7 +3561,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()

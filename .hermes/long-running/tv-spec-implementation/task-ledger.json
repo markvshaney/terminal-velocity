@@ -12,7 +12,7 @@
   },
   "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T17:07:00Z",
+  "updated_at": "2026-06-09T16:58:20Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified adjacent increment batches until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable event/checkpoint policy.",
   "active_gate": null,
@@ -61,15 +61,14 @@
     }
   ],
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...coordinate-display-bounds...v11",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...coordinate-display-extrema...v12",
     "python3 -m unittest focused sourced-system/static-topology tests -v -> OK (3 tests)",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_coordinate_display_bounds_summary passed",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_coordinate_display_extrema_summary passed",
     "extractor temp-output cmp -> exit 0",
     "JSON/JSONL parse -> ok",
-    "git diff --check -> exit 0",
-    "git push origin main and HEAD == origin/main -> passed (06dc1ea35d5073987ec82b26a92308ef81939ce5)"
+    "git diff --check -> exit 0"
   ],
-  "next_resume_action": "Continue Lane A with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; preserve untracked continuous-runner.lock as active wrapper state.",
+  "next_resume_action": "Continue Lane A with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion; stabilize/push the v12 coordinate display-extrema slice first if still dirty. Preserve untracked continuous-runner.lock as active wrapper state.",
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments. Optimize for development throughput: avoid default full-skill loads, avoid runner self-inspection, avoid routine ledger rewrites, and report externally only at material boundaries.",
   "runner": {
     "kind": "continuous-background-loop",
