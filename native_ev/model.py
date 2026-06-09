@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-name-seed-summary-levo-name-map-v10':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-bounds-link-graph-distance-name-seed-summary-levo-name-map-v11':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -341,6 +341,19 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate domain summary has unexpected y high-word domain')
     if 'not-promoted' not in domain.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate domain summary must not promote display units')
+    display_bounds = data.get('coordinateDisplayBoundsSummary', {})
+    if display_bounds.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-bounds-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display-bounds summary source label')
+    if display_bounds.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display-bounds summary should keep display scaling pending')
+    if display_bounds.get('recordCount') != 67:
+        raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected record count')
+    if display_bounds.get('xPos', {}).get('rawHighWordCandidateSpan') != 3 or display_bounds.get('xPos', {}).get('rawLowWordCandidateSpan') != 153:
+        raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected x spans')
+    if display_bounds.get('yPos', {}).get('rawHighWordCandidateSpan') != 133 or display_bounds.get('yPos', {}).get('rawLowWordCandidateSpan') != 61440:
+        raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected y spans')
+    if display_bounds.get('xPos', {}).get('signedLongCandidateBounds') != [65664, 327679] or display_bounds.get('yPos', {}).get('signedLongCandidateBounds') != [1, 8720384]:
+        raise ValueError('sourced EV systems manifest coordinate display-bounds summary has unexpected signed-long bounds')
     link_graph = data.get('candidateLinkGraphSummary', {})
     if link_graph.get('sourceLabel') != 'decoded-resource-backed-candidate-link-graph-scout':
         raise ValueError('sourced EV systems manifest missing candidate link-graph summary source label')

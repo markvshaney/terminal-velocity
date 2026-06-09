@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-link-graph-distance-name-seed-summary-levo-name-map-v10'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-bounds-link-graph-distance-name-seed-summary-levo-name-map-v11'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -184,6 +184,36 @@ def _coordinate_display_candidate_summary(systems: list[dict]) -> dict:
         'resource128': by_resource.get('128'),
         'recordCount': len(systems),
         'sourceNote': 'A later map-scaling pass can compare these per-axis candidates against original-runtime map/click/capture evidence or another promoted source. This manifest still withholds Classic display-unit fidelity.',
+    }
+
+
+def _coordinate_display_bounds_summary(systems: list[dict]) -> dict:
+    """Summarize coordinate candidate bounds without promoting display units."""
+    def _axis_values(axis: str) -> dict:
+        high_words = [system['semanticFields']['mapCoordinates'][axis]['rawWords'][0] for system in systems]
+        low_words = [system['semanticFields']['mapCoordinates'][axis]['rawWords'][1] for system in systems]
+        signed_longs = [system['semanticFields']['mapCoordinates'][axis]['signedLongCandidate'] for system in systems]
+        return {
+            'rawHighWordCandidateSpan': max(high_words) - min(high_words),
+            'rawLowWordCandidateSpan': max(low_words) - min(low_words),
+            'signedLongCandidateSpan': max(signed_longs) - min(signed_longs),
+            'rawHighWordCandidateBounds': [min(high_words), max(high_words)],
+            'rawLowWordCandidateBounds': [min(low_words), max(low_words)],
+            'signedLongCandidateBounds': [min(signed_longs), max(signed_longs)],
+        }
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-bounds-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'recordCount': len(systems),
+        'candidateFamilies': [
+            'raw high-word candidate bounds/span',
+            'raw low-word candidate bounds/span',
+            'signed 32-bit big-endian raw-long candidate bounds/span',
+        ],
+        'xPos': _axis_values('xPos'),
+        'yPos': _axis_values('yPos'),
+        'sourceNote': 'This summarizes candidate coordinate bounds/spans from decoded syst xPos/yPos payloads for a later map-scaling pass. It does not promote EV Classic display units, projection, centering, axis inversion, or map pixel scaling.',
     }
 
 
@@ -457,6 +487,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systemNameSeedSummary': _system_name_seed_summary(names),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
+        'coordinateDisplayBoundsSummary': _coordinate_display_bounds_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),
         'candidateGraphDistanceSummary': _candidate_graph_distance_summary(systems),
