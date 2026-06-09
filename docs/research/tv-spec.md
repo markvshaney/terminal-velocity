@@ -173,7 +173,7 @@ If a lane lacks restore/capture/input/post-run records, classify that lane as `s
 
 ### Basilisk speed matrix
 
-Maintain a persistent speed qualification matrix rather than re-reasoning every task:
+Maintain `docs/research/basilisk-speed-qualification.json` as the persistent speed qualification matrix rather than re-reasoning every task. Validate it with `python3 tools/basilisk_speed_qualification.py`.
 
 ```text
 basilisk_speed_qualification:
@@ -185,9 +185,15 @@ basilisk_speed_qualification:
   verifier:
   last_checked:
   status:
+  restore_readiness:
+  capture_readiness:
+  input_readiness:
+  allowed_oracle_classes:
+  disallowed_oracle_classes:
+  promotion_limitations:
 ```
 
-Use the highest current qualified speed. Requalify only when stale, contradicted, unsafe, or a new evidence family is being introduced.
+Use the highest current qualified speed for the explicit evidence family/lane/oracle class. Requalify only when stale, contradicted, unsafe, or a new evidence family is being introduced. Do not treat any speed qualification as global; timing/feel/combat promotion requires an explicit 1x sentinel or direct 1x evidence.
 
 ## Increment packet contract
 

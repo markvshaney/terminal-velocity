@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "artifact_role": "Persistent Basilisk acceleration qualification matrix for Terminal Velocity original-runtime evidence lanes.",
+  "canonical_rule": "Use the fastest speed explicitly qualified for the evidence_family/lane_id/oracle class. Do not treat any speed qualification as global. Timing/feel/combat promotion requires an explicit 1x sentinel or direct 1x evidence.",
+  "source_policy": {
+    "primary_policy_doc": "docs/research/tv-spec.md#basilisk-speed-matrix",
+    "checker": "python3 tools/basilisk_speed_qualification.py",
+    "raw_captures_policy": "Raw Basilisk screenshots/captures remain local-only unless explicitly approved; this artifact records derived qualification state and local/provenance handles only."
+  },
+  "entries": [
+    {
+      "evidence_family": "unassigned",
+      "lane_id": "basilisk-lane-1",
+      "speed": "unqualified",
+      "qualification_class": "setup-incomplete",
+      "sentinel_used": "none",
+      "verifier": "pending lane restore/capture/input qualification",
+      "last_checked": "2026-06-09",
+      "status": "setup-incomplete",
+      "restore_readiness": "setup-incomplete",
+      "capture_readiness": "setup-incomplete",
+      "input_readiness": "setup-incomplete",
+      "allowed_oracle_classes": [],
+      "disallowed_oracle_classes": [
+        "runtime-ui",
+        "runtime-behavior",
+        "timing-feel",
+        "combat-cadence"
+      ],
+      "promotion_limitations": [
+        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
+        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+      ]
+    },
+    {
+      "evidence_family": "unassigned",
+      "lane_id": "basilisk-lane-2",
+      "speed": "unqualified",
+      "qualification_class": "setup-incomplete",
+      "sentinel_used": "none",
+      "verifier": "pending lane restore/capture/input qualification",
+      "last_checked": "2026-06-09",
+      "status": "setup-incomplete",
+      "restore_readiness": "setup-incomplete",
+      "capture_readiness": "setup-incomplete",
+      "input_readiness": "setup-incomplete",
+      "allowed_oracle_classes": [],
+      "disallowed_oracle_classes": [
+        "runtime-ui",
+        "runtime-behavior",
+        "timing-feel",
+        "combat-cadence"
+      ],
+      "promotion_limitations": [
+        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
+        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+      ]
+    },
+    {
+      "evidence_family": "unassigned",
+      "lane_id": "basilisk-lane-3",
+      "speed": "unqualified",
+      "qualification_class": "setup-incomplete",
+      "sentinel_used": "none",
+      "verifier": "pending lane restore/capture/input qualification",
+      "last_checked": "2026-06-09",
+      "status": "setup-incomplete",
+      "restore_readiness": "setup-incomplete",
+      "capture_readiness": "setup-incomplete",
+      "input_readiness": "setup-incomplete",
+      "allowed_oracle_classes": [],
+      "disallowed_oracle_classes": [
+        "runtime-ui",
+        "runtime-behavior",
+        "timing-feel",
+        "combat-cadence"
+      ],
+      "promotion_limitations": [
+        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
+        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+      ]
+    },
+    {
+      "evidence_family": "unassigned",
+      "lane_id": "basilisk-lane-4",
+      "speed": "unqualified",
+      "qualification_class": "setup-incomplete",
+      "sentinel_used": "none",
+      "verifier": "pending lane restore/capture/input qualification",
+      "last_checked": "2026-06-09",
+      "status": "setup-incomplete",
+      "restore_readiness": "setup-incomplete",
+      "capture_readiness": "setup-incomplete",
+      "input_readiness": "setup-incomplete",
+      "allowed_oracle_classes": [],
+      "disallowed_oracle_classes": [
+        "runtime-ui",
+        "runtime-behavior",
+        "timing-feel",
+        "combat-cadence"
+      ],
+      "promotion_limitations": [
+        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
+        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+      ]
+    }
+  ]
+}

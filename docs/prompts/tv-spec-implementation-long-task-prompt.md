@@ -14,7 +14,7 @@ Required first actions every invocation:
    2. inspect `.hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json` when present;
    3. inspect live repo state: `git status --short --branch`, current branch, `HEAD`, and `origin/main`;
    4. inspect the latest 20 lines of `.hermes/long-running/tv-spec-implementation/events.jsonl`;
-   5. inspect `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` first for dispatch candidates, then read only the relevant section(s) of `docs/research/tv-spec.md`, `docs/checklists/ev-classic-fidelity-implementation-backlog.md`, and touched source surfaces needed for the current slice.
+   5. inspect `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` first for dispatch candidates; if original-runtime/Basilisk evidence is needed, inspect `docs/research/basilisk-speed-qualification.json` before choosing speed/lane; then read only the relevant section(s) of `docs/research/tv-spec.md`, `docs/checklists/ev-classic-fidelity-implementation-backlog.md`, and touched source surfaces needed for the current slice.
 3. If the worktree is dirty, understand and stabilize the existing slice/batch before starting a new one. Do not overwrite or abandon unknown dirty work.
    - Known runner state exception: ignored `.hermes/long-running/tv-spec-implementation/continuous-runner/`, `STOP_CONTINUOUS_RUNNER`, `continuous-runner.lock`, and `continuous-runner.lock.json` are wrapper state, not a development dirty batch. Do not wait for or monitor the continuous-runner process from inside a runner invocation; proceed with repo/backlog work unless other dirty files, a ledger gate, or a real blocker is present.
 
@@ -37,6 +37,7 @@ Verification defaults:
 - Static/model increments: targeted unittest(s), relevant extractor command, and targeted JSON parse/idempotence check for touched manifests.
 - Native gameplay scenario increments: targeted unittest(s), targeted `tools/run_gameplay_scenarios.py <scenario> --pretty`; broader native scenario suite at integration/checkpoint or when the touched surface justifies it.
 - Godot increments: target `./run_godot.sh <mode>`; run `./run_godot.sh self-test` at integration/checkpoint or when the touched Godot surface justifies it.
+- Basilisk speed qualification changes: `python3 tools/basilisk_speed_qualification.py`; timing/feel/combat promotion must name the 1x sentinel or direct 1x evidence.
 - Broad repo hygiene, all-data JSON/JSONL parse sweeps, `git diff --check`, secret scans, remote checks, and full scenario/self-test suites run at checkpoint, handoff, risky-step, or touched-surface boundaries rather than after every local increment.
 
 Gates:
