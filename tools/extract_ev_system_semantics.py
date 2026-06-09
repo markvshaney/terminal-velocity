@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-domain-levo-name-map-v4'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-levo-name-map-v5'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -152,6 +152,41 @@ def _coordinate_domain_summary(systems: list[dict]) -> dict:
     }
 
 
+def _coordinate_display_candidate(axis_payload: dict) -> dict:
+    """Expose candidate display interpretations without promoting map scaling fidelity."""
+    high_word, low_word = axis_payload['rawWords']
+    return {
+        'rawHighWordAsGridBandCandidate': high_word,
+        'rawLowWordAsSubgridOffsetCandidate': low_word,
+        'signedLongCandidate': axis_payload['signedLongCandidate'],
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-candidate',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'sourceNote': 'This preserves plausible display-analysis components from the decoded raw coordinate payload only. It does not claim EV Classic map pixels, projection, centering, axis inversion, or scaling.',
+    }
+
+
+def _coordinate_display_candidate_summary(systems: list[dict]) -> dict:
+    by_resource = {}
+    for system in systems:
+        coordinates = system['semanticFields']['mapCoordinates']
+        by_resource[str(system['resourceId'])] = {
+            'xPos': _coordinate_display_candidate(coordinates['xPos']),
+            'yPos': _coordinate_display_candidate(coordinates['yPos']),
+        }
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-candidate',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'candidateFamilies': [
+            'raw high word as coarse grid/band candidate',
+            'raw low word as subgrid/offset candidate',
+            'signed 32-bit big-endian raw-long candidate',
+        ],
+        'resource128': by_resource.get('128'),
+        'recordCount': len(systems),
+        'sourceNote': 'A later map-scaling pass can compare these per-axis candidates against original-runtime map/click/capture evidence or another promoted source. This manifest still withholds Classic display-unit fidelity.',
+    }
+
+
 def _exact_system_name_mapping(resource_id: int) -> dict | None:
     mapping = EXACT_SYSTEM_NAME_MAPPINGS.get(resource_id)
     if mapping is None:
@@ -230,6 +265,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         },
         'systemNameSeeds': names.get('systemNames', []),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
+        'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

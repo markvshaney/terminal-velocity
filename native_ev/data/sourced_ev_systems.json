@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-domain-levo-name-map-v4",
+  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-levo-name-map-v5",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -172,6 +172,35 @@
     },
     "displayUnitInterpretationStatus": "not-promoted; raw coordinate component domain is preserved for a later map display scaling/topology pass",
     "sourceNote": "This summary is computed from the decoded syst-like coordinate payloads and supports the next display-unit/map-scaling interpretation pass. It does not claim EV Classic map pixel units, projection, centering, or route layout fidelity."
+  },
+  "coordinateDisplayCandidateSummary": {
+    "sourceLabel": "decoded-resource-backed-coordinate-display-candidate",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "candidateFamilies": [
+      "raw high word as coarse grid/band candidate",
+      "raw low word as subgrid/offset candidate",
+      "signed 32-bit big-endian raw-long candidate"
+    ],
+    "resource128": {
+      "xPos": {
+        "rawHighWordAsGridBandCandidate": 1,
+        "rawLowWordAsSubgridOffsetCandidate": 128,
+        "signedLongCandidate": 65664,
+        "sourceLabel": "decoded-resource-backed-coordinate-display-candidate",
+        "oracleStatus": "coordinate_display_units_map_scaling_pending",
+        "sourceNote": "This preserves plausible display-analysis components from the decoded raw coordinate payload only. It does not claim EV Classic map pixels, projection, centering, axis inversion, or scaling."
+      },
+      "yPos": {
+        "rawHighWordAsGridBandCandidate": 127,
+        "rawLowWordAsSubgridOffsetCandidate": 4096,
+        "signedLongCandidate": 8327168,
+        "sourceLabel": "decoded-resource-backed-coordinate-display-candidate",
+        "oracleStatus": "coordinate_display_units_map_scaling_pending",
+        "sourceNote": "This preserves plausible display-analysis components from the decoded raw coordinate payload only. It does not claim EV Classic map pixels, projection, centering, axis inversion, or scaling."
+      }
+    },
+    "recordCount": 67,
+    "sourceNote": "A later map-scaling pass can compare these per-axis candidates against original-runtime map/click/capture evidence or another promoted source. This manifest still withholds Classic display-unit fidelity."
   },
   "exactSystemNameMappings": [
     {
@@ -18626,5 +18655,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }

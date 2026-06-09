@@ -1804,6 +1804,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_name_seed_inputs',
             'recorded_coordinate_raw_long_candidate',
             'recorded_coordinate_domain_summary',
+            'recorded_coordinate_display_candidate_summary',
             'recorded_candidate_link_family',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
@@ -1819,10 +1820,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['candidateCoordinateSourceConfidence'], 'resource-bible-field-family-plus-decoded-raw-word-pair-domain-summary-plus-raw-signed-long-candidate')
         self.assertEqual(readiness['coordinateDomainSourceLabel'], 'decoded-resource-backed-coordinate-domain-scout')
         self.assertEqual(readiness['coordinateDisplayUnitOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(readiness['coordinateDisplayCandidateSourceLabel'], 'decoded-resource-backed-coordinate-display-candidate')
+        self.assertIn('raw high word as coarse grid/band candidate', readiness['coordinateDisplayCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayCandidateResource128']['xPos']['rawHighWordAsGridBandCandidate'], 1)
+        self.assertEqual(readiness['coordinateDisplayCandidateResource128']['yPos']['rawLowWordAsSubgridOffsetCandidate'], 4096)
         self.assertEqual(readiness['coordinateXHighWordDistinctValues'], [1, 2, 3, 4])
         self.assertEqual(readiness['coordinateYHighWordDistinctValues'], [0, 18, 72, 127, 133])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDomainSourceLabel'], 'decoded-resource-backed-coordinate-domain-scout')
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayUnitOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayCandidateSourceLabel'], 'decoded-resource-backed-coordinate-display-candidate')
         self.assertEqual(readiness['candidateLinkWordIndices'], list(range(4, 20)))
         self.assertEqual(readiness['candidateLinkedSystemIdsForResource128'][:4], [128, 129, 130, 131])
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')

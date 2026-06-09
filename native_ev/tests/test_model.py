@@ -3413,7 +3413,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-domain-levo-name-map-v4')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-candidates-levo-name-map-v5')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3448,6 +3448,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(domain['yPos']['lowWordRange'], [-32768, 28672])
         self.assertEqual(domain['yPos']['signedLongCandidateRange'], [1, 8720384])
         self.assertIn('not-promoted', domain['displayUnitInterpretationStatus'])
+        display_candidates = data['coordinateDisplayCandidateSummary']
+        self.assertEqual(display_candidates['sourceLabel'], 'decoded-resource-backed-coordinate-display-candidate')
+        self.assertEqual(display_candidates['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(display_candidates['recordCount'], 67)
+        self.assertIn('raw high word as coarse grid/band candidate', display_candidates['candidateFamilies'])
+        levo_candidates = display_candidates['resource128']
+        self.assertEqual(levo_candidates['xPos']['rawHighWordAsGridBandCandidate'], 1)
+        self.assertEqual(levo_candidates['xPos']['rawLowWordAsSubgridOffsetCandidate'], 128)
+        self.assertEqual(levo_candidates['xPos']['signedLongCandidate'], 65664)
+        self.assertEqual(levo_candidates['xPos']['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(levo_candidates['yPos']['rawHighWordAsGridBandCandidate'], 127)
+        self.assertEqual(levo_candidates['yPos']['rawLowWordAsSubgridOffsetCandidate'], 4096)
+        self.assertEqual(levo_candidates['yPos']['signedLongCandidate'], 8327168)
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['slotNames'], [f'Con{index}' for index in range(1, 17)])
         self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
@@ -3476,7 +3489,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, and in-run target resource/ordinal cross-links are promoted as analysis inputs; coordinate display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
