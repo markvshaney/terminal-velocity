@@ -35,22 +35,17 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T04:22:20Z",
+  "last_material_event_id": "2026-06-10T04:23:55Z",
   "last_progress_token": "8c5ab258e4daa12e777ab30f3cc027f9683c9228",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T040504Z-6.summary.json",
-  "last_verification_summary": "Verified v24 decoded-resource-backed coordinate residual-magnitude summary as non-promoted analysis data; extractor/model/scenario/backlog updated; static topology scenario and native EV model/scenario suites pass.",
+  "last_verification_summary": "Committed and normal-pushed v24 coordinate residual-magnitude/fractional-absolute analysis packet; local HEAD equals origin/main after fetch.",
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v24",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> 3/3 OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success True; recorded_coordinate_display_residual_magnitude_summary passed",
-    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
-    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> 271/271 OK",
-    "temp extractor output cmp against native_ev/data/sourced_ev_systems.json -> identical",
-    "JSON/JSONL parse OK; git diff --check passed",
-    "secret-pattern scan on touched diff -> only benign progress_token/token field names; no credentials",
-    "package.json search at repo root -> none; npm test not applicable"
+    "git commit -m \"Resolve residual magnitude verification gate\" -> 4cd4161",
+    "git push origin main -> 8c5ab25..4cd4161 main -> main",
+    "git fetch origin main --quiet && test HEAD == origin/main -> passed (4cd4161)",
+    "git status --short --branch -> ## main...origin/main"
   ],
-  "next_resume_action": "Commit and normal-push the verified v24 coordinate residual-magnitude packet, then continue Lane A display-unit/map-scaling interpretation and exact record-to-name/runtime topology mapping before runtime universe expansion.",
+  "next_resume_action": "Continue Lane A display-unit/map-scaling interpretation plus remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; latest promoted slice is a non-promoted coordinate residual-magnitude/fractional-absolute analysis packet v24.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -135,5 +130,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T04:22:20Z"
+  "updated_at": "2026-06-10T04:23:55Z"
 }
