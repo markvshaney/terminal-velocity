@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v16')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v17')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3588,6 +3588,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(start_display['linkedNeighbors'][3]['deltaSignedLongFromStart'], {'xPos': 65536, 'yPos': 4096})
         self.assertEqual(start_display['linkedNeighbors'][3]['unitIntervalCandidate']['invertedYPos'], 0.044622)
         self.assertEqual(start_display['unjoinedNeighborResourceIds'], [129, 130, 131])
+        start_distance = data['startNeighborhoodDisplayDistanceSummary']
+        self.assertEqual(start_distance['sourceLabel'], 'decoded-resource-backed-start-neighborhood-display-distance-scout')
+        self.assertEqual(start_distance['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(start_distance['startResourceId'], 128)
+        self.assertEqual(start_distance['startExactSystemName'], 'Levo')
+        self.assertIn('start-neighborhood inverted-y unit-interval manhattan-distance candidates', start_distance['candidateFamilies'])
+        self.assertEqual(start_distance['linkedNeighborCount'], 4)
+        self.assertEqual([neighbor['targetResourceId'] for neighbor in start_distance['linkedNeighbors']], [128, 129, 130, 131])
+        self.assertEqual(start_distance['linkedNeighbors'][1]['manhattanSignedLongCandidate'], 8425472)
+        self.assertEqual(start_distance['linkedNeighbors'][1]['deltaUnitIntervalCandidate'], {'xPos': 0.500246, 'yPos': -0.95115, 'invertedYPos': 0.95115})
+        self.assertEqual(start_distance['linkedNeighbors'][3]['manhattanInvertedYUnitIntervalCandidate'], 0.250593)
+        self.assertEqual(start_distance['nonSelfSignedLongManhattanDistanceRange'], [69632, 8425473])
+        self.assertEqual(start_distance['nonSelfInvertedYUnitIntervalManhattanDistanceRange'], [0.250593, 1.4514])
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['slotNames'], [f'Con{index}' for index in range(1, 17)])
         self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
@@ -3616,7 +3629,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
