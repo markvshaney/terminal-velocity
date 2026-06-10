@@ -3825,6 +3825,14 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual([entry['targetResourceId'] for entry in route_label_probe_targeting['probeTargets']], [129, 130, 131])
         self.assertIn('probe targets are worklist entries, not decoded resource-ID/name joins', route_label_probe_targeting['promotionBlockers'])
         self.assertIn('not-promoted', route_label_probe_targeting['promotionStatus'])
+        route_label_probe_execution_gate = data['runtimeRouteLabelProbeExecutionGateSummary']
+        self.assertEqual(route_label_probe_execution_gate['sourceLabel'], 'original-runtime-route-label-probe-execution-gate')
+        self.assertEqual(route_label_probe_execution_gate['oracleStatus'], 'route_label_probe_execution_blocked_pending_disposable_runtime_capture')
+        self.assertEqual(route_label_probe_execution_gate['candidateStartResourceId'], 128)
+        self.assertEqual(route_label_probe_execution_gate['requiredProbeTargetResourceIds'], [129, 130, 131])
+        self.assertEqual(route_label_probe_execution_gate['requiredCaptureFields'][:4], ['disposableNonStrictPilot', 'startSystemVisibleLabel', 'inputMethod', 'visibleDestinationLabel'])
+        self.assertIn('do not run route-label probes on Strict Play or reusable pilots', route_label_probe_execution_gate['safetyBlockers'])
+        self.assertIn('not-promoted', route_label_probe_execution_gate['promotionStatus'])
         topology_readiness = data['topologyPromotionReadinessSummary']
         self.assertEqual(topology_readiness['sourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(topology_readiness['oracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')

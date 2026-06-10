@@ -1622,6 +1622,43 @@ def _runtime_route_label_probe_targeting_summary(systems: list[dict]) -> dict:
     }
 
 
+def _runtime_route_label_probe_execution_gate_summary(systems: list[dict]) -> dict:
+    """Record the safe execution gate for original-runtime route-label probes."""
+    probe_targeting = _runtime_route_label_probe_targeting_summary(systems)
+    required_target_ids = [entry['targetResourceId'] for entry in probe_targeting['probeTargets']]
+    return {
+        'sourceLabel': 'original-runtime-route-label-probe-execution-gate',
+        'oracleStatus': 'route_label_probe_execution_blocked_pending_disposable_runtime_capture',
+        'sourceReferences': [
+            'runtimeRouteLabelProbeTargetingSummary',
+            'docs/research/original-ev-classic-runtime-observations.md lines 135-158',
+            'docs/research/original-ev-classic-runtime-observations.md lines 197-209',
+        ],
+        'candidateStartResourceId': probe_targeting['candidateStartResourceId'],
+        'candidateStartSystemName': probe_targeting['candidateStartSystemName'],
+        'requiredProbeTargetResourceIds': required_target_ids,
+        'requiredProbeTargetCount': len(required_target_ids),
+        'requiredCaptureFields': [
+            'disposableNonStrictPilot',
+            'startSystemVisibleLabel',
+            'inputMethod',
+            'visibleDestinationLabel',
+            'selectedEdgeOrderOrCycleOrdinal',
+            'clickOrKeyPositionWhenApplicable',
+            'screenshotOrTranscriptReference',
+            'decodedResourceIdJoinWithEvidenceOnlyAfterIndependentOracle',
+        ],
+        'safetyBlockers': [
+            'do not run route-label probes on Strict Play or reusable pilots',
+            'do not mutate raw proprietary EV resource assets while probing runtime labels',
+            'do not assign visible labels to decoded resource IDs 129-131 until a capture ties the visible label to a decoded resource ID or Con slot',
+        ],
+        'allowedUse': 'prepare disposable original-runtime capture packets for Levo route-label probes only; preserve every resource-ID/name join as blocked until captured evidence exists',
+        'promotionStatus': 'not-promoted; execution gate documents safe evidence capture requirements only',
+        'sourceNote': 'This gate turns the v49 probe-targeting matrix into an executable safety checklist without performing original-runtime probing or promoting any Classic route labels. It prevents the next worker from treating a target list as evidence.',
+    }
+
+
 def _word_group_summary(run: dict, word_indices: list[int]) -> dict:
     values = [
         _word(record, word_index)
@@ -2292,6 +2329,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'namedRouteTopologyOracleGapSummary': _named_route_topology_oracle_gap_summary(systems, names),
         'runtimeRouteLabelObservationBridgeGapSummary': _runtime_route_label_observation_bridge_gap_summary(systems),
         'runtimeRouteLabelProbeTargetingSummary': _runtime_route_label_probe_targeting_summary(systems),
+        'runtimeRouteLabelProbeExecutionGateSummary': _runtime_route_label_probe_execution_gate_summary(systems),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),

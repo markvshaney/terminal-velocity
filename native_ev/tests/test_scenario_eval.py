@@ -1847,6 +1847,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_record_name_oracle_evidence_matrix',
             'recorded_named_route_topology_oracle_gap',
             'recorded_runtime_route_label_observation_bridge_gap',
+            'recorded_runtime_route_label_probe_targeting_matrix',
+            'recorded_runtime_route_label_probe_execution_gate',
             'recorded_static_topology_source_boundary',
         ]:
             self.assertEqual(result['checks'][check], 'passed')
@@ -2048,6 +2050,14 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('runtime labels are visible Classic observations but no capture currently ties each label to a decoded resource ID or Con slot', readiness['runtimeRouteLabelObservationBridgeGapBridgeBlockers'])
         self.assertIn('not-promoted', readiness['runtimeRouteLabelObservationBridgeGapPromotionStatus'])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['runtimeRouteLabelObservationBridgeGapObservedLabelCount'], 4)
+        self.assertEqual(readiness['runtimeRouteLabelProbeTargetingSourceLabel'], 'original-runtime-and-decoded-resource-backed-route-label-probe-targeting-matrix')
+        self.assertEqual(readiness['runtimeRouteLabelProbeTargetingTargetResourceIds'], [129, 130, 131])
+        self.assertEqual(readiness['runtimeRouteLabelProbeExecutionGateSourceLabel'], 'original-runtime-route-label-probe-execution-gate')
+        self.assertEqual(readiness['runtimeRouteLabelProbeExecutionGateOracleStatus'], 'route_label_probe_execution_blocked_pending_disposable_runtime_capture')
+        self.assertEqual(readiness['runtimeRouteLabelProbeExecutionGateRequiredTargetResourceIds'], [129, 130, 131])
+        self.assertIn('disposableNonStrictPilot', readiness['runtimeRouteLabelProbeExecutionGateRequiredCaptureFields'])
+        self.assertIn('do not run route-label probes on Strict Play or reusable pilots', readiness['runtimeRouteLabelProbeExecutionGateSafetyBlockers'])
+        self.assertIn('not-promoted', readiness['runtimeRouteLabelProbeExecutionGatePromotionStatus'])
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)

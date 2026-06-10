@@ -45,31 +45,34 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v49-runtime-route-label-probe-targeting-matrix-push-ready",
-  "last_progress_token": "lane-a-v49-runtime-route-label-probe-targeting-matrix-local-checkpoint",
+  "last_material_event_id": "lane-a-v50-runtime-route-label-probe-execution-gate-push-ready",
+  "last_progress_token": "lane-a-v50-runtime-route-label-probe-execution-gate-local-checkpoint",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
+    "packet": "lane-a-v50-runtime-route-label-probe-execution-gate",
+    "summary": "Lane A v50 adds a non-promoted original-runtime route-label probe execution gate for Levo candidate targets 129-131, documenting disposable-pilot capture fields and safety blockers without performing original-runtime probing or promoting route labels.",
     "files_touched": [
       "native_ev/data/sourced_ev_systems.json",
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_model.py",
+      "native_ev/tests/test_scenario_eval.py",
       "tools/extract_ev_system_semantics.py",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
-      ".hermes/long-running/tv-spec-implementation/events.jsonl"
+      ".hermes/long-running/tv-spec-implementation/events.jsonl",
+      ".hermes/long-running/tv-spec-implementation/runner-topology-bug-review-2026-06-10.md"
     ],
-    "packet": "lane-a-v49-runtime-route-label-probe-targeting-matrix",
-    "promotion_status": "not-promoted probe targeting only; no new resource-ID/name joins, named route topology, coordinate display units, non-topology syst semantics, or broad universe replacement promoted",
-    "publication_status": "local checkpoint commit; branch remains ahead of origin/main and push is integration-owner gated for this worker",
-    "summary": "Lane A v49 adds a non-promoted runtime route-label probe targeting matrix that combines decoded Levo start-neighborhood resource IDs 129-131 with bounded original-runtime label observations as a probe worklist only.",
+    "source_fidelity_label": "original-runtime-route-label-probe-execution-gate",
+    "promotion_status": "not-promoted execution gate only; no original-runtime probing performed and no decoded resource-ID/name joins, named route topology, coordinate display units, non-topology syst semantics, or broad universe replacement promoted",
+    "publication_status": "local checkpoint pending commit; worker must not push and integration owner handles normal non-force publication after review/status/fetch/HEAD verification",
     "verifiers": [
       {
         "command": "python3 tools/extract_ev_system_semantics.py",
-        "result": "passed; systems=67 method includes runtime-route-label-observation-bridge-gap-route-label-probe-targeting"
+        "result": "passed; systems=67 method includes route-label-probe-targeting and manifest includes runtimeRouteLabelProbeExecutionGateSummary"
       },
       {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; recorded_runtime_route_label_probe_targeting_matrix passed"
+        "result": "passed; recorded_runtime_route_label_probe_execution_gate passed"
       },
       {
         "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
@@ -78,18 +81,28 @@
       {
         "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
         "result": "passed; Ran 271 tests OK"
+      },
+      {
+        "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/dev/null; python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json >/dev/null; events JSONL parse",
+        "result": "passed; json checks passed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "passed; no whitespace errors"
       }
     ]
   },
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method includes runtime-route-label-observation-bridge-gap-route-label-probe-targeting",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_runtime_route_label_probe_targeting_matrix passed",
+    "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method includes route-label-probe-targeting and manifest includes runtimeRouteLabelProbeExecutionGateSummary",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_runtime_route_label_probe_execution_gate passed",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> passed; Ran 2 tests OK",
-    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> passed; Ran 271 tests OK"
+    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> passed; Ran 271 tests OK",
+    "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/dev/null; python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json >/dev/null; events JSONL parse -> passed; json checks passed",
+    "git diff --check -> passed; no whitespace errors"
   ],
-  "next_resume_action": "Continue Lane A only with stronger Classic oracles: original-runtime route-label/click captures tied to decoded resource IDs or Con slots, complete name/order source, coordinate display calibration, or Classic syst field offset/runtime probes before promoting blocked semantics. Local v49 checkpoint remains ahead of origin/main; worker must not push, integration owner may push normally after review/status/fetch/HEAD verification.",
+  "next_resume_action": "Continue Lane A only with stronger Classic oracles or safe preparation for them: disposable non-Strict original-runtime route-label/click captures tied to decoded resource IDs or Con slots, complete name/order source, coordinate display calibration, or Classic syst field offset/runtime probes before promoting blocked semantics. Local v50 checkpoint must be reviewed/committed/published by the integration owner; worker must not push.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
-  "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
+  "operational_owner_candidate": "no active implementation runner; cron fallback eliminated. Future TV implementation must use a single explicitly started continuous Kanban/background runner, with cron limited to quiet no-agent health/reporting only if separately approved.",
   "repo": {
     "branch": "main",
     "head_at_creation": "f191d2201fb6164ada9c7c04fddda222fd0fcbe0",
@@ -114,7 +127,7 @@
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments. Optimize for development throughput: avoid default full-skill loads, avoid runner self-inspection, avoid routine ledger rewrites, and report externally only at material boundaries.",
   "runner": {
     "cli_flags": "chat -Q --source tv-spec-continuous-runner -t terminal,file,messaging -q <prompt>",
-    "cron_fallback_state": "paused to avoid overlapping writers",
+    "cron_fallback_state": "eliminated; no LLM implementation or autonomous repair cron fallback is retained",
     "delivery": "Telegram/progress only at material boundaries; local routine events under .hermes/long-running/tv-spec-implementation/events.jsonl and logs under .hermes/long-running/tv-spec-implementation/continuous-runner/",
     "enabled_toolsets": [
       "terminal",
@@ -124,7 +137,10 @@
     "kind": "continuous-background-loop",
     "loop_policy": "zero intentional polling gap: after one invocation exits cleanly and ledger has no gate/terminal status, immediately invoke the next adjacent-increment batch; stale review/auth gates must be rechecked against live repo state before stopping.",
     "profile": "loki-game",
-    "replaces_paused_cron_job_id": "5430276bcaa5",
+    "removed_cron_fallback_job_ids": [
+      "5430276bcaa5",
+      "58592dca0042"
+    ],
     "script": "/home/bh/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh",
     "skill_loading_policy": "No default -s preload in continuous wrapper; prompt embeds standing contract. Load extra skills/docs only for uncovered surfaces, gates/process changes, or original-runtime/gameplay operator procedure.",
     "workdir": "/home/bh/workspaces/loki/terminal-velocity"
@@ -167,11 +183,11 @@
     "rule": "Source/fidelity findings and task state must be recorded in repo docs/checklists/ledger with explicit provenance labels, not left only in chat.",
     "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec."
   },
-  "status": "running",
+  "status": "stopped_by_user_control_plane_quieting",
   "task_id": "tv-spec-implementation",
   "tool_caps_policy": {
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T20:05:06Z"
+  "updated_at": "2026-06-10T20:15:47Z"
 }

@@ -476,6 +476,41 @@
     "promotionStatus": "not-promoted; probe targeting matrix preserves next evidence targets without assigning Classic names or routes",
     "sourceNote": "This matrix is a Lane A worklist bridge: it combines the decoded Levo start-neighborhood slots with bounded original-runtime label observations to identify the next probes, while explicitly withholding all resource-ID/name and named-route assignments."
   },
+  "runtimeRouteLabelProbeExecutionGateSummary": {
+    "sourceLabel": "original-runtime-route-label-probe-execution-gate",
+    "oracleStatus": "route_label_probe_execution_blocked_pending_disposable_runtime_capture",
+    "sourceReferences": [
+      "runtimeRouteLabelProbeTargetingSummary",
+      "docs/research/original-ev-classic-runtime-observations.md lines 135-158",
+      "docs/research/original-ev-classic-runtime-observations.md lines 197-209"
+    ],
+    "candidateStartResourceId": 128,
+    "candidateStartSystemName": "Levo",
+    "requiredProbeTargetResourceIds": [
+      129,
+      130,
+      131
+    ],
+    "requiredProbeTargetCount": 3,
+    "requiredCaptureFields": [
+      "disposableNonStrictPilot",
+      "startSystemVisibleLabel",
+      "inputMethod",
+      "visibleDestinationLabel",
+      "selectedEdgeOrderOrCycleOrdinal",
+      "clickOrKeyPositionWhenApplicable",
+      "screenshotOrTranscriptReference",
+      "decodedResourceIdJoinWithEvidenceOnlyAfterIndependentOracle"
+    ],
+    "safetyBlockers": [
+      "do not run route-label probes on Strict Play or reusable pilots",
+      "do not mutate raw proprietary EV resource assets while probing runtime labels",
+      "do not assign visible labels to decoded resource IDs 129-131 until a capture ties the visible label to a decoded resource ID or Con slot"
+    ],
+    "allowedUse": "prepare disposable original-runtime capture packets for Levo route-label probes only; preserve every resource-ID/name join as blocked until captured evidence exists",
+    "promotionStatus": "not-promoted; execution gate documents safe evidence capture requirements only",
+    "sourceNote": "This gate turns the v49 probe-targeting matrix into an executable safety checklist without performing original-runtime probing or promoting any Classic route labels. It prevents the next worker from treating a target list as evidence."
+  },
   "recordToNamePromotionReadinessSummary": {
     "sourceLabel": "decoded-resource-backed-record-to-name-promotion-readiness-scout",
     "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",

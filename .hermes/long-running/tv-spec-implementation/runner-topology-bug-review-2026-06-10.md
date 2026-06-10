@@ -142,7 +142,16 @@ Evidence checked after cron pause:
 - `/home/bh/.hermes/profiles/loki-game/run/tv_kanban_continuous_loop_state.json` still reports `last_state: running`, PID `1970812`, active task `t_ef52f8ee`, ready task `t_ef52f8ee`, successor `t_d1818f18`, updated at `2026-06-10T19:56:46.673887+00:00`.
 - `/home/bh/.hermes/profiles/loki-game/processes.json` still registers detached `tv_kanban_continuous_loop.py`, PID `1970812`, cwd `/home/bh/workspaces/loki/terminal-velocity`, session key `agent:main:telegram:group:-5127009860:7956191079`.
 
-Conclusion: user-visible every-minute posting is evidence of an active task path outside the now-paused cron scheduler, most likely the continuous Kanban loop or a child/session it is driving. The earlier cron-only answer was incomplete: cron is paused, but implementation/control-plane activity is not cleanly stopped.
+Conclusion: user-visible every-minute posting was evidence of an active task path outside the now-paused cron scheduler, most likely the continuous Kanban loop or a child/session it was driving. The earlier cron-only answer was incomplete: cron was paused, but implementation/control-plane activity was not cleanly stopped.
+
+Follow-up action after explicit user approval to kill it:
+
+- One-shot local script job `ec09cd3291fd` inspected PID `1970812` and verified it matched `python3 /home/bh/.hermes/profiles/loki-game/scripts/tv_kanban_continuous_loop.py`.
+- It sent `SIGTERM`; verification returned `after_ps: <not running>` and `remaining_matches: <none>`.
+- It updated `/home/bh/.hermes/profiles/loki-game/run/tv_kanban_continuous_loop_state.json` to `last_state: stopped_by_user_kill`, `stopped_pid: 1970812`, `updated_at: 2026-06-10T20:06:29Z`.
+- `cronjob list` after the one-shot run returned only the four original TV cron jobs, all paused; the one-shot job completed and was removed by repeat-once cleanup.
+
+Status after kill: cron paused and continuous Kanban PID killed. Further repair work should not assume the control-plane design is fixed; it is only quieted.
 
 ## Fix-through checklist
 

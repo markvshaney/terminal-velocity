@@ -577,6 +577,19 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest route-label probe targeting missing non-promotion blocker')
     if 'not-promoted' not in route_label_probe_targeting.get('promotionStatus', ''):
         raise ValueError('sourced EV systems manifest route-label probe targeting must not promote named topology')
+    route_label_probe_execution_gate = data.get('runtimeRouteLabelProbeExecutionGateSummary', {})
+    if route_label_probe_execution_gate.get('sourceLabel') != 'original-runtime-route-label-probe-execution-gate':
+        raise ValueError('sourced EV systems manifest missing runtime route-label probe execution gate')
+    if route_label_probe_execution_gate.get('oracleStatus') != 'route_label_probe_execution_blocked_pending_disposable_runtime_capture':
+        raise ValueError('sourced EV systems manifest route-label probe execution gate must remain blocked pending capture')
+    if route_label_probe_execution_gate.get('candidateStartResourceId') != 128 or route_label_probe_execution_gate.get('requiredProbeTargetResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest route-label probe execution gate changed target boundary')
+    if 'disposableNonStrictPilot' not in route_label_probe_execution_gate.get('requiredCaptureFields', []):
+        raise ValueError('sourced EV systems manifest route-label probe execution gate missing disposable-pilot capture field')
+    if 'do not run route-label probes on Strict Play or reusable pilots' not in route_label_probe_execution_gate.get('safetyBlockers', []):
+        raise ValueError('sourced EV systems manifest route-label probe execution gate missing Strict Play/reusable-pilot blocker')
+    if 'not-promoted' not in route_label_probe_execution_gate.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest route-label probe execution gate must not promote named topology')
     topology_readiness = data.get('topologyPromotionReadinessSummary', {})
     if topology_readiness.get('sourceLabel') != 'decoded-resource-backed-topology-promotion-readiness-matrix':
         raise ValueError('sourced EV systems manifest missing topology promotion readiness matrix source label')
