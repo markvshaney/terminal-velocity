@@ -45,11 +45,11 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v37-record-name-oracle-evidence-matrix",
-  "last_progress_token": "d781286d853988f7f753135dc76dad194ecb4311a72919b42dd634e12b877791",
+  "last_material_event_id": "lane-a-v38-named-route-topology-oracle-gap-current-worker-stabilized",
+  "last_progress_token": "864d3755956f02adadd142321a4cbf6b3a190317d42e8c0217a7d85223dfa2c3",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
-    "commit": "local checkpoint commit containing this event; inspect git rev-parse HEAD",
+    "commit": "pending local checkpoint commit by t_4f00efb5",
     "files_touched": [
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
@@ -62,13 +62,17 @@
       "native_ev/tests/test_scenario_eval.py",
       "tools/extract_ev_system_semantics.py"
     ],
-    "packet": "lane-a-v37-record-name-oracle-evidence-matrix",
-    "promotion_status": "source-readiness/evidence matrix only; record-to-name joins beyond resource 128 -> Levo, named route topology, display-unit calibration, and broad runtime universe replacement remain unpromoted",
-    "summary": "Lane A v37 recordNameOracleEvidenceMatrixSummary was verified as an executable negative evidence matrix for record-to-name promotion: only resource 128 -> Levo remains exact; resources 129-194 remain unjoined pending complete name/order or runtime map-label oracle.",
+    "packet": "lane-a-v38-named-route-topology-oracle-gap",
+    "promotion_status": "source-readiness/evidence gap only; no promotion of remaining names, visible named route labels, coordinate display units, or broad runtime universe replacement",
+    "summary": "Stabilized Lane A v38 namedRouteTopologyOracleGapSummary as the current worker checkpoint: decoded candidate resource-ID route graph evidence is executable while visible named Classic route topology remains blocked pending exact name/order, runtime route-label, and coordinate display calibration evidence.",
     "verifiers": [
       {
+        "command": "git fetch origin && git status --short --branch && git rev-parse --short HEAD && git rev-parse --short origin/main",
+        "result": "passed; branch main, HEAD 95ec54f == origin/main before stabilizing dirty v38 slice"
+      },
+      {
         "command": "python3 tools/extract_ev_system_semantics.py --out native_ev/data/sourced_ev_systems.json",
-        "result": "passed; regenerated sourced_ev_systems.json systems=67 method=...record-name-oracle-evidence-matrix...levo-name-map-v37"
+        "result": "passed; regenerated sourced_ev_systems.json systems=67 method=...named-route-topology-oracle-gap...levo-name-map-v38"
       },
       {
         "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
@@ -76,36 +80,52 @@
       },
       {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; success true and recorded_record_name_oracle_evidence_matrix passed"
-      },
-      {
-        "command": "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check",
-        "result": "passed; BACKLOG DISPATCH INDEX OK"
+        "result": "passed; recorded_named_route_topology_oracle_gap passed"
       },
       {
         "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
         "result": "passed; Ran 271 tests OK"
       },
       {
-        "command": "git diff --check",
-        "result": "passed; no output"
+        "command": "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check",
+        "result": "passed; BACKLOG DISPATCH INDEX OK"
       },
       {
-        "command": "git commit --amend --no-edit",
-        "result": "pending at event write; local checkpoint commit contains v37 code/data/docs plus this push_ready event"
+        "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+        "result": "passed"
+      },
+      {
+        "command": "python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json",
+        "result": "passed before this update"
+      },
+      {
+        "command": "events JSONL parse",
+        "result": "passed; 133 lines before this event"
+      },
+      {
+        "command": "git diff --check",
+        "result": "passed; no output"
       }
     ]
   },
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py --out native_ev/data/sourced_ev_systems.json -> passed; regenerated sourced_ev_systems.json systems=67 method=...record-name-oracle-evidence-matrix...levo-name-map-v37",
+    "git fetch origin && git status --short --branch && git rev-parse --short HEAD && git rev-parse --short origin/main -> passed; branch main, HEAD 95ec54f == origin/main before stabilizing dirty v38 slice",
+    "python3 tools/extract_ev_system_semantics.py --out native_ev/data/sourced_ev_systems.json -> passed; regenerated sourced_ev_systems.json systems=67 method=...named-route-topology-oracle-gap...levo-name-map-v38",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> passed; Ran 2 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; success true and recorded_record_name_oracle_evidence_matrix passed",
-    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> passed; BACKLOG DISPATCH INDEX OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_named_route_topology_oracle_gap passed",
     "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> passed; Ran 271 tests OK",
-    "git diff --check -> passed; no output",
-    "git commit --amend --no-edit -> pending at event write; local checkpoint commit contains v37 code/data/docs plus this push_ready event"
+    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> passed; BACKLOG DISPATCH INDEX OK",
+    "python3 -m json.tool native_ev/data/sourced_ev_systems.json -> passed",
+    "python3 -m json.tool docs/checklists/ev-classic-fidelity-implementation-backlog.index.json -> passed",
+    "python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json -> passed before this update",
+    "events JSONL parse -> passed; 133 lines before this event",
+    "git diff --check -> passed; no output"
   ],
-  "next_resume_action": "Integration owner should push local main normally, fetch origin, verify HEAD equals origin/main, then continue Lane A with complete name/order oracle, runtime map/route label evidence, coordinate display calibration, or source-level syst field-order oracle before promoting remaining names or broad runtime universe replacement.",
+  "next_resume_action": "Continue Lane A with complete Classic name/order oracle, runtime map/route label evidence, coordinate display-unit/map-scaling/projection calibration, or source-level syst field-order oracle before promoting remaining names or broad runtime universe replacement.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -191,5 +211,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T17:49:22Z"
+  "updated_at": "2026-06-10T18:02:17Z"
 }

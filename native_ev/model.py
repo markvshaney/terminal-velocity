@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v37':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v38':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -446,6 +446,26 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest record-name oracle evidence matrix must not promote byte-proximity joins')
     if not record_name_oracle.get('nextEvidenceFamilies', [''])[0].startswith('decoded complete name/list resource'):
         raise ValueError('sourced EV systems manifest record-name oracle evidence matrix missing complete name/list evidence family')
+    named_route_gap = data.get('namedRouteTopologyOracleGapSummary', {})
+    if named_route_gap.get('sourceLabel') != 'decoded-resource-backed-named-route-topology-oracle-gap':
+        raise ValueError('sourced EV systems manifest missing named route topology oracle gap')
+    if named_route_gap.get('oracleStatus') != 'named_route_topology_blocked_pending_record_name_and_runtime_label_oracle':
+        raise ValueError('sourced EV systems manifest named route topology oracle gap must keep route labels blocked')
+    if named_route_gap.get('recordCount') != 67 or named_route_gap.get('candidateDirectedLinkSlotCount') != 268:
+        raise ValueError('sourced EV systems manifest named route topology oracle gap has unexpected candidate link counts')
+    if named_route_gap.get('uniqueDirectedCandidateEdgeCount') != 117:
+        raise ValueError('sourced EV systems manifest named route topology oracle gap has unexpected unique edge count')
+    if named_route_gap.get('exactMappedResourceIds') != [128] or named_route_gap.get('unjoinedRecordCount') != 66:
+        raise ValueError('sourced EV systems manifest named route topology oracle gap changed exact mapping boundary')
+    if named_route_gap.get('evidenceInputSummaryCount') != 6 or 'coordinateDisplayCalibrationGateSummary' not in named_route_gap.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest named route topology oracle gap missing calibration evidence input')
+    start_named_edges = named_route_gap.get('startSystemNamedCandidateEdges', [])
+    if len(start_named_edges) != 4 or start_named_edges[0].get('nameJoinStatus') != 'exact':
+        raise ValueError('sourced EV systems manifest named route topology oracle gap has unexpected Levo edge boundary')
+    if any(edge.get('nameJoinStatus') != 'blocked-missing-target-name-oracle' for edge in start_named_edges[1:]):
+        raise ValueError('sourced EV systems manifest named route topology oracle gap must block unnamed Levo neighbors')
+    if 'candidate link graph records resource-ID edges, not visible Classic route labels' not in named_route_gap.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest named route topology oracle gap missing resource-ID edge blocker')
     topology_readiness = data.get('topologyPromotionReadinessSummary', {})
     if topology_readiness.get('sourceLabel') != 'decoded-resource-backed-topology-promotion-readiness-matrix':
         raise ValueError('sourced EV systems manifest missing topology promotion readiness matrix source label')

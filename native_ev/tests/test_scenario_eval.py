@@ -1836,6 +1836,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_exact_start_system_mapping',
             'recorded_record_to_name_promotion_readiness_summary',
             'recorded_record_name_oracle_evidence_matrix',
+            'recorded_named_route_topology_oracle_gap',
             'recorded_static_topology_source_boundary',
         ]:
             self.assertEqual(result['checks'][check], 'passed')
@@ -1942,7 +1943,19 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('blocked', readiness['recordNameOracleEvidenceMatrixReadinessStatus'])
         self.assertIn('landing-name byte proximity and matching text are scout signals, not a complete record-name oracle', readiness['recordNameOracleEvidenceMatrixPromotionBlockers'])
         self.assertIn('decoded complete name/list resource', readiness['recordNameOracleEvidenceMatrixNextEvidenceFamilies'][0])
-        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['recordNameOracleEvidenceMatrixUnjoinedRecordCount'], 66)
+        self.assertEqual(readiness['namedRouteTopologyOracleGapSourceLabel'], 'decoded-resource-backed-named-route-topology-oracle-gap')
+        self.assertEqual(readiness['namedRouteTopologyOracleGapOracleStatus'], 'named_route_topology_blocked_pending_record_name_and_runtime_label_oracle')
+        self.assertEqual(readiness['namedRouteTopologyOracleGapRecordCount'], 67)
+        self.assertEqual(readiness['namedRouteTopologyOracleGapCandidateLinkSlotCount'], 268)
+        self.assertEqual(readiness['namedRouteTopologyOracleGapUniqueEdgeCount'], 117)
+        self.assertEqual(readiness['namedRouteTopologyOracleGapExactMappedResourceIds'], [128])
+        self.assertEqual(readiness['namedRouteTopologyOracleGapUnjoinedRecordCount'], 66)
+        self.assertIn('coordinateDisplayCalibrationGateSummary', readiness['namedRouteTopologyOracleGapInputSummaries'])
+        self.assertEqual(readiness['namedRouteTopologyOracleGapStartSystemNamedCandidateEdges'][0]['nameJoinStatus'], 'exact')
+        self.assertEqual(readiness['namedRouteTopologyOracleGapStartSystemNamedCandidateEdges'][1]['nameJoinStatus'], 'blocked-missing-target-name-oracle')
+        self.assertIn('candidate link graph records resource-ID edges, not visible Classic route labels', readiness['namedRouteTopologyOracleGapPromotionBlockers'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['namedRouteTopologyOracleGapUnjoinedRecordCount'], 66)
+        self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)
         self.assertEqual(readiness['candidateCoordinateYRawLongResource128'], 8327168)
