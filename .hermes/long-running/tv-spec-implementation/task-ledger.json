@@ -1,5 +1,10 @@
 {
-  "active_gate": null,
+  "active_gate": {
+    "reason": "normal non-force git push of local gate-resolution commit failed because HTTPS GitHub credentials are unavailable in this headless worker and SSH auth is not configured",
+    "resume_after": "GitHub credentials or an authenticated remote path are available, or a human/authorized runner pushes local main and verifies HEAD == origin/main",
+    "type": "external_auth",
+    "withheld_action": "push local main through HEAD c7ea156 to origin/main (currently e8ecb51)"
+  },
   "created_at": "2026-06-09T14:48:45Z",
   "do_not_redo": [
     "Do not depend on superseded supporting workflow drafts as execution authority; promote needed claims into repo docs/backlog instead.",
@@ -35,15 +40,15 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T03:58:04Z",
+  "last_material_event_id": "2026-06-10T03:58:37Z",
   "last_progress_token": "75bae4d21f265dc62988bca415ff9d21499bfb01bde4ad0ca7e5a842cbda0f7b",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T034629Z-4.summary.json",
-  "last_verification_summary": "Verified v21 source slice and durable kanban verification records; local HEAD equals origin/main after fetch.",
+  "last_verification_summary": "Local verification/gate-resolution records are committed, but the latest local HEAD is not pushed because GitHub auth is unavailable in this worker.",
   "last_verified_commands": [
-    "git fetch origin main --quiet && test HEAD == origin/main -> passed (e8ecb51)",
-    "git status --short --branch -> ## main...origin/main"
+    "git push origin main -> fatal: could not read Username for https://github.com",
+    "git fetch origin main --quiet; git status --short --branch -> ahead 1, HEAD c7ea156, origin/main e8ecb51"
   ],
-  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation and exact record-to-name/runtime topology mapping before runtime universe expansion. Latest verified source slice is the non-promoted v21 coordinate fixed-point plus start-neighborhood slot-angular packet; display units/map scaling, route/angular ordering, exact target names, route UI behavior, and broad runtime topology remain pending.",
+  "next_resume_action": "Push local main through HEAD c7ea156 from /home/bh/workspaces/loki/terminal-velocity using an authenticated environment, fetch, verify HEAD == origin/main, then continue Lane A coordinate display-unit/map-scaling interpretation and exact record-to-name/runtime topology mapping before runtime universe expansion.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -122,11 +127,11 @@
     "rule": "Source/fidelity findings and task state must be recorded in repo docs/checklists/ledger with explicit provenance labels, not left only in chat.",
     "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec."
   },
-  "status": "running",
+  "status": "waiting_gate",
   "task_id": "tv-spec-implementation",
   "tool_caps_policy": {
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T03:58:04Z"
+  "updated_at": "2026-06-10T03:58:37Z"
 }
