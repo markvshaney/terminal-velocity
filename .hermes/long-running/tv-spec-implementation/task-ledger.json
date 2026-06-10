@@ -1,9 +1,9 @@
 {
   "active_gate": {
     "type": "push_auth_unavailable",
-    "reason": "git push origin main failed: could not read Username for 'https://github.com': No such device or address",
-    "withheld_action": "Push local commit 83b6703a51c14a24cc8d10c735adfd5ed0f46c1a to origin/main and verify HEAD == origin/main.",
-    "resume_after": "GitHub HTTPS credentials are available in the worker environment or a human pushes the commit."
+    "reason": "git push origin main failed because GitHub HTTPS credentials are unavailable in the headless worker",
+    "withheld_action": "Push local commit cffd10a79dfedcc1702cf0362bfebca91f4a2e56 to origin/main (currently ee45cab5a0303e4aefdcf793ab7ec3e075ae16e6) and verify HEAD == origin/main.",
+    "resume_after": "GitHub HTTPS credentials are available in the worker environment or a human/authorized runner pushes the commit."
   },
   "created_at": "2026-06-09T14:48:45Z",
   "do_not_redo": [
@@ -40,10 +40,10 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T04:45:25Z",
-  "last_progress_token": "1fa7830718c1c30ffe531a951464073274da73af6728d1491f89f0510e4e53c4",
-  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T042434Z-8.summary.json",
-  "last_verification_summary": "Local v26 coordinate residual quantization/grid-step packet is committed as 83b6703; verification passed, but push is gated by unavailable GitHub HTTPS credentials.",
+  "last_material_event_id": "2026-06-10T04:47:42Z",
+  "last_progress_token": "e0ce453abc1a85f193c942831bf14e5f02ddc74bb518865daece974cbcf97641",
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
+  "last_verification_summary": "Local v26 coordinate residual quantization/grid-step packet is committed as cffd10a; verification passed, but push is gated by unavailable GitHub HTTPS credentials.",
   "last_verified_commands": [
     "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...coordinate-display-quantization...v26",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> Ran 3 tests OK",
@@ -138,5 +138,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T04:45:31Z"
+  "updated_at": "2026-06-10T04:47:42Z"
 }
