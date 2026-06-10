@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v43':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v44':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -413,6 +413,15 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest byte-size padding gap changed 32-bit-coordinate padding count')
     if 'byte-size arithmetic must not promote NavDef' not in ' '.join(byte_size_gap.get('promotionBlockers', [])):
         raise ValueError('sourced EV systems manifest byte-size padding gap missing promotion blocker')
+    width_offset_gap = byte_size_gap.get('fieldWidthOffsetOracleGapSummary', {})
+    if width_offset_gap.get('sourceLabel') != 'resource-bible-backed-syst-field-width-offset-oracle-gap':
+        raise ValueError('sourced EV systems manifest missing syst field-width/offset oracle gap')
+    if width_offset_gap.get('oracleStatus') != 'syst_field_width_offset_mapping_blocked_pending_source_template_or_runtime_oracle':
+        raise ValueError('sourced EV systems manifest field-width/offset gap must keep mapping blocked')
+    if len(width_offset_gap.get('requiredEvidenceFamilies', [])) != 3:
+        raise ValueError('sourced EV systems manifest field-width/offset gap changed evidence requirements')
+    if 'Con6-Con16 begin' not in ' '.join(width_offset_gap.get('blockedWidthClaims', [])):
+        raise ValueError('sourced EV systems manifest field-width/offset gap missing Con6-Con16 blocker')
     budget_candidates = {entry.get('candidate'): entry for entry in field_count_budget.get('projectedWordBudgetCandidates', [])}
     if budget_candidates.get('16-bit xPos/yPos plus 16-bit downstream fields', {}).get('unassignedTailWordCount') != 8:
         raise ValueError('sourced EV systems manifest field-count budget changed 16-bit tail count')

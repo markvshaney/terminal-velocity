@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v43')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v44')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3484,6 +3484,12 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(byte_size_gap['projectedByteBudgetCandidates'][0]['unassignedPaddingByteCount'], 16)
         self.assertEqual(byte_size_gap['projectedByteBudgetCandidates'][1]['unassignedPaddingByteCount'], 12)
         self.assertIn('byte-size arithmetic must not promote NavDef', ' '.join(byte_size_gap['promotionBlockers']))
+        width_offset_gap = byte_size_gap['fieldWidthOffsetOracleGapSummary']
+        self.assertEqual(width_offset_gap['sourceLabel'], 'resource-bible-backed-syst-field-width-offset-oracle-gap')
+        self.assertEqual(width_offset_gap['oracleStatus'], 'syst_field_width_offset_mapping_blocked_pending_source_template_or_runtime_oracle')
+        self.assertEqual(len(width_offset_gap['requiredEvidenceFamilies']), 3)
+        self.assertIn('Con6-Con16 begin', ' '.join(width_offset_gap['blockedWidthClaims']))
+        self.assertIn('not-promoted', width_offset_gap['promotionStatus'])
         self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][0]['unassignedTailWordCount'], 8)
         self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][1]['unassignedTailWordCount'], 6)
         self.assertIn('field-count arithmetic cannot promote NavDef', ' '.join(field_count_budget['promotionBlockers']))
