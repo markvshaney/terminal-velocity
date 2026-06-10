@@ -1809,6 +1809,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_syst_field_order_conflict_summary',
             'recorded_resource_bible_syst_sequential_projection_negative_oracle',
             'recorded_resource_bible_syst_field_count_budget_negative_oracle',
+            'recorded_resource_bible_syst_byte_size_padding_gap_negative_oracle',
             'recorded_syst_word_domain_coverage_summary',
             'recorded_non_topology_syst_oracle_gap',
             'recorded_topology_promotion_readiness_summary',
@@ -1900,6 +1901,12 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(budget['projectedWordBudgetCandidates'][0]['unassignedTailWordCount'], 8)
         self.assertEqual(budget['projectedWordBudgetCandidates'][1]['unassignedTailWordCount'], 6)
         self.assertIn('field-count arithmetic cannot promote NavDef', ' '.join(budget['promotionBlockers']))
+        byte_gap = readiness['resourceBibleSystSequentialProjectionByteSizePaddingGap']
+        self.assertEqual(byte_gap['sourceLabel'], 'resource-bible-backed-syst-byte-size-padding-gap-negative-oracle')
+        self.assertEqual(byte_gap['recordBytes'], 88)
+        self.assertEqual(byte_gap['projectedByteBudgetCandidates'][0]['unassignedPaddingByteCount'], 16)
+        self.assertEqual(byte_gap['projectedByteBudgetCandidates'][1]['unassignedPaddingByteCount'], 12)
+        self.assertIn('byte-size arithmetic must not promote NavDef', ' '.join(byte_gap['promotionBlockers']))
         self.assertIn('direct sequential projection would place Con6-Con16 at all-zero words 27-37', ' '.join(readiness['resourceBibleSystSequentialProjectionBlockingSignals']))
         self.assertIn('blocked', readiness['resourceBibleSystSequentialProjectionReadinessStatus'])
         self.assertIn('source-level syst struct declaration', readiness['resourceBibleSystSequentialProjectionNextEvidenceFamilies'][0])
