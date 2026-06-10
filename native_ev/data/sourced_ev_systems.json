@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v14",
+  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -784,6 +784,79 @@
       "22": 3
     },
     "sourceNote": "This is a candidate hop-distance summary over decoded Con1-Con16 links. It preserves route-analysis inputs only; exact Classic named topology, map distances, and display scaling remain pending."
+  },
+  "startSystemCandidateTopologySummary": {
+    "sourceLabel": "decoded-resource-backed-start-system-candidate-topology-scout",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "startResourceId": 128,
+    "startExactSystemName": "Levo",
+    "linkedNeighborCount": 4,
+    "linkedNeighbors": [
+      {
+        "slotName": "Con1",
+        "targetResourceId": 128,
+        "targetOrdinal": 0,
+        "targetExactSystemName": "Levo",
+        "targetNameJoinStatus": "exact",
+        "isSelfLink": true,
+        "hasReciprocalCandidateEdge": true,
+        "targetCoordinateSignedLongCandidate": {
+          "xPos": 65664,
+          "yPos": 8327168
+        }
+      },
+      {
+        "slotName": "Con2",
+        "targetResourceId": 129,
+        "targetOrdinal": 1,
+        "targetExactSystemName": null,
+        "targetNameJoinStatus": "unjoined",
+        "isSelfLink": false,
+        "hasReciprocalCandidateEdge": false,
+        "targetCoordinateSignedLongCandidate": {
+          "xPos": 196736,
+          "yPos": 32768
+        }
+      },
+      {
+        "slotName": "Con3",
+        "targetResourceId": 130,
+        "targetOrdinal": 2,
+        "targetExactSystemName": null,
+        "targetNameJoinStatus": "unjoined",
+        "isSelfLink": false,
+        "hasReciprocalCandidateEdge": false,
+        "targetCoordinateSignedLongCandidate": {
+          "xPos": 196737,
+          "yPos": 32768
+        }
+      },
+      {
+        "slotName": "Con4",
+        "targetResourceId": 131,
+        "targetOrdinal": 3,
+        "targetExactSystemName": null,
+        "targetNameJoinStatus": "unjoined",
+        "isSelfLink": false,
+        "hasReciprocalCandidateEdge": false,
+        "targetCoordinateSignedLongCandidate": {
+          "xPos": 131200,
+          "yPos": 8331264
+        }
+      }
+    ],
+    "selfLinkSlotNames": [
+      "Con1"
+    ],
+    "reciprocalNeighborResourceIds": [
+      128
+    ],
+    "unjoinedNeighborResourceIds": [
+      129,
+      130,
+      131
+    ],
+    "sourceNote": "This packages the exact Levo/resource 128 bridge with decoded Con1-Con16 neighbor records and coordinate candidates. It promotes only start-neighborhood analysis inputs; target system names, route UI behavior, map layout, and broad runtime topology remain pending."
   },
   "exactSystemNameMappings": [
     {
@@ -19238,5 +19311,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }

@@ -12,14 +12,14 @@
   },
   "status": "waiting_gate",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T20:10:39Z",
+  "updated_at": "2026-06-09T23:11:06Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified adjacent increment batches until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable event/checkpoint policy.",
   "active_gate": {
-    "type": "external_auth",
-    "reason": "git push origin main failed because HTTPS GitHub credentials are unavailable in this headless worker",
-    "withheld_action": "normal non-force push of local main branch to origin/main (includes Lane A coordinate display-transform implementation commit 9ac4c71 plus durable gate records; origin/main currently ffb9dd5)",
-    "resume_after": "GitHub credentials or an authenticated remote path are available, or a human pushes the local commits."
+    "type": "review_required",
+    "reason": "Local code/data/test/doc changes add EV Classic resource 128 start-neighborhood candidate topology summary; human review required before commit/merge or further topology promotion.",
+    "withheld_action": "commit/push and continue into coordinate display-unit/map-scaling interpretation or broader runtime universe expansion",
+    "resume_after": "reviewer approves these local changes or requests edits via kanban comments"
   },
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
@@ -66,17 +66,16 @@
     }
   ],
   "last_verified_commands": [
-    "git fetch origin && git status --short --branch -> ## main...origin/main [ahead 2]; HEAD 1264880; origin/main ffb9dd5",
-    "git diff --name-status origin/main..HEAD -> 10 intended Lane A/display-transform and durable gate files",
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v14",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> 3/3 OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_coordinate_display_transform_summary passed",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> Ran 3 tests OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_start_system_candidate_topology_summary passed",
+    "python3 tools/backlog_dispatch_index.py build -> wrote docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
     "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
     "git diff --check -> passed",
-    "git status --short --branch -> ## main...origin/main [ahead 2]; no tracked/untracked development dirt shown",
-    "git push origin main -> failed: fatal: could not read Username for https://github.com"
+    "temporary out extract plus cmp against native_ev/data/sourced_ev_systems.json -> identical; JSON ledger/events/manifest/index parse OK",
+    "git status --short --branch -> ## main...origin/main with 8 modified tracked files; HEAD == origin/main 925a358bd2c493d360ba263ce59652eabf460916"
   ],
-  "next_resume_action": "Resolve GitHub push authentication or manually push local main to origin/main (includes implementation commit 9ac4c7101b82a05bf3d98d63ab2a67967c92c9b2 plus durable gate records); then fetch/verify HEAD == origin/main and continue Lane A coordinate display-unit/map-scaling interpretation plus exact record-to-name/runtime topology mapping before runtime universe expansion.",
+  "next_resume_action": "Review local v15 startSystemCandidateTopologySummary changes. If approved, commit normally; then continue with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping, keeping oracleStatus pending and avoiding runtime universe expansion.",
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments. Optimize for development throughput: avoid default full-skill loads, avoid runner self-inspection, avoid routine ledger rewrites, and report externally only at material boundaries.",
   "runner": {
     "kind": "continuous-background-loop",

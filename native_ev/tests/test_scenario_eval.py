@@ -1815,6 +1815,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_candidate_link_graph_summary',
             'recorded_candidate_graph_connectivity_summary',
             'recorded_candidate_graph_distance_summary',
+            'recorded_start_system_candidate_topology_summary',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
@@ -1890,8 +1891,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['candidateGraphResource128WeakHopDistanceDistribution'], {'0': 1, '1': 3, '2': 19, '3': 31, '4': 13})
         self.assertEqual(readiness['candidateGraphWeakDiameterCandidate'], 7)
         self.assertEqual(readiness['candidateGraphDirectedReachableCountRange'], [2, 22])
-        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['candidateLinkGraphDirectedSlotCount'], 268)
-        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['candidateLinkGraphReciprocalDirectedLinkCount'], 8)
+        self.assertEqual(readiness['startSystemCandidateTopologySourceLabel'], 'decoded-resource-backed-start-system-candidate-topology-scout')
+        self.assertEqual(readiness['startSystemCandidateTopologyOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
+        self.assertEqual(readiness['startSystemCandidateTopologyStartName'], 'Levo')
+        self.assertEqual(readiness['startSystemCandidateTopologyLinkedNeighborCount'], 4)
+        self.assertEqual(readiness['startSystemCandidateTopologyNeighborResourceIds'], [128, 129, 130, 131])
+        self.assertEqual(readiness['startSystemCandidateTopologyUnjoinedNeighborResourceIds'], [129, 130, 131])
+        self.assertEqual(readiness['startSystemCandidateTopologySelfLinkSlotNames'], ['Con1'])
+        self.assertEqual(readiness['startSystemCandidateTopologyReciprocalNeighborResourceIds'], [128])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startSystemCandidateTopologySourceLabel'], 'decoded-resource-backed-start-system-candidate-topology-scout')
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
         self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')

@@ -442,6 +442,7 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
     candidate_link_graph = systems_manifest.get('candidateLinkGraphSummary', {})
     candidate_graph_connectivity = systems_manifest.get('candidateGraphConnectivitySummary', {})
     candidate_graph_distances = systems_manifest.get('candidateGraphDistanceSummary', {})
+    start_system_topology = systems_manifest.get('startSystemCandidateTopologySummary', {})
     exact_name = first_fields.get('exactSystemName', {})
     runtime_system_count = len(load_universe().get('systems', []))
     trace.append({
@@ -522,6 +523,14 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'candidateGraphResource128WeakHopDistanceDistribution': candidate_graph_distances.get('resource128WeakHopDistanceDistribution', {}),
         'candidateGraphWeakDiameterCandidate': candidate_graph_distances.get('weakGraphDiameterCandidate'),
         'candidateGraphDirectedReachableCountRange': candidate_graph_distances.get('directedReachableCountRange', []),
+        'startSystemCandidateTopologySourceLabel': start_system_topology.get('sourceLabel'),
+        'startSystemCandidateTopologyOracleStatus': start_system_topology.get('oracleStatus'),
+        'startSystemCandidateTopologyStartName': start_system_topology.get('startExactSystemName'),
+        'startSystemCandidateTopologyLinkedNeighborCount': start_system_topology.get('linkedNeighborCount'),
+        'startSystemCandidateTopologyNeighborResourceIds': [neighbor.get('targetResourceId') for neighbor in start_system_topology.get('linkedNeighbors', [])],
+        'startSystemCandidateTopologyUnjoinedNeighborResourceIds': start_system_topology.get('unjoinedNeighborResourceIds', []),
+        'startSystemCandidateTopologySelfLinkSlotNames': start_system_topology.get('selfLinkSlotNames', []),
+        'startSystemCandidateTopologyReciprocalNeighborResourceIds': start_system_topology.get('reciprocalNeighborResourceIds', []),
         'exactSystemNameResource128': exact_name.get('systemName'),
         'exactSystemNameSourceBasis': exact_name.get('sourceBasis', []),
         'runtimeSystemSubsetCount': runtime_system_count,
@@ -591,6 +600,12 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'candidateGraphResource128DirectedMaxHopDistance': candidate_graph_distances.get('resource128DirectedMaxHopDistance'),
         'candidateGraphResource128WeakMaxHopDistance': candidate_graph_distances.get('resource128WeakMaxHopDistance'),
         'candidateGraphWeakDiameterCandidate': candidate_graph_distances.get('weakGraphDiameterCandidate'),
+        'startSystemCandidateTopologySourceLabel': start_system_topology.get('sourceLabel'),
+        'startSystemCandidateTopologyStartName': start_system_topology.get('startExactSystemName'),
+        'startSystemCandidateTopologyLinkedNeighborCount': start_system_topology.get('linkedNeighborCount'),
+        'startSystemCandidateTopologyNeighborResourceIds': [neighbor.get('targetResourceId') for neighbor in start_system_topology.get('linkedNeighbors', [])],
+        'startSystemCandidateTopologyUnjoinedNeighborResourceIds': start_system_topology.get('unjoinedNeighborResourceIds', []),
+        'startSystemCandidateTopologySelfLinkSlotNames': start_system_topology.get('selfLinkSlotNames', []),
         'exactSystemNameResource128': exact_name.get('systemName'),
         'runtimeSystemSubsetCount': runtime_system_count,
         'promotionSafeNext': len(records) >= 60 and syst_run.get('recordSize') == 88,
@@ -3778,6 +3793,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_candidate_link_graph_summary': 'passed' if readiness.get('candidateLinkGraphSourceLabel') == 'decoded-resource-backed-candidate-link-graph-scout' and readiness.get('candidateLinkGraphOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('candidateLinkGraphDirectedSlotCount') == 268 and readiness.get('candidateLinkGraphUniqueDirectedLinkCount') == 117 and readiness.get('candidateLinkGraphReciprocalDirectedLinkCount') == 8 and readiness.get('candidateLinkGraphNonReciprocalDirectedLinkCount') == 109 and readiness.get('candidateLinkGraphUniqueSelfLinkCount') == 4 and readiness.get('candidateLinkGraphUniqueSelfLinkResourceIds') == [128, 136, 139, 140] and readiness.get('candidateLinkGraphTargetsInRun') is True and static_state.get('candidateLinkGraphDirectedSlotCount') == 268 and static_state.get('candidateLinkGraphReciprocalDirectedLinkCount') == 8 else 'failed',
             'recorded_candidate_graph_connectivity_summary': 'passed' if readiness.get('candidateGraphConnectivitySourceLabel') == 'decoded-resource-backed-candidate-graph-connectivity-scout' and readiness.get('candidateGraphWeaklyConnectedComponentCount') == 1 and readiness.get('candidateGraphResource128WeakComponentSize') == 67 and readiness.get('candidateGraphResource128DirectedReachableCount') == 21 and readiness.get('candidateGraphResource128DirectedUnreachableCount') == 46 and readiness.get('candidateGraphUniqueOutDegreeDistribution') == {'1': 39, '2': 14, '3': 6, '4': 8} and static_state.get('candidateGraphConnectivitySourceLabel') == 'decoded-resource-backed-candidate-graph-connectivity-scout' else 'failed',
             'recorded_candidate_graph_distance_summary': 'passed' if readiness.get('candidateGraphDistanceSourceLabel') == 'decoded-resource-backed-candidate-graph-distance-scout' and readiness.get('candidateGraphResource128DirectedMaxHopDistance') == 4 and readiness.get('candidateGraphResource128WeakMaxHopDistance') == 4 and readiness.get('candidateGraphResource128WeakHopDistanceDistribution') == {'0': 1, '1': 3, '2': 19, '3': 31, '4': 13} and readiness.get('candidateGraphWeakDiameterCandidate') == 7 and readiness.get('candidateGraphDirectedReachableCountRange') == [2, 22] and static_state.get('candidateGraphDistanceSourceLabel') == 'decoded-resource-backed-candidate-graph-distance-scout' else 'failed',
+            'recorded_start_system_candidate_topology_summary': 'passed' if readiness.get('startSystemCandidateTopologySourceLabel') == 'decoded-resource-backed-start-system-candidate-topology-scout' and readiness.get('startSystemCandidateTopologyOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('startSystemCandidateTopologyStartName') == 'Levo' and readiness.get('startSystemCandidateTopologyLinkedNeighborCount') == 4 and readiness.get('startSystemCandidateTopologyNeighborResourceIds') == [128, 129, 130, 131] and readiness.get('startSystemCandidateTopologyUnjoinedNeighborResourceIds') == [129, 130, 131] and readiness.get('startSystemCandidateTopologySelfLinkSlotNames') == ['Con1'] and readiness.get('startSystemCandidateTopologyReciprocalNeighborResourceIds') == [128] and static_state.get('startSystemCandidateTopologySourceLabel') == 'decoded-resource-backed-start-system-candidate-topology-scout' else 'failed',
             'recorded_exact_start_system_mapping': 'passed' if readiness.get('exactSystemNameResource128') == 'Levo' and 'original-runtime-observed' in readiness.get('exactSystemNameSourceBasis', []) and static_state.get('exactSystemNameResource128') == 'Levo' else 'failed',
             'recorded_static_topology_source_boundary': 'passed' if readiness.get('sourceLabel') == 'decoded-resource-backed-static-readiness' and readiness.get('oracleStatus') == 'topology_semantic_promotion_pending_field_family_mapping' else 'failed',
         })

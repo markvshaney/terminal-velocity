@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v14'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -512,6 +512,53 @@ def _candidate_graph_distance_summary(systems: list[dict]) -> dict:
     }
 
 
+def _start_system_candidate_topology_summary(systems: list[dict]) -> dict:
+    """Summarize resource 128's candidate neighborhood without promoting named topology."""
+    by_resource_id = {system['resourceId']: system for system in systems}
+    start_resource_id = 128
+    start_system = by_resource_id[start_resource_id]
+    unique_edges = set()
+    for system in systems:
+        resource_id = system['resourceId']
+        for slot in system['semanticFields']['candidateHyperspaceLinks']['linkSlots']:
+            if slot.get('status') == 'linked-system' and slot.get('targetPresentInSystRun'):
+                unique_edges.add((resource_id, slot['targetResourceId']))
+
+    linked_neighbors = []
+    for slot in start_system['semanticFields']['candidateHyperspaceLinks']['linkSlots']:
+        if slot.get('status') != 'linked-system':
+            continue
+        target = by_resource_id[slot['targetResourceId']]
+        target_coordinates = target['semanticFields']['mapCoordinates']
+        target_name = target['semanticFields'].get('exactSystemName', {})
+        linked_neighbors.append({
+            'slotName': slot['slotName'],
+            'targetResourceId': slot['targetResourceId'],
+            'targetOrdinal': slot['targetOrdinal'],
+            'targetExactSystemName': target_name.get('systemName'),
+            'targetNameJoinStatus': 'exact' if target_name else 'unjoined',
+            'isSelfLink': slot['targetResourceId'] == start_resource_id,
+            'hasReciprocalCandidateEdge': (slot['targetResourceId'], start_resource_id) in unique_edges,
+            'targetCoordinateSignedLongCandidate': {
+                'xPos': target_coordinates['xPos']['signedLongCandidate'],
+                'yPos': target_coordinates['yPos']['signedLongCandidate'],
+            },
+        })
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-start-system-candidate-topology-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'startResourceId': start_resource_id,
+        'startExactSystemName': start_system['semanticFields']['exactSystemName']['systemName'],
+        'linkedNeighborCount': len(linked_neighbors),
+        'linkedNeighbors': linked_neighbors,
+        'selfLinkSlotNames': [neighbor['slotName'] for neighbor in linked_neighbors if neighbor['isSelfLink']],
+        'reciprocalNeighborResourceIds': [neighbor['targetResourceId'] for neighbor in linked_neighbors if neighbor['hasReciprocalCandidateEdge']],
+        'unjoinedNeighborResourceIds': [neighbor['targetResourceId'] for neighbor in linked_neighbors if neighbor['targetNameJoinStatus'] == 'unjoined'],
+        'sourceNote': 'This packages the exact Levo/resource 128 bridge with decoded Con1-Con16 neighbor records and coordinate candidates. It promotes only start-neighborhood analysis inputs; target system names, route UI behavior, map layout, and broad runtime topology remain pending.',
+    }
+
+
 def _system_name_seed_summary(names: dict) -> dict:
     """Summarize heuristic name seeds without claiming record-to-name joins."""
     system_seeds = names.get('systemNames', [])
@@ -617,6 +664,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),
         'candidateGraphDistanceSummary': _candidate_graph_distance_summary(systems),
+        'startSystemCandidateTopologySummary': _start_system_candidate_topology_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

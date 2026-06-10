@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v14':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -436,6 +436,24 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest candidate graph distance has unexpected weak diameter candidate')
     if distances.get('directedReachableCountRange') != [2, 22]:
         raise ValueError('sourced EV systems manifest candidate graph distance has unexpected directed reachable count range')
+    start_topology = data.get('startSystemCandidateTopologySummary', {})
+    if start_topology.get('sourceLabel') != 'decoded-resource-backed-start-system-candidate-topology-scout':
+        raise ValueError('sourced EV systems manifest missing start-system candidate topology source label')
+    if start_topology.get('oracleStatus') != 'exact_record_name_runtime_topology_mapping_pending':
+        raise ValueError('sourced EV systems manifest start-system topology should keep runtime topology pending')
+    if start_topology.get('startResourceId') != 128 or start_topology.get('startExactSystemName') != 'Levo':
+        raise ValueError('sourced EV systems manifest start-system topology has unexpected start identity')
+    if start_topology.get('linkedNeighborCount') != 4:
+        raise ValueError('sourced EV systems manifest start-system topology has unexpected neighbor count')
+    if start_topology.get('selfLinkSlotNames') != ['Con1'] or start_topology.get('reciprocalNeighborResourceIds') != [128]:
+        raise ValueError('sourced EV systems manifest start-system topology has unexpected reciprocal/self-link boundary')
+    if start_topology.get('unjoinedNeighborResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest start-system topology should keep target names unjoined')
+    start_neighbors = start_topology.get('linkedNeighbors', [])
+    if [neighbor.get('targetResourceId') for neighbor in start_neighbors] != [128, 129, 130, 131]:
+        raise ValueError('sourced EV systems manifest start-system topology has unexpected target resource order')
+    if start_neighbors[1].get('targetCoordinateSignedLongCandidate') != {'xPos': 196736, 'yPos': 32768}:
+        raise ValueError('sourced EV systems manifest start-system topology has unexpected neighbor coordinate candidate')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')
