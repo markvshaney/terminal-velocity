@@ -45,8 +45,8 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v40-source-readiness-oracle-gaps-current-worker-stabilized",
-  "last_progress_token": "2b7977e84ed4898eab55997bc96cb69e68d0828736ec0bf21a3da3dd0c44771f",
+  "last_material_event_id": "lane-a-v38-v40-checkpoint-pushed",
+  "last_progress_token": "7573462e2120969c1ae522aec1af7eed9897cab4",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
     "files_touched": [
@@ -210,5 +210,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T18:17:00Z"
+  "updated_at": "2026-06-10T18:14:54Z"
 }
