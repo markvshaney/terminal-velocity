@@ -45,20 +45,18 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "2026-06-10T14:55:34Z",
+  "last_material_event_id": "2026-06-10T15:06:54Z",
   "last_progress_token": "e0ce453abc1a85f193c942831bf14e5f02ddc74bb518865daece974cbcf97641",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
-  "last_verification_summary": "Resolved Lane A v28 push_ready gate: normal non-force push succeeded, fetch succeeded, and local HEAD equals origin/main at f325f6a924f79d476e396d6e8a6795bb13f31f86.",
+  "last_verification_summary": "Promoted EV Classic Resource Bible topology constants into sourced EV systems v29 as static-source constants only; preserved coordinate display units/map scaling/projection blocker; extractor, focused model/scenario tests, scenario verifier, backlog index, JSON/JSONL parse, and git diff --check passed.",
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...record-name-promotion-readiness...v28",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> Ran 3 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success True; recorded_record_to_name_promotion_readiness_summary passed",
-    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
-    "python3 -m unittest discover native_ev/tests -v -> Ran 284 tests OK",
-    "task-ledger/events JSON/JSONL parse plus git diff --check -> OK",
-    "git push origin main -> e4aeaae..f325f6a main -> main; git fetch origin main -> OK; HEAD == origin/main == f325f6a924f79d476e396d6e8a6795bb13f31f86"
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...resource-bible-topology-constants...v29",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> Ran 3 tests OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_resource_bible_topology_constants passed",
+    "python3 tools/backlog_dispatch_index.py build -> BACKLOG DISPATCH INDEX OK; python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json -> OK; inline JSONL parse -> events_jsonl_ok lines=105; git diff --check -> OK"
   ],
-  "next_resume_action": "Continue Lane A only with stronger Classic runtime/source evidence for remaining record-to-name/runtime topology mapping; do not promote additional record-to-name joins from byte proximity or adaptation data alone.",
+  "next_resume_action": "Continue Lane A with stronger Classic runtime/source evidence for coordinate display-unit/map-scaling/projection and remaining exact record-to-name/runtime topology mapping; do not use JumpDistance to promote decoded syst xPos/yPos units.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -144,5 +142,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T14:55:34Z"
+  "updated_at": "2026-06-10T15:06:54Z"
 }

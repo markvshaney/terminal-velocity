@@ -266,9 +266,9 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v28':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v29':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
-    if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
+    if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
     run = data.get('recordRun', {})
     if run.get('candidateType') != 'syst-like' or run.get('recordSize') != 88 or run.get('count') != 67:
@@ -319,6 +319,17 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     seeds = data.get('systemNameSeeds', [])
     if len(seeds) < 9 or 'Sol' not in {seed.get('name') for seed in seeds}:
         raise ValueError('sourced EV systems manifest missing expected heuristic name seeds')
+    topology_constants = data.get('resourceBibleTopologyConstantsSummary', {})
+    if topology_constants.get('sourceLabel') != 'resource-bible-backed-topology-constants':
+        raise ValueError('sourced EV systems manifest missing Resource Bible topology constants source label')
+    if topology_constants.get('maxStellarObjects') != 1500 or topology_constants.get('maxSystems') != 1000:
+        raise ValueError('sourced EV systems manifest has unexpected Resource Bible topology capacities')
+    if topology_constants.get('jumpDistancePixels') != 1000:
+        raise ValueError('sourced EV systems manifest has unexpected Resource Bible JumpDistance constant')
+    if topology_constants.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest must not promote coordinate display units from JumpDistance alone')
+    if 'not a decoded syst coordinate unit interpretation' not in ' '.join(topology_constants.get('promotionBlockers', [])):
+        raise ValueError('sourced EV systems manifest topology constants must preserve display-unit blocker')
     seed_summary = data.get('systemNameSeedSummary', {})
     if seed_summary.get('sourceLabel') != 'decoded-resource-backed-system-name-seed-join-scout':
         raise ValueError('sourced EV systems manifest missing system-name seed summary source label')

@@ -1803,6 +1803,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'found_67_syst_like_primitive_records',
             'kept_runtime_universe_subset_unchanged',
             'recorded_name_seed_inputs',
+            'recorded_resource_bible_topology_constants',
             'recorded_system_name_seed_summary',
             'recorded_coordinate_raw_long_candidate',
             'recorded_coordinate_domain_summary',
@@ -1836,6 +1837,13 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['systLikeRecords'], 67)
         self.assertEqual(readiness['recordSize'], 88)
         self.assertEqual(readiness['runtimeSystemSubsetCount'], 10)
+        self.assertEqual(readiness['resourceBibleTopologyConstantsSourceLabel'], 'resource-bible-backed-topology-constants')
+        self.assertEqual(readiness['resourceBibleTopologyConstantsOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(readiness['resourceBibleTopologyConstantsMaxStellarObjects'], 1500)
+        self.assertEqual(readiness['resourceBibleTopologyConstantsMaxSystems'], 1000)
+        self.assertEqual(readiness['resourceBibleTopologyConstantsJumpDistancePixels'], 1000)
+        self.assertIn('not a decoded syst coordinate unit interpretation', ' '.join(readiness['resourceBibleTopologyConstantsPromotionBlockers']))
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['resourceBibleTopologyConstantsJumpDistancePixels'], 1000)
         self.assertEqual(readiness['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
         self.assertEqual(readiness['systemNameSeedSummaryOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
         self.assertEqual(readiness['systemNameSeedSummarySeedCount'], 9)

@@ -429,6 +429,7 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
     system_names = names.get('systemNames', [])
     landing_names = names.get('landingNames', [])
     system_name_seed_summary = systems_manifest.get('systemNameSeedSummary', {})
+    topology_constants = systems_manifest.get('resourceBibleTopologyConstantsSummary', {})
     record_to_name_readiness = systems_manifest.get('recordToNamePromotionReadinessSummary', {})
     system_name_landing_proximity = systems_manifest.get('systemNameLandingProximitySummary', {})
     first_system = systems_manifest.get('systems', [{}])[0]
@@ -465,6 +466,12 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'primitiveRunConfidence': syst_run.get('confidence'),
         'heuristicSystemNameSeeds': len(system_names),
         'landingNameSeeds': len(landing_names),
+        'resourceBibleTopologyConstantsSourceLabel': topology_constants.get('sourceLabel'),
+        'resourceBibleTopologyConstantsOracleStatus': topology_constants.get('oracleStatus'),
+        'resourceBibleTopologyConstantsMaxStellarObjects': topology_constants.get('maxStellarObjects'),
+        'resourceBibleTopologyConstantsMaxSystems': topology_constants.get('maxSystems'),
+        'resourceBibleTopologyConstantsJumpDistancePixels': topology_constants.get('jumpDistancePixels'),
+        'resourceBibleTopologyConstantsPromotionBlockers': topology_constants.get('promotionBlockers', []),
         'systemNameSeedSummarySourceLabel': system_name_seed_summary.get('sourceLabel'),
         'systemNameSeedSummaryOracleStatus': system_name_seed_summary.get('oracleStatus'),
         'systemNameSeedSummarySeedCount': system_name_seed_summary.get('systemNameSeedCount'),
@@ -659,6 +666,12 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'recordSize': syst_run.get('recordSize'),
         'heuristicSystemNameSeeds': len(system_names),
         'landingNameSeeds': len(landing_names),
+        'resourceBibleTopologyConstantsSourceLabel': topology_constants.get('sourceLabel'),
+        'resourceBibleTopologyConstantsOracleStatus': topology_constants.get('oracleStatus'),
+        'resourceBibleTopologyConstantsMaxStellarObjects': topology_constants.get('maxStellarObjects'),
+        'resourceBibleTopologyConstantsMaxSystems': topology_constants.get('maxSystems'),
+        'resourceBibleTopologyConstantsJumpDistancePixels': topology_constants.get('jumpDistancePixels'),
+        'resourceBibleTopologyConstantsPromotionBlockers': topology_constants.get('promotionBlockers', []),
         'systemNameSeedSummarySourceLabel': system_name_seed_summary.get('sourceLabel'),
         'systemNameSeedSummarySeedCount': system_name_seed_summary.get('systemNameSeedCount'),
         'systemNameSeedSummaryExactMappedNames': system_name_seed_summary.get('exactMappedSystemNames', []),
@@ -3976,6 +3989,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'found_67_syst_like_primitive_records': 'passed' if readiness.get('systLikeRecords') == 67 and readiness.get('recordSize') == 88 else 'failed',
             'kept_runtime_universe_subset_unchanged': 'passed' if readiness.get('runtimeSystemSubsetCount') == 10 and static_state.get('runtimeSystemSubsetCount') == 10 else 'failed',
             'recorded_name_seed_inputs': 'passed' if readiness.get('heuristicSystemNameSeeds', 0) >= 9 and readiness.get('landingNameSeeds', 0) >= 70 else 'failed',
+            'recorded_resource_bible_topology_constants': 'passed' if readiness.get('resourceBibleTopologyConstantsSourceLabel') == 'resource-bible-backed-topology-constants' and readiness.get('resourceBibleTopologyConstantsOracleStatus') == 'coordinate_display_units_map_scaling_pending' and readiness.get('resourceBibleTopologyConstantsMaxStellarObjects') == 1500 and readiness.get('resourceBibleTopologyConstantsMaxSystems') == 1000 and readiness.get('resourceBibleTopologyConstantsJumpDistancePixels') == 1000 and 'not a decoded syst coordinate unit interpretation' in ' '.join(readiness.get('resourceBibleTopologyConstantsPromotionBlockers', [])) and static_state.get('resourceBibleTopologyConstantsJumpDistancePixels') == 1000 else 'failed',
             'recorded_system_name_seed_summary': 'passed' if readiness.get('systemNameSeedSummarySourceLabel') == 'decoded-resource-backed-system-name-seed-join-scout' and readiness.get('systemNameSeedSummaryOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('systemNameSeedSummarySeedCount') == 9 and readiness.get('systemNameSeedSummarySeedNames', [])[:3] == ['Sol', 'Centauri', 'Sirius'] and readiness.get('systemNameSeedSummaryExactMappedNames') == ['Levo'] and readiness.get('systemNameSeedSummaryUnjoinedSeedCount') == 9 and static_state.get('systemNameSeedSummarySourceLabel') == 'decoded-resource-backed-system-name-seed-join-scout' else 'failed',
             'recorded_record_to_name_promotion_readiness_summary': 'passed' if readiness.get('recordToNamePromotionReadinessSourceLabel') == 'decoded-resource-backed-record-to-name-promotion-readiness-scout' and readiness.get('recordToNamePromotionReadinessOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('recordToNamePromotionReadinessExactMappedResourceIds') == [128] and readiness.get('recordToNamePromotionReadinessUnjoinedRecordCount') == 66 and 'landing-name byte proximity is a scout signal, not a syst record-to-name join' in readiness.get('recordToNamePromotionReadinessPromotionBlockers', []) and static_state.get('recordToNamePromotionReadinessUnjoinedRecordCount') == 66 else 'failed',
             'recorded_system_name_landing_proximity_summary': 'passed' if readiness.get('systemNameLandingProximitySourceLabel') == 'decoded-resource-backed-system-name-landing-proximity-scout' and readiness.get('systemNameLandingProximityOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and 'system-name text seed to nearest landing-name text seed byte-proximity candidates' in readiness.get('systemNameLandingProximityCandidateFamilies', []) and readiness.get('systemNameLandingProximityCloseCandidates') == ['Centauri', 'Sirius', 'Tau Ceti', 'Alkaid', 'Zaxted', 'Clotho'] and readiness.get('systemNameLandingProximityDistantCandidates') == ['Sol', 'Enyo', 'Antares'] and readiness.get('systemNameLandingProximityExactMappedLandingCandidates') == [{'systemName': 'Levo', 'landingNameSeedByteOffsets': [23867]}] and static_state.get('systemNameLandingProximitySourceLabel') == 'decoded-resource-backed-system-name-landing-proximity-scout' else 'failed',
