@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v35':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v36':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -647,6 +647,23 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display scale interpretation missing map evidence blocker')
     if 'not-promoted' not in display_scale_interpretation.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate display scale interpretation must not promote display units')
+    display_calibration_gate = data.get('coordinateDisplayCalibrationGateSummary', {})
+    if display_calibration_gate.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-calibration-gate':
+        raise ValueError('sourced EV systems manifest missing coordinate display calibration gate source label')
+    if display_calibration_gate.get('oracleStatus') != 'coordinate_display_calibration_blocked_pending_classic_map_evidence':
+        raise ValueError('sourced EV systems manifest coordinate display calibration gate should keep Classic map calibration blocked')
+    if display_calibration_gate.get('recordCount') != 67 or display_calibration_gate.get('candidateInputSummaryCount') != 8:
+        raise ValueError('sourced EV systems manifest coordinate display calibration gate has unexpected counts')
+    if 'coordinateDisplayScaleInterpretationSummary' not in display_calibration_gate.get('candidateInputSummaries', []):
+        raise ValueError('sourced EV systems manifest coordinate display calibration gate missing scale interpretation input')
+    if 'display pixel scale or accepted projection surrogate' not in display_calibration_gate.get('calibrationRequiredClaims', []):
+        raise ValueError('sourced EV systems manifest coordinate display calibration gate missing pixel/projection required claim')
+    if 'blocked' not in display_calibration_gate.get('promotionReadinessStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display calibration gate must stay blocked')
+    if 'candidate coordinate families disagree on scale/aspect interpretation' not in display_calibration_gate.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest coordinate display calibration gate missing scale/aspect blocker')
+    if not display_calibration_gate.get('nextEvidenceFamilies', [''])[0].startswith('original-runtime map screenshot/click calibration'):
+        raise ValueError('sourced EV systems manifest coordinate display calibration gate missing original-runtime evidence family')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')

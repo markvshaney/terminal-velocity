@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v35')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v36')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3636,6 +3636,22 @@ class NativeEvModelTests(unittest.TestCase):
             'route UI ordering and projection remain unobserved',
         ])
         self.assertIn('not-promoted', display_scale_interpretation['displayUnitInterpretationStatus'])
+        display_calibration_gate = data['coordinateDisplayCalibrationGateSummary']
+        self.assertEqual(display_calibration_gate['sourceLabel'], 'decoded-resource-backed-coordinate-display-calibration-gate')
+        self.assertEqual(display_calibration_gate['oracleStatus'], 'coordinate_display_calibration_blocked_pending_classic_map_evidence')
+        self.assertEqual(display_calibration_gate['recordCount'], 67)
+        self.assertEqual(display_calibration_gate['candidateInputSummaryCount'], 8)
+        self.assertIn('coordinateDisplayScaleInterpretationSummary', display_calibration_gate['candidateInputSummaries'])
+        self.assertIn('coordinateDisplayQuantizationSummary', display_calibration_gate['candidateInputSummaries'])
+        self.assertEqual(display_calibration_gate['calibrationRequiredClaims'], [
+            'display pixel scale or accepted projection surrogate',
+            'map origin/centering transform',
+            'axis orientation/y inversion',
+            'at least two named systems tied to decoded resource IDs and observed map positions',
+        ])
+        self.assertEqual(display_calibration_gate['promotionReadinessStatus'], 'blocked; static coordinate candidates are analysis inputs only')
+        self.assertIn('candidate coordinate families disagree on scale/aspect interpretation', display_calibration_gate['promotionBlockers'])
+        self.assertIn('original-runtime map screenshot/click calibration', display_calibration_gate['nextEvidenceFamilies'][0])
         display_extrema = data['coordinateDisplayExtremaSummary']
         self.assertEqual(display_extrema['sourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(display_extrema['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
@@ -3863,7 +3879,9 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('not-promoted beyond resource 128 to Levo', topology_readiness['recordNamePromotionStatus'])
         self.assertIn('blocked', topology_readiness['runtimeUniverseReplacementStatus'])
         self.assertIn('Classic map screenshot/click calibration', topology_readiness['nextEvidenceFamilies'][0])
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertIn('coordinate display calibration gate matrix', data['promotionBoundary'])
+        self.assertIn('non-promoted coordinate scale-interpretation blocker/comparison candidates', data['promotionBoundary'])
+        self.assertIn('coordinate display units/map scaling/projection', data['promotionBoundary'])
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
