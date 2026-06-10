@@ -1808,8 +1808,10 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_syst_field_layout_source_readiness_summary',
             'recorded_syst_field_order_conflict_summary',
             'recorded_syst_word_domain_coverage_summary',
+            'recorded_non_topology_syst_oracle_gap',
             'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',
+            'recorded_system_name_byte_order_oracle_gap',
             'recorded_coordinate_raw_long_candidate',
             'recorded_coordinate_domain_summary',
             'recorded_coordinate_display_candidate_summary',
@@ -1891,6 +1893,16 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['systWordDomainCoverageWord20Range'], [15, 40])
         self.assertIn('complete syst field-order oracle is still missing', readiness['systWordDomainCoveragePromotionBlockers'])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systWordDomainCoverageSourceLabel'], 'decoded-resource-backed-syst-word-domain-coverage-scout')
+        self.assertEqual(readiness['nonTopologySystOracleGapSourceLabel'], 'decoded-resource-backed-non-topology-syst-oracle-gap')
+        self.assertEqual(readiness['nonTopologySystOracleGapOracleStatus'], 'non_topology_syst_fields_blocked_pending_field_order_or_runtime_oracle')
+        self.assertEqual(readiness['nonTopologySystOracleGapRecordCount'], 67)
+        self.assertEqual(readiness['nonTopologySystOracleGapInputSummaryCount'], 4)
+        self.assertIn('systFieldOrderConflictSummary', readiness['nonTopologySystOracleGapInputSummaries'])
+        self.assertIn('NavDef F1-F4 navigation defaults', readiness['nonTopologySystOracleGapBlockedFamilies'])
+        self.assertIn('Govt/Message/Asteroids/Interference/VisBit environment and visibility controls', readiness['nonTopologySystOracleGapBlockedFamilies'])
+        self.assertIn('do not route AI, hazards, message buoys, visibility, or government ownership from unresolved word windows', readiness['nonTopologySystOracleGapPromotionBlockers'])
+        self.assertIn('blocked', readiness['nonTopologySystOracleGapReadinessStatus'])
+        self.assertIn('source-level syst struct declaration', readiness['nonTopologySystOracleGapNextEvidenceFamilies'][0])
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['topologyPromotionReadinessOracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
         self.assertIn('complete decoded coordinate word pairs and link slots for all 67 records', readiness['topologyPromotionReadinessReadyStaticInputFamilies'])
@@ -1923,6 +1935,17 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['systemNameSeedSummarySeedNames'][:3], ['Sol', 'Centauri', 'Sirius'])
         self.assertEqual(readiness['systemNameSeedSummaryExactMappedNames'], ['Levo'])
         self.assertEqual(readiness['systemNameSeedSummaryUnjoinedSeedCount'], 9)
+        self.assertEqual(readiness['systemNameByteOrderOracleGapSourceLabel'], 'decoded-resource-backed-system-name-byte-order-oracle-gap')
+        self.assertEqual(readiness['systemNameByteOrderOracleGapOracleStatus'], 'record_name_byte_order_blocked_pending_complete_name_table_or_runtime_label_oracle')
+        self.assertEqual(readiness['systemNameByteOrderOracleGapSystemSeedCount'], 9)
+        self.assertEqual(readiness['systemNameByteOrderOracleGapSeedOrderNames'][:3], ['Centauri', 'Sirius', 'Tau Ceti'])
+        self.assertEqual(readiness['systemNameByteOrderOracleGapLandingFirstNames'][:6], ['Earth', 'Stardock Alpha', 'Mars', 'Landfall', 'Luna', 'Levo'])
+        self.assertEqual(readiness['systemNameByteOrderOracleGapExactMappedNamesPresentInSystemSeeds'], [])
+        self.assertEqual(readiness['systemNameByteOrderOracleGapExactMappedNamesPresentInLandingSeeds'][0]['landingNameSeedIndex'], 5)
+        self.assertTrue(readiness['systemNameByteOrderOracleGapSeedOrderDoesNotContainExactStartSystem'])
+        self.assertIn('blocked', readiness['systemNameByteOrderOracleGapPromotionReadinessStatus'])
+        self.assertIn('system-name seed count is far smaller than the 67 decoded syst records and cannot define a bijective record order', readiness['systemNameByteOrderOracleGapUnsafeJoinSignals'])
+        self.assertIn('decoded complete system-name table', readiness['systemNameByteOrderOracleGapNextEvidenceFamilies'][0])
         self.assertEqual(readiness['recordToNamePromotionReadinessSourceLabel'], 'decoded-resource-backed-record-to-name-promotion-readiness-scout')
         self.assertEqual(readiness['recordToNamePromotionReadinessOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
         self.assertEqual(readiness['recordToNamePromotionReadinessExactMappedResourceIds'], [128])

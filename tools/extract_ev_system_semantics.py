@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v38'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v40'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and source provenance are promoted; coordinate display units/map scaling/projection, remaining exact system names, named route topology, services, hazards, governments, ports, and broad runtime universe replacement are explicitly not promoted yet'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -1317,6 +1317,54 @@ def _system_name_landing_proximity_summary(names: dict) -> dict:
     }
 
 
+def _system_name_byte_order_oracle_gap_summary(names: dict) -> dict:
+    """Record why current name byte-order evidence is not a record-to-name oracle."""
+    system_seeds = sorted(names.get('systemNames', []), key=lambda entry: entry.get('byteOffset', 0))
+    landing_seeds = sorted(names.get('landingNames', []), key=lambda entry: entry.get('byteOffset', 0))
+    exact_names = {mapping['systemName'] for mapping in EXACT_SYSTEM_NAME_MAPPINGS.values()}
+    landing_exact_matches = [
+        {
+            'systemName': entry.get('name'),
+            'landingNameSeedIndex': index,
+            'landingChunkIndex': entry.get('chunkIndex'),
+            'landingByteOffset': entry.get('byteOffset'),
+        }
+        for index, entry in enumerate(landing_seeds)
+        if entry.get('name') in exact_names
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-system-name-byte-order-oracle-gap',
+        'oracleStatus': 'record_name_byte_order_blocked_pending_complete_name_table_or_runtime_label_oracle',
+        'candidateFamilies': [
+            'heuristic system-name text-seed byte order',
+            'landing description chunk byte order',
+            'exact mapped start-system landing-name cross-check',
+        ],
+        'systemNameSeedCount': len(system_seeds),
+        'landingNameSeedCount': len(landing_seeds),
+        'systemNameSeedByteOrderNames': [entry.get('name') for entry in system_seeds],
+        'landingNameSeedFirstNames': [entry.get('name') for entry in landing_seeds[:12]],
+        'exactMappedSystemNames': sorted(exact_names),
+        'exactMappedNamesPresentInSystemNameSeeds': [entry.get('name') for entry in system_seeds if entry.get('name') in exact_names],
+        'exactMappedNamesPresentInLandingSeeds': landing_exact_matches,
+        'seedOrderDoesNotContainExactStartSystem': not any(entry.get('name') in exact_names for entry in system_seeds),
+        'landingOrderStartSystemIndex': landing_exact_matches[0]['landingNameSeedIndex'] if landing_exact_matches else None,
+        'unsafeJoinSignals': [
+            'heuristic system-name text seeds are description occurrences and do not contain the exact mapped Levo start-system name',
+            'landing description byte order contains Levo but landing chunks describe ports/planets, not syst records',
+            'system-name seed count is far smaller than the 67 decoded syst records and cannot define a bijective record order',
+            'byte proximity/order signals must remain scouting inputs until a complete name table or runtime route-label oracle exists',
+        ],
+        'promotionReadinessStatus': 'blocked; byte-order seeds are scout evidence only and cannot assign names to syst resource IDs',
+        'nextEvidenceFamilies': [
+            'decoded complete system-name table with record/resource ordering',
+            'source-level name storage/order oracle for syst records',
+            'original-runtime map/route label capture tying labels to decoded resource IDs or link slots',
+        ],
+        'sourceNote': 'This packet makes the byte-order failure mode executable: current text seeds are useful leads, but neither system-name text occurrence order nor landing-description order can promote additional resource ID to Classic name joins beyond resource 128 -> Levo.',
+    }
+
+
 def _record_to_name_promotion_readiness_summary(names: dict, resource_ids: set[int]) -> dict:
     """Make the remaining record-to-name evidence gap explicit without promoting joins."""
     system_seed_names = [seed.get('name') for seed in names.get('systemNames', [])]
@@ -1648,6 +1696,58 @@ def _syst_word_domain_coverage_summary(run: dict) -> dict:
     }
 
 
+def _non_topology_syst_oracle_gap_summary(run: dict) -> dict:
+    """Record non-topology syst field gates before gameplay integration."""
+    evidence_inputs = [
+        'systFieldLayoutSourceReadinessSummary',
+        'systFieldOrderConflictSummary',
+        'systWordDomainCoverageSummary',
+        'runtimeUniverseReplacementGateSummary',
+    ]
+    blocked_families = [
+        'NavDef F1-F4 navigation defaults',
+        'DudeTypes/%Prob/AvgShips AI population controls',
+        'Govt/Message/Asteroids/Interference/VisBit environment and visibility controls',
+        'Con6-Con16 additional hyperspace links',
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-non-topology-syst-oracle-gap',
+        'oracleStatus': 'non_topology_syst_fields_blocked_pending_field_order_or_runtime_oracle',
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': evidence_inputs,
+        'evidenceInputSummaryCount': len(evidence_inputs),
+        'blockedResourceBibleFamilies': blocked_families,
+        'decodedWordGroupScouts': {
+            'projectedNavDefF1ToF4Words9To12': _word_group_summary(run, [9, 10, 11, 12]),
+            'projectedDudeProbabilityAvgShipsWords13To21': _word_group_summary(run, list(range(13, 22))),
+            'projectedGovtMessageHazardVisibilityWords22To26': _word_group_summary(run, [22, 23, 24, 25, 26]),
+            'projectedCon6ToCon16Words27To37': _word_group_summary(run, list(range(27, 38))),
+            'currentCandidateLinkScoutWindowWords4To19': _word_group_summary(run, list(range(4, 20))),
+        },
+        'requiredOracleClaims': [
+            'complete syst field-order oracle identifying word widths and offsets for NavDef, population, government, message, hazard, visibility, and split Con6-Con16 fields',
+            'runtime/source evidence tying navigation defaults to selectable/radar objects before AI or target UI integration',
+            'runtime/source evidence tying governments, message buoys, asteroids, interference, and visibility bits to observed gameplay before environment integration',
+            'field-order reconciliation that preserves candidate topology scout data without treating every scout word as a promoted Resource Bible field',
+        ],
+        'promotionReadinessStatus': 'blocked; non-topology syst fields are source-backed family names only',
+        'promotionBlockers': [
+            'do not route AI, hazards, message buoys, visibility, or government ownership from unresolved word windows',
+            'direct Resource Bible 16-bit projection conflicts with current decoded word-domain scout evidence',
+            'current Con1-Con16 contiguous link scout remains analysis input only and cannot promote downstream field semantics',
+            'broad runtime universe replacement remains blocked until non-topology fields have an offset/runtime oracle or explicit scaffold boundary',
+        ],
+        'nextEvidenceFamilies': [
+            'source-level syst struct declaration including NavDef/population/government/message/hazard/visibility offsets',
+            'ResEdit/template field map tying syst field names to byte offsets and field widths',
+            'runtime probes for navigation defaults, governments, message buoys, asteroids, interference, visibility bits, and Con6-Con16 behavior',
+        ],
+        'sourceNote': 'This packet narrows the next non-topology syst integration gate: Resource Bible family names are preserved, but unresolved offsets and conflicting word-domain scouts block gameplay use of navigation defaults, AI populations, governments, hazards, messages, visibility, and split Con6-Con16 placement.',
+    }
+
+
 def _topology_promotion_readiness_summary(systems: list[dict], names: dict) -> dict:
     """Summarize ready Lane A static inputs versus still-blocked topology promotions."""
     resource_ids = {system['resourceId'] for system in systems}
@@ -1835,6 +1935,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         },
         'systemNameSeeds': names.get('systemNames', []),
         'systemNameSeedSummary': _system_name_seed_summary(names),
+        'systemNameByteOrderOracleGapSummary': _system_name_byte_order_oracle_gap_summary(names),
         'recordNameOracleEvidenceMatrixSummary': _record_name_oracle_evidence_matrix_summary(names, resource_ids),
         'namedRouteTopologyOracleGapSummary': _named_route_topology_oracle_gap_summary(systems, names),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
@@ -1843,6 +1944,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
         'systWordDomainCoverageSummary': _syst_word_domain_coverage_summary(run),
+        'nonTopologySystOracleGapSummary': _non_topology_syst_oracle_gap_summary(run),
         'topologyPromotionReadinessSummary': _topology_promotion_readiness_summary(systems, names),
         'runtimeUniverseReplacementGateSummary': _runtime_universe_replacement_gate_summary(systems, names),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),

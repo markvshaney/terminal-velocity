@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v38')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v40')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3480,6 +3480,20 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(word_domain['coverageSignals']['noLinkSentinelOnlyWords'], list(range(8, 20)))
         self.assertEqual(word_domain['coverageSignals']['zeroOnlyTailWords'], list(range(24, 44)))
         self.assertIn('complete syst field-order oracle is still missing', word_domain['promotionBlockers'])
+        non_topology_gap = data['nonTopologySystOracleGapSummary']
+        self.assertEqual(non_topology_gap['sourceLabel'], 'decoded-resource-backed-non-topology-syst-oracle-gap')
+        self.assertEqual(non_topology_gap['oracleStatus'], 'non_topology_syst_fields_blocked_pending_field_order_or_runtime_oracle')
+        self.assertEqual(non_topology_gap['recordCount'], 67)
+        self.assertEqual(non_topology_gap['evidenceInputSummaries'], [
+            'systFieldLayoutSourceReadinessSummary',
+            'systFieldOrderConflictSummary',
+            'systWordDomainCoverageSummary',
+            'runtimeUniverseReplacementGateSummary',
+        ])
+        self.assertIn('NavDef F1-F4 navigation defaults', non_topology_gap['blockedResourceBibleFamilies'])
+        self.assertIn('Govt/Message/Asteroids/Interference/VisBit environment and visibility controls', non_topology_gap['blockedResourceBibleFamilies'])
+        self.assertIn('do not route AI, hazards, message buoys, visibility, or government ownership from unresolved word windows', non_topology_gap['promotionBlockers'])
+        self.assertIn('source-level syst struct declaration', non_topology_gap['nextEvidenceFamilies'][0])
         systems = data['systems']
         self.assertEqual(len(systems), 67)
         first = systems[0]
@@ -3672,6 +3686,21 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(seed_summary['exactMappedSystemNames'], ['Levo'])
         self.assertEqual(seed_summary['unjoinedSystemNameSeedCount'], 9)
         self.assertEqual(seed_summary['systemSeedNamesAlsoPresentAsLandingSeeds'], [])
+        byte_order_gap = data['systemNameByteOrderOracleGapSummary']
+        self.assertEqual(byte_order_gap['sourceLabel'], 'decoded-resource-backed-system-name-byte-order-oracle-gap')
+        self.assertEqual(byte_order_gap['oracleStatus'], 'record_name_byte_order_blocked_pending_complete_name_table_or_runtime_label_oracle')
+        self.assertIn('heuristic system-name text-seed byte order', byte_order_gap['candidateFamilies'])
+        self.assertEqual(byte_order_gap['systemNameSeedCount'], 9)
+        self.assertGreaterEqual(byte_order_gap['landingNameSeedCount'], 70)
+        self.assertEqual(byte_order_gap['systemNameSeedByteOrderNames'][:3], ['Centauri', 'Sirius', 'Tau Ceti'])
+        self.assertEqual(byte_order_gap['landingNameSeedFirstNames'][:6], ['Earth', 'Stardock Alpha', 'Mars', 'Landfall', 'Luna', 'Levo'])
+        self.assertEqual(byte_order_gap['exactMappedSystemNames'], ['Levo'])
+        self.assertEqual(byte_order_gap['exactMappedNamesPresentInSystemNameSeeds'], [])
+        self.assertEqual(byte_order_gap['exactMappedNamesPresentInLandingSeeds'][0]['landingNameSeedIndex'], 5)
+        self.assertTrue(byte_order_gap['seedOrderDoesNotContainExactStartSystem'])
+        self.assertIn('blocked', byte_order_gap['promotionReadinessStatus'])
+        self.assertIn('system-name seed count is far smaller than the 67 decoded syst records and cannot define a bijective record order', byte_order_gap['unsafeJoinSignals'])
+        self.assertIn('decoded complete system-name table', byte_order_gap['nextEvidenceFamilies'][0])
         record_name_readiness = data['recordToNamePromotionReadinessSummary']
         self.assertEqual(record_name_readiness['sourceLabel'], 'decoded-resource-backed-record-to-name-promotion-readiness-scout')
         self.assertEqual(record_name_readiness['oracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
