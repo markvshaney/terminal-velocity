@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v36'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v37'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity scout; coordinate display units/map scaling/projection, complete record-to-name joins beyond resource ID 128, named route topology, non-topology syst fields, and broad runtime universe replacement remain pending'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity scout; coordinate display units/map scaling/projection, complete record-to-name joins beyond resource ID 128, named route topology, non-topology syst fields, and broad runtime universe replacement remain pending'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -1350,6 +1350,55 @@ def _record_to_name_promotion_readiness_summary(names: dict, resource_ids: set[i
     }
 
 
+def _record_name_oracle_evidence_matrix_summary(names: dict, resource_ids: set[int]) -> dict:
+    """Record the evidence matrix needed before resource IDs may receive exact Classic names."""
+    system_seed_names = [seed.get('name') for seed in names.get('systemNames', [])]
+    landing_seed_names = [seed.get('name') for seed in names.get('landingNames', [])]
+    exact_mapped_resource_ids = sorted(EXACT_SYSTEM_NAME_MAPPINGS)
+    unjoined_resource_ids = sorted(resource_ids - set(exact_mapped_resource_ids))
+    evidence_inputs = [
+        'systemNameSeedSummary',
+        'systemNameLandingProximitySummary',
+        'recordToNamePromotionReadinessSummary',
+        'candidateLinkGraphSummary',
+        'startSystemCandidateTopologySummary',
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-record-name-oracle-evidence-matrix',
+        'oracleStatus': 'record_name_mapping_blocked_pending_complete_name_order_or_runtime_label_oracle',
+        'recordCount': len(resource_ids),
+        'evidenceInputSummaries': evidence_inputs,
+        'evidenceInputSummaryCount': len(evidence_inputs),
+        'exactMappedRecordCount': len(exact_mapped_resource_ids),
+        'exactMappedResourceIds': exact_mapped_resource_ids,
+        'exactMappedSystemNames': [EXACT_SYSTEM_NAME_MAPPINGS[resource_id]['systemName'] for resource_id in exact_mapped_resource_ids],
+        'unjoinedRecordCount': len(unjoined_resource_ids),
+        'unjoinedResourceIdRange': [unjoined_resource_ids[0], unjoined_resource_ids[-1]] if unjoined_resource_ids else [],
+        'heuristicSystemNameSeedCount': len(system_seed_names),
+        'landingNameSeedCount': len(landing_seed_names),
+        'systemSeedNamesAlsoPresentAsLandingSeeds': sorted(set(system_seed_names) & set(landing_seed_names)),
+        'requiredOracleClaims': [
+            'complete source/runtime name ordering that can be joined bijectively to the 67 decoded syst records',
+            'or runtime map/route label evidence tying named systems to decoded resource IDs and link slots',
+            'Resource Bible/source variable evidence for name/list resource storage and ordering',
+            'cross-check that promoted names preserve resource 128 -> Levo and do not rely on landing-name byte proximity alone',
+        ],
+        'promotionReadinessStatus': 'blocked; only resource 128 -> Levo is exact-mapped',
+        'promotionBlockers': [
+            'heuristic system-name seeds cover 9 names, not the remaining 66 unjoined syst records',
+            'landing-name byte proximity and matching text are scout signals, not a complete record-name oracle',
+            'candidate link graph uses resource IDs, but named Classic route labels remain unobserved beyond Levo',
+            'display/map calibration remains blocked, so map-label position joins cannot be inferred from static coordinates',
+        ],
+        'nextEvidenceFamilies': [
+            'decoded complete name/list resource with a stable order matching the 67 syst records',
+            'original-runtime map or route UI captures tying multiple labels to decoded resource IDs and Con-slot neighbors',
+            'source-level variable/struct evidence identifying system-name resource storage and ordering',
+        ],
+        'sourceNote': 'This matrix is a negative gate for record-to-name promotion. It keeps the heuristic system-name and landing-name seeds useful for scouting while requiring a complete name/order oracle or runtime label evidence before assigning any additional Classic system names to decoded syst records.',
+    }
+
+
 def _word_group_summary(run: dict, word_indices: list[int]) -> dict:
     values = [
         _word(record, word_index)
@@ -1716,6 +1765,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         },
         'systemNameSeeds': names.get('systemNames', []),
         'systemNameSeedSummary': _system_name_seed_summary(names),
+        'recordNameOracleEvidenceMatrixSummary': _record_name_oracle_evidence_matrix_summary(names, resource_ids),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),

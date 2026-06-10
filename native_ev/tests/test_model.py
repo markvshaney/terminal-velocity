@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v36')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v37')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3685,6 +3685,22 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertTrue(record_name_readiness['heuristicSeedCountDoesNotCoverRemainingRecords'])
         self.assertIn('landing-name byte proximity is a scout signal, not a syst record-to-name join', record_name_readiness['promotionBlockers'])
         self.assertIn('decoded complete name/list resource', record_name_readiness['nextEvidenceFamilies'][0])
+        record_name_oracle = data['recordNameOracleEvidenceMatrixSummary']
+        self.assertEqual(record_name_oracle['sourceLabel'], 'decoded-resource-backed-record-name-oracle-evidence-matrix')
+        self.assertEqual(record_name_oracle['oracleStatus'], 'record_name_mapping_blocked_pending_complete_name_order_or_runtime_label_oracle')
+        self.assertEqual(record_name_oracle['recordCount'], 67)
+        self.assertEqual(record_name_oracle['evidenceInputSummaryCount'], 5)
+        self.assertIn('recordToNamePromotionReadinessSummary', record_name_oracle['evidenceInputSummaries'])
+        self.assertEqual(record_name_oracle['exactMappedResourceIds'], [128])
+        self.assertEqual(record_name_oracle['exactMappedSystemNames'], ['Levo'])
+        self.assertEqual(record_name_oracle['unjoinedRecordCount'], 66)
+        self.assertEqual(record_name_oracle['unjoinedResourceIdRange'], [129, 194])
+        self.assertEqual(record_name_oracle['heuristicSystemNameSeedCount'], 9)
+        self.assertGreaterEqual(record_name_oracle['landingNameSeedCount'], 70)
+        self.assertIn('complete source/runtime name ordering', record_name_oracle['requiredOracleClaims'][0])
+        self.assertIn('blocked', record_name_oracle['promotionReadinessStatus'])
+        self.assertIn('landing-name byte proximity and matching text are scout signals, not a complete record-name oracle', record_name_oracle['promotionBlockers'])
+        self.assertIn('decoded complete name/list resource', record_name_oracle['nextEvidenceFamilies'][0])
         topology_readiness = data['topologyPromotionReadinessSummary']
         self.assertEqual(topology_readiness['sourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(topology_readiness['oracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')

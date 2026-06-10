@@ -1835,6 +1835,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_start_neighborhood_slot_angular_order_summary',
             'recorded_exact_start_system_mapping',
             'recorded_record_to_name_promotion_readiness_summary',
+            'recorded_record_name_oracle_evidence_matrix',
             'recorded_static_topology_source_boundary',
         ]:
             self.assertEqual(result['checks'][check], 'passed')
@@ -1929,6 +1930,19 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('decoded complete name/list resource', readiness['recordToNamePromotionReadinessNextEvidenceFamilies'][0])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['recordToNamePromotionReadinessUnjoinedRecordCount'], 66)
+        self.assertEqual(readiness['recordNameOracleEvidenceMatrixSourceLabel'], 'decoded-resource-backed-record-name-oracle-evidence-matrix')
+        self.assertEqual(readiness['recordNameOracleEvidenceMatrixOracleStatus'], 'record_name_mapping_blocked_pending_complete_name_order_or_runtime_label_oracle')
+        self.assertEqual(readiness['recordNameOracleEvidenceMatrixRecordCount'], 67)
+        self.assertEqual(readiness['recordNameOracleEvidenceMatrixInputSummaryCount'], 5)
+        self.assertIn('recordToNamePromotionReadinessSummary', readiness['recordNameOracleEvidenceMatrixInputSummaries'])
+        self.assertEqual(readiness['recordNameOracleEvidenceMatrixExactMappedResourceIds'], [128])
+        self.assertEqual(readiness['recordNameOracleEvidenceMatrixUnjoinedRecordCount'], 66)
+        self.assertEqual(readiness['recordNameOracleEvidenceMatrixUnjoinedResourceIdRange'], [129, 194])
+        self.assertIn('complete source/runtime name ordering', readiness['recordNameOracleEvidenceMatrixRequiredClaims'][0])
+        self.assertIn('blocked', readiness['recordNameOracleEvidenceMatrixReadinessStatus'])
+        self.assertIn('landing-name byte proximity and matching text are scout signals, not a complete record-name oracle', readiness['recordNameOracleEvidenceMatrixPromotionBlockers'])
+        self.assertIn('decoded complete name/list resource', readiness['recordNameOracleEvidenceMatrixNextEvidenceFamilies'][0])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['recordNameOracleEvidenceMatrixUnjoinedRecordCount'], 66)
         self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)
         self.assertEqual(readiness['candidateCoordinateYRawLongResource128'], 8327168)

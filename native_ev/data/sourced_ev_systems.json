@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v36",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v37",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -163,6 +163,53 @@
     ],
     "unjoinedSystemNameSeedCount": 9,
     "sourceNote": "Heuristic system-name text seeds are preserved for later record-to-name joins, but they are not assigned to syst resource IDs by this summary. The only exact current system-name mapping remains resource ID 128 to Levo from Resource Bible start-system plus original-runtime start observation."
+  },
+  "recordNameOracleEvidenceMatrixSummary": {
+    "sourceLabel": "decoded-resource-backed-record-name-oracle-evidence-matrix",
+    "oracleStatus": "record_name_mapping_blocked_pending_complete_name_order_or_runtime_label_oracle",
+    "recordCount": 67,
+    "evidenceInputSummaries": [
+      "systemNameSeedSummary",
+      "systemNameLandingProximitySummary",
+      "recordToNamePromotionReadinessSummary",
+      "candidateLinkGraphSummary",
+      "startSystemCandidateTopologySummary"
+    ],
+    "evidenceInputSummaryCount": 5,
+    "exactMappedRecordCount": 1,
+    "exactMappedResourceIds": [
+      128
+    ],
+    "exactMappedSystemNames": [
+      "Levo"
+    ],
+    "unjoinedRecordCount": 66,
+    "unjoinedResourceIdRange": [
+      129,
+      194
+    ],
+    "heuristicSystemNameSeedCount": 9,
+    "landingNameSeedCount": 72,
+    "systemSeedNamesAlsoPresentAsLandingSeeds": [],
+    "requiredOracleClaims": [
+      "complete source/runtime name ordering that can be joined bijectively to the 67 decoded syst records",
+      "or runtime map/route label evidence tying named systems to decoded resource IDs and link slots",
+      "Resource Bible/source variable evidence for name/list resource storage and ordering",
+      "cross-check that promoted names preserve resource 128 -> Levo and do not rely on landing-name byte proximity alone"
+    ],
+    "promotionReadinessStatus": "blocked; only resource 128 -> Levo is exact-mapped",
+    "promotionBlockers": [
+      "heuristic system-name seeds cover 9 names, not the remaining 66 unjoined syst records",
+      "landing-name byte proximity and matching text are scout signals, not a complete record-name oracle",
+      "candidate link graph uses resource IDs, but named Classic route labels remain unobserved beyond Levo",
+      "display/map calibration remains blocked, so map-label position joins cannot be inferred from static coordinates"
+    ],
+    "nextEvidenceFamilies": [
+      "decoded complete name/list resource with a stable order matching the 67 syst records",
+      "original-runtime map or route UI captures tying multiple labels to decoded resource IDs and Con-slot neighbors",
+      "source-level variable/struct evidence identifying system-name resource storage and ordering"
+    ],
+    "sourceNote": "This matrix is a negative gate for record-to-name promotion. It keeps the heuristic system-name and landing-name seeds useful for scouting while requiring a complete name/order oracle or runtime label evidence before assigning any additional Classic system names to decoded syst records."
   },
   "recordToNamePromotionReadinessSummary": {
     "sourceLabel": "decoded-resource-backed-record-to-name-promotion-readiness-scout",
@@ -23345,5 +23392,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity scout; coordinate display units/map scaling/projection, complete record-to-name joins beyond resource ID 128, named route topology, non-topology syst fields, and broad runtime universe replacement remain pending"
+  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity scout; coordinate display units/map scaling/projection, complete record-to-name joins beyond resource ID 128, named route topology, non-topology syst fields, and broad runtime universe replacement remain pending"
 }

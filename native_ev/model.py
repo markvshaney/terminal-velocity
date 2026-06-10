@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v36':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v37':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -427,6 +427,25 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest record-to-name readiness has unexpected heuristic seed boundary')
     if 'landing-name byte proximity is a scout signal, not a syst record-to-name join' not in record_name_readiness.get('promotionBlockers', []):
         raise ValueError('sourced EV systems manifest record-to-name readiness must not promote byte-proximity joins')
+    record_name_oracle = data.get('recordNameOracleEvidenceMatrixSummary', {})
+    if record_name_oracle.get('sourceLabel') != 'decoded-resource-backed-record-name-oracle-evidence-matrix':
+        raise ValueError('sourced EV systems manifest missing record-name oracle evidence matrix')
+    if record_name_oracle.get('oracleStatus') != 'record_name_mapping_blocked_pending_complete_name_order_or_runtime_label_oracle':
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix must keep name mapping blocked')
+    if record_name_oracle.get('recordCount') != 67 or record_name_oracle.get('exactMappedRecordCount') != 1:
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix has unexpected record counts')
+    if record_name_oracle.get('exactMappedResourceIds') != [128] or record_name_oracle.get('exactMappedSystemNames') != ['Levo']:
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix changed exact mapping boundary')
+    if record_name_oracle.get('unjoinedRecordCount') != 66 or record_name_oracle.get('unjoinedResourceIdRange') != [129, 194]:
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix has unexpected unjoined records')
+    if record_name_oracle.get('evidenceInputSummaryCount') != 5 or 'recordToNamePromotionReadinessSummary' not in record_name_oracle.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix missing input summaries')
+    if 'blocked' not in record_name_oracle.get('promotionReadinessStatus', ''):
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix must stay blocked')
+    if 'landing-name byte proximity and matching text are scout signals, not a complete record-name oracle' not in record_name_oracle.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix must not promote byte-proximity joins')
+    if not record_name_oracle.get('nextEvidenceFamilies', [''])[0].startswith('decoded complete name/list resource'):
+        raise ValueError('sourced EV systems manifest record-name oracle evidence matrix missing complete name/list evidence family')
     topology_readiness = data.get('topologyPromotionReadinessSummary', {})
     if topology_readiness.get('sourceLabel') != 'decoded-resource-backed-topology-promotion-readiness-matrix':
         raise ValueError('sourced EV systems manifest missing topology promotion readiness matrix source label')
