@@ -443,6 +443,7 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
     candidate_graph_connectivity = systems_manifest.get('candidateGraphConnectivitySummary', {})
     candidate_graph_distances = systems_manifest.get('candidateGraphDistanceSummary', {})
     start_system_topology = systems_manifest.get('startSystemCandidateTopologySummary', {})
+    start_neighborhood_display = systems_manifest.get('startNeighborhoodDisplayTransformSummary', {})
     exact_name = first_fields.get('exactSystemName', {})
     runtime_system_count = len(load_universe().get('systems', []))
     trace.append({
@@ -531,6 +532,13 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'startSystemCandidateTopologyUnjoinedNeighborResourceIds': start_system_topology.get('unjoinedNeighborResourceIds', []),
         'startSystemCandidateTopologySelfLinkSlotNames': start_system_topology.get('selfLinkSlotNames', []),
         'startSystemCandidateTopologyReciprocalNeighborResourceIds': start_system_topology.get('reciprocalNeighborResourceIds', []),
+        'startNeighborhoodDisplayTransformSourceLabel': start_neighborhood_display.get('sourceLabel'),
+        'startNeighborhoodDisplayTransformOracleStatus': start_neighborhood_display.get('oracleStatus'),
+        'startNeighborhoodDisplayTransformCandidateFamilies': start_neighborhood_display.get('candidateFamilies', []),
+        'startNeighborhoodDisplayTransformStartUnitInterval': start_neighborhood_display.get('startUnitIntervalCandidate', {}),
+        'startNeighborhoodDisplayTransformNeighborResourceIds': [neighbor.get('targetResourceId') for neighbor in start_neighborhood_display.get('linkedNeighbors', [])],
+        'startNeighborhoodDisplayTransformNeighbor129Delta': next((neighbor.get('deltaSignedLongFromStart') for neighbor in start_neighborhood_display.get('linkedNeighbors', []) if neighbor.get('targetResourceId') == 129), {}),
+        'startNeighborhoodDisplayTransformNeighbor129UnitInterval': next((neighbor.get('unitIntervalCandidate') for neighbor in start_neighborhood_display.get('linkedNeighbors', []) if neighbor.get('targetResourceId') == 129), {}),
         'exactSystemNameResource128': exact_name.get('systemName'),
         'exactSystemNameSourceBasis': exact_name.get('sourceBasis', []),
         'runtimeSystemSubsetCount': runtime_system_count,
@@ -606,6 +614,10 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'startSystemCandidateTopologyNeighborResourceIds': [neighbor.get('targetResourceId') for neighbor in start_system_topology.get('linkedNeighbors', [])],
         'startSystemCandidateTopologyUnjoinedNeighborResourceIds': start_system_topology.get('unjoinedNeighborResourceIds', []),
         'startSystemCandidateTopologySelfLinkSlotNames': start_system_topology.get('selfLinkSlotNames', []),
+        'startNeighborhoodDisplayTransformSourceLabel': start_neighborhood_display.get('sourceLabel'),
+        'startNeighborhoodDisplayTransformStartUnitInterval': start_neighborhood_display.get('startUnitIntervalCandidate', {}),
+        'startNeighborhoodDisplayTransformNeighbor129Delta': next((neighbor.get('deltaSignedLongFromStart') for neighbor in start_neighborhood_display.get('linkedNeighbors', []) if neighbor.get('targetResourceId') == 129), {}),
+        'startNeighborhoodDisplayTransformNeighbor129UnitInterval': next((neighbor.get('unitIntervalCandidate') for neighbor in start_neighborhood_display.get('linkedNeighbors', []) if neighbor.get('targetResourceId') == 129), {}),
         'exactSystemNameResource128': exact_name.get('systemName'),
         'runtimeSystemSubsetCount': runtime_system_count,
         'promotionSafeNext': len(records) >= 60 and syst_run.get('recordSize') == 88,
@@ -3794,6 +3806,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_candidate_graph_connectivity_summary': 'passed' if readiness.get('candidateGraphConnectivitySourceLabel') == 'decoded-resource-backed-candidate-graph-connectivity-scout' and readiness.get('candidateGraphWeaklyConnectedComponentCount') == 1 and readiness.get('candidateGraphResource128WeakComponentSize') == 67 and readiness.get('candidateGraphResource128DirectedReachableCount') == 21 and readiness.get('candidateGraphResource128DirectedUnreachableCount') == 46 and readiness.get('candidateGraphUniqueOutDegreeDistribution') == {'1': 39, '2': 14, '3': 6, '4': 8} and static_state.get('candidateGraphConnectivitySourceLabel') == 'decoded-resource-backed-candidate-graph-connectivity-scout' else 'failed',
             'recorded_candidate_graph_distance_summary': 'passed' if readiness.get('candidateGraphDistanceSourceLabel') == 'decoded-resource-backed-candidate-graph-distance-scout' and readiness.get('candidateGraphResource128DirectedMaxHopDistance') == 4 and readiness.get('candidateGraphResource128WeakMaxHopDistance') == 4 and readiness.get('candidateGraphResource128WeakHopDistanceDistribution') == {'0': 1, '1': 3, '2': 19, '3': 31, '4': 13} and readiness.get('candidateGraphWeakDiameterCandidate') == 7 and readiness.get('candidateGraphDirectedReachableCountRange') == [2, 22] and static_state.get('candidateGraphDistanceSourceLabel') == 'decoded-resource-backed-candidate-graph-distance-scout' else 'failed',
             'recorded_start_system_candidate_topology_summary': 'passed' if readiness.get('startSystemCandidateTopologySourceLabel') == 'decoded-resource-backed-start-system-candidate-topology-scout' and readiness.get('startSystemCandidateTopologyOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('startSystemCandidateTopologyStartName') == 'Levo' and readiness.get('startSystemCandidateTopologyLinkedNeighborCount') == 4 and readiness.get('startSystemCandidateTopologyNeighborResourceIds') == [128, 129, 130, 131] and readiness.get('startSystemCandidateTopologyUnjoinedNeighborResourceIds') == [129, 130, 131] and readiness.get('startSystemCandidateTopologySelfLinkSlotNames') == ['Con1'] and readiness.get('startSystemCandidateTopologyReciprocalNeighborResourceIds') == [128] and static_state.get('startSystemCandidateTopologySourceLabel') == 'decoded-resource-backed-start-system-candidate-topology-scout' else 'failed',
+            'recorded_start_neighborhood_display_transform_summary': 'passed' if readiness.get('startNeighborhoodDisplayTransformSourceLabel') == 'decoded-resource-backed-start-neighborhood-display-transform-scout' and readiness.get('startNeighborhoodDisplayTransformOracleStatus') == 'coordinate_display_units_map_scaling_pending' and 'start-neighborhood inverted-y display-transform candidates' in readiness.get('startNeighborhoodDisplayTransformCandidateFamilies', []) and readiness.get('startNeighborhoodDisplayTransformStartUnitInterval') == {'xPos': 0, 'yPos': 0.954908, 'invertedYPos': 0.045092} and readiness.get('startNeighborhoodDisplayTransformNeighborResourceIds') == [128, 129, 130, 131] and readiness.get('startNeighborhoodDisplayTransformNeighbor129Delta') == {'xPos': 131072, 'yPos': -8294400} and readiness.get('startNeighborhoodDisplayTransformNeighbor129UnitInterval') == {'xPos': 0.500246, 'yPos': 0.003758, 'invertedYPos': 0.996242} and static_state.get('startNeighborhoodDisplayTransformSourceLabel') == 'decoded-resource-backed-start-neighborhood-display-transform-scout' else 'failed',
             'recorded_exact_start_system_mapping': 'passed' if readiness.get('exactSystemNameResource128') == 'Levo' and 'original-runtime-observed' in readiness.get('exactSystemNameSourceBasis', []) and static_state.get('exactSystemNameResource128') == 'Levo' else 'failed',
             'recorded_static_topology_source_boundary': 'passed' if readiness.get('sourceLabel') == 'decoded-resource-backed-static-readiness' and readiness.get('oracleStatus') == 'topology_semantic_promotion_pending_field_family_mapping' else 'failed',
         })

@@ -1816,6 +1816,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_candidate_graph_connectivity_summary',
             'recorded_candidate_graph_distance_summary',
             'recorded_start_system_candidate_topology_summary',
+            'recorded_start_neighborhood_display_transform_summary',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
@@ -1900,6 +1901,14 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['startSystemCandidateTopologySelfLinkSlotNames'], ['Con1'])
         self.assertEqual(readiness['startSystemCandidateTopologyReciprocalNeighborResourceIds'], [128])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startSystemCandidateTopologySourceLabel'], 'decoded-resource-backed-start-system-candidate-topology-scout')
+        self.assertEqual(readiness['startNeighborhoodDisplayTransformSourceLabel'], 'decoded-resource-backed-start-neighborhood-display-transform-scout')
+        self.assertEqual(readiness['startNeighborhoodDisplayTransformOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('start-neighborhood inverted-y display-transform candidates', readiness['startNeighborhoodDisplayTransformCandidateFamilies'])
+        self.assertEqual(readiness['startNeighborhoodDisplayTransformStartUnitInterval'], {'xPos': 0, 'yPos': 0.954908, 'invertedYPos': 0.045092})
+        self.assertEqual(readiness['startNeighborhoodDisplayTransformNeighborResourceIds'], [128, 129, 130, 131])
+        self.assertEqual(readiness['startNeighborhoodDisplayTransformNeighbor129Delta'], {'xPos': 131072, 'yPos': -8294400})
+        self.assertEqual(readiness['startNeighborhoodDisplayTransformNeighbor129UnitInterval'], {'xPos': 0.500246, 'yPos': 0.003758, 'invertedYPos': 0.996242})
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodDisplayTransformSourceLabel'], 'decoded-resource-backed-start-neighborhood-display-transform-scout')
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
         self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')

@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15",
+  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v16",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -311,6 +311,946 @@
         "unitIntervalCandidate": 0.954908
       }
     },
+    "perResource": [
+      {
+        "resourceId": 128,
+        "ordinal": 0,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 8327168,
+          "minNormalizedSignedLongCandidate": 8327167,
+          "unitIntervalCandidate": 0.954908
+        }
+      },
+      {
+        "resourceId": 129,
+        "ordinal": 1,
+        "xPos": {
+          "signedLongCandidate": 196736,
+          "minNormalizedSignedLongCandidate": 131072,
+          "unitIntervalCandidate": 0.500246
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 130,
+        "ordinal": 2,
+        "xPos": {
+          "signedLongCandidate": 196737,
+          "minNormalizedSignedLongCandidate": 131073,
+          "unitIntervalCandidate": 0.50025
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 131,
+        "ordinal": 3,
+        "xPos": {
+          "signedLongCandidate": 131200,
+          "minNormalizedSignedLongCandidate": 65536,
+          "unitIntervalCandidate": 0.250123
+        },
+        "yPos": {
+          "signedLongCandidate": 8331264,
+          "minNormalizedSignedLongCandidate": 8331263,
+          "unitIntervalCandidate": 0.955378
+        }
+      },
+      {
+        "resourceId": 132,
+        "ordinal": 4,
+        "xPos": {
+          "signedLongCandidate": 262277,
+          "minNormalizedSignedLongCandidate": 196613,
+          "unitIntervalCandidate": 0.750388
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 133,
+        "ordinal": 5,
+        "xPos": {
+          "signedLongCandidate": 196607,
+          "minNormalizedSignedLongCandidate": 130943,
+          "unitIntervalCandidate": 0.499754
+        },
+        "yPos": {
+          "signedLongCandidate": 8351744,
+          "minNormalizedSignedLongCandidate": 8351743,
+          "unitIntervalCandidate": 0.957727
+        }
+      },
+      {
+        "resourceId": 134,
+        "ordinal": 6,
+        "xPos": {
+          "signedLongCandidate": 196738,
+          "minNormalizedSignedLongCandidate": 131074,
+          "unitIntervalCandidate": 0.500254
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 135,
+        "ordinal": 7,
+        "xPos": {
+          "signedLongCandidate": 196739,
+          "minNormalizedSignedLongCandidate": 131075,
+          "unitIntervalCandidate": 0.500258
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 136,
+        "ordinal": 8,
+        "xPos": {
+          "signedLongCandidate": 196740,
+          "minNormalizedSignedLongCandidate": 131076,
+          "unitIntervalCandidate": 0.500261
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 137,
+        "ordinal": 9,
+        "xPos": {
+          "signedLongCandidate": 262272,
+          "minNormalizedSignedLongCandidate": 196608,
+          "unitIntervalCandidate": 0.750369
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 138,
+        "ordinal": 10,
+        "xPos": {
+          "signedLongCandidate": 262273,
+          "minNormalizedSignedLongCandidate": 196609,
+          "unitIntervalCandidate": 0.750373
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 139,
+        "ordinal": 11,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 4751360,
+          "minNormalizedSignedLongCandidate": 4751359,
+          "unitIntervalCandidate": 0.544857
+        }
+      },
+      {
+        "resourceId": 140,
+        "ordinal": 12,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 4751360,
+          "minNormalizedSignedLongCandidate": 4751359,
+          "unitIntervalCandidate": 0.544857
+        }
+      },
+      {
+        "resourceId": 141,
+        "ordinal": 13,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 4751360,
+          "minNormalizedSignedLongCandidate": 4751359,
+          "unitIntervalCandidate": 0.544857
+        }
+      },
+      {
+        "resourceId": 142,
+        "ordinal": 14,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 143,
+        "ordinal": 15,
+        "xPos": {
+          "signedLongCandidate": 196736,
+          "minNormalizedSignedLongCandidate": 131072,
+          "unitIntervalCandidate": 0.500246
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 144,
+        "ordinal": 16,
+        "xPos": {
+          "signedLongCandidate": 196607,
+          "minNormalizedSignedLongCandidate": 130943,
+          "unitIntervalCandidate": 0.499754
+        },
+        "yPos": {
+          "signedLongCandidate": 8351744,
+          "minNormalizedSignedLongCandidate": 8351743,
+          "unitIntervalCandidate": 0.957727
+        }
+      },
+      {
+        "resourceId": 145,
+        "ordinal": 17,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 146,
+        "ordinal": 18,
+        "xPos": {
+          "signedLongCandidate": 65671,
+          "minNormalizedSignedLongCandidate": 7,
+          "unitIntervalCandidate": 2.7e-05
+        },
+        "yPos": {
+          "signedLongCandidate": 1212416,
+          "minNormalizedSignedLongCandidate": 1212415,
+          "unitIntervalCandidate": 0.139032
+        }
+      },
+      {
+        "resourceId": 147,
+        "ordinal": 19,
+        "xPos": {
+          "signedLongCandidate": 262279,
+          "minNormalizedSignedLongCandidate": 196615,
+          "unitIntervalCandidate": 0.750396
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 148,
+        "ordinal": 20,
+        "xPos": {
+          "signedLongCandidate": 262273,
+          "minNormalizedSignedLongCandidate": 196609,
+          "unitIntervalCandidate": 0.750373
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 149,
+        "ordinal": 21,
+        "xPos": {
+          "signedLongCandidate": 196736,
+          "minNormalizedSignedLongCandidate": 131072,
+          "unitIntervalCandidate": 0.500246
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 150,
+        "ordinal": 22,
+        "xPos": {
+          "signedLongCandidate": 262275,
+          "minNormalizedSignedLongCandidate": 196611,
+          "unitIntervalCandidate": 0.750381
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 151,
+        "ordinal": 23,
+        "xPos": {
+          "signedLongCandidate": 262276,
+          "minNormalizedSignedLongCandidate": 196612,
+          "unitIntervalCandidate": 0.750385
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 152,
+        "ordinal": 24,
+        "xPos": {
+          "signedLongCandidate": 196745,
+          "minNormalizedSignedLongCandidate": 131081,
+          "unitIntervalCandidate": 0.500281
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 153,
+        "ordinal": 25,
+        "xPos": {
+          "signedLongCandidate": 196737,
+          "minNormalizedSignedLongCandidate": 131073,
+          "unitIntervalCandidate": 0.50025
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 154,
+        "ordinal": 26,
+        "xPos": {
+          "signedLongCandidate": 65665,
+          "minNormalizedSignedLongCandidate": 1,
+          "unitIntervalCandidate": 4e-06
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 155,
+        "ordinal": 27,
+        "xPos": {
+          "signedLongCandidate": 327679,
+          "minNormalizedSignedLongCandidate": 262015,
+          "unitIntervalCandidate": 1.0
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 156,
+        "ordinal": 28,
+        "xPos": {
+          "signedLongCandidate": 327679,
+          "minNormalizedSignedLongCandidate": 262015,
+          "unitIntervalCandidate": 1.0
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 157,
+        "ordinal": 29,
+        "xPos": {
+          "signedLongCandidate": 262272,
+          "minNormalizedSignedLongCandidate": 196608,
+          "unitIntervalCandidate": 0.750369
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 158,
+        "ordinal": 30,
+        "xPos": {
+          "signedLongCandidate": 262273,
+          "minNormalizedSignedLongCandidate": 196609,
+          "unitIntervalCandidate": 0.750373
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 159,
+        "ordinal": 31,
+        "xPos": {
+          "signedLongCandidate": 196738,
+          "minNormalizedSignedLongCandidate": 131074,
+          "unitIntervalCandidate": 0.500254
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 160,
+        "ordinal": 32,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 161,
+        "ordinal": 33,
+        "xPos": {
+          "signedLongCandidate": 196738,
+          "minNormalizedSignedLongCandidate": 131074,
+          "unitIntervalCandidate": 0.500254
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 162,
+        "ordinal": 34,
+        "xPos": {
+          "signedLongCandidate": 196738,
+          "minNormalizedSignedLongCandidate": 131074,
+          "unitIntervalCandidate": 0.500254
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 163,
+        "ordinal": 35,
+        "xPos": {
+          "signedLongCandidate": 65664,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        },
+        "yPos": {
+          "signedLongCandidate": 4751360,
+          "minNormalizedSignedLongCandidate": 4751359,
+          "unitIntervalCandidate": 0.544857
+        }
+      },
+      {
+        "resourceId": 164,
+        "ordinal": 36,
+        "xPos": {
+          "signedLongCandidate": 196738,
+          "minNormalizedSignedLongCandidate": 131074,
+          "unitIntervalCandidate": 0.500254
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 165,
+        "ordinal": 37,
+        "xPos": {
+          "signedLongCandidate": 196738,
+          "minNormalizedSignedLongCandidate": 131074,
+          "unitIntervalCandidate": 0.500254
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 166,
+        "ordinal": 38,
+        "xPos": {
+          "signedLongCandidate": 131210,
+          "minNormalizedSignedLongCandidate": 65546,
+          "unitIntervalCandidate": 0.250161
+        },
+        "yPos": {
+          "signedLongCandidate": 8323073,
+          "minNormalizedSignedLongCandidate": 8323072,
+          "unitIntervalCandidate": 0.954439
+        }
+      },
+      {
+        "resourceId": 167,
+        "ordinal": 39,
+        "xPos": {
+          "signedLongCandidate": 131211,
+          "minNormalizedSignedLongCandidate": 65547,
+          "unitIntervalCandidate": 0.250165
+        },
+        "yPos": {
+          "signedLongCandidate": 8323073,
+          "minNormalizedSignedLongCandidate": 8323072,
+          "unitIntervalCandidate": 0.954439
+        }
+      },
+      {
+        "resourceId": 168,
+        "ordinal": 40,
+        "xPos": {
+          "signedLongCandidate": 196747,
+          "minNormalizedSignedLongCandidate": 131083,
+          "unitIntervalCandidate": 0.500288
+        },
+        "yPos": {
+          "signedLongCandidate": 1,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        }
+      },
+      {
+        "resourceId": 169,
+        "ordinal": 41,
+        "xPos": {
+          "signedLongCandidate": 262283,
+          "minNormalizedSignedLongCandidate": 196619,
+          "unitIntervalCandidate": 0.750411
+        },
+        "yPos": {
+          "signedLongCandidate": 1,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        }
+      },
+      {
+        "resourceId": 170,
+        "ordinal": 42,
+        "xPos": {
+          "signedLongCandidate": 262284,
+          "minNormalizedSignedLongCandidate": 196620,
+          "unitIntervalCandidate": 0.750415
+        },
+        "yPos": {
+          "signedLongCandidate": 1,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        }
+      },
+      {
+        "resourceId": 171,
+        "ordinal": 43,
+        "xPos": {
+          "signedLongCandidate": 196737,
+          "minNormalizedSignedLongCandidate": 131073,
+          "unitIntervalCandidate": 0.50025
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 172,
+        "ordinal": 44,
+        "xPos": {
+          "signedLongCandidate": 262284,
+          "minNormalizedSignedLongCandidate": 196620,
+          "unitIntervalCandidate": 0.750415
+        },
+        "yPos": {
+          "signedLongCandidate": 1,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        }
+      },
+      {
+        "resourceId": 173,
+        "ordinal": 45,
+        "xPos": {
+          "signedLongCandidate": 196738,
+          "minNormalizedSignedLongCandidate": 131074,
+          "unitIntervalCandidate": 0.500254
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 174,
+        "ordinal": 46,
+        "xPos": {
+          "signedLongCandidate": 196754,
+          "minNormalizedSignedLongCandidate": 131090,
+          "unitIntervalCandidate": 0.500315
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 175,
+        "ordinal": 47,
+        "xPos": {
+          "signedLongCandidate": 196754,
+          "minNormalizedSignedLongCandidate": 131090,
+          "unitIntervalCandidate": 0.500315
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 176,
+        "ordinal": 48,
+        "xPos": {
+          "signedLongCandidate": 196751,
+          "minNormalizedSignedLongCandidate": 131087,
+          "unitIntervalCandidate": 0.500303
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 177,
+        "ordinal": 49,
+        "xPos": {
+          "signedLongCandidate": 196752,
+          "minNormalizedSignedLongCandidate": 131088,
+          "unitIntervalCandidate": 0.500307
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 178,
+        "ordinal": 50,
+        "xPos": {
+          "signedLongCandidate": 196752,
+          "minNormalizedSignedLongCandidate": 131088,
+          "unitIntervalCandidate": 0.500307
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 179,
+        "ordinal": 51,
+        "xPos": {
+          "signedLongCandidate": 196753,
+          "minNormalizedSignedLongCandidate": 131089,
+          "unitIntervalCandidate": 0.500311
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 180,
+        "ordinal": 52,
+        "xPos": {
+          "signedLongCandidate": 196753,
+          "minNormalizedSignedLongCandidate": 131089,
+          "unitIntervalCandidate": 0.500311
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 181,
+        "ordinal": 53,
+        "xPos": {
+          "signedLongCandidate": 131208,
+          "minNormalizedSignedLongCandidate": 65544,
+          "unitIntervalCandidate": 0.250154
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 182,
+        "ordinal": 54,
+        "xPos": {
+          "signedLongCandidate": 262286,
+          "minNormalizedSignedLongCandidate": 196622,
+          "unitIntervalCandidate": 0.750423
+        },
+        "yPos": {
+          "signedLongCandidate": 8720384,
+          "minNormalizedSignedLongCandidate": 8720383,
+          "unitIntervalCandidate": 1.0
+        }
+      },
+      {
+        "resourceId": 183,
+        "ordinal": 55,
+        "xPos": {
+          "signedLongCandidate": 262283,
+          "minNormalizedSignedLongCandidate": 196619,
+          "unitIntervalCandidate": 0.750411
+        },
+        "yPos": {
+          "signedLongCandidate": 1,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        }
+      },
+      {
+        "resourceId": 184,
+        "ordinal": 56,
+        "xPos": {
+          "signedLongCandidate": 196752,
+          "minNormalizedSignedLongCandidate": 131088,
+          "unitIntervalCandidate": 0.500307
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 185,
+        "ordinal": 57,
+        "xPos": {
+          "signedLongCandidate": 196754,
+          "minNormalizedSignedLongCandidate": 131090,
+          "unitIntervalCandidate": 0.500315
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 186,
+        "ordinal": 58,
+        "xPos": {
+          "signedLongCandidate": 196747,
+          "minNormalizedSignedLongCandidate": 131083,
+          "unitIntervalCandidate": 0.500288
+        },
+        "yPos": {
+          "signedLongCandidate": 1,
+          "minNormalizedSignedLongCandidate": 0,
+          "unitIntervalCandidate": 0.0
+        }
+      },
+      {
+        "resourceId": 187,
+        "ordinal": 59,
+        "xPos": {
+          "signedLongCandidate": 196751,
+          "minNormalizedSignedLongCandidate": 131087,
+          "unitIntervalCandidate": 0.500303
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 188,
+        "ordinal": 60,
+        "xPos": {
+          "signedLongCandidate": 196754,
+          "minNormalizedSignedLongCandidate": 131090,
+          "unitIntervalCandidate": 0.500315
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 189,
+        "ordinal": 61,
+        "xPos": {
+          "signedLongCandidate": 196756,
+          "minNormalizedSignedLongCandidate": 131092,
+          "unitIntervalCandidate": 0.500323
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 190,
+        "ordinal": 62,
+        "xPos": {
+          "signedLongCandidate": 131221,
+          "minNormalizedSignedLongCandidate": 65557,
+          "unitIntervalCandidate": 0.250203
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 191,
+        "ordinal": 63,
+        "xPos": {
+          "signedLongCandidate": 65672,
+          "minNormalizedSignedLongCandidate": 8,
+          "unitIntervalCandidate": 3.1e-05
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      },
+      {
+        "resourceId": 192,
+        "ordinal": 64,
+        "xPos": {
+          "signedLongCandidate": 196760,
+          "minNormalizedSignedLongCandidate": 131096,
+          "unitIntervalCandidate": 0.500338
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 193,
+        "ordinal": 65,
+        "xPos": {
+          "signedLongCandidate": 196754,
+          "minNormalizedSignedLongCandidate": 131090,
+          "unitIntervalCandidate": 0.500315
+        },
+        "yPos": {
+          "signedLongCandidate": 32768,
+          "minNormalizedSignedLongCandidate": 32767,
+          "unitIntervalCandidate": 0.003758
+        }
+      },
+      {
+        "resourceId": 194,
+        "ordinal": 66,
+        "xPos": {
+          "signedLongCandidate": 65665,
+          "minNormalizedSignedLongCandidate": 1,
+          "unitIntervalCandidate": 4e-06
+        },
+        "yPos": {
+          "signedLongCandidate": 8355840,
+          "minNormalizedSignedLongCandidate": 8355839,
+          "unitIntervalCandidate": 0.958196
+        }
+      }
+    ],
     "sourceNote": "This normalizes decoded signed-long coordinate candidates against run minima so later map-scaling work can compare relative layout to original-runtime map evidence. It still does not promote Classic display units, projection, centering, axis inversion, or pixel scale."
   },
   "coordinateDisplayTransformSummary": {
@@ -857,6 +1797,91 @@
       131
     ],
     "sourceNote": "This packages the exact Levo/resource 128 bridge with decoded Con1-Con16 neighbor records and coordinate candidates. It promotes only start-neighborhood analysis inputs; target system names, route UI behavior, map layout, and broad runtime topology remain pending."
+  },
+  "startNeighborhoodDisplayTransformSummary": {
+    "sourceLabel": "decoded-resource-backed-start-neighborhood-display-transform-scout",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "startResourceId": 128,
+    "startExactSystemName": "Levo",
+    "candidateFamilies": [
+      "start-neighborhood signed-long delta candidates",
+      "start-neighborhood unit-interval display-transform candidates",
+      "start-neighborhood inverted-y display-transform candidates"
+    ],
+    "startUnitIntervalCandidate": {
+      "xPos": 0.0,
+      "yPos": 0.954908,
+      "invertedYPos": 0.045092
+    },
+    "linkedNeighborCount": 4,
+    "linkedNeighbors": [
+      {
+        "slotName": "Con1",
+        "targetResourceId": 128,
+        "targetExactSystemName": "Levo",
+        "targetNameJoinStatus": "exact",
+        "deltaSignedLongFromStart": {
+          "xPos": 0,
+          "yPos": 0
+        },
+        "unitIntervalCandidate": {
+          "xPos": 0.0,
+          "yPos": 0.954908,
+          "invertedYPos": 0.045092
+        }
+      },
+      {
+        "slotName": "Con2",
+        "targetResourceId": 129,
+        "targetExactSystemName": null,
+        "targetNameJoinStatus": "unjoined",
+        "deltaSignedLongFromStart": {
+          "xPos": 131072,
+          "yPos": -8294400
+        },
+        "unitIntervalCandidate": {
+          "xPos": 0.500246,
+          "yPos": 0.003758,
+          "invertedYPos": 0.996242
+        }
+      },
+      {
+        "slotName": "Con3",
+        "targetResourceId": 130,
+        "targetExactSystemName": null,
+        "targetNameJoinStatus": "unjoined",
+        "deltaSignedLongFromStart": {
+          "xPos": 131073,
+          "yPos": -8294400
+        },
+        "unitIntervalCandidate": {
+          "xPos": 0.50025,
+          "yPos": 0.003758,
+          "invertedYPos": 0.996242
+        }
+      },
+      {
+        "slotName": "Con4",
+        "targetResourceId": 131,
+        "targetExactSystemName": null,
+        "targetNameJoinStatus": "unjoined",
+        "deltaSignedLongFromStart": {
+          "xPos": 65536,
+          "yPos": 4096
+        },
+        "unitIntervalCandidate": {
+          "xPos": 0.250123,
+          "yPos": 0.955378,
+          "invertedYPos": 0.044622
+        }
+      }
+    ],
+    "unjoinedNeighborResourceIds": [
+      129,
+      130,
+      131
+    ],
+    "sourceNote": "This combines the exact Levo/resource 128 bridge, decoded Con1-Con16 neighbor records, signed-long coordinate deltas, and non-promoted display-transform candidates for the start neighborhood. It remains analysis input only; exact target system names, EV Classic map pixels, projection, centering, axis orientation, route UI behavior, and broad runtime topology remain pending."
   },
   "exactSystemNameMappings": [
     {
@@ -19311,5 +20336,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }

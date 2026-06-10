@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v16':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -454,6 +454,22 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest start-system topology has unexpected target resource order')
     if start_neighbors[1].get('targetCoordinateSignedLongCandidate') != {'xPos': 196736, 'yPos': 32768}:
         raise ValueError('sourced EV systems manifest start-system topology has unexpected neighbor coordinate candidate')
+    start_display = data.get('startNeighborhoodDisplayTransformSummary', {})
+    if start_display.get('sourceLabel') != 'decoded-resource-backed-start-neighborhood-display-transform-scout':
+        raise ValueError('sourced EV systems manifest missing start-neighborhood display-transform source label')
+    if start_display.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest start-neighborhood display-transform should keep display scaling pending')
+    if start_display.get('startResourceId') != 128 or start_display.get('startExactSystemName') != 'Levo':
+        raise ValueError('sourced EV systems manifest start-neighborhood display-transform has unexpected start identity')
+    if start_display.get('linkedNeighborCount') != 4 or start_display.get('unjoinedNeighborResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest start-neighborhood display-transform has unexpected neighbor boundary')
+    display_neighbors = start_display.get('linkedNeighbors', [])
+    if [neighbor.get('targetResourceId') for neighbor in display_neighbors] != [128, 129, 130, 131]:
+        raise ValueError('sourced EV systems manifest start-neighborhood display-transform has unexpected target resource order')
+    if display_neighbors[1].get('deltaSignedLongFromStart') != {'xPos': 131072, 'yPos': -8294400}:
+        raise ValueError('sourced EV systems manifest start-neighborhood display-transform has unexpected resource 129 delta')
+    if display_neighbors[1].get('unitIntervalCandidate', {}).get('invertedYPos') != 0.996242:
+        raise ValueError('sourced EV systems manifest start-neighborhood display-transform has unexpected resource 129 inverted y')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')

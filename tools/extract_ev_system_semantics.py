@@ -16,9 +16,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v16'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -262,6 +262,7 @@ def _coordinate_display_normalized_summary(systems: list[dict]) -> dict:
             'minNormalizedSignedLongCandidateRange': [0, y_span],
         },
         'resource128': _normalized_for(systems[0]),
+        'perResource': [_normalized_for(system) for system in systems],
         'sourceNote': 'This normalizes decoded signed-long coordinate candidates against run minima so later map-scaling work can compare relative layout to original-runtime map evidence. It still does not promote Classic display units, projection, centering, axis inversion, or pixel scale.',
     }
 
@@ -559,6 +560,63 @@ def _start_system_candidate_topology_summary(systems: list[dict]) -> dict:
     }
 
 
+def _start_neighborhood_display_transform_summary(systems: list[dict]) -> dict:
+    """Summarize start-neighborhood display transform candidates without promotion."""
+    by_resource_id = {system['resourceId']: system for system in systems}
+    start_topology = _start_system_candidate_topology_summary(systems)
+    normalized = _coordinate_display_normalized_summary(systems)
+    normalized_by_resource = {
+        entry['resourceId']: entry
+        for entry in normalized['perResource']
+    }
+    start_resource_id = start_topology['startResourceId']
+    start_coordinates = by_resource_id[start_resource_id]['semanticFields']['mapCoordinates']
+    start_normalized = normalized_by_resource[start_resource_id]
+
+    transformed_neighbors = []
+    for neighbor in start_topology['linkedNeighbors']:
+        resource_id = neighbor['targetResourceId']
+        coordinates = by_resource_id[resource_id]['semanticFields']['mapCoordinates']
+        normalized_neighbor = normalized_by_resource[resource_id]
+        y_unit = normalized_neighbor['yPos']['unitIntervalCandidate']
+        transformed_neighbors.append({
+            'slotName': neighbor['slotName'],
+            'targetResourceId': resource_id,
+            'targetExactSystemName': neighbor['targetExactSystemName'],
+            'targetNameJoinStatus': neighbor['targetNameJoinStatus'],
+            'deltaSignedLongFromStart': {
+                'xPos': coordinates['xPos']['signedLongCandidate'] - start_coordinates['xPos']['signedLongCandidate'],
+                'yPos': coordinates['yPos']['signedLongCandidate'] - start_coordinates['yPos']['signedLongCandidate'],
+            },
+            'unitIntervalCandidate': {
+                'xPos': normalized_neighbor['xPos']['unitIntervalCandidate'],
+                'yPos': y_unit,
+                'invertedYPos': round(1 - y_unit, 6),
+            },
+        })
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-start-neighborhood-display-transform-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'startResourceId': start_resource_id,
+        'startExactSystemName': start_topology['startExactSystemName'],
+        'candidateFamilies': [
+            'start-neighborhood signed-long delta candidates',
+            'start-neighborhood unit-interval display-transform candidates',
+            'start-neighborhood inverted-y display-transform candidates',
+        ],
+        'startUnitIntervalCandidate': {
+            'xPos': start_normalized['xPos']['unitIntervalCandidate'],
+            'yPos': start_normalized['yPos']['unitIntervalCandidate'],
+            'invertedYPos': round(1 - start_normalized['yPos']['unitIntervalCandidate'], 6),
+        },
+        'linkedNeighborCount': len(transformed_neighbors),
+        'linkedNeighbors': transformed_neighbors,
+        'unjoinedNeighborResourceIds': start_topology['unjoinedNeighborResourceIds'],
+        'sourceNote': 'This combines the exact Levo/resource 128 bridge, decoded Con1-Con16 neighbor records, signed-long coordinate deltas, and non-promoted display-transform candidates for the start neighborhood. It remains analysis input only; exact target system names, EV Classic map pixels, projection, centering, axis orientation, route UI behavior, and broad runtime topology remain pending.',
+    }
+
+
 def _system_name_seed_summary(names: dict) -> dict:
     """Summarize heuristic name seeds without claiming record-to-name joins."""
     system_seeds = names.get('systemNames', [])
@@ -665,6 +723,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),
         'candidateGraphDistanceSummary': _candidate_graph_distance_summary(systems),
         'startSystemCandidateTopologySummary': _start_system_candidate_topology_summary(systems),
+        'startNeighborhoodDisplayTransformSummary': _start_neighborhood_display_transform_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

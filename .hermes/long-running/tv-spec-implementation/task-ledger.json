@@ -10,17 +10,12 @@
     "origin_main_at_creation": "f191d2201fb6164ada9c7c04fddda222fd0fcbe0",
     "status_at_creation": "## main...origin/main"
   },
-  "status": "waiting_gate",
+  "status": "running",
   "created_at": "2026-06-09T14:48:45Z",
-  "updated_at": "2026-06-09T23:11:06Z",
+  "updated_at": "2026-06-10T03:01:27Z",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "done_condition": "tv-spec implementation workflow is active and repeatedly producing verified adjacent increment batches until the live backlog has no safe actionable item or the user changes/stops the objective; each increment satisfies tv-spec packet fields and durable event/checkpoint policy.",
-  "active_gate": {
-    "type": "review_required",
-    "reason": "Local code/data/test/doc changes add EV Classic resource 128 start-neighborhood candidate topology summary; human review required before commit/merge or further topology promotion.",
-    "withheld_action": "commit/push and continue into coordinate display-unit/map-scaling interpretation or broader runtime universe expansion",
-    "resume_after": "reviewer approves these local changes or requests edits via kanban comments"
-  },
+  "active_gate": null,
   "tool_caps_policy": {
     "rule": "Tool/time/context caps are per-run budgets, not task completion.",
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop."
@@ -66,16 +61,17 @@
     }
   ],
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v15",
+    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v16",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> Ran 3 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_start_system_candidate_topology_summary passed",
-    "python3 tools/backlog_dispatch_index.py build -> wrote docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
-    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_start_neighborhood_display_transform_summary passed",
+    "temporary extractor output cmp against native_ev/data/sourced_ev_systems.json -> identical",
+    "JSON parse OK for sourced_ev_systems.json, task-ledger.json, backlog index, and events.jsonl",
     "git diff --check -> passed",
-    "temporary out extract plus cmp against native_ev/data/sourced_ev_systems.json -> identical; JSON ledger/events/manifest/index parse OK",
-    "git status --short --branch -> ## main...origin/main with 8 modified tracked files; HEAD == origin/main 925a358bd2c493d360ba263ce59652eabf460916"
+    "npm test -- --run / npm run build not applicable: no package.json exists at repo root",
+    "git status --short --branch -> ## main...origin/main with 10 modified tracked files before commit"
   ],
-  "next_resume_action": "Review local v15 startSystemCandidateTopologySummary changes. If approved, commit normally; then continue with coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping, keeping oracleStatus pending and avoiding runtime universe expansion.",
+  "next_resume_action": "Commit and normal-push the verified v16 start-neighborhood display-transform packet, then continue Lane A coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion.",
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments. Optimize for development throughput: avoid default full-skill loads, avoid runner self-inspection, avoid routine ledger rewrites, and report externally only at material boundaries.",
   "runner": {
     "kind": "continuous-background-loop",
