@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v19')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v21')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3499,6 +3499,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(display_transform['resource128']['yPos']['unitIntervalCandidate'], 0.954908)
         self.assertEqual(display_transform['resource128']['yPos']['invertedUnitIntervalCandidate'], 0.045092)
         self.assertIn('not-promoted', display_transform['displayUnitInterpretationStatus'])
+        display_fixed_point = data['coordinateDisplayFixedPointSummary']
+        self.assertEqual(display_fixed_point['sourceLabel'], 'decoded-resource-backed-coordinate-display-fixed-point-scale-scout')
+        self.assertEqual(display_fixed_point['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('16.16 fixed-point coordinate-unit candidate', display_fixed_point['candidateFamilies'])
+        self.assertEqual(display_fixed_point['fixedPointDivisorCandidate'], 65536)
+        self.assertEqual(display_fixed_point['xPos']['fixedPointCandidateBounds'], [1.001953, 4.999985])
+        self.assertEqual(display_fixed_point['xPos']['fixedPointCandidateSpan'], 3.998032)
+        self.assertEqual(display_fixed_point['yPos']['fixedPointCandidateBounds'], [0.000015, 133.0625])
+        self.assertEqual(display_fixed_point['yPos']['fixedPointCandidateSpan'], 133.062485)
+        self.assertEqual(display_fixed_point['fixedPointAxisSpanRatioYOverX'], 33.281996)
+        self.assertEqual(display_fixed_point['resource128']['yPosFixedPointCandidate'], 127.0625)
+        self.assertEqual(display_fixed_point['resource129']['xPosFixedPointCandidate'], 3.001953)
+        self.assertIn('not-promoted', display_fixed_point['displayUnitInterpretationStatus'])
         display_extrema = data['coordinateDisplayExtremaSummary']
         self.assertEqual(display_extrema['sourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(display_extrema['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
@@ -3626,6 +3639,17 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(slot_order['nonSelfResourceIdsByDistanceCandidate'], [131, 129, 130])
         self.assertEqual(slot_order['firstNonSelfSlotName'], 'Con2')
         self.assertEqual(slot_order['firstNonSelfResourceId'], 129)
+        slot_angle = data['startNeighborhoodSlotAngularOrderSummary']
+        self.assertEqual(slot_angle['sourceLabel'], 'decoded-resource-backed-start-neighborhood-slot-angular-order-scout')
+        self.assertEqual(slot_angle['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('start-neighborhood angular-rank candidates', slot_angle['candidateFamilies'])
+        self.assertEqual([entry['targetResourceId'] for entry in slot_angle['linkedSlotAngularOrder']], [128, 129, 130, 131])
+        self.assertEqual(slot_angle['linkedSlotAngularOrder'][3]['angleRankAmongNonSelfCandidates'], 1)
+        self.assertEqual(slot_angle['nonSelfSlotNamesBySignedAngleCandidate'], ['Con4', 'Con3', 'Con2'])
+        self.assertEqual(slot_angle['nonSelfResourceIdsBySignedAngleCandidate'], [131, 130, 129])
+        self.assertEqual(slot_angle['nonSelfQuadrantsBySignedAngleCandidate'], ['south-east', 'north-east', 'north-east'])
+        self.assertEqual(slot_angle['firstSignedAngleNonSelfSlotName'], 'Con4')
+        self.assertEqual(slot_angle['firstSignedAngleNonSelfResourceId'], 131)
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
         self.assertEqual(data['fieldFamilies']['candidateHyperspaceLinks']['slotNames'], [f'Con{index}' for index in range(1, 17)])
         self.assertEqual(first['semanticFields']['candidateHyperspaceLinks']['wordIndices'], list(range(4, 20)))
@@ -3654,7 +3678,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()

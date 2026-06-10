@@ -1810,6 +1810,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_bounds_summary',
             'recorded_coordinate_display_normalized_summary',
             'recorded_coordinate_display_transform_summary',
+            'recorded_coordinate_display_fixed_point_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -1820,6 +1821,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_start_neighborhood_display_distance_summary',
             'recorded_start_neighborhood_display_vector_summary',
             'recorded_start_neighborhood_slot_vector_order_summary',
+            'recorded_start_neighborhood_slot_angular_order_summary',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
@@ -1863,6 +1865,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayTransformAxisSpanRatioYOverX'], 33.281999)
         self.assertEqual(readiness['coordinateDisplayTransformResource128']['yPos']['invertedUnitIntervalCandidate'], 0.045092)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayTransformSourceLabel'], 'decoded-resource-backed-coordinate-display-transform-scout')
+        self.assertEqual(readiness['coordinateDisplayFixedPointSourceLabel'], 'decoded-resource-backed-coordinate-display-fixed-point-scale-scout')
+        self.assertEqual(readiness['coordinateDisplayFixedPointOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('16.16 fixed-point coordinate-unit candidate', readiness['coordinateDisplayFixedPointCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayFixedPointDivisor'], 65536)
+        self.assertEqual(readiness['coordinateDisplayFixedPointXSpan'], 3.998032)
+        self.assertEqual(readiness['coordinateDisplayFixedPointYSpan'], 133.062485)
+        self.assertEqual(readiness['coordinateDisplayFixedPointAxisSpanRatioYOverX'], 33.281996)
+        self.assertEqual(readiness['coordinateDisplayFixedPointResource128']['yPosFixedPointCandidate'], 127.0625)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayFixedPointSourceLabel'], 'decoded-resource-backed-coordinate-display-fixed-point-scale-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])
@@ -1941,6 +1952,17 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['startNeighborhoodSlotVectorOrderCon4DistanceRank'], 1)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotVectorOrderSourceLabel'], 'decoded-resource-backed-start-neighborhood-slot-vector-order-scout')
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotVectorOrderFirstNonSelfResourceId'], 129)
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderSourceLabel'], 'decoded-resource-backed-start-neighborhood-slot-angular-order-scout')
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('start-neighborhood angular-rank candidates', readiness['startNeighborhoodSlotAngularOrderCandidateFamilies'])
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderNeighborResourceIds'], [128, 129, 130, 131])
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderNonSelfResourceIdsByAngle'], [131, 130, 129])
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderNonSelfQuadrantsByAngle'], ['south-east', 'north-east', 'north-east'])
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderFirstAngleSlotName'], 'Con4')
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderFirstAngleResourceId'], 131)
+        self.assertEqual(readiness['startNeighborhoodSlotAngularOrderCon4AngleRank'], 1)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotAngularOrderSourceLabel'], 'decoded-resource-backed-start-neighborhood-slot-angular-order-scout')
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotAngularOrderFirstAngleResourceId'], 131)
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
         self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')

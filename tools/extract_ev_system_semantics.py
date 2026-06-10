@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v19'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v21'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -295,6 +295,54 @@ def _coordinate_display_transform_summary(systems: list[dict]) -> dict:
         },
         'displayUnitInterpretationStatus': 'not-promoted; transform candidates are analysis inputs for later Classic map projection, centering, axis inversion, and pixel-scale evidence',
         'sourceNote': 'This packages normalized signed-long coordinate candidates into transform/aspect-ratio analysis inputs. It does not claim EV Classic map display units, projection, centering, y-axis orientation, or pixel scale.',
+    }
+
+
+def _coordinate_display_fixed_point_summary(systems: list[dict]) -> dict:
+    """Preserve 16.16-style fixed-point scale candidates without promoting map pixels."""
+    divisor = 65536
+
+    def _fixed_point(axis_payload: dict) -> float:
+        return round(axis_payload['signedLongCandidate'] / divisor, 6)
+
+    def _axis_values(axis: str) -> dict:
+        values = [
+            _fixed_point(system['semanticFields']['mapCoordinates'][axis])
+            for system in systems
+        ]
+        return {
+            'fixedPointCandidateBounds': [min(values), max(values)],
+            'fixedPointCandidateSpan': round(max(values) - min(values), 6),
+        }
+
+    def _resource_values(resource_id: int) -> dict:
+        system = next(system for system in systems if system['resourceId'] == resource_id)
+        coordinates = system['semanticFields']['mapCoordinates']
+        return {
+            'resourceId': resource_id,
+            'xPosFixedPointCandidate': _fixed_point(coordinates['xPos']),
+            'yPosFixedPointCandidate': _fixed_point(coordinates['yPos']),
+        }
+
+    x_axis = _axis_values('xPos')
+    y_axis = _axis_values('yPos')
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-fixed-point-scale-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'recordCount': len(systems),
+        'fixedPointDivisorCandidate': divisor,
+        'candidateFamilies': [
+            '16.16 fixed-point coordinate-unit candidate',
+            'unsigned low-word fractional-subunit candidate',
+            'run-level fixed-point span/aspect-ratio candidate',
+        ],
+        'xPos': x_axis,
+        'yPos': y_axis,
+        'fixedPointAxisSpanRatioYOverX': round(y_axis['fixedPointCandidateSpan'] / x_axis['fixedPointCandidateSpan'], 6) if x_axis['fixedPointCandidateSpan'] else None,
+        'resource128': _resource_values(128),
+        'resource129': _resource_values(129),
+        'displayUnitInterpretationStatus': 'not-promoted; 16.16 fixed-point candidates are analysis inputs for later Classic map projection, centering, axis inversion, and pixel-scale evidence',
+        'sourceNote': 'This interprets the decoded signed 32-bit coordinate payload as a 16.16-style fixed-point candidate because each coordinate is represented by two 16-bit words. It preserves map-scaling analysis inputs only and does not claim EV Classic map pixels, projection, centering, axis orientation, route UI behavior, or exact remaining system-name joins.',
     }
 
 
@@ -767,6 +815,7 @@ def _start_neighborhood_slot_vector_order_summary(systems: list[dict]) -> dict:
             'displayQuadrantCandidate': neighbor['displayQuadrantCandidate'],
             'dominantAxisCandidate': neighbor['dominantAxisCandidate'],
             'euclideanInvertedYUnitIntervalCandidate': neighbor['euclideanInvertedYUnitIntervalCandidate'],
+            'signedAngleDegreesFromPositiveXCandidate': neighbor['signedAngleDegreesFromPositiveXCandidate'],
             'distanceRankAmongNonSelfCandidates': distance_rank_by_resource.get(neighbor['targetResourceId']),
         })
     return {
@@ -786,6 +835,60 @@ def _start_neighborhood_slot_vector_order_summary(systems: list[dict]) -> dict:
         'firstNonSelfSlotName': next((entry['slotName'] for entry in linked_slot_order if not entry['isSelfLink']), None),
         'firstNonSelfResourceId': next((entry['targetResourceId'] for entry in linked_slot_order if not entry['isSelfLink']), None),
         'sourceNote': 'This cross-walks decoded Levo/resource 128 Con-slot order with non-promoted display-vector/distance candidates for later map-scaling and route-UI comparison. It does not claim EV Classic route ordering, map pixels, distance formula, projection, axis orientation, exact target system names, or broad runtime topology.',
+    }
+
+
+def _start_neighborhood_slot_angular_order_summary(systems: list[dict]) -> dict:
+    """Summarize start-neighborhood slot order against signed-angle candidates without promotion."""
+    slot_order = _start_neighborhood_slot_vector_order_summary(systems)
+    linked_entries = slot_order['linkedSlotOrder']
+    non_self_entries = [entry for entry in linked_entries if not entry['isSelfLink']]
+    by_angle = sorted(
+        non_self_entries,
+        key=lambda entry: (
+            entry['signedAngleDegreesFromPositiveXCandidate'],
+            entry['slotName'],
+            entry['targetResourceId'],
+        ),
+    )
+    angle_rank_by_resource = {
+        entry['targetResourceId']: rank
+        for rank, entry in enumerate(by_angle, start=1)
+    }
+    linked_slot_angular_order = []
+    for entry in linked_entries:
+        linked_slot_angular_order.append({
+            'slotOrderIndex': entry['slotOrderIndex'],
+            'slotName': entry['slotName'],
+            'targetResourceId': entry['targetResourceId'],
+            'targetExactSystemName': entry['targetExactSystemName'],
+            'targetNameJoinStatus': entry['targetNameJoinStatus'],
+            'isSelfLink': entry['isSelfLink'],
+            'displayQuadrantCandidate': entry['displayQuadrantCandidate'],
+            'dominantAxisCandidate': entry['dominantAxisCandidate'],
+            'signedAngleDegreesFromPositiveXCandidate': entry['signedAngleDegreesFromPositiveXCandidate'],
+            'angleRankAmongNonSelfCandidates': angle_rank_by_resource.get(entry['targetResourceId']),
+            'distanceRankAmongNonSelfCandidates': entry['distanceRankAmongNonSelfCandidates'],
+        })
+    return {
+        'sourceLabel': 'decoded-resource-backed-start-neighborhood-slot-angular-order-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'startResourceId': slot_order['startResourceId'],
+        'startExactSystemName': slot_order['startExactSystemName'],
+        'candidateFamilies': [
+            'start-neighborhood Con-slot order versus signed-angle candidates',
+            'start-neighborhood display-quadrant order candidates',
+            'start-neighborhood angular-rank candidates',
+        ],
+        'linkedNeighborCount': len(linked_slot_angular_order),
+        'linkedSlotAngularOrder': linked_slot_angular_order,
+        'nonSelfResourceIdsBySignedAngleCandidate': [entry['targetResourceId'] for entry in by_angle],
+        'nonSelfSlotNamesBySignedAngleCandidate': [entry['slotName'] for entry in by_angle],
+        'nonSelfQuadrantsInSlotOrder': [entry['displayQuadrantCandidate'] for entry in non_self_entries],
+        'nonSelfQuadrantsBySignedAngleCandidate': [entry['displayQuadrantCandidate'] for entry in by_angle],
+        'firstSignedAngleNonSelfSlotName': by_angle[0]['slotName'] if by_angle else None,
+        'firstSignedAngleNonSelfResourceId': by_angle[0]['targetResourceId'] if by_angle else None,
+        'sourceNote': 'This cross-walks decoded Levo/resource 128 Con-slot order with non-promoted signed-angle/quadrant candidates for later map orientation and route-UI comparison. It does not claim EV Classic angular ordering, route ordering, map pixels, projection, axis orientation, exact target system names, or broad runtime topology.',
     }
 
 
@@ -890,6 +993,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDisplayBoundsSummary': _coordinate_display_bounds_summary(systems),
         'coordinateDisplayNormalizedSummary': _coordinate_display_normalized_summary(systems),
         'coordinateDisplayTransformSummary': _coordinate_display_transform_summary(systems),
+        'coordinateDisplayFixedPointSummary': _coordinate_display_fixed_point_summary(systems),
         'coordinateDisplayExtremaSummary': _coordinate_display_extrema_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),
@@ -899,6 +1003,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'startNeighborhoodDisplayDistanceSummary': _start_neighborhood_display_distance_summary(systems),
         'startNeighborhoodDisplayVectorSummary': _start_neighborhood_display_vector_summary(systems),
         'startNeighborhoodSlotVectorOrderSummary': _start_neighborhood_slot_vector_order_summary(systems),
+        'startNeighborhoodSlotAngularOrderSummary': _start_neighborhood_slot_angular_order_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

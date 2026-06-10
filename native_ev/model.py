@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v19':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v21':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -374,6 +374,21 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display-transform summary has unexpected axis span ratio')
     if display_transform.get('resource128', {}).get('yPos', {}).get('invertedUnitIntervalCandidate') != 0.045092:
         raise ValueError('sourced EV systems manifest coordinate display-transform summary has unexpected Levo inverted y unit interval')
+    display_fixed_point = data.get('coordinateDisplayFixedPointSummary', {})
+    if display_fixed_point.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-fixed-point-scale-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display fixed-point scale source label')
+    if display_fixed_point.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display fixed-point scale should keep display scaling pending')
+    if display_fixed_point.get('fixedPointDivisorCandidate') != 65536:
+        raise ValueError('sourced EV systems manifest coordinate display fixed-point scale has unexpected divisor')
+    if display_fixed_point.get('xPos', {}).get('fixedPointCandidateBounds') != [1.001953, 4.999985] or display_fixed_point.get('yPos', {}).get('fixedPointCandidateBounds') != [0.000015, 133.0625]:
+        raise ValueError('sourced EV systems manifest coordinate display fixed-point scale has unexpected bounds')
+    if display_fixed_point.get('fixedPointAxisSpanRatioYOverX') != 33.281996:
+        raise ValueError('sourced EV systems manifest coordinate display fixed-point scale has unexpected axis ratio')
+    if display_fixed_point.get('resource128', {}).get('yPosFixedPointCandidate') != 127.0625:
+        raise ValueError('sourced EV systems manifest coordinate display fixed-point scale has unexpected Levo y fixed-point candidate')
+    if 'not-promoted' not in display_fixed_point.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display fixed-point scale must not promote display units')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')
@@ -513,6 +528,17 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest start-neighborhood slot-vector order has unexpected distance order')
     if slot_order.get('firstNonSelfSlotName') != 'Con2' or slot_order.get('firstNonSelfResourceId') != 129:
         raise ValueError('sourced EV systems manifest start-neighborhood slot-vector order has unexpected first non-self link')
+    slot_angular = data.get('startNeighborhoodSlotAngularOrderSummary', {})
+    if slot_angular.get('sourceLabel') != 'decoded-resource-backed-start-neighborhood-slot-angular-order-scout':
+        raise ValueError('sourced EV systems manifest missing start-neighborhood slot-angular order source label')
+    if slot_angular.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-angular order should keep display scaling pending')
+    if [entry.get('targetResourceId') for entry in slot_angular.get('linkedSlotAngularOrder', [])] != [128, 129, 130, 131]:
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-angular order has unexpected target resource order')
+    if slot_angular.get('nonSelfResourceIdsBySignedAngleCandidate') != [131, 130, 129]:
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-angular order has unexpected angle order')
+    if slot_angular.get('firstSignedAngleNonSelfSlotName') != 'Con4' or slot_angular.get('firstSignedAngleNonSelfResourceId') != 131:
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-angular order has unexpected first angle candidate')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')
@@ -526,6 +552,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         'Con1-Con16 link slot names' not in boundary
         or 'resource ID 128 to Levo' not in boundary
         or 'link-slot/display-vector order analysis' not in boundary
+        or 'slot/angular order analysis' not in boundary
     ):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
     return data

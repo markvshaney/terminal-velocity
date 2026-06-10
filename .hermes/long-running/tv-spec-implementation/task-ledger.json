@@ -35,20 +35,22 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T03:43:51Z",
-  "last_progress_token": "edc2a9a-start-neighborhood-slot-vector-order",
-  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T033007Z-2.summary.json",
+  "last_material_event_id": "2026-06-10T03:55:36Z",
+  "last_progress_token": "f6e6b37cef893a53cad9ca1926fdd537ecd086bb7d9b4a5c88563ccf9392b155",
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T033703Z-3.summary.json",
+  "last_verification_summary": "Promoted v21 non-promoted coordinate fixed-point display-scale packet; extractor idempotence, native EV model/scenario tests, static topology scenario, backlog index build/check, JSON/JSONL parse, secret-pattern search, and git diff --check pass locally.",
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...slot-vector-order...v19",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> model test OK; initial scenario class-name typo produced AttributeError, rerun with ScenarioEvalHarnessTests OK",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...coordinate-display-fixed-point...slot-angular-order...v21",
+    "python3 -m unittest targeted sourced-system/static-topology tests -v -> Ran 2 tests OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_coordinate_display_fixed_point_summary passed",
+    "temporary extractor output cmp against native_ev/data/sourced_ev_systems.json -> identical",
     "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> Ran 271 tests OK",
     "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_start_neighborhood_slot_vector_order_summary passed",
     "JSON/JSONL parse OK",
     "git diff --check -> passed",
-    "npm test -- --run -> blocked: no package.json at repo root (ENOENT)"
+    "secret-pattern search -> only benign local variable token matches in tools/backlog_dispatch_index.py; no credentials in touched diff"
   ],
-  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation plus remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; latest promoted slice is a non-promoted start-neighborhood slot-vector order analysis packet.",
+  "next_resume_action": "Commit and normal-push the verified v21 coordinate fixed-point display-scale packet, then continue Lane A coordinate display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -133,6 +135,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T03:45:57Z",
-  "last_verification_summary": "Committed and normal-pushed v19 start-neighborhood slot-vector order packet; local HEAD equals origin/main."
+  "updated_at": "2026-06-10T03:55:36Z"
 }
