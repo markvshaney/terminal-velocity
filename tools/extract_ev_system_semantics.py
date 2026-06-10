@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v49'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -1647,6 +1647,40 @@ def _runtime_route_label_probe_execution_gate_summary(systems: list[dict]) -> di
             'clickOrKeyPositionWhenApplicable',
             'screenshotOrTranscriptReference',
             'decodedResourceIdJoinWithEvidenceOnlyAfterIndependentOracle',
+        ],
+        'capturePacketSchemaVersion': 1,
+        'requiredCapturePacketCount': len(required_target_ids),
+        'capturePacketTemplates': [
+            {
+                'targetResourceId': target['targetResourceId'],
+                'slotName': target['slotName'],
+                'startSystem': {
+                    'resourceId': probe_targeting['candidateStartResourceId'],
+                    'systemName': probe_targeting['candidateStartSystemName'],
+                },
+                'operatorStateRequirements': {
+                    'disposableNonStrictPilot': True,
+                    'strictPlayAllowed': False,
+                    'reusablePilotAllowed': False,
+                    'rawResourceMutationAllowed': False,
+                },
+                'requiredObservationFields': [
+                    'startSystemVisibleLabel',
+                    'inputMethod',
+                    'visibleDestinationLabel',
+                    'selectedEdgeOrderOrCycleOrdinal',
+                    'clickOrKeyPositionWhenApplicable',
+                    'screenshotOrTranscriptReference',
+                ],
+                'joinPromotionRule': 'capture may propose a resource-ID/Con-slot join only when it records a visible label tied to this targetResourceId or slotName; otherwise leave name/topology promotion blocked',
+                'sourceFidelityLabel': 'original-runtime-route-label-capture-packet-template',
+            }
+            for target in probe_targeting['probeTargets']
+        ],
+        'capturePacketValidationRules': [
+            'one capture packet per required target resource ID 129-131 before any route-label join review',
+            'each packet must retain local-only screenshot/transcript provenance; do not publish raw proprietary captures without approval',
+            'a visible label alone is insufficient; packet must tie label selection to a decoded resource ID or Con slot before promotion review',
         ],
         'safetyBlockers': [
             'do not run route-label probes on Strict Play or reusable pilots',

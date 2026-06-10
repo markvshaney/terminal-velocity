@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v49')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3831,6 +3831,16 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(route_label_probe_execution_gate['candidateStartResourceId'], 128)
         self.assertEqual(route_label_probe_execution_gate['requiredProbeTargetResourceIds'], [129, 130, 131])
         self.assertEqual(route_label_probe_execution_gate['requiredCaptureFields'][:4], ['disposableNonStrictPilot', 'startSystemVisibleLabel', 'inputMethod', 'visibleDestinationLabel'])
+        self.assertEqual(route_label_probe_execution_gate['capturePacketSchemaVersion'], 1)
+        self.assertEqual(route_label_probe_execution_gate['requiredCapturePacketCount'], 3)
+        capture_templates = route_label_probe_execution_gate['capturePacketTemplates']
+        self.assertEqual([entry['targetResourceId'] for entry in capture_templates], [129, 130, 131])
+        self.assertEqual([entry['slotName'] for entry in capture_templates], ['Con2', 'Con3', 'Con4'])
+        self.assertTrue(all(entry['operatorStateRequirements']['disposableNonStrictPilot'] for entry in capture_templates))
+        self.assertTrue(all(not entry['operatorStateRequirements']['strictPlayAllowed'] for entry in capture_templates))
+        self.assertIn('visibleDestinationLabel', capture_templates[0]['requiredObservationFields'])
+        self.assertIn('sourceFidelityLabel', capture_templates[0])
+        self.assertIn('one capture packet per required target resource ID 129-131 before any route-label join review', route_label_probe_execution_gate['capturePacketValidationRules'])
         self.assertIn('do not run route-label probes on Strict Play or reusable pilots', route_label_probe_execution_gate['safetyBlockers'])
         self.assertIn('not-promoted', route_label_probe_execution_gate['promotionStatus'])
         topology_readiness = data['topologyPromotionReadinessSummary']

@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v49",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -501,6 +501,87 @@
       "clickOrKeyPositionWhenApplicable",
       "screenshotOrTranscriptReference",
       "decodedResourceIdJoinWithEvidenceOnlyAfterIndependentOracle"
+    ],
+    "capturePacketSchemaVersion": 1,
+    "requiredCapturePacketCount": 3,
+    "capturePacketTemplates": [
+      {
+        "targetResourceId": 129,
+        "slotName": "Con2",
+        "startSystem": {
+          "resourceId": 128,
+          "systemName": "Levo"
+        },
+        "operatorStateRequirements": {
+          "disposableNonStrictPilot": true,
+          "strictPlayAllowed": false,
+          "reusablePilotAllowed": false,
+          "rawResourceMutationAllowed": false
+        },
+        "requiredObservationFields": [
+          "startSystemVisibleLabel",
+          "inputMethod",
+          "visibleDestinationLabel",
+          "selectedEdgeOrderOrCycleOrdinal",
+          "clickOrKeyPositionWhenApplicable",
+          "screenshotOrTranscriptReference"
+        ],
+        "joinPromotionRule": "capture may propose a resource-ID/Con-slot join only when it records a visible label tied to this targetResourceId or slotName; otherwise leave name/topology promotion blocked",
+        "sourceFidelityLabel": "original-runtime-route-label-capture-packet-template"
+      },
+      {
+        "targetResourceId": 130,
+        "slotName": "Con3",
+        "startSystem": {
+          "resourceId": 128,
+          "systemName": "Levo"
+        },
+        "operatorStateRequirements": {
+          "disposableNonStrictPilot": true,
+          "strictPlayAllowed": false,
+          "reusablePilotAllowed": false,
+          "rawResourceMutationAllowed": false
+        },
+        "requiredObservationFields": [
+          "startSystemVisibleLabel",
+          "inputMethod",
+          "visibleDestinationLabel",
+          "selectedEdgeOrderOrCycleOrdinal",
+          "clickOrKeyPositionWhenApplicable",
+          "screenshotOrTranscriptReference"
+        ],
+        "joinPromotionRule": "capture may propose a resource-ID/Con-slot join only when it records a visible label tied to this targetResourceId or slotName; otherwise leave name/topology promotion blocked",
+        "sourceFidelityLabel": "original-runtime-route-label-capture-packet-template"
+      },
+      {
+        "targetResourceId": 131,
+        "slotName": "Con4",
+        "startSystem": {
+          "resourceId": 128,
+          "systemName": "Levo"
+        },
+        "operatorStateRequirements": {
+          "disposableNonStrictPilot": true,
+          "strictPlayAllowed": false,
+          "reusablePilotAllowed": false,
+          "rawResourceMutationAllowed": false
+        },
+        "requiredObservationFields": [
+          "startSystemVisibleLabel",
+          "inputMethod",
+          "visibleDestinationLabel",
+          "selectedEdgeOrderOrCycleOrdinal",
+          "clickOrKeyPositionWhenApplicable",
+          "screenshotOrTranscriptReference"
+        ],
+        "joinPromotionRule": "capture may propose a resource-ID/Con-slot join only when it records a visible label tied to this targetResourceId or slotName; otherwise leave name/topology promotion blocked",
+        "sourceFidelityLabel": "original-runtime-route-label-capture-packet-template"
+      }
+    ],
+    "capturePacketValidationRules": [
+      "one capture packet per required target resource ID 129-131 before any route-label join review",
+      "each packet must retain local-only screenshot/transcript provenance; do not publish raw proprietary captures without approval",
+      "a visible label alone is insufficient; packet must tie label selection to a decoded resource ID or Con slot before promotion review"
     ],
     "safetyBlockers": [
       "do not run route-label probes on Strict Play or reusable pilots",

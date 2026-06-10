@@ -166,6 +166,31 @@ Follow-up action after explicit user request to eliminate the cron fallback:
 
 Status after fallback elimination: no implementation, autonomous repair, watchdog/coordinator, or dispatch cron fallback remains listed. The remaining cron surface is a paused no-agent slice reporter, not an implementation fallback.
 
+## Deep-dive finding after user asked why activity/blocking persisted
+
+Evidence inspected on 2026-06-10 after cron fallback removal:
+
+- `cronjob list` shows exactly one TV cron job: `4e9cc82d1a99` paused, `no_agent: true`, script `tv_slice_reporter.py`. This is not an LLM implementation runner.
+- `/home/bh/.hermes/profiles/loki-game/run/tv_kanban_continuous_loop_state.json` now records `last_state: stopped_by_user_kill`, PID `1970812`, `stopped_pid: 1970812`, `stop_reason: user requested kill after every-minute posting/control-plane confusion`.
+- `/home/bh/.hermes/profiles/loki-game/processes.json` is `[]`; no registered detached process remains.
+- The one-shot kill output `/home/bh/.hermes/profiles/loki-game/cron/output/ec09cd3291fd/2026-06-10_16-06-29.md` verified PID `1970812` was `python3 /home/bh/.hermes/profiles/loki-game/scripts/tv_kanban_continuous_loop.py`, sent SIGTERM, then `after_ps: <not running>` and `remaining_matches: <none>`.
+- `/home/bh/.hermes/profiles/loki-game/config.yaml` has the embedded Kanban dispatcher enabled independently of cron: `kanban.dispatch_in_gateway: true`, `dispatch_interval_seconds: 60`.
+- `/home/bh/.hermes/profiles/loki-game/logs/agent.log` shows that dispatcher spawned a `terminal-velocity` worker at `2026-06-10 14:55:57` and reaped it at `15:04:57`.
+- `.hermes/long-running/tv-spec-implementation/events.jsonl` shows `runner-cron-fallback-eliminated` at `20:12:00Z`, then `lane-a-v50-runtime-route-label-probe-execution-gate-push-ready` at `20:17:02Z`.
+
+Interpretation:
+
+There was not a single clean runner. At least four separate surfaces existed and were easy to conflate:
+
+1. cron LLM implementation fallback (`5430276bcaa5`) — removed;
+2. cron autonomous repair fallback (`58592dca0042`) — removed;
+3. cron watchdog/coordinator/dispatcher (`72e736287129`) — removed;
+4. non-cron Kanban execution surfaces — the standalone `tv_kanban_continuous_loop.py` and the gateway embedded Kanban dispatcher.
+
+The `v50` event after fallback removal is therefore not evidence that cron survived. It is evidence that an already-dispatched Kanban worker or active cleanup/session continued after the cron jobs were removed. Killing the standalone continuous loop stopped its parent/supervisor PID, but it did not necessarily cancel any child worker that the gateway/Kanban dispatcher had already spawned. The gateway dispatcher is also not configured as cron, so eliminating cron fallback does not eliminate all Kanban dispatch capability.
+
+Current explanation: cron fallback is eliminated, but the architecture still has a separate Kanban dispatcher path and previously had a standalone loop path. The bug was treating “pause/remove cron” as equivalent to “stop all TV implementation activity.” Those are different control planes.
+
 ## Fix-through checklist
 
 Use this section to work the bugs without losing the distinctions.
