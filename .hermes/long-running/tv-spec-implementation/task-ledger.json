@@ -35,6 +35,9 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
+  "last_material_event_id": "2026-06-10T03:28:02Z",
+  "last_progress_token": "8acf7add84900a5b905b6c379f5c2f30e3f15d14af9141a35b9fc64ace87e827",
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T032305Z-1.summary.json",
   "last_verified_commands": [
     "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...v17",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> 3/3 ok",
@@ -83,6 +86,9 @@
     "script": "/home/bh/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh",
     "skill_loading_policy": "No default -s preload in continuous wrapper; prompt embeds standing contract. Load extra skills/docs only for uncovered surfaces, gates/process changes, or original-runtime/gameplay operator procedure.",
     "workdir": "/home/bh/workspaces/loki/terminal-velocity"
+  },
+  "runner_policy": {
+    "progress_token_definition": "sha256 of ledger status, active gate, next action, HEAD, git status, event count, and last event digest"
   },
   "safe_backlog": [
     {
