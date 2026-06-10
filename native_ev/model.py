@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v30':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v31':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -369,6 +369,23 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest record-to-name readiness has unexpected heuristic seed boundary')
     if 'landing-name byte proximity is a scout signal, not a syst record-to-name join' not in record_name_readiness.get('promotionBlockers', []):
         raise ValueError('sourced EV systems manifest record-to-name readiness must not promote byte-proximity joins')
+    topology_readiness = data.get('topologyPromotionReadinessSummary', {})
+    if topology_readiness.get('sourceLabel') != 'decoded-resource-backed-topology-promotion-readiness-matrix':
+        raise ValueError('sourced EV systems manifest missing topology promotion readiness matrix source label')
+    if topology_readiness.get('oracleStatus') != 'topology_semantic_promotion_pending_field_family_mapping':
+        raise ValueError('sourced EV systems manifest topology promotion readiness should keep topology mapping pending')
+    if topology_readiness.get('recordCount') != 67 or topology_readiness.get('exactMappedRecordCount') != 1:
+        raise ValueError('sourced EV systems manifest topology promotion readiness has unexpected record counts')
+    if topology_readiness.get('exactMappedResourceIds') != [128] or topology_readiness.get('unjoinedRecordCount') != 66:
+        raise ValueError('sourced EV systems manifest topology promotion readiness changed exact mapping boundary')
+    if 'complete decoded coordinate word pairs and link slots for all 67 records' not in topology_readiness.get('readyStaticInputFamilies', []):
+        raise ValueError('sourced EV systems manifest topology promotion readiness missing ready static input family')
+    if 'remaining 66 exact record-to-name joins' not in topology_readiness.get('blockedPromotionClaims', []):
+        raise ValueError('sourced EV systems manifest topology promotion readiness must block remaining name joins')
+    if 'not-promoted' not in topology_readiness.get('coordinatePromotionStatus', '') or 'not-promoted' not in topology_readiness.get('recordNamePromotionStatus', ''):
+        raise ValueError('sourced EV systems manifest topology promotion readiness must not promote coordinates or remaining names')
+    if 'blocked' not in topology_readiness.get('runtimeUniverseReplacementStatus', ''):
+        raise ValueError('sourced EV systems manifest topology promotion readiness must block broad universe replacement')
     landing_proximity = data.get('systemNameLandingProximitySummary', {})
     if landing_proximity.get('sourceLabel') != 'decoded-resource-backed-system-name-landing-proximity-scout':
         raise ValueError('sourced EV systems manifest missing system-name landing-proximity source label')

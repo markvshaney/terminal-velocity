@@ -1805,6 +1805,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_name_seed_inputs',
             'recorded_resource_bible_topology_constants',
             'recorded_coordinate_map_source_readiness_summary',
+            'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',
             'recorded_coordinate_raw_long_candidate',
             'recorded_coordinate_domain_summary',
@@ -1856,6 +1857,18 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('original-runtime map screenshot/click calibration', readiness['coordinateMapSourceReadinessNextEvidenceFamilies'][0])
         self.assertIn('not-promoted', readiness['coordinateMapSourceReadinessStatus'])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateMapSourceReadinessSourceLabel'], 'resource-bible-backed-coordinate-map-source-readiness')
+        self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
+        self.assertEqual(readiness['topologyPromotionReadinessOracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
+        self.assertIn('complete decoded coordinate word pairs and link slots for all 67 records', readiness['topologyPromotionReadinessReadyStaticInputFamilies'])
+        self.assertIn('broad runtime universe replacement from the decoded syst run', readiness['topologyPromotionReadinessBlockedPromotionClaims'])
+        self.assertEqual(readiness['topologyPromotionReadinessExactMappedRecordCount'], 1)
+        self.assertEqual(readiness['topologyPromotionReadinessExactMappedResourceIds'], [128])
+        self.assertEqual(readiness['topologyPromotionReadinessUnjoinedRecordCount'], 66)
+        self.assertIn('not-promoted', readiness['topologyPromotionReadinessCoordinateStatus'])
+        self.assertIn('not-promoted beyond resource 128 to Levo', readiness['topologyPromotionReadinessRecordNameStatus'])
+        self.assertIn('blocked', readiness['topologyPromotionReadinessRuntimeUniverseStatus'])
+        self.assertIn('Classic map screenshot/click calibration', readiness['topologyPromotionReadinessNextEvidenceFamilies'][0])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['topologyPromotionReadinessUnjoinedRecordCount'], 66)
         self.assertEqual(readiness['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
         self.assertEqual(readiness['systemNameSeedSummaryOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
         self.assertEqual(readiness['systemNameSeedSummarySeedCount'], 9)

@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v30')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v31')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3627,6 +3627,17 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertTrue(record_name_readiness['heuristicSeedCountDoesNotCoverRemainingRecords'])
         self.assertIn('landing-name byte proximity is a scout signal, not a syst record-to-name join', record_name_readiness['promotionBlockers'])
         self.assertIn('decoded complete name/list resource', record_name_readiness['nextEvidenceFamilies'][0])
+        topology_readiness = data['topologyPromotionReadinessSummary']
+        self.assertEqual(topology_readiness['sourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
+        self.assertEqual(topology_readiness['oracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
+        self.assertEqual(topology_readiness['recordCount'], 67)
+        self.assertEqual(topology_readiness['exactMappedResourceIds'], [128])
+        self.assertEqual(topology_readiness['unjoinedRecordCount'], 66)
+        self.assertIn('complete decoded coordinate word pairs and link slots for all 67 records', topology_readiness['readyStaticInputFamilies'])
+        self.assertIn('remaining 66 exact record-to-name joins', topology_readiness['blockedPromotionClaims'])
+        self.assertIn('not-promoted', topology_readiness['coordinatePromotionStatus'])
+        self.assertIn('not-promoted', topology_readiness['recordNamePromotionStatus'])
+        self.assertIn('blocked', topology_readiness['runtimeUniverseReplacementStatus'])
         landing_proximity = data['systemNameLandingProximitySummary']
         self.assertEqual(landing_proximity['sourceLabel'], 'decoded-resource-backed-system-name-landing-proximity-scout')
         self.assertEqual(landing_proximity['oracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
@@ -3784,7 +3795,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        topology_readiness = data['topologyPromotionReadinessSummary']
+        self.assertEqual(topology_readiness['sourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
+        self.assertEqual(topology_readiness['oracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
+        self.assertIn('complete decoded coordinate word pairs and link slots for all 67 records', topology_readiness['readyStaticInputFamilies'])
+        self.assertIn('broad runtime universe replacement from the decoded syst run', topology_readiness['blockedPromotionClaims'])
+        self.assertEqual(topology_readiness['exactMappedRecordCount'], 1)
+        self.assertEqual(topology_readiness['exactMappedResourceIds'], [128])
+        self.assertEqual(topology_readiness['unjoinedRecordCount'], 66)
+        self.assertIn('not-promoted', topology_readiness['coordinatePromotionStatus'])
+        self.assertIn('not-promoted beyond resource 128 to Levo', topology_readiness['recordNamePromotionStatus'])
+        self.assertIn('blocked', topology_readiness['runtimeUniverseReplacementStatus'])
+        self.assertIn('Classic map screenshot/click calibration', topology_readiness['nextEvidenceFamilies'][0])
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
