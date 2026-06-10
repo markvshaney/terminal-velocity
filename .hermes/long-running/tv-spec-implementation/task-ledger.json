@@ -36,11 +36,13 @@
     "unsafe dirty state that cannot be separated"
   ],
   "last_verified_commands": [
-    "git push origin main -> bd619c6..61c267f main -> main",
-    "git fetch origin main --quiet && test HEAD == origin/main -> passed (61c267fd0b1579671e3e343b94749d0e2c19e13d)",
-    "git status --short --branch -> ## main...origin/main plus durable ledger/events update only before restart"
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...v17",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> 3/3 ok",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_start_neighborhood_display_distance_summary passed",
+    "tmp extractor output cmp native_ev/data/sourced_ev_systems.json; json parse ok; git diff --check -> passed",
+    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK"
   ],
-  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation plus remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; continuous wrapper should run without human input unless a real safety/auth/destructive gate is reached.",
+  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation plus remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Latest local slice promotes only a non-promoted start-neighborhood display-distance analysis packet; display pixels/formula/projection/target names/runtime topology remain pending.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -122,5 +124,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T03:22:00Z"
+  "updated_at": "2026-06-10T03:28:35Z"
 }
