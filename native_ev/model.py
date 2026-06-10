@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v34':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v35':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -444,6 +444,28 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest topology promotion readiness must not promote coordinates or remaining names')
     if 'blocked' not in topology_readiness.get('runtimeUniverseReplacementStatus', ''):
         raise ValueError('sourced EV systems manifest topology promotion readiness must block broad universe replacement')
+    runtime_gate = data.get('runtimeUniverseReplacementGateSummary', {})
+    if runtime_gate.get('sourceLabel') != 'decoded-resource-backed-runtime-universe-replacement-gate':
+        raise ValueError('sourced EV systems manifest missing runtime universe replacement gate')
+    if runtime_gate.get('oracleStatus') != 'runtime_universe_replacement_blocked_pending_name_topology_display_oracles':
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate must keep replacement blocked')
+    if runtime_gate.get('decodedSystRecordCount') != 67 or runtime_gate.get('exactMappedResourceIds') != [128]:
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate has unexpected record boundary')
+    if runtime_gate.get('unjoinedRecordCount') != 66 or runtime_gate.get('unjoinedResourceIdRange') != [129, 194]:
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate changed unjoined record boundary')
+    gate_names = [entry.get('gate') for entry in runtime_gate.get('blockingGates', [])]
+    for expected_gate in [
+        'coordinate_display_units_map_scaling_projection',
+        'remaining_record_to_name_joins',
+        'named_route_topology_labels',
+        'non_topology_syst_field_semantics',
+    ]:
+        if expected_gate not in gate_names:
+            raise ValueError('sourced EV systems manifest runtime universe replacement gate missing blocker')
+    if 'not-ready' not in runtime_gate.get('replacementReadinessStatus', ''):
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate must not mark replacement ready')
+    if 'do not infer Classic-faithful broad universe behavior from the decoded syst run alone' not in runtime_gate.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate missing fidelity blocker')
     landing_proximity = data.get('systemNameLandingProximitySummary', {})
     if landing_proximity.get('sourceLabel') != 'decoded-resource-backed-system-name-landing-proximity-scout':
         raise ValueError('sourced EV systems manifest missing system-name landing-proximity source label')

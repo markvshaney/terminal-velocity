@@ -45,13 +45,10 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v34-syst-word-domain-coverage-pushed",
+  "last_material_event_id": "lane-a-v35-runtime-universe-replacement-gate",
   "last_progress_token": "449bbfbd25c6cb0e99ad3c0049da50393f969d9d05cd51d25be27f161c379e6b",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
-    "packet": "lane-a-v34-syst-word-domain-coverage",
-    "summary": "Lane A v34 added systWordDomainCoverageSummary: all 44 decoded syst words are preserved as source-readiness word-domain evidence, including system-ID-domain words [1,2,4,5,6,7], no-link-only words 8-19, zero-only tail words 24-43, and word 20 range [15,40].",
-    "promotion_status": "source-readiness guardrail only; unresolved Resource Bible field semantics, Con6-Con16 split placement, non-topology syst behavior, coordinate display units, remaining name joins, named runtime topology, and broad universe replacement remain unpromoted",
     "files_touched": [
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
@@ -64,25 +61,28 @@
       "native_ev/tests/test_scenario_eval.py",
       "tools/extract_ev_system_semantics.py"
     ],
+    "packet": "lane-a-v35-runtime-universe-replacement-gate",
+    "promotion_status": "source-readiness guardrail only; broad runtime universe replacement remains not-ready/unpromoted pending name/topology/display/field-order oracles or an accepted scaffold boundary",
+    "summary": "Lane A v35 added runtimeUniverseReplacementGateSummary: an explicit negative gate for replacing the current 10-system runtime subset with the 67 decoded syst-like records. Exact mapped resource IDs remain [128], unjoined records remain 66, and coordinate/name/named-route/non-topology field blockers are executable.",
     "verifiers": [
       {
         "command": "python3 tools/extract_ev_system_semantics.py",
-        "result": "passed; regenerated sourced_ev_systems.json with method ending levo-name-map-v34 and systems=67"
+        "result": "passed; regenerated sourced_ev_systems.json with method ending runtime-universe-replacement-gate...levo-name-map-v35 and systems=67"
       },
       {
-        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
-        "result": "passed; Ran 271 tests in 1.446s OK"
+        "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+        "result": "passed; Ran 2 tests in 0.259s OK"
       },
       {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; success true and recorded_syst_word_domain_coverage_summary passed"
+        "result": "passed; success true and recorded_runtime_universe_replacement_gate_summary passed"
       },
       {
-        "command": "python3 tools/backlog_dispatch_index.py build",
-        "result": "passed; BACKLOG DISPATCH INDEX OK"
+        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
+        "result": "passed; Ran 271 tests in 1.517s OK"
       },
       {
-        "command": "python3 tools/backlog_dispatch_index.py check",
+        "command": "python3 tools/backlog_dispatch_index.py build/check",
         "result": "passed; BACKLOG DISPATCH INDEX OK"
       },
       {
@@ -90,20 +90,20 @@
         "result": "passed; no output"
       },
       {
-        "command": "git push origin main; git fetch origin main; git rev-parse HEAD/origin/main",
-        "result": "passed; local HEAD == origin/main == 11850ef0e3353c48a3d1dcf27cb1b2286b8444a8"
+        "command": "task-ledger/events JSON parse checks",
+        "result": "passed; ledger_json_ok events_jsonl_ok lines=120 before gate-resolution event"
       }
     ]
   },
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...syst-word-domain-coverage...v34",
-    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -> Ran 271 tests in 1.446s OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_syst_word_domain_coverage_summary passed",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...runtime-universe-replacement-gate...v35",
+    "focused Lane A model/scenario tests -> Ran 2 tests OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_runtime_universe_replacement_gate_summary passed",
+    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> Ran 271 tests in 1.517s OK",
     "python3 tools/backlog_dispatch_index.py build/check -> BACKLOG DISPATCH INDEX OK",
-    "git diff --check -> OK",
-    "git push/fetch verification -> local HEAD == origin/main == 11850ef0e3353c48a3d1dcf27cb1b2286b8444a8"
+    "git diff --check -> OK"
   ],
-  "next_resume_action": "Continue Lane A only with stronger Classic runtime/source evidence for coordinate display-unit/map-scaling/projection calibration, complete exact record-to-name/runtime topology mapping, or a complete source-level syst field-order oracle before promoting unresolved syst fields, Con6-Con16 split placement, or broad runtime universe replacement.",
+  "next_resume_action": "Continue Lane A only with stronger Classic runtime/source evidence for coordinate display-unit/map-scaling/projection calibration, complete exact record-to-name/runtime topology mapping, or a complete source-level syst field-order oracle before promoting broad runtime universe replacement or unresolved syst fields.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -189,5 +189,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T17:07:22Z"
+  "updated_at": "2026-06-10T17:19:07Z"
 }
