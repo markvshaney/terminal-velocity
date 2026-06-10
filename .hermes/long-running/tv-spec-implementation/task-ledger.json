@@ -35,17 +35,20 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T03:56:02Z",
-  "last_progress_token": "f6e6b37cef893a53cad9ca1926fdd537ecd086bb7d9b4a5c88563ccf9392b155",
-  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T033703Z-3.summary.json",
-  "last_verification_summary": "Committed and normal-pushed v21 non-promoted coordinate fixed-point display-scale packet; local HEAD equals origin/main.",
+  "last_material_event_id": "2026-06-10T03:56:28Z",
+  "last_progress_token": "75bae4d21f265dc62988bca415ff9d21499bfb01bde4ad0ca7e5a842cbda0f7b",
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T034629Z-4.summary.json",
+  "last_verification_summary": "Verified Lane A v21 coordinate fixed-point and start-neighborhood slot-angular order packet; extractor, native EV model/scenario tests, backlog index build/check, static topology scenario, JSON/JSONL parse, and git diff --check pass locally.",
   "last_verified_commands": [
-    "git commit -m \"Promote EV syst coordinate fixed-point candidates\" -> 7a32f28",
-    "git push origin main -> 37b4817..7a32f28 main -> main",
-    "git fetch origin main --quiet && test HEAD == origin/main -> passed (7a32f284332511ad1e271b1804f7b98176a65a30)",
-    "git status --short --branch -> ## main...origin/main plus durable ledger/events update only before runner summary"
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...v21",
+    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> Ran 271 tests OK",
+    "python3 tools/backlog_dispatch_index.py build -> wrote backlog index",
+    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success True; recorded_coordinate_display_fixed_point_summary passed; recorded_start_neighborhood_slot_angular_order_summary passed",
+    "JSON parse for task ledger, events JSONL, sourced systems, backlog index, scenario output -> json_ok",
+    "git diff --check -> passed"
   ],
-  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation plus remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; latest promoted slice is a non-promoted coordinate fixed-point display-scale analysis packet layered on start-neighborhood slot-angular order v21.",
+  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation and exact record-to-name/runtime topology mapping before runtime universe expansion. Latest verified source slice is the non-promoted v21 coordinate fixed-point plus start-neighborhood slot-angular packet; display units/map scaling, route/angular ordering, exact target names, route UI behavior, and broad runtime topology remain pending.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -130,5 +133,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T03:56:02Z"
+  "updated_at": "2026-06-10T03:56:28Z"
 }
