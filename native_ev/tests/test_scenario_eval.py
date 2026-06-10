@@ -1846,6 +1846,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_record_to_name_promotion_readiness_summary',
             'recorded_record_name_oracle_evidence_matrix',
             'recorded_named_route_topology_oracle_gap',
+            'recorded_runtime_route_label_observation_bridge_gap',
             'recorded_static_topology_source_boundary',
         ]:
             self.assertEqual(result['checks'][check], 'passed')
@@ -2037,6 +2038,16 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['namedRouteTopologyOracleGapStartSystemNamedCandidateEdges'][1]['nameJoinStatus'], 'blocked-missing-target-name-oracle')
         self.assertIn('candidate link graph records resource-ID edges, not visible Classic route labels', readiness['namedRouteTopologyOracleGapPromotionBlockers'])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['namedRouteTopologyOracleGapUnjoinedRecordCount'], 66)
+        self.assertEqual(readiness['runtimeRouteLabelObservationBridgeGapSourceLabel'], 'original-runtime-observed-route-label-bridge-gap')
+        self.assertEqual(readiness['runtimeRouteLabelObservationBridgeGapOracleStatus'], 'runtime_route_labels_observed_but_not_joined_to_decoded_resource_ids')
+        self.assertEqual(readiness['runtimeRouteLabelObservationBridgeGapObservedLabelCount'], 4)
+        self.assertIn('Rigel', readiness['runtimeRouteLabelObservationBridgeGapObservedLabels'])
+        self.assertIn('Kathoon', readiness['runtimeRouteLabelObservationBridgeGapObservedLabels'])
+        self.assertEqual(readiness['runtimeRouteLabelObservationBridgeGapCandidateStartResourceId'], 128)
+        self.assertEqual(readiness['runtimeRouteLabelObservationBridgeGapUnjoinedStartNeighborResourceIds'], [129, 130, 131])
+        self.assertIn('runtime labels are visible Classic observations but no capture currently ties each label to a decoded resource ID or Con slot', readiness['runtimeRouteLabelObservationBridgeGapBridgeBlockers'])
+        self.assertIn('not-promoted', readiness['runtimeRouteLabelObservationBridgeGapPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['runtimeRouteLabelObservationBridgeGapObservedLabelCount'], 4)
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)

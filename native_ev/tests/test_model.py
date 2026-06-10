@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v47')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3801,6 +3801,17 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(named_route_gap['startSystemNamedCandidateEdges'][0]['nameJoinStatus'], 'exact')
         self.assertEqual(named_route_gap['startSystemNamedCandidateEdges'][1]['nameJoinStatus'], 'blocked-missing-target-name-oracle')
         self.assertIn('candidate link graph records resource-ID edges, not visible Classic route labels', named_route_gap['promotionBlockers'])
+        route_label_bridge = data['runtimeRouteLabelObservationBridgeGapSummary']
+        self.assertEqual(route_label_bridge['sourceLabel'], 'original-runtime-observed-route-label-bridge-gap')
+        self.assertEqual(route_label_bridge['oracleStatus'], 'runtime_route_labels_observed_but_not_joined_to_decoded_resource_ids')
+        self.assertEqual(route_label_bridge['observedRuntimeLabelCount'], 4)
+        observed_bridge_labels = [entry['label'] for entry in route_label_bridge['observedRuntimeLabels']]
+        self.assertIn('Rigel', observed_bridge_labels)
+        self.assertIn('Kathoon', observed_bridge_labels)
+        self.assertEqual(route_label_bridge['candidateStartResourceId'], 128)
+        self.assertEqual(route_label_bridge['unjoinedStartNeighborResourceIds'], [129, 130, 131])
+        self.assertIn('runtime labels are visible Classic observations but no capture currently ties each label to a decoded resource ID or Con slot', route_label_bridge['bridgeBlockers'])
+        self.assertIn('not-promoted', route_label_bridge['promotionStatus'])
         topology_readiness = data['topologyPromotionReadinessSummary']
         self.assertEqual(topology_readiness['sourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(topology_readiness['oracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')

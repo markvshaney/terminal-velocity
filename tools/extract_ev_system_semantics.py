@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v47'
-SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and source provenance are promoted; coordinate display units/map scaling/projection, remaining exact system names, named route topology, services, hazards, governments, ports, and broad runtime universe replacement are explicitly not promoted yet'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48'
+SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -1517,6 +1517,63 @@ def _named_route_topology_oracle_gap_summary(systems: list[dict], names: dict) -
     }
 
 
+def _runtime_route_label_observation_bridge_gap_summary(systems: list[dict]) -> dict:
+    """Record bounded original-runtime route/map labels without assigning resource IDs."""
+    start_system = next(system for system in systems if system['resourceId'] == 128)
+    start_linked_ids = start_system['semanticFields']['candidateHyperspaceLinks']['linkedSystemResourceIdsInRun']
+    exact_mapped_resource_ids = sorted(EXACT_SYSTEM_NAME_MAPPINGS)
+    return {
+        'sourceLabel': 'original-runtime-observed-route-label-bridge-gap',
+        'oracleStatus': 'runtime_route_labels_observed_but_not_joined_to_decoded_resource_ids',
+        'sourceReferences': [
+            'docs/research/original-ev-classic-runtime-observations.md lines 135-158',
+            'docs/research/original-ev-classic-runtime-observations.md lines 197-209',
+        ],
+        'observedRuntimeLabels': [
+            {
+                'label': 'Rigel',
+                'observation': 'Backslash selected Rigel from Levo in Hyperspace mode.',
+                'joinStatus': 'not-promoted; observed as a visible route label but not tied to a decoded resource ID or Con slot',
+            },
+            {
+                'label': 'Kathoon',
+                'observation': 'Shift-click route screenshot showed Destination System: Kathoon around Rigel/Levo.',
+                'joinStatus': 'not-promoted; screenshot/click geometry is not yet calibrated to decoded resource IDs or slots',
+            },
+            {
+                'label': 'Yemuro',
+                'observation': 'Mission text named New Istanbul in the Yemuro system.',
+                'joinStatus': 'not-promoted; mission destination text is not a map/resource-order oracle for syst records',
+            },
+            {
+                'label': 'Torgo',
+                'observation': 'Mission text named Torgo Prime in the Torgo system.',
+                'joinStatus': 'not-promoted; mission destination text is not a map/resource-order oracle for syst records',
+            },
+        ],
+        'observedRuntimeLabelCount': 4,
+        'candidateStartResourceId': 128,
+        'candidateStartSystemName': EXACT_SYSTEM_NAME_MAPPINGS[128]['systemName'],
+        'candidateStartLinkedResourceIds': start_linked_ids,
+        'exactMappedResourceIds': exact_mapped_resource_ids,
+        'unjoinedStartNeighborResourceIds': [resource_id for resource_id in start_linked_ids if resource_id not in exact_mapped_resource_ids],
+        'bridgeBlockers': [
+            'runtime labels are visible Classic observations but no capture currently ties each label to a decoded resource ID or Con slot',
+            'backslash/shift-click route observations do not record the resource ordinal or candidate edge selected by the original runtime',
+            'mission destination text names systems but does not define syst record order or map coordinate calibration',
+            'coordinate display/click calibration remains missing, so route-label positions cannot join decoded coordinates to visible labels',
+        ],
+        'allowedUse': 'stronger original-runtime route-label evidence inventory and probe targeting only; do not assign names or routes from this bridge gap',
+        'nextEvidenceFamilies': [
+            'Classic map capture/click probe that starts at Levo and records visible candidate labels plus exact input/click positions',
+            'route-selection probe tying each chosen visible label to the decoded start-neighborhood candidate edge order',
+            'complete source/name-order oracle that can reconcile observed route labels with resource IDs 129-194',
+        ],
+        'promotionStatus': 'not-promoted; original-runtime labels exist but are not yet a decoded resource-ID/name/topology join',
+        'sourceNote': 'This bridge gap upgrades the route-label evidence inventory without over-promoting it: Classic-visible labels like Rigel and Kathoon are real runtime observations, but the current captures lack a decoded-resource-ID/slot join and cannot promote named topology.',
+    }
+
+
 def _word_group_summary(run: dict, word_indices: list[int]) -> dict:
     values = [
         _word(record, word_index)
@@ -2185,6 +2242,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systemNameByteOrderOracleGapSummary': _system_name_byte_order_oracle_gap_summary(names),
         'recordNameOracleEvidenceMatrixSummary': _record_name_oracle_evidence_matrix_summary(names, resource_ids),
         'namedRouteTopologyOracleGapSummary': _named_route_topology_oracle_gap_summary(systems, names),
+        'runtimeRouteLabelObservationBridgeGapSummary': _runtime_route_label_observation_bridge_gap_summary(systems),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
