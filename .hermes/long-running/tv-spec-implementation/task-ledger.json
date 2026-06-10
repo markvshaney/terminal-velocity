@@ -1,5 +1,10 @@
 {
-  "active_gate": null,
+  "active_gate": {
+    "reason": "normal non-force git push of local verification/gate commits failed because HTTPS GitHub credentials are unavailable in this headless worker and SSH auth is not configured",
+    "resume_after": "GitHub credentials or an authenticated remote path are available, or a human/authorized runner pushes local main and verifies HEAD == origin/main",
+    "type": "external_auth",
+    "withheld_action": "push local main commit(s) through HEAD 74eef58 to origin/main (currently 9599b1a)"
+  },
   "created_at": "2026-06-09T14:48:45Z",
   "do_not_redo": [
     "Do not depend on superseded supporting workflow drafts as execution authority; promote needed claims into repo docs/backlog instead.",
@@ -35,20 +40,17 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T03:56:28Z",
+  "last_material_event_id": "2026-06-10T03:57:40Z",
   "last_progress_token": "75bae4d21f265dc62988bca415ff9d21499bfb01bde4ad0ca7e5a842cbda0f7b",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T034629Z-4.summary.json",
-  "last_verification_summary": "Verified Lane A v21 coordinate fixed-point and start-neighborhood slot-angular order packet; extractor, native EV model/scenario tests, backlog index build/check, static topology scenario, JSON/JSONL parse, and git diff --check pass locally.",
+  "last_verification_summary": "Verified v21 source slice and local kanban verification record, but normal push of local verification/gate commits is blocked by missing GitHub auth in this worker.",
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...v21",
-    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> Ran 271 tests OK",
-    "python3 tools/backlog_dispatch_index.py build -> wrote backlog index",
-    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success True; recorded_coordinate_display_fixed_point_summary passed; recorded_start_neighborhood_slot_angular_order_summary passed",
-    "JSON parse for task ledger, events JSONL, sourced systems, backlog index, scenario output -> json_ok",
-    "git diff --check -> passed"
+    "git push origin main -> fatal: could not read Username for https://github.com",
+    "gh auth status -> not logged into any GitHub hosts",
+    "ssh -T git@github.com -> Permission denied (publickey)",
+    "git status --short --branch -> ahead of origin/main after local commit(s), HEAD 74eef58, origin/main 9599b1a"
   ],
-  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation and exact record-to-name/runtime topology mapping before runtime universe expansion. Latest verified source slice is the non-promoted v21 coordinate fixed-point plus start-neighborhood slot-angular packet; display units/map scaling, route/angular ordering, exact target names, route UI behavior, and broad runtime topology remain pending.",
+  "next_resume_action": "From /home/bh/workspaces/loki/terminal-velocity, push local main through HEAD 74eef58 normally after auth is available, fetch, verify HEAD == origin/main, then continue Lane A coordinate display-unit/map-scaling interpretation and exact record-to-name/runtime topology mapping before runtime universe expansion.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -127,11 +129,11 @@
     "rule": "Source/fidelity findings and task state must be recorded in repo docs/checklists/ledger with explicit provenance labels, not left only in chat.",
     "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec."
   },
-  "status": "running",
+  "status": "waiting_gate",
   "task_id": "tv-spec-implementation",
   "tool_caps_policy": {
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T03:56:28Z"
+  "updated_at": "2026-06-10T03:57:40Z"
 }
