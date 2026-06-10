@@ -1811,6 +1811,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_normalized_summary',
             'recorded_coordinate_display_transform_summary',
             'recorded_coordinate_display_fixed_point_summary',
+            'recorded_coordinate_display_integer_band_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -1874,6 +1875,14 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayFixedPointAxisSpanRatioYOverX'], 33.281996)
         self.assertEqual(readiness['coordinateDisplayFixedPointResource128']['yPosFixedPointCandidate'], 127.0625)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayFixedPointSourceLabel'], 'decoded-resource-backed-coordinate-display-fixed-point-scale-scout')
+        self.assertEqual(readiness['coordinateDisplayIntegerBandSourceLabel'], 'decoded-resource-backed-coordinate-display-integer-band-scout')
+        self.assertEqual(readiness['coordinateDisplayIntegerBandOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('16.16 high-word integer-band candidate', readiness['coordinateDisplayIntegerBandCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayIntegerBandXDistribution'], {'1': 12, '2': 7, '3': 32, '4': 16})
+        self.assertEqual(readiness['coordinateDisplayIntegerBandYDistribution'], {'0': 42, '18': 1, '72': 4, '127': 19, '133': 1})
+        self.assertEqual(readiness['coordinateDisplayIntegerBandResource128']['yPos']['integerBandCandidate'], 127)
+        self.assertEqual(readiness['coordinateDisplayIntegerBandResource129']['yPos']['signedFractionalResidualCandidate'], -32768)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayIntegerBandSourceLabel'], 'decoded-resource-backed-coordinate-display-integer-band-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])

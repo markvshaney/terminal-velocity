@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v21':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v22':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -389,6 +389,23 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display fixed-point scale has unexpected Levo y fixed-point candidate')
     if 'not-promoted' not in display_fixed_point.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate display fixed-point scale must not promote display units')
+    display_integer_band = data.get('coordinateDisplayIntegerBandSummary', {})
+    if display_integer_band.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-integer-band-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display integer-band source label')
+    if display_integer_band.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display integer-band should keep display scaling pending')
+    if '16.16 high-word integer-band candidate' not in display_integer_band.get('candidateFamilies', []):
+        raise ValueError('sourced EV systems manifest coordinate display integer-band missing candidate family')
+    if display_integer_band.get('xPos', {}).get('integerBandCandidateDistribution') != {'1': 12, '2': 7, '3': 32, '4': 16}:
+        raise ValueError('sourced EV systems manifest coordinate display integer-band has unexpected x band distribution')
+    if display_integer_band.get('yPos', {}).get('integerBandCandidateDistribution') != {'0': 42, '18': 1, '72': 4, '127': 19, '133': 1}:
+        raise ValueError('sourced EV systems manifest coordinate display integer-band has unexpected y band distribution')
+    if display_integer_band.get('resource128', {}).get('yPos', {}).get('integerBandCandidate') != 127:
+        raise ValueError('sourced EV systems manifest coordinate display integer-band has unexpected Levo y band')
+    if display_integer_band.get('resource129', {}).get('yPos', {}).get('signedFractionalResidualCandidate') != -32768:
+        raise ValueError('sourced EV systems manifest coordinate display integer-band has unexpected resource 129 y residual')
+    if 'not-promoted' not in display_integer_band.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display integer-band must not promote display units')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')
@@ -553,6 +570,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         or 'resource ID 128 to Levo' not in boundary
         or 'link-slot/display-vector order analysis' not in boundary
         or 'slot/angular order analysis' not in boundary
+        or 'integer-band/fractional residual candidates' not in boundary
     ):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
     return data
