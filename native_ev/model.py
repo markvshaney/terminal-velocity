@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v44':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v46':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -422,6 +422,24 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest field-width/offset gap changed evidence requirements')
     if 'Con6-Con16 begin' not in ' '.join(width_offset_gap.get('blockedWidthClaims', [])):
         raise ValueError('sourced EV systems manifest field-width/offset gap missing Con6-Con16 blocker')
+    template_gap = width_offset_gap.get('templateSourceAvailabilityGapSummary', {})
+    if template_gap.get('sourceLabel') != 'repo-reference-backed-syst-resedit-template-source-availability-gap':
+        raise ValueError('sourced EV systems manifest missing syst ResEdit/template availability gap')
+    if template_gap.get('oracleStatus') != 'syst_template_offset_mapping_blocked_pending_exact_tmpl_or_resedit_source':
+        raise ValueError('sourced EV systems manifest template availability gap must stay blocked pending exact source')
+    if 'no exact syst TMPL/resource-template artifact' not in ' '.join(template_gap.get('missingEvidence', [])):
+        raise ValueError('sourced EV systems manifest template availability gap missing exact TMPL absence evidence')
+    if 'template/source absence means Resource Bible prose cannot be converted into byte offsets by assertion' not in template_gap.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template availability gap missing offset assertion blocker')
+    ev_family_guardrail = template_gap.get('evFamilyTemplateTransferGuardrailSummary', {})
+    if ev_family_guardrail.get('sourceLabel') != 'ev-family-reference-backed-template-transfer-guardrail':
+        raise ValueError('sourced EV systems manifest missing EV-family template transfer guardrail')
+    if ev_family_guardrail.get('oracleStatus') != 'ev_family_template_evidence_not_classic_syst_offset_oracle':
+        raise ValueError('sourced EV systems manifest EV-family template guardrail must not promote Classic offsets')
+    if 'EV Nova Bible' not in ' '.join(ev_family_guardrail.get('weakerReferenceFamilies', [])):
+        raise ValueError('sourced EV systems manifest EV-family template guardrail missing Nova weaker-source boundary')
+    if 'EV-family TMPL/resource-editor workflows cannot promote EV Classic syst byte offsets without a Classic-specific template/source oracle' not in ev_family_guardrail.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest EV-family template guardrail missing transfer blocker')
     budget_candidates = {entry.get('candidate'): entry for entry in field_count_budget.get('projectedWordBudgetCandidates', [])}
     if budget_candidates.get('16-bit xPos/yPos plus 16-bit downstream fields', {}).get('unassignedTailWordCount') != 8:
         raise ValueError('sourced EV systems manifest field-count budget changed 16-bit tail count')

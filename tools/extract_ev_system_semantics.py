@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v44'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v46'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and source provenance are promoted; coordinate display units/map scaling/projection, remaining exact system names, named route topology, services, hazards, governments, ports, and broad runtime universe replacement are explicitly not promoted yet'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -1736,6 +1736,49 @@ def _resource_bible_syst_sequential_field_projection_summary(run: dict) -> dict:
                     'which of the remaining decoded words are padding, packed bitfields, or semantic fields',
                     'where Con6-Con16 begin after non-topology fields without contradicting the current link-domain scout',
                 ],
+                'templateSourceAvailabilityGapSummary': {
+                    'sourceLabel': 'repo-reference-backed-syst-resedit-template-source-availability-gap',
+                    'oracleStatus': 'syst_template_offset_mapping_blocked_pending_exact_tmpl_or_resedit_source',
+                    'checkedReferenceFamilies': [
+                        'EV Classic Resource Bible syst prose at docs/references/ev-family/ev-classic-resource-bible.txt lines 924-989',
+                        'local decoded primitive 88-byte syst-like records in native_ev/data/sourced_ev_structures.json',
+                        'local reference archive search terms: TMPL/template/ResEdit/sÿst/syst field names',
+                    ],
+                    'availableEvidence': [
+                        'Resource Bible field-family order and value domains for xPos/yPos, Con1-Con5, NavDef, DudeTypes/%Prob/AvgShips, Govt/Message/Asteroids/Interference/VisBit, and Con6-Con16',
+                        'decoded record size and word-domain coverage for 67 syst-like records',
+                    ],
+                    'missingEvidence': [
+                        'no exact syst TMPL/resource-template artifact is recorded in the local source manifest',
+                        'no ResEdit field-offset screenshot/export is recorded in the local source manifest',
+                        'no source-level Classic syst struct declaration is recorded in the local source manifest',
+                    ],
+                    'promotionBlockers': [
+                        'template/source absence means Resource Bible prose cannot be converted into byte offsets by assertion',
+                        'decoded word-domain scouts remain negative/candidate evidence until an exact template or runtime behavior oracle resolves offsets',
+                    ],
+                    'evFamilyTemplateTransferGuardrailSummary': {
+                        'sourceLabel': 'ev-family-reference-backed-template-transfer-guardrail',
+                        'oracleStatus': 'ev_family_template_evidence_not_classic_syst_offset_oracle',
+                        'weakerReferenceFamilies': [
+                            'EV Nova Bible documents a sÿst family and field-style documentation in docs/references/ev-family/ev-nova-bible.html but is not EV Classic-specific source evidence',
+                            'EV Override Resource Bible and EV-family documentation may guide search terms but do not prove EV Classic syst byte layout',
+                            'community Rezilla/TMPL export workflows in docs/research/ev-community-engine-survey.md describe EV Nova extraction paths, not a Classic syst TMPL artifact in this repo',
+                        ],
+                        'promotionBlockers': [
+                            'EV-family TMPL/resource-editor workflows cannot promote EV Classic syst byte offsets without a Classic-specific template/source oracle',
+                            'EV Nova/Override field documentation may seed hypotheses only; Classic runtime/source confirmation is still required before assigning unresolved syst words to gameplay semantics',
+                        ],
+                        'allowedUse': 'search-term and hypothesis guidance only for locating a Classic-specific syst template, source struct, or runtime probe target',
+                        'promotionStatus': 'not-promoted; EV-family template evidence remains a transfer guardrail, not a Classic offset oracle',
+                    },
+                    'nextEvidenceFamilies': [
+                        'recover original EV Classic syst TMPL/template or equivalent ResEdit field map',
+                        'obtain source-level struct declaration with byte widths, padding, and field offsets',
+                        'capture Classic runtime probes that expose one blocked non-topology syst family at a time',
+                    ],
+                    'promotionStatus': 'not-promoted; records that the template/ResEdit offset source is still absent from the local evidence bundle',
+                },
                 'minimumPromotionRequirement': 'at least one exact source/template offset oracle or independent runtime behavior oracle before assigning unresolved words to gameplay semantics',
                 'promotionStatus': 'not-promoted; byte-count and field-count gaps are negative oracles only',
             },

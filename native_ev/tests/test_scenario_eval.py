@@ -1811,6 +1811,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_resource_bible_syst_field_count_budget_negative_oracle',
             'recorded_resource_bible_syst_byte_size_padding_gap_negative_oracle',
             'recorded_resource_bible_syst_field_width_offset_oracle_gap',
+            'recorded_syst_resedit_template_source_availability_gap',
+            'recorded_syst_ev_family_template_transfer_guardrail',
             'recorded_syst_word_domain_coverage_summary',
             'recorded_non_topology_syst_oracle_gap',
             'recorded_topology_promotion_readiness_summary',
@@ -1913,6 +1915,18 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(width_offset_gap['oracleStatus'], 'syst_field_width_offset_mapping_blocked_pending_source_template_or_runtime_oracle')
         self.assertEqual(len(width_offset_gap['requiredEvidenceFamilies']), 3)
         self.assertIn('Con6-Con16 begin', ' '.join(width_offset_gap['blockedWidthClaims']))
+        template_gap = width_offset_gap['templateSourceAvailabilityGapSummary']
+        self.assertEqual(template_gap['sourceLabel'], 'repo-reference-backed-syst-resedit-template-source-availability-gap')
+        self.assertEqual(template_gap['oracleStatus'], 'syst_template_offset_mapping_blocked_pending_exact_tmpl_or_resedit_source')
+        self.assertIn('no exact syst TMPL/resource-template artifact', ' '.join(template_gap['missingEvidence']))
+        self.assertIn('template/source absence means Resource Bible prose cannot be converted into byte offsets by assertion', template_gap['promotionBlockers'])
+        self.assertIn('not-promoted', template_gap['promotionStatus'])
+        ev_family_guardrail = template_gap['evFamilyTemplateTransferGuardrailSummary']
+        self.assertEqual(ev_family_guardrail['sourceLabel'], 'ev-family-reference-backed-template-transfer-guardrail')
+        self.assertEqual(ev_family_guardrail['oracleStatus'], 'ev_family_template_evidence_not_classic_syst_offset_oracle')
+        self.assertIn('EV Nova Bible', ' '.join(ev_family_guardrail['weakerReferenceFamilies']))
+        self.assertIn('EV-family TMPL/resource-editor workflows cannot promote EV Classic syst byte offsets without a Classic-specific template/source oracle', ev_family_guardrail['promotionBlockers'])
+        self.assertIn('not-promoted', ev_family_guardrail['promotionStatus'])
         self.assertIn('not-promoted', width_offset_gap['promotionStatus'])
         self.assertIn('direct sequential projection would place Con6-Con16 at all-zero words 27-37', ' '.join(readiness['resourceBibleSystSequentialProjectionBlockingSignals']))
         self.assertIn('blocked', readiness['resourceBibleSystSequentialProjectionReadinessStatus'])

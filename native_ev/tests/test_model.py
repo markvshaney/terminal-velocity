@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v44')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v46')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3489,6 +3489,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(width_offset_gap['oracleStatus'], 'syst_field_width_offset_mapping_blocked_pending_source_template_or_runtime_oracle')
         self.assertEqual(len(width_offset_gap['requiredEvidenceFamilies']), 3)
         self.assertIn('Con6-Con16 begin', ' '.join(width_offset_gap['blockedWidthClaims']))
+        template_gap = width_offset_gap['templateSourceAvailabilityGapSummary']
+        self.assertEqual(template_gap['sourceLabel'], 'repo-reference-backed-syst-resedit-template-source-availability-gap')
+        self.assertEqual(template_gap['oracleStatus'], 'syst_template_offset_mapping_blocked_pending_exact_tmpl_or_resedit_source')
+        self.assertIn('no exact syst TMPL/resource-template artifact', ' '.join(template_gap['missingEvidence']))
+        self.assertIn('template/source absence means Resource Bible prose cannot be converted into byte offsets by assertion', template_gap['promotionBlockers'])
+        self.assertIn('not-promoted', template_gap['promotionStatus'])
+        ev_family_guardrail = template_gap['evFamilyTemplateTransferGuardrailSummary']
+        self.assertEqual(ev_family_guardrail['sourceLabel'], 'ev-family-reference-backed-template-transfer-guardrail')
+        self.assertEqual(ev_family_guardrail['oracleStatus'], 'ev_family_template_evidence_not_classic_syst_offset_oracle')
+        self.assertIn('EV Nova Bible', ' '.join(ev_family_guardrail['weakerReferenceFamilies']))
+        self.assertIn('EV-family TMPL/resource-editor workflows cannot promote EV Classic syst byte offsets without a Classic-specific template/source oracle', ev_family_guardrail['promotionBlockers'])
+        self.assertIn('not-promoted', ev_family_guardrail['promotionStatus'])
         self.assertIn('not-promoted', width_offset_gap['promotionStatus'])
         self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][0]['unassignedTailWordCount'], 8)
         self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][1]['unassignedTailWordCount'], 6)

@@ -45,14 +45,11 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v44-resource-bible-syst-field-width-offset-oracle-gap-push-ready",
-  "last_progress_token": "v44-field-width-offset-oracle-gap-push-ready-local-ahead",
+  "last_material_event_id": "lane-a-v46-syst-ev-family-template-transfer-guardrail",
+  "last_progress_token": "v46-ev-family-template-transfer-guardrail-local-uncommitted",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
-    "commit": "395274a848217d9eed0e9bca9f7cde2ed3a0c102",
     "files_touched": [
-      ".hermes/long-running/tv-spec-implementation/events.jsonl",
-      ".hermes/long-running/tv-spec-implementation/task-ledger.json",
       "native_ev/data/sourced_ev_systems.json",
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
@@ -60,37 +57,46 @@
       "native_ev/tests/test_scenario_eval.py",
       "tools/extract_ev_system_semantics.py"
     ],
-    "packet": "lane-a-v44-resource-bible-syst-field-width-offset-oracle-gap",
-    "promotion_status": "not-promoted negative oracle only; no Resource Bible syst field width/offset semantics, NavDef/population/government/message/hazard/interference/visibility, Con6-Con16 split placement, coordinate display units, named topology, or runtime universe replacement promoted",
-    "publication_status": "push attempted but GitHub HTTPS auth was unavailable; local checkpoint remains ahead of origin/main and ready for integration-owner normal non-force push",
-    "summary": "Lane A v44 syst field-width/offset oracle gap was locally committed and verified; normal push was attempted under task preapproval but GitHub HTTPS credentials were unavailable, so the checkpoint is push_ready for an integration owner.",
+    "packet": "lane-a-v46-syst-ev-family-template-transfer-guardrail",
+    "promotion_status": "not-promoted negative oracle only; EV-family template evidence may guide search terms but cannot promote EV Classic syst offsets, field widths, NavDef/population/government/message/hazard/interference/visibility semantics, Con6-Con16 split placement, coordinate display units, named topology, or runtime universe replacement",
+    "publication_status": "local uncommitted worker changes; branch was already ahead of origin/main and push remains integration-owner gated",
+    "summary": "Lane A v46 records EV-family/Nova/Override TMPL and resource-editor workflows as a transfer guardrail only, not a Classic syst byte-offset oracle, nested under the template-source availability gap.",
     "verifiers": [
       {
         "command": "python3 tools/extract_ev_system_semantics.py",
-        "result": "passed; systems=67 method=...resource-bible-syst-field-width-offset-oracle-gap...levo-name-map-v44"
+        "result": "passed; systems=67 method=...resedit-template-source-availability-gap-ev-family-template-transfer-guardrail...levo-name-map-v46"
       },
       {
-        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
-        "result": "passed; Ran 271 tests OK"
+        "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+        "result": "passed; Ran 2 tests OK"
       },
       {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; recorded_resource_bible_syst_field_width_offset_oracle_gap passed"
+        "result": "passed; recorded_syst_ev_family_template_transfer_guardrail passed"
       },
       {
-        "command": "python3 JSON spot-check native_ev/data/sourced_ev_systems.json",
-        "result": "passed; gap source/status/evidence_count=3/Con6 blocker/not-promoted promotion status verified"
+        "command": "python3 -m unittest discover native_ev/tests -v",
+        "result": "passed; Ran 284 tests OK"
+      },
+      {
+        "command": "python3 -m unittest discover -v",
+        "result": "failed; root discovery found 0 tests in this checkout (use native_ev/tests discovery instead)"
+      },
+      {
+        "command": "npm test -- --runInBand",
+        "result": "failed; no package.json exists at repo root under this WSL path, so npm/Vite test surface is unavailable for this checkout"
       }
     ]
   },
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method=...resource-bible-syst-field-width-offset-oracle-gap...levo-name-map-v44",
-    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> passed; Ran 271 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_resource_bible_syst_field_width_offset_oracle_gap passed",
-    "python3 JSON spot-check native_ev/data/sourced_ev_systems.json -> passed; gap source/status/evidence_count=3/Con6 blocker/not-promoted promotion status verified",
-    "git push origin main -> failed; GitHub HTTPS credentials unavailable; recorded push_ready"
+    "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method=...resedit-template-source-availability-gap-ev-family-template-transfer-guardrail...levo-name-map-v46",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> passed; Ran 2 tests OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_syst_ev_family_template_transfer_guardrail passed",
+    "python3 -m unittest discover native_ev/tests -v -> passed; Ran 284 tests OK",
+    "python3 -m unittest discover -v -> failed; root discovery found 0 tests in this checkout (use native_ev/tests discovery instead)",
+    "npm test -- --runInBand -> failed; no package.json exists at repo root under this WSL path, so npm/Vite test surface is unavailable for this checkout"
   ],
-  "next_resume_action": "Integration owner should push local main normally, fetch origin, verify HEAD equals origin/main, then continue Lane A only with stronger Classic oracles: source-level syst struct field widths/offsets, ResEdit/template field map, runtime probes for NavDef/population/government/message/hazard/interference/visibility/Con6-Con16, complete Classic name/order oracle, route/map label evidence, or coordinate display calibration before promoting blocked semantics.",
+  "next_resume_action": "Continue Lane A only with stronger Classic oracles: recover exact EV Classic syst TMPL/ResEdit/template or source-level struct offsets, capture runtime probes for NavDef/population/government/message/hazard/interference/visibility/Con6-Con16, complete Classic name/order oracle, route/map label evidence, or coordinate display calibration before promoting blocked semantics. Current v46 EV-family template-transfer guardrail is local/uncommitted and should be reviewed/checkpointed by integration owner with existing ahead-of-origin work.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -176,5 +182,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T18:55:06Z"
+  "updated_at": "2026-06-10T19:13:10Z"
 }
