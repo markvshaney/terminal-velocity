@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -1574,6 +1574,54 @@ def _runtime_route_label_observation_bridge_gap_summary(systems: list[dict]) -> 
     }
 
 
+def _runtime_route_label_probe_targeting_summary(systems: list[dict]) -> dict:
+    """Turn the route-label bridge gap into bounded probe targets without assigning names."""
+    start_system = next(system for system in systems if system['resourceId'] == 128)
+    link_slots = start_system['semanticFields']['candidateHyperspaceLinks']['linkSlots']
+    observed_labels = ['Rigel', 'Kathoon', 'Yemuro', 'Torgo']
+    unjoined_targets = [
+        {
+            'slotName': slot['slotName'],
+            'targetResourceId': slot['targetResourceId'],
+            'targetNameJoinStatus': 'blocked-missing-target-name-oracle',
+            'recommendedProbe': 'capture original-runtime map/route label selection from Levo and record visible label, input/click position, and selected edge order without assigning a Classic name to this decoded resource ID',
+        }
+        for slot in link_slots
+        if slot.get('targetPresentInSystRun') and slot.get('targetResourceId') not in EXACT_SYSTEM_NAME_MAPPINGS
+    ]
+    return {
+        'sourceLabel': 'original-runtime-and-decoded-resource-backed-route-label-probe-targeting-matrix',
+        'oracleStatus': 'route_label_probe_targets_pending_decoded_resource_id_slot_join',
+        'sourceReferences': [
+            'runtimeRouteLabelObservationBridgeGapSummary',
+            'namedRouteTopologyOracleGapSummary',
+            'startSystemCandidateTopologySummary',
+        ],
+        'sourceBasis': ['original-runtime-observed', 'decoded-original-variable', 'resource-bible-field'],
+        'candidateStartResourceId': 128,
+        'candidateStartSystemName': EXACT_SYSTEM_NAME_MAPPINGS[128]['systemName'],
+        'candidateStartLinkedResourceIds': start_system['semanticFields']['candidateHyperspaceLinks']['linkedSystemResourceIdsInRun'],
+        'observedRuntimeLabels': observed_labels,
+        'observedRuntimeLabelCount': len(observed_labels),
+        'unjoinedStartNeighborResourceIds': [entry['targetResourceId'] for entry in unjoined_targets],
+        'probeTargetCount': len(unjoined_targets),
+        'probeTargets': unjoined_targets,
+        'blockedClaims': [
+            'which observed runtime label, if any, corresponds to decoded resource IDs 129, 130, or 131',
+            'whether visible route-label order matches Con-slot order, angular order, distance order, or another runtime selector',
+            'whether Rigel/Kathoon/Yemuro/Torgo are map-route labels, mission text labels, or unrelated name observations for the decoded start-neighborhood packet',
+        ],
+        'promotionBlockers': [
+            'probe targets are worklist entries, not decoded resource-ID/name joins',
+            'observed labels remain unassigned until a Classic runtime probe ties a visible label to an exact decoded resource ID or Con slot',
+            'do not rename resource IDs 129-131 or promote named route topology from this targeting matrix alone',
+        ],
+        'allowedUse': 'prioritize original-runtime route-label probes for the three unjoined Levo candidate neighbors only',
+        'promotionStatus': 'not-promoted; probe targeting matrix preserves next evidence targets without assigning Classic names or routes',
+        'sourceNote': 'This matrix is a Lane A worklist bridge: it combines the decoded Levo start-neighborhood slots with bounded original-runtime label observations to identify the next probes, while explicitly withholding all resource-ID/name and named-route assignments.',
+    }
+
+
 def _word_group_summary(run: dict, word_indices: list[int]) -> dict:
     values = [
         _word(record, word_index)
@@ -2243,6 +2291,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'recordNameOracleEvidenceMatrixSummary': _record_name_oracle_evidence_matrix_summary(names, resource_ids),
         'namedRouteTopologyOracleGapSummary': _named_route_topology_oracle_gap_summary(systems, names),
         'runtimeRouteLabelObservationBridgeGapSummary': _runtime_route_label_observation_bridge_gap_summary(systems),
+        'runtimeRouteLabelProbeTargetingSummary': _runtime_route_label_probe_targeting_summary(systems),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),

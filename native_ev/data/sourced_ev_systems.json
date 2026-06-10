@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -407,6 +407,74 @@
     ],
     "promotionStatus": "not-promoted; original-runtime labels exist but are not yet a decoded resource-ID/name/topology join",
     "sourceNote": "This bridge gap upgrades the route-label evidence inventory without over-promoting it: Classic-visible labels like Rigel and Kathoon are real runtime observations, but the current captures lack a decoded-resource-ID/slot join and cannot promote named topology."
+  },
+  "runtimeRouteLabelProbeTargetingSummary": {
+    "sourceLabel": "original-runtime-and-decoded-resource-backed-route-label-probe-targeting-matrix",
+    "oracleStatus": "route_label_probe_targets_pending_decoded_resource_id_slot_join",
+    "sourceReferences": [
+      "runtimeRouteLabelObservationBridgeGapSummary",
+      "namedRouteTopologyOracleGapSummary",
+      "startSystemCandidateTopologySummary"
+    ],
+    "sourceBasis": [
+      "original-runtime-observed",
+      "decoded-original-variable",
+      "resource-bible-field"
+    ],
+    "candidateStartResourceId": 128,
+    "candidateStartSystemName": "Levo",
+    "candidateStartLinkedResourceIds": [
+      128,
+      129,
+      130,
+      131
+    ],
+    "observedRuntimeLabels": [
+      "Rigel",
+      "Kathoon",
+      "Yemuro",
+      "Torgo"
+    ],
+    "observedRuntimeLabelCount": 4,
+    "unjoinedStartNeighborResourceIds": [
+      129,
+      130,
+      131
+    ],
+    "probeTargetCount": 3,
+    "probeTargets": [
+      {
+        "slotName": "Con2",
+        "targetResourceId": 129,
+        "targetNameJoinStatus": "blocked-missing-target-name-oracle",
+        "recommendedProbe": "capture original-runtime map/route label selection from Levo and record visible label, input/click position, and selected edge order without assigning a Classic name to this decoded resource ID"
+      },
+      {
+        "slotName": "Con3",
+        "targetResourceId": 130,
+        "targetNameJoinStatus": "blocked-missing-target-name-oracle",
+        "recommendedProbe": "capture original-runtime map/route label selection from Levo and record visible label, input/click position, and selected edge order without assigning a Classic name to this decoded resource ID"
+      },
+      {
+        "slotName": "Con4",
+        "targetResourceId": 131,
+        "targetNameJoinStatus": "blocked-missing-target-name-oracle",
+        "recommendedProbe": "capture original-runtime map/route label selection from Levo and record visible label, input/click position, and selected edge order without assigning a Classic name to this decoded resource ID"
+      }
+    ],
+    "blockedClaims": [
+      "which observed runtime label, if any, corresponds to decoded resource IDs 129, 130, or 131",
+      "whether visible route-label order matches Con-slot order, angular order, distance order, or another runtime selector",
+      "whether Rigel/Kathoon/Yemuro/Torgo are map-route labels, mission text labels, or unrelated name observations for the decoded start-neighborhood packet"
+    ],
+    "promotionBlockers": [
+      "probe targets are worklist entries, not decoded resource-ID/name joins",
+      "observed labels remain unassigned until a Classic runtime probe ties a visible label to an exact decoded resource ID or Con slot",
+      "do not rename resource IDs 129-131 or promote named route topology from this targeting matrix alone"
+    ],
+    "allowedUse": "prioritize original-runtime route-label probes for the three unjoined Levo candidate neighbors only",
+    "promotionStatus": "not-promoted; probe targeting matrix preserves next evidence targets without assigning Classic names or routes",
+    "sourceNote": "This matrix is a Lane A worklist bridge: it combines the decoded Levo start-neighborhood slots with bounded original-runtime label observations to identify the next probes, while explicitly withholding all resource-ID/name and named-route assignments."
   },
   "recordToNamePromotionReadinessSummary": {
     "sourceLabel": "decoded-resource-backed-record-to-name-promotion-readiness-scout",

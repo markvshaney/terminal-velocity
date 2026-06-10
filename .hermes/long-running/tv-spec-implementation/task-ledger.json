@@ -45,8 +45,8 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v48-runtime-route-label-observation-bridge-gap-push-ready",
-  "last_progress_token": "v48-runtime-route-label-observation-bridge-gap-local-commit",
+  "last_material_event_id": "lane-a-v49-runtime-route-label-probe-targeting-matrix-push-ready",
+  "last_progress_token": "lane-a-v49-runtime-route-label-probe-targeting-matrix-local-checkpoint",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
     "files_touched": [
@@ -54,49 +54,40 @@
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_model.py",
-      "native_ev/tests/test_scenario_eval.py",
-      "tools/extract_ev_system_semantics.py"
+      "tools/extract_ev_system_semantics.py",
+      ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+      ".hermes/long-running/tv-spec-implementation/events.jsonl"
     ],
-    "packet": "lane-a-v48-runtime-route-label-observation-bridge-gap",
-    "promotion_status": "not-promoted observation bridge only; original-runtime labels are preserved as evidence inventory but no new resource-ID/name joins, named route topology, coordinate display units, non-topology syst semantics, or broad universe replacement promoted",
+    "packet": "lane-a-v49-runtime-route-label-probe-targeting-matrix",
+    "promotion_status": "not-promoted probe targeting only; no new resource-ID/name joins, named route topology, coordinate display units, non-topology syst semantics, or broad universe replacement promoted",
     "publication_status": "local checkpoint commit; branch remains ahead of origin/main and push is integration-owner gated for this worker",
-    "summary": "Lane A v48 records bounded original-runtime route/map labels (Rigel, Kathoon, Yemuro, Torgo) as a runtime route-label observation bridge gap: evidence inventory and probe targeting only, with no decoded resource-ID/name/topology promotion.",
+    "summary": "Lane A v49 adds a non-promoted runtime route-label probe targeting matrix that combines decoded Levo start-neighborhood resource IDs 129-131 with bounded original-runtime label observations as a probe worklist only.",
     "verifiers": [
       {
-        "command": "python3 tools/extract_ev_system_semantics.py --out native_ev/data/sourced_ev_systems.json",
-        "result": "passed; systems=67 method=...runtime-route-label-observation-bridge-gap...levo-name-map-v48"
+        "command": "python3 tools/extract_ev_system_semantics.py",
+        "result": "passed; systems=67 method includes runtime-route-label-observation-bridge-gap-route-label-probe-targeting"
+      },
+      {
+        "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+        "result": "passed; recorded_runtime_route_label_probe_targeting_matrix passed"
       },
       {
         "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
         "result": "passed; Ran 2 tests OK"
       },
       {
-        "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; recorded_runtime_route_label_observation_bridge_gap passed"
-      },
-      {
-        "command": "python3 -m unittest discover native_ev/tests -v",
-        "result": "passed; Ran 284 tests OK"
-      },
-      {
-        "command": "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check",
-        "result": "passed; BACKLOG DISPATCH INDEX OK"
-      },
-      {
-        "command": "search_files package.json",
-        "result": "no package.json found at repo root/workspace; npm test not applicable"
+        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
+        "result": "passed; Ran 271 tests OK"
       }
     ]
   },
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py --out native_ev/data/sourced_ev_systems.json -> passed; systems=67 method=...runtime-route-label-observation-bridge-gap...levo-name-map-v48",
+    "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method includes runtime-route-label-observation-bridge-gap-route-label-probe-targeting",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_runtime_route_label_probe_targeting_matrix passed",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> passed; Ran 2 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_runtime_route_label_observation_bridge_gap passed",
-    "python3 -m unittest discover native_ev/tests -v -> passed; Ran 284 tests OK",
-    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> passed; BACKLOG DISPATCH INDEX OK",
-    "search_files package.json -> no package.json found at repo root/workspace; npm test not applicable"
+    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> passed; Ran 271 tests OK"
   ],
-  "next_resume_action": "Integration owner should review local main, push normally, fetch origin, verify HEAD equals origin/main, then continue Lane A only with stronger Classic oracles: complete name/order source, original-runtime map/click/route-label capture tied to decoded resource IDs or Con slots, coordinate display calibration, exact EV Classic syst template/source offsets, or runtime probes for NavDef/population/government/message/hazard/interference/visibility/Con6-Con16 before promoting blocked semantics.",
+  "next_resume_action": "Continue Lane A only with stronger Classic oracles: original-runtime route-label/click captures tied to decoded resource IDs or Con slots, complete name/order source, coordinate display calibration, or Classic syst field offset/runtime probes before promoting blocked semantics. Local v49 checkpoint remains ahead of origin/main; worker must not push, integration owner may push normally after review/status/fetch/HEAD verification.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -182,5 +173,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T19:47:33Z"
+  "updated_at": "2026-06-10T20:05:06Z"
 }

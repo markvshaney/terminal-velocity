@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v48':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -562,6 +562,21 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest route-label bridge missing resource-ID join blocker')
     if 'not-promoted' not in runtime_route_label_bridge.get('promotionStatus', ''):
         raise ValueError('sourced EV systems manifest route-label bridge must not promote named topology')
+    route_label_probe_targeting = data.get('runtimeRouteLabelProbeTargetingSummary', {})
+    if route_label_probe_targeting.get('sourceLabel') != 'original-runtime-and-decoded-resource-backed-route-label-probe-targeting-matrix':
+        raise ValueError('sourced EV systems manifest missing runtime route-label probe targeting matrix')
+    if route_label_probe_targeting.get('oracleStatus') != 'route_label_probe_targets_pending_decoded_resource_id_slot_join':
+        raise ValueError('sourced EV systems manifest route-label probe targeting must keep resource-ID joins blocked')
+    if 'original-runtime-observed' not in route_label_probe_targeting.get('sourceBasis', []) or 'decoded-original-variable' not in route_label_probe_targeting.get('sourceBasis', []):
+        raise ValueError('sourced EV systems manifest route-label probe targeting missing source/fidelity basis')
+    if route_label_probe_targeting.get('candidateStartResourceId') != 128 or route_label_probe_targeting.get('probeTargetCount') != 3:
+        raise ValueError('sourced EV systems manifest route-label probe targeting changed Levo target boundary')
+    if route_label_probe_targeting.get('unjoinedStartNeighborResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest route-label probe targeting changed unjoined start neighbors')
+    if 'probe targets are worklist entries, not decoded resource-ID/name joins' not in route_label_probe_targeting.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest route-label probe targeting missing non-promotion blocker')
+    if 'not-promoted' not in route_label_probe_targeting.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest route-label probe targeting must not promote named topology')
     topology_readiness = data.get('topologyPromotionReadinessSummary', {})
     if topology_readiness.get('sourceLabel') != 'decoded-resource-backed-topology-promotion-readiness-matrix':
         raise ValueError('sourced EV systems manifest missing topology promotion readiness matrix source label')
