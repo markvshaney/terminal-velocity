@@ -45,10 +45,11 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v44-resource-bible-syst-field-width-offset-oracle-gap",
-  "last_progress_token": "v44-field-width-offset-oracle-gap-verified-local-dirty",
+  "last_material_event_id": "lane-a-v44-resource-bible-syst-field-width-offset-oracle-gap-push-ready",
+  "last_progress_token": "v44-field-width-offset-oracle-gap-push-ready-local-ahead",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
+    "commit": "395274a848217d9eed0e9bca9f7cde2ed3a0c102",
     "files_touched": [
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
@@ -61,8 +62,8 @@
     ],
     "packet": "lane-a-v44-resource-bible-syst-field-width-offset-oracle-gap",
     "promotion_status": "not-promoted negative oracle only; no Resource Bible syst field width/offset semantics, NavDef/population/government/message/hazard/interference/visibility, Con6-Con16 split placement, coordinate display units, named topology, or runtime universe replacement promoted",
-    "publication_status": "local dirty implementation verified; worker run must not push; needs review/integration checkpoint before publication",
-    "summary": "Added Lane A v44 Resource Bible syst field-width/offset oracle-gap negative oracle nested under byte-size padding gap: explicit evidence families and blocked width/offset claims keep xPos/yPos width, padding/bitfield identity, and Con6-Con16 split placement unpromoted pending source/template/runtime oracle.",
+    "publication_status": "push attempted but GitHub HTTPS auth was unavailable; local checkpoint remains ahead of origin/main and ready for integration-owner normal non-force push",
+    "summary": "Lane A v44 syst field-width/offset oracle gap was locally committed and verified; normal push was attempted under task preapproval but GitHub HTTPS credentials were unavailable, so the checkpoint is push_ready for an integration owner.",
     "verifiers": [
       {
         "command": "python3 tools/extract_ev_system_semantics.py",
@@ -86,9 +87,10 @@
     "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method=...resource-bible-syst-field-width-offset-oracle-gap...levo-name-map-v44",
     "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> passed; Ran 271 tests OK",
     "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_resource_bible_syst_field_width_offset_oracle_gap passed",
-    "python3 JSON spot-check native_ev/data/sourced_ev_systems.json -> passed; gap source/status/evidence_count=3/Con6 blocker/not-promoted promotion status verified"
+    "python3 JSON spot-check native_ev/data/sourced_ev_systems.json -> passed; gap source/status/evidence_count=3/Con6 blocker/not-promoted promotion status verified",
+    "git push origin main -> failed; GitHub HTTPS credentials unavailable; recorded push_ready"
   ],
-  "next_resume_action": "After review/integration of v44, continue Lane A only with stronger Classic oracles: source-level syst struct field widths/offsets, ResEdit/template field map, runtime probes for NavDef/population/government/message/hazard/interference/visibility/Con6-Con16, complete Classic name/order oracle, route/map label evidence, or coordinate display calibration before promoting blocked semantics.",
+  "next_resume_action": "Integration owner should push local main normally, fetch origin, verify HEAD equals origin/main, then continue Lane A only with stronger Classic oracles: source-level syst struct field widths/offsets, ResEdit/template field map, runtime probes for NavDef/population/government/message/hazard/interference/visibility/Con6-Con16, complete Classic name/order oracle, route/map label evidence, or coordinate display calibration before promoting blocked semantics.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -174,5 +176,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T18:50:34Z"
+  "updated_at": "2026-06-10T18:55:06Z"
 }
