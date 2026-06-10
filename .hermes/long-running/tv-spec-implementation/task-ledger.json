@@ -1,5 +1,11 @@
 {
-  "active_gate": null,
+  "active_gate": {
+    "next_safe_action_after_resume": "git push origin main; git fetch origin main --quiet; verify HEAD equals origin/main; then create successor continuation task or unblock current task for closeout",
+    "reason": "normal git push to https://github.com/markvshaney/terminal-velocity.git failed because this worker has no GitHub credentials/gh auth session",
+    "resume_after": "GitHub credentials are available to this profile/session or a human pushes local commit e85befe",
+    "type": "credential/auth",
+    "withheld_action": "git push origin main"
+  },
   "created_at": "2026-06-09T14:48:45Z",
   "do_not_redo": [
     "Do not depend on superseded supporting workflow drafts as execution authority; promote needed claims into repo docs/backlog instead.",
@@ -38,7 +44,7 @@
   "last_material_event_id": "2026-06-10T04:22:20Z",
   "last_progress_token": "8c5ab258e4daa12e777ab30f3cc027f9683c9228",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T040504Z-6.summary.json",
-  "last_verification_summary": "Added v24 decoded-resource-backed coordinate residual-magnitude summary as non-promoted analysis data; extractor/model/scenario/backlog updated; static topology scenario and native EV model/scenario suites pass.",
+  "last_verification_summary": "Added v24 decoded-resource-backed coordinate residual-magnitude summary as non-promoted analysis data; extractor/model/scenario/backlog updated; static topology scenario and native EV model/scenario suites pass. Local commit e85befe is created but not pushed; origin/main remains 8c5ab25 due missing GitHub credentials.",
   "last_verified_commands": [
     "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v24",
     "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
@@ -48,7 +54,7 @@
     "JSON/JSONL parse OK; extractor temp-output idempotency OK; git diff --check passed",
     "npm test -- --run -> not applicable: no package.json at repo root"
   ],
-  "next_resume_action": "Continue Lane A display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Latest local slice records non-promoted coordinate residual-magnitude/fractional-absolute candidates in v24; do not promote display units/map scaling from those candidates alone.",
+  "next_resume_action": "Resolve push/auth gate for local commit e85befe: provide GitHub credentials/gh auth or push e85befe manually, then verify HEAD == origin/main and continue Lane A display-unit/map-scaling/topology mapping.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -127,11 +133,11 @@
     "rule": "Source/fidelity findings and task state must be recorded in repo docs/checklists/ledger with explicit provenance labels, not left only in chat.",
     "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec."
   },
-  "status": "running",
+  "status": "waiting_gate",
   "task_id": "tv-spec-implementation",
   "tool_caps_policy": {
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T04:22:20Z"
+  "updated_at": "2026-06-10T04:23:05Z"
 }
