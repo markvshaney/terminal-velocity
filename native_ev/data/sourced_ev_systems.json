@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v33",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v34",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -1155,6 +1155,934 @@
       "runtime probes for Con6-Con16 and non-topology syst fields that disambiguate offset families"
     ],
     "sourceNote": "This matrix records a deliberate unresolved mismatch between Resource Bible field-order prose and the current decoded word-domain scout. It keeps the candidate link graph available while preventing broad field-layout promotion until an offset oracle or runtime probe resolves the split."
+  },
+  "systWordDomainCoverageSummary": {
+    "sourceLabel": "decoded-resource-backed-syst-word-domain-coverage-scout",
+    "oracleStatus": "syst_field_order_mapping_pending_complete_oracle",
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "wordCount": 44,
+    "wordDomains": [
+      {
+        "wordIndex": 0,
+        "observedValueRange": [
+          1,
+          4
+        ],
+        "distinctObservedValues": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "distinctObservedValueCount": 4,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 1,
+        "observedValueRange": [
+          -1,
+          152
+        ],
+        "distinctObservedValues": [
+          -1,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          142,
+          143,
+          144,
+          145,
+          146,
+          148,
+          149,
+          152
+        ],
+        "distinctObservedValueCount": 21,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 63,
+        "noLinkSentinelCount": 4,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 2,
+        "observedValueRange": [
+          0,
+          133
+        ],
+        "distinctObservedValues": [
+          0,
+          18,
+          72,
+          127,
+          133
+        ],
+        "distinctObservedValueCount": 5,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 1,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 42
+      },
+      {
+        "wordIndex": 3,
+        "observedValueRange": [
+          -32768,
+          28672
+        ],
+        "distinctObservedValues": [
+          -32768,
+          1,
+          4096,
+          8192,
+          28672
+        ],
+        "distinctObservedValueCount": 5,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 4,
+        "observedValueRange": [
+          128,
+          153
+        ],
+        "distinctObservedValues": [
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          146,
+          149,
+          150,
+          153
+        ],
+        "distinctObservedValueCount": 21,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 67,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 5,
+        "observedValueRange": [
+          129,
+          153
+        ],
+        "distinctObservedValues": [
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          146,
+          147,
+          149,
+          150,
+          151,
+          153
+        ],
+        "distinctObservedValueCount": 22,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 67,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 6,
+        "observedValueRange": [
+          129,
+          153
+        ],
+        "distinctObservedValues": [
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          146,
+          147,
+          149,
+          150,
+          151,
+          153
+        ],
+        "distinctObservedValueCount": 22,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 67,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 7,
+        "observedValueRange": [
+          129,
+          153
+        ],
+        "distinctObservedValues": [
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          145,
+          146,
+          147,
+          149,
+          150,
+          153
+        ],
+        "distinctObservedValueCount": 22,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 67,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 8,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 9,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 10,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 11,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 12,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 13,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 14,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 15,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 16,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 17,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 18,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 19,
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 20,
+        "observedValueRange": [
+          15,
+          40
+        ],
+        "distinctObservedValues": [
+          15,
+          21,
+          25,
+          30,
+          35,
+          37,
+          40
+        ],
+        "distinctObservedValueCount": 7,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 21,
+        "observedValueRange": [
+          15,
+          40
+        ],
+        "distinctObservedValues": [
+          15,
+          19,
+          20,
+          21,
+          25,
+          30,
+          40
+        ],
+        "distinctObservedValueCount": 7,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 22,
+        "observedValueRange": [
+          15,
+          55
+        ],
+        "distinctObservedValues": [
+          15,
+          19,
+          20,
+          21,
+          25,
+          30,
+          35,
+          40,
+          55
+        ],
+        "distinctObservedValueCount": 9,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 23,
+        "observedValueRange": [
+          5,
+          37
+        ],
+        "distinctObservedValues": [
+          5,
+          10,
+          15,
+          20,
+          25,
+          35,
+          37
+        ],
+        "distinctObservedValueCount": 7,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 0
+      },
+      {
+        "wordIndex": 24,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 25,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 26,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 27,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 28,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 29,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 30,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 31,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 32,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 33,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 34,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 35,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 36,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 37,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 38,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 39,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 40,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 41,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 42,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      },
+      {
+        "wordIndex": 43,
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 67
+      }
+    ],
+    "coverageSignals": {
+      "coordinateCandidateWords": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "systemIdDomainWords": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "noLinkSentinelOnlyWords": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "zeroOnlyTailWords": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43
+      ],
+      "percentLikeValueWords": [
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    "promotionBlockers": [
+      "complete syst field-order oracle is still missing",
+      "word-domain coverage records value families but does not assign Resource Bible field semantics to unresolved offsets",
+      "current link-domain and zero-tail coverage must not promote Con6-Con16 split placement or non-topology syst fields without an offset oracle"
+    ],
+    "nextEvidenceFamilies": [
+      "source-level syst struct declaration including field widths and offsets",
+      "ResEdit/template field map tying each word offset to a Resource Bible family",
+      "runtime probes that disambiguate word-domain candidates for navigation, population, government, hazard, visibility, and Con6-Con16 fields"
+    ],
+    "sourceNote": "This packet records every decoded word-domain in the 44-word syst-like records as source-readiness evidence. It narrows future offset-oracle work while explicitly withholding downstream field semantics and broad runtime universe promotion."
   },
   "topologyPromotionReadinessSummary": {
     "sourceLabel": "decoded-resource-backed-topology-promotion-readiness-matrix",

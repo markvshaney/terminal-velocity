@@ -1807,6 +1807,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_map_source_readiness_summary',
             'recorded_syst_field_layout_source_readiness_summary',
             'recorded_syst_field_order_conflict_summary',
+            'recorded_syst_word_domain_coverage_summary',
             'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',
             'recorded_coordinate_raw_long_candidate',
@@ -1879,6 +1880,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('source-level syst struct declaration', readiness['systFieldOrderConflictNextEvidenceFamilies'][0])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systFieldOrderConflictSourceLabel'], 'decoded-resource-backed-syst-field-order-conflict-scout')
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systFieldLayoutSourceReadinessSourceLabel'], 'resource-bible-backed-syst-field-layout-source-readiness')
+        self.assertEqual(readiness['systWordDomainCoverageSourceLabel'], 'decoded-resource-backed-syst-word-domain-coverage-scout')
+        self.assertEqual(readiness['systWordDomainCoverageOracleStatus'], 'syst_field_order_mapping_pending_complete_oracle')
+        self.assertEqual(readiness['systWordDomainCoverageWordCount'], 44)
+        self.assertEqual(readiness['systWordDomainCoverageSystemIdWords'], [1, 2, 4, 5, 6, 7])
+        self.assertEqual(readiness['systWordDomainCoverageNoLinkOnlyWords'], list(range(8, 20)))
+        self.assertEqual(readiness['systWordDomainCoverageZeroOnlyTailWords'], list(range(24, 44)))
+        self.assertEqual(readiness['systWordDomainCoverageWord20Range'], [15, 40])
+        self.assertIn('complete syst field-order oracle is still missing', readiness['systWordDomainCoveragePromotionBlockers'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systWordDomainCoverageSourceLabel'], 'decoded-resource-backed-syst-word-domain-coverage-scout')
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['topologyPromotionReadinessOracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
         self.assertIn('complete decoded coordinate word pairs and link slots for all 67 records', readiness['topologyPromotionReadinessReadyStaticInputFamilies'])

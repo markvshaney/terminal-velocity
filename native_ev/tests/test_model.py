@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v33')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v34')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3463,6 +3463,23 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertTrue(conflict_scouts['projectedCon6ToCon16Words27To37']['allValuesZero'])
         self.assertIn('Con6-Con16 split placement cannot be promoted', ' '.join(field_order_conflict['promotionBlockers']))
         self.assertIn('source-level syst struct declaration', field_order_conflict['nextEvidenceFamilies'][0])
+        word_domain = data['systWordDomainCoverageSummary']
+        self.assertEqual(word_domain['sourceLabel'], 'decoded-resource-backed-syst-word-domain-coverage-scout')
+        self.assertEqual(word_domain['oracleStatus'], 'syst_field_order_mapping_pending_complete_oracle')
+        self.assertEqual(word_domain['recordCount'], 67)
+        self.assertEqual(word_domain['recordSize'], 88)
+        self.assertEqual(len(word_domain['wordDomains']), 44)
+        by_index = {entry['wordIndex']: entry for entry in word_domain['wordDomains']}
+        self.assertEqual(by_index[0]['observedValueRange'], [1, 4])
+        self.assertEqual(by_index[4]['systemIdDomainValueCount'], 67)
+        self.assertEqual(by_index[8]['noLinkSentinelCount'], 67)
+        self.assertEqual(by_index[20]['observedValueRange'], [15, 40])
+        self.assertEqual(by_index[24]['zeroValueCount'], 67)
+        self.assertEqual(by_index[43]['zeroValueCount'], 67)
+        self.assertEqual(word_domain['coverageSignals']['systemIdDomainWords'], [1, 2, 4, 5, 6, 7])
+        self.assertEqual(word_domain['coverageSignals']['noLinkSentinelOnlyWords'], list(range(8, 20)))
+        self.assertEqual(word_domain['coverageSignals']['zeroOnlyTailWords'], list(range(24, 44)))
+        self.assertIn('complete syst field-order oracle is still missing', word_domain['promotionBlockers'])
         systems = data['systems']
         self.assertEqual(len(systems), 67)
         first = systems[0]

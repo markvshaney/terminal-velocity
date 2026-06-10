@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v33':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v34':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -378,6 +378,31 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest syst field-order conflict expected zero-only projected Con6-Con16 window')
     if 'Con6-Con16 split placement cannot be promoted' not in ' '.join(syst_field_order_conflict.get('promotionBlockers', [])):
         raise ValueError('sourced EV systems manifest syst field-order conflict missing Con6-Con16 promotion blocker')
+    word_domain = data.get('systWordDomainCoverageSummary', {})
+    if word_domain.get('sourceLabel') != 'decoded-resource-backed-syst-word-domain-coverage-scout':
+        raise ValueError('sourced EV systems manifest missing syst word-domain coverage scout')
+    if word_domain.get('oracleStatus') != 'syst_field_order_mapping_pending_complete_oracle':
+        raise ValueError('sourced EV systems manifest word-domain coverage must keep field-order mapping pending')
+    if word_domain.get('recordCount') != 67 or word_domain.get('recordSize') != 88 or word_domain.get('wordCount') != 44:
+        raise ValueError('sourced EV systems manifest word-domain coverage has unexpected dimensions')
+    word_domains = {entry.get('wordIndex'): entry for entry in word_domain.get('wordDomains', [])}
+    if len(word_domains) != 44:
+        raise ValueError('sourced EV systems manifest word-domain coverage missing word entries')
+    if word_domains.get(4, {}).get('systemIdDomainValueCount') != 67:
+        raise ValueError('sourced EV systems manifest word-domain coverage changed front link-domain count')
+    if word_domains.get(8, {}).get('noLinkSentinelCount') != 67:
+        raise ValueError('sourced EV systems manifest word-domain coverage changed no-link sentinel-only word')
+    if word_domains.get(20, {}).get('observedValueRange') != [15, 40]:
+        raise ValueError('sourced EV systems manifest word-domain coverage changed percent-like word range')
+    if word_domains.get(24, {}).get('zeroValueCount') != 67 or word_domains.get(43, {}).get('zeroValueCount') != 67:
+        raise ValueError('sourced EV systems manifest word-domain coverage changed zero-tail words')
+    coverage = word_domain.get('coverageSignals', {})
+    if coverage.get('systemIdDomainWords') != [1, 2, 4, 5, 6, 7]:
+        raise ValueError('sourced EV systems manifest word-domain coverage changed system-ID-domain word list')
+    if coverage.get('noLinkSentinelOnlyWords') != list(range(8, 20)) or coverage.get('zeroOnlyTailWords') != list(range(24, 44)):
+        raise ValueError('sourced EV systems manifest word-domain coverage changed sentinel/zero coverage')
+    if 'complete syst field-order oracle is still missing' not in word_domain.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest word-domain coverage missing field-order blocker')
     seed_summary = data.get('systemNameSeedSummary', {})
     if seed_summary.get('sourceLabel') != 'decoded-resource-backed-system-name-seed-join-scout':
         raise ValueError('sourced EV systems manifest missing system-name seed summary source label')

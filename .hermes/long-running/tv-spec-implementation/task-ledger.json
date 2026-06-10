@@ -45,10 +45,13 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v33-syst-field-order-conflict",
-  "last_progress_token": "e0ce453abc1a85f193c942831bf14e5f02ddc74bb518865daece974cbcf97641",
+  "last_material_event_id": "lane-a-v34-syst-word-domain-coverage",
+  "last_progress_token": "449bbfbd25c6cb0e99ad3c0049da50393f969d9d05cd51d25be27f161c379e6b",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
+    "packet": "lane-a-v34-syst-word-domain-coverage",
+    "summary": "Lane A v34 added systWordDomainCoverageSummary: all 44 decoded syst words are preserved as source-readiness word-domain evidence, including system-ID-domain words [1,2,4,5,6,7], no-link-only words 8-19, zero-only tail words 24-43, and word 20 range [15,40].",
+    "promotion_status": "source-readiness guardrail only; unresolved Resource Bible field semantics, Con6-Con16 split placement, non-topology syst behavior, coordinate display units, remaining name joins, named runtime topology, and broad universe replacement remain unpromoted",
     "files_touched": [
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
@@ -61,21 +64,18 @@
       "native_ev/tests/test_scenario_eval.py",
       "tools/extract_ev_system_semantics.py"
     ],
-    "packet": "lane-a-v33-syst-field-order-conflict",
-    "promotion_status": "source-readiness guardrail only; no runtime semantic promotion",
-    "summary": "Lane A v33 stabilized: decoded-resource-backed syst field-order conflict scout added as an executable source-readiness guardrail; it records the Resource Bible Con6-Con16 family-order conflict with the current contiguous link scout while keeping field-order mapping, Con6-Con16 placement, non-topology syst semantics, display-unit/map scaling, remaining 66 name joins, named runtime topology, and broad universe replacement unpromoted.",
     "verifiers": [
       {
         "command": "python3 tools/extract_ev_system_semantics.py",
-        "result": "passed; regenerated sourced_ev_systems.json with method ending levo-name-map-v33 and systems=67"
+        "result": "passed; regenerated sourced_ev_systems.json with method ending levo-name-map-v34 and systems=67"
       },
       {
-        "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
-        "result": "passed; Ran 2 tests OK after v33 manifest/model alignment"
+        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
+        "result": "passed; Ran 271 tests in 1.446s OK"
       },
       {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; success true, including recorded_syst_field_order_conflict_summary"
+        "result": "passed; success true and recorded_syst_word_domain_coverage_summary passed"
       },
       {
         "command": "python3 tools/backlog_dispatch_index.py build",
@@ -86,25 +86,19 @@
         "result": "passed; BACKLOG DISPATCH INDEX OK"
       },
       {
-        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
-        "result": "passed; Ran 271 tests in 1.518s OK"
-      },
-      {
         "command": "git diff --check",
         "result": "passed; no output"
       }
     ]
   },
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...syst-field-order-conflict...v33",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -> Ran 2 tests OK",
-    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -> Ran 271 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success; recorded_syst_field_order_conflict_summary passed",
-    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
-    "task-ledger/backlog-index/sourced-systems JSON and events JSONL parse -> OK; git diff --check -> OK",
-    "npm test -- --run ... -> not applicable: no package.json exists at repo root"
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...syst-word-domain-coverage...v34",
+    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -> Ran 271 tests in 1.446s OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_syst_word_domain_coverage_summary passed",
+    "python3 tools/backlog_dispatch_index.py build/check -> BACKLOG DISPATCH INDEX OK",
+    "git diff --check -> OK"
   ],
-  "next_resume_action": "Continue Lane A with the next narrow source-backed field family only after the v33 checkpoint is committed/pushed or otherwise stabilized; do not promote coordinate display units, Con6-Con16 placement, non-topology syst semantics, remaining record-to-name joins, named runtime topology, or broad universe replacement without stronger Classic runtime/source evidence.",
+  "next_resume_action": "Continue Lane A only with stronger Classic runtime/source evidence for coordinate display-unit/map-scaling/projection calibration, complete exact record-to-name/runtime topology mapping, or a complete source-level syst field-order oracle before promoting unresolved syst fields, Con6-Con16 split placement, or broad runtime universe replacement.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -190,5 +184,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T16:55:23Z"
+  "updated_at": "2026-06-10T17:07:22Z"
 }
