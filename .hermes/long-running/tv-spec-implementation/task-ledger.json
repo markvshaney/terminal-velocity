@@ -45,11 +45,11 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v38-named-route-topology-oracle-gap-current-worker-stabilized",
+  "last_material_event_id": "lane-a-v38-named-route-topology-oracle-gap-push-ready",
   "last_progress_token": "864d3755956f02adadd142321a4cbf6b3a190317d42e8c0217a7d85223dfa2c3",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
-    "commit": "pending local checkpoint commit by t_4f00efb5",
+    "commit": "4eca9d2e44e17a483ea3c8234fd943baf76f7809",
     "files_touched": [
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
@@ -64,6 +64,7 @@
     ],
     "packet": "lane-a-v38-named-route-topology-oracle-gap",
     "promotion_status": "source-readiness/evidence gap only; no promotion of remaining names, visible named route labels, coordinate display units, or broad runtime universe replacement",
+    "push_status": "push_ready; git push origin main failed because HTTPS credentials unavailable in worker",
     "summary": "Stabilized Lane A v38 namedRouteTopologyOracleGapSummary as the current worker checkpoint: decoded candidate resource-ID route graph evidence is executable while visible named Classic route topology remains blocked pending exact name/order, runtime route-label, and coordinate display calibration evidence.",
     "verifiers": [
       {
@@ -109,6 +110,10 @@
       {
         "command": "git diff --check",
         "result": "passed; no output"
+      },
+      {
+        "command": "git push origin main",
+        "result": "failed; fatal: could not read Username for HTTPS GitHub remote"
       }
     ]
   },
@@ -123,9 +128,10 @@
     "python3 -m json.tool docs/checklists/ev-classic-fidelity-implementation-backlog.index.json -> passed",
     "python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json -> passed before this update",
     "events JSONL parse -> passed; 133 lines before this event",
-    "git diff --check -> passed; no output"
+    "git diff --check -> passed; no output",
+    "git push origin main -> failed; fatal: could not read Username for HTTPS GitHub remote"
   ],
-  "next_resume_action": "Continue Lane A with complete Classic name/order oracle, runtime map/route label evidence, coordinate display-unit/map-scaling/projection calibration, or source-level syst field-order oracle before promoting remaining names or broad runtime universe replacement.",
+  "next_resume_action": "Integration owner should push local main normally, fetch origin, verify HEAD equals origin/main, then continue Lane A with complete name/order oracle, runtime map/route label evidence, coordinate display calibration, or source-level syst field-order oracle before promoting remaining names or broad runtime universe replacement.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -211,5 +217,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T18:02:17Z"
+  "updated_at": "2026-06-10T18:02:58Z"
 }
