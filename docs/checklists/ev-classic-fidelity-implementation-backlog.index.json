@@ -33,11 +33,11 @@
     {
       "blocked_reason": "Exact record-to-name/runtime topology mapping is not fully promoted; do not implement from adaptation data alone.",
       "id": "fuller-ev-classic-galaxy-topology-and-coordinates",
-      "item_body_sha256": "8e69d320867f8fca5168b99c119f76f9b4c5fa1adf1f1ba904a0880023c0b8fa",
+      "item_body_sha256": "33d3a2f1c28696b95b24f371d7a5371ee9b5325c9182dacb55dd08c8e34e6e8b",
       "lane_class": "Lane A: static galaxy topology semantics",
       "line_range": [
         158,
-        200
+        201
       ],
       "markdown_anchor": "#fuller-ev-classic-galaxy-topology-and-coordinates",
       "next_action": "Continue promoting the `syst-like` primitive run one field family at a time: next highest-value families are coordinate display-unit/map-scaling interpretation, exact record-to-name/runtime topology mapping, then hazards/government/ports before broad universe changes.",
@@ -66,8 +66,8 @@
       "item_body_sha256": "6f11a5a3924d4cc0e7278368b84f30ee0114122f06e436efb620cba74f730313",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        218,
-        233
+        219,
+        234
       ],
       "markdown_anchor": "#exact-starting-primary-weapons-outfits",
       "next_action": "Open a non-mutating Classic Player Info or outfitter/status surface to confirm primary weapons/outfits beyond the starting HUD.",
@@ -90,8 +90,8 @@
       "item_body_sha256": "7db9ba460c2998bf95b21188d860df89290e02fdd47584836d6b0527231cd3f6",
       "lane_class": "Lane B: service/store provisioning",
       "line_range": [
-        245,
-        259
+        246,
+        260
       ],
       "markdown_anchor": "#system-by-system-original-service-store-provisioning",
       "next_action": "Promote a static service/store manifest from decoded landing/body/resource records and graphics/source manifests; spot-check ambiguous UI-sensitive surfaces in Basilisk only when needed.",
@@ -118,8 +118,8 @@
       "item_body_sha256": "e80f07a96167b3e6832d0146ba653a6a70e0d4e516a509968001925b916bc2ff",
       "lane_class": "Lane C: economy/commodity semantics",
       "line_range": [
-        260,
-        284
+        261,
+        285
       ],
       "markdown_anchor": "#economy-wide-buy-sell-display-and-spread-rules",
       "next_action": "Observe additional ports or decode commodity/economy resources before changing global formula assumptions.",
@@ -146,8 +146,8 @@
       "item_body_sha256": "37f1d6feeb140417f1dbd4e6ab300aa5d925083eabdd490a119c6b533d4f1459",
       "lane_class": "Lane E: deterministic evaluator/playtest packets",
       "line_range": [
-        285,
-        300
+        286,
+        301
       ],
       "markdown_anchor": "#ev-classic-prefs-screen-fidelity",
       "next_action": "Keep as a regression surface; add a new narrow item only if another prefs control needs exact behavior beyond visual layout.",
@@ -170,8 +170,8 @@
       "item_body_sha256": "4de5835d628cb121929414d0aca35cdfc44c473ed2e0d94665c6002c8ddf121e",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        308,
-        320
+        309,
+        321
       ],
       "markdown_anchor": "#ship-facing-frame-order-runtime-confirmation",
       "next_action": "Capture deterministic original-runtime turning/facing sequence and compare against Terminal Velocity movement log.",
@@ -194,8 +194,8 @@
       "item_body_sha256": "ff08571187660f8ad57649e032963148261dfa6afd217e60203ef3073def223b",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        321,
-        334
+        322,
+        335
       ],
       "markdown_anchor": "#movement-tuning-turn-rate-acceleration-curve-max-speed-inertial-drift",
       "next_action": "Capture original-runtime acceleration/max-speed/drift against the same deterministic scenario shape, then tune Terminal Velocity if logs diverge.",
@@ -218,8 +218,8 @@
       "item_body_sha256": "da31cfcef07c67dcd85b56969e24a670c5f6227648d231d2ee74ddf7e61c287f",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        335,
-        349
+        336,
+        350
       ],
       "markdown_anchor": "#afterburner-acceleration-and-fuel-use-behavior",
       "next_action": "Capture or decode EV Classic afterburner acceleration/fuel behavior before promoting constants beyond scaffold status.",
@@ -242,8 +242,8 @@
       "item_body_sha256": "637c71e9f4bfd421baabcdf8b93be14d041d976b94e6b40470561ef33fc83698",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        350,
-        364
+        351,
+        365
       ],
       "markdown_anchor": "#autopilot-behavior-and-port-approach-assist",
       "next_action": "Capture or decode EV Classic autopilot behavior before promoting target/speed constants or UI wording beyond scaffold status.",
@@ -266,8 +266,8 @@
       "item_body_sha256": "5b9abf68a1efd061468e4f7141942fa1183f7c557cd319d923a7ccf600ac0d79",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        365,
-        379
+        366,
+        380
       ],
       "markdown_anchor": "#land-takeoff-and-hyperspace-timing-sound-animation-fidelity",
       "next_action": "Use a fresh non-strict original EV session or alternate input route that proves reliable hotkey receipt, then capture successful hyperspace transit and compare to Godot event logs.",
@@ -290,8 +290,8 @@
       "item_body_sha256": "b712ed96f48df89e79fc005382e46d43202082c784ffad1a89393548cc30039a",
       "lane_class": "Lane B: service/store provisioning",
       "line_range": [
-        380,
-        395
+        381,
+        396
       ],
       "markdown_anchor": "#landed-service-button-matrix-bar-mission-computer-commodities-outfitter-shipyard-gambling",
       "next_action": "Run bounded original EV click-through starting at Levo and then an outfitter/shipyard/gambling-capable early port, using disposable/non-strict state and before/after captures for every mutating option.",
@@ -315,8 +315,8 @@
       "item_body_sha256": "e8b922d360151bf114d34394b77e2c3cca7a08184f630ccb5fc34ebdd4f96c39",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        396,
-        437
+        397,
+        438
       ],
       "markdown_anchor": "#basic-combat-fidelity-fire-rate-projectile-speed-lifetime-damage-target-selection-explosions",
       "next_action": "Capture original runtime combat behavior for exact fire cadence, projectile motion, explosions, AI retaliation cadence, rewards, deaths, and legal consequences before promoting the scaffold to Classic fidelity.",
@@ -346,8 +346,8 @@
       "item_body_sha256": "8b7847b14e56117914c3ff7067a423eac1ef42ecefb31729633b5286d73f8b45",
       "lane_class": "Lane E: deterministic evaluator/playtest packets",
       "line_range": [
-        438,
-        453
+        439,
+        454
       ],
       "markdown_anchor": "#ev-family-gameplay-learning-source-integration",
       "next_action": "Convert the source-grounded model into small implementation plans or UI/data tickets, starting with mission state/log, map arrows/fuel feedback, per-government legal state, cargo reservation, and ship/outfit comparison.",
@@ -371,8 +371,8 @@
       "item_body_sha256": "f2dbbbe3d649e2f245b5d7cf7245d7a79920998d3acce9e104d873d2fb38a396",
       "lane_class": "Lane D: mission-family semantic promotion",
       "line_range": [
-        454,
-        501
+        455,
+        502
       ],
       "markdown_anchor": "#mission-state-log-and-mission-surface-model",
       "next_action": "Capture or mine original EV Classic/manual/resource evidence for exact mission abort/runtime failure UI, deadline date display, CanAbort behavior, failure descriptions, and special flags before changing player-facing wording or broader penalties.",
@@ -401,8 +401,8 @@
       "item_body_sha256": "500733133804311983e780f4f93eaadc508141054a94b63f335082eb9d5b1975",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
-        502,
-        524
+        503,
+        525
       ],
       "markdown_anchor": "#map-objective-arrows-fuel-range-and-hyperspace-feedback",
       "next_action": "Keep mission route hint/fuel precheck/navigation recovery as opt-in helper scaffolds; promote only after stronger Classic map/fuel/jump/land/refuel capture, especially multi-hop Shift-click toward non-direct destinations.",
@@ -427,8 +427,8 @@
       "item_body_sha256": "d28ef85b55c99ce9e9072f25ea128164c883ac767d53316f0e9a2066dcb4dfc6",
       "lane_class": "Lane D: mission-family semantic promotion",
       "line_range": [
-        525,
-        570
+        526,
+        571
       ],
       "markdown_anchor": "#per-government-legal-reputation-and-ai-behavior-model",
       "next_action": "Compare inferred mechanics against EV Classic runtime and EV/Override/Nova plugin-manual/Bible fields such as government crime tolerance, scan fines, contraband, bribery, and mission legal availability; tune labels/thresholds from evidence without blocking current playable scaffolds.",
@@ -461,8 +461,8 @@
       "item_body_sha256": "45bfe2ceac3657f120b5949ed9f7a303487e6dc572c2b8f6634e02d935ad603f",
       "lane_class": "Lane E: deterministic evaluator/playtest packets",
       "line_range": [
-        693,
-        704
+        694,
+        705
       ],
       "markdown_anchor": "#external-adaptation-comparisons",
       "next_action": "Use only as hypothesis input when a specific implementation question needs comparison; require original runtime, decoded resources, manual/docs, or Terminal Velocity instrumentation before implementation.",

@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v32",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v33",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -735,6 +735,426 @@
       "decoder update that separates front Con slots from downstream syst field families before broad universe replacement"
     ],
     "sourceNote": "This packet records the Resource Bible syst layout families beside the decoded 44-word/88-byte records. It preserves the existing link-window scout output for continuity, while explicitly keeping non-topology syst fields and downstream field offsets unpromoted until a complete field-order oracle or runtime evidence is available."
+  },
+  "systFieldOrderConflictSummary": {
+    "sourceLabel": "decoded-resource-backed-syst-field-order-conflict-scout",
+    "oracleStatus": "syst_field_order_mapping_pending_complete_oracle",
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "candidateInterpretations": [
+      {
+        "interpretationLabel": "current-decoder-contiguous-link-window",
+        "coordinateWordIndices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "candidateLinkWordIndices": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "candidateLinkWindowSummary": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "observedValueRange": [
+            -1,
+            153
+          ],
+          "distinctObservedValues": [
+            -1,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            149,
+            150,
+            151
+          ],
+          "distinctObservedValueCount": 25,
+          "allValuesZero": false,
+          "allValuesNoLinkSentinel": false,
+          "systemIdDomainValueCount": 268,
+          "noLinkSentinelCount": 804,
+          "zeroValueCount": 0
+        },
+        "promotionStatus": "analysis-input-only; preserves candidate graph continuity but not full Resource Bible field layout"
+      },
+      {
+        "interpretationLabel": "resource-bible-order-after-32-bit-coordinate-pairs",
+        "coordinateWordIndices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "frontCon1ToCon5WordIndices": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "navDefF1ToF4WordIndices": [
+          9,
+          10,
+          11,
+          12
+        ],
+        "dudeProbabilityAvgShipsWordIndices": [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "govtMessageHazardVisibilityWordIndices": [
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "projectedCon6ToCon16WordIndices": [
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "unexplainedTailWordIndices": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43
+        ],
+        "promotionStatus": "not-promoted; direct 16-bit projection conflicts with decoded word-domain evidence"
+      }
+    ],
+    "decodedWordGroupScouts": {
+      "currentCandidateLinkScoutWindowWords4To19": {
+        "wordIndices": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "observedValueRange": [
+          -1,
+          153
+        ],
+        "distinctObservedValues": [
+          -1,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          145,
+          146,
+          147,
+          149,
+          150,
+          151
+        ],
+        "distinctObservedValueCount": 25,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 268,
+        "noLinkSentinelCount": 804,
+        "zeroValueCount": 0
+      },
+      "frontCon1ToCon5CandidateWords4To8": {
+        "wordIndices": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "observedValueRange": [
+          -1,
+          153
+        ],
+        "distinctObservedValues": [
+          -1,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          145,
+          146,
+          147,
+          149,
+          150,
+          151
+        ],
+        "distinctObservedValueCount": 25,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 268,
+        "noLinkSentinelCount": 67,
+        "zeroValueCount": 0
+      },
+      "projectedNavDefF1ToF4Words9To12": {
+        "wordIndices": [
+          9,
+          10,
+          11,
+          12
+        ],
+        "observedValueRange": [
+          -1,
+          -1
+        ],
+        "distinctObservedValues": [
+          -1
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": true,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 268,
+        "zeroValueCount": 0
+      },
+      "projectedDudeProbabilityAvgShipsWords13To21": {
+        "wordIndices": [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "observedValueRange": [
+          -1,
+          40
+        ],
+        "distinctObservedValues": [
+          -1,
+          15,
+          19,
+          20,
+          21,
+          25,
+          30,
+          35,
+          37,
+          40
+        ],
+        "distinctObservedValueCount": 10,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 469,
+        "zeroValueCount": 0
+      },
+      "projectedGovtMessageHazardVisibilityWords22To26": {
+        "wordIndices": [
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "observedValueRange": [
+          0,
+          55
+        ],
+        "distinctObservedValues": [
+          0,
+          5,
+          10,
+          15,
+          19,
+          20,
+          21,
+          25,
+          30,
+          35,
+          37,
+          40,
+          55
+        ],
+        "distinctObservedValueCount": 13,
+        "allValuesZero": false,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 201
+      },
+      "projectedCon6ToCon16Words27To37": {
+        "wordIndices": [
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 737
+      },
+      "unexplainedTailWords38To43": {
+        "wordIndices": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43
+        ],
+        "observedValueRange": [
+          0,
+          0
+        ],
+        "distinctObservedValues": [
+          0
+        ],
+        "distinctObservedValueCount": 1,
+        "allValuesZero": true,
+        "allValuesNoLinkSentinel": false,
+        "systemIdDomainValueCount": 0,
+        "noLinkSentinelCount": 0,
+        "zeroValueCount": 402
+      }
+    },
+    "conflictSignals": [
+      "Resource Bible prose orders Con6-Con16 after NavDef, population, government, message, hazard, and visibility fields, but the local contiguous link scout has all 268 system-ID-domain links inside words 4-19",
+      "A direct 32-bit-coordinate plus 16-bit-field projection would place Con6-Con16 at words 27-37, but those decoded words are all zero rather than -1/no-link or 128-1127 system IDs",
+      "The current candidate graph remains useful as a scout because its values target in-run system IDs, but it must not be treated as a verified complete Resource Bible field-order mapping"
+    ],
+    "promotionBlockers": [
+      "complete syst field-order oracle is missing for reconciling current decoder word windows with Resource Bible family ordering",
+      "Con6-Con16 split placement cannot be promoted from the contiguous link scout until byte/word-width interpretation is resolved",
+      "downstream NavDef/population/government/message/hazard/visibility fields remain source-backed family names, not decoded runtime-integrated semantics"
+    ],
+    "nextEvidenceFamilies": [
+      "source-level syst struct declaration including field widths and offsets",
+      "ResEdit/template field map or resource editor view tying fields to byte offsets",
+      "runtime probes for Con6-Con16 and non-topology syst fields that disambiguate offset families"
+    ],
+    "sourceNote": "This matrix records a deliberate unresolved mismatch between Resource Bible field-order prose and the current decoded word-domain scout. It keeps the candidate link graph available while preventing broad field-layout promotion until an offset oracle or runtime probe resolves the split."
   },
   "topologyPromotionReadinessSummary": {
     "sourceLabel": "decoded-resource-backed-topology-promotion-readiness-matrix",
@@ -21898,5 +22318,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }

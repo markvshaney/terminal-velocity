@@ -1806,6 +1806,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_resource_bible_topology_constants',
             'recorded_coordinate_map_source_readiness_summary',
             'recorded_syst_field_layout_source_readiness_summary',
+            'recorded_syst_field_order_conflict_summary',
             'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',
             'recorded_coordinate_raw_long_candidate',
@@ -1869,6 +1870,14 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['systFieldLayoutSourceReadinessDecodedWordGroupScouts']['percentLikeWords20To23']['observedValueRange'], [5, 55])
         self.assertTrue(readiness['systFieldLayoutSourceReadinessDecodedWordGroupScouts']['allZeroTailWords24To43']['allValuesZero'])
         self.assertIn('current Con1-Con16 link-slot scout window remains a candidate graph input', ' '.join(readiness['systFieldLayoutSourceReadinessPromotionBlockers']))
+        conflict_scouts = readiness['systFieldOrderConflictDecodedWordGroupScouts']
+        self.assertEqual(readiness['systFieldOrderConflictSourceLabel'], 'decoded-resource-backed-syst-field-order-conflict-scout')
+        self.assertEqual(readiness['systFieldOrderConflictOracleStatus'], 'syst_field_order_mapping_pending_complete_oracle')
+        self.assertEqual(conflict_scouts['currentCandidateLinkScoutWindowWords4To19']['systemIdDomainValueCount'], 268)
+        self.assertTrue(conflict_scouts['projectedCon6ToCon16Words27To37']['allValuesZero'])
+        self.assertIn('Con6-Con16 split placement cannot be promoted', ' '.join(readiness['systFieldOrderConflictPromotionBlockers']))
+        self.assertIn('source-level syst struct declaration', readiness['systFieldOrderConflictNextEvidenceFamilies'][0])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systFieldOrderConflictSourceLabel'], 'decoded-resource-backed-syst-field-order-conflict-scout')
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systFieldLayoutSourceReadinessSourceLabel'], 'resource-bible-backed-syst-field-layout-source-readiness')
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['topologyPromotionReadinessOracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
