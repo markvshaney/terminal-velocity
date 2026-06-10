@@ -44,6 +44,8 @@ Verification defaults:
 
 Gates:
 - Stop and record `waiting_gate` only for: destructive/risky original-EV tests, Strict Play, hard-to-restore/save-corrupting original pilot mutation, raw proprietary asset publication, external/account/config/provider/gateway changes, changing other scheduled jobs, force-push/history rewrite, deletion/merge/release/settings changes, non-TV repo/public/social side effects, missing evidence required for a fidelity claim, or unsafe dirty state that cannot be separated.
+- Do not create a `review_required` / `human review` gate for verified safe-local TV code/data/docs changes. The user has preapproved normal non-force TV checkpoint commits/pushes after the established checks; commit/push and continue. If a previous ledger event says `review_required`, re-check live state and resolve it locally when the changes are verified and within TV scope.
+- If normal push fails, re-check live credentials/remotes once from the current runner environment before treating it as `external_auth`. If another authorized environment has already pushed the commit and `HEAD == origin/main`, clear the stale gate, set status back to `running`, and continue.
 - A completed safe increment is a checkpoint, not task completion. Continue through adjacent safe increments in the same invocation when possible, then on the next recurrence unless the ledger `done_condition` is met or a real gate/blocker/no-safe-slice state is recorded.
 - Tool/time/context caps are checkpoint boundaries, not task completion. Before stopping for a cap, preserve the next resume action and enough verifier/source state for the next invocation.
 
