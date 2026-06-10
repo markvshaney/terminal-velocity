@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v25':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v26':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -468,6 +468,29 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected resource 129 y absolute fractional unit')
     if 'not-promoted' not in display_residual_magnitude.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate display residual-magnitude must not promote display units')
+    display_quantization = data.get('coordinateDisplayQuantizationSummary', {})
+    if display_quantization.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-quantization-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display quantization source label')
+    if display_quantization.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display quantization should keep display scaling pending')
+    if '16.16 residual gcd quantization candidate' not in display_quantization.get('candidateFamilies', []):
+        raise ValueError('sourced EV systems manifest coordinate display quantization missing candidate family')
+    if display_quantization.get('fixedPointDivisorCandidate') != 65536:
+        raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected divisor')
+    if display_quantization.get('xPos', {}).get('absoluteResidualGcdCandidate') != 1:
+        raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected x gcd')
+    if display_quantization.get('xPos', {}).get('residualModulo128Distribution', {}).get('0') != 14:
+        raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected x modulo-128 count')
+    if display_quantization.get('yPos', {}).get('coarseGridStepCandidate') != 4096:
+        raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected y coarse step')
+    if display_quantization.get('yPos', {}).get('coarseGridStepFractionalUnitCandidate') != 0.0625:
+        raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected y coarse unit')
+    if display_quantization.get('yPos', {}).get('coarseGridAlignedResourceCount') != 59:
+        raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected y grid alignment count')
+    if display_quantization.get('yPos', {}).get('coarseGridOffstepResourceIds') != [166, 167, 168, 169, 170, 172, 183, 186]:
+        raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected y offstep resource ids')
+    if 'not-promoted' not in display_quantization.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display quantization must not promote display units')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')

@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v25')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v26')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         systems = data['systems']
@@ -3545,6 +3545,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(display_residual_magnitude['resource128']['yPosAbsoluteFractionalUnitCandidate'], 0.0625)
         self.assertEqual(display_residual_magnitude['resource129']['yPosAbsoluteFractionalUnitCandidate'], 0.5)
         self.assertIn('not-promoted', display_residual_magnitude['displayUnitInterpretationStatus'])
+        display_quantization = data['coordinateDisplayQuantizationSummary']
+        self.assertEqual(display_quantization['sourceLabel'], 'decoded-resource-backed-coordinate-display-quantization-scout')
+        self.assertEqual(display_quantization['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('16.16 residual gcd quantization candidate', display_quantization['candidateFamilies'])
+        self.assertEqual(display_quantization['fixedPointDivisorCandidate'], 65536)
+        self.assertEqual(display_quantization['xPos']['absoluteResidualGcdCandidate'], 1)
+        self.assertEqual(display_quantization['xPos']['residualModulo128Distribution']['0'], 14)
+        self.assertEqual(display_quantization['yPos']['coarseGridStepCandidate'], 4096)
+        self.assertEqual(display_quantization['yPos']['coarseGridStepFractionalUnitCandidate'], 0.0625)
+        self.assertEqual(display_quantization['yPos']['coarseGridAlignedResourceCount'], 59)
+        self.assertEqual(display_quantization['yPos']['coarseGridOffstepResourceIds'], [166, 167, 168, 169, 170, 172, 183, 186])
+        self.assertIn('not-promoted', display_quantization['displayUnitInterpretationStatus'])
         display_extrema = data['coordinateDisplayExtremaSummary']
         self.assertEqual(display_extrema['sourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(display_extrema['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
@@ -3722,7 +3734,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertNotIn('targetResourceId', first_link_slots[4])
         self.assertGreaterEqual(len(data['systemNameSeeds']), 9)
         self.assertIn('Sol', {entry['name'] for entry in data['systemNameSeeds']})
-        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.')
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()

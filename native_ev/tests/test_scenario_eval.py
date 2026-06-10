@@ -1814,6 +1814,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_integer_band_summary',
             'recorded_coordinate_display_residual_sign_summary',
             'recorded_coordinate_display_residual_magnitude_summary',
+            'recorded_coordinate_display_quantization_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -1905,6 +1906,17 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayResidualMagnitudeResource128']['yPosAbsoluteFractionalUnitCandidate'], 0.0625)
         self.assertEqual(readiness['coordinateDisplayResidualMagnitudeResource129']['yPosAbsoluteFractionalUnitCandidate'], 0.5)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayResidualMagnitudeSourceLabel'], 'decoded-resource-backed-coordinate-display-residual-magnitude-scout')
+        self.assertEqual(readiness['coordinateDisplayQuantizationSourceLabel'], 'decoded-resource-backed-coordinate-display-quantization-scout')
+        self.assertEqual(readiness['coordinateDisplayQuantizationOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('16.16 y-axis 4096-step coarse-grid candidate', readiness['coordinateDisplayQuantizationCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayQuantizationFixedPointDivisor'], 65536)
+        self.assertEqual(readiness['coordinateDisplayQuantizationXResidualGcd'], 1)
+        self.assertEqual(readiness['coordinateDisplayQuantizationXModulo128Distribution']['0'], 14)
+        self.assertEqual(readiness['coordinateDisplayQuantizationYCoarseStep'], 4096)
+        self.assertEqual(readiness['coordinateDisplayQuantizationYCoarseStepFractionalUnit'], 0.0625)
+        self.assertEqual(readiness['coordinateDisplayQuantizationYCoarseGridAlignedResourceCount'], 59)
+        self.assertEqual(readiness['coordinateDisplayQuantizationYCoarseGridOffstepResourceIds'], [166, 167, 168, 169, 170, 172, 183, 186])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayQuantizationSourceLabel'], 'decoded-resource-backed-coordinate-display-quantization-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])
