@@ -1813,6 +1813,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_resource_bible_syst_field_width_offset_oracle_gap',
             'recorded_syst_resedit_template_source_availability_gap',
             'recorded_syst_ev_family_template_transfer_guardrail',
+            'recorded_syst_ev_family_variant_divergence_guardrail',
             'recorded_syst_word_domain_coverage_summary',
             'recorded_non_topology_syst_oracle_gap',
             'recorded_topology_promotion_readiness_summary',
@@ -1927,6 +1928,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('EV Nova Bible', ' '.join(ev_family_guardrail['weakerReferenceFamilies']))
         self.assertIn('EV-family TMPL/resource-editor workflows cannot promote EV Classic syst byte offsets without a Classic-specific template/source oracle', ev_family_guardrail['promotionBlockers'])
         self.assertIn('not-promoted', ev_family_guardrail['promotionStatus'])
+        variant_guardrail = readiness['resourceBibleSystSequentialProjectionEvFamilySystVariantDivergenceGuardrail']
+        self.assertEqual(variant_guardrail['sourceLabel'], 'ev-family-reference-backed-syst-variant-divergence-guardrail')
+        self.assertEqual(variant_guardrail['oracleStatus'], 'ev_family_syst_field_count_variants_not_classic_offset_oracles')
+        self.assertEqual(variant_guardrail['classicReference']['navDefCount'], 4)
+        self.assertEqual(variant_guardrail['classicReference']['visibilitySetRange'], [0, 255])
+        self.assertEqual(variant_guardrail['overrideReference']['visibilitySetRange'], [0, 511])
+        self.assertEqual(variant_guardrail['novaReference']['navDefCount'], 16)
+        self.assertIn('EV-family field-count variants cannot be transposed onto EV Classic unresolved words', variant_guardrail['promotionBlockers'])
+        self.assertIn('not-promoted', variant_guardrail['promotionStatus'])
         self.assertIn('not-promoted', width_offset_gap['promotionStatus'])
         self.assertIn('direct sequential projection would place Con6-Con16 at all-zero words 27-37', ' '.join(readiness['resourceBibleSystSequentialProjectionBlockingSignals']))
         self.assertIn('blocked', readiness['resourceBibleSystSequentialProjectionReadinessStatus'])

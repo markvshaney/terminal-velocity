@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v46",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v47",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -1453,6 +1453,81 @@
               ],
               "allowedUse": "search-term and hypothesis guidance only for locating a Classic-specific syst template, source struct, or runtime probe target",
               "promotionStatus": "not-promoted; EV-family template evidence remains a transfer guardrail, not a Classic offset oracle"
+            },
+            "evFamilySystVariantDivergenceGuardrailSummary": {
+              "sourceLabel": "ev-family-reference-backed-syst-variant-divergence-guardrail",
+              "oracleStatus": "ev_family_syst_field_count_variants_not_classic_offset_oracles",
+              "classicReference": {
+                "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-989",
+                "navDefCount": 4,
+                "dudeTypeCount": 4,
+                "probabilityCount": 4,
+                "asteroidRange": [
+                  0,
+                  10
+                ],
+                "visibilitySetRange": [
+                  0,
+                  255
+                ],
+                "visibilityClearedRange": [
+                  1000,
+                  1255
+                ],
+                "conLinkCount": 16
+              },
+              "overrideReference": {
+                "sourceReference": "docs/references/ev-family/ev-override-resource-bible-1.0.2.txt lines 1170-1239",
+                "navDefCount": 4,
+                "dudeTypeCount": 4,
+                "probabilityCount": 4,
+                "asteroidRange": [
+                  0,
+                  10
+                ],
+                "visibilitySetRange": [
+                  0,
+                  511
+                ],
+                "visibilityClearedRange": [
+                  1000,
+                  1511
+                ],
+                "conLinkCount": 16,
+                "extraTailFamily": "AlwaysPers fields after Con6-Con16"
+              },
+              "novaReference": {
+                "sourceReference": "docs/references/ev-family/ev-nova-bible.html lines 3064-3188",
+                "navDefCount": 16,
+                "dudeTypeCount": 8,
+                "probabilityCount": 8,
+                "asteroidRange": [
+                  0,
+                  16
+                ],
+                "visibilityModel": "control-bit expression rather than Classic VisBit numeric ranges",
+                "conLinkCount": 16,
+                "extraTailFamilies": [
+                  "BkgndColor",
+                  "Murk",
+                  "AstTypes",
+                  "ReinfFleet",
+                  "ReinfTime",
+                  "ReinfIntrval"
+                ]
+              },
+              "divergenceSignals": [
+                "Override preserves Classic NavDef/DudeTypes counts but widens VisBit mission-bit ranges and adds AlwaysPers tail fields",
+                "Nova expands NavDef/DudeTypes and introduces post-visibility fields, changing field-count and tail-placement assumptions",
+                "Classic Resource Bible prose remains the only current Classic field-family source, but it still lacks byte widths and offsets"
+              ],
+              "promotionBlockers": [
+                "EV-family field-count variants cannot be transposed onto EV Classic unresolved words",
+                "variant Resource Bible agreement on some field names is not equivalent to an EV Classic byte-offset oracle",
+                "visibility, population, and tail-field divergences reinforce the need for a Classic-specific template/source/runtime oracle"
+              ],
+              "allowedUse": "negative oracle and search guidance only; use EV-family differences to avoid importing Override/Nova tail fields into Classic syst semantics",
+              "promotionStatus": "not-promoted; EV-family variant divergence blocks offset/field-count transfer into Classic unresolved words"
             },
             "nextEvidenceFamilies": [
               "recover original EV Classic syst TMPL/template or equivalent ResEdit field map",

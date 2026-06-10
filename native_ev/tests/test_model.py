@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v46')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v47')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3501,6 +3501,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('EV Nova Bible', ' '.join(ev_family_guardrail['weakerReferenceFamilies']))
         self.assertIn('EV-family TMPL/resource-editor workflows cannot promote EV Classic syst byte offsets without a Classic-specific template/source oracle', ev_family_guardrail['promotionBlockers'])
         self.assertIn('not-promoted', ev_family_guardrail['promotionStatus'])
+        variant_guardrail = template_gap['evFamilySystVariantDivergenceGuardrailSummary']
+        self.assertEqual(variant_guardrail['sourceLabel'], 'ev-family-reference-backed-syst-variant-divergence-guardrail')
+        self.assertEqual(variant_guardrail['oracleStatus'], 'ev_family_syst_field_count_variants_not_classic_offset_oracles')
+        self.assertEqual(variant_guardrail['classicReference']['navDefCount'], 4)
+        self.assertEqual(variant_guardrail['classicReference']['dudeTypeCount'], 4)
+        self.assertEqual(variant_guardrail['classicReference']['visibilitySetRange'], [0, 255])
+        self.assertEqual(variant_guardrail['overrideReference']['visibilitySetRange'], [0, 511])
+        self.assertEqual(variant_guardrail['novaReference']['navDefCount'], 16)
+        self.assertEqual(variant_guardrail['novaReference']['dudeTypeCount'], 8)
+        self.assertIn('Nova expands NavDef/DudeTypes and introduces post-visibility fields', ' '.join(variant_guardrail['divergenceSignals']))
+        self.assertIn('EV-family field-count variants cannot be transposed onto EV Classic unresolved words', variant_guardrail['promotionBlockers'])
+        self.assertIn('not-promoted', variant_guardrail['promotionStatus'])
         self.assertIn('not-promoted', width_offset_gap['promotionStatus'])
         self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][0]['unassignedTailWordCount'], 8)
         self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][1]['unassignedTailWordCount'], 6)

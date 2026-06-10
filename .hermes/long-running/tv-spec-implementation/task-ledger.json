@@ -45,26 +45,29 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v46-syst-ev-family-template-transfer-guardrail",
-  "last_progress_token": "v46-ev-family-template-transfer-guardrail-local-uncommitted",
+  "last_material_event_id": "lane-a-v47-syst-ev-family-variant-divergence-guardrail-push-ready",
+  "last_progress_token": "v47-ev-family-syst-variant-divergence-guardrail-local-commit",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
+    "commit": "local checkpoint commit containing this event; inspect git rev-parse HEAD",
     "files_touched": [
       "native_ev/data/sourced_ev_systems.json",
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_model.py",
       "native_ev/tests/test_scenario_eval.py",
-      "tools/extract_ev_system_semantics.py"
+      "tools/extract_ev_system_semantics.py",
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
     ],
-    "packet": "lane-a-v46-syst-ev-family-template-transfer-guardrail",
-    "promotion_status": "not-promoted negative oracle only; EV-family template evidence may guide search terms but cannot promote EV Classic syst offsets, field widths, NavDef/population/government/message/hazard/interference/visibility semantics, Con6-Con16 split placement, coordinate display units, named topology, or runtime universe replacement",
-    "publication_status": "local uncommitted worker changes; branch was already ahead of origin/main and push remains integration-owner gated",
-    "summary": "Lane A v46 records EV-family/Nova/Override TMPL and resource-editor workflows as a transfer guardrail only, not a Classic syst byte-offset oracle, nested under the template-source availability gap.",
+    "packet": "lane-a-v47-syst-ev-family-variant-divergence-guardrail",
+    "promotion_status": "not-promoted negative oracle only; EV-family variant field-count/reference divergence may guide Classic search terms but cannot promote EV Classic syst byte offsets, field widths, visibility/population/NavDef/tail semantics, Con6-Con16 split placement, coordinate display units, named topology, or runtime universe replacement",
+    "publication_status": "local checkpoint commit; branch remains ahead of origin/main and push is integration-owner gated for this worker",
+    "summary": "Lane A v47 records Classic/Override/Nova syst field-family divergences as an executable transfer guardrail: Override widens VisBit and adds AlwaysPers, Nova expands NavDef/DudeTypes and adds tail fields, so EV-family references cannot be transposed into EV Classic unresolved syst offsets.",
     "verifiers": [
       {
         "command": "python3 tools/extract_ev_system_semantics.py",
-        "result": "passed; systems=67 method=...resedit-template-source-availability-gap-ev-family-template-transfer-guardrail...levo-name-map-v46"
+        "result": "passed; systems=67 method=...ev-family-syst-variant-divergence-guardrail...levo-name-map-v47"
       },
       {
         "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
@@ -72,31 +75,26 @@
       },
       {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; recorded_syst_ev_family_template_transfer_guardrail passed"
+        "result": "passed; recorded_syst_ev_family_variant_divergence_guardrail passed"
       },
       {
         "command": "python3 -m unittest discover native_ev/tests -v",
         "result": "passed; Ran 284 tests OK"
       },
       {
-        "command": "python3 -m unittest discover -v",
-        "result": "failed; root discovery found 0 tests in this checkout (use native_ev/tests discovery instead)"
-      },
-      {
-        "command": "npm test -- --runInBand",
-        "result": "failed; no package.json exists at repo root under this WSL path, so npm/Vite test surface is unavailable for this checkout"
+        "command": "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check",
+        "result": "passed; BACKLOG DISPATCH INDEX OK"
       }
     ]
   },
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method=...resedit-template-source-availability-gap-ev-family-template-transfer-guardrail...levo-name-map-v46",
+    "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method=...ev-family-syst-variant-divergence-guardrail...levo-name-map-v47",
     "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> passed; Ran 2 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_syst_ev_family_template_transfer_guardrail passed",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> passed; recorded_syst_ev_family_variant_divergence_guardrail passed",
     "python3 -m unittest discover native_ev/tests -v -> passed; Ran 284 tests OK",
-    "python3 -m unittest discover -v -> failed; root discovery found 0 tests in this checkout (use native_ev/tests discovery instead)",
-    "npm test -- --runInBand -> failed; no package.json exists at repo root under this WSL path, so npm/Vite test surface is unavailable for this checkout"
+    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> passed; BACKLOG DISPATCH INDEX OK"
   ],
-  "next_resume_action": "Continue Lane A only with stronger Classic oracles: recover exact EV Classic syst TMPL/ResEdit/template or source-level struct offsets, capture runtime probes for NavDef/population/government/message/hazard/interference/visibility/Con6-Con16, complete Classic name/order oracle, route/map label evidence, or coordinate display calibration before promoting blocked semantics. Current v46 EV-family template-transfer guardrail is local/uncommitted and should be reviewed/checkpointed by integration owner with existing ahead-of-origin work.",
+  "next_resume_action": "Integration owner should review local main, push normally, fetch origin, verify HEAD equals origin/main, then continue Lane A only with stronger Classic oracles: exact EV Classic syst TMPL/ResEdit/template or source-level struct offsets, original-runtime probes for NavDef/population/government/message/hazard/interference/visibility/Con6-Con16, complete Classic name/order oracle, route/map label evidence, or coordinate display calibration before promoting blocked semantics.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -182,5 +180,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T19:13:10Z"
+  "updated_at": "2026-06-10T19:27:33Z"
 }
