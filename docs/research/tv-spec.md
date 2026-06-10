@@ -311,11 +311,11 @@ For each actionable backlog item with `touched_surfaces`, the dispatch checker r
 
 Commit/push is a durability or coordination action, not the unit of development. Do not commit/push merely because a coherent local slice completed.
 
-Checkpoint policy decides when remote publication is needed; role policy decides who may publish. A normal non-force push is not human-gated under existing repo policy, but only the integration owner performs the push.
+Checkpoint policy decides when remote publication has coordination or durability value; role policy decides who may publish. A normal coherent non-force push is not human-gated under existing repo policy, but only the integration owner performs the push.
 
-Workers/continuous runners may checkpoint locally when this policy triggers, but they do not push. When remote publication is needed, a worker records `push_ready` with commit SHA, intended files, verification commands/results, and remaining next action, then continues safe local work when possible or stops at a real gate/cap/no-safe-slice boundary. Missing GitHub credentials in a worker are not a TV development gate.
+Workers/continuous runners may checkpoint locally when this policy triggers, but they do not push. A worker does not stop merely because local `main` is ahead of `origin/main`. When remote publication is actually needed, a worker records `push_ready` with commit SHA, intended files, verification commands/results, why remote state is needed, and remaining next action, then continues safe local work when possible. A worker stops only at a real gate, cap/handoff boundary, unsafe dirty state, failed verifier, or no-safe-local-slice boundary. Missing GitHub credentials in a worker are not a TV development gate.
 
-The integration owner performs final status/diff review, runs required checkpoint verification, pushes normal non-force bundles, fetches, verifies local `HEAD == origin/main`, and records the pushed checkpoint.
+The integration owner performs final status/diff review, runs required checkpoint verification, pushes normal non-force bundles, fetches, verifies local `HEAD == origin/main`, and records the pushed checkpoint. Integration is event-triggered: publish as infrequently as possible while preventing worker blockage, stale coordination, context/reset loss, or inspection-expensive local divergence. Do not push by maximum-frequency cadence, per-commit habit, or arbitrary commit-count batching. One clean commit may be pushed immediately if it unblocks another lane; several adjacent commits may remain local when no one is blocked and the stack remains coherent and easy to inspect.
 
 Run the full checkpoint procedure only when one of these is true:
 
@@ -325,7 +325,8 @@ Run the full checkpoint procedure only when one of these is true:
 - a risky/destructive/original-runtime step is about to begin and the repo needs a rollback anchor;
 - another worker/session needs the work from the remote;
 - work changes project-governing docs/spec/backlog in a way that future sessions are likely to rely on before the next natural checkpoint;
-- local work has accumulated enough that losing it would be painful.
+- local work has accumulated enough that losing it would be painful or reviewing it later would become inspection-expensive;
+- a recorded `push_ready` state is blocking another card/lane and standard normal-push checks pass.
 
 Otherwise, keep the slice verified locally and continue. Fidelity discipline comes from source labels, verifiers, and backlog/provenance updates, not from remote publication after every slice.
 
@@ -373,7 +374,9 @@ Gated:
 Not gated:
 
 - ordinary safe-local TV development in the current session;
-- normal coherent non-force TV pushes by the integration owner under the existing repo policy.
+- local branch-ahead state by itself;
+- worker `push_ready` records that identify normal remote-publication need without unsafe state;
+- normal coherent non-force TV pushes by the integration owner under the existing repo policy after standard status/remotes/branch, intended-file, sensitive-value, relevant-verifier, push, fetch, and `HEAD == origin/main` checks.
 
 ## Completion definition
 
