@@ -157,13 +157,14 @@ Follow-up action after explicit user request to eliminate the cron fallback:
 
 - Removed cron job `5430276bcaa5` (`Terminal Velocity tv-spec implementation loop`).
 - Removed cron job `58592dca0042` (`Terminal Velocity autonomous blocked-run repair loop`).
-- Updated `task-ledger.json` so `runner.cron_fallback_state` is `eliminated; no LLM implementation or autonomous repair cron fallback is retained`.
-- Replaced `replaces_paused_cron_job_id` with `removed_cron_fallback_job_ids: [5430276bcaa5, 58592dca0042]`.
+- Removed cron job `72e736287129` (`Terminal Velocity Kanban watchdog/coordinator (quiet local)`) because it was a coordinator/dispatch cron surface, not just passive reporting.
+- Updated `task-ledger.json` so `runner.cron_fallback_state` is `eliminated; no implementation, autonomous repair, watchdog/coordinator, or dispatch cron fallback is retained`.
+- Replaced `replaces_paused_cron_job_id` with `removed_cron_fallback_job_ids: [5430276bcaa5, 58592dca0042, 72e736287129]`.
 - Set ledger `status` to `stopped_by_user_control_plane_quieting`.
 - Appended `runner-cron-fallback-eliminated` to `events.jsonl` and verified JSONL repair/parse through the one-shot local script output `repaired_events_jsonl=true lines=160`.
-- `cronjob list` after cleanup shows only two TV cron jobs remaining, both paused/no-agent script surfaces: `72e736287129` quiet local watchdog and `4e9cc82d1a99` slice reporter.
+- `cronjob list` after final cleanup shows only one TV cron job remaining: `4e9cc82d1a99` paused no-agent slice reporter.
 
-Status after fallback elimination: no LLM implementation/autonomous repair cron fallback remains listed. Remaining cron surfaces are paused no-agent scripts, not implementation fallbacks.
+Status after fallback elimination: no implementation, autonomous repair, watchdog/coordinator, or dispatch cron fallback remains listed. The remaining cron surface is a paused no-agent slice reporter, not an implementation fallback.
 
 ## Fix-through checklist
 
