@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v26':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v27':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -491,6 +491,24 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display quantization has unexpected y offstep resource ids')
     if 'not-promoted' not in display_quantization.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate display quantization must not promote display units')
+    display_scale_interpretation = data.get('coordinateDisplayScaleInterpretationSummary', {})
+    if display_scale_interpretation.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-scale-interpretation-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display scale interpretation source label')
+    if display_scale_interpretation.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display scale interpretation should keep display scaling pending')
+    if 'candidate-family comparison without Classic map-pixel promotion' not in display_scale_interpretation.get('candidateFamilies', []):
+        raise ValueError('sourced EV systems manifest coordinate display scale interpretation missing candidate family')
+    if display_scale_interpretation.get('fixedPointDivisorCandidate') != 65536:
+        raise ValueError('sourced EV systems manifest coordinate display scale interpretation has unexpected divisor')
+    scale_spans = display_scale_interpretation.get('spanComparisons', {})
+    if scale_spans.get('signedLongAxisSpanRatioYOverX') != 33.281999 or scale_spans.get('fixedPointAxisSpanRatioYOverX') != 33.281996:
+        raise ValueError('sourced EV systems manifest coordinate display scale interpretation has unexpected signed/fixed ratio')
+    if scale_spans.get('rawHighWordAxisSpanRatioYOverX') != 44.333333:
+        raise ValueError('sourced EV systems manifest coordinate display scale interpretation has unexpected raw high-word ratio')
+    if 'no Classic map pixel/click/capture evidence in this static packet' not in display_scale_interpretation.get('scalePromotionBlockers', []):
+        raise ValueError('sourced EV systems manifest coordinate display scale interpretation missing map evidence blocker')
+    if 'not-promoted' not in display_scale_interpretation.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display scale interpretation must not promote display units')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')

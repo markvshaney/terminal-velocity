@@ -1,9 +1,9 @@
 {
   "active_gate": {
-    "type": "push_auth_unavailable",
-    "reason": "git push origin main failed because GitHub HTTPS credentials are unavailable in the headless worker; gh is not logged in and SSH auth is not configured",
-    "withheld_action": "Push local main through the current local HEAD to origin/main (currently ee45cab5a0303e4aefdcf793ab7ec3e075ae16e6) and verify HEAD == origin/main.",
-    "resume_after": "GitHub HTTPS credentials are available in the worker environment or a human/authorized runner pushes local main normally."
+    "reason": null,
+    "resume_after": null,
+    "type": null,
+    "withheld_action": null
   },
   "created_at": "2026-06-09T14:48:45Z",
   "do_not_redo": [
@@ -40,20 +40,20 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T04:50:29Z",
+  "last_material_event_id": "2026-06-10T05:00:27Z",
   "last_progress_token": "e0ce453abc1a85f193c942831bf14e5f02ddc74bb518865daece974cbcf97641",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
-  "last_verification_summary": "Local main is ahead of origin/main by 3 commits; normal push was retried and is gated by unavailable GitHub HTTPS/SSH credentials.",
+  "last_verification_summary": "Lane A v27 coordinate display scale-interpretation blocker/comparison summary added; static topology readiness exposes pending display-unit/map-scaling evidence; 271 native_ev model/scenario tests pass.",
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...coordinate-display-quantization...v26",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> Ran 3 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success True; recorded_coordinate_display_quantization_summary passed; failed_checks {}",
-    "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...coordinate-display-scale-interpretation...v27",
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> Ran 2 tests OK",
     "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> Ran 271 tests OK",
     "python3 tools/extract_ev_system_semantics.py --out <tmp> && cmp <tmp> native_ev/data/sourced_ev_systems.json -> extractor_cmp_ok",
-    "git diff --check plus task-ledger/events JSON/JSONL parse -> OK"
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success True; failed_checks {}",
+    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "task-ledger/events JSON/JSONL parse plus git diff --check -> OK"
   ],
-  "next_resume_action": "After GitHub push credentials are available, run git push origin main, fetch origin/main, verify HEAD == origin/main, then create the next Terminal Velocity continuation Kanban task for remaining Lane A display-unit/map-scaling interpretation plus exact record-to-name/runtime topology mapping.",
+  "next_resume_action": "Continue Lane A from live origin/main after the v27 coordinate display scale-interpretation checkpoint: next adjacent safe increment is exact record-to-name/runtime topology mapping or additional display-unit/map-scaling evidence only if backed by Classic runtime/source proof; keep coordinate_display_units_map_scaling_pending until then.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -132,11 +132,11 @@
     "rule": "Source/fidelity findings and task state must be recorded in repo docs/checklists/ledger with explicit provenance labels, not left only in chat.",
     "workflow_spec": "docs/research/tv-spec.md is the canonical compact workflow spec."
   },
-  "status": "waiting_gate",
+  "status": "checkpointed_not_scheduled",
   "task_id": "tv-spec-implementation",
   "tool_caps_policy": {
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T04:50:29Z"
+  "updated_at": "2026-06-10T05:00:27Z"
 }

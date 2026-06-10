@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v26",
+  "method": "ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v27",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -2041,6 +2041,37 @@
     },
     "displayUnitInterpretationStatus": "not-promoted; residual quantization and coarse-grid candidates are analysis inputs for later Classic map projection, centering, axis orientation, and pixel-scale evidence",
     "sourceNote": "This summarizes decoded low-word coordinate residuals as quantization/grid-step candidates. The y-axis has many residuals aligned to a 4096/65536 step, while x-axis residuals remain mostly fine-grained; this is analysis input only and does not claim EV Classic map pixels, projection, centering, axis orientation, route UI behavior, or exact remaining system-name joins."
+  },
+  "coordinateDisplayScaleInterpretationSummary": {
+    "sourceLabel": "decoded-resource-backed-coordinate-display-scale-interpretation-scout",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "recordCount": 67,
+    "fixedPointDivisorCandidate": 65536,
+    "candidateFamilies": [
+      "candidate-family comparison without Classic map-pixel promotion",
+      "signed-long and fixed-point span/aspect-ratio comparison",
+      "static-source promotion blocker ledger for display-unit/map-scaling interpretation"
+    ],
+    "spanComparisons": {
+      "signedLongAxisSpanRatioYOverX": 33.281999,
+      "fixedPointAxisSpanRatioYOverX": 33.281996,
+      "rawHighWordAxisSpanRatioYOverX": 44.333333,
+      "rawLowWordAxisSpanRatioYOverX": 401.568627
+    },
+    "quantizationComparison": {
+      "xResidualGcdCandidate": 1,
+      "yResidualGcdCandidate": 1,
+      "yCoarseGridAlignedResourceCount": 59,
+      "xCoarseGridAlignedResourceCount": 0
+    },
+    "scalePromotionBlockers": [
+      "no Classic map pixel/click/capture evidence in this static packet",
+      "candidate families disagree on x/y aspect ratio and unit interpretation",
+      "remaining 66 system record-to-name joins are unpromoted",
+      "route UI ordering and projection remain unobserved"
+    ],
+    "displayUnitInterpretationStatus": "not-promoted; static coordinate scale candidates are compared and blockers are explicit, but Classic display units/map scaling require map-pixel/projection or accepted surrogate evidence",
+    "sourceNote": "This compares decoded Resource Bible xPos/yPos candidate families already preserved in the manifest. It deliberately records why display-unit/map-scaling remains unpromoted instead of inferring Classic map pixels, projection, centering, axis orientation, route UI behavior, or full runtime topology from static data alone."
   },
   "coordinateDisplayExtremaSummary": {
     "sourceLabel": "decoded-resource-backed-coordinate-display-extrema-scout",
@@ -21446,5 +21477,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }

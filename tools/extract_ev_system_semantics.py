@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v26'
+METHOD = 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v27'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -542,6 +542,47 @@ def _coordinate_display_quantization_summary(systems: list[dict]) -> dict:
         'yPos': _axis_summary('yPos'),
         'displayUnitInterpretationStatus': 'not-promoted; residual quantization and coarse-grid candidates are analysis inputs for later Classic map projection, centering, axis orientation, and pixel-scale evidence',
         'sourceNote': 'This summarizes decoded low-word coordinate residuals as quantization/grid-step candidates. The y-axis has many residuals aligned to a 4096/65536 step, while x-axis residuals remain mostly fine-grained; this is analysis input only and does not claim EV Classic map pixels, projection, centering, axis orientation, route UI behavior, or exact remaining system-name joins.',
+    }
+
+
+def _coordinate_display_scale_interpretation_summary(systems: list[dict]) -> dict:
+    """Compare coordinate-scale candidates and preserve promotion blockers."""
+    bounds = _coordinate_display_bounds_summary(systems)
+    transform = _coordinate_display_transform_summary(systems)
+    fixed_point = _coordinate_display_fixed_point_summary(systems)
+    quantization = _coordinate_display_quantization_summary(systems)
+    raw_high_x_span = bounds['xPos']['rawHighWordCandidateSpan']
+    raw_high_y_span = bounds['yPos']['rawHighWordCandidateSpan']
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-scale-interpretation-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'recordCount': len(systems),
+        'fixedPointDivisorCandidate': fixed_point['fixedPointDivisorCandidate'],
+        'candidateFamilies': [
+            'candidate-family comparison without Classic map-pixel promotion',
+            'signed-long and fixed-point span/aspect-ratio comparison',
+            'static-source promotion blocker ledger for display-unit/map-scaling interpretation',
+        ],
+        'spanComparisons': {
+            'signedLongAxisSpanRatioYOverX': transform['signedLongAxisSpanRatioYOverX'],
+            'fixedPointAxisSpanRatioYOverX': fixed_point['fixedPointAxisSpanRatioYOverX'],
+            'rawHighWordAxisSpanRatioYOverX': round(raw_high_y_span / raw_high_x_span, 6) if raw_high_x_span else None,
+            'rawLowWordAxisSpanRatioYOverX': round(bounds['yPos']['rawLowWordCandidateSpan'] / bounds['xPos']['rawLowWordCandidateSpan'], 6) if bounds['xPos']['rawLowWordCandidateSpan'] else None,
+        },
+        'quantizationComparison': {
+            'xResidualGcdCandidate': quantization['xPos']['absoluteResidualGcdCandidate'],
+            'yResidualGcdCandidate': quantization['yPos']['absoluteResidualGcdCandidate'],
+            'yCoarseGridAlignedResourceCount': quantization['yPos']['coarseGridAlignedResourceCount'],
+            'xCoarseGridAlignedResourceCount': quantization['xPos']['coarseGridAlignedResourceCount'],
+        },
+        'scalePromotionBlockers': [
+            'no Classic map pixel/click/capture evidence in this static packet',
+            'candidate families disagree on x/y aspect ratio and unit interpretation',
+            'remaining 66 system record-to-name joins are unpromoted',
+            'route UI ordering and projection remain unobserved',
+        ],
+        'displayUnitInterpretationStatus': 'not-promoted; static coordinate scale candidates are compared and blockers are explicit, but Classic display units/map scaling require map-pixel/projection or accepted surrogate evidence',
+        'sourceNote': 'This compares decoded Resource Bible xPos/yPos candidate families already preserved in the manifest. It deliberately records why display-unit/map-scaling remains unpromoted instead of inferring Classic map pixels, projection, centering, axis orientation, route UI behavior, or full runtime topology from static data alone.',
     }
 
 
@@ -1260,6 +1301,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDisplayResidualSignSummary': _coordinate_display_residual_sign_summary(systems),
         'coordinateDisplayResidualMagnitudeSummary': _coordinate_display_residual_magnitude_summary(systems),
         'coordinateDisplayQuantizationSummary': _coordinate_display_quantization_summary(systems),
+        'coordinateDisplayScaleInterpretationSummary': _coordinate_display_scale_interpretation_summary(systems),
         'coordinateDisplayExtremaSummary': _coordinate_display_extrema_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),

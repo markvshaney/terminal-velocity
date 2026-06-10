@@ -1815,6 +1815,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_residual_sign_summary',
             'recorded_coordinate_display_residual_magnitude_summary',
             'recorded_coordinate_display_quantization_summary',
+            'recorded_coordinate_display_scale_interpretation_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -1917,6 +1918,16 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayQuantizationYCoarseGridAlignedResourceCount'], 59)
         self.assertEqual(readiness['coordinateDisplayQuantizationYCoarseGridOffstepResourceIds'], [166, 167, 168, 169, 170, 172, 183, 186])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayQuantizationSourceLabel'], 'decoded-resource-backed-coordinate-display-quantization-scout')
+        self.assertEqual(readiness['coordinateDisplayScaleInterpretationSourceLabel'], 'decoded-resource-backed-coordinate-display-scale-interpretation-scout')
+        self.assertEqual(readiness['coordinateDisplayScaleInterpretationOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('candidate-family comparison without Classic map-pixel promotion', readiness['coordinateDisplayScaleInterpretationCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayScaleInterpretationFixedPointDivisor'], 65536)
+        self.assertEqual(readiness['coordinateDisplayScaleInterpretationSpanRatios']['signedLongAxisSpanRatioYOverX'], 33.281999)
+        self.assertEqual(readiness['coordinateDisplayScaleInterpretationSpanRatios']['fixedPointAxisSpanRatioYOverX'], 33.281996)
+        self.assertEqual(readiness['coordinateDisplayScaleInterpretationSpanRatios']['rawHighWordAxisSpanRatioYOverX'], 44.333333)
+        self.assertIn('no Classic map pixel/click/capture evidence in this static packet', readiness['coordinateDisplayScaleInterpretationPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['coordinateDisplayScaleInterpretationStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayScaleInterpretationSourceLabel'], 'decoded-resource-backed-coordinate-display-scale-interpretation-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])
