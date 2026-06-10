@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v22'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v23'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -390,6 +390,55 @@ def _coordinate_display_integer_band_summary(systems: list[dict]) -> dict:
         'resource129': _resource_values(129),
         'displayUnitInterpretationStatus': 'not-promoted; integer-band and fractional-residual candidates are analysis inputs for later Classic map projection, centering, axis orientation, and pixel-scale evidence',
         'sourceNote': 'This decomposes decoded coordinate word pairs as 16.16-style integer-band and signed fractional-residual candidates. It preserves display-scale analysis inputs only and does not claim EV Classic map pixels, projection, centering, axis orientation, route UI behavior, or exact remaining system-name joins.',
+    }
+
+
+def _coordinate_display_residual_sign_summary(systems: list[dict]) -> dict:
+    """Preserve signed low-word residual distributions without promoting map scale."""
+    divisor = 65536
+
+    def _axis_summary(axis: str) -> dict:
+        low_words = [system['semanticFields']['mapCoordinates'][axis]['rawWords'][1] for system in systems]
+        distinct_values = sorted(set(low_words))
+        return {
+            'signedFractionalResidualCandidateDistinctValues': distinct_values,
+            'signedFractionalResidualCandidateRange': [min(low_words), max(low_words)],
+            'signedFractionalResidualSignDistribution': {
+                'negative': len([value for value in low_words if value < 0]),
+                'zero': len([value for value in low_words if value == 0]),
+                'positive': len([value for value in low_words if value > 0]),
+            },
+            'fractionalUnitCandidateDistinctValues': [
+                round(value / divisor, 6)
+                for value in distinct_values
+            ],
+        }
+
+    def _resource_values(resource_id: int) -> dict:
+        system = next(system for system in systems if system['resourceId'] == resource_id)
+        coordinates = system['semanticFields']['mapCoordinates']
+        return {
+            'resourceId': resource_id,
+            'xPosFractionalUnitCandidate': round(coordinates['xPos']['rawWords'][1] / divisor, 6),
+            'yPosFractionalUnitCandidate': round(coordinates['yPos']['rawWords'][1] / divisor, 6),
+        }
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-residual-sign-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'recordCount': len(systems),
+        'fixedPointDivisorCandidate': divisor,
+        'candidateFamilies': [
+            '16.16 low-word residual sign distribution candidate',
+            '16.16 low-word fractional-unit distinct value candidate',
+            'resource-level fractional-unit candidate examples',
+        ],
+        'xPos': _axis_summary('xPos'),
+        'yPos': _axis_summary('yPos'),
+        'resource128': _resource_values(128),
+        'resource129': _resource_values(129),
+        'displayUnitInterpretationStatus': 'not-promoted; residual-sign and fractional-unit candidates are analysis inputs for later Classic map projection, centering, axis orientation, and pixel-scale evidence',
+        'sourceNote': 'This summarizes signed low-word residual values as 16.16-style fractional-unit candidates. It preserves display-scale analysis inputs only and does not claim EV Classic map pixels, projection, centering, axis orientation, route UI behavior, or exact remaining system-name joins.',
     }
 
 
@@ -1042,6 +1091,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDisplayTransformSummary': _coordinate_display_transform_summary(systems),
         'coordinateDisplayFixedPointSummary': _coordinate_display_fixed_point_summary(systems),
         'coordinateDisplayIntegerBandSummary': _coordinate_display_integer_band_summary(systems),
+        'coordinateDisplayResidualSignSummary': _coordinate_display_residual_sign_summary(systems),
         'coordinateDisplayExtremaSummary': _coordinate_display_extrema_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),

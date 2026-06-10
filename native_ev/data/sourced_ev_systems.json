@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v22",
+  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v23",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -1379,6 +1379,111 @@
     },
     "displayUnitInterpretationStatus": "not-promoted; integer-band and fractional-residual candidates are analysis inputs for later Classic map projection, centering, axis orientation, and pixel-scale evidence",
     "sourceNote": "This decomposes decoded coordinate word pairs as 16.16-style integer-band and signed fractional-residual candidates. It preserves display-scale analysis inputs only and does not claim EV Classic map pixels, projection, centering, axis orientation, route UI behavior, or exact remaining system-name joins."
+  },
+  "coordinateDisplayResidualSignSummary": {
+    "sourceLabel": "decoded-resource-backed-coordinate-display-residual-sign-scout",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "recordCount": 67,
+    "fixedPointDivisorCandidate": 65536,
+    "candidateFamilies": [
+      "16.16 low-word residual sign distribution candidate",
+      "16.16 low-word fractional-unit distinct value candidate",
+      "resource-level fractional-unit candidate examples"
+    ],
+    "xPos": {
+      "signedFractionalResidualCandidateDistinctValues": [
+        -1,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        142,
+        143,
+        144,
+        145,
+        146,
+        148,
+        149,
+        152
+      ],
+      "signedFractionalResidualCandidateRange": [
+        -1,
+        152
+      ],
+      "signedFractionalResidualSignDistribution": {
+        "negative": 4,
+        "zero": 0,
+        "positive": 63
+      },
+      "fractionalUnitCandidateDistinctValues": [
+        -1.5e-05,
+        0.001953,
+        0.001968,
+        0.001984,
+        0.001999,
+        0.002014,
+        0.002029,
+        0.00206,
+        0.002075,
+        0.00209,
+        0.002106,
+        0.002121,
+        0.002136,
+        0.002167,
+        0.002182,
+        0.002197,
+        0.002213,
+        0.002228,
+        0.002258,
+        0.002274,
+        0.002319
+      ]
+    },
+    "yPos": {
+      "signedFractionalResidualCandidateDistinctValues": [
+        -32768,
+        1,
+        4096,
+        8192,
+        28672
+      ],
+      "signedFractionalResidualCandidateRange": [
+        -32768,
+        28672
+      ],
+      "signedFractionalResidualSignDistribution": {
+        "negative": 54,
+        "zero": 0,
+        "positive": 13
+      },
+      "fractionalUnitCandidateDistinctValues": [
+        -0.5,
+        1.5e-05,
+        0.0625,
+        0.125,
+        0.4375
+      ]
+    },
+    "resource128": {
+      "resourceId": 128,
+      "xPosFractionalUnitCandidate": 0.001953,
+      "yPosFractionalUnitCandidate": 0.0625
+    },
+    "resource129": {
+      "resourceId": 129,
+      "xPosFractionalUnitCandidate": 0.001953,
+      "yPosFractionalUnitCandidate": -0.5
+    },
+    "displayUnitInterpretationStatus": "not-promoted; residual-sign and fractional-unit candidates are analysis inputs for later Classic map projection, centering, axis orientation, and pixel-scale evidence",
+    "sourceNote": "This summarizes signed low-word residual values as 16.16-style fractional-unit candidates. It preserves display-scale analysis inputs only and does not claim EV Classic map pixels, projection, centering, axis orientation, route UI behavior, or exact remaining system-name joins."
   },
   "coordinateDisplayExtremaSummary": {
     "sourceLabel": "decoded-resource-backed-coordinate-display-extrema-scout",
@@ -20784,5 +20889,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }
