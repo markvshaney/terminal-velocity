@@ -64,7 +64,7 @@
     ],
     "source_fidelity_label": "original-runtime-route-label-probe-execution-gate",
     "promotion_status": "not-promoted execution gate only; no original-runtime probing performed and no decoded resource-ID/name joins, named route topology, coordinate display units, non-topology syst semantics, or broad universe replacement promoted",
-    "publication_status": "local checkpoint pending commit; worker must not push and integration owner handles normal non-force publication after review/status/fetch/HEAD verification",
+    "publication_status": "local checkpoint commit 8c70ee6; branch remains ahead of origin/main and push is integration-owner gated for this worker",
     "verifiers": [
       {
         "command": "python3 tools/extract_ev_system_semantics.py",
@@ -90,7 +90,8 @@
         "command": "git diff --check",
         "result": "passed; no whitespace errors"
       }
-    ]
+    ],
+    "commit": "8c70ee62fb4909744341b9f05d972d922d19493a"
   },
   "last_verified_commands": [
     "python3 tools/extract_ev_system_semantics.py -> passed; systems=67 method includes route-label-probe-targeting and manifest includes runtimeRouteLabelProbeExecutionGateSummary",
@@ -100,7 +101,7 @@
     "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/dev/null; python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json >/dev/null; events JSONL parse -> passed; json checks passed",
     "git diff --check -> passed; no whitespace errors"
   ],
-  "next_resume_action": "Continue Lane A only with stronger Classic oracles or safe preparation for them: disposable non-Strict original-runtime route-label/click captures tied to decoded resource IDs or Con slots, complete name/order source, coordinate display calibration, or Classic syst field offset/runtime probes before promoting blocked semantics. Local v50 checkpoint must be reviewed/committed/published by the integration owner; worker must not push.",
+  "next_resume_action": "Integration owner should review local main checkpoint 8c70ee6, push normally, fetch origin, verify HEAD equals origin/main, then continue Lane A only with stronger Classic oracles or safe preparation for them: disposable non-Strict original-runtime route-label/click captures tied to decoded resource IDs or Con slots, complete name/order source, coordinate display calibration, or Classic syst field offset/runtime probes before promoting blocked semantics.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "no active implementation runner; cron fallback eliminated. Future TV implementation must use a single explicitly started continuous Kanban/background runner, with cron limited to quiet no-agent health/reporting only if separately approved.",
   "repo": {
@@ -189,5 +190,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T20:15:47Z"
+  "updated_at": "2026-06-10T20:17:02Z"
 }
