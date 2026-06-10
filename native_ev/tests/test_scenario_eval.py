@@ -1817,6 +1817,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_candidate_graph_distance_summary',
             'recorded_start_system_candidate_topology_summary',
             'recorded_start_neighborhood_display_transform_summary',
+            'recorded_start_neighborhood_display_distance_summary',
+            'recorded_start_neighborhood_display_vector_summary',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
@@ -1918,6 +1920,16 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['startNeighborhoodDisplayDistanceNonSelfSignedLongRange'], [69632, 8425473])
         self.assertEqual(readiness['startNeighborhoodDisplayDistanceNonSelfInvertedYUnitRange'], [0.250593, 1.4514])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodDisplayDistanceSourceLabel'], 'decoded-resource-backed-start-neighborhood-display-distance-scout')
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorSourceLabel'], 'decoded-resource-backed-start-neighborhood-display-vector-scout')
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('start-neighborhood display quadrant candidates', readiness['startNeighborhoodDisplayVectorCandidateFamilies'])
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorNeighborResourceIds'], [128, 129, 130, 131])
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorNeighbor129Quadrant'], 'north-east')
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorNeighbor129DominantAxis'], 'y')
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorNeighbor131Angle'], -0.107663)
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorNonSelfQuadrants'], ['north-east', 'south-east'])
+        self.assertEqual(readiness['startNeighborhoodDisplayVectorNonSelfDominantAxisDistribution'], {'x': 1, 'y': 2})
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodDisplayVectorSourceLabel'], 'decoded-resource-backed-start-neighborhood-display-vector-scout')
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
         self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')

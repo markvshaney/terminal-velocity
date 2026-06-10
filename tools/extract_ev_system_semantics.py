@@ -11,14 +11,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v17'
+METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v18'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -671,6 +672,69 @@ def _start_neighborhood_display_distance_summary(systems: list[dict]) -> dict:
     }
 
 
+def _display_quadrant(delta_x: float, delta_inverted_y: float) -> str:
+    if delta_x == 0 and delta_inverted_y == 0:
+        return 'self'
+    horizontal = 'east' if delta_x > 0 else 'west' if delta_x < 0 else 'center'
+    vertical = 'north' if delta_inverted_y > 0 else 'south' if delta_inverted_y < 0 else 'center'
+    return '-'.join(part for part in [vertical, horizontal] if part != 'center')
+
+
+def _start_neighborhood_display_vector_summary(systems: list[dict]) -> dict:
+    """Summarize start-neighborhood display vector candidates without promotion."""
+    start_distance = _start_neighborhood_display_distance_summary(systems)
+
+    vector_neighbors = []
+    for neighbor in start_distance['linkedNeighbors']:
+        delta_unit = neighbor['deltaUnitIntervalCandidate']
+        delta_x = delta_unit['xPos']
+        delta_y_inverted = delta_unit['invertedYPos']
+        euclidean = round(math.hypot(delta_x, delta_y_inverted), 6)
+        signed_angle = None if euclidean == 0 else round(math.degrees(math.atan2(delta_y_inverted, delta_x)), 6)
+        dominant_axis = 'self'
+        if euclidean != 0:
+            dominant_axis = 'x' if abs(delta_x) >= abs(delta_y_inverted) else 'y'
+        vector_neighbors.append({
+            'slotName': neighbor['slotName'],
+            'targetResourceId': neighbor['targetResourceId'],
+            'targetExactSystemName': neighbor['targetExactSystemName'],
+            'targetNameJoinStatus': neighbor['targetNameJoinStatus'],
+            'deltaInvertedYUnitIntervalCandidate': {
+                'xPos': delta_x,
+                'yPos': delta_y_inverted,
+            },
+            'euclideanInvertedYUnitIntervalCandidate': euclidean,
+            'signedAngleDegreesFromPositiveXCandidate': signed_angle,
+            'displayQuadrantCandidate': _display_quadrant(delta_x, delta_y_inverted),
+            'dominantAxisCandidate': dominant_axis,
+        })
+
+    non_self_vectors = [
+        neighbor for neighbor in vector_neighbors
+        if neighbor['targetResourceId'] != start_distance['startResourceId']
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-start-neighborhood-display-vector-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'startResourceId': start_distance['startResourceId'],
+        'startExactSystemName': start_distance['startExactSystemName'],
+        'candidateFamilies': [
+            'start-neighborhood inverted-y unit-vector candidates',
+            'start-neighborhood display quadrant candidates',
+            'start-neighborhood signed-angle candidates',
+            'start-neighborhood dominant-axis candidates',
+        ],
+        'linkedNeighborCount': len(vector_neighbors),
+        'linkedNeighbors': vector_neighbors,
+        'nonSelfDisplayQuadrantCandidates': sorted({neighbor['displayQuadrantCandidate'] for neighbor in non_self_vectors}),
+        'nonSelfDominantAxisDistribution': {
+            axis: len([neighbor for neighbor in non_self_vectors if neighbor['dominantAxisCandidate'] == axis])
+            for axis in sorted({neighbor['dominantAxisCandidate'] for neighbor in non_self_vectors})
+        },
+        'sourceNote': 'This converts the decoded Levo/resource 128 neighbor display-distance candidates into non-promoted vector, quadrant, signed-angle, and dominant-axis candidates for later map-projection comparison. It does not claim EV Classic map pixels, distance formula, projection, centering, axis orientation, exact target system names, route UI behavior, or broad runtime topology.',
+    }
+
+
 def _system_name_seed_summary(names: dict) -> dict:
     """Summarize heuristic name seeds without claiming record-to-name joins."""
     system_seeds = names.get('systemNames', [])
@@ -779,6 +843,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'startSystemCandidateTopologySummary': _start_system_candidate_topology_summary(systems),
         'startNeighborhoodDisplayTransformSummary': _start_neighborhood_display_transform_summary(systems),
         'startNeighborhoodDisplayDistanceSummary': _start_neighborhood_display_distance_summary(systems),
+        'startNeighborhoodDisplayVectorSummary': _start_neighborhood_display_vector_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)
