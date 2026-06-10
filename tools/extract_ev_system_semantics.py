@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v42'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v43'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and source provenance are promoted; coordinate display units/map scaling/projection, remaining exact system names, named route topology, services, hazards, governments, ports, and broad runtime universe replacement are explicitly not promoted yet'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -1695,6 +1695,7 @@ def _resource_bible_syst_sequential_field_projection_summary(run: dict) -> dict:
     width_budget = {
         'sourceLabel': 'resource-bible-backed-syst-field-count-budget-negative-oracle',
         'recordWords': run.get('recordSize') // 2 if run.get('recordSize') else None,
+        'recordBytes': run.get('recordSize'),
         'resourceBibleSequentialFieldFamilies': [
             {'fieldFamily': 'xPos/yPos map coordinates', 'sourceFieldCount': 2, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 931-932'},
             {'fieldFamily': 'Con1-Con5 front hyperspace links', 'sourceFieldCount': 5, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 933-937'},
@@ -1704,6 +1705,31 @@ def _resource_bible_syst_sequential_field_projection_summary(run: dict) -> dict:
             {'fieldFamily': 'Con6-Con16 additional hyperspace links', 'sourceFieldCount': 11, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 985-989'},
         ],
         'sourceFieldCountTotal': 36,
+        'byteSizePaddingGapSummary': {
+            'sourceLabel': 'resource-bible-backed-syst-byte-size-padding-gap-negative-oracle',
+            'recordBytes': run.get('recordSize'),
+            'sourceFieldCountTotal': 36,
+            'projectedByteBudgetCandidates': [
+                {
+                    'candidate': 'all Resource Bible syst fields interpreted as 16-bit words',
+                    'projectedBytesUsed': 72,
+                    'unassignedPaddingByteCount': (run.get('recordSize') - 72) if run.get('recordSize') else None,
+                    'promotionStatus': 'not-promoted; leaves sixteen record bytes unassigned and conflicts with promoted 32-bit coordinate raw-word evidence',
+                },
+                {
+                    'candidate': '32-bit xPos/yPos plus remaining Resource Bible syst fields as 16-bit words',
+                    'projectedBytesUsed': 76,
+                    'unassignedPaddingByteCount': (run.get('recordSize') - 76) if run.get('recordSize') else None,
+                    'promotionStatus': 'not-promoted; leaves twelve record bytes unassigned and does not identify downstream byte offsets',
+                },
+            ],
+            'budgetStatus': 'blocked; byte-size arithmetic proves a padding/width gap but cannot assign offsets or runtime semantics',
+            'promotionBlockers': [
+                '88-byte decoded syst records cannot be fully explained by Resource Bible field counts under either all-16-bit or 32-bit-coordinate projections',
+                'byte-size padding gaps cannot identify which unresolved words are padding, bitfields, packed fields, or runtime semantics',
+                'byte-size arithmetic must not promote NavDef, population, government, message, hazards, visibility, or Con6-Con16 placement without an offset/runtime oracle',
+            ],
+        },
         'projectedWordBudgetCandidates': [
             {
                 'candidate': '16-bit xPos/yPos plus 16-bit downstream fields',

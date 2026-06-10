@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v42':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v43':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -401,6 +401,18 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest sequential projection missing field-count budget negative oracle')
     if field_count_budget.get('recordWords') != 44 or field_count_budget.get('sourceFieldCountTotal') != 36:
         raise ValueError('sourced EV systems manifest field-count budget has unexpected record/source counts')
+    byte_size_gap = field_count_budget.get('byteSizePaddingGapSummary', {})
+    if byte_size_gap.get('sourceLabel') != 'resource-bible-backed-syst-byte-size-padding-gap-negative-oracle':
+        raise ValueError('sourced EV systems manifest field-count budget missing byte-size padding gap oracle')
+    if byte_size_gap.get('recordBytes') != 88 or byte_size_gap.get('sourceFieldCountTotal') != 36:
+        raise ValueError('sourced EV systems manifest byte-size padding gap has unexpected record/source counts')
+    byte_candidates = {entry.get('candidate'): entry for entry in byte_size_gap.get('projectedByteBudgetCandidates', [])}
+    if byte_candidates.get('all Resource Bible syst fields interpreted as 16-bit words', {}).get('unassignedPaddingByteCount') != 16:
+        raise ValueError('sourced EV systems manifest byte-size padding gap changed all-16-bit padding count')
+    if byte_candidates.get('32-bit xPos/yPos plus remaining Resource Bible syst fields as 16-bit words', {}).get('unassignedPaddingByteCount') != 12:
+        raise ValueError('sourced EV systems manifest byte-size padding gap changed 32-bit-coordinate padding count')
+    if 'byte-size arithmetic must not promote NavDef' not in ' '.join(byte_size_gap.get('promotionBlockers', [])):
+        raise ValueError('sourced EV systems manifest byte-size padding gap missing promotion blocker')
     budget_candidates = {entry.get('candidate'): entry for entry in field_count_budget.get('projectedWordBudgetCandidates', [])}
     if budget_candidates.get('16-bit xPos/yPos plus 16-bit downstream fields', {}).get('unassignedTailWordCount') != 8:
         raise ValueError('sourced EV systems manifest field-count budget changed 16-bit tail count')
