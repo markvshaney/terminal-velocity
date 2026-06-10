@@ -128,7 +128,7 @@
   "resume_prompt": "Follow docs/prompts/tv-spec-implementation-long-task-prompt.md plus the continuous-runner overlay in ~/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh. One invocation may complete multiple adjacent safe increments. Optimize for development throughput: avoid default full-skill loads, avoid runner self-inspection, avoid routine ledger rewrites, and report externally only at material boundaries.",
   "runner": {
     "cli_flags": "chat -Q --source tv-spec-continuous-runner -t terminal,file,messaging -q <prompt>",
-    "cron_fallback_state": "eliminated; no LLM implementation or autonomous repair cron fallback is retained",
+    "cron_fallback_state": "eliminated; no implementation, autonomous repair, watchdog/coordinator, or dispatch cron fallback is retained",
     "delivery": "Telegram/progress only at material boundaries; local routine events under .hermes/long-running/tv-spec-implementation/events.jsonl and logs under .hermes/long-running/tv-spec-implementation/continuous-runner/",
     "enabled_toolsets": [
       "terminal",
@@ -140,7 +140,8 @@
     "profile": "loki-game",
     "removed_cron_fallback_job_ids": [
       "5430276bcaa5",
-      "58592dca0042"
+      "58592dca0042",
+      "72e736287129"
     ],
     "script": "/home/bh/.hermes/profiles/loki-game/scripts/tv_spec_continuous_runner.sh",
     "skill_loading_policy": "No default -s preload in continuous wrapper; prompt embeds standing contract. Load extra skills/docs only for uncovered surfaces, gates/process changes, or original-runtime/gameplay operator procedure.",
@@ -190,5 +191,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T20:17:02Z"
+  "updated_at": "2026-06-10T20:18:00Z"
 }
