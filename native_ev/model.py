@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v23':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v24':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -427,6 +427,31 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display residual-sign has unexpected resource 129 y fractional unit')
     if 'not-promoted' not in display_residual_sign.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate display residual-sign must not promote display units')
+    display_residual_magnitude = data.get('coordinateDisplayResidualMagnitudeSummary', {})
+    if display_residual_magnitude.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-residual-magnitude-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate display residual-magnitude source label')
+    if display_residual_magnitude.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude should keep display scaling pending')
+    if '16.16 low-word absolute residual magnitude candidate' not in display_residual_magnitude.get('candidateFamilies', []):
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude missing candidate family')
+    if display_residual_magnitude.get('fixedPointDivisorCandidate') != 65536:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected divisor')
+    if display_residual_magnitude.get('xPos', {}).get('absoluteResidualCandidateRange') != [1, 152]:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected x range')
+    if display_residual_magnitude.get('xPos', {}).get('absoluteResidualCandidateDistribution', {}).get('128') != 14:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected x 128 count')
+    if display_residual_magnitude.get('yPos', {}).get('absoluteResidualCandidateRange') != [1, 32768]:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected y range')
+    if display_residual_magnitude.get('yPos', {}).get('absoluteFractionalUnitCandidateDistinctValues') != [0.000015, 0.0625, 0.125, 0.4375, 0.5]:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected y absolute fractional units')
+    if display_residual_magnitude.get('yPos', {}).get('maxResidualMagnitudeResourceIds', [])[:3] != [129, 130, 132]:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected y max residual resources')
+    if display_residual_magnitude.get('resource128', {}).get('yPosAbsoluteFractionalUnitCandidate') != 0.0625:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected Levo y absolute fractional unit')
+    if display_residual_magnitude.get('resource129', {}).get('yPosAbsoluteFractionalUnitCandidate') != 0.5:
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude has unexpected resource 129 y absolute fractional unit')
+    if 'not-promoted' not in display_residual_magnitude.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display residual-magnitude must not promote display units')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')

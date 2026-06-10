@@ -1813,6 +1813,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_fixed_point_summary',
             'recorded_coordinate_display_integer_band_summary',
             'recorded_coordinate_display_residual_sign_summary',
+            'recorded_coordinate_display_residual_magnitude_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -1893,6 +1894,17 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['coordinateDisplayResidualSignResource128']['yPosFractionalUnitCandidate'], 0.0625)
         self.assertEqual(readiness['coordinateDisplayResidualSignResource129']['yPosFractionalUnitCandidate'], -0.5)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayResidualSignSourceLabel'], 'decoded-resource-backed-coordinate-display-residual-sign-scout')
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeSourceLabel'], 'decoded-resource-backed-coordinate-display-residual-magnitude-scout')
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('16.16 low-word absolute residual magnitude candidate', readiness['coordinateDisplayResidualMagnitudeCandidateFamilies'])
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeXRange'], [1, 152])
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeXDistribution']['128'], 14)
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeYRange'], [1, 32768])
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeYDistinctAbsoluteFractionalUnits'], [1.5e-05, 0.0625, 0.125, 0.4375, 0.5])
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeYMaxResourceIds'][:3], [129, 130, 132])
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeResource128']['yPosAbsoluteFractionalUnitCandidate'], 0.0625)
+        self.assertEqual(readiness['coordinateDisplayResidualMagnitudeResource129']['yPosAbsoluteFractionalUnitCandidate'], 0.5)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayResidualMagnitudeSourceLabel'], 'decoded-resource-backed-coordinate-display-residual-magnitude-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])

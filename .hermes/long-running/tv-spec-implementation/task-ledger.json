@@ -35,20 +35,20 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T04:20:00Z",
-  "last_progress_token": "d444973cc25bb4c3a838b7ebf046fff2f7bd39301f1408cec9ccbe3663686088",
-  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T035619Z-5.summary.json",
-  "last_verification_summary": "Committed and normal-pushed v23 coordinate display residual-sign/fractional-unit analysis packet; local HEAD equals origin/main after fetch.",
+  "last_material_event_id": "2026-06-10T04:22:20Z",
+  "last_progress_token": "8c5ab258e4daa12e777ab30f3cc027f9683c9228",
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T040504Z-6.summary.json",
+  "last_verification_summary": "Added v24 decoded-resource-backed coordinate residual-magnitude summary as non-promoted analysis data; extractor/model/scenario/backlog updated; static topology scenario and native EV model/scenario suites pass.",
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...v23",
-    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> 2/2 OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_coordinate_display_residual_sign_summary passed",
-    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> 271/271 OK",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v24",
     "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
-    "JSON/JSONL parse OK; git diff --check passed; secret-pattern search only benign progress_token/token text",
-    "git commit -m \"Promote EV syst coordinate residual signs\" -> be83566; git push origin main -> a1271fe..be83566; HEAD == origin/main -> be83566"
+    "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> 3/3 OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty > /tmp/tv_scenario_v24.json -> success True; recorded_coordinate_display_residual_magnitude_summary passed",
+    "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> 271/271 OK",
+    "JSON/JSONL parse OK; extractor temp-output idempotency OK; git diff --check passed",
+    "npm test -- --run -> not applicable: no package.json at repo root"
   ],
-  "next_resume_action": "Continue Lane A coordinate display-unit/map-scaling interpretation plus remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; latest promoted slice is a non-promoted coordinate residual-sign/fractional-unit analysis packet v23.",
+  "next_resume_action": "Continue Lane A display-unit/map-scaling interpretation and remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Latest local slice records non-promoted coordinate residual-magnitude/fractional-absolute candidates in v24; do not promote display units/map scaling from those candidates alone.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -133,5 +133,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T04:20:00Z"
+  "updated_at": "2026-06-10T04:22:20Z"
 }
