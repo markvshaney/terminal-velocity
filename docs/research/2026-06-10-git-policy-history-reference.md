@@ -80,7 +80,7 @@ Observed state:
 - Ledger status: `stopped_by_user`
 - Ledger active gate: `null`
 - Ledger next resume action: do not auto-resume; if explicitly resumed, remove `STOP_CONTINUOUS_RUNNER` and start the continuation runner in no-push worker mode; integration owner handles `push_ready` checkpoints.
-- Known dirty worktree items observed while creating this artifact: `tools/extract_ev_system_semantics.py`, `native_ev/model.py`, `native_ev/scenario_eval.py`, and `native_ev/tests/test_model.py` had unstaged development changes unrelated to this historical reference artifact.
+- The worktree contained unstaged development changes unrelated to this historical reference artifact. Exact dirty-file membership is intentionally not part of this policy record because it can change independently; use live `git status --short --branch` for current dirty state.
 
 This state snapshot is historical only. Re-check live status before doing anything.
 
