@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v31':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v32':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -345,6 +345,27 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate map source-readiness missing JumpDistance display-unit blocker')
     if 'not-promoted' not in coordinate_map_source.get('displayUnitInterpretationStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate map source-readiness must not promote display units')
+    syst_field_layout = data.get('systFieldLayoutSourceReadinessSummary', {})
+    if syst_field_layout.get('sourceLabel') != 'resource-bible-backed-syst-field-layout-source-readiness':
+        raise ValueError('sourced EV systems manifest missing syst field-layout source-readiness label')
+    if syst_field_layout.get('oracleStatus') != 'non_topology_syst_field_semantics_pending_runtime_integration':
+        raise ValueError('sourced EV systems manifest syst field-layout summary should keep non-topology semantics pending')
+    if syst_field_layout.get('recordCount') != 67 or syst_field_layout.get('recordSize') != 88 or syst_field_layout.get('fieldCompleteRecordCount') != 67:
+        raise ValueError('sourced EV systems manifest syst field-layout summary has unexpected record coverage')
+    if syst_field_layout.get('sourceReferences', {}).get('systResourceDefinition') != 'docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993':
+        raise ValueError('sourced EV systems manifest syst field-layout summary changed Resource Bible source reference')
+    field_families = [entry.get('fieldFamily') for entry in syst_field_layout.get('resourceBibleFieldFamilies', [])]
+    if 'NavDef F1-F4 navigation defaults' not in field_families or 'Con6-Con16 additional hyperspace links' not in field_families:
+        raise ValueError('sourced EV systems manifest syst field-layout summary missing source-backed field families')
+    word_scouts = syst_field_layout.get('decodedWordGroupScouts', {})
+    if word_scouts.get('frontFiveConCandidateWords4To8', {}).get('systemIdDomainValueCount') != 268:
+        raise ValueError('sourced EV systems manifest syst field-layout summary has unexpected front Con scout count')
+    if word_scouts.get('percentLikeWords20To23', {}).get('observedValueRange') != [5, 55]:
+        raise ValueError('sourced EV systems manifest syst field-layout summary has unexpected percent-like word range')
+    if word_scouts.get('allZeroTailWords24To43', {}).get('allValuesZero') is not True:
+        raise ValueError('sourced EV systems manifest syst field-layout summary expected zero-only tail scout')
+    if 'current Con1-Con16 link-slot scout window remains a candidate graph input' not in ' '.join(syst_field_layout.get('promotionBlockers', [])):
+        raise ValueError('sourced EV systems manifest syst field-layout summary missing link-window promotion blocker')
     seed_summary = data.get('systemNameSeedSummary', {})
     if seed_summary.get('sourceLabel') != 'decoded-resource-backed-system-name-seed-join-scout':
         raise ValueError('sourced EV systems manifest missing system-name seed summary source label')

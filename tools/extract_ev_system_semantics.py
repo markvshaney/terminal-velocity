@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v31'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v32'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -40,6 +40,12 @@ RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
 COORDINATE_MAP_SOURCE_REFERENCES = {
     'mapPlacementFields': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 924-937',
     'topologyConstants': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 14-19',
+}
+SYST_FIELD_LAYOUT_SOURCE_REFERENCES = {
+    'systResourceDefinition': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993',
+    'mapPlacementFields': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937',
+    'hyperspaceLinkFields': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993',
+    'runtimeNpcAndEnvironmentFields': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987',
 }
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
@@ -1304,6 +1310,64 @@ def _record_to_name_promotion_readiness_summary(names: dict, resource_ids: set[i
     }
 
 
+def _word_group_summary(run: dict, word_indices: list[int]) -> dict:
+    values = [
+        _word(record, word_index)
+        for record in run['records']
+        for word_index in word_indices
+    ]
+    return {
+        'wordIndices': word_indices,
+        'observedValueRange': [min(values), max(values)] if values else [],
+        'distinctObservedValues': sorted(set(values))[:24],
+        'distinctObservedValueCount': len(set(values)),
+        'allValuesZero': bool(values) and all(value == 0 for value in values),
+        'allValuesNoLinkSentinel': bool(values) and all(value == -1 for value in values),
+        'systemIdDomainValueCount': sum(1 for value in values if 128 <= value <= 1127),
+        'noLinkSentinelCount': values.count(-1),
+        'zeroValueCount': values.count(0),
+    }
+
+
+def _syst_field_layout_source_readiness_summary(run: dict) -> dict:
+    """Preserve Resource Bible syst field-family boundaries without over-promoting semantics."""
+    field_complete_count = sum(1 for record in run['records'] if record.get('fieldsComplete'))
+    return {
+        'sourceLabel': 'resource-bible-backed-syst-field-layout-source-readiness',
+        'oracleStatus': 'non_topology_syst_field_semantics_pending_runtime_integration',
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'fieldCompleteRecordCount': field_complete_count,
+        'resourceBibleFieldFamilies': [
+            {'fieldFamily': 'xPos/yPos map coordinates', 'promotionStatus': 'analysis-input-promoted', 'wordIndicesInCurrentDecoder': [0, 1, 2, 3]},
+            {'fieldFamily': 'Con1-Con5 hyperspace links', 'promotionStatus': 'candidate-analysis-input-promoted', 'wordIndicesInCurrentDecoder': [4, 5, 6, 7, 8]},
+            {'fieldFamily': 'NavDef F1-F4 navigation defaults', 'promotionStatus': 'source-backed-field-family-only'},
+            {'fieldFamily': 'DudeTypes/%Prob/AvgShips AI population controls', 'promotionStatus': 'source-backed-field-family-only'},
+            {'fieldFamily': 'Govt/Message/Asteroids/Interference/VisBit environment and visibility controls', 'promotionStatus': 'source-backed-field-family-only'},
+            {'fieldFamily': 'Con6-Con16 additional hyperspace links', 'promotionStatus': 'source-backed-field-family-only'},
+        ],
+        'decodedWordGroupScouts': {
+            'coordinateWords0To3': _word_group_summary(run, [0, 1, 2, 3]),
+            'currentCandidateLinkScoutWindowWords4To19': _word_group_summary(run, list(range(4, 20))),
+            'frontFiveConCandidateWords4To8': _word_group_summary(run, [4, 5, 6, 7, 8]),
+            'percentLikeWords20To23': _word_group_summary(run, [20, 21, 22, 23]),
+            'allZeroTailWords24To43': _word_group_summary(run, list(range(24, 44))),
+        },
+        'promotionBlockers': [
+            'Resource Bible field-family names alone do not identify every decoded word offset in the current primitive record without a verified complete field map',
+            'NavDef, DudeTypes, probabilities, AvgShips, Govt, Message, Asteroids, Interference, VisBit, and Con6-Con16 remain source-backed but not runtime-integrated semantics',
+            'current Con1-Con16 link-slot scout window remains a candidate graph input, not proof that every downstream syst field family has been mapped',
+        ],
+        'nextEvidenceFamilies': [
+            'complete source-level syst struct declaration or ResEdit field order confirming every word offset',
+            'original-runtime capture tying navigation defaults, hazards, governments, messages, visibility bits, and Con6-Con16 links to observed behavior',
+            'decoder update that separates front Con slots from downstream syst field families before broad universe replacement',
+        ],
+        'sourceNote': 'This packet records the Resource Bible syst layout families beside the decoded 44-word/88-byte records. It preserves the existing link-window scout output for continuity, while explicitly keeping non-topology syst fields and downstream field offsets unpromoted until a complete field-order oracle or runtime evidence is available.',
+    }
+
+
 def _topology_promotion_readiness_summary(systems: list[dict], names: dict) -> dict:
     """Summarize ready Lane A static inputs versus still-blocked topology promotions."""
     resource_ids = {system['resourceId'] for system in systems}
@@ -1325,6 +1389,7 @@ def _topology_promotion_readiness_summary(systems: list[dict], names: dict) -> d
         ],
         'blockedPromotionClaims': [
             'coordinate display units/map scaling/projection/centering/axis orientation',
+            'post-coordinate syst field layout for NavDef/population/government/message/hazard/visibility and split Con6-Con16 placement',
             'remaining 66 exact record-to-name joins',
             'named runtime route topology and map-label ordering',
             'broad runtime universe replacement from the decoded syst run',
@@ -1430,6 +1495,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
+        'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'topologyPromotionReadinessSummary': _topology_promotion_readiness_summary(systems, names),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),

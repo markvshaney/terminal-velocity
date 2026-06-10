@@ -45,19 +45,20 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "2026-06-10T16:33:20Z",
+  "last_material_event_id": "2026-06-10T16:43:31Z",
   "last_progress_token": "e0ce453abc1a85f193c942831bf14e5f02ddc74bb518865daece974cbcf97641",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
-  "last_verification_summary": "Reverified and stabilized Lane A v31 topology promotion readiness matrix under current Kanban task; ready static inputs are executable while coordinate display-unit, record-name, named route-topology, and broad universe-replacement claims remain blocked.",
+  "last_verification_summary": "Added Lane A v32 syst field-layout source-readiness guardrail; Resource Bible syst field families and decoded word-group scouts are executable while non-topology field semantics and broad universe replacement remain unpromoted.",
   "last_verified_commands": [
-    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...levo-name-map-v31",
-    "focused Lane A unittest trio -> Ran 3 tests OK",
-    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_topology_promotion_readiness_summary/matrix passed",
-    "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+    "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method=...syst-field-layout-source-readiness...v32",
+    "focused Lane A unittest pair -> Ran 2 tests OK",
+    "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_syst_field_layout_source_readiness_summary passed",
+    "python3 tools/backlog_dispatch_index.py build/check -> BACKLOG DISPATCH INDEX OK",
     "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> Ran 271 tests OK",
-    "task-ledger JSON parse OK; events JSONL parse OK lines=110; git diff --check -> OK"
+    "JSON parse for task-ledger/backlog-index/sourced systems/events JSONL -> OK; git diff --check -> OK",
+    "npm test -- --runInBand -> not applicable: no package.json exists at repo root"
   ],
-  "next_resume_action": "Create exactly one successor Kanban continuation task, then continue Lane A with stronger Classic evidence for coordinate display-unit/map-scaling/projection calibration or complete exact record-to-name/runtime topology mapping; do not promote broad runtime universe replacement from the decoded syst run.",
+  "next_resume_action": "Resolve duplicate running continuation ownership, then continue Lane A with stronger Classic evidence for coordinate display-unit/map-scaling/projection calibration or complete exact record-to-name/runtime topology mapping; do not create another successor from t_3e2a7a9a while duplicate t_e00f4455 is unresolved.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -143,5 +144,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T16:33:20Z"
+  "updated_at": "2026-06-10T16:43:31Z"
 }

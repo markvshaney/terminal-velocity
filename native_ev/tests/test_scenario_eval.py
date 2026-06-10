@@ -1805,6 +1805,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_name_seed_inputs',
             'recorded_resource_bible_topology_constants',
             'recorded_coordinate_map_source_readiness_summary',
+            'recorded_syst_field_layout_source_readiness_summary',
             'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',
             'recorded_coordinate_raw_long_candidate',
@@ -1857,6 +1858,18 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('original-runtime map screenshot/click calibration', readiness['coordinateMapSourceReadinessNextEvidenceFamilies'][0])
         self.assertIn('not-promoted', readiness['coordinateMapSourceReadinessStatus'])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateMapSourceReadinessSourceLabel'], 'resource-bible-backed-coordinate-map-source-readiness')
+        self.assertEqual(readiness['systFieldLayoutSourceReadinessSourceLabel'], 'resource-bible-backed-syst-field-layout-source-readiness')
+        self.assertEqual(readiness['systFieldLayoutSourceReadinessOracleStatus'], 'non_topology_syst_field_semantics_pending_runtime_integration')
+        self.assertEqual(readiness['systFieldLayoutSourceReadinessRecordCount'], 67)
+        self.assertEqual(readiness['systFieldLayoutSourceReadinessRecordSize'], 88)
+        self.assertEqual(readiness['systFieldLayoutSourceReadinessFieldCompleteRecordCount'], 67)
+        self.assertIn('NavDef F1-F4 navigation defaults', readiness['systFieldLayoutSourceReadinessFieldFamilies'])
+        self.assertIn('Con6-Con16 additional hyperspace links', readiness['systFieldLayoutSourceReadinessFieldFamilies'])
+        self.assertEqual(readiness['systFieldLayoutSourceReadinessDecodedWordGroupScouts']['frontFiveConCandidateWords4To8']['systemIdDomainValueCount'], 268)
+        self.assertEqual(readiness['systFieldLayoutSourceReadinessDecodedWordGroupScouts']['percentLikeWords20To23']['observedValueRange'], [5, 55])
+        self.assertTrue(readiness['systFieldLayoutSourceReadinessDecodedWordGroupScouts']['allZeroTailWords24To43']['allValuesZero'])
+        self.assertIn('current Con1-Con16 link-slot scout window remains a candidate graph input', ' '.join(readiness['systFieldLayoutSourceReadinessPromotionBlockers']))
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systFieldLayoutSourceReadinessSourceLabel'], 'resource-bible-backed-syst-field-layout-source-readiness')
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['topologyPromotionReadinessOracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
         self.assertIn('complete decoded coordinate word pairs and link slots for all 67 records', readiness['topologyPromotionReadinessReadyStaticInputFamilies'])

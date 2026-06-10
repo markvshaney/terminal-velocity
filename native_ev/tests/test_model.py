@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v31')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v32')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3438,6 +3438,23 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('JumpDistance pixels do not by themselves calibrate the decoded syst xPos/yPos coordinate units', coordinate_map_source['promotionBlockers'])
         self.assertIn('original-runtime map screenshot/click calibration', coordinate_map_source['nextEvidenceFamilies'][0])
         self.assertIn('not-promoted', coordinate_map_source['displayUnitInterpretationStatus'])
+        syst_field_layout = data['systFieldLayoutSourceReadinessSummary']
+        self.assertEqual(syst_field_layout['sourceLabel'], 'resource-bible-backed-syst-field-layout-source-readiness')
+        self.assertEqual(syst_field_layout['oracleStatus'], 'non_topology_syst_field_semantics_pending_runtime_integration')
+        self.assertEqual(syst_field_layout['sourceReferences']['systResourceDefinition'], 'docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993')
+        self.assertEqual(syst_field_layout['recordCount'], 67)
+        self.assertEqual(syst_field_layout['recordSize'], 88)
+        self.assertEqual(syst_field_layout['fieldCompleteRecordCount'], 67)
+        layout_families = [entry['fieldFamily'] for entry in syst_field_layout['resourceBibleFieldFamilies']]
+        self.assertIn('NavDef F1-F4 navigation defaults', layout_families)
+        self.assertIn('DudeTypes/%Prob/AvgShips AI population controls', layout_families)
+        self.assertIn('Govt/Message/Asteroids/Interference/VisBit environment and visibility controls', layout_families)
+        self.assertIn('Con6-Con16 additional hyperspace links', layout_families)
+        word_scouts = syst_field_layout['decodedWordGroupScouts']
+        self.assertEqual(word_scouts['frontFiveConCandidateWords4To8']['systemIdDomainValueCount'], 268)
+        self.assertEqual(word_scouts['percentLikeWords20To23']['observedValueRange'], [5, 55])
+        self.assertTrue(word_scouts['allZeroTailWords24To43']['allValuesZero'])
+        self.assertIn('current Con1-Con16 link-slot scout window remains a candidate graph input', ' '.join(syst_field_layout['promotionBlockers']))
         systems = data['systems']
         self.assertEqual(len(systems), 67)
         first = systems[0]
