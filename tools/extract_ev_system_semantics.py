@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v24'
+METHOD = 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v25'
 SOURCE_BASIS = 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
@@ -1067,6 +1067,68 @@ def _system_name_seed_summary(names: dict) -> dict:
     }
 
 
+def _system_name_landing_proximity_summary(names: dict) -> dict:
+    """Preserve name/landing text-byte proximity candidates without joining syst records."""
+    system_seeds = names.get('systemNames', [])
+    landing_seeds = names.get('landingNames', [])
+
+    def _nearest_landings(system_seed: dict) -> dict:
+        system_offset = int(system_seed.get('byteOffset', 0))
+        nearest = sorted(
+            landing_seeds,
+            key=lambda landing: (abs(int(landing.get('byteOffset', 0)) - system_offset), int(landing.get('byteOffset', 0))),
+        )[:3]
+        return {
+            'systemNameSeed': system_seed.get('name'),
+            'systemNameSeedByteOffset': system_offset,
+            'nearestLandingNameCandidates': [
+                {
+                    'landingName': landing.get('name'),
+                    'landingByteOffset': int(landing.get('byteOffset', 0)),
+                    'byteDeltaFromSystemNameSeed': int(landing.get('byteOffset', 0)) - system_offset,
+                }
+                for landing in nearest
+            ],
+        }
+
+    by_system_name = [_nearest_landings(seed) for seed in system_seeds]
+    exact_mapped_names = [mapping['systemName'] for mapping in EXACT_SYSTEM_NAME_MAPPINGS.values()]
+    exact_mapped_landing_candidates = [
+        {
+            'systemName': name,
+            'landingNameSeedByteOffsets': [
+                int(seed.get('byteOffset', 0)) for seed in landing_seeds if seed.get('name') == name
+            ],
+        }
+        for name in exact_mapped_names
+    ]
+    close_threshold = 256
+    close_candidates = [
+        entry['systemNameSeed']
+        for entry in by_system_name
+        if entry['nearestLandingNameCandidates']
+        and abs(entry['nearestLandingNameCandidates'][0]['byteDeltaFromSystemNameSeed']) <= close_threshold
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-system-name-landing-proximity-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'candidateFamilies': [
+            'system-name text seed to nearest landing-name text seed byte-proximity candidates',
+            'exact mapped system-name landing-seed presence candidates',
+        ],
+        'systemNameSeedCount': len(system_seeds),
+        'landingNameSeedCount': len(landing_seeds),
+        'closeByteThresholdCandidate': close_threshold,
+        'systemNameSeedsWithCloseLandingCandidates': close_candidates,
+        'systemNameSeedsWithoutCloseLandingCandidates': [
+            entry['systemNameSeed'] for entry in by_system_name if entry['systemNameSeed'] not in close_candidates
+        ],
+        'exactMappedSystemLandingCandidates': exact_mapped_landing_candidates,
+        'bySystemNameSeed': by_system_name,
+        'sourceNote': 'This compares heuristic text seed byte offsets only. It is useful for later record-to-name/topology investigation, but it does not assign any syst resource ID to these names or promote EV Classic runtime topology. Resource 128 to Levo remains the only exact system-name mapping.',
+    }
+
+
 def _exact_system_name_mapping(resource_id: int) -> dict | None:
     mapping = EXACT_SYSTEM_NAME_MAPPINGS.get(resource_id)
     if mapping is None:
@@ -1145,6 +1207,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         },
         'systemNameSeeds': names.get('systemNames', []),
         'systemNameSeedSummary': _system_name_seed_summary(names),
+        'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'coordinateDisplayBoundsSummary': _coordinate_display_bounds_summary(systems),

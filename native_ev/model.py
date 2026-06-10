@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v24':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v25':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -328,6 +328,22 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest system-name seed summary has unexpected seed coverage')
     if seed_summary.get('exactMappedSystemNames') != ['Levo'] or seed_summary.get('unjoinedSystemNameSeedCount') != len(seeds):
         raise ValueError('sourced EV systems manifest system-name seed summary has unexpected exact mapping boundary')
+    landing_proximity = data.get('systemNameLandingProximitySummary', {})
+    if landing_proximity.get('sourceLabel') != 'decoded-resource-backed-system-name-landing-proximity-scout':
+        raise ValueError('sourced EV systems manifest missing system-name landing-proximity source label')
+    if landing_proximity.get('oracleStatus') != 'exact_record_name_runtime_topology_mapping_pending':
+        raise ValueError('sourced EV systems manifest landing-proximity summary should keep runtime topology pending')
+    if landing_proximity.get('systemNameSeedCount') != len(seeds) or landing_proximity.get('landingNameSeedCount', 0) < 70:
+        raise ValueError('sourced EV systems manifest landing-proximity summary has unexpected seed counts')
+    if landing_proximity.get('systemNameSeedsWithCloseLandingCandidates') != ['Centauri', 'Sirius', 'Tau Ceti', 'Alkaid', 'Zaxted', 'Clotho']:
+        raise ValueError('sourced EV systems manifest landing-proximity close candidates changed unexpectedly')
+    if landing_proximity.get('systemNameSeedsWithoutCloseLandingCandidates') != ['Sol', 'Enyo', 'Antares']:
+        raise ValueError('sourced EV systems manifest landing-proximity distant candidates changed unexpectedly')
+    exact_landing = landing_proximity.get('exactMappedSystemLandingCandidates', [{}])[0]
+    if exact_landing.get('systemName') != 'Levo' or exact_landing.get('landingNameSeedByteOffsets') != [23867]:
+        raise ValueError('sourced EV systems manifest landing-proximity exact mapped landing candidate changed unexpectedly')
+    if 'not assign any syst resource ID' not in landing_proximity.get('sourceNote', ''):
+        raise ValueError('sourced EV systems manifest landing-proximity summary must not promote record-to-name joins')
     domain = data.get('coordinateDomainSummary', {})
     if domain.get('sourceLabel') != 'decoded-resource-backed-coordinate-domain-scout':
         raise ValueError('sourced EV systems manifest missing coordinate domain summary source label')

@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v24",
+  "method": "ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v25",
   "sourceBasis": "EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "recordRun": {
@@ -146,6 +146,230 @@
     ],
     "unjoinedSystemNameSeedCount": 9,
     "sourceNote": "Heuristic system-name text seeds are preserved for later record-to-name joins, but they are not assigned to syst resource IDs by this summary. The only exact current system-name mapping remains resource ID 128 to Levo from Resource Bible start-system plus original-runtime start observation."
+  },
+  "systemNameLandingProximitySummary": {
+    "sourceLabel": "decoded-resource-backed-system-name-landing-proximity-scout",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "candidateFamilies": [
+      "system-name text seed to nearest landing-name text seed byte-proximity candidates",
+      "exact mapped system-name landing-seed presence candidates"
+    ],
+    "systemNameSeedCount": 9,
+    "landingNameSeedCount": 72,
+    "closeByteThresholdCandidate": 256,
+    "systemNameSeedsWithCloseLandingCandidates": [
+      "Centauri",
+      "Sirius",
+      "Tau Ceti",
+      "Alkaid",
+      "Zaxted",
+      "Clotho"
+    ],
+    "systemNameSeedsWithoutCloseLandingCandidates": [
+      "Sol",
+      "Enyo",
+      "Antares"
+    ],
+    "exactMappedSystemLandingCandidates": [
+      {
+        "systemName": "Levo",
+        "landingNameSeedByteOffsets": [
+          23867
+        ]
+      }
+    ],
+    "bySystemNameSeed": [
+      {
+        "systemNameSeed": "Sol",
+        "systemNameSeedByteOffset": 134259,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Liberty Station",
+            "landingByteOffset": 42272,
+            "byteDeltaFromSystemNameSeed": -91987
+          },
+          {
+            "landingName": "New Antigua",
+            "landingByteOffset": 42066,
+            "byteDeltaFromSystemNameSeed": -92193
+          },
+          {
+            "landingName": "A grim, snowy world",
+            "landingByteOffset": 41826,
+            "byteDeltaFromSystemNameSeed": -92433
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Centauri",
+        "systemNameSeedByteOffset": 24415,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Capella",
+            "landingByteOffset": 24338,
+            "byteDeltaFromSystemNameSeed": -77
+          },
+          {
+            "landingName": "Dune",
+            "landingByteOffset": 24502,
+            "byteDeltaFromSystemNameSeed": 87
+          },
+          {
+            "landingName": "Spica",
+            "landingByteOffset": 24642,
+            "byteDeltaFromSystemNameSeed": 227
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Sirius",
+        "systemNameSeedByteOffset": 26130,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Sirius III",
+            "landingByteOffset": 26130,
+            "byteDeltaFromSystemNameSeed": 0
+          },
+          {
+            "landingName": "Sirius Station",
+            "landingByteOffset": 26192,
+            "byteDeltaFromSystemNameSeed": 62
+          },
+          {
+            "landingName": "Tau Ceti IV",
+            "landingByteOffset": 26345,
+            "byteDeltaFromSystemNameSeed": 215
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Tau Ceti",
+        "systemNameSeedByteOffset": 26345,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Tau Ceti IV",
+            "landingByteOffset": 26345,
+            "byteDeltaFromSystemNameSeed": 0
+          },
+          {
+            "landingName": "Merlin",
+            "landingByteOffset": 26440,
+            "byteDeltaFromSystemNameSeed": 95
+          },
+          {
+            "landingName": "Sirius Station",
+            "landingByteOffset": 26192,
+            "byteDeltaFromSystemNameSeed": -153
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Enyo",
+        "systemNameSeedByteOffset": 27016,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Tabletop",
+            "landingByteOffset": 26724,
+            "byteDeltaFromSystemNameSeed": -292
+          },
+          {
+            "landingName": "New Sahara",
+            "landingByteOffset": 27382,
+            "byteDeltaFromSystemNameSeed": 366
+          },
+          {
+            "landingName": "Merlin",
+            "landingByteOffset": 26440,
+            "byteDeltaFromSystemNameSeed": -576
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Antares",
+        "systemNameSeedByteOffset": 28605,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "New Istanbul",
+            "landingByteOffset": 28876,
+            "byteDeltaFromSystemNameSeed": 271
+          },
+          {
+            "landingName": "New Providence",
+            "landingByteOffset": 28257,
+            "byteDeltaFromSystemNameSeed": -348
+          },
+          {
+            "landingName": "George’s World",
+            "landingByteOffset": 29050,
+            "byteDeltaFromSystemNameSeed": 445
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Alkaid",
+        "systemNameSeedByteOffset": 30346,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Alkaidion",
+            "landingByteOffset": 30389,
+            "byteDeltaFromSystemNameSeed": 43
+          },
+          {
+            "landingName": "Palshife",
+            "landingByteOffset": 30062,
+            "byteDeltaFromSystemNameSeed": -284
+          },
+          {
+            "landingName": "Regulus II",
+            "landingByteOffset": 30850,
+            "byteDeltaFromSystemNameSeed": 504
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Zaxted",
+        "systemNameSeedByteOffset": 31065,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Zaxted Starport",
+            "landingByteOffset": 31065,
+            "byteDeltaFromSystemNameSeed": 0
+          },
+          {
+            "landingName": "Clotho Prime",
+            "landingByteOffset": 31204,
+            "byteDeltaFromSystemNameSeed": 139
+          },
+          {
+            "landingName": "Regulus II",
+            "landingByteOffset": 30850,
+            "byteDeltaFromSystemNameSeed": -215
+          }
+        ]
+      },
+      {
+        "systemNameSeed": "Clotho",
+        "systemNameSeedByteOffset": 31204,
+        "nearestLandingNameCandidates": [
+          {
+            "landingName": "Clotho Prime",
+            "landingByteOffset": 31204,
+            "byteDeltaFromSystemNameSeed": 0
+          },
+          {
+            "landingName": "Zaxted Starport",
+            "landingByteOffset": 31065,
+            "byteDeltaFromSystemNameSeed": -139
+          },
+          {
+            "landingName": "Clotho II",
+            "landingByteOffset": 31375,
+            "byteDeltaFromSystemNameSeed": 171
+          }
+        ]
+      }
+    ],
+    "sourceNote": "This compares heuristic text seed byte offsets only. It is useful for later record-to-name/topology investigation, but it does not assign any syst resource ID to these names or promote EV Classic runtime topology. Resource 128 to Levo remains the only exact system-name mapping."
   },
   "coordinateDomainSummary": {
     "sourceLabel": "decoded-resource-backed-coordinate-domain-scout",
@@ -21089,5 +21313,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and non-promoted system-name seed coverage summary are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
+  "promotionBoundary": "IDs/resource ordering, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic display units/map scaling, services, hazards, governments, and remaining exact record-to-name mapping remain pending."
 }

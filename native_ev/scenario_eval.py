@@ -429,6 +429,7 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
     system_names = names.get('systemNames', [])
     landing_names = names.get('landingNames', [])
     system_name_seed_summary = systems_manifest.get('systemNameSeedSummary', {})
+    system_name_landing_proximity = systems_manifest.get('systemNameLandingProximitySummary', {})
     first_system = systems_manifest.get('systems', [{}])[0]
     first_fields = first_system.get('semanticFields', {})
     first_links = first_fields.get('candidateHyperspaceLinks', {})
@@ -467,6 +468,12 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'systemNameSeedSummarySeedNames': system_name_seed_summary.get('systemNameSeedNames', []),
         'systemNameSeedSummaryExactMappedNames': system_name_seed_summary.get('exactMappedSystemNames', []),
         'systemNameSeedSummaryUnjoinedSeedCount': system_name_seed_summary.get('unjoinedSystemNameSeedCount'),
+        'systemNameLandingProximitySourceLabel': system_name_landing_proximity.get('sourceLabel'),
+        'systemNameLandingProximityOracleStatus': system_name_landing_proximity.get('oracleStatus'),
+        'systemNameLandingProximityCandidateFamilies': system_name_landing_proximity.get('candidateFamilies', []),
+        'systemNameLandingProximityCloseCandidates': system_name_landing_proximity.get('systemNameSeedsWithCloseLandingCandidates', []),
+        'systemNameLandingProximityDistantCandidates': system_name_landing_proximity.get('systemNameSeedsWithoutCloseLandingCandidates', []),
+        'systemNameLandingProximityExactMappedLandingCandidates': system_name_landing_proximity.get('exactMappedSystemLandingCandidates', []),
         'candidateCoordinateWordIndices': first_coordinates.get('wordIndices', []),
         'candidateCoordinateXRawLongResource128': first_coordinates.get('xPos', {}).get('signedLongCandidate'),
         'candidateCoordinateYRawLongResource128': first_coordinates.get('yPos', {}).get('signedLongCandidate'),
@@ -630,6 +637,11 @@ def _scan_static_topology_source(state: dict[str, Any], action: dict[str, Any], 
         'systemNameSeedSummarySeedCount': system_name_seed_summary.get('systemNameSeedCount'),
         'systemNameSeedSummaryExactMappedNames': system_name_seed_summary.get('exactMappedSystemNames', []),
         'systemNameSeedSummaryUnjoinedSeedCount': system_name_seed_summary.get('unjoinedSystemNameSeedCount'),
+        'systemNameLandingProximitySourceLabel': system_name_landing_proximity.get('sourceLabel'),
+        'systemNameLandingProximityOracleStatus': system_name_landing_proximity.get('oracleStatus'),
+        'systemNameLandingProximityCloseCandidates': system_name_landing_proximity.get('systemNameSeedsWithCloseLandingCandidates', []),
+        'systemNameLandingProximityDistantCandidates': system_name_landing_proximity.get('systemNameSeedsWithoutCloseLandingCandidates', []),
+        'systemNameLandingProximityExactMappedLandingCandidates': system_name_landing_proximity.get('exactMappedSystemLandingCandidates', []),
         'candidateCoordinateWordIndices': first_coordinates.get('wordIndices', []),
         'candidateCoordinateXRawLongResource128': first_coordinates.get('xPos', {}).get('signedLongCandidate'),
         'candidateCoordinateYRawLongResource128': first_coordinates.get('yPos', {}).get('signedLongCandidate'),
@@ -3916,6 +3928,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'kept_runtime_universe_subset_unchanged': 'passed' if readiness.get('runtimeSystemSubsetCount') == 10 and static_state.get('runtimeSystemSubsetCount') == 10 else 'failed',
             'recorded_name_seed_inputs': 'passed' if readiness.get('heuristicSystemNameSeeds', 0) >= 9 and readiness.get('landingNameSeeds', 0) >= 70 else 'failed',
             'recorded_system_name_seed_summary': 'passed' if readiness.get('systemNameSeedSummarySourceLabel') == 'decoded-resource-backed-system-name-seed-join-scout' and readiness.get('systemNameSeedSummaryOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and readiness.get('systemNameSeedSummarySeedCount') == 9 and readiness.get('systemNameSeedSummarySeedNames', [])[:3] == ['Sol', 'Centauri', 'Sirius'] and readiness.get('systemNameSeedSummaryExactMappedNames') == ['Levo'] and readiness.get('systemNameSeedSummaryUnjoinedSeedCount') == 9 and static_state.get('systemNameSeedSummarySourceLabel') == 'decoded-resource-backed-system-name-seed-join-scout' else 'failed',
+            'recorded_system_name_landing_proximity_summary': 'passed' if readiness.get('systemNameLandingProximitySourceLabel') == 'decoded-resource-backed-system-name-landing-proximity-scout' and readiness.get('systemNameLandingProximityOracleStatus') == 'exact_record_name_runtime_topology_mapping_pending' and 'system-name text seed to nearest landing-name text seed byte-proximity candidates' in readiness.get('systemNameLandingProximityCandidateFamilies', []) and readiness.get('systemNameLandingProximityCloseCandidates') == ['Centauri', 'Sirius', 'Tau Ceti', 'Alkaid', 'Zaxted', 'Clotho'] and readiness.get('systemNameLandingProximityDistantCandidates') == ['Sol', 'Enyo', 'Antares'] and readiness.get('systemNameLandingProximityExactMappedLandingCandidates') == [{'systemName': 'Levo', 'landingNameSeedByteOffsets': [23867]}] and static_state.get('systemNameLandingProximitySourceLabel') == 'decoded-resource-backed-system-name-landing-proximity-scout' else 'failed',
             'recorded_coordinate_raw_long_candidate': 'passed' if readiness.get('candidateCoordinateWordIndices') == [0, 1, 2, 3] and readiness.get('candidateCoordinateXRawLongResource128') == 65664 and readiness.get('candidateCoordinateYRawLongResource128') == 8327168 and readiness.get('candidateCoordinateSourceConfidence') == 'resource-bible-field-family-plus-decoded-raw-word-pair-domain-summary-plus-raw-signed-long-candidate' and static_state.get('candidateCoordinateXRawLongResource128') == 65664 else 'failed',
             'recorded_coordinate_domain_summary': 'passed' if readiness.get('coordinateDomainSourceLabel') == 'decoded-resource-backed-coordinate-domain-scout' and readiness.get('coordinateDisplayUnitOracleStatus') == 'coordinate_display_units_map_scaling_pending' and readiness.get('coordinateXHighWordDistinctValues') == [1, 2, 3, 4] and readiness.get('coordinateYHighWordDistinctValues') == [0, 18, 72, 127, 133] and static_state.get('coordinateDomainSourceLabel') == 'decoded-resource-backed-coordinate-domain-scout' and static_state.get('coordinateDisplayUnitOracleStatus') == 'coordinate_display_units_map_scaling_pending' else 'failed',
             'recorded_coordinate_display_candidate_summary': 'passed' if readiness.get('coordinateDisplayCandidateSourceLabel') == 'decoded-resource-backed-coordinate-display-candidate' and 'raw high word as coarse grid/band candidate' in readiness.get('coordinateDisplayCandidateFamilies', []) and readiness.get('coordinateDisplayCandidateResource128', {}).get('xPos', {}).get('rawHighWordAsGridBandCandidate') == 1 and readiness.get('coordinateDisplayCandidateResource128', {}).get('yPos', {}).get('rawLowWordAsSubgridOffsetCandidate') == 4096 and static_state.get('coordinateDisplayCandidateSourceLabel') == 'decoded-resource-backed-coordinate-display-candidate' else 'failed',
