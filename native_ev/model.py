@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v29':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v30':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -330,6 +330,21 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest must not promote coordinate display units from JumpDistance alone')
     if 'not a decoded syst coordinate unit interpretation' not in ' '.join(topology_constants.get('promotionBlockers', [])):
         raise ValueError('sourced EV systems manifest topology constants must preserve display-unit blocker')
+    coordinate_map_source = data.get('coordinateMapSourceReadinessSummary', {})
+    if coordinate_map_source.get('sourceLabel') != 'resource-bible-backed-coordinate-map-source-readiness':
+        raise ValueError('sourced EV systems manifest missing coordinate map source-readiness label')
+    if coordinate_map_source.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate map source-readiness must keep display scaling pending')
+    if coordinate_map_source.get('recordCount') != 67 or coordinate_map_source.get('coordinateFieldCompleteRecordCount') != 67 or coordinate_map_source.get('linkSlotCompleteRecordCount') != 67:
+        raise ValueError('sourced EV systems manifest coordinate map source-readiness has unexpected coverage counts')
+    if 'The sÿst resource xPos/yPos fields are the system X and Y positions on the map.' != coordinate_map_source.get('resourceBibleMapPlacementClaim'):
+        raise ValueError('sourced EV systems manifest coordinate map source-readiness changed Resource Bible map-placement claim')
+    if 'JumpDistance=1000 pixels is preserved as a game/topology range constant, not as decoded xPos/yPos map-pixel proof.' != coordinate_map_source.get('resourceBibleRangeConstantBoundary'):
+        raise ValueError('sourced EV systems manifest coordinate map source-readiness must preserve JumpDistance boundary')
+    if 'JumpDistance pixels do not by themselves calibrate the decoded syst xPos/yPos coordinate units' not in coordinate_map_source.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest coordinate map source-readiness missing JumpDistance display-unit blocker')
+    if 'not-promoted' not in coordinate_map_source.get('displayUnitInterpretationStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate map source-readiness must not promote display units')
     seed_summary = data.get('systemNameSeedSummary', {})
     if seed_summary.get('sourceLabel') != 'decoded-resource-backed-system-name-seed-join-scout':
         raise ValueError('sourced EV systems manifest missing system-name seed summary source label')

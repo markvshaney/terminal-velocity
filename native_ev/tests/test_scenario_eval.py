@@ -1804,6 +1804,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'kept_runtime_universe_subset_unchanged',
             'recorded_name_seed_inputs',
             'recorded_resource_bible_topology_constants',
+            'recorded_coordinate_map_source_readiness_summary',
             'recorded_system_name_seed_summary',
             'recorded_coordinate_raw_long_candidate',
             'recorded_coordinate_domain_summary',
@@ -1844,6 +1845,17 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['resourceBibleTopologyConstantsJumpDistancePixels'], 1000)
         self.assertIn('not a decoded syst coordinate unit interpretation', ' '.join(readiness['resourceBibleTopologyConstantsPromotionBlockers']))
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['resourceBibleTopologyConstantsJumpDistancePixels'], 1000)
+        self.assertEqual(readiness['coordinateMapSourceReadinessSourceLabel'], 'resource-bible-backed-coordinate-map-source-readiness')
+        self.assertEqual(readiness['coordinateMapSourceReadinessOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertEqual(readiness['coordinateMapSourceReadinessRecordCount'], 67)
+        self.assertEqual(readiness['coordinateMapSourceReadinessCoordinateFieldCompleteRecordCount'], 67)
+        self.assertEqual(readiness['coordinateMapSourceReadinessLinkSlotCompleteRecordCount'], 67)
+        self.assertEqual(readiness['coordinateMapSourceReadinessMapPlacementClaim'], 'The sÿst resource xPos/yPos fields are the system X and Y positions on the map.')
+        self.assertEqual(readiness['coordinateMapSourceReadinessRangeConstantBoundary'], 'JumpDistance=1000 pixels is preserved as a game/topology range constant, not as decoded xPos/yPos map-pixel proof.')
+        self.assertIn('JumpDistance pixels do not by themselves calibrate the decoded syst xPos/yPos coordinate units', readiness['coordinateMapSourceReadinessPromotionBlockers'])
+        self.assertIn('original-runtime map screenshot/click calibration', readiness['coordinateMapSourceReadinessNextEvidenceFamilies'][0])
+        self.assertIn('not-promoted', readiness['coordinateMapSourceReadinessStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateMapSourceReadinessSourceLabel'], 'resource-bible-backed-coordinate-map-source-readiness')
         self.assertEqual(readiness['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
         self.assertEqual(readiness['systemNameSeedSummaryOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
         self.assertEqual(readiness['systemNameSeedSummarySeedCount'], 9)

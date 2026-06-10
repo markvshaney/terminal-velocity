@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v29'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v30'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, non-promoted system-name seed coverage summary, and non-promoted system-name/landing-name byte-proximity candidates are promoted as analysis inputs; EV Classic coordinate display units/map scaling/projection, services, hazards, governments, and remaining exact record-to-name mapping remain pending.'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -36,6 +36,10 @@ RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
         'xPos/yPos raw coordinate candidates still need Classic map pixel/click/projection evidence before display-unit/map-scaling promotion',
     ],
     'sourceNote': 'The EV Classic Resource Bible lists MaxStellarObjects 1500, MaxSystems 1000, and JumpDistance 1000 pixels. This packet preserves those constants for later route/range analysis, but does not claim that decoded xPos/yPos raw words are already expressed in map pixels or that the TV map projection is Classic-faithful.',
+}
+COORDINATE_MAP_SOURCE_REFERENCES = {
+    'mapPlacementFields': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 924-937',
+    'topologyConstants': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 14-19',
 }
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 LINK_WORD_INDICES = list(range(4, 20))
@@ -144,6 +148,44 @@ def _axis_range(systems: list[dict], axis: str, key: str) -> list[int]:
 def _axis_word_range(systems: list[dict], axis: str, word_index: int) -> list[int]:
     values = [system['semanticFields']['mapCoordinates'][axis]['rawWords'][word_index] for system in systems]
     return [min(values), max(values)]
+
+
+def _coordinate_map_source_readiness_summary(systems: list[dict]) -> dict:
+    """Record Resource Bible map-placement evidence and the exact promotion blockers."""
+    coordinate_complete = [
+        system['resourceId']
+        for system in systems
+        if len(system['semanticFields']['mapCoordinates']['wordIndices']) == 4
+    ]
+    link_complete = [
+        system['resourceId']
+        for system in systems
+        if len(system['semanticFields']['candidateHyperspaceLinks']['linkSlots']) == 16
+    ]
+    return {
+        'sourceLabel': 'resource-bible-backed-coordinate-map-source-readiness',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'sourceReferences': COORDINATE_MAP_SOURCE_REFERENCES,
+        'recordCount': len(systems),
+        'coordinateFieldCompleteRecordCount': len(coordinate_complete),
+        'linkSlotCompleteRecordCount': len(link_complete),
+        'resourceBibleMapPlacementClaim': 'The sÿst resource xPos/yPos fields are the system X and Y positions on the map.',
+        'resourceBibleLinkClaim': 'The sÿst Con1-Con16 fields link to other systems by resource ID or -1 for no link.',
+        'resourceBibleRangeConstantBoundary': 'JumpDistance=1000 pixels is preserved as a game/topology range constant, not as decoded xPos/yPos map-pixel proof.',
+        'promotionBlockers': [
+            'Resource Bible map-placement wording does not specify decoded coordinate storage width, fixed-point divisor, projection, centering, axis orientation, or screen pixel transform',
+            'JumpDistance pixels do not by themselves calibrate the decoded syst xPos/yPos coordinate units',
+            'Classic map pixel/click/capture evidence or an accepted surrogate is still required before display-unit/map-scaling promotion',
+            'remaining 66 system record-to-name joins are unpromoted, so runtime topology labels remain incomplete',
+        ],
+        'nextEvidenceFamilies': [
+            'original-runtime map screenshot/click calibration tying at least two named systems to on-screen positions',
+            'decoded complete system-name/order source that can join the remaining syst records to labels',
+            'source-level projection or coordinate-transform description for EV Classic map rendering',
+        ],
+        'displayUnitInterpretationStatus': 'not-promoted; Resource Bible confirms map-placement field intent but not display units, scaling, projection, or remaining runtime topology labels',
+        'sourceNote': 'This packet strengthens source readiness by separating Resource Bible map-placement field intent from the missing runtime/display calibration evidence. It deliberately preserves the blocker rather than promoting decoded coordinate display units from static text alone.',
+    }
 
 
 def _coordinate_domain_summary(systems: list[dict]) -> dict:
@@ -1343,6 +1385,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systemNameSeedSummary': _system_name_seed_summary(names),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
+        'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
         'coordinateDisplayCandidateSummary': _coordinate_display_candidate_summary(systems),
         'coordinateDisplayBoundsSummary': _coordinate_display_bounds_summary(systems),
