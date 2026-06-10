@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v27':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-record-name-promotion-readiness-landing-proximity-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v28':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -328,6 +328,21 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest system-name seed summary has unexpected seed coverage')
     if seed_summary.get('exactMappedSystemNames') != ['Levo'] or seed_summary.get('unjoinedSystemNameSeedCount') != len(seeds):
         raise ValueError('sourced EV systems manifest system-name seed summary has unexpected exact mapping boundary')
+    record_name_readiness = data.get('recordToNamePromotionReadinessSummary', {})
+    if record_name_readiness.get('sourceLabel') != 'decoded-resource-backed-record-to-name-promotion-readiness-scout':
+        raise ValueError('sourced EV systems manifest missing record-to-name promotion readiness source label')
+    if record_name_readiness.get('oracleStatus') != 'exact_record_name_runtime_topology_mapping_pending':
+        raise ValueError('sourced EV systems manifest record-to-name readiness should keep runtime topology pending')
+    if record_name_readiness.get('recordCount') != 67 or record_name_readiness.get('exactMappedRecordCount') != 1:
+        raise ValueError('sourced EV systems manifest record-to-name readiness has unexpected record counts')
+    if record_name_readiness.get('exactMappedResourceIds') != [128] or record_name_readiness.get('exactMappedSystemNames') != ['Levo']:
+        raise ValueError('sourced EV systems manifest record-to-name readiness changed exact mapping boundary')
+    if record_name_readiness.get('unjoinedRecordCount') != 66 or record_name_readiness.get('unjoinedResourceIdRange') != [129, 194]:
+        raise ValueError('sourced EV systems manifest record-to-name readiness has unexpected unjoined records')
+    if record_name_readiness.get('heuristicSystemNameSeedCount') != len(seeds) or not record_name_readiness.get('heuristicSeedCountDoesNotCoverRemainingRecords'):
+        raise ValueError('sourced EV systems manifest record-to-name readiness has unexpected heuristic seed boundary')
+    if 'landing-name byte proximity is a scout signal, not a syst record-to-name join' not in record_name_readiness.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest record-to-name readiness must not promote byte-proximity joins')
     landing_proximity = data.get('systemNameLandingProximitySummary', {})
     if landing_proximity.get('sourceLabel') != 'decoded-resource-backed-system-name-landing-proximity-scout':
         raise ValueError('sourced EV systems manifest missing system-name landing-proximity source label')

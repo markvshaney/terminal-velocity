@@ -1828,6 +1828,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_start_neighborhood_slot_vector_order_summary',
             'recorded_start_neighborhood_slot_angular_order_summary',
             'recorded_exact_start_system_mapping',
+            'recorded_record_to_name_promotion_readiness_summary',
             'recorded_static_topology_source_boundary',
         ]:
             self.assertEqual(result['checks'][check], 'passed')
@@ -1841,7 +1842,14 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['systemNameSeedSummarySeedNames'][:3], ['Sol', 'Centauri', 'Sirius'])
         self.assertEqual(readiness['systemNameSeedSummaryExactMappedNames'], ['Levo'])
         self.assertEqual(readiness['systemNameSeedSummaryUnjoinedSeedCount'], 9)
+        self.assertEqual(readiness['recordToNamePromotionReadinessSourceLabel'], 'decoded-resource-backed-record-to-name-promotion-readiness-scout')
+        self.assertEqual(readiness['recordToNamePromotionReadinessOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
+        self.assertEqual(readiness['recordToNamePromotionReadinessExactMappedResourceIds'], [128])
+        self.assertEqual(readiness['recordToNamePromotionReadinessUnjoinedRecordCount'], 66)
+        self.assertIn('landing-name byte proximity is a scout signal, not a syst record-to-name join', readiness['recordToNamePromotionReadinessPromotionBlockers'])
+        self.assertIn('decoded complete name/list resource', readiness['recordToNamePromotionReadinessNextEvidenceFamilies'][0])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['recordToNamePromotionReadinessUnjoinedRecordCount'], 66)
         self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)
         self.assertEqual(readiness['candidateCoordinateYRawLongResource128'], 8327168)
