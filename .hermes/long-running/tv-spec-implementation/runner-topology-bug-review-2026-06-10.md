@@ -132,6 +132,18 @@ Primary review set:
 - `/home/bh/.hermes/profiles/loki-game/cron/output/5430276bcaa5/2026-06-10_14-19-01.md`
 - `.hermes/long-running/tv-spec-implementation/events.jsonl`
 
+## Follow-up finding: active continuous Kanban task despite paused cron
+
+Recorded after user observed messages still arriving every minute.
+
+Evidence checked after cron pause:
+
+- `cronjob list` shows all four TV cron jobs paused, including `5430276bcaa5` and `4e9cc82d1a99`.
+- `/home/bh/.hermes/profiles/loki-game/run/tv_kanban_continuous_loop_state.json` still reports `last_state: running`, PID `1970812`, active task `t_ef52f8ee`, ready task `t_ef52f8ee`, successor `t_d1818f18`, updated at `2026-06-10T19:56:46.673887+00:00`.
+- `/home/bh/.hermes/profiles/loki-game/processes.json` still registers detached `tv_kanban_continuous_loop.py`, PID `1970812`, cwd `/home/bh/workspaces/loki/terminal-velocity`, session key `agent:main:telegram:group:-5127009860:7956191079`.
+
+Conclusion: user-visible every-minute posting is evidence of an active task path outside the now-paused cron scheduler, most likely the continuous Kanban loop or a child/session it is driving. The earlier cron-only answer was incomplete: cron is paused, but implementation/control-plane activity is not cleanly stopped.
+
 ## Fix-through checklist
 
 Use this section to work the bugs without losing the distinctions.
