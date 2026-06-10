@@ -45,7 +45,7 @@
     "integration_owner": "Owns final status/diff review, required checkpoint verification, normal non-force push, fetch, HEAD == origin/main verification, and pushed checkpoint record.",
     "worker_continuous_runner": "May inspect/edit/test/update local docs/backlog/events and create local checkpoint commits when needed, but must not run git push. If publication is needed, record push_ready with commit SHA, intended files, verifier output, and next action."
   },
-  "last_material_event_id": "lane-a-v34-syst-word-domain-coverage",
+  "last_material_event_id": "lane-a-v34-syst-word-domain-coverage-pushed",
   "last_progress_token": "449bbfbd25c6cb0e99ad3c0049da50393f969d9d05cd51d25be27f161c379e6b",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T043308Z-9.summary.json",
   "last_verification_summary": {
@@ -88,6 +88,10 @@
       {
         "command": "git diff --check",
         "result": "passed; no output"
+      },
+      {
+        "command": "git push origin main; git fetch origin main; git rev-parse HEAD/origin/main",
+        "result": "passed; local HEAD == origin/main == 11850ef0e3353c48a3d1dcf27cb1b2286b8444a8"
       }
     ]
   },
@@ -96,7 +100,8 @@
     "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -> Ran 271 tests in 1.446s OK",
     "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty -> success true; recorded_syst_word_domain_coverage_summary passed",
     "python3 tools/backlog_dispatch_index.py build/check -> BACKLOG DISPATCH INDEX OK",
-    "git diff --check -> OK"
+    "git diff --check -> OK",
+    "git push/fetch verification -> local HEAD == origin/main == 11850ef0e3353c48a3d1dcf27cb1b2286b8444a8"
   ],
   "next_resume_action": "Continue Lane A only with stronger Classic runtime/source evidence for coordinate display-unit/map-scaling/projection calibration, complete exact record-to-name/runtime topology mapping, or a complete source-level syst field-order oracle before promoting unresolved syst fields, Con6-Con16 split placement, or broad runtime universe replacement.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
