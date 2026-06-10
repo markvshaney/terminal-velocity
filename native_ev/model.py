@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v18':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-coordinate-link-slot-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-coordinate-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v19':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -502,6 +502,17 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest start-neighborhood display-vector has unexpected resource 131 angle')
     if start_vector.get('nonSelfDisplayQuadrantCandidates') != ['north-east', 'south-east']:
         raise ValueError('sourced EV systems manifest start-neighborhood display-vector has unexpected quadrant summary')
+    slot_order = data.get('startNeighborhoodSlotVectorOrderSummary', {})
+    if slot_order.get('sourceLabel') != 'decoded-resource-backed-start-neighborhood-slot-vector-order-scout':
+        raise ValueError('sourced EV systems manifest missing start-neighborhood slot-vector order source label')
+    if slot_order.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-vector order should keep display scaling pending')
+    if [entry.get('targetResourceId') for entry in slot_order.get('linkedSlotOrder', [])] != [128, 129, 130, 131]:
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-vector order has unexpected target resource order')
+    if slot_order.get('nonSelfResourceIdsByDistanceCandidate') != [131, 129, 130]:
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-vector order has unexpected distance order')
+    if slot_order.get('firstNonSelfSlotName') != 'Con2' or slot_order.get('firstNonSelfResourceId') != 129:
+        raise ValueError('sourced EV systems manifest start-neighborhood slot-vector order has unexpected first non-self link')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')
@@ -510,7 +521,12 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest first system is not mapped to Levo')
     if 'original-runtime-observed' not in first_exact_name.get('sourceBasis', []):
         raise ValueError('sourced EV systems manifest Levo mapping missing runtime source basis')
-    if 'Con1-Con16 link slot names' not in data.get('promotionBoundary', '') or 'resource ID 128 to Levo' not in data.get('promotionBoundary', ''):
+    boundary = data.get('promotionBoundary', '')
+    if (
+        'Con1-Con16 link slot names' not in boundary
+        or 'resource ID 128 to Levo' not in boundary
+        or 'link-slot/display-vector order analysis' not in boundary
+    ):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
     return data
 

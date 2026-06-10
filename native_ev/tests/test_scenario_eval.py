@@ -1819,6 +1819,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_start_neighborhood_display_transform_summary',
             'recorded_start_neighborhood_display_distance_summary',
             'recorded_start_neighborhood_display_vector_summary',
+            'recorded_start_neighborhood_slot_vector_order_summary',
             'recorded_exact_start_system_mapping',
             'recorded_static_topology_source_boundary',
         ]:
@@ -1930,6 +1931,16 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['startNeighborhoodDisplayVectorNonSelfQuadrants'], ['north-east', 'south-east'])
         self.assertEqual(readiness['startNeighborhoodDisplayVectorNonSelfDominantAxisDistribution'], {'x': 1, 'y': 2})
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodDisplayVectorSourceLabel'], 'decoded-resource-backed-start-neighborhood-display-vector-scout')
+        self.assertEqual(readiness['startNeighborhoodSlotVectorOrderSourceLabel'], 'decoded-resource-backed-start-neighborhood-slot-vector-order-scout')
+        self.assertEqual(readiness['startNeighborhoodSlotVectorOrderOracleStatus'], 'coordinate_display_units_map_scaling_pending')
+        self.assertIn('start-neighborhood Con-slot order candidates', readiness['startNeighborhoodSlotVectorOrderCandidateFamilies'])
+        self.assertEqual(readiness['startNeighborhoodSlotVectorOrderNeighborResourceIds'], [128, 129, 130, 131])
+        self.assertEqual(readiness['startNeighborhoodSlotVectorOrderFirstNonSelfSlotName'], 'Con2')
+        self.assertEqual(readiness['startNeighborhoodSlotVectorOrderFirstNonSelfResourceId'], 129)
+        self.assertEqual(readiness['startNeighborhoodSlotVectorOrderNonSelfResourceIdsByDistance'], [131, 129, 130])
+        self.assertEqual(readiness['startNeighborhoodSlotVectorOrderCon4DistanceRank'], 1)
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotVectorOrderSourceLabel'], 'decoded-resource-backed-start-neighborhood-slot-vector-order-scout')
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotVectorOrderFirstNonSelfResourceId'], 129)
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
         self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')
