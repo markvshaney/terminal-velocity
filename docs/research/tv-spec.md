@@ -311,7 +311,13 @@ For each actionable backlog item with `touched_surfaces`, the dispatch checker r
 
 Commit/push is a durability or coordination action, not the unit of development. Do not commit/push merely because a coherent local slice completed.
 
-Run the full commit/push procedure only when one of these is true:
+Checkpoint policy decides when remote publication is needed; role policy decides who may publish. A normal non-force push is not human-gated under existing repo policy, but only the integration owner performs the push.
+
+Workers/continuous runners may checkpoint locally when this policy triggers, but they do not push. When remote publication is needed, a worker records `push_ready` with commit SHA, intended files, verification commands/results, and remaining next action, then continues safe local work when possible or stops at a real gate/cap/no-safe-slice boundary. Missing GitHub credentials in a worker are not a TV development gate.
+
+The integration owner performs final status/diff review, runs required checkpoint verification, pushes normal non-force bundles, fetches, verifies local `HEAD == origin/main`, and records the pushed checkpoint.
+
+Run the full checkpoint procedure only when one of these is true:
 
 - user explicitly asks for a checkpoint/push;
 - context/tool/reset limit is near and uncommitted work would be costly to reconstruct;
@@ -343,7 +349,7 @@ Use this loop:
 3. Pick lane: A, B, C, D, E, or Basilisk runtime lane.
 4. Execute the smallest vertical increment, then continue through adjacent increments under the long-running efficiency policy when safe.
 5. Emit or locally record increment packets with files, command output, `oracle_class`, `source_basis`, evidence label, promotion status, uncertainty, and gates; batch routine external reports.
-6. Integrate: one owner verifies, updates backlog/provenance only when future execution state changes, and commits/pushes only when the Git checkpoint policy is triggered.
+6. Integrate: one owner verifies, updates backlog/provenance only when future execution state changes, performs any local checkpoint commit when the Git checkpoint policy is triggered, and pushes only when acting as the integration owner.
 7. Continue unless a real gate, cap/handoff boundary, failed verifier, unsafe dirty state, or no-safe-local-slice condition is reached.
 
 ## Autoresearch boundary
@@ -367,7 +373,7 @@ Gated:
 Not gated:
 
 - ordinary safe-local TV development in the current session;
-- normal coherent non-force TV pushes under the existing repo policy.
+- normal coherent non-force TV pushes by the integration owner under the existing repo policy.
 
 ## Completion definition
 
