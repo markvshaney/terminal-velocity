@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v40':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v42':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -378,6 +378,36 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest syst field-order conflict expected zero-only projected Con6-Con16 window')
     if 'Con6-Con16 split placement cannot be promoted' not in ' '.join(syst_field_order_conflict.get('promotionBlockers', [])):
         raise ValueError('sourced EV systems manifest syst field-order conflict missing Con6-Con16 promotion blocker')
+    sequential_projection = data.get('resourceBibleSystSequentialFieldProjectionSummary', {})
+    if sequential_projection.get('sourceLabel') != 'resource-bible-backed-syst-sequential-field-projection-negative-oracle':
+        raise ValueError('sourced EV systems manifest missing Resource Bible syst sequential projection negative oracle')
+    if sequential_projection.get('oracleStatus') != 'sequential_syst_field_projection_blocked_pending_width_offset_or_runtime_oracle':
+        raise ValueError('sourced EV systems manifest sequential projection must stay blocked pending field oracle')
+    if sequential_projection.get('recordCount') != 67 or sequential_projection.get('recordSize') != 88:
+        raise ValueError('sourced EV systems manifest sequential projection has unexpected record coverage')
+    if sequential_projection.get('projectedFieldGroupCount') != 6:
+        raise ValueError('sourced EV systems manifest sequential projection missing field groups')
+    if 'Con6-Con16 additional hyperspace links' not in sequential_projection.get('blockedProjectionFamilies', []):
+        raise ValueError('sourced EV systems manifest sequential projection must block projected Con6-Con16 semantics')
+    projected_groups = {entry.get('fieldFamily'): entry for entry in sequential_projection.get('projectedFieldGroups', [])}
+    if projected_groups.get('NavDef F1-F4 navigation defaults', {}).get('wordIndices') != [9, 10, 11, 12]:
+        raise ValueError('sourced EV systems manifest sequential projection changed NavDef candidate words')
+    if projected_groups.get('Con6-Con16 additional hyperspace links', {}).get('domainSummary', {}).get('allValuesZero') is not True:
+        raise ValueError('sourced EV systems manifest sequential projection expected zero-only projected Con6-Con16 words')
+    if 'direct sequential projection would place Con6-Con16 at all-zero words 27-37' not in ' '.join(sequential_projection.get('blockingSignals', [])):
+        raise ValueError('sourced EV systems manifest sequential projection missing all-zero conflict signal')
+    field_count_budget = sequential_projection.get('fieldCountBudgetSummary', {})
+    if field_count_budget.get('sourceLabel') != 'resource-bible-backed-syst-field-count-budget-negative-oracle':
+        raise ValueError('sourced EV systems manifest sequential projection missing field-count budget negative oracle')
+    if field_count_budget.get('recordWords') != 44 or field_count_budget.get('sourceFieldCountTotal') != 36:
+        raise ValueError('sourced EV systems manifest field-count budget has unexpected record/source counts')
+    budget_candidates = {entry.get('candidate'): entry for entry in field_count_budget.get('projectedWordBudgetCandidates', [])}
+    if budget_candidates.get('16-bit xPos/yPos plus 16-bit downstream fields', {}).get('unassignedTailWordCount') != 8:
+        raise ValueError('sourced EV systems manifest field-count budget changed 16-bit tail count')
+    if budget_candidates.get('32-bit xPos/yPos plus 16-bit downstream fields', {}).get('unassignedTailWordCount') != 6:
+        raise ValueError('sourced EV systems manifest field-count budget changed 32-bit tail count')
+    if 'field-count arithmetic cannot promote NavDef' not in ' '.join(field_count_budget.get('promotionBlockers', [])):
+        raise ValueError('sourced EV systems manifest field-count budget missing promotion blocker')
     word_domain = data.get('systWordDomainCoverageSummary', {})
     if word_domain.get('sourceLabel') != 'decoded-resource-backed-syst-word-domain-coverage-scout':
         raise ValueError('sourced EV systems manifest missing syst word-domain coverage scout')

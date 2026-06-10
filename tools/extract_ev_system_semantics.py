@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v40'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v42'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, named route topology oracle gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood link-slot/display-vector order analysis, non-promoted start-neighborhood slot/angular order analysis, and source provenance are promoted; coordinate display units/map scaling/projection, remaining exact system names, named route topology, services, hazards, governments, ports, and broad runtime universe replacement are explicitly not promoted yet'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -1638,6 +1638,120 @@ def _syst_field_order_conflict_summary(run: dict) -> dict:
     }
 
 
+def _resource_bible_syst_sequential_field_projection_summary(run: dict) -> dict:
+    """Project the Resource Bible syst field order onto current words as a negative oracle."""
+    projected_field_groups = [
+        {
+            'fieldFamily': 'xPos/yPos map coordinates',
+            'wordIndices': [0, 1, 2, 3],
+            'resourceBibleReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 931-932',
+            'domainSummary': _word_group_summary(run, [0, 1, 2, 3]),
+            'projectionStatus': 'promoted-as-coordinate-raw-word-pairs-only; display units remain blocked',
+        },
+        {
+            'fieldFamily': 'Con1-Con5 front hyperspace links',
+            'wordIndices': [4, 5, 6, 7, 8],
+            'resourceBibleReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 933-937',
+            'domainSummary': _word_group_summary(run, [4, 5, 6, 7, 8]),
+            'projectionStatus': 'candidate-link-domain-compatible; exact named route topology remains blocked',
+        },
+        {
+            'fieldFamily': 'NavDef F1-F4 navigation defaults',
+            'wordIndices': [9, 10, 11, 12],
+            'resourceBibleReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 938-945',
+            'domainSummary': _word_group_summary(run, [9, 10, 11, 12]),
+            'projectionStatus': 'not-promoted; current words are no-link sentinels in the contiguous link scout, not verified stellar defaults',
+        },
+        {
+            'fieldFamily': 'DudeTypes/%Prob/AvgShips population controls',
+            'wordIndices': list(range(13, 22)),
+            'resourceBibleReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 946-959',
+            'domainSummary': _word_group_summary(run, list(range(13, 22))),
+            'projectionStatus': 'not-promoted; mixed link-sentinel/percent-like values need field-width and runtime oracle before AI population use',
+        },
+        {
+            'fieldFamily': 'Govt/Message/Asteroids/Interference/VisBit environment and visibility controls',
+            'wordIndices': [22, 23, 24, 25, 26],
+            'resourceBibleReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 961-984',
+            'domainSummary': _word_group_summary(run, [22, 23, 24, 25, 26]),
+            'projectionStatus': 'not-promoted; zero/percent-like projection must not drive government, message, hazard, interference, or visibility gameplay',
+        },
+        {
+            'fieldFamily': 'Con6-Con16 additional hyperspace links',
+            'wordIndices': list(range(27, 38)),
+            'resourceBibleReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 985-989',
+            'domainSummary': _word_group_summary(run, list(range(27, 38))),
+            'projectionStatus': 'not-promoted; projected Con6-Con16 words are all zero in current decode, conflicting with promoted link-window scout values',
+        },
+    ]
+    compatible_families = [
+        entry['fieldFamily'] for entry in projected_field_groups
+        if entry['projectionStatus'].startswith(('promoted-as-coordinate', 'candidate-link-domain-compatible'))
+    ]
+    blocked_families = [
+        entry['fieldFamily'] for entry in projected_field_groups
+        if entry['projectionStatus'].startswith('not-promoted')
+    ]
+    width_budget = {
+        'sourceLabel': 'resource-bible-backed-syst-field-count-budget-negative-oracle',
+        'recordWords': run.get('recordSize') // 2 if run.get('recordSize') else None,
+        'resourceBibleSequentialFieldFamilies': [
+            {'fieldFamily': 'xPos/yPos map coordinates', 'sourceFieldCount': 2, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 931-932'},
+            {'fieldFamily': 'Con1-Con5 front hyperspace links', 'sourceFieldCount': 5, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 933-937'},
+            {'fieldFamily': 'NavDef F1-F4 navigation defaults', 'sourceFieldCount': 4, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 938-945'},
+            {'fieldFamily': 'DudeTypes/%Prob/AvgShips population controls', 'sourceFieldCount': 9, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 946-959'},
+            {'fieldFamily': 'Govt/Message/Asteroids/Interference/VisBit environment and visibility controls', 'sourceFieldCount': 5, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 961-984'},
+            {'fieldFamily': 'Con6-Con16 additional hyperspace links', 'sourceFieldCount': 11, 'sourceReference': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 985-989'},
+        ],
+        'sourceFieldCountTotal': 36,
+        'projectedWordBudgetCandidates': [
+            {
+                'candidate': '16-bit xPos/yPos plus 16-bit downstream fields',
+                'projectedWordsUsed': 36,
+                'unassignedTailWordCount': (run.get('recordSize') // 2 - 36) if run.get('recordSize') else None,
+                'promotionStatus': 'not-promoted; leaves eight record words unassigned and conflicts with existing raw-coordinate word-pair evidence',
+            },
+            {
+                'candidate': '32-bit xPos/yPos plus 16-bit downstream fields',
+                'projectedWordsUsed': 38,
+                'unassignedTailWordCount': (run.get('recordSize') // 2 - 38) if run.get('recordSize') else None,
+                'promotionStatus': 'not-promoted; leaves six record words unassigned and still places Con6-Con16 on zero-only words 27-37',
+            },
+        ],
+        'budgetStatus': 'blocked; Resource Bible field counts constrain the projection but do not identify exact byte widths, padding, or offsets',
+        'promotionBlockers': [
+            'Resource Bible prose names and counts field families but does not specify enough byte-width/padding detail to fill all 44 decoded words',
+            'both 16-bit-coordinate and 32-bit-coordinate field-count budgets leave unassigned tail words in the 88-byte record',
+            'field-count arithmetic cannot promote NavDef, population, government, message, hazards, visibility, or Con6-Con16 without an offset/runtime oracle',
+        ],
+    }
+    return {
+        'sourceLabel': 'resource-bible-backed-syst-sequential-field-projection-negative-oracle',
+        'oracleStatus': 'sequential_syst_field_projection_blocked_pending_width_offset_or_runtime_oracle',
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'fieldCountBudgetSummary': width_budget,
+        'projectedFieldGroups': projected_field_groups,
+        'projectedFieldGroupCount': len(projected_field_groups),
+        'compatibleProjectionFamilies': compatible_families,
+        'blockedProjectionFamilies': blocked_families,
+        'blockingSignals': [
+            'Resource Bible prose gives the sequential family order but not enough byte-width evidence to reconcile every current decoded word offset',
+            'current decoded words 4-19 carry the link-domain scout, while a direct sequential projection would place Con6-Con16 at all-zero words 27-37',
+            'words 9-12 look like no-link sentinels in the current scout and must not be promoted as NavDef stellar object IDs without an offset/runtime oracle',
+            'government, message, hazard, interference, visibility, population, and AI fields remain source-backed family names only',
+        ],
+        'promotionReadinessStatus': 'blocked; sequential Resource Bible projection is an executable negative oracle, not a complete syst field map',
+        'nextEvidenceFamilies': [
+            'source-level syst struct declaration or template with exact byte widths and offsets',
+            'ResEdit/editor field map proving how the prose field order maps onto the 88-byte records',
+            'runtime probes for NavDef, population, government, message, hazard, interference, visibility, and Con6-Con16 behavior',
+        ],
+        'sourceNote': 'This packet preserves the Resource Bible sequential field-family text as a testable projection while explicitly blocking non-topology gameplay semantics where the projection conflicts with decoded word-domain evidence.',
+    }
+
+
 def _syst_word_domain_coverage_summary(run: dict) -> dict:
     """Preserve a complete word-domain coverage matrix for future syst offset oracles."""
     word_domains = []
@@ -1701,6 +1815,7 @@ def _non_topology_syst_oracle_gap_summary(run: dict) -> dict:
     evidence_inputs = [
         'systFieldLayoutSourceReadinessSummary',
         'systFieldOrderConflictSummary',
+        'resourceBibleSystSequentialFieldProjectionSummary',
         'systWordDomainCoverageSummary',
         'runtimeUniverseReplacementGateSummary',
     ]
@@ -1943,6 +2058,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
+        'resourceBibleSystSequentialFieldProjectionSummary': _resource_bible_syst_sequential_field_projection_summary(run),
         'systWordDomainCoverageSummary': _syst_word_domain_coverage_summary(run),
         'nonTopologySystOracleGapSummary': _non_topology_syst_oracle_gap_summary(run),
         'topologyPromotionReadinessSummary': _topology_promotion_readiness_summary(systems, names),

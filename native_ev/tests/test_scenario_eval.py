@@ -1807,6 +1807,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_map_source_readiness_summary',
             'recorded_syst_field_layout_source_readiness_summary',
             'recorded_syst_field_order_conflict_summary',
+            'recorded_resource_bible_syst_sequential_projection_negative_oracle',
+            'recorded_resource_bible_syst_field_count_budget_negative_oracle',
             'recorded_syst_word_domain_coverage_summary',
             'recorded_non_topology_syst_oracle_gap',
             'recorded_topology_promotion_readiness_summary',
@@ -1884,6 +1886,24 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('source-level syst struct declaration', readiness['systFieldOrderConflictNextEvidenceFamilies'][0])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systFieldOrderConflictSourceLabel'], 'decoded-resource-backed-syst-field-order-conflict-scout')
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systFieldLayoutSourceReadinessSourceLabel'], 'resource-bible-backed-syst-field-layout-source-readiness')
+        self.assertEqual(readiness['resourceBibleSystSequentialProjectionSourceLabel'], 'resource-bible-backed-syst-sequential-field-projection-negative-oracle')
+        self.assertEqual(readiness['resourceBibleSystSequentialProjectionOracleStatus'], 'sequential_syst_field_projection_blocked_pending_width_offset_or_runtime_oracle')
+        self.assertEqual(readiness['resourceBibleSystSequentialProjectionFieldGroupCount'], 6)
+        self.assertIn('Con1-Con5 front hyperspace links', readiness['resourceBibleSystSequentialProjectionCompatibleFamilies'])
+        self.assertIn('Con6-Con16 additional hyperspace links', readiness['resourceBibleSystSequentialProjectionBlockedFamilies'])
+        self.assertEqual(readiness['resourceBibleSystSequentialProjectionNavDefWords'], [9, 10, 11, 12])
+        self.assertTrue(readiness['resourceBibleSystSequentialProjectionCon6ToCon16Domain']['allValuesZero'])
+        budget = readiness['resourceBibleSystSequentialProjectionFieldCountBudget']
+        self.assertEqual(budget['sourceLabel'], 'resource-bible-backed-syst-field-count-budget-negative-oracle')
+        self.assertEqual(budget['recordWords'], 44)
+        self.assertEqual(budget['sourceFieldCountTotal'], 36)
+        self.assertEqual(budget['projectedWordBudgetCandidates'][0]['unassignedTailWordCount'], 8)
+        self.assertEqual(budget['projectedWordBudgetCandidates'][1]['unassignedTailWordCount'], 6)
+        self.assertIn('field-count arithmetic cannot promote NavDef', ' '.join(budget['promotionBlockers']))
+        self.assertIn('direct sequential projection would place Con6-Con16 at all-zero words 27-37', ' '.join(readiness['resourceBibleSystSequentialProjectionBlockingSignals']))
+        self.assertIn('blocked', readiness['resourceBibleSystSequentialProjectionReadinessStatus'])
+        self.assertIn('source-level syst struct declaration', readiness['resourceBibleSystSequentialProjectionNextEvidenceFamilies'][0])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['resourceBibleSystSequentialProjectionSourceLabel'], 'resource-bible-backed-syst-sequential-field-projection-negative-oracle')
         self.assertEqual(readiness['systWordDomainCoverageSourceLabel'], 'decoded-resource-backed-syst-word-domain-coverage-scout')
         self.assertEqual(readiness['systWordDomainCoverageOracleStatus'], 'syst_field_order_mapping_pending_complete_oracle')
         self.assertEqual(readiness['systWordDomainCoverageWordCount'], 44)
@@ -1896,8 +1916,9 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['nonTopologySystOracleGapSourceLabel'], 'decoded-resource-backed-non-topology-syst-oracle-gap')
         self.assertEqual(readiness['nonTopologySystOracleGapOracleStatus'], 'non_topology_syst_fields_blocked_pending_field_order_or_runtime_oracle')
         self.assertEqual(readiness['nonTopologySystOracleGapRecordCount'], 67)
-        self.assertEqual(readiness['nonTopologySystOracleGapInputSummaryCount'], 4)
+        self.assertEqual(readiness['nonTopologySystOracleGapInputSummaryCount'], 5)
         self.assertIn('systFieldOrderConflictSummary', readiness['nonTopologySystOracleGapInputSummaries'])
+        self.assertIn('resourceBibleSystSequentialFieldProjectionSummary', readiness['nonTopologySystOracleGapInputSummaries'])
         self.assertIn('NavDef F1-F4 navigation defaults', readiness['nonTopologySystOracleGapBlockedFamilies'])
         self.assertIn('Govt/Message/Asteroids/Interference/VisBit environment and visibility controls', readiness['nonTopologySystOracleGapBlockedFamilies'])
         self.assertIn('do not route AI, hazards, message buoys, visibility, or government ownership from unresolved word windows', readiness['nonTopologySystOracleGapPromotionBlockers'])

@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v40')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v42')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3463,6 +3463,27 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertTrue(conflict_scouts['projectedCon6ToCon16Words27To37']['allValuesZero'])
         self.assertIn('Con6-Con16 split placement cannot be promoted', ' '.join(field_order_conflict['promotionBlockers']))
         self.assertIn('source-level syst struct declaration', field_order_conflict['nextEvidenceFamilies'][0])
+        sequential_projection = data['resourceBibleSystSequentialFieldProjectionSummary']
+        self.assertEqual(sequential_projection['sourceLabel'], 'resource-bible-backed-syst-sequential-field-projection-negative-oracle')
+        self.assertEqual(sequential_projection['oracleStatus'], 'sequential_syst_field_projection_blocked_pending_width_offset_or_runtime_oracle')
+        self.assertEqual(sequential_projection['recordCount'], 67)
+        self.assertEqual(sequential_projection['recordSize'], 88)
+        self.assertEqual(sequential_projection['projectedFieldGroupCount'], 6)
+        self.assertIn('Con1-Con5 front hyperspace links', sequential_projection['compatibleProjectionFamilies'])
+        self.assertIn('NavDef F1-F4 navigation defaults', sequential_projection['blockedProjectionFamilies'])
+        projected_groups = {entry['fieldFamily']: entry for entry in sequential_projection['projectedFieldGroups']}
+        self.assertEqual(projected_groups['NavDef F1-F4 navigation defaults']['wordIndices'], [9, 10, 11, 12])
+        self.assertTrue(projected_groups['Con6-Con16 additional hyperspace links']['domainSummary']['allValuesZero'])
+        field_count_budget = sequential_projection['fieldCountBudgetSummary']
+        self.assertEqual(field_count_budget['sourceLabel'], 'resource-bible-backed-syst-field-count-budget-negative-oracle')
+        self.assertEqual(field_count_budget['recordWords'], 44)
+        self.assertEqual(field_count_budget['sourceFieldCountTotal'], 36)
+        self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][0]['unassignedTailWordCount'], 8)
+        self.assertEqual(field_count_budget['projectedWordBudgetCandidates'][1]['unassignedTailWordCount'], 6)
+        self.assertIn('field-count arithmetic cannot promote NavDef', ' '.join(field_count_budget['promotionBlockers']))
+        self.assertIn('direct sequential projection would place Con6-Con16 at all-zero words 27-37', ' '.join(sequential_projection['blockingSignals']))
+        self.assertIn('blocked', sequential_projection['promotionReadinessStatus'])
+        self.assertIn('source-level syst struct declaration', sequential_projection['nextEvidenceFamilies'][0])
         word_domain = data['systWordDomainCoverageSummary']
         self.assertEqual(word_domain['sourceLabel'], 'decoded-resource-backed-syst-word-domain-coverage-scout')
         self.assertEqual(word_domain['oracleStatus'], 'syst_field_order_mapping_pending_complete_oracle')
@@ -3487,6 +3508,7 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(non_topology_gap['evidenceInputSummaries'], [
             'systFieldLayoutSourceReadinessSummary',
             'systFieldOrderConflictSummary',
+            'resourceBibleSystSequentialFieldProjectionSummary',
             'systWordDomainCoverageSummary',
             'runtimeUniverseReplacementGateSummary',
         ])

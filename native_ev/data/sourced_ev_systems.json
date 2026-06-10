@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v40",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-resource-bible-syst-sequential-field-projection-field-count-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-slot-vector-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v42",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, and original-runtime-observed starting system Levo",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -1339,6 +1339,388 @@
     ],
     "sourceNote": "This matrix records a deliberate unresolved mismatch between Resource Bible field-order prose and the current decoded word-domain scout. It keeps the candidate link graph available while preventing broad field-layout promotion until an offset oracle or runtime probe resolves the split."
   },
+  "resourceBibleSystSequentialFieldProjectionSummary": {
+    "sourceLabel": "resource-bible-backed-syst-sequential-field-projection-negative-oracle",
+    "oracleStatus": "sequential_syst_field_projection_blocked_pending_width_offset_or_runtime_oracle",
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "fieldCountBudgetSummary": {
+      "sourceLabel": "resource-bible-backed-syst-field-count-budget-negative-oracle",
+      "recordWords": 44,
+      "resourceBibleSequentialFieldFamilies": [
+        {
+          "fieldFamily": "xPos/yPos map coordinates",
+          "sourceFieldCount": 2,
+          "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 931-932"
+        },
+        {
+          "fieldFamily": "Con1-Con5 front hyperspace links",
+          "sourceFieldCount": 5,
+          "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 933-937"
+        },
+        {
+          "fieldFamily": "NavDef F1-F4 navigation defaults",
+          "sourceFieldCount": 4,
+          "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-945"
+        },
+        {
+          "fieldFamily": "DudeTypes/%Prob/AvgShips population controls",
+          "sourceFieldCount": 9,
+          "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 946-959"
+        },
+        {
+          "fieldFamily": "Govt/Message/Asteroids/Interference/VisBit environment and visibility controls",
+          "sourceFieldCount": 5,
+          "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 961-984"
+        },
+        {
+          "fieldFamily": "Con6-Con16 additional hyperspace links",
+          "sourceFieldCount": 11,
+          "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 985-989"
+        }
+      ],
+      "sourceFieldCountTotal": 36,
+      "projectedWordBudgetCandidates": [
+        {
+          "candidate": "16-bit xPos/yPos plus 16-bit downstream fields",
+          "projectedWordsUsed": 36,
+          "unassignedTailWordCount": 8,
+          "promotionStatus": "not-promoted; leaves eight record words unassigned and conflicts with existing raw-coordinate word-pair evidence"
+        },
+        {
+          "candidate": "32-bit xPos/yPos plus 16-bit downstream fields",
+          "projectedWordsUsed": 38,
+          "unassignedTailWordCount": 6,
+          "promotionStatus": "not-promoted; leaves six record words unassigned and still places Con6-Con16 on zero-only words 27-37"
+        }
+      ],
+      "budgetStatus": "blocked; Resource Bible field counts constrain the projection but do not identify exact byte widths, padding, or offsets",
+      "promotionBlockers": [
+        "Resource Bible prose names and counts field families but does not specify enough byte-width/padding detail to fill all 44 decoded words",
+        "both 16-bit-coordinate and 32-bit-coordinate field-count budgets leave unassigned tail words in the 88-byte record",
+        "field-count arithmetic cannot promote NavDef, population, government, message, hazards, visibility, or Con6-Con16 without an offset/runtime oracle"
+      ]
+    },
+    "projectedFieldGroups": [
+      {
+        "fieldFamily": "xPos/yPos map coordinates",
+        "wordIndices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "resourceBibleReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 931-932",
+        "domainSummary": {
+          "wordIndices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "observedValueRange": [
+            -32768,
+            28672
+          ],
+          "distinctObservedValues": [
+            -32768,
+            -1,
+            0,
+            1,
+            2,
+            3,
+            4,
+            18,
+            72,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            142,
+            143
+          ],
+          "distinctObservedValueCount": 33,
+          "allValuesZero": false,
+          "allValuesNoLinkSentinel": false,
+          "systemIdDomainValueCount": 64,
+          "noLinkSentinelCount": 4,
+          "zeroValueCount": 42
+        },
+        "projectionStatus": "promoted-as-coordinate-raw-word-pairs-only; display units remain blocked"
+      },
+      {
+        "fieldFamily": "Con1-Con5 front hyperspace links",
+        "wordIndices": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "resourceBibleReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 933-937",
+        "domainSummary": {
+          "wordIndices": [
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "observedValueRange": [
+            -1,
+            153
+          ],
+          "distinctObservedValues": [
+            -1,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            149,
+            150,
+            151
+          ],
+          "distinctObservedValueCount": 25,
+          "allValuesZero": false,
+          "allValuesNoLinkSentinel": false,
+          "systemIdDomainValueCount": 268,
+          "noLinkSentinelCount": 67,
+          "zeroValueCount": 0
+        },
+        "projectionStatus": "candidate-link-domain-compatible; exact named route topology remains blocked"
+      },
+      {
+        "fieldFamily": "NavDef F1-F4 navigation defaults",
+        "wordIndices": [
+          9,
+          10,
+          11,
+          12
+        ],
+        "resourceBibleReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-945",
+        "domainSummary": {
+          "wordIndices": [
+            9,
+            10,
+            11,
+            12
+          ],
+          "observedValueRange": [
+            -1,
+            -1
+          ],
+          "distinctObservedValues": [
+            -1
+          ],
+          "distinctObservedValueCount": 1,
+          "allValuesZero": false,
+          "allValuesNoLinkSentinel": true,
+          "systemIdDomainValueCount": 0,
+          "noLinkSentinelCount": 268,
+          "zeroValueCount": 0
+        },
+        "projectionStatus": "not-promoted; current words are no-link sentinels in the contiguous link scout, not verified stellar defaults"
+      },
+      {
+        "fieldFamily": "DudeTypes/%Prob/AvgShips population controls",
+        "wordIndices": [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "resourceBibleReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 946-959",
+        "domainSummary": {
+          "wordIndices": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ],
+          "observedValueRange": [
+            -1,
+            40
+          ],
+          "distinctObservedValues": [
+            -1,
+            15,
+            19,
+            20,
+            21,
+            25,
+            30,
+            35,
+            37,
+            40
+          ],
+          "distinctObservedValueCount": 10,
+          "allValuesZero": false,
+          "allValuesNoLinkSentinel": false,
+          "systemIdDomainValueCount": 0,
+          "noLinkSentinelCount": 469,
+          "zeroValueCount": 0
+        },
+        "projectionStatus": "not-promoted; mixed link-sentinel/percent-like values need field-width and runtime oracle before AI population use"
+      },
+      {
+        "fieldFamily": "Govt/Message/Asteroids/Interference/VisBit environment and visibility controls",
+        "wordIndices": [
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "resourceBibleReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 961-984",
+        "domainSummary": {
+          "wordIndices": [
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "observedValueRange": [
+            0,
+            55
+          ],
+          "distinctObservedValues": [
+            0,
+            5,
+            10,
+            15,
+            19,
+            20,
+            21,
+            25,
+            30,
+            35,
+            37,
+            40,
+            55
+          ],
+          "distinctObservedValueCount": 13,
+          "allValuesZero": false,
+          "allValuesNoLinkSentinel": false,
+          "systemIdDomainValueCount": 0,
+          "noLinkSentinelCount": 0,
+          "zeroValueCount": 201
+        },
+        "projectionStatus": "not-promoted; zero/percent-like projection must not drive government, message, hazard, interference, or visibility gameplay"
+      },
+      {
+        "fieldFamily": "Con6-Con16 additional hyperspace links",
+        "wordIndices": [
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37
+        ],
+        "resourceBibleReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 985-989",
+        "domainSummary": {
+          "wordIndices": [
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ],
+          "observedValueRange": [
+            0,
+            0
+          ],
+          "distinctObservedValues": [
+            0
+          ],
+          "distinctObservedValueCount": 1,
+          "allValuesZero": true,
+          "allValuesNoLinkSentinel": false,
+          "systemIdDomainValueCount": 0,
+          "noLinkSentinelCount": 0,
+          "zeroValueCount": 737
+        },
+        "projectionStatus": "not-promoted; projected Con6-Con16 words are all zero in current decode, conflicting with promoted link-window scout values"
+      }
+    ],
+    "projectedFieldGroupCount": 6,
+    "compatibleProjectionFamilies": [
+      "xPos/yPos map coordinates",
+      "Con1-Con5 front hyperspace links"
+    ],
+    "blockedProjectionFamilies": [
+      "NavDef F1-F4 navigation defaults",
+      "DudeTypes/%Prob/AvgShips population controls",
+      "Govt/Message/Asteroids/Interference/VisBit environment and visibility controls",
+      "Con6-Con16 additional hyperspace links"
+    ],
+    "blockingSignals": [
+      "Resource Bible prose gives the sequential family order but not enough byte-width evidence to reconcile every current decoded word offset",
+      "current decoded words 4-19 carry the link-domain scout, while a direct sequential projection would place Con6-Con16 at all-zero words 27-37",
+      "words 9-12 look like no-link sentinels in the current scout and must not be promoted as NavDef stellar object IDs without an offset/runtime oracle",
+      "government, message, hazard, interference, visibility, population, and AI fields remain source-backed family names only"
+    ],
+    "promotionReadinessStatus": "blocked; sequential Resource Bible projection is an executable negative oracle, not a complete syst field map",
+    "nextEvidenceFamilies": [
+      "source-level syst struct declaration or template with exact byte widths and offsets",
+      "ResEdit/editor field map proving how the prose field order maps onto the 88-byte records",
+      "runtime probes for NavDef, population, government, message, hazard, interference, visibility, and Con6-Con16 behavior"
+    ],
+    "sourceNote": "This packet preserves the Resource Bible sequential field-family text as a testable projection while explicitly blocking non-topology gameplay semantics where the projection conflicts with decoded word-domain evidence."
+  },
   "systWordDomainCoverageSummary": {
     "sourceLabel": "decoded-resource-backed-syst-word-domain-coverage-scout",
     "oracleStatus": "syst_field_order_mapping_pending_complete_oracle",
@@ -2281,10 +2663,11 @@
     "evidenceInputSummaries": [
       "systFieldLayoutSourceReadinessSummary",
       "systFieldOrderConflictSummary",
+      "resourceBibleSystSequentialFieldProjectionSummary",
       "systWordDomainCoverageSummary",
       "runtimeUniverseReplacementGateSummary"
     ],
-    "evidenceInputSummaryCount": 4,
+    "evidenceInputSummaryCount": 5,
     "blockedResourceBibleFamilies": [
       "NavDef F1-F4 navigation defaults",
       "DudeTypes/%Prob/AvgShips AI population controls",
