@@ -35,7 +35,7 @@
     "missing evidence required for a fidelity claim",
     "unsafe dirty state that cannot be separated"
   ],
-  "last_material_event_id": "2026-06-10T04:31:52Z",
+  "last_material_event_id": "2026-06-10T04:32:35Z",
   "last_progress_token": "835c4e49b27abf1ae65fcae2243d92492837613ece1df4da31ffb9bb9dad5ef5",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260610T041431Z-7.summary.json",
   "last_verification_summary": "Verified v25 non-promoted system-name/landing-name byte-proximity analysis with extractor idempotence, static topology scenario, full native model/scenario tests, backlog index check, JSON/JSONL parse, and diff whitespace check.",
@@ -47,7 +47,7 @@
     "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v -> Ran 271 tests OK",
     "JSON/JSONL parse OK; extractor temp-output cmp OK; git diff --check passed"
   ],
-  "next_resume_action": "Commit and normal-push the verified v25 system-name/landing-name byte-proximity packet, then continue Lane A display-unit/map-scaling interpretation and exact record-to-name/runtime topology mapping before runtime universe expansion.",
+  "next_resume_action": "Continue Lane A display-unit/map-scaling interpretation plus remaining exact record-to-name/runtime topology mapping before runtime universe expansion. Remote is synchronized; latest promoted slice is a non-promoted system-name/landing-name byte-proximity analysis packet v25.",
   "objective": "Implement docs/research/tv-spec.md as the executable Terminal Velocity long-running development workflow: source-labeled adjacent increment batches, live backlog dispatch fields, verified packets/events, durable checkpoints, and normal coherent integration.",
   "operational_owner_candidate": "loki-game continuous background runner with immediate next-slice loop; paused cron fallback job retained but disabled to avoid overlap",
   "repo": {
@@ -132,5 +132,5 @@
     "near_cap_action": "Stabilize current increment/batch, append compact events, update ledger only for changed resumable state, record next_resume_action; the continuous wrapper immediately starts the next invocation unless ledger status/gate says to stop.",
     "rule": "Tool/time/context caps are per-run budgets, not task completion."
   },
-  "updated_at": "2026-06-10T04:31:52Z"
+  "updated_at": "2026-06-10T04:32:35Z"
 }
