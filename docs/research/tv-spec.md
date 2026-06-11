@@ -267,6 +267,22 @@ Rules:
 - one writer per file/resource surface;
 - Kanban/worktrees are for durable multi-lane work, not line-level patches or a single safe-local slice.
 
+## Runner ownership and dispatch surfaces
+
+TV implementation dispatch uses a single-owner control-plane model:
+
+- `none_active` — no background implementation owner is active;
+- `direct_session` — the current chat/session owns safe-local edits;
+- `continuous_kanban_runner` — one explicitly started TV standalone continuous runner using/dispatching Kanban owns implementation dispatch;
+- `gateway_kanban_dispatcher` — the profile gateway Kanban dispatcher owns TV implementation dispatch when actual TV Kanban board claims/tasks/workers show it owns TV work;
+- `integration_owner` — fan-in, final review, normal non-force push, fetch, and remote verification.
+
+Only one implementation-dispatch owner may be active at a time. Cron is not an implementation owner. A scheduled cron surface, if retained, must be no-agent, script-only reporting or health observation; it must not implement, repair, coordinate, dispatch workers, edit the repo, or act as an LLM fallback for TV work.
+
+Gateway Kanban dispatch, TV standalone continuous loops using/dispatching Kanban, direct sessions, and integration-owner fan-in are distinct control planes. Do not treat clearing one surface as proof that the others are stopped or authorized. Before starting any background implementation runner, run a topology preflight that derives current runtime truth from live cron metadata, detached process state, loop state, actual TV Kanban board claims/tasks/workers, gateway dispatch configuration, git state, and other active control-plane surfaces first, then reconciles `.hermes/long-running/tv-spec-implementation/task-ledger.json` only as declared intent/checkpoint state. The ledger is not live runtime truth by itself. Startup fails closed with a recorded `active_owner_conflict` when another implementation-dispatch owner is active or unresolved. Stale ledger-only disagreement is recorded as `ledger_stale`; passive no-agent reporting cron surfaces are `passive_reporter_ignored`; completed/disabled bootstrap jobs are `stale_bootstrap_job_ignored`; globally enabled gateway dispatch without TV-specific active board/process evidence is `gateway_global_enabled_warning`. Until the topology checker implements the full live-state inspection above, any `topology_conflict` derived only from ledger/config is a diagnosis candidate that must be rechecked against live state before restart, STOP removal, cron/config mutation, or publication.
+
+Related rationale artifact: `docs/research/tv-kanban-topology-review-2026-06-10.md` records why TV's Kanban setup is project-specific: standard Hermes Kanban owns board/claim dispatch, while TV adds a single-owner runner topology around that board. Future topology work should inspect actual TV Kanban claims/tasks before treating gateway dispatch as a live TV implementation owner.
+
 ## Backlog dispatch contract
 
 The live execution surface is:
