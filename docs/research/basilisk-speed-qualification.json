@@ -9,100 +9,126 @@
   },
   "entries": [
     {
-      "evidence_family": "unassigned",
+      "evidence_family": "runtime-ui-setup-smoke",
       "lane_id": "basilisk-lane-1",
-      "speed": "unqualified",
-      "qualification_class": "setup-incomplete",
-      "sentinel_used": "none",
-      "verifier": "pending lane restore/capture/input qualification",
-      "last_checked": "2026-06-09",
-      "status": "setup-incomplete",
-      "restore_readiness": "setup-incomplete",
-      "capture_readiness": "setup-incomplete",
-      "input_readiness": "setup-incomplete",
-      "allowed_oracle_classes": [],
+      "speed": "uncapped-local-fast (delay=0, frameskip=1, jit=false, nosound=true)",
+      "qualification_class": "scout-grade",
+      "sentinel_used": "none; non-timing setup/capture/focus smoke only",
+      "verifier": "Windows process TV4-1 responding; prefs/disk/ROM paths inspected; PrintWindow capture saved at C:\\Games\\BasiliskII\\qualification-captures\\TV4-1.png; topmost/titlebar focus probe verified foreground ownership; no EV command/input mutation performed.",
+      "last_checked": "2026-06-11",
+      "status": "scout-only",
+      "restore_readiness": "dedicated mutable disk C:\\Games\\BasiliskII\\multi4-trial\\instance-1\\System7_5_3_tv4_1.img exists; EV transfer disk C:\\Games\\BasiliskII\\multi4-trial\\instance-1\\EV_Installer_Transfer_tv4_1.hfv exists; shared Quadra ROM path exists; process responding",
+      "capture_readiness": "PrintWindow capture verified for TV4-1 at 646x509; visible Classic Mac OS desktop/EV install or installed EV folder; no blank/error/frozen screen observed",
+      "input_readiness": "host window focus verified via SetWindowPos topmost plus titlebar click; foreground matched Basilisk hwnd; guest EV command input not re-qualified in this pass and must be probed before route/travel/combat evidence",
+      "allowed_oracle_classes": [
+        "runtime-ui"
+      ],
       "disallowed_oracle_classes": [
-        "runtime-ui",
         "runtime-behavior",
         "timing-feel",
         "combat-cadence"
       ],
       "promotion_limitations": [
-        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
-        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+        "Qualified only for booted-lane capacity and non-timing Classic Mac/EV setup UI observation smoke evidence.",
+        "Not promotion-grade for EV route/travel behavior until EV app state, guest command input, and restore/reset procedure are separately probed for the lane.",
+        "Not valid for timing/feel/combat cadence; those require explicit 1x sentinel or direct 1x evidence.",
+        "Raw captures remain local-only under C:\\Games\\BasiliskII\\qualification-captures unless explicitly approved for publication."
       ]
     },
     {
-      "evidence_family": "unassigned",
+      "evidence_family": "runtime-ui-setup-smoke",
       "lane_id": "basilisk-lane-2",
-      "speed": "unqualified",
-      "qualification_class": "setup-incomplete",
-      "sentinel_used": "none",
-      "verifier": "pending lane restore/capture/input qualification",
-      "last_checked": "2026-06-09",
-      "status": "setup-incomplete",
-      "restore_readiness": "setup-incomplete",
-      "capture_readiness": "setup-incomplete",
-      "input_readiness": "setup-incomplete",
-      "allowed_oracle_classes": [],
+      "speed": "uncapped-local-fast (delay=0, frameskip=1, jit=false, nosound=true)",
+      "qualification_class": "scout-grade",
+      "sentinel_used": "none; non-timing setup/capture/focus smoke only",
+      "verifier": "Windows process TV4-2 responding; prefs/disk/ROM paths inspected; PrintWindow capture saved at C:\\Games\\BasiliskII\\qualification-captures\\TV4-2.png; topmost/titlebar focus probe verified foreground ownership; no EV command/input mutation performed.",
+      "last_checked": "2026-06-11",
+      "status": "scout-only",
+      "restore_readiness": "dedicated mutable disk C:\\Games\\BasiliskII\\multi4-trial\\instance-2\\System7_5_3_tv4_2.img exists; EV transfer disk C:\\Games\\BasiliskII\\multi4-trial\\instance-2\\EV_Installer_Transfer_tv4_2.hfv exists; shared Quadra ROM path exists; process responding",
+      "capture_readiness": "PrintWindow capture verified for TV4-2 at 646x509; visible Classic Mac OS desktop/EV install or installed EV folder; no blank/error/frozen screen observed",
+      "input_readiness": "host window focus verified via SetWindowPos topmost plus titlebar click; foreground matched Basilisk hwnd; guest EV command input not re-qualified in this pass and must be probed before route/travel/combat evidence",
+      "allowed_oracle_classes": [
+        "runtime-ui"
+      ],
       "disallowed_oracle_classes": [
-        "runtime-ui",
         "runtime-behavior",
         "timing-feel",
         "combat-cadence"
       ],
       "promotion_limitations": [
-        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
-        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+        "Qualified only for booted-lane capacity and non-timing Classic Mac/EV setup UI observation smoke evidence.",
+        "Not promotion-grade for EV route/travel behavior until EV app state, guest command input, and restore/reset procedure are separately probed for the lane.",
+        "Not valid for timing/feel/combat cadence; those require explicit 1x sentinel or direct 1x evidence.",
+        "Raw captures remain local-only under C:\\Games\\BasiliskII\\qualification-captures unless explicitly approved for publication."
       ]
     },
     {
-      "evidence_family": "unassigned",
+      "evidence_family": "runtime-ui-setup-smoke",
       "lane_id": "basilisk-lane-3",
-      "speed": "unqualified",
-      "qualification_class": "setup-incomplete",
-      "sentinel_used": "none",
-      "verifier": "pending lane restore/capture/input qualification",
-      "last_checked": "2026-06-09",
-      "status": "setup-incomplete",
-      "restore_readiness": "setup-incomplete",
-      "capture_readiness": "setup-incomplete",
-      "input_readiness": "setup-incomplete",
-      "allowed_oracle_classes": [],
+      "speed": "uncapped-local-fast (delay=0, frameskip=1, jit=false, nosound=true)",
+      "qualification_class": "scout-grade",
+      "sentinel_used": "none; non-timing setup/capture/focus smoke only",
+      "verifier": "Windows process TV4-3 responding; prefs/disk/ROM paths inspected; PrintWindow capture saved at C:\\Games\\BasiliskII\\qualification-captures\\TV4-3.png; topmost/titlebar focus probe verified foreground ownership; no EV command/input mutation performed.",
+      "last_checked": "2026-06-11",
+      "status": "scout-only",
+      "restore_readiness": "dedicated mutable disk C:\\Games\\BasiliskII\\multi4-trial\\instance-3\\System7_5_3_tv4_3.img exists; EV transfer disk C:\\Games\\BasiliskII\\multi4-trial\\instance-3\\EV_Installer_Transfer_tv4_3.hfv exists; shared Quadra ROM path exists; process responding",
+      "capture_readiness": "PrintWindow capture verified for TV4-3 at 646x509; visible Classic Mac OS desktop/EV install or installed EV folder; no blank/error/frozen screen observed",
+      "input_readiness": "host window focus verified via SetWindowPos topmost plus titlebar click; foreground matched Basilisk hwnd; guest EV command input not re-qualified in this pass and must be probed before route/travel/combat evidence",
+      "allowed_oracle_classes": [
+        "runtime-ui"
+      ],
       "disallowed_oracle_classes": [
-        "runtime-ui",
         "runtime-behavior",
         "timing-feel",
         "combat-cadence"
       ],
       "promotion_limitations": [
-        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
-        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+        "Qualified only for booted-lane capacity and non-timing Classic Mac/EV setup UI observation smoke evidence.",
+        "Not promotion-grade for EV route/travel behavior until EV app state, guest command input, and restore/reset procedure are separately probed for the lane.",
+        "Not valid for timing/feel/combat cadence; those require explicit 1x sentinel or direct 1x evidence.",
+        "Raw captures remain local-only under C:\\Games\\BasiliskII\\qualification-captures unless explicitly approved for publication."
       ]
     },
     {
-      "evidence_family": "unassigned",
+      "evidence_family": "runtime-ui-setup-smoke",
       "lane_id": "basilisk-lane-4",
-      "speed": "unqualified",
-      "qualification_class": "setup-incomplete",
-      "sentinel_used": "none",
-      "verifier": "pending lane restore/capture/input qualification",
-      "last_checked": "2026-06-09",
-      "status": "setup-incomplete",
-      "restore_readiness": "setup-incomplete",
-      "capture_readiness": "setup-incomplete",
-      "input_readiness": "setup-incomplete",
-      "allowed_oracle_classes": [],
+      "speed": "uncapped-local-fast (delay=0, frameskip=1, jit=false, nosound=true)",
+      "qualification_class": "scout-grade",
+      "sentinel_used": "none; non-timing setup/capture/focus smoke only",
+      "verifier": "Windows process TV4-4 responding; prefs/disk/ROM paths inspected; PrintWindow capture saved at C:\\Games\\BasiliskII\\qualification-captures\\TV4-4.png; topmost/titlebar focus probe verified foreground ownership; no EV command/input mutation performed.",
+      "last_checked": "2026-06-11",
+      "status": "scout-only",
+      "restore_readiness": "dedicated mutable disk C:\\Games\\BasiliskII\\multi4-trial\\instance-4\\System7_5_3_tv4_4.img exists; EV transfer disk C:\\Games\\BasiliskII\\multi4-trial\\instance-4\\EV_Installer_Transfer_tv4_4.hfv exists; shared Quadra ROM path exists; process responding",
+      "capture_readiness": "PrintWindow capture verified for TV4-4 at 646x509; visible Classic Mac OS desktop/EV install or installed EV folder; no blank/error/frozen screen observed",
+      "input_readiness": "host window focus verified via SetWindowPos topmost plus titlebar click; foreground matched Basilisk hwnd; guest EV command input not re-qualified in this pass and must be probed before route/travel/combat evidence",
+      "allowed_oracle_classes": [
+        "runtime-ui"
+      ],
       "disallowed_oracle_classes": [
-        "runtime-ui",
         "runtime-behavior",
         "timing-feel",
         "combat-cadence"
       ],
       "promotion_limitations": [
-        "No original-runtime evidence promotion from this lane until restore/capture/input readiness are recorded.",
-        "No timing/feel/combat promotion without a 1x sentinel or direct 1x evidence."
+        "Qualified only for booted-lane capacity and non-timing Classic Mac/EV setup UI observation smoke evidence.",
+        "Not promotion-grade for EV route/travel behavior until EV app state, guest command input, and restore/reset procedure are separately probed for the lane.",
+        "Not valid for timing/feel/combat cadence; those require explicit 1x sentinel or direct 1x evidence.",
+        "Raw captures remain local-only under C:\\Games\\BasiliskII\\qualification-captures unless explicitly approved for publication."
       ]
     }
-  ]
+  ],
+  "last_capacity_qualification": {
+    "checked_at": "2026-06-11",
+    "result": "four Basilisk II Windows GUI lanes are live, responding, independently disked, capture-ready, and host-focusable for non-timing runtime-UI setup smoke; EV guest command/input and timing evidence remain unqualified.",
+    "live_windows": [
+      "TV4-1",
+      "TV4-2",
+      "TV4-3",
+      "TV4-4"
+    ],
+    "local_capture_dir": "C:\\Games\\BasiliskII\\qualification-captures",
+    "process_probe": "Get-Process BasiliskII returned four responding processes",
+    "focus_probe": "SetWindowPos topmost + titlebar click made each TV4 window foreground in turn",
+    "raw_capture_policy": "Raw Basilisk screenshots/captures remain local-only unless explicitly approved; this artifact records derived qualification state and local/provenance handles only."
+  }
 }

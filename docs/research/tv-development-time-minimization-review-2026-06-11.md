@@ -1,232 +1,156 @@
 # TV development-time minimization review
 
 Date: 2026-06-11
-Status: current setup assessment and recommendations
+Status: current setup assessment after completed cleanup/qualification work
 Scope: Terminal Velocity development workflow/process only. This is not an EV Classic gameplay/fidelity source.
 
 ## Decision
 
-Keep the current direction: **parallel executable lanes + fast evaluators + batched integration + fidelity gates + playable-payoff dispatch** is the right time-minimizing architecture.
+The time-minimizing architecture remains: **parallel executable lanes + fast evaluators + batched integration + fidelity gates + playable-payoff dispatch**.
 
-Revise the operating setup before restarting autonomous implementation, because the live control plane now has one remaining local gate:
+Completed cleanup and qualification work has been removed from the action list. The artifact now tracks only the current operating posture and remaining recommendations:
 
-1. the continuous runner is not live;
-2. `HEAD` equals `origin/main`, but tracked and untracked local changes remain;
-3. the topology checker false positive for the enabled Loki Game memory-hygiene cron was fixed on 2026-06-11 by narrowing cron TV ownership detection to explicit TV control-plane surfaces;
-4. the ledger was reconciled on 2026-06-11 to `declared_owner: none_active`, `status: paused`, and active gate `dirty_worktree_reconciliation`.
+1. resume playable-payoff batches under `continuous_kanban_runner` after a fresh topology preflight;
+2. continue route/fuel/travel-player affordance work as TV scaffolds unless Classic evidence supports promotion;
+3. use the four Basilisk `TV4-*` lanes only for scout-grade non-timing runtime-UI setup/capture/focus work until one lane is separately qualified for EV app state, guest input, and restore/reset;
+4. keep backlog/priority/verifier maps as the machine-readable dispatch surface.
 
-So the highest-leverage next move is **dirty-worktree cleanup/checkpointing first, then resume playable-payoff batches**. Do not start another runner until the dirty files are classified and either checkpointed or reverted.
+Starting/restarting the runner remains an operational side effect and should use the established TV control-plane policy. There is no current dirty-worktree, stale-ledger, or topology-conflict blocker recorded by this artifact.
 
-## Sources inspected
+## Current truth sources
 
-Live/repo sources inspected for this review:
+Live/repo sources for this current assessment:
 
-- `docs/research/tv-spec.md`
-- `docs/prompts/tv-spec-implementation-long-task-prompt.md`
-- `docs/research/long-running-task-wrapper-spec.md`
-- `docs/research/tv-kanban-topology-review-2026-06-10.md`
 - `.hermes/long-running/tv-spec-implementation/task-ledger.json`
-- `.hermes/long-running/tv-spec-implementation/events.jsonl` tail, lines 142-181
-- `.hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json`
-- `.hermes/long-running/tv-spec-implementation/continuous-runner/index.jsonl`
-- `docs/checklists/tv-playable-milestone-priority-map.json`
-- `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json`
-- `docs/checklists/tv-verifier-impact-map.json`
 - `docs/research/basilisk-speed-qualification.json`
-- `/home/bh/.hermes/profiles/loki-game/cron/jobs.json`
+- `docs/checklists/ev-classic-original-runtime-observation-checklist.md`
 - `tools/check_tv_runner_topology.py`
+- `native_ev/tests/test_tv_spec_continuous_runner.py`
+- current git status/history/remote-tracking state
 
-Live commands run:
+Current verification commands from the recent setup pass:
 
 ```text
 git status --short --branch
-# -> ## main...origin/main
-# -> dirty tracked files: .hermes/long-running/tv-spec-implementation/task-ledger.json, native_ev/data/sourced_ev_systems.json, native_ev/model.py, native_ev/scenario_eval.py, native_ev/tests/test_model.py, native_ev/tests/test_scenario_eval.py, native_ev/tests/test_tv_spec_continuous_runner.py, tools/check_tv_runner_topology.py, tools/extract_ev_system_semantics.py
-# -> untracked files: docs/research/tv-development-time-minimization-review-2026-06-11.md
-
-git rev-parse HEAD origin/main
-# -> both 2e3ff8679497a109e5d189fc125d6972792fdc6c
-
-git diff --stat
-# -> source/gameplay files plus topology-checker/doc/ledger changes are dirty; see git status for exact current set.
+# -> ## main...origin/main plus current doc/ledger/qualification edits only
 
 python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner
-# -> exit 0; ok true; topology_conflict false; conflict_types []
-# -> live_implementation_owner none_active; declared_implementation_owner none_active; warning_types []
+# -> ok true; topology_conflict false; warning_types []
+
+python3 tools/basilisk_speed_qualification.py
+# -> BASILISK SPEED QUALIFICATION OK
+
+python3 -m unittest native_ev.tests.test_basilisk_speed_qualification -v
+# -> Ran 3 tests OK
+
+python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json
+# -> valid JSON
+
+git diff --check
+# -> clean
 ```
 
-Cron cross-check:
+Historical run summaries are not current truth. The stale `continuous-runner/latest-summary.json` sidecar was deleted by explicit user request; the run-specific historical summary remains at `.hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T072555Z-4.summary.json` with `events.jsonl`.
 
-- Hermes `cronjob list` and `/home/bh/.hermes/profiles/loki-game/cron/jobs.json` show only one enabled cron job: `20dca3ae3beb`, `Daily Loki Game memory hygiene`.
-- That job is not a TV implementation/repair/dispatch surface. Its prompt merely mentions preserving “TV safety/fidelity/user-preference semantics.”
-- Therefore the current topology conflict is a **checker false positive**, not evidence of an active TV implementation cron.
+## Current setup status
 
-## What is already good
+### Control plane
 
-### 1. The spec now encodes the right throughput model
+Current state:
 
-`tv-spec.md` already contains the key time-saving doctrines:
+- declared implementation owner: `none_active`
+- live implementation owner: `none_active`
+- topology conflict: `false`
+- topology warnings: `[]`
+- ledger active gate: `null`
+- ledger status: `paused`
 
-- batch adjacent increments inside one invocation;
-- report only at material boundaries;
-- update backlog/provenance only when future execution changes;
-- match verifier breadth to risk;
-- use event logs for routine history and ledger for resumable state;
-- avoid workers/subagents for mechanical sequential source-mining loops.
+Assessment: **clean but idle.** The next implementation step is not more reconciliation; it is a fresh preflight and then a single-owner runner start if operationally approved.
 
-Assessment: **already in spec; do not re-litigate.**
+### Dispatch machinery
 
-### 2. Dispatch metadata exists and is machine-readable enough for current use
+The repo already has the right execution surfaces:
 
-The repo has:
+- `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json`
+- `docs/checklists/tv-playable-milestone-priority-map.json`
+- `docs/checklists/tv-verifier-impact-map.json`
 
-- `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` with `next_action`, `lane_class`, `oracle_class`, `source_basis`, `verifier`, `blocked_reason`, and `promotion_status` per item;
-- `docs/checklists/tv-playable-milestone-priority-map.json` ranking playable payoff, with `playable_travel_loop` currently rank 1;
-- `docs/checklists/tv-verifier-impact-map.json` mapping touched surfaces to cheap required verifiers.
+Assessment: **use these, patch on touch, do not replace with more narrative process.**
 
-Assessment: **major operationalization gap has been substantially closed.** Keep improving on-touch, but do not spend a fresh pass redesigning these artifacts unless a checker or dispatch failure exposes a concrete gap.
+### Basilisk capacity
 
-### 3. Recent runner output shows useful player-visible batching
+`docs/research/basilisk-speed-qualification.json` now records four scout-qualified Basilisk II Windows GUI lanes:
 
-The recent event tail shows the continuous runner made several adjacent route/fuel/guardrail increments in one lane:
+- `TV4-1`
+- `TV4-2`
+- `TV4-3`
+- `TV4-4`
 
-- route invalid-stop structured recovery;
-- blocked-jump structured recovery;
-- route-clear reselect structured recovery;
-- manual route-fuel structured recovery.
+Qualified for:
 
-These are labeled as TV scaffolds / route guardrails, not promoted EV Classic fidelity. That is the right quality-preserving speed pattern: player-visible progress now, source/fidelity promotion later.
+- live/responding Windows process capacity;
+- dedicated disk/prefs path presence;
+- local-only `PrintWindow` capture;
+- host foreground focus via topmost/titlebar probe;
+- non-timing runtime-UI setup/capture/focus smoke evidence.
 
-Assessment: **the workflow can produce useful batches when the control plane is healthy.**
+Not qualified for:
 
-## Current setup problems
+- guest EV command input;
+- route/travel/mission behavior promotion;
+- timing/feel/combat cadence;
+- combat or movement tuning claims.
 
-### 1. Topology checker false-positive cron conflict — fixed locally
+Assessment: **Basilisk setup capacity is no longer the blocker.** Gameplay evidence still needs a lane-local EV app state + reversible guest-input + restore/reset qualification before use for promotion claims.
 
-`tools/check_tv_runner_topology.py` previously used broad TV term matching:
+## Remaining recommendations
 
-- `TV_TERMS = ("terminal velocity", "tv-spec", "tv ", "loki gametv")`
-- it scanned cron job `id`, `name`, `prompt`, `script`, `deliver`, and `workdir`
+### P0 — Resume playable-payoff batches through the intended runner path
 
-The memory-hygiene cron prompt contains a sentence about preserving TV safety/fidelity semantics, so the checker classified it as TV-related. Because it is enabled and agent-backed, the checker reported an `active_owner_conflict` even though no TV cron implementation job existed.
+Before start:
 
-Status: **fixed locally on 2026-06-11.** Cron TV ownership detection now prefers explicit TV control-plane surface fields (`id`, `name`, `script`, `deliver`, `workdir`) and only uses prompt text for strong TV owner phrases. A regression test covers the current memory-hygiene cron shape and proves it is ignored as a non-TV owner.
+- verify `git status --short --branch` has only intended local edits or is clean at `origin/main`;
+- run `python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner`;
+- start under exactly one owner surface, preferably `continuous_kanban_runner`.
 
-Remaining implication: the topology false positive is no longer a restart blocker; the ledger also no longer reports a stale owner. Dirty source/gameplay files remain the restart blocker.
-
-### 2. Ledger reconciled; latest summary remains historical
-
-Live git says:
-
-- local `HEAD` equals `origin/main`;
-- branch is not ahead;
-- tracked and untracked local changes remain.
-
-Before reconciliation, the ledger/latest runner summary still said or implied:
-
-- integration owner should push local main;
-- `head_equals_origin_main: false` in the latest summary;
-- `git_dirty_summary: ## main...origin/main [ahead 19]` in the latest summary;
-- ledger status `running` with next action to push/fetch/verify.
-
-Status: **ledger fixed locally on 2026-06-11.** `.hermes/long-running/tv-spec-implementation/task-ledger.json` now records `declared_owner: none_active`, `status: paused`, `HEAD == origin/main`, `latest_summary_is_historical: true`, and an active `dirty_worktree_reconciliation` gate.
-
-Remaining implication: `continuous-runner/latest-summary.json` is still historical output from the old runner invocation. Treat it as evidence of what that invocation saw, not current runtime truth. The live topology checker now returns no conflicts and no warnings.
-
-### 3. Dirty source-mining/gameplay files need stabilization before more automation
-
-Pre-existing dirty tracked source/gameplay files still need reconciliation before restarting autonomous implementation:
-
-- `native_ev/data/sourced_ev_systems.json`
-- `native_ev/model.py`
-- `native_ev/scenario_eval.py`
-- `native_ev/tests/test_model.py`
-- `native_ev/tests/test_scenario_eval.py`
-- `tools/extract_ev_system_semantics.py`
-
-Separate from those, this topology-checker fix intentionally modifies `tools/check_tv_runner_topology.py` and `native_ev/tests/test_tv_spec_continuous_runner.py`; the review artifact itself remains untracked until checkpointed.
-
-Assessment: **do not restart autonomous implementation over the unknown source/gameplay slice.** First classify it as either:
-
-- intentional uncommitted continuation work from the route/system semantics lane;
-- generated output that should be rebuilt/committed/reverted;
-- stale residue after pushed commits.
-
-Recommended fix:
-
-1. Inspect the diff by file.
-2. Run the relevant targeted verifiers from the verifier impact map.
-3. Either checkpoint the coherent slice locally or revert stale/generated residue.
-4. Only then restart the continuous runner.
-
-### 4. Basilisk capacity is declared but not yet qualified
-
-`tv-spec.md` correctly treats four Basilisk lanes as concrete capacity. But `docs/research/basilisk-speed-qualification.json` still marks all four lanes as `setup-incomplete` / `unqualified`.
-
-Assessment: **not a blocker for TV-scaffold/Godot/Python work, but still a real bottleneck for original-runtime promotion.**
-
-Recommended fix:
-
-- Do not schedule Basilisk-heavy promotion work until at least one lane has restore/capture/input qualification for the needed evidence family.
-- Continue TV-side playable scaffolds and static-resource/manual-backed semantic promotion in the meantime.
-- Add Basilisk qualification work only when the backlog item genuinely needs original-runtime evidence.
-
-## Highest-leverage recommendations
-
-### P0 — Fix topology false positive and reconcile dirty live state
-
-Why it minimizes time:
-
-- removes a fake restart blocker;
-- prevents stale ledger/summary churn;
-- avoids running an autonomous loop over ambiguous dirty source files.
-
-Done condition:
-
-- topology checker passes or reports only real live conflicts;
-- memory-hygiene cron is explicitly ignored by regression test;
-- git dirty state is understood and either verified/checkpointed or reverted;
-- ledger next action matches live git and runner state.
-
-### P1 — Resume the playable-payoff batch lane after cleanup
-
-The current priority map says rank 1 is `playable_travel_loop`. Recent successful increments are in that lane. Continue there unless the dirty-state inspection shows a more urgent stabilization task.
-
-Preferred next implementation shape after cleanup:
+Implementation shape:
 
 - choose the next route/fuel/travel blocker or recovery affordance from the backlog index;
 - keep it `tv-scaffold` unless Classic evidence supports promotion;
 - use focused scenario/unit verifiers first;
 - batch adjacent route/fuel increments in one invocation;
-- report externally only at material boundary.
+- report externally only at a material boundary.
 
-### P2 — Qualify one Basilisk lane only when it unblocks a specific promotion claim
+### P1 — Promote one Basilisk lane only when it unblocks a specific Classic claim
 
-Do not make Basilisk setup the default next move just because it is incomplete. Use it when a backlog item needs original-runtime evidence, especially exact UI wording/timing or route/map behavior.
+Do not make Basilisk gameplay setup the default next move just because the four lanes are now scout-qualified.
 
-Recommended first qualified family when needed:
+When a backlog item needs original-runtime evidence:
 
-- non-destructive route/map UI observation for travel-loop promotion candidates;
-- highest safe accelerated speed for scout evidence;
-- 1x sentinel only for timing-sensitive promotion.
+1. choose one `TV4-*` lane;
+2. restore/launch to a known EV app or pilot state;
+3. verify guest command input with a reversible action;
+4. record the lane-local restore/reset procedure;
+5. qualify non-destructive route/map UI observation for travel-loop promotion candidates;
+6. keep high-speed scout evidence separate from any 1x timing sentinel.
 
-### P3 — Keep the machine-readable dispatch artifacts as the execution surface
+### P2 — Keep machine-readable dispatch artifacts authoritative
 
-Do not replace the current backlog index, priority map, or verifier map with new narrative doctrine. They are already the right kind of machinery. Patch them on touch when future dispatch would otherwise be stale.
+Do not spend another pass redesigning process doctrine. Patch the backlog index, priority map, verifier map, and qualification matrix only when future dispatch would otherwise be stale or wrong.
 
 ## Rejected time savers
 
-- **Turning off source/fidelity labels to move faster.** Reject. It saves apparent time by creating later rework and Classic-claim contamination.
-- **Restarting the runner despite dirty files and topology conflict.** Reject until the conflict is proven false in code/tests and dirty files are stabilized.
-- **Using cron as an implementation fallback.** Reject. Current policy is right: cron should not implement, repair, coordinate, or dispatch TV work.
+- **Turning off source/fidelity labels to move faster.** Reject. It creates later rework and Classic-claim contamination.
+- **Restarting via cron/gateway workaround.** Reject. Use the intended single-owner runner/control-plane path.
+- **Using cron as an implementation fallback.** Reject. Cron should not implement, repair, coordinate, or dispatch TV work.
 - **Broad Basilisk-first exploration.** Reject as a default. Use Basilisk for specific original-runtime claims; static/resource/manual-backed and TV-scaffold work should proceed without waiting.
 
 ## Current gate
 
-No human approval is needed to edit this review artifact or to perform safe local repo inspection/tests.
+No human approval is needed for safe local repo inspection/tests or for updating this review artifact.
 
-Starting/restarting the continuous runner, changing cron/gateway/provider/account config, or mutating scheduler state remains separately gated by the existing TV control-plane policy. The immediate safe local implementation follow-up is a code/test/docs cleanup of the topology checker false positive plus dirty-state reconciliation.
+Starting/restarting the continuous runner, changing cron/gateway/provider/account config, mutating scheduler state, or publishing raw captures remains separately gated by the existing TV control-plane and source/provenance policy.
 
 ## Closeout classification
 
-This artifact is a **current setup assessment with recommendations**. It does not itself start/stop runners, mutate cron, push commits, or promote any EV Classic gameplay claim.
+This artifact is a **current setup assessment with only remaining recommendations**. Completed cleanup items have been removed from the action list. It does not itself start/stop runners, mutate cron, push commits, or promote any EV Classic gameplay claim.

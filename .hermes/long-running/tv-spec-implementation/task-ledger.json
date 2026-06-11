@@ -11,10 +11,11 @@
   },
   "declared_owner": "none_active",
   "evidence_pointers": {
+    "basilisk_speed_qualification": "docs/research/basilisk-speed-qualification.json",
     "debug_snapshot": ".hermes/long-running/tv-spec-implementation/tv-spec-debug-artifact-2026-06-10.md",
     "history_log": ".hermes/long-running/tv-spec-implementation/events.jsonl",
     "runner_prompt": "docs/prompts/tv-spec-implementation-long-task-prompt.md",
-    "runner_summary": ".hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json",
+    "runner_summary": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T072555Z-4.summary.json",
     "topology_checker": "tools/check_tv_runner_topology.py",
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
@@ -41,9 +42,10 @@
     "latest_summary_is_historical": true,
     "origin_main_before_checkpoint": "2e3ff8679497a109e5d189fc125d6972792fdc6c"
   },
-  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json",
+  "last_runner_summary_path": null,
   "last_verified": {
     "live_truth_sources": {
+      "basilisk_capacity": "2026-06-11: four TV4-* Basilisk II processes responding; dedicated disks/prefs inspected; PrintWindow captures saved locally; host foreground focus verified; scout-only non-timing runtime-UI setup/capture/focus, guest EV command input still unqualified.",
       "extractor": "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method ...v52",
       "git_diff_check": "git diff --check passed",
       "model_test": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v -> OK",
@@ -55,7 +57,9 @@
     "timestamp": "2026-06-11T16:31:51Z",
     "verified_by": "direct_session:checkpoint-prepush-review"
   },
-  "next_resume_action": "After the checkpoint commits are pushed and HEAD equals origin/main, autonomous implementation may resume under continuous_kanban_runner after rerunning topology preflight. Keep original-runtime capture evidence local-only/proprietary unless explicitly approved for publication.",
+  "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
+  "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
+  "next_resume_action": "Autonomous implementation may resume under continuous_kanban_runner after topology preflight. For original-runtime work, inspect docs/research/basilisk-speed-qualification.json first: four TV4-* lanes are scout-only for non-timing setup/capture/focus; run lane-local EV app state, reversible guest input, and restore/reset qualification before route/travel/mission/timing promotion evidence.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
