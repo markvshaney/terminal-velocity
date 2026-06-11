@@ -8,14 +8,14 @@ Scope: Terminal Velocity development workflow/process only. This is not an EV Cl
 
 The time-minimizing architecture remains: **parallel executable lanes + fast evaluators + batched integration + fidelity gates + playable-payoff dispatch**.
 
-Completed cleanup and qualification work has been removed from the action list. The artifact now tracks only the current operating posture and remaining recommendations:
+Completed cleanup, qualification, and false human-review handoff work has been removed from the action list. The artifact now tracks only the current operating posture and remaining recommendations:
 
-1. resume playable-payoff batches under `continuous_kanban_runner` after a fresh topology preflight;
+1. keep the tv-spec loop moving through the autonomous integration-owner + Kanban successor path; do not wait on human review for verified safe-local TV changes;
 2. continue route/fuel/travel-player affordance work as TV scaffolds unless Classic evidence supports promotion;
 3. use the four Basilisk `TV4-*` lanes only for scout-grade non-timing runtime-UI setup/capture/focus work until one lane is separately qualified for EV app state, guest input, and restore/reset;
 4. keep backlog/priority/verifier maps as the machine-readable dispatch surface.
 
-Starting/restarting the runner remains an operational side effect and should use the established TV control-plane policy. There is no current dirty-worktree, stale-ledger, or topology-conflict blocker recorded by this artifact.
+Starting/restarting the runner remains an operational side effect and should use the established TV control-plane policy. There is no current dirty-worktree, stale-ledger, topology-conflict, or human-review blocker recorded by this artifact.
 
 ## Current truth sources
 
@@ -50,6 +50,25 @@ git diff --check
 # -> clean
 ```
 
+Current autonomous-integration correction verification:
+
+```text
+python3 tools/tv_integration_lane.py --dry-run
+# -> decision publish; blockers []; git_diff_check and committed_diff_secret_scan passed
+
+python3 tools/tv_integration_lane.py --push --llm-approved
+# -> pushed true; HEAD == origin/main == 924e689372ace8bd8f6afcf6e33bf7f52ca95afe
+
+python3 -m unittest discover -s native_ev/tests -p 'test_*.py'
+# -> Ran 295 tests OK
+
+python3 -m unittest native_ev.tests.test_scenario_eval -v
+# -> Ran 103 tests OK
+
+python3 tools/run_gameplay_scenarios.py --all --pretty
+# -> summary passed=99 failed=0 total=99
+```
+
 Historical run summaries are not current truth. The stale `continuous-runner/latest-summary.json` sidecar was deleted by explicit user request; the run-specific historical summary remains at `.hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T072555Z-4.summary.json` with `events.jsonl`.
 
 ## Current setup status
@@ -58,14 +77,15 @@ Historical run summaries are not current truth. The stale `continuous-runner/lat
 
 Current state:
 
-- declared implementation owner: `none_active`
-- live implementation owner: `none_active`
+- declared implementation owner: `none_active` for direct implementation; autonomous integration owner is available for normal non-force checkpoint fan-in
+- live implementation owner: `terminal-velocity` Kanban successor task `t_9460240d` is running; no direct-session implementation owner is active
 - topology conflict: `false`
 - topology warnings: `[]`
 - ledger active gate: `null`
-- ledger status: `paused`
+- ledger status: `running`
+- last integrated checkpoint: `924e689372ace8bd8f6afcf6e33bf7f52ca95afe`
 
-Assessment: **clean but idle.** The next implementation step is not more reconciliation; it is a fresh preflight and then a single-owner runner start if operationally approved.
+Assessment: **clean and running.** The next implementation step is not more reconciliation or human review; it is to let the single Kanban successor continue, then let the autonomous integration owner resolve any verified safe-local `push_ready` checkpoint.
 
 ### Dispatch machinery
 
@@ -76,6 +96,17 @@ The repo already has the right execution surfaces:
 - `docs/checklists/tv-verifier-impact-map.json`
 
 Assessment: **use these, patch on touch, do not replace with more narrative process.**
+
+### Integration ownership
+
+Current rule:
+
+- `review_required` / `human review` is not a valid stop condition for verified safe-local TV code/data/docs increments.
+- Non-integrator workers may still avoid `git push`; they should emit `push_ready` with commit SHA, intended files, verifier output, and next action.
+- The integration owner is autonomous for normal coherent non-force checkpoint review/push/fetch/`HEAD == origin/main` verification.
+- Human approval remains required only for explicit risky/destructive/external/config/publication/credential/account/provider/gateway boundaries.
+
+Assessment: **the previous human-review handoff was a process bug, not a real gate.** The correction is recorded in the runner prompt, task ledger, events log, Kanban completion for `t_99038daf`, and successor task `t_9460240d`.
 
 ### Basilisk capacity
 
@@ -107,7 +138,13 @@ Assessment: **Basilisk setup capacity is no longer the blocker.** Gameplay evide
 
 ### P0 — Resume playable-payoff batches through the intended runner path
 
-Before start:
+Current action:
+
+- let running successor `t_9460240d` continue from `origin/main` after checkpoint `924e689372ace8bd8f6afcf6e33bf7f52ca95afe`;
+- do not spawn a second implementation owner over the same worktree;
+- if it produces verified safe-local work, complete/push via the autonomous integration-owner lane rather than asking for human review.
+
+Before any future fresh start:
 
 - verify `git status --short --branch` has only intended local edits or is clean at `origin/main`;
 - run `python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner`;
@@ -143,11 +180,14 @@ Do not spend another pass redesigning process doctrine. Patch the backlog index,
 - **Turning off source/fidelity labels to move faster.** Reject. It creates later rework and Classic-claim contamination.
 - **Restarting via cron/gateway workaround.** Reject. Use the intended single-owner runner/control-plane path.
 - **Using cron as an implementation fallback.** Reject. Cron should not implement, repair, coordinate, or dispatch TV work.
+- **Treating verified safe-local checkpoint review as a human gate.** Reject. Use the autonomous integration owner; human review is not in the long-winding loop unless a real gated boundary is crossed.
 - **Broad Basilisk-first exploration.** Reject as a default. Use Basilisk for specific original-runtime claims; static/resource/manual-backed and TV-scaffold work should proceed without waiting.
 
 ## Current gate
 
 No human approval is needed for safe local repo inspection/tests or for updating this review artifact.
+
+No human approval is needed for autonomous integration-owner handling of normal coherent non-force TV checkpoint review/push/fetch/`HEAD == origin/main` verification after deterministic guards pass.
 
 Starting/restarting the continuous runner, changing cron/gateway/provider/account config, mutating scheduler state, or publishing raw captures remains separately gated by the existing TV control-plane and source/provenance policy.
 
