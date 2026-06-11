@@ -1315,6 +1315,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['refueled_at_recovery_body'], 'passed')
         self.assertEqual(result['checks']['delivered_mission_after_route_refuel'], 'passed')
         self.assertEqual(result['checks']['recorded_route_refuel_source_boundary'], 'passed')
+        self.assertEqual(result['checks']['surfaced_mission_route_fuel_recovery'], 'passed')
         self.assertEqual(result['state']['currentSystem'], 'Centauri')
         self.assertEqual(result['state']['landedBody'], 'Luna')
         self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera'])
@@ -1324,8 +1325,16 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertTrue(any(event.get('type') == 'refuel' and event.get('body') == 'Earth' for event in result['trace']))
         route_events = [event for event in result['trace'] if event.get('type') == 'route_to_active_mission_destination']
         self.assertTrue(route_events)
-        self.assertEqual(route_events[-1]['sourceLabel'], 'terminal-velocity-design-scaffold')
-        self.assertEqual(route_events[-1]['oracleStatus'], 'mission_objective_hint_pending_ev_classic_ui_trace')
+        mission_route = route_events[-1]
+        self.assertEqual(mission_route['sourceLabel'], 'terminal-velocity-design-scaffold')
+        self.assertEqual(mission_route['oracleStatus'], 'mission_objective_hint_pending_ev_classic_ui_trace')
+        self.assertEqual(mission_route['originSystem'], 'Sol')
+        self.assertEqual(mission_route['greenRoutePath'], ['Sol', 'Centauri'])
+        self.assertEqual(mission_route['reachableRoutePrefix'], [])
+        self.assertEqual(mission_route['blockedRouteTail'], ['Centauri'])
+        self.assertEqual(mission_route['firstBlockedStop'], 'Centauri')
+        self.assertEqual(mission_route['fuelDeficit'], 1)
+        self.assertIn('fuel service port', mission_route['recoveryHint'])
 
     def test_mission_trade_hybrid_capacity_planning_preserves_trade_cargo(self):
         result = run_scripted_scenario('mission_trade_hybrid_capacity_planning')

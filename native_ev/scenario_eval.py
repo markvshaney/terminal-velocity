@@ -1619,25 +1619,43 @@ def _route_to_active_mission_destination(state: dict[str, Any], _action: dict[st
     fuel_available = int(state.get('fuel', 0))
     max_fuel = int(state.get('maxFuel', STARTING_FUEL))
     fuel_warning = fuel_required > fuel_available
+    reachable_hop_count = max(0, min(fuel_available, fuel_required))
+    reachable_prefix = route_queue[:reachable_hop_count]
+    blocked_tail = route_queue[reachable_hop_count:]
     refuel_body = _nearest_refuel_body_name(state) if fuel_warning else None
     refuel_hint = '; refuel before full route' if fuel_warning else ''
+    recovery_hint = None
+    if fuel_warning:
+        recovery_hint = 'land at a fuel service port before continuing the mission route'
     if refuel_body:
         refuel_hint += f'; nearest refuel: {refuel_body}'
     objective_hint = f"Mission route queued to {destination}: {fuel_required} jump(s), fuel {fuel_available}/{max_fuel}{refuel_hint}"
-    trace.append({
+    event = {
         'type': 'route_to_active_mission_destination',
         'missionId': job.get('id'),
+        'originSystem': state['currentSystem'],
         'destinationSystem': destination,
         'routeQueued': appended and len(route_queue) > before_size,
         'routeQueue': route_queue,
+        'greenRoutePath': [state['currentSystem']] + route_queue if route_queue else [],
+        'reachableRoutePrefix': reachable_prefix,
+        'blockedRouteTail': blocked_tail,
         'fuelRequired': fuel_required,
         'fuelAvailable': fuel_available,
+        'fuelDeficit': max(0, fuel_required - fuel_available),
         'fuelWarning': fuel_warning,
         'refuelRecoveryBody': refuel_body,
         'objectiveHint': objective_hint,
         'sourceLabel': 'terminal-velocity-design-scaffold',
         'oracleStatus': 'mission_objective_hint_pending_ev_classic_ui_trace',
-    })
+    }
+    if reachable_prefix:
+        event['nextReachableStop'] = reachable_prefix[-1]
+    if blocked_tail:
+        event['firstBlockedStop'] = blocked_tail[0]
+    if recovery_hint is not None:
+        event['recoveryHint'] = recovery_hint
+    trace.append(event)
     return True
 
 
@@ -4231,6 +4249,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
                 'refueled_at_recovery_body': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
                 'delivered_mission_after_route_refuel': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['intro_courier_earth_hera'] and state.get('routeQueue') == [] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
                 'recorded_route_refuel_source_boundary': 'passed' if latest_route.get('sourceLabel') == 'terminal-velocity-design-scaffold' and latest_route.get('oracleStatus') == 'mission_objective_hint_pending_ev_classic_ui_trace' else 'failed',
+                'surfaced_mission_route_fuel_recovery': 'passed' if latest_route.get('originSystem') == 'Sol' and latest_route.get('greenRoutePath') == ['Sol', 'Centauri'] and latest_route.get('reachableRoutePrefix') == [] and latest_route.get('blockedRouteTail') == ['Centauri'] and latest_route.get('firstBlockedStop') == 'Centauri' and latest_route.get('fuelDeficit') == 1 and latest_route.get('refuelRecoveryBody') == 'Earth' and 'fuel service port' in latest_route.get('recoveryHint', '') else 'failed',
             })
     elif name == 'mission_trade_hybrid_capacity_planning':
         checks.update({
