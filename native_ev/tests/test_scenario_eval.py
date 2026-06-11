@@ -1355,6 +1355,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
 
         self.assertTrue(result['success'], result)
         self.assertEqual(result['checks']['accepted_intro_mission_and_trade_lot'], 'passed')
+        self.assertEqual(result['checks']['surfaced_mission_trade_route_cargo_context'], 'passed')
         self.assertEqual(result['checks']['blocked_delivery_leg_on_low_fuel'], 'passed')
         self.assertEqual(result['checks']['refueled_before_delivery_leg'], 'passed')
         self.assertEqual(result['checks']['completed_delivery_with_trade_cargo_held'], 'passed')

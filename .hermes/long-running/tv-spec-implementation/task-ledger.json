@@ -6,9 +6,9 @@
     "gateway_global_enabled_warning": false,
     "ledger_stale": false,
     "passive_reporter_ignored": false,
+    "review_required_process_bug": true,
     "stale_bootstrap_job_ignored": false,
-    "verification_note": "review-required/human-review was reclassified as a process bug on 2026-06-11: long-running TV safe-local increments should be resolved by the autonomous integration owner, not wait for human review.",
-    "review_required_process_bug": true
+    "verification_note": "review-required/human-review was reclassified as a process bug on 2026-06-11: long-running TV safe-local increments should be resolved by the autonomous integration owner, not wait for human review."
   },
   "declared_owner": "none_active",
   "evidence_pointers": {
@@ -21,40 +21,39 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "integration-owner-autonomy-correction-20260611T182748Z",
-  "last_progress_token": "28909110c02e9851e22de27d371fccd34eb19e81bef00f128818554d43965893",
+  "last_material_event_id": "mission-trade-route-cargo-context-20260611T184004Z",
+  "last_progress_token": "1a7e91d4bfa2040caf41a46d0efb69256d91e61b70a2afb9c69e767d07361635",
   "last_reconciled_live_git": {
-    "checked_at": "2026-06-11T18:27:48Z",
-    "checkpoint_decision": "autonomous_integration_owner_resolved_review_required_gate",
+    "active_kanban_task": "t_9460240d",
+    "checked_at": "2026-06-11T18:40:04Z",
+    "checkpoint_decision": "safe_local_mission_trade_route_cargo_context_increment_ready_for_review_or_integration",
     "checkpoint_files": [
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_scenario_eval.py",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
-      "docs/prompts/tv-spec-implementation-long-task-prompt.md",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl"
     ],
-    "head_before_integration_commit": "2902f3a52b0b25c50708206cf65e8a6393b7b0d5",
-    "origin_main_before_integration": "8c1ef2bd93663d7dedd7b2bef8beb37c2f90e00f",
-    "review_required_gate_classification": "process_bug_not_human_gate"
+    "head_before_slice": "7abbff5776732c44856b213ea7221731f9ea0c81",
+    "origin_main_before_slice": "924e689372ace8bd8f6afcf6e33bf7f52ca95afe"
   },
   "last_runner_summary_path": null,
   "last_verified": {
-    "timestamp": "2026-06-11T18:27:48Z",
-    "verified_by": "direct-session:autonomous-integration-owner-correction",
     "live_truth_sources": {
-      "focused_unittest": "passed; test_mission_route_refuel_delivery_loop_recovers_and_delivers OK",
-      "focused_scenario": "passed; mission_route_refuel_delivery_loop success true; surfaced_mission_route_fuel_recovery passed",
       "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all --pretty summary passed=99 failed=0 total=99",
-      "scenario_eval_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v Ran 103 tests OK",
-      "native_ev_discovery_suite": "passed; python3 -m unittest discover -s native_ev/tests -p test_*.py Ran 295 tests OK after no live worker remained active",
-      "backlog_dispatch_index": "passed; BACKLOG DISPATCH INDEX OK"
-    }
+      "backlog_dispatch_index": "passed; BACKLOG DISPATCH INDEX OK",
+      "focused_scenario": "passed; mission_trade_refuel_delivery_loop success true; surfaced_mission_trade_route_cargo_context passed",
+      "focused_unittest": "passed; test_mission_trade_refuel_delivery_loop_blocks_low_fuel_then_delivers_with_trade_cargo OK",
+      "git_diff_check": "passed; git diff --check exit 0",
+      "native_ev_discovery_suite": "partial failure unrelated to this scenario slice while active worker/gateway ownership state is live; Ran 295 tests with 6 failures in tv runner topology/integration lane tests due active_worker/gateway_kanban_dispatcher live-state expectations"
+    },
+    "timestamp": "2026-06-11T18:40:04Z",
+    "verified_by": "kanban-worker:t_9460240d"
   },
   "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
   "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Autonomous integration owner should commit/push the verified mission-route fuel recovery and prompt/process correction, complete kanban:t_99038daf as integrated, then create/dispatch exactly one successor continuation task if no real gate remains. Do not wait for human review for verified safe-local TV changes.",
+  "next_resume_action": "Review the mission_trade_refuel_delivery_loop cargo-context route event increment, resolve the known live-owner topology test failures separately if still relevant, then commit/push or continue with the next safe playable mission/trade slice per the priority map.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
@@ -63,7 +62,7 @@
       "integration_owner": "autonomous_available_for_checkpoint_review_push"
     },
     "implementation_owner": "none_active",
-    "last_verified_at": "2026-06-11T18:27:48Z"
+    "last_verified_at": "2026-06-11T18:40:04Z"
   },
   "runner_policy": {
     "progress_token_definition": "sha256 of ledger status, active gate, next action, HEAD, git status, event count, and last event digest"
