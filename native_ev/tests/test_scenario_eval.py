@@ -2413,6 +2413,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['metrics']['jumps'], 2)
         self.assertEqual(result['checks']['drew_manual_green_route_with_fuel_hint'], 'passed')
         self.assertEqual(result['checks']['surfaced_route_fuel_recovery_hint'], 'passed')
+        self.assertEqual(result['checks']['surfaced_partial_route_reachability'], 'passed')
         self.assertEqual(result['checks']['blocked_without_consuming_route_or_fuel'], 'passed')
         self.assertEqual(result['checks']['recovered_by_refueling_and_reselecting_route'], 'passed')
         self.assertEqual(result['checks']['landed_after_recovery'], 'passed')

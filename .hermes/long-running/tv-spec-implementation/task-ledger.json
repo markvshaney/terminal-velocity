@@ -20,46 +20,39 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "tv-spec-continuous-runner-20260611T073200Z-5-manual-route-fuel-structured-recovery-push-ready",
+  "last_material_event_id": "kanban-t_8600d6aa-route-fuel-reachability-structured-recovery",
   "last_progress_token": "28909110c02e9851e22de27d371fccd34eb19e81bef00f128818554d43965893",
   "last_reconciled_live_git": {
-    "checked_at": "2026-06-11T16:31:51Z",
-    "checkpoint_decision": "commit_and_push_recommended",
+    "checked_at": "2026-06-11T17:46:06Z",
+    "checkpoint_decision": "commit_and_push_verified_route_fuel_reachability_slice",
     "checkpoint_files": [
-      "native_ev/data/sourced_ev_systems.json",
-      "native_ev/model.py",
       "native_ev/scenario_eval.py",
-      "native_ev/tests/test_model.py",
       "native_ev/tests/test_scenario_eval.py",
-      "tools/extract_ev_system_semantics.py",
-      "tools/check_tv_runner_topology.py",
-      "native_ev/tests/test_tv_spec_continuous_runner.py",
-      "docs/research/tv-development-time-minimization-review-2026-06-11.md",
-      ".hermes/long-running/tv-spec-implementation/task-ledger.json"
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+      ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+      ".hermes/long-running/tv-spec-implementation/events.jsonl"
     ],
-    "head_before_checkpoint": "2e3ff8679497a109e5d189fc125d6972792fdc6c",
+    "head_before_checkpoint": "8c1ef2bd93663d7dedd7b2bef8beb37c2f90e00f",
     "head_equals_origin_main_before_checkpoint": true,
-    "latest_summary_is_historical": true,
-    "origin_main_before_checkpoint": "2e3ff8679497a109e5d189fc125d6972792fdc6c"
+    "origin_main_before_checkpoint": "8c1ef2bd93663d7dedd7b2bef8beb37c2f90e00f"
   },
   "last_runner_summary_path": null,
   "last_verified": {
     "live_truth_sources": {
-      "basilisk_capacity": "2026-06-11: four TV4-* Basilisk II processes responding; dedicated disks/prefs inspected; PrintWindow captures saved locally; host foreground focus verified; scout-only non-timing runtime-UI setup/capture/focus, guest EV command input still unqualified.",
-      "extractor": "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method ...v52",
-      "git_diff_check": "git diff --check passed",
-      "model_test": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v -> OK",
+      "backlog_dispatch_index": "passed; BACKLOG DISPATCH INDEX OK",
+      "git_diff_check": "passed; no whitespace errors",
       "remote": "origin https://github.com/markvshaney/terminal-velocity.git",
-      "scenario_eval_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> OK",
-      "topology_checker": "python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner -> ok true; topology_conflict false; warning_types []",
-      "topology_tests": "python3 -m unittest native_ev.tests.test_tv_spec_continuous_runner -v -> Ran 10 tests OK"
+      "route_fuel_reachability_test": "passed; Ran 1 test OK",
+      "route_fuel_scenario": "passed; success true; surfaced_partial_route_reachability passed",
+      "scenario_eval_suite": "passed; Ran 103 tests OK"
     },
-    "timestamp": "2026-06-11T16:31:51Z",
-    "verified_by": "direct_session:checkpoint-prepush-review"
+    "timestamp": "2026-06-11T17:46:06Z",
+    "verified_by": "kanban:t_8600d6aa"
   },
   "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
   "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Autonomous implementation may resume under continuous_kanban_runner after topology preflight. For original-runtime work, inspect docs/research/basilisk-speed-qualification.json first: four TV4-* lanes are scout-only for non-timing setup/capture/focus; run lane-local EV app state, reversible guest input, and restore/reset qualification before route/travel/mission/timing promotion evidence.",
+  "next_resume_action": "Checkpoint/push this verified route-fuel reachability structured recovery slice, then continue highest-priority safe backlog dispatch using the priority map and dispatch index. Keep route/fuel helpers labeled as Terminal Velocity scaffold until stronger EV Classic map/fuel/jump captures exist.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
@@ -76,6 +69,6 @@
   "runtime_truth_rule": "Derive current runtime truth from live cron/process/loop/gateway/Kanban/git surfaces first. Reconcile this ledger only as declared intent/checkpoint state; do not treat old gates or derived interpretations here as primary runtime truth.",
   "schema_version": 2,
   "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity under loki-game profile. No cron mutation, gateway/provider/account change, push, force-push, deletion, or publication is authorized by this ledger entry.",
-  "status": "paused",
+  "status": "running",
   "task_id": "tv-spec-implementation"
 }
