@@ -261,7 +261,7 @@ Default limits:
 
 Rules:
 
-- one integration owner owns fan-in, final diff review, integrated verification, commit, and normal non-force push;
+- one integration owner owns fan-in, final diff review, integrated verification, commit, and normal non-force push; use `tools/tv_integration_lane.py --dry-run` as the deterministic guard packet before any LLM-assisted publish decision;
 - mutating workers use isolated worktrees;
 - each lane has owner, writable surface, verifier, source-label policy, merge contract, rollback/cleanup path;
 - one writer per file/resource surface;
@@ -275,7 +275,7 @@ TV implementation dispatch uses a single-owner control-plane model:
 - `direct_session` — the current chat/session owns safe-local edits;
 - `continuous_kanban_runner` — one explicitly started TV standalone continuous runner using/dispatching Kanban owns implementation dispatch;
 - `gateway_kanban_dispatcher` — the profile gateway Kanban dispatcher owns TV implementation dispatch when actual TV Kanban board claims/tasks/workers show it owns TV work;
-- `integration_owner` — fan-in, final review, normal non-force push, fetch, and remote verification.
+- `integration_owner` — fan-in, final review, normal non-force push, fetch, and remote verification. This is a named coordinator lane, not the generic gateway dispatcher; the dispatcher may invoke it, but the lane cannot implement feature work.
 
 Only one implementation-dispatch owner may be active at a time. Cron is not an implementation owner. A scheduled cron surface, if retained, must be no-agent, script-only reporting or health observation; it must not implement, repair, coordinate, dispatch workers, edit the repo, or act as an LLM fallback for TV work.
 
@@ -327,11 +327,11 @@ For each actionable backlog item with `touched_surfaces`, the dispatch checker r
 
 Commit/push is a durability or coordination action, not the unit of development. Do not commit/push merely because a coherent local slice completed.
 
-Checkpoint policy decides when remote publication has coordination or durability value; role policy decides who may publish. A normal coherent non-force push is not human-gated under existing repo policy, but only the integration owner performs the push.
+Checkpoint policy decides when remote publication has coordination or durability value; role policy decides who may publish. A normal coherent non-force push is not human-gated under existing repo policy, but only the integration owner performs the push. The integration owner is automated as a two-layer lane: deterministic guard script first, then LLM-assisted bundle review.
 
 Workers/continuous runners may checkpoint locally when this policy triggers, but they do not push. A worker does not stop merely because local `main` is ahead of `origin/main`. When remote publication is actually needed, a worker records `push_ready` with commit SHA, intended files, verification commands/results, why remote state is needed, and remaining next action, then continues safe local work when possible. A worker stops only at a real gate, cap/handoff boundary, unsafe dirty state, failed verifier, or no-safe-local-slice boundary. Missing GitHub credentials in a worker are not a TV development gate.
 
-The integration owner performs final status/diff review, runs required checkpoint verification, pushes normal non-force bundles, fetches, verifies local `HEAD == origin/main`, and records the pushed checkpoint. Integration is event-triggered: publish as infrequently as possible while preventing worker blockage, stale coordination, context/reset loss, or inspection-expensive local divergence. Do not push by maximum-frequency cadence, per-commit habit, or arbitrary commit-count batching. One clean commit may be pushed immediately if it unblocks another lane; several adjacent commits may remain local when no one is blocked and the stack remains coherent and easy to inspect.
+The integration owner performs final status/diff review, runs required checkpoint verification, pushes normal non-force bundles, fetches, verifies local `HEAD == origin/main`, and records the pushed checkpoint. Integration is event-triggered: publish as infrequently as possible while preventing worker blockage, stale coordination, context/reset loss, or inspection-expensive local divergence. Do not push by maximum-frequency cadence, per-commit habit, or arbitrary commit-count batching. The deterministic preflight is `python3 tools/tv_integration_lane.py --dry-run`; it must report no active worker, no dirty worktree, no branch-behind state, only safe TV paths, `git diff --check`, and committed-diff secret scan before an LLM review may return `publish`. Actual push uses `python3 tools/tv_integration_lane.py --push --llm-approved` only after that exact-bundle review. One clean commit may be pushed immediately if it unblocks another lane; several adjacent commits may remain local when no one is blocked and the stack remains coherent and easy to inspect.
 
 Run the full checkpoint procedure only when one of these is true:
 
