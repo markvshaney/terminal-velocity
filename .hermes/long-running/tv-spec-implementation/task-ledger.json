@@ -2,13 +2,14 @@
   "active_gate": null,
   "current_gate_classification": {
     "active_owner_conflict": false,
+    "dirty_worktree_reconciliation": false,
     "gateway_global_enabled_warning": false,
     "ledger_stale": false,
     "passive_reporter_ignored": false,
     "stale_bootstrap_job_ignored": false,
-    "verification_note": "Topology preflight was rerun with direct terminal access during invocation tv-spec-continuous-runner:20260611T070053Z:1; standalone continuous-runner startup owner matches the live derived owner, and no conflicts or warnings were reported."
+    "verification_note": "Dirty worktree was reviewed as commit-worthy on 2026-06-11T16:31:51Z: coordinate display runtime capture gate remains non-promoting, topology false-positive fix is verified, and the review artifact records the setup assessment. This ledger is part of the checkpoint; after push, live git status/remotes remain the primary truth."
   },
-  "declared_owner": "continuous_kanban_runner",
+  "declared_owner": "none_active",
   "evidence_pointers": {
     "debug_snapshot": ".hermes/long-running/tv-spec-implementation/tv-spec-debug-artifact-2026-06-10.md",
     "history_log": ".hermes/long-running/tv-spec-implementation/events.jsonl",
@@ -20,25 +21,57 @@
   },
   "last_material_event_id": "tv-spec-continuous-runner-20260611T073200Z-5-manual-route-fuel-structured-recovery-push-ready",
   "last_progress_token": "28909110c02e9851e22de27d371fccd34eb19e81bef00f128818554d43965893",
-  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T072555Z-4.summary.json",
+  "last_reconciled_live_git": {
+    "checked_at": "2026-06-11T16:31:51Z",
+    "checkpoint_decision": "commit_and_push_recommended",
+    "checkpoint_files": [
+      "native_ev/data/sourced_ev_systems.json",
+      "native_ev/model.py",
+      "native_ev/scenario_eval.py",
+      "native_ev/tests/test_model.py",
+      "native_ev/tests/test_scenario_eval.py",
+      "tools/extract_ev_system_semantics.py",
+      "tools/check_tv_runner_topology.py",
+      "native_ev/tests/test_tv_spec_continuous_runner.py",
+      "docs/research/tv-development-time-minimization-review-2026-06-11.md",
+      ".hermes/long-running/tv-spec-implementation/task-ledger.json"
+    ],
+    "head_before_checkpoint": "2e3ff8679497a109e5d189fc125d6972792fdc6c",
+    "head_equals_origin_main_before_checkpoint": true,
+    "latest_summary_is_historical": true,
+    "origin_main_before_checkpoint": "2e3ff8679497a109e5d189fc125d6972792fdc6c"
+  },
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json",
   "last_verified": {
     "live_truth_sources": {
-      "backlog_dispatch": "python3 tools/backlog_dispatch_index.py build -> wrote index and BACKLOG DISPATCH INDEX OK; python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v -> Ran 8 tests OK",
+      "extractor": "python3 tools/extract_ev_system_semantics.py -> wrote native_ev/data/sourced_ev_systems.json systems=67 method ...v52",
       "git_diff_check": "git diff --check passed",
-      "scenario": "python3 tools/run_gameplay_scenarios.py manual_route_low_fuel_recovery_landing_loop --pretty -> success true with surfaced_route_fuel_recovery_hint passed",
-      "scenario_eval_tests": "python3 -m unittest native_ev.tests.test_scenario_eval -v -> Ran 103 tests OK",
-      "targeted_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_manual_route_low_fuel_recovery_landing_loop_keeps_route_and_recovers -v -> Ran 1 test OK"
+      "model_test": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v -> OK",
+      "remote": "origin https://github.com/markvshaney/terminal-velocity.git",
+      "scenario_eval_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v -> OK",
+      "topology_checker": "python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner -> ok true; topology_conflict false; warning_types []",
+      "topology_tests": "python3 -m unittest native_ev.tests.test_tv_spec_continuous_runner -v -> Ran 10 tests OK"
     },
-    "timestamp": "2026-06-11T07:38:57Z",
-    "verified_by": "tv-spec-continuous-runner:20260611T073200Z:5"
+    "timestamp": "2026-06-11T16:31:51Z",
+    "verified_by": "direct_session:checkpoint-prepush-review"
   },
-  "next_resume_action": "Integration owner should review local main checkpoint at HEAD, push normally, fetch origin, verify HEAD equals origin/main, then continue highest-priority safe backlog dispatch using the priority map and dispatch index under the single continuous_kanban_runner owner.",
+  "next_resume_action": "After the checkpoint commits are pushed and HEAD equals origin/main, autonomous implementation may resume under continuous_kanban_runner after rerunning topology preflight. Keep original-runtime capture evidence local-only/proprietary unless explicitly approved for publication.",
+  "runner_ownership": {
+    "allowed_surfaces": {
+      "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
+      "direct_session": "available_for_checkpoint_and_push",
+      "gateway_kanban_dispatcher": "not_live",
+      "integration_owner": "not_live"
+    },
+    "implementation_owner": "none_active",
+    "last_verified_at": "2026-06-11T16:31:51Z"
+  },
   "runner_policy": {
     "progress_token_definition": "sha256 of ledger status, active gate, next action, HEAD, git status, event count, and last event digest"
   },
   "runtime_truth_rule": "Derive current runtime truth from live cron/process/loop/gateway/Kanban/git surfaces first. Reconcile this ledger only as declared intent/checkpoint state; do not treat old gates or derived interpretations here as primary runtime truth.",
   "schema_version": 2,
   "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity under loki-game profile. No cron mutation, gateway/provider/account change, push, force-push, deletion, or publication is authorized by this ledger entry.",
-  "status": "running",
+  "status": "paused",
   "task_id": "tv-spec-implementation"
 }
