@@ -2324,6 +2324,10 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         blocked_jump = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
         self.assertIsNone(blocked_jump['destinationSystem'])
         self.assertEqual(blocked_jump['reason'], 'no destination selected')
+        self.assertIn('select an adjacent linked destination', blocked_jump['recoveryHint'])
+        self.assertIn('Sol', blocked_jump['linkedStopsFromOrigin'])
+        self.assertEqual(blocked_jump['sourceLabel'], 'terminal-velocity-navigation-guardrail-scaffold')
+        self.assertEqual(blocked_jump['oracleStatus'], 'classic_runtime_jump_refusal_ui_pending')
 
     def test_route_queue_clear_reselect_guardrail_recovers_after_new_route_selection(self):
         result = run_scripted_scenario('route_queue_clear_reselect_guardrail')
@@ -2347,6 +2351,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
         self.assertEqual(blocked['destinationSystem'], 'Sol')
         self.assertEqual(blocked['reason'], 'too close to system center')
+        self.assertIn('fly away', blocked['recoveryHint'])
+        self.assertIn('Sol', blocked['linkedStopsFromOrigin'])
         self.assertEqual(blocked['sourceLabel'], 'original-runtime-observed')
         self.assertEqual(blocked['oracleStatus'], 'near_center_jump_failure_observed_exact_distance_pending')
 
@@ -2359,10 +2365,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['fuel'], 6)
         self.assertEqual(result['metrics']['jumps'], 1)
         self.assertEqual(result['checks']['blocked_empty_fuel_jump'], 'passed')
-        self.assertIn(
-            {'type': 'blocked_jump', 'originSystem': 'Sol', 'destinationSystem': 'Levo', 'reason': 'insufficient fuel'},
-            result['trace'],
-        )
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
+        self.assertEqual(blocked['originSystem'], 'Sol')
+        self.assertEqual(blocked['destinationSystem'], 'Levo')
+        self.assertEqual(blocked['reason'], 'insufficient fuel')
+        self.assertEqual(blocked['fuel'], 0)
+        self.assertEqual(blocked['fuelRequired'], 1)
+        self.assertIn('refuel before retrying', blocked['recoveryHint'])
+        self.assertEqual(blocked['sourceLabel'], 'terminal-velocity-navigation-guardrail-scaffold')
+        self.assertEqual(blocked['oracleStatus'], 'classic_runtime_jump_refusal_ui_pending')
         self.assertIn(
             {'type': 'refuel', 'system': 'Sol', 'body': 'Earth', 'fuelAfter': 6},
             result['trace'],
@@ -2400,10 +2411,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['blocked_low_fuel_jump'], 'passed')
         self.assertEqual(result['checks']['preserved_system_after_block'], 'passed')
         self.assertEqual(result['checks']['refueled_after_block'], 'passed')
-        self.assertIn(
-            {'type': 'blocked_jump', 'originSystem': 'Levo', 'destinationSystem': 'Sol', 'reason': 'insufficient fuel'},
-            result['trace'],
-        )
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
+        self.assertEqual(blocked['originSystem'], 'Levo')
+        self.assertEqual(blocked['destinationSystem'], 'Sol')
+        self.assertEqual(blocked['reason'], 'insufficient fuel')
+        self.assertEqual(blocked['fuel'], 0)
+        self.assertEqual(blocked['fuelRequired'], 1)
+        self.assertIn('refuel before retrying', blocked['recoveryHint'])
+        self.assertEqual(blocked['sourceLabel'], 'terminal-velocity-navigation-guardrail-scaffold')
+        self.assertEqual(blocked['oracleStatus'], 'classic_runtime_jump_refusal_ui_pending')
         self.assertIn(
             {'type': 'refuel', 'system': 'Levo', 'body': 'Levo Spaceport', 'fuelAfter': 6},
             result['trace'],

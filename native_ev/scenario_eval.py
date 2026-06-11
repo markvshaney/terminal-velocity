@@ -1319,10 +1319,34 @@ def _advance_days(state: dict[str, Any], action: dict[str, Any], trace: list[dic
     return True
 
 
-def _blocked_jump_event(origin: str, destination: str | None, reason: str, route_queue: list[str]) -> dict[str, Any]:
+def _blocked_jump_event(
+    origin: str,
+    destination: str | None,
+    reason: str,
+    route_queue: list[str],
+    *,
+    state: dict[str, Any] | None = None,
+    universe: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     event: dict[str, Any] = {'type': 'blocked_jump', 'originSystem': origin, 'destinationSystem': destination, 'reason': reason}
     if route_queue:
         event['routeQueue'] = list(route_queue)
+    if state is not None:
+        event['fuel'] = int(state.get('fuel', 0))
+    if universe is not None:
+        event['linkedStopsFromOrigin'] = list(_system(universe, origin).get('links', []))
+    if reason == 'no destination selected':
+        event['recoveryHint'] = 'select an adjacent linked destination or queued route before jumping'
+    elif reason == 'insufficient fuel':
+        event['fuelRequired'] = 1
+        event['recoveryHint'] = 'land at a fuel service port and refuel before retrying the selected route'
+    elif reason == 'too close to system center':
+        event['recoveryHint'] = 'fly away from the system center before retrying hyperspace'
+    elif 'not linked' in reason:
+        event['recoveryHint'] = 'select an adjacent linked stop before retrying hyperspace'
+    if 'recoveryHint' in event:
+        event['sourceLabel'] = 'terminal-velocity-navigation-guardrail-scaffold'
+        event['oracleStatus'] = 'classic_runtime_jump_refusal_ui_pending'
     return event
 
 
@@ -1332,20 +1356,48 @@ def _jump(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, A
     if destination is None and state.get('routeQueue'):
         destination = state['routeQueue'][0]
     if destination is None:
-        trace.append(_blocked_jump_event(state['currentSystem'], None, 'no destination selected', list(state.get('routeQueue', []))))
+        trace.append(_blocked_jump_event(
+            state['currentSystem'],
+            None,
+            'no destination selected',
+            list(state.get('routeQueue', [])),
+            state=state,
+            universe=universe,
+        ))
         return False
     destination = str(destination)
     origin = state['currentSystem']
     links = set(_system(universe, origin).get('links', []))
     if destination not in links:
-        trace.append(_blocked_jump_event(origin, destination, f'{destination} not linked from {origin}', list(state.get('routeQueue', []))))
+        trace.append(_blocked_jump_event(
+            origin,
+            destination,
+            f'{destination} not linked from {origin}',
+            list(state.get('routeQueue', [])),
+            state=state,
+            universe=universe,
+        ))
         return False
     if state['fuel'] <= 0:
-        trace.append(_blocked_jump_event(origin, destination, 'insufficient fuel', list(state.get('routeQueue', []))))
+        trace.append(_blocked_jump_event(
+            origin,
+            destination,
+            'insufficient fuel',
+            list(state.get('routeQueue', [])),
+            state=state,
+            universe=universe,
+        ))
         return False
     distance_from_center = float(action.get('distanceFromSystemCenter', state.get('distanceFromSystemCenter', MIN_JUMP_DISTANCE + 50)))
     if distance_from_center < MIN_JUMP_DISTANCE:
-        event = _blocked_jump_event(origin, destination, 'too close to system center', list(state.get('routeQueue', [])))
+        event = _blocked_jump_event(
+            origin,
+            destination,
+            'too close to system center',
+            list(state.get('routeQueue', [])),
+            state=state,
+            universe=universe,
+        )
         event['distanceFromSystemCenter'] = distance_from_center
         event['minJumpDistance'] = MIN_JUMP_DISTANCE
         event['sourceLabel'] = 'original-runtime-observed'

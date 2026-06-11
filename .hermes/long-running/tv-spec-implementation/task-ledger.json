@@ -18,21 +18,21 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "tv-spec-continuous-runner-20260611T070856Z-2-route-invalid-stop-structured-recovery-push-ready",
-  "last_progress_token": "bdae55d8c2c9b34a803100439fa5c8da81e0fb1ffca22bd9ff593342f92e3695",
-  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T070053Z-1.summary.json",
+  "last_material_event_id": "tv-spec-continuous-runner-20260611T071835Z-3-blocked-jump-structured-recovery-push-ready",
+  "last_progress_token": "ae48a1c48856c3b8eb2bfa80616012e959ed86b8c523209a7ad7474a83ce9ae2",
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T070856Z-2.summary.json",
   "last_verified": {
     "live_truth_sources": {
       "backlog_dispatch": "python3 tools/backlog_dispatch_index.py build -> wrote index and BACKLOG DISPATCH INDEX OK; python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
       "git_diff_check": "git diff --check passed",
-      "scenario": "python3 tools/run_gameplay_scenarios.py route_queue_invalid_stop_guardrail --pretty -> success true; surfaced_adjacent_stop_recovery_hint passed",
+      "scenario": "python3 tools/run_gameplay_scenarios.py route_queue_clear_guardrail --pretty; route_planner_refuel_loop --pretty; low_fuel_jump_recovery --pretty; near_center_jump_block --pretty -> all success true with structured blocked-jump recovery metadata",
       "scenario_eval_tests": "python3 -m unittest native_ev.tests.test_scenario_eval -v -> Ran 103 tests OK",
-      "targeted_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_invalid_stop_guardrail_preserves_valid_route -v -> OK"
+      "targeted_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_clear_guardrail_clears_route_and_blocks_unselected_jump native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_near_center_jump_block_preserves_state_with_original_runtime_label native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_planner_refuel_loop_spends_fuel_blocks_empty_jump_then_refuels native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_low_fuel_jump_recovery_blocks_jump_preserves_state_then_refuels -v -> Ran 4 tests OK"
     },
-    "timestamp": "2026-06-11T07:15:39Z",
-    "verified_by": "tv-spec-continuous-runner:20260611T070856Z:2"
+    "timestamp": "2026-06-11T07:23:02Z",
+    "verified_by": "tv-spec-continuous-runner:20260611T071835Z:3"
   },
-  "next_resume_action": "Checkpoint the verified route invalid-stop structured recovery slice locally, then continue highest-priority safe backlog dispatch using the priority map and dispatch index under the single continuous_kanban_runner owner. Worker must not push; integration owner may later review/push normal non-force checkpoints.",
+  "next_resume_action": "Checkpoint the verified blocked-jump structured recovery slice locally, then continue highest-priority safe backlog dispatch using the priority map and dispatch index under the single continuous_kanban_runner owner. Worker must not push; integration owner may later review/push normal non-force checkpoints.",
   "runner_policy": {
     "progress_token_definition": "sha256 of ledger status, active gate, next action, HEAD, git status, event count, and last event digest"
   },
