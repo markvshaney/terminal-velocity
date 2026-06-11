@@ -368,24 +368,38 @@ def _route_fuel_status(state: dict[str, Any], action: dict[str, Any], trace: lis
     route_queue = list(state.get('routeQueue', []))
     fuel = int(state.get('fuel', 0))
     required = len(route_queue)
+    refuel_body = None
+    recovery_hint = None
     if not route_queue:
         fuel_status = 'no route selected'
+        recovery_hint = 'select an adjacent linked destination before checking route fuel'
     elif fuel >= required:
         fuel_status = 'enough fuel for full route'
     elif fuel > 0:
         fuel_status = 'insufficient fuel for full route'
+        refuel_body = _nearest_refuel_body_name(state)
+        recovery_hint = 'land at a fuel service port before continuing the full route'
     else:
         fuel_status = 'empty fuel for route'
-    trace.append({
+        refuel_body = _nearest_refuel_body_name(state)
+        recovery_hint = 'land at a fuel service port and refuel before jumping'
+    event = {
         'type': 'route_fuel_status',
+        'originSystem': state['currentSystem'],
         'routeQueue': route_queue,
         'greenRoutePath': [state['currentSystem']] + route_queue if route_queue else [],
         'fuel': fuel,
         'fuelRequired': required,
+        'fuelDeficit': max(0, required - fuel),
         'fuelStatus': fuel_status,
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-fuel-feedback-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'classic_runtime_route_fuel_feedback_pending'),
-    })
+    }
+    if recovery_hint is not None:
+        event['recoveryHint'] = recovery_hint
+    if refuel_body:
+        event['refuelRecoveryBody'] = refuel_body
+    trace.append(event)
     return True
 
 
@@ -1469,6 +1483,9 @@ def _body_refuel_available_for_scenario(body: dict[str, Any]) -> bool:
 
 
 def _nearest_refuel_body_name(state: dict[str, Any]) -> str | None:
+    landed_body = state.get('landedBody')
+    if landed_body:
+        return str(landed_body)
     universe = load_universe()
     for system in universe.get('systems', []):
         if system.get('name') != state.get('currentSystem'):
@@ -4522,6 +4539,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         post_recovery_appends = [event for event in trace if event.get('type') == 'append_route_stop' and event.get('sourceLabel') == 'terminal-velocity-route-guardrail']
         checks.update({
             'drew_manual_green_route_with_fuel_hint': 'passed' if route_status and route_status[-1].get('greenRoutePath') == ['Levo', 'Sol', 'Sirius'] and route_status[-1].get('fuelStatus') == 'insufficient fuel for full route' else 'failed',
+            'surfaced_route_fuel_recovery_hint': 'passed' if route_status and route_status[-1].get('originSystem') == START_SYSTEM and route_status[-1].get('fuel') == 1 and route_status[-1].get('fuelRequired') == 2 and route_status[-1].get('fuelDeficit') == 1 and route_status[-1].get('refuelRecoveryBody') == START_BODY and 'fuel service port' in route_status[-1].get('recoveryHint', '') else 'failed',
             'blocked_without_consuming_route_or_fuel': 'passed' if blocked and blocked[-1].get('routeQueue') == ['Sol', 'Sirius'] and any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('fuel') == 0 for event in trace) else 'failed',
             'recovered_by_refueling_and_reselecting_route': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == START_SYSTEM and event.get('fuelAfter') == STARTING_FUEL for event in trace) and [event.get('destinationSystem') for event in post_recovery_appends] == ['Sol', 'Sirius'] else 'failed',
             'landed_after_recovery': 'passed' if state.get('currentSystem') == 'Sirius' and state.get('landedBody') == 'Sirius Station' and state.get('routeQueue') == [] and state.get('fuel') == STARTING_FUEL - 2 else 'failed',

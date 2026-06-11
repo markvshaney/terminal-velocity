@@ -18,19 +18,19 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "tv-spec-continuous-runner-20260611T072555Z-4-route-clear-reselect-structured-recovery-push-ready",
+  "last_material_event_id": "tv-spec-continuous-runner-20260611T073200Z-5-manual-route-fuel-structured-recovery-push-ready",
   "last_progress_token": "28909110c02e9851e22de27d371fccd34eb19e81bef00f128818554d43965893",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T072555Z-4.summary.json",
   "last_verified": {
     "live_truth_sources": {
       "backlog_dispatch": "python3 tools/backlog_dispatch_index.py build -> wrote index and BACKLOG DISPATCH INDEX OK; python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v -> Ran 8 tests OK",
       "git_diff_check": "git diff --check passed",
-      "scenario": "python3 tools/run_gameplay_scenarios.py route_queue_clear_guardrail --pretty; route_queue_clear_reselect_guardrail --pretty -> success true with surfaced_clear_reselect_recovery_hint passed",
+      "scenario": "python3 tools/run_gameplay_scenarios.py manual_route_low_fuel_recovery_landing_loop --pretty -> success true with surfaced_route_fuel_recovery_hint passed",
       "scenario_eval_tests": "python3 -m unittest native_ev.tests.test_scenario_eval -v -> Ran 103 tests OK",
-      "targeted_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_clear_guardrail_clears_route_and_blocks_unselected_jump native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_clear_reselect_guardrail_recovers_after_new_route_selection -v -> Ran 2 tests OK"
+      "targeted_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_manual_route_low_fuel_recovery_landing_loop_keeps_route_and_recovers -v -> Ran 1 test OK"
     },
-    "timestamp": "2026-06-11T07:29:15Z",
-    "verified_by": "tv-spec-continuous-runner:20260611T072555Z:4"
+    "timestamp": "2026-06-11T07:38:57Z",
+    "verified_by": "tv-spec-continuous-runner:20260611T073200Z:5"
   },
   "next_resume_action": "Integration owner should review local main checkpoint at HEAD, push normally, fetch origin, verify HEAD equals origin/main, then continue highest-priority safe backlog dispatch using the priority map and dispatch index under the single continuous_kanban_runner owner.",
   "runner_policy": {

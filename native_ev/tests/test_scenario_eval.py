@@ -2398,11 +2398,17 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['routeQueue'], [])
         self.assertEqual(result['metrics']['jumps'], 2)
         self.assertEqual(result['checks']['drew_manual_green_route_with_fuel_hint'], 'passed')
+        self.assertEqual(result['checks']['surfaced_route_fuel_recovery_hint'], 'passed')
         self.assertEqual(result['checks']['blocked_without_consuming_route_or_fuel'], 'passed')
         self.assertEqual(result['checks']['recovered_by_refueling_and_reselecting_route'], 'passed')
         self.assertEqual(result['checks']['landed_after_recovery'], 'passed')
         route_status = [event for event in result['trace'] if event['type'] == 'route_fuel_status']
         self.assertEqual(route_status[-1]['routeQueue'], ['Sol', 'Sirius'])
+        self.assertEqual(route_status[-1]['originSystem'], 'Levo')
+        self.assertEqual(route_status[-1]['fuelRequired'], 2)
+        self.assertEqual(route_status[-1]['fuelDeficit'], 1)
+        self.assertEqual(route_status[-1]['refuelRecoveryBody'], 'Levo Spaceport')
+        self.assertIn('fuel service port', route_status[-1]['recoveryHint'])
         self.assertEqual(route_status[-1]['fuelStatus'], 'insufficient fuel for full route')
         blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump']
         self.assertEqual(blocked[-1]['reason'], 'insufficient fuel')
