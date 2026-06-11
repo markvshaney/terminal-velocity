@@ -1831,6 +1831,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_residual_magnitude_summary',
             'recorded_coordinate_display_quantization_summary',
             'recorded_coordinate_display_scale_interpretation_summary',
+            'recorded_coordinate_display_calibration_gate_summary',
+            'recorded_coordinate_display_runtime_capture_gate_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
             'recorded_candidate_link_graph_summary',
@@ -2160,6 +2162,18 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('candidate coordinate families disagree on scale/aspect interpretation', readiness['coordinateDisplayCalibrationGatePromotionBlockers'])
         self.assertIn('original-runtime map screenshot/click calibration', readiness['coordinateDisplayCalibrationGateNextEvidenceFamilies'][0])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayCalibrationGateSourceLabel'], 'decoded-resource-backed-coordinate-display-calibration-gate')
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureGateSourceLabel'], 'original-runtime-coordinate-map-calibration-capture-gate')
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureGateOracleStatus'], 'coordinate_display_capture_blocked_pending_classic_map_pixel_click_evidence')
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureGateRequiredTargetResourceIds'], [129, 130, 131])
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureGateRequiredConSlots'], ['Con2', 'Con3', 'Con4'])
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureGateCapturePacketSchemaVersion'], 1)
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureGateRequiredCapturePacketCount'], 3)
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureGateCapturePacketTargetResourceIds'], [129, 130, 131])
+        self.assertIn('mapWindowPixelBounds', readiness['coordinateDisplayRuntimeCaptureGateFirstObservationFields'])
+        self.assertIn('destinationPixelPosition', readiness['coordinateDisplayRuntimeCaptureGateFirstObservationFields'])
+        self.assertIn('minimum two named observed map positions tied to decoded resource IDs or Con slots before any display-scale review', readiness['coordinateDisplayRuntimeCaptureGateCaptureValidationRules'])
+        self.assertIn('not-promoted', readiness['coordinateDisplayRuntimeCaptureGatePromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayRuntimeCaptureGateSourceLabel'], 'original-runtime-coordinate-map-calibration-capture-gate')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])

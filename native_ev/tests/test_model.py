@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v49')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3724,6 +3724,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(display_calibration_gate['promotionReadinessStatus'], 'blocked; static coordinate candidates are analysis inputs only')
         self.assertIn('candidate coordinate families disagree on scale/aspect interpretation', display_calibration_gate['promotionBlockers'])
         self.assertIn('original-runtime map screenshot/click calibration', display_calibration_gate['nextEvidenceFamilies'][0])
+        display_runtime_capture_gate = data['coordinateDisplayRuntimeCaptureGateSummary']
+        self.assertEqual(display_runtime_capture_gate['sourceLabel'], 'original-runtime-coordinate-map-calibration-capture-gate')
+        self.assertEqual(display_runtime_capture_gate['oracleStatus'], 'coordinate_display_capture_blocked_pending_classic_map_pixel_click_evidence')
+        self.assertEqual(display_runtime_capture_gate['requiredTargetResourceIds'], [129, 130, 131])
+        self.assertEqual(display_runtime_capture_gate['requiredConSlots'], ['Con2', 'Con3', 'Con4'])
+        self.assertEqual(display_runtime_capture_gate['requiredCapturePacketCount'], 3)
+        self.assertEqual(display_runtime_capture_gate['capturePacketSchemaVersion'], 1)
+        display_capture_templates = display_runtime_capture_gate['capturePacketTemplates']
+        self.assertEqual([entry['targetResourceId'] for entry in display_capture_templates], [129, 130, 131])
+        self.assertIn('mapWindowPixelBounds', display_capture_templates[0]['requiredObservationFields'])
+        self.assertIn('destinationPixelPosition', display_capture_templates[0]['requiredObservationFields'])
+        self.assertIn('minimum two named observed map positions tied to decoded resource IDs or Con slots before any display-scale review', display_runtime_capture_gate['captureValidationRules'])
+        self.assertIn('not-promoted', display_runtime_capture_gate['promotionStatus'])
         display_extrema = data['coordinateDisplayExtremaSummary']
         self.assertEqual(display_extrema['sourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(display_extrema['oracleStatus'], 'coordinate_display_units_map_scaling_pending')
