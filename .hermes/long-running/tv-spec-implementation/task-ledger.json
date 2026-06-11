@@ -20,11 +20,11 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "kanban-t_8600d6aa-route-fuel-reachability-structured-recovery",
+  "last_material_event_id": "kanban-t_8600d6aa-route-fuel-reachability-push-ready",
   "last_progress_token": "28909110c02e9851e22de27d371fccd34eb19e81bef00f128818554d43965893",
   "last_reconciled_live_git": {
-    "checked_at": "2026-06-11T17:46:06Z",
-    "checkpoint_decision": "commit_and_push_verified_route_fuel_reachability_slice",
+    "checked_at": "2026-06-11T17:52:00Z",
+    "checkpoint_decision": "push_ready_missing_worker_https_credentials",
     "checkpoint_files": [
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_scenario_eval.py",
@@ -33,8 +33,8 @@
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl"
     ],
-    "head_before_checkpoint": "8c1ef2bd93663d7dedd7b2bef8beb37c2f90e00f",
-    "head_equals_origin_main_before_checkpoint": true,
+    "head_after_checkpoint": "ce1473f",
+    "head_equals_origin_main_after_checkpoint": false,
     "origin_main_before_checkpoint": "8c1ef2bd93663d7dedd7b2bef8beb37c2f90e00f"
   },
   "last_runner_summary_path": null,
@@ -42,17 +42,19 @@
     "live_truth_sources": {
       "backlog_dispatch_index": "passed; BACKLOG DISPATCH INDEX OK",
       "git_diff_check": "passed; no whitespace errors",
+      "local_commit": "ce1473f feat(tv): expose route fuel reachability",
+      "push_attempt": "failed; fatal: could not read Username for 'https://github.com': No such device or address",
       "remote": "origin https://github.com/markvshaney/terminal-velocity.git",
       "route_fuel_reachability_test": "passed; Ran 1 test OK",
       "route_fuel_scenario": "passed; success true; surfaced_partial_route_reachability passed",
       "scenario_eval_suite": "passed; Ran 103 tests OK"
     },
-    "timestamp": "2026-06-11T17:46:06Z",
-    "verified_by": "kanban:t_8600d6aa"
+    "timestamp": "2026-06-11T17:52:00Z",
+    "verified_by": "kanban:t_8600d6aa:push-ready"
   },
   "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
   "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Checkpoint/push this verified route-fuel reachability structured recovery slice, then continue highest-priority safe backlog dispatch using the priority map and dispatch index. Keep route/fuel helpers labeled as Terminal Velocity scaffold until stronger EV Classic map/fuel/jump captures exist.",
+  "next_resume_action": "Integration owner or credentialed TV session should push local main commit ce1473f normally, fetch origin, verify HEAD equals origin/main, then continue highest-priority safe backlog dispatch. Missing worker GitHub credentials are not a TV development gate.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
