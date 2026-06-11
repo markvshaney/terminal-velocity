@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+"""Script-only autostart watchdog for the Terminal Velocity Kanban runner.
+
+This is intentionally narrow:
+- no feature implementation;
+- no git commit/push/rewrite;
+- no gateway/provider/config restart;
+- dispatch one ready TV Kanban task when the lane is idle;
+- seed exactly one continuation task when the lane is idle and clean.
+
+stdout is reserved for material actions/problems so a no-agent cron job can stay
+quiet during healthy ticks.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+REPO = Path("/home/bh/workspaces/loki/terminal-velocity")
+BOARD = "terminal-velocity"
+ASSIGNEE = "terminal-velocity"
+PROFILE_ARGS = ["hermes", "-p", "loki-game"]
+STATE_PATH = Path("/home/bh/.hermes/profiles/loki-game/cron/tv_runner_autostart_state.json")
+
+
+def run(cmd: list[str], *, cwd: Path | None = None, timeout: int = 45) -> str:
+    return subprocess.check_output(
+        cmd,
+        cwd=str(cwd) if cwd else None,
+        stderr=subprocess.STDOUT,
+        text=True,
+        timeout=timeout,
+    )
+
+
+def git_status_lines() -> list[str]:
+    return run(["git", "status", "--short", "--branch"], cwd=REPO, timeout=10).splitlines()
+
+
+def git_dirty() -> bool:
+    lines = git_status_lines()
+    return any(line and not line.startswith("## ") for line in lines)
+
+
+def git_head() -> str:
+    return run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO, timeout=10).strip()
+
+
+def git_status_summary() -> str:
+    return "; ".join(git_status_lines()[:12])
+
+
+def load_state() -> dict:
+    try:
+        return json.loads(STATE_PATH.read_text())
+    except Exception:
+        return {}
+
+
+def save_state(**updates: object) -> None:
+    state = load_state()
+    state.update(updates)
+    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    STATE_PATH.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
+
+
+def board_tasks() -> list[dict]:
+    raw = run(PROFILE_ARGS + ["kanban", "--board", BOARD, "list", "--json"], timeout=60)
+    data = json.loads(raw)
+    if isinstance(data, list):
+        return data
+    if isinstance(data, dict) and isinstance(data.get("tasks"), list):
+        return data["tasks"]
+    raise RuntimeError("unexpected kanban list --json shape")
+
+
+def assignee_tasks(tasks: list[dict], status: str) -> list[dict]:
+    return [t for t in tasks if t.get("assignee") == ASSIGNEE and t.get("status") == status]
+
+
+def dispatch(dry_run: bool) -> str:
+    if dry_run:
+        return "dry-run-dispatch"
+    return run(
+        PROFILE_ARGS + ["kanban", "--board", BOARD, "dispatch", "--max", "1"],
+        timeout=60,
+    ).strip()
+
+
+def continuation_body(head: str) -> str:
+    return f"""Continue Terminal Velocity tv-spec implementation from current live repo state using the durable long-running task envelope.
+
+Repo/workdir: {REPO}
+Board/assignee: {BOARD} / {ASSIGNEE}
+Base: current origin/main. Inspect live git state before editing; do not trust copied SHAs. Current local HEAD at autostart seed: {head}.
+
+Required preflight:
+- Read .hermes/long-running/tv-spec-implementation/task-ledger.json and tail .hermes/long-running/tv-spec-implementation/events.jsonl.
+- Read docs/prompts/tv-spec-implementation-long-task-prompt.md and docs/research/tv-spec.md; use docs/checklists/ev-classic-fidelity-implementation-backlog.md for next work selection.
+- Run git fetch origin, git status --short --branch, inspect HEAD/origin/main before edits.
+- Preserve runner-state artifacts; do not start/stop/restart live continuous runner, cron jobs, gateway/supervision, providers, accounts, or credential/config surfaces.
+
+Continuation contract:
+- This is a long-running autonomous loop. Do not stop for human review on verified safe-local TV code/data/docs changes.
+- Implement one or more adjacent source-aligned safe local Terminal Velocity increments when file set/source basis/verifier surface remain coherent.
+- Each increment must include source/fidelity labels, deterministic verifier(s), and durable event/checkpoint updates when future behavior/state changes.
+- Terminal Velocity/Godot logs are implementation evidence, not Classic truth; label scaffolds/pending Classic confirmations explicitly.
+- A verified slice is a checkpoint, not a stop. Before completing this Kanban task, if no real gate/blocker/complete condition exists, create exactly one successor continuation task assigned to {ASSIGNEE} with this same continuation contract, then complete this task with successor id and verification summary.
+- If checkpoint publication is needed from a non-integrator worker, record push_ready; the autonomous integration owner should resolve it. Human review is not a gate unless the task crosses an explicit risky/destructive/external/publication/credential/config boundary.
+- If unable to create a successor, block with a self-contained handoff instead of silently finishing.
+
+Verification defaults:
+- Targeted sourced-system/static-topology tests for Lane A.
+- python3 tools/extract_ev_system_semantics.py when extractor/model data touched.
+- python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty when scenario packet touched.
+- python3 tools/backlog_dispatch_index.py check when backlog dispatch fields touched.
+- Broader native/Godot checks only at material checkpoint or touched-surface boundary.
+
+Do not redo prior verified slices recorded in the ledger/events; continue from live state and the current backlog/priority/verifier maps.
+"""
+
+
+def create_continuation(dry_run: bool) -> str:
+    head = git_head()
+    if dry_run:
+        return f"dry-run-create-tv-autostart-continuation-{head}"
+    raw = run(
+        PROFILE_ARGS
+        + [
+            "kanban",
+            "--board",
+            BOARD,
+            "create",
+            "Continue TV tv-spec autonomous loop after autostart watchdog",
+            "--assignee",
+            ASSIGNEE,
+            "--workspace",
+            f"dir:{REPO}",
+            "--skill",
+            "long-running-task-harness",
+            "--skill",
+            "source-and-fidelity",
+            "--skill",
+            "artifact-governance",
+            "--skill",
+            "living-backlog-governance",
+            "--skill",
+            "ev-terminal-velocity-play",
+            "--max-runtime",
+            "45m",
+            "--idempotency-key",
+            f"tv-autostart-continuation-{head}",
+            "--body",
+            continuation_body(head),
+            "--json",
+        ],
+        timeout=60,
+    )
+    created = json.loads(raw)
+    return str(created.get("id") or "").strip()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+
+    now = datetime.now(timezone.utc).isoformat()
+    tasks = board_tasks()
+    running = assignee_tasks(tasks, "running")
+    ready = assignee_tasks(tasks, "ready")
+    blocked = assignee_tasks(tasks, "blocked")
+    scheduled = assignee_tasks(tasks, "scheduled")
+
+    if running:
+        active = f"{running[0].get('id')} {running[0].get('title')}"
+        state = load_state()
+        if active != state.get("last_active"):
+            save_state(last_active=active, last_ok_at=now)
+            print(f"TV runner autostart status: running {active}")
+            print("repo: " + git_status_summary())
+        else:
+            save_state(last_ok_at=now)
+        return 0
+
+    if ready:
+        out = dispatch(args.dry_run)
+        save_state(last_action="dispatch_ready", last_action_at=now, last_active="")
+        print(f"TV runner autostart: dispatched ready task; ready_before={len(ready)} blocked_ignored={len(blocked)}")
+        if out:
+            print(out.splitlines()[-1])
+        print("repo: " + git_status_summary())
+        return 0
+
+    if scheduled:
+        save_state(last_ok_at=now, last_active="")
+        return 0
+
+    if git_dirty():
+        save_state(last_problem="idle_dirty_repo", last_problem_at=now, last_active="")
+        print("TV runner autostart blocked: idle lane but repo has uncommitted work; integration owner must cohere/publish or preserve it before seeding new work.")
+        print("repo: " + git_status_summary())
+        print(f"blocked_tasks_ignored={len(blocked)}")
+        return 0
+
+    created = create_continuation(args.dry_run)
+    out = dispatch(args.dry_run)
+    save_state(last_action="seed_and_dispatch", last_action_at=now, last_seeded_task=created, last_active="")
+    print(f"TV runner autostart: seeded and dispatched continuation {created}; blocked_ignored={len(blocked)}")
+    if out:
+        print(out.splitlines()[-1])
+    print("repo: " + git_status_summary())
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
