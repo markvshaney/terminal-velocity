@@ -18,21 +18,21 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "tv-spec-continuous-runner-20260611T070053Z-1-topology-repair-push-ready",
+  "last_material_event_id": "tv-spec-continuous-runner-20260611T070856Z-2-route-invalid-stop-structured-recovery-push-ready",
   "last_progress_token": "bdae55d8c2c9b34a803100439fa5c8da81e0fb1ffca22bd9ff593342f92e3695",
   "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T070053Z-1.summary.json",
   "last_verified": {
     "live_truth_sources": {
-      "backlog_dispatch": "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+      "backlog_dispatch": "python3 tools/backlog_dispatch_index.py build -> wrote index and BACKLOG DISPATCH INDEX OK; python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
       "git_diff_check": "git diff --check passed",
-      "json": "python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json and docs/checklists/ev-classic-fidelity-implementation-backlog.index.json passed",
-      "runner_tests": "python3 -m unittest native_ev.tests.test_tv_spec_continuous_runner -v -> Ran 9 tests OK",
-      "topology_preflight": "python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner -> ok true; topology_conflict false; conflict_types []; warning_types []; live_implementation_owner continuous_kanban_runner; declared_implementation_owner none_active before ledger alignment"
+      "scenario": "python3 tools/run_gameplay_scenarios.py route_queue_invalid_stop_guardrail --pretty -> success true; surfaced_adjacent_stop_recovery_hint passed",
+      "scenario_eval_tests": "python3 -m unittest native_ev.tests.test_scenario_eval -v -> Ran 103 tests OK",
+      "targeted_test": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_invalid_stop_guardrail_preserves_valid_route -v -> OK"
     },
-    "timestamp": "2026-06-11T07:04:39Z",
-    "verified_by": "tv-spec-continuous-runner:20260611T070053Z:1"
+    "timestamp": "2026-06-11T07:15:39Z",
+    "verified_by": "tv-spec-continuous-runner:20260611T070856Z:2"
   },
-  "next_resume_action": "Continue TV spec implementation under the single live owner continuous_kanban_runner. First stabilize/checkpoint the verified topology-control-plane repair bundle; then resume highest-priority safe backlog dispatch using the priority map and dispatch index. Do not start a second gateway-dispatch owner or push from a non-integration worker.",
+  "next_resume_action": "Checkpoint the verified route invalid-stop structured recovery slice locally, then continue highest-priority safe backlog dispatch using the priority map and dispatch index under the single continuous_kanban_runner owner. Worker must not push; integration owner may later review/push normal non-force checkpoints.",
   "runner_policy": {
     "progress_token_definition": "sha256 of ledger status, active gate, next action, HEAD, git status, event count, and last event digest"
   },

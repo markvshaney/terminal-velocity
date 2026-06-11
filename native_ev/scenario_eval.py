@@ -324,10 +324,31 @@ def _append_route_stop(state: dict[str, Any], action: dict[str, Any], trace: lis
     tail_name = _route_tail_system(state)
     tail_system = next((system for system in universe.get('systems', []) if system.get('name') == tail_name), None)
     if not tail_system or destination not in tail_system.get('links', []):
-        trace.append({'type': 'blocked_append_route_stop', 'destinationSystem': destination, 'tailSystem': tail_name, 'reason': 'not linked from route tail', 'routeQueue': list(state.get('routeQueue', []))})
+        linked_stops = list(tail_system.get('links', [])) if tail_system else []
+        trace.append({
+            'type': 'blocked_append_route_stop',
+            'destinationSystem': destination,
+            'tailSystem': tail_name,
+            'reason': 'not linked from route tail',
+            'routeQueue': list(state.get('routeQueue', [])),
+            'linkedStopsFromTail': linked_stops,
+            'recoveryHint': 'select an adjacent linked stop from the route tail before queueing this destination',
+            'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-guardrail'),
+            'oracleStatus': action.get('oracleStatus', 'route_queue_recovery_pending_ev_classic_ui_trace'),
+        })
         return True
     if destination == state['currentSystem'] or destination in state.get('routeQueue', []):
-        trace.append({'type': 'blocked_append_route_stop', 'destinationSystem': destination, 'tailSystem': tail_name, 'reason': 'duplicate or current system', 'routeQueue': list(state.get('routeQueue', []))})
+        trace.append({
+            'type': 'blocked_append_route_stop',
+            'destinationSystem': destination,
+            'tailSystem': tail_name,
+            'reason': 'duplicate or current system',
+            'routeQueue': list(state.get('routeQueue', [])),
+            'linkedStopsFromTail': list(tail_system.get('links', [])) if tail_system else [],
+            'recoveryHint': 'keep the existing route or clear it before selecting a new adjacent stop',
+            'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-guardrail'),
+            'oracleStatus': action.get('oracleStatus', 'route_queue_recovery_pending_ev_classic_ui_trace'),
+        })
         return True
     state.setdefault('routeQueue', []).append(destination)
     state['routeSourceLabel'] = action.get('sourceLabel', 'original-runtime-observed')
@@ -4403,10 +4424,12 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         })
     elif name == 'route_queue_invalid_stop_guardrail':
         blocked_reasons = [event.get('reason') for event in trace if event.get('type') == 'blocked_append_route_stop']
+        blocked_events = [event for event in trace if event.get('type') == 'blocked_append_route_stop']
         checks.update({
             'preserved_valid_route_after_invalid_clicks': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('routeQueue') == ['Sol'] else 'failed',
             'blocked_duplicate_or_current_system': 'passed' if 'duplicate or current system' in blocked_reasons else 'failed',
             'blocked_unlinked_route_tail_stop': 'passed' if 'not linked from route tail' in blocked_reasons else 'failed',
+            'surfaced_adjacent_stop_recovery_hint': 'passed' if any(event.get('destinationSystem') == 'Antares' and event.get('tailSystem') == 'Sol' and 'Sirius' in event.get('linkedStopsFromTail', []) and 'adjacent linked stop' in event.get('recoveryHint', '') and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' for event in blocked_events) else 'failed',
         })
     elif name == 'route_queue_clear_guardrail':
         checks.update({

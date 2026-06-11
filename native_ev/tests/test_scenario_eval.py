@@ -2299,9 +2299,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['preserved_valid_route_after_invalid_clicks'], 'passed')
         self.assertEqual(result['checks']['blocked_duplicate_or_current_system'], 'passed')
         self.assertEqual(result['checks']['blocked_unlinked_route_tail_stop'], 'passed')
+        self.assertEqual(result['checks']['surfaced_adjacent_stop_recovery_hint'], 'passed')
         blocked = [event for event in result['trace'] if event['type'] == 'blocked_append_route_stop']
         self.assertEqual([event['destinationSystem'] for event in blocked], ['Levo', 'Antares'])
         self.assertTrue(all(event['routeQueue'] == ['Sol'] for event in blocked))
+        self.assertEqual(blocked[-1]['tailSystem'], 'Sol')
+        self.assertIn('Sirius', blocked[-1]['linkedStopsFromTail'])
+        self.assertIn('adjacent linked stop', blocked[-1]['recoveryHint'])
+        self.assertEqual(blocked[-1]['sourceLabel'], 'terminal-velocity-route-guardrail')
+        self.assertEqual(blocked[-1]['oracleStatus'], 'route_queue_recovery_pending_ev_classic_ui_trace')
 
     def test_route_queue_clear_guardrail_clears_route_and_blocks_unselected_jump(self):
         result = run_scripted_scenario('route_queue_clear_guardrail')
