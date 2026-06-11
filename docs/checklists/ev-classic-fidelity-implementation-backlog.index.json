@@ -397,11 +397,11 @@
     {
       "blocked_reason": "Current capture did not show original EV auto-drawing active mission objective routes; helper behavior must not be represented as Classic fidelity.",
       "id": "map-objective-arrows-fuel-range-and-hyperspace-feedback",
-      "item_body_sha256": "9f5c71acd39eed31c4892c295edaf90541d7287f893f87ccfdece301bc456095",
+      "item_body_sha256": "9f00e475b4298617a6c5701a3e75c0e67e9950c67846453f9a411b9852e1f6b2",
       "lane_class": "Basilisk runtime lane",
       "line_range": [
         510,
-        534
+        535
       ],
       "markdown_anchor": "#map-objective-arrows-fuel-range-and-hyperspace-feedback",
       "next_action": "Keep mission route hint/fuel precheck/navigation recovery as opt-in helper scaffolds; promote only after stronger Classic map/fuel/jump/land/refuel capture, especially multi-hop Shift-click toward non-direct destinations.",
@@ -426,8 +426,8 @@
       "item_body_sha256": "d28ef85b55c99ce9e9072f25ea128164c883ac767d53316f0e9a2066dcb4dfc6",
       "lane_class": "Lane D: mission-family semantic promotion",
       "line_range": [
-        535,
-        580
+        536,
+        581
       ],
       "markdown_anchor": "#per-government-legal-reputation-and-ai-behavior-model",
       "next_action": "Compare inferred mechanics against EV Classic runtime and EV/Override/Nova plugin-manual/Bible fields such as government crime tolerance, scan fines, contraband, bribery, and mission legal availability; tune labels/thresholds from evidence without blocking current playable scaffolds.",
@@ -460,8 +460,8 @@
       "item_body_sha256": "45bfe2ceac3657f120b5949ed9f7a303487e6dc572c2b8f6634e02d935ad603f",
       "lane_class": "Lane E: deterministic evaluator/playtest packets",
       "line_range": [
-        703,
-        714
+        704,
+        715
       ],
       "markdown_anchor": "#external-adaptation-comparisons",
       "next_action": "Use only as hypothesis input when a specific implementation question needs comparison; require original runtime, decoded resources, manual/docs, or Terminal Velocity instrumentation before implementation.",

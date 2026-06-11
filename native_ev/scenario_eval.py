@@ -391,12 +391,19 @@ def _route_fuel_status(state: dict[str, Any], action: dict[str, Any], trace: lis
 
 def _clear_route_queue(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     previous_route = list(state.get('routeQueue', []))
+    universe = load_universe()
+    origin_system = _system(universe, str(state['currentSystem']))
+    linked_stops = list(origin_system.get('links', []))
     state['routeQueue'] = []
     state['routeSourceLabel'] = None
     trace.append({
         'type': 'clear_route_queue',
         'previousRoute': previous_route,
         'routeQueue': [],
+        'originSystem': state['currentSystem'],
+        'linkedStopsFromOrigin': linked_stops,
+        'clearedRouteLength': len(previous_route),
+        'recoveryHint': 'route cleared; select an adjacent linked destination before retrying hyperspace',
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-guardrail'),
         'oracleStatus': action.get('oracleStatus', 'route_clear_pending_ev_classic_trace'),
     })
@@ -4488,12 +4495,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'cleared_multi_stop_route': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('previousRoute') == ['Sol', 'Sirius'] and event.get('routeQueue') == [] for event in trace) and state.get('routeQueue') == [] else 'failed',
             'blocked_jump_after_clear': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'no destination selected' for event in trace) else 'failed',
             'recorded_clear_source_boundary': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' and 'pending_ev_classic_trace' in event.get('oracleStatus', '') for event in trace) else 'failed',
+            'surfaced_clear_reselect_recovery_hint': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('originSystem') == START_SYSTEM and 'Sol' in event.get('linkedStopsFromOrigin', []) and event.get('clearedRouteLength') == 2 and 'select an adjacent linked destination' in event.get('recoveryHint', '') for event in trace) else 'failed',
         })
     elif name == 'route_queue_clear_reselect_guardrail':
         checks.update({
             'blocked_jump_after_clear': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'no destination selected' for event in trace) else 'failed',
             'reselected_after_clear': 'passed' if any(event.get('type') == 'append_route_stop' and event.get('destinationSystem') == 'Sol' and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' for event in trace) else 'failed',
             'jumped_after_reselect': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == [] and any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol'] and event.get('remainingRoute') == [] for event in trace) else 'failed',
+            'surfaced_clear_reselect_recovery_hint': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('originSystem') == START_SYSTEM and 'Sol' in event.get('linkedStopsFromOrigin', []) and 'select an adjacent linked destination' in event.get('recoveryHint', '') for event in trace) else 'failed',
         })
     elif name == 'near_center_jump_block':
         checks.update({

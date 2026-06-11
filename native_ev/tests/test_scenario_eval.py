@@ -2320,7 +2320,12 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['recorded_clear_source_boundary'], 'passed')
         clear_event = [event for event in result['trace'] if event['type'] == 'clear_route_queue'][-1]
         self.assertEqual(clear_event['previousRoute'], ['Sol', 'Sirius'])
+        self.assertEqual(clear_event['originSystem'], 'Levo')
+        self.assertEqual(clear_event['clearedRouteLength'], 2)
+        self.assertIn('Sol', clear_event['linkedStopsFromOrigin'])
+        self.assertIn('select an adjacent linked destination', clear_event['recoveryHint'])
         self.assertEqual(clear_event['sourceLabel'], 'terminal-velocity-route-guardrail')
+        self.assertEqual(result['checks']['surfaced_clear_reselect_recovery_hint'], 'passed')
         blocked_jump = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
         self.assertIsNone(blocked_jump['destinationSystem'])
         self.assertEqual(blocked_jump['reason'], 'no destination selected')
@@ -2338,6 +2343,10 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['blocked_jump_after_clear'], 'passed')
         self.assertEqual(result['checks']['reselected_after_clear'], 'passed')
         self.assertEqual(result['checks']['jumped_after_reselect'], 'passed')
+        self.assertEqual(result['checks']['surfaced_clear_reselect_recovery_hint'], 'passed')
+        clear_event = [event for event in result['trace'] if event['type'] == 'clear_route_queue'][-1]
+        self.assertIn('Sol', clear_event['linkedStopsFromOrigin'])
+        self.assertIn('select an adjacent linked destination', clear_event['recoveryHint'])
         event_types = [event['type'] for event in result['trace']]
         self.assertEqual(event_types[-3:], ['blocked_jump', 'append_route_stop', 'jump'])
 
