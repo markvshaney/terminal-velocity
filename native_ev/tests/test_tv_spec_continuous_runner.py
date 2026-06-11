@@ -141,6 +141,33 @@ class TvRunnerTopologyTests(unittest.TestCase):
             self.assertNotIn("gateway_global_enabled_warning", payload["warning_types"])
             self.assertNotIn("active_owner_conflict", payload["conflict_types"])
 
+    def test_profile_housekeeping_cron_that_mentions_tv_safety_is_not_tv_owner(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo, profile, task_dir = self.make_topology_fixture(Path(tmp))
+            (task_dir / "task-ledger.json").write_text(json.dumps({
+                "task_id": "tv-spec-implementation",
+                "status": "running",
+                "declared_owner": "continuous_kanban_runner",
+                "active_gate": None,
+            }) + "\n")
+            (profile / "cron/jobs.json").write_text(json.dumps({"jobs": [{
+                "id": "20dca3ae3beb",
+                "name": "Daily Loki Game memory hygiene",
+                "prompt": "Inspect loki-game profile memory and preserve TV safety/fidelity/user-preference semantics. Do not change repo files, runners, gateway, providers, or cron jobs.",
+                "script": None,
+                "no_agent": False,
+                "enabled": True,
+                "state": "scheduled",
+                "deliver": "origin",
+            }]}) + "\n")
+
+            code, payload = self.run_checker(repo, profile, "--startup-owner", "continuous_kanban_runner")
+
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(payload["live_implementation_owner"], "none_active")
+            self.assertIn("ledger_stale", payload["warning_types"])
+            self.assertNotIn("active_owner_conflict", payload["conflict_types"])
+
     def test_active_continuous_loop_conflicts_with_startup_owner(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo, profile, task_dir = self.make_topology_fixture(Path(tmp))

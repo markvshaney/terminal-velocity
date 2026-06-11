@@ -37,6 +37,20 @@ ALLOWED_OWNERS = {
 }
 
 TV_TERMS = ("terminal velocity", "tv-spec", "tv ", "loki gametv")
+TV_SURFACE_TERMS = (
+    "terminal velocity",
+    "terminal-velocity",
+    "tv-spec",
+    "loki gametv",
+    "tv_spec_continuous_runner",
+    "tv_kanban_continuous_loop",
+    "tv_slice_reporter",
+)
+TV_PROMPT_OWNER_PATTERNS = (
+    r"\btv-spec\s+(?:implementation|runner|continuous|dispatch|repair)",
+    r"\bterminal velocity\s+(?:implementation|development|runner|continuous|dispatch|repair)",
+    r"\bloki gametv\b",
+)
 IMPLEMENTATION_TERMS = ("implementation", "repair", "coordinator", "dispatch", "watchdog")
 PASSIVE_REPORTER_SCRIPTS = {"tv_slice_reporter.py"}
 TERMINAL_JOB_STATES = {"completed", "complete", "done", "disabled", "paused", "removed"}
@@ -68,11 +82,25 @@ def gateway_dispatch_enabled(path: Path) -> bool:
 
 
 def is_tv_job(job: dict[str, Any]) -> bool:
-    text = " ".join(
+    """Return True only for cron jobs that are explicit TV control-plane surfaces.
+
+    Profile-wide housekeeping prompts may mention TV safety/fidelity as text to
+    preserve, but that does not make the cron job a Terminal Velocity
+    implementation/repair/dispatch owner. Prefer explicit surface fields
+    (name/script/workdir/deliver/id) and only use prompt text for strong owner
+    phrases.
+    """
+    surface_text = " ".join(
         str(job.get(k, ""))
-        for k in ("id", "name", "prompt", "script", "deliver", "workdir")
+        for k in ("id", "name", "script", "deliver", "workdir")
     ).lower()
-    return any(term in text for term in TV_TERMS)
+    if any(term in surface_text for term in TV_SURFACE_TERMS):
+        return True
+    if re.search(r"(?<![a-z0-9-])tv(?:[-_]|$)", surface_text):
+        return True
+
+    prompt = str(job.get("prompt", "")).lower()
+    return any(re.search(pattern, prompt) for pattern in TV_PROMPT_OWNER_PATTERNS)
 
 
 def job_enabled(job: dict[str, Any]) -> bool:
