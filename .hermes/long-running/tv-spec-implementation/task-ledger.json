@@ -1,38 +1,44 @@
 {
-  "schema_version": 2,
-  "task_id": "tv-spec-implementation",
-  "status": "running",
   "active_gate": null,
   "current_gate_classification": {
     "active_owner_conflict": false,
+    "gateway_global_enabled_warning": false,
     "ledger_stale": false,
     "passive_reporter_ignored": false,
     "stale_bootstrap_job_ignored": false,
-    "gateway_global_enabled_warning": false,
     "verification_note": "Topology preflight was rerun with direct terminal access during invocation tv-spec-continuous-runner:20260611T070053Z:1; standalone continuous-runner startup owner matches the live derived owner, and no conflicts or warnings were reported."
   },
-  "next_resume_action": "Continue TV spec implementation under the single live owner continuous_kanban_runner. First stabilize/checkpoint the verified topology-control-plane repair bundle; then resume highest-priority safe backlog dispatch using the priority map and dispatch index. Do not start a second gateway-dispatch owner or push from a non-integration worker.",
   "declared_owner": "continuous_kanban_runner",
-  "last_verified": {
-    "verified_by": "tv-spec-continuous-runner:20260611T070053Z:1",
-    "timestamp": "2026-06-11T07:04:39Z",
-    "live_truth_sources": {
-      "topology_preflight": "python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner -> ok true; topology_conflict false; conflict_types []; warning_types []; live_implementation_owner continuous_kanban_runner; declared_implementation_owner none_active before ledger alignment",
-      "runner_tests": "python3 -m unittest native_ev.tests.test_tv_spec_continuous_runner -v -> Ran 9 tests OK",
-      "backlog_dispatch": "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
-      "json": "python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json and docs/checklists/ev-classic-fidelity-implementation-backlog.index.json passed",
-      "git_diff_check": "git diff --check passed"
-    }
-  },
   "evidence_pointers": {
-    "history_log": ".hermes/long-running/tv-spec-implementation/events.jsonl",
     "debug_snapshot": ".hermes/long-running/tv-spec-implementation/tv-spec-debug-artifact-2026-06-10.md",
-    "runner_summary": ".hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json",
-    "workflow_policy": "docs/research/tv-spec.md",
+    "history_log": ".hermes/long-running/tv-spec-implementation/events.jsonl",
     "runner_prompt": "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+    "runner_summary": ".hermes/long-running/tv-spec-implementation/continuous-runner/latest-summary.json",
     "topology_checker": "tools/check_tv_runner_topology.py",
-    "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py"
+    "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
+    "workflow_policy": "docs/research/tv-spec.md"
+  },
+  "last_material_event_id": "tv-spec-continuous-runner-20260611T070053Z-1-topology-repair-push-ready",
+  "last_progress_token": "bdae55d8c2c9b34a803100439fa5c8da81e0fb1ffca22bd9ff593342f92e3695",
+  "last_runner_summary_path": ".hermes/long-running/tv-spec-implementation/continuous-runner/run-20260611T070053Z-1.summary.json",
+  "last_verified": {
+    "live_truth_sources": {
+      "backlog_dispatch": "python3 tools/backlog_dispatch_index.py check -> BACKLOG DISPATCH INDEX OK",
+      "git_diff_check": "git diff --check passed",
+      "json": "python3 -m json.tool .hermes/long-running/tv-spec-implementation/task-ledger.json and docs/checklists/ev-classic-fidelity-implementation-backlog.index.json passed",
+      "runner_tests": "python3 -m unittest native_ev.tests.test_tv_spec_continuous_runner -v -> Ran 9 tests OK",
+      "topology_preflight": "python3 tools/check_tv_runner_topology.py --startup-owner continuous_kanban_runner -> ok true; topology_conflict false; conflict_types []; warning_types []; live_implementation_owner continuous_kanban_runner; declared_implementation_owner none_active before ledger alignment"
+    },
+    "timestamp": "2026-06-11T07:04:39Z",
+    "verified_by": "tv-spec-continuous-runner:20260611T070053Z:1"
+  },
+  "next_resume_action": "Continue TV spec implementation under the single live owner continuous_kanban_runner. First stabilize/checkpoint the verified topology-control-plane repair bundle; then resume highest-priority safe backlog dispatch using the priority map and dispatch index. Do not start a second gateway-dispatch owner or push from a non-integration worker.",
+  "runner_policy": {
+    "progress_token_definition": "sha256 of ledger status, active gate, next action, HEAD, git status, event count, and last event digest"
   },
   "runtime_truth_rule": "Derive current runtime truth from live cron/process/loop/gateway/Kanban/git surfaces first. Reconcile this ledger only as declared intent/checkpoint state; do not treat old gates or derived interpretations here as primary runtime truth.",
-  "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity under loki-game profile. No cron mutation, gateway/provider/account change, push, force-push, deletion, or publication is authorized by this ledger entry."
+  "schema_version": 2,
+  "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity under loki-game profile. No cron mutation, gateway/provider/account change, push, force-push, deletion, or publication is authorized by this ledger entry.",
+  "status": "running",
+  "task_id": "tv-spec-implementation"
 }
