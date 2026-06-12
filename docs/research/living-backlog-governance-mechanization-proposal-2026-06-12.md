@@ -1,7 +1,7 @@
 # Living backlog governance mechanization proposal
 
 Date: 2026-06-12
-Status: proposal / not yet implemented
+Status: implemented / protected by repo-local checks
 Scope: Terminal Velocity backlog governance and the profile-local `living-backlog-governance` skill.
 
 Purpose: preserve the proposal to move enforceable backlog/runner rules out of prose-only skill guidance and into repo-local mechanical checks, while keeping the skill as the judgment layer for cases that require source/fidelity interpretation or coordination decisions.
@@ -118,6 +118,8 @@ Primary failure prevented: autonomous runners choose easy isolated static/resour
 
 ### 6. Pre-worker executability report
 
+Implementation state: implemented as `python3 tools/backlog_dispatch_index.py audit-workers`.
+
 Candidate command: `python3 tools/backlog_dispatch_index.py audit-workers`
 
 Alternative only if the command becomes too broad: `python3 tools/check_ev_fidelity_backlog.py --audit-workers`
@@ -134,6 +136,8 @@ Read-only report should include:
 Primary failure prevented: adding mutating workers while the shared checkout is dirty or while candidate work lacks gates and file ownership.
 
 ### 7. Runner preflight gate
+
+Implementation state: implemented as `python3 tools/backlog_dispatch_index.py runner-preflight` and called by `tools/tv_runner_autostart.py` before dispatching or seeding continuation work. When no selected item ID is available yet, `runner-preflight` validates global backlog/index/map readiness without treating an arbitrary first backlog item as the selected item; selected-item gate checks apply when `--selected-item-id` is provided.
 
 Candidate command: `python3 tools/backlog_dispatch_index.py runner-preflight`
 
@@ -175,6 +179,8 @@ Keep `living-backlog-governance` responsible for judgment that is not safely red
 6. Wire TV runner/autostart prompt/spec to call the checker before selecting work, or add a small runner-preflight command that composes the existing checks.
 7. Shrink `living-backlog-governance` text to the judgment/policy wrapper and link this artifact plus the checker commands.
 
+Implementation note: steps 1–7 are implemented in the repo-local checker/preflight/audit paths and the profile-local skill has been shrunk/cross-linked.
+
 ## Acceptance checks
 
 A mechanized fix is done when:
@@ -209,4 +215,4 @@ Gates:
 - Extends the existing generated index and maps: `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json`, `docs/checklists/tv-verifier-impact-map.json`, and `docs/checklists/tv-playable-milestone-priority-map.json`.
 - Complements `docs/research/terminal-velocity-coordination-topology.md` by making parts of its coordination advice enforceable before worker dispatch.
 - Complements `docs/research/tv-spec.md` by protecting source/fidelity execution from prompt-only runner drift.
-- Should be cross-linked from the `living-backlog-governance` skill if/when implementation begins.
+- Cross-linked from the profile-local `living-backlog-governance` skill; the repo-local mechanical surfaces are the authority for deterministic validation.

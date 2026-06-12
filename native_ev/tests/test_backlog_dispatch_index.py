@@ -8,6 +8,7 @@ from tools.backlog_dispatch_index import (
     REQUIRED_PLAYABLE_MILESTONES,
     REQUIRED_VERIFIER_IMPACT_SURFACES,
     build_dispatch_index,
+    audit_workers,
     check_dispatch_index,
     load_playable_milestone_priority_map,
     load_verifier_impact_map,
@@ -352,6 +353,46 @@ class BacklogDispatchIndexTests(unittest.TestCase):
 
         self.assertTrue(result.ok, result.errors)
         self.assertTrue(any("python3 tools/backlog_dispatch_index.py check" in warning for warning in result.warnings))
+    def test_runner_preflight_without_selected_item_does_not_gate_on_arbitrary_first_item(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            checklists = root / "docs/checklists"
+            checklists.mkdir(parents=True)
+            backlog = checklists / "ev-classic-fidelity-implementation-backlog.md"
+            index_path = checklists / "ev-classic-fidelity-implementation-backlog.index.json"
+            destructive_backlog = CONTRACT_BACKLOG.replace(
+                "Continue promoting the `syst-like` primitive run one field family at a time.",
+                "Use a disposable destructive original runtime probe before implementation.",
+            )
+            backlog.write_text(destructive_backlog)
+            write_dispatch_index(build_dispatch_index(backlog, repo_root=root), index_path)
+
+            result = runner_preflight(root)
+            selected_result = runner_preflight(root, selected_item_id="fuller-ev-classic-galaxy-topology-and-coordinates")
+
+        self.assertTrue(result.ok, result.errors)
+        self.assertFalse(selected_result.ok)
+        self.assertIn("requires explicit human gate", "\n".join(selected_result.errors))
+
+    def test_audit_workers_reports_executability_sections(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            checklists = root / "docs/checklists"
+            checklists.mkdir(parents=True)
+            backlog = checklists / "ev-classic-fidelity-implementation-backlog.md"
+            index_path = checklists / "ev-classic-fidelity-implementation-backlog.index.json"
+            backlog.write_text(CONTRACT_BACKLOG)
+            write_dispatch_index(build_dispatch_index(backlog, repo_root=root), index_path)
+
+            report = audit_workers(root)
+
+        self.assertEqual(report["schema_version"], 1)
+        self.assertIn("branch_status", report)
+        self.assertIn("relevant_dirty_files", report)
+        self.assertIn("active_items_missing_required_fields", report)
+        self.assertIn("safe_for_read_only_scouting", report)
+        self.assertIn("unsafe_for_mutation", report)
+        self.assertTrue(report["backlog_check_ok"], report["backlog_check_errors"])
 
 
 if __name__ == "__main__":

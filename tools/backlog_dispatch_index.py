@@ -12,6 +12,7 @@ import dataclasses
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -545,6 +546,88 @@ def check_dispatch_index(backlog_path: Path, index_path: Path, repo_root: Path |
     return CheckResult(ok=not errors, errors=errors, warnings=warnings)
 
 
+def _git_status_lines(repo_root: Path) -> list[str]:
+    try:
+        completed = subprocess.run(
+            ["git", "status", "--short", "--branch"],
+            cwd=repo_root,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except Exception as exc:  # pragma: no cover - defensive for git-less fixtures
+        return [f"git status unavailable: {exc}"]
+    output = completed.stdout.strip().splitlines()
+    if completed.returncode != 0:
+        stderr = completed.stderr.strip()
+        return [f"git status failed with exit {completed.returncode}: {stderr or '<no stderr>'}"]
+    return output or ["<clean status unavailable>"]
+
+
+def _active_item_field_errors(index: dict[str, Any], impact_map: dict[str, Any] | None) -> list[dict[str, Any]]:
+    validation = validate_dispatch_index(index, impact_map=impact_map)
+    item_errors: dict[str, list[str]] = {}
+    for error in validation.errors:
+        match = re.match(r"item \d+ \(([^)]+)\): (.+)", error)
+        if not match:
+            continue
+        item_errors.setdefault(match.group(1), []).append(match.group(2))
+    return [{"id": item_id, "errors": errors} for item_id, errors in sorted(item_errors.items())]
+
+
+def audit_workers(repo_root: Path) -> dict[str, Any]:
+    """Produce a read-only executability report before adding/dispatching workers."""
+    repo_root = repo_root.resolve()
+    backlog = repo_root / BACKLOG_RELATIVE_PATH
+    index_path = repo_root / INDEX_RELATIVE_PATH
+    expected = build_dispatch_index(backlog, repo_root=repo_root)
+    impact_map = _load_default_impact_map(repo_root)
+    check_result = check_dispatch_index(backlog, index_path, repo_root=repo_root)
+    status_lines = _git_status_lines(repo_root)
+    dirty_files = [line[3:].strip() for line in status_lines[1:] if len(line) >= 3 and line[:2].strip()]
+    relevant_dirty_files = [
+        path
+        for path in dirty_files
+        if path.startswith(("docs/", "tools/", "native_ev/", "godot_ev/", ".hermes/long-running/")) or path.endswith(".ps1")
+    ]
+
+    missing_fields = _active_item_field_errors(expected, impact_map=impact_map)
+    safe_read_only: list[dict[str, str]] = []
+    unsafe_mutation: list[dict[str, str]] = []
+    missing_by_id = {entry["id"]: entry["errors"] for entry in missing_fields}
+    for item in expected.get("items", []):
+        item_id = item.get("id", "<missing-id>")
+        status = str(item.get("status", ""))
+        risk_gate = str(item.get("risk_gate", ""))
+        if item_id in missing_by_id:
+            unsafe_mutation.append({"id": item_id, "reason": "; ".join(missing_by_id[item_id])})
+            continue
+        if relevant_dirty_files:
+            unsafe_mutation.append({"id": item_id, "reason": "shared checkout has relevant dirty files"})
+            continue
+        if risk_gate in {"original_runtime_destructive", "external_action", "user_decision"}:
+            unsafe_mutation.append({"id": item_id, "reason": f"risk_gate {risk_gate!r} requires explicit gate before mutation"})
+            safe_read_only.append({"id": item_id, "reason": "read-only evidence/scouting only until gate is resolved"})
+            continue
+        if status in {"needs evidence", "blocked", "candidate"}:
+            safe_read_only.append({"id": item_id, "reason": f"status {status!r} is suitable for bounded read-only scouting"})
+        else:
+            safe_read_only.append({"id": item_id, "reason": "metadata and gate checks permit normal safe-local work"})
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "repo_root": repo_root.as_posix(),
+        "branch_status": status_lines,
+        "relevant_dirty_files": relevant_dirty_files,
+        "backlog_check_ok": check_result.ok,
+        "backlog_check_errors": check_result.errors,
+        "active_items_missing_required_fields": missing_fields,
+        "safe_for_read_only_scouting": safe_read_only,
+        "unsafe_for_mutation": unsafe_mutation,
+    }
+
+
 def runner_preflight(repo_root: Path, selected_item_id: str | None = None) -> CheckResult:
     """Compose static backlog/index/map checks before runner work selection."""
     repo_root = repo_root.resolve()
@@ -564,9 +647,7 @@ def runner_preflight(repo_root: Path, selected_item_id: str | None = None) -> Ch
         selected_item = items.get(selected_item_id)
         if selected_item is None:
             errors.append(f"selected item {selected_item_id!r} is not present in the dispatch index")
-    elif items:
-        selected_item = next(iter(items.values()))
-    else:
+    elif not items:
         errors.append("dispatch index has no selectable items")
 
     impact_map = _load_default_impact_map(repo_root)
@@ -607,7 +688,7 @@ def _print_result(result: CheckResult) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", choices=("build", "check", "print", "runner-preflight"), nargs="?", default="check")
+    parser.add_argument("mode", choices=("build", "check", "print", "runner-preflight", "audit-workers"), nargs="?", default="check")
     parser.add_argument("--repo", type=Path, default=Path.cwd())
     parser.add_argument("--backlog", type=Path)
     parser.add_argument("--index", type=Path)
@@ -644,6 +725,9 @@ def main(argv: list[str] | None = None) -> int:
         result = runner_preflight(repo, selected_item_id=args.selected_item_id)
         _print_result(result)
         return 0 if result.ok else 1
+    if args.mode == "audit-workers":
+        print(json.dumps(audit_workers(repo), indent=2, sort_keys=True))
+        return 0
 
     result = check_dispatch_index(backlog, index, repo_root=repo)
     _print_result(result)
