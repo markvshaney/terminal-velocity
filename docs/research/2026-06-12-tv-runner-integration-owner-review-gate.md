@@ -519,6 +519,25 @@ Verified behavior:
 
 Remaining follow-up: wire the checkpoint recovery path into a fuller integration-owner command that records or normalizes the Kanban/ledger `push_ready` packet and then runs the existing publish guard.
 
+### Applied implementation note — 2026-06-12 start/resume preflight first slice
+
+Status: partial P2.7/P3 implementation.
+
+Implemented surfaces:
+
+- `tools/tv_runner_start_resume_preflight.py` now wraps the topology checker and live repo checks into a structured start/resume decision packet.
+- The packet includes `repo_state`, `dirty_paths`, `topology`, `blocked_cards`, `stop_lock_state`, `watchdog_reporter_state`, `capability_check`, `recommended_action`, `safe_to_start`, and `explicit_gate`.
+- Regression coverage lives in `native_ev/tests/test_tv_runner_start_resume_preflight.py`.
+
+Verified behavior:
+
+- clean idle repo + gateway startup owner -> `start_gateway_kanban_dispatcher`;
+- dirty repo -> `recover_dirty_handoff` with `recovery_preflight_required` before any start;
+- active matching gateway owner -> `resume_existing_owner`;
+- conflicting live owner -> `blocked:topology_conflict`.
+
+Remaining follow-up: enrich the `blocked_cards` section from the live Kanban board/DB instead of leaving it as topology-path metadata, then feed this preflight into `tv_runner_autostart.py` before dispatch/seeding.
+
 ### P3 — tighten reporting and observability
 
 31. **Use material progress reports, not process-chatter loops.**
