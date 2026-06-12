@@ -1,0 +1,8 @@
+{
+  "classification": "push_ready",
+  "safe_local": true,
+  "focused_verifiers_passed": true,
+  "summary": "Trade-margin decision traces now include cargo/lot context and recovery hints; native_ev unittest scenario suite passes. Local checkpoint is ready for autonomous integration/push handling.",
+  "human_gate_boundary": "",
+  "known_unrelated_failure_surface": "pytest unavailable in system python; unittest verifier used successfully"
+}

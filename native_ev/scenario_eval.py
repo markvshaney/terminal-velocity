@@ -278,6 +278,15 @@ def _evaluate_trade_margin(state: dict[str, Any], action: dict[str, Any], trace:
     sell_price = int(economy['markets'][destination][commodity]['sell'])
     margin = sell_price - buy_price
     decision = 'carry' if margin > 0 else 'skip'
+    lot_tons = int(action.get('tons', COMMODITY_LOT_SIZE))
+    cargo_used = int(state.get('cargoUsed', 0))
+    cargo_capacity = int(state.get('cargoCapacity', 0))
+    reserved_cargo_tons = sum(
+        int(job.get('reservedCargoTons', job.get('tons', 0)) or 0)
+        for job in state.get('activeJobs', [])
+    )
+    free_cargo_tons = max(0, cargo_capacity - cargo_used)
+    enough_free_cargo = free_cargo_tons >= lot_tons
     trace.append({
         'type': 'trade_margin_decision',
         'commodity': commodity,
@@ -286,8 +295,18 @@ def _evaluate_trade_margin(state: dict[str, Any], action: dict[str, Any], trace:
         'buyPrice': buy_price,
         'sellPrice': sell_price,
         'marginPerTon': margin,
+        'lotTons': lot_tons,
+        'projectedLotProfit': margin * lot_tons,
+        'cargoUsed': cargo_used,
+        'cargoCapacity': cargo_capacity,
+        'freeCargoTons': free_cargo_tons,
+        'reservedCargoTons': reserved_cargo_tons,
+        'heldTradeCargoTons': max(0, cargo_used - reserved_cargo_tons),
+        'heldCommodityTons': int(state.get('cargoHold', {}).get(commodity, 0)),
+        'enoughFreeCargoForLot': enough_free_cargo,
         'decision': decision,
         'reason': 'positive margin' if margin > 0 else 'non-positive margin',
+        'recoveryHint': 'skip non-positive return cargo and finish the active contract chain' if margin <= 0 else 'carry only if mission deadlines, route fuel, and free hold margins stay safe',
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-trade-margin-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'trade_margin_pending_classic_runtime_trace'),
     })

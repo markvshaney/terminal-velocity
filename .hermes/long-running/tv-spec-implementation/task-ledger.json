@@ -21,39 +21,34 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "mission-trade-route-cargo-context-20260611T184004Z",
-  "last_progress_token": "1a7e91d4bfa2040caf41a46d0efb69256d91e61b70a2afb9c69e767d07361635",
+  "last_material_event_id": "trade-margin-cargo-context-20260612T203518Z",
+  "last_progress_token": "7da473b2dfd8b68cebe2804fbad206aa5e1c7a430ab03230fa697be799c62c62",
   "last_reconciled_live_git": {
-    "active_kanban_task": "t_9460240d",
-    "checked_at": "2026-06-11T18:40:04Z",
-    "checkpoint_decision": "safe_local_mission_trade_route_cargo_context_increment_ready_for_review_or_integration",
+    "active_kanban_task": "t_ec7d263a",
+    "checked_at": "2026-06-12T20:35:18Z",
+    "checkpoint_decision": "safe_local_trade_margin_cargo_context_increment_verified_by_unittest_ready_for_review_or_integration",
     "checkpoint_files": [
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_scenario_eval.py",
-      "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
-      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl"
     ],
-    "head_before_slice": "7abbff5776732c44856b213ea7221731f9ea0c81",
-    "origin_main_before_slice": "924e689372ace8bd8f6afcf6e33bf7f52ca95afe"
+    "head_before_slice": "6c45635f94ff14bb6306b90822c13dfdf60a6820",
+    "origin_main_before_slice": "6c45635f94ff14bb6306b90822c13dfdf60a6820"
   },
   "last_runner_summary_path": null,
   "last_verified": {
     "live_truth_sources": {
-      "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all --pretty summary passed=99 failed=0 total=99",
-      "backlog_dispatch_index": "passed; BACKLOG DISPATCH INDEX OK",
-      "focused_scenario": "passed; mission_trade_refuel_delivery_loop success true; surfaced_mission_trade_route_cargo_context passed",
-      "focused_unittest": "passed; test_mission_trade_refuel_delivery_loop_blocks_low_fuel_then_delivers_with_trade_cargo OK",
-      "git_diff_check": "passed; git diff --check exit 0",
-      "native_ev_discovery_suite": "partial failure unrelated to this scenario slice while active worker/gateway ownership state is live; Ran 295 tests with 6 failures in tv runner topology/integration lane tests due active_worker/gateway_kanban_dispatcher live-state expectations"
+      "git_diff_check": "reviewed; git diff/status showed native_ev/scenario_eval.py and native_ev/tests/test_scenario_eval.py modified before ledger/event checkpoint",
+      "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests in 0.716s; OK",
+      "pytest_attempt": "blocked; /usr/bin/python3: No module named pytest"
     },
-    "timestamp": "2026-06-11T18:40:04Z",
-    "verified_by": "kanban-worker:t_9460240d"
+    "timestamp": "2026-06-12T20:35:18Z",
+    "verified_by": "kanban-worker:t_ec7d263a"
   },
   "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
   "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Review the mission_trade_refuel_delivery_loop cargo-context route event increment, resolve the known live-owner topology test failures separately if still relevant, then commit/push or continue with the next safe playable mission/trade slice per the priority map.",
+  "next_resume_action": "Continue with the next safe EV Classic fidelity backlog slice; if closing this code increment, review and integrate the local diff for scenario_eval.py/test_scenario_eval.py plus ledger/events checkpoint.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
