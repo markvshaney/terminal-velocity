@@ -498,6 +498,25 @@ The fixes below are ordered by urgency. Before implementation, each fix item mus
    - LLM-assisted review owns: exact-bundle risk assessment after deterministic guards pass, ambiguous source/fidelity tradeoffs, and concise human-readable reporting.
    - The LLM must not override a failed deterministic safety gate; it may only explain the gate or recommend the next safe local remediation.
 
+### Applied implementation note — 2026-06-12 recovery-classifier first slice
+
+Status: partial P2.7 implementation.
+
+Implemented surfaces:
+
+- `tools/tv_runner_recovery_preflight.py` now performs side-effect-free idle-dirty classification and emits structured JSON for `repo_state`, `dirty_paths`, `candidate_handoff`, `handoff_match`, `sensitive_path_check`, `focused_verifier_status`, `known_unrelated_failures`, `active_worker`, `recommended_action`, and `explicit_gate`.
+- `tools/tv_runner_autostart.py` now runs the recovery preflight on idle dirty state and reports that JSON before refusing to seed overlapping work.
+- Regression coverage lives in `native_ev/tests/test_tv_runner_recovery_preflight.py` and `native_ev/tests/test_tv_runner_autostart.py`.
+
+Verified behavior:
+
+- clean idle repo -> `seed_successor`;
+- dirty repo without matching handoff -> `unsafe_dirty_state`;
+- dirty repo matching a blocked handoff with focused verifier pass -> `checkpoint_and_push_ready`;
+- dirty repo matching a blocked handoff without focused verifier evidence -> `rerun_focused_verifier`.
+
+Remaining follow-up: convert this report-only classifier into an integration-owner recovery executor that can, after deterministic guard success and exact-bundle review, create the local checkpoint / `push_ready` packet and then run the existing publish guard.
+
 ### P3 — tighten reporting and observability
 
 31. **Use material progress reports, not process-chatter loops.**

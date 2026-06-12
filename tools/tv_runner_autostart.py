@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -130,6 +131,31 @@ def pre_dispatch_preflight(dry_run: bool) -> str:
     return raw.strip()
 
 
+def recovery_preflight(tasks: list[dict]) -> tuple[int, str]:
+    """Run the deterministic idle-dirty recovery classifier with current Kanban state."""
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as handle:
+        json.dump(tasks, handle)
+        tasks_path = Path(handle.name)
+    try:
+        return run_checked(
+            [
+                "python3",
+                "tools/tv_runner_recovery_preflight.py",
+                "--repo",
+                str(REPO),
+                "--tasks-json",
+                str(tasks_path),
+            ],
+            cwd=REPO,
+            timeout=60,
+        )
+    finally:
+        try:
+            tasks_path.unlink()
+        except FileNotFoundError:
+            pass
+
+
 def target_profile_skill_names() -> set[str]:
     """Return skill names available in the active target Hermes profile."""
     if not PROFILE_SKILLS_ROOT.exists():
@@ -212,10 +238,10 @@ def create_continuation(dry_run: bool) -> str:
     return str(created.get("id") or "").strip()
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     now = datetime.now(timezone.utc).isoformat()
     try:
@@ -261,8 +287,10 @@ def main() -> int:
         return 0
 
     if git_dirty():
-        save_state(last_problem="idle_dirty_repo", last_problem_at=now, last_active="")
-        print("TV runner autostart blocked: idle lane but repo has uncommitted work; integration owner must cohere/publish or preserve it before seeding new work.")
+        code, recovery = recovery_preflight(tasks)
+        save_state(last_problem="idle_dirty_repo", last_problem_at=now, last_active="", last_recovery_preflight_exit=code)
+        print("TV runner autostart blocked: idle lane but repo has uncommitted work; recovery preflight classified the state before seeding new work.")
+        print(recovery.strip())
         print("repo: " + git_status_summary())
         print(f"blocked_tasks_ignored={len(blocked)}")
         return 0
