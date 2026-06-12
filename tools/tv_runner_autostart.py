@@ -24,6 +24,12 @@ BOARD = "terminal-velocity"
 ASSIGNEE = "terminal-velocity"
 PROFILE_ARGS = ["hermes", "-p", "loki-game"]
 STATE_PATH = Path("/home/bh/.hermes/profiles/loki-game/cron/tv_runner_autostart_state.json")
+PROFILE_SKILLS_ROOT = Path("/home/bh/.hermes/profiles/loki-game/skills")
+REQUESTED_CONTINUATION_SKILLS = (
+    "long-running-task-harness",
+    "source-and-fidelity",
+    "artifact-governance",
+)
 
 
 def run(cmd: list[str], *, cwd: Path | None = None, timeout: int = 45) -> str:
@@ -124,6 +130,22 @@ def pre_dispatch_preflight(dry_run: bool) -> str:
     return raw.strip()
 
 
+def target_profile_skill_names() -> set[str]:
+    """Return skill names available in the active target Hermes profile."""
+    if not PROFILE_SKILLS_ROOT.exists():
+        return set()
+    return {path.parent.name for path in PROFILE_SKILLS_ROOT.glob("**/SKILL.md")}
+
+
+def continuation_skill_args() -> list[str]:
+    available = target_profile_skill_names()
+    args: list[str] = []
+    for skill in REQUESTED_CONTINUATION_SKILLS:
+        if skill in available:
+            args.extend(["--skill", skill])
+    return args
+
+
 def continuation_body(head: str) -> str:
     return f"""Continue Terminal Velocity tv-spec implementation from current live repo state using the durable long-running task envelope.
 
@@ -145,6 +167,7 @@ Continuation contract:
 - Terminal Velocity/Godot logs are implementation evidence, not Classic truth; label scaffolds/pending Classic confirmations explicitly.
 - A verified slice is a checkpoint, not a stop. Before completing this Kanban task, if no real gate/blocker/complete condition exists, create exactly one successor continuation task assigned to {ASSIGNEE} with this same continuation contract, then complete this task with successor id and verification summary.
 - If checkpoint publication is needed from a non-integrator worker, record push_ready; the autonomous integration owner should resolve it. Human review is not a gate unless the task crosses an explicit risky/destructive/external/publication/credential/config boundary.
+- Before blocking or completing as review-related, validate the closeout packet with python3 tools/tv_closeout_guard.py. Valid closeout classes are continue, push_ready, or blocked:*; generic review-required is invalid for verified safe-local TV code/data/docs work.
 - If unable to create a successor, block with a self-contained handoff instead of silently finishing.
 
 Verification defaults:
@@ -174,12 +197,7 @@ def create_continuation(dry_run: bool) -> str:
             ASSIGNEE,
             "--workspace",
             f"dir:{REPO}",
-            "--skill",
-            "long-running-task-harness",
-            "--skill",
-            "source-and-fidelity",
-            "--skill",
-            "artifact-governance",
+            *continuation_skill_args(),
             "--max-runtime",
             "45m",
             "--idempotency-key",
