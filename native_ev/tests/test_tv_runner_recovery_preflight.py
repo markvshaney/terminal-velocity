@@ -17,11 +17,11 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
         subprocess.run(["git", "init", "-q"], cwd=root, check=True)
         return root
 
-    def run_preflight(self, repo: Path, tasks: list[dict]) -> tuple[int, dict]:
+    def run_preflight(self, repo: Path, tasks: list[dict], *extra_args: str) -> tuple[int, dict]:
         tasks_path = repo / "tasks.json"
         tasks_path.write_text(json.dumps(tasks))
         result = subprocess.run(
-            ["python3", str(SCRIPT), "--repo", str(repo), "--tasks-json", str(tasks_path)],
+            ["python3", str(SCRIPT), "--repo", str(repo), "--tasks-json", str(tasks_path), *extra_args],
             cwd=REPO,
             text=True,
             stdout=subprocess.PIPE,
@@ -101,6 +101,30 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
         self.assertEqual(payload["focused_verifier_status"], "missing")
         self.assertTrue(payload["handoff_match"])
         self.assertEqual(payload["explicit_gate"], "rerun_focused_verifier")
+
+    def test_checkpoint_mode_commits_matching_handoff_bundle_and_reports_push_ready(self):
+        repo = self.make_repo()
+        (repo / "native_ev/tests").mkdir(parents=True)
+        (repo / "native_ev/scenario_eval.py").write_text("dirty\n")
+        (repo / "native_ev/tests/test_scenario_eval.py").write_text("dirty\n")
+        tasks = [{
+            "id": "t_recover",
+            "status": "blocked",
+            "assignee": "terminal-velocity",
+            "title": "Continue TV tv-spec autonomous loop",
+            "body": "Changed files: native_ev/scenario_eval.py, native_ev/tests/test_scenario_eval.py. Focused verifier passed: python3 -m unittest native_ev.tests.test_scenario_eval -v.",
+        }]
+
+        code, payload = self.run_preflight(repo, tasks, "--checkpoint")
+
+        self.assertEqual(code, 0, payload)
+        self.assertEqual(payload["recommended_action"], "push_ready")
+        self.assertEqual(payload["checkpoint"]["created"], True)
+        self.assertEqual(payload["checkpoint"]["handoff_id"], "t_recover")
+        self.assertEqual(payload["checkpoint"]["staged_paths"], ["native_ev/scenario_eval.py", "native_ev/tests/test_scenario_eval.py"])
+        self.assertRegex(payload["checkpoint"]["commit"], r"^[0-9a-f]{7,40}$")
+        status = subprocess.run(["git", "status", "--porcelain"], cwd=repo, text=True, stdout=subprocess.PIPE, check=True)
+        self.assertEqual(status.stdout.strip(), "?? tasks.json")
 
 
 if __name__ == "__main__":

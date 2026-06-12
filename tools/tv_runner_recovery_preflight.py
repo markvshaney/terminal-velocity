@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Dry-run classifier for Terminal Velocity idle dirty handoff recovery.
+"""Classifier and guarded checkpoint helper for TV idle dirty handoff recovery.
 
-This script is deliberately deterministic and side-effect-free. It does not
-commit, push, unblock Kanban cards, or start workers. Its job is to classify an
-idle worktree before autostart seeds overlapping work.
+Default mode is deterministic and side-effect-free: classify an idle worktree
+before autostart seeds overlapping work. With --checkpoint, the integration
+owner may create a local checkpoint commit only after classification proves the
+dirty bundle matches a verifier-passed handoff. This script never pushes,
+unblocks Kanban cards, or starts workers.
 """
 from __future__ import annotations
 
@@ -234,7 +236,71 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
 
 
 def exit_code_for(payload: dict[str, Any]) -> int:
-    return 0 if payload.get("recommended_action") in {"seed_successor", "checkpoint_and_push_ready"} else 1
+    return 0 if payload.get("recommended_action") in {"seed_successor", "checkpoint_and_push_ready", "push_ready"} else 1
+
+
+def create_checkpoint(repo: Path, payload: dict[str, Any]) -> dict[str, Any]:
+    """Create a local checkpoint commit for an already-classified safe dirty handoff."""
+    if payload.get("recommended_action") != "checkpoint_and_push_ready":
+        payload["checkpoint"] = {"created": False, "error": "not_checkpoint_ready"}
+        return payload
+    paths = list(payload.get("dirty_paths") or [])
+    if not paths:
+        payload["checkpoint"] = {"created": False, "error": "no_dirty_paths"}
+        payload["recommended_action"] = "unsafe_dirty_state"
+        payload["explicit_gate"] = "unsafe_dirty_state"
+        return payload
+
+    add = run_checked(["git", "add", "--", *paths], cwd=repo, timeout=30)
+    if add[0] != 0:
+        payload["checkpoint"] = {"created": False, "error": "git_add_failed", "output": add[1].strip()}
+        payload["recommended_action"] = "unsafe_dirty_state"
+        payload["explicit_gate"] = "unsafe_dirty_state"
+        return payload
+    diff_check = run_checked(["git", "diff", "--cached", "--check"], cwd=repo, timeout=30)
+    if diff_check[0] != 0:
+        run_checked(["git", "reset", "--", *paths], cwd=repo, timeout=30)
+        payload["checkpoint"] = {"created": False, "error": "git_diff_check_failed", "output": diff_check[1].strip()}
+        payload["recommended_action"] = "unsafe_dirty_state"
+        payload["explicit_gate"] = "unsafe_dirty_state"
+        return payload
+
+    handoff_id = None
+    if isinstance(payload.get("candidate_handoff"), dict):
+        handoff_id = payload["candidate_handoff"].get("id")
+    message = "checkpoint: recover TV worker handoff"
+    if handoff_id:
+        message += f" {handoff_id}"
+    commit = run_checked(
+        [
+            "git",
+            "-c",
+            "user.name=TV Integration Owner",
+            "-c",
+            "user.email=tv-integration-owner@example.invalid",
+            "commit",
+            "-m",
+            message,
+        ],
+        cwd=repo,
+        timeout=60,
+    )
+    if commit[0] != 0:
+        payload["checkpoint"] = {"created": False, "error": "git_commit_failed", "output": commit[1].strip()}
+        payload["recommended_action"] = "unsafe_dirty_state"
+        payload["explicit_gate"] = "unsafe_dirty_state"
+        return payload
+    commit_id = run_checked(["git", "rev-parse", "HEAD"], cwd=repo, timeout=15)[1].strip()
+    payload["checkpoint"] = {
+        "created": True,
+        "commit": commit_id,
+        "handoff_id": handoff_id,
+        "staged_paths": paths,
+        "message": message,
+    }
+    payload["recommended_action"] = "push_ready"
+    payload["explicit_gate"] = None
+    return payload
 
 
 def main() -> int:
@@ -243,6 +309,7 @@ def main() -> int:
     parser.add_argument("--tasks-json", type=Path, help="Optional Kanban list JSON file; defaults to hermes kanban list --json")
     parser.add_argument("--board", default=DEFAULT_BOARD)
     parser.add_argument("--assignee", default=DEFAULT_ASSIGNEE)
+    parser.add_argument("--checkpoint", action="store_true", help="Create a local checkpoint commit when the dirty handoff is classified checkpoint_and_push_ready.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -253,6 +320,8 @@ def main() -> int:
         if payload.get("repo_state") == "dirty" and payload.get("recommended_action") == "unsafe_dirty_state":
             payload["recommended_action"] = "missing_handoff"
             payload["explicit_gate"] = "missing_handoff"
+    if args.checkpoint and not task_error:
+        payload = create_checkpoint(repo, payload)
     print(json.dumps(payload, indent=2, sort_keys=True))
     return exit_code_for(payload)
 
