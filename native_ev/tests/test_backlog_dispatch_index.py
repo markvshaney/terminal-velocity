@@ -11,7 +11,9 @@ from tools.backlog_dispatch_index import (
     check_dispatch_index,
     load_playable_milestone_priority_map,
     load_verifier_impact_map,
+    runner_preflight,
     validate_dispatch_index,
+    validate_backlog_contract,
     validate_playable_milestone_priority_map,
     validate_verifier_impact_map,
     write_dispatch_index,
@@ -44,8 +46,53 @@ SAMPLE_BACKLOG = textwrap.dedent(
     """
 ).lstrip()
 
+CONTRACT_BACKLOG = textwrap.dedent(
+    """
+    # EV Classic fidelity implementation backlog
+
+    Purpose: live checklist for recommendations and potential Terminal Velocity implementations that come out of original EV Classic observation, decoded resources, or comparison work.
+
+    Use contract: this is an execution surface, not a passive idea dump. New evidence should either produce a small source-backed implementation slice, a labeled Terminal Velocity scaffold, or a bounded `needs evidence` / `blocked` next action.
+
+    Anti-staleness rule: before choosing fresh work, prefer an existing `ready`, `implemented / needs Classic confirmation`, or narrow `needs evidence` item whose next action is safe local work.
+
+    Dispatch index: `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` is generated from this markdown backlog for cheap runner dispatch. Do not edit the JSON by hand.
+
+    Playable priority overlay: `docs/checklists/tv-playable-milestone-priority-map.json` ranks backlog-backed work by broad playable Terminal Velocity payoff while preserving source/fidelity labels.
+
+    Status vocabulary: `candidate`, `needs evidence`, `ready`, `implemented`, `verified`, `deferred`, `blocked`.
+
+    ## Candidates / potential implementations
+
+    - [ ] Fuller EV Classic galaxy topology and coordinates
+      - Status: `needs evidence`
+      - Dispatch fields:
+        - `next_action`: Continue promoting the `syst-like` primitive run one field family at a time.
+        - `lane_class`: Lane A: static galaxy topology semantics
+        - `oracle_class`: static-resource
+        - `source_basis`: [decoded-record-family, resource-bible-field]
+        - `verifier`: `python3 tools/extract_ev_system_semantics.py` plus focused sourced-system manifest tests.
+        - `blocked_reason`: Exact record-to-name/runtime topology mapping is not fully promoted.
+        - `promotion_status`: needs evidence
+      - Implementation: `tools/extract_ev_system_semantics.py` generates `native_ev/data/sourced_ev_systems.json`.
+    """
+).lstrip()
+
 
 class BacklogDispatchIndexTests(unittest.TestCase):
+    def test_validate_backlog_contract_accepts_live_execution_header(self):
+        result = validate_backlog_contract(CONTRACT_BACKLOG)
+
+        self.assertTrue(result.ok, result.errors)
+
+    def test_validate_backlog_contract_rejects_missing_use_contract(self):
+        incomplete = CONTRACT_BACKLOG.replace("Use contract:", "Use note:")
+
+        result = validate_backlog_contract(incomplete)
+
+        self.assertFalse(result.ok)
+        self.assertIn("use contract", "\n".join(result.errors).lower())
+
     def test_build_dispatch_index_extracts_actionable_fields_and_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -247,6 +294,64 @@ class BacklogDispatchIndexTests(unittest.TestCase):
 
         self.assertFalse(result.ok)
         self.assertIn("fidelity-promoted", "\n".join(result.errors))
+
+    def test_runner_preflight_accepts_valid_selected_item_and_reports_verifiers(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            checklists = root / "docs/checklists"
+            checklists.mkdir(parents=True)
+            backlog = checklists / "ev-classic-fidelity-implementation-backlog.md"
+            index_path = checklists / "ev-classic-fidelity-implementation-backlog.index.json"
+            impact_path = checklists / "tv-verifier-impact-map.json"
+            priority_path = checklists / "tv-playable-milestone-priority-map.json"
+            backlog.write_text(CONTRACT_BACKLOG)
+            built = build_dispatch_index(backlog, repo_root=root)
+            write_dispatch_index(built, index_path)
+            impact_map = {
+                "schema_version": 1,
+                "source_path": "docs/research/tv-spec.md",
+                "generated_from": "test",
+                "surfaces": {
+                    surface: {
+                        "cheap_required": ["python3 tools/backlog_dispatch_index.py check"],
+                        "checkpoint_optional": [],
+                        "path_prefixes": ["docs/", "tools/", "native_ev/data/"],
+                        "path_suffixes": [],
+                        "path_contains": [],
+                        "verifier_hints": ["backlog_dispatch_index.py"],
+                        "notes": "test",
+                    }
+                    for surface in REQUIRED_VERIFIER_IMPACT_SURFACES
+                },
+            }
+            impact_path.write_text(json.dumps(impact_map, indent=2) + "\n")
+            priority_map = {
+                "schema_version": 1,
+                "source_path": "docs/research/tv-spec.md",
+                "generated_from": "test",
+                "selection_rule": "test",
+                "milestones": [
+                    {
+                        "milestone_id": milestone,
+                        "rank": rank,
+                        "player_payoff": "payoff",
+                        "current_path": "scaffold",
+                        "backlog_item_ids": ["fuller-ev-classic-galaxy-topology-and-coordinates"],
+                        "required_playable_capability": "capability",
+                        "acceptable_scaffold_boundary": "boundary",
+                        "promotion_gate": "promotion gate",
+                        "preferred_verifier_family": ["python3 tools/backlog_dispatch_index.py check"],
+                        "notes": "notes",
+                    }
+                    for rank, milestone in enumerate(REQUIRED_PLAYABLE_MILESTONES, start=1)
+                ],
+            }
+            priority_path.write_text(json.dumps(priority_map, indent=2) + "\n")
+
+            result = runner_preflight(root, selected_item_id="fuller-ev-classic-galaxy-topology-and-coordinates")
+
+        self.assertTrue(result.ok, result.errors)
+        self.assertTrue(any("python3 tools/backlog_dispatch_index.py check" in warning for warning in result.warnings))
 
 
 if __name__ == "__main__":

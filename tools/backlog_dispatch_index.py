@@ -78,6 +78,15 @@ VALID_RISK_GATES = {
     "user_decision",
 }
 
+REQUIRED_BACKLOG_CONTRACT_MARKERS = (
+    ("purpose", "Purpose:"),
+    ("use contract", "Use contract:"),
+    ("anti-staleness rule", "Anti-staleness rule:"),
+    ("dispatch index", "Dispatch index:"),
+    ("playable priority overlay", "Playable priority overlay:"),
+    ("status vocabulary", "Status vocabulary:"),
+)
+
 PATHISH_RE = re.compile(
     r"(?:^|\s)((?:\./|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+(?:\.[A-Za-z0-9_.-]+)?)"
 )
@@ -212,6 +221,30 @@ def _derive_risk_gate(item: dict[str, Any], fields: dict[str, Any], block: str) 
 def _active_unchecked_items(backlog_path: Path) -> list[dict[str, Any]]:
     lines = backlog_path.read_text().splitlines()
     return [item for item in _split_items(lines) if not item["checked"]]
+
+
+def validate_backlog_contract(backlog_text: str) -> CheckResult:
+    """Validate the canonical markdown header that makes the backlog executable."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    header = backlog_text.split("## ", 1)[0]
+    header_lower = header.lower()
+
+    for label, marker in REQUIRED_BACKLOG_CONTRACT_MARKERS:
+        if marker.lower() not in header_lower:
+            errors.append(f"backlog contract missing {label}: expected header marker {marker!r}")
+
+    if "execution surface" not in header_lower and "live checklist" not in header_lower:
+        errors.append("backlog contract must identify the backlog as a live execution surface")
+    if "not a passive idea dump" not in header_lower:
+        errors.append("backlog contract must reject passive idea-dump use")
+    if "do not edit" not in header_lower or "json" not in header_lower:
+        errors.append("backlog contract must state the generated JSON/index is not hand-edited")
+    for status in ("candidate", "needs evidence", "ready", "blocked"):
+        if status not in header_lower:
+            errors.append(f"backlog contract status vocabulary missing {status!r}")
+
+    return CheckResult(ok=not errors, errors=errors, warnings=warnings)
 
 
 def build_dispatch_index(backlog_path: Path, repo_root: Path | None = None) -> dict[str, Any]:
@@ -482,12 +515,14 @@ def write_dispatch_index(index: dict[str, Any], index_path: Path) -> None:
 
 def check_dispatch_index(backlog_path: Path, index_path: Path, repo_root: Path | None = None) -> CheckResult:
     repo_root = repo_root or Path.cwd()
+    backlog_text = backlog_path.read_text()
+    contract_validation = validate_backlog_contract(backlog_text)
     expected = build_dispatch_index(backlog_path, repo_root=repo_root)
     impact_map = _load_default_impact_map(repo_root)
     priority_map = _load_default_priority_map(repo_root)
     validation = validate_dispatch_index(expected, impact_map=impact_map)
-    errors = list(validation.errors)
-    warnings = list(validation.warnings)
+    errors = [*contract_validation.errors, *validation.errors]
+    warnings = [*contract_validation.warnings, *validation.warnings]
     if priority_map is not None:
         priority_validation = validate_playable_milestone_priority_map(priority_map, expected)
         errors.extend(priority_validation.errors)
@@ -510,6 +545,56 @@ def check_dispatch_index(backlog_path: Path, index_path: Path, repo_root: Path |
     return CheckResult(ok=not errors, errors=errors, warnings=warnings)
 
 
+def runner_preflight(repo_root: Path, selected_item_id: str | None = None) -> CheckResult:
+    """Compose static backlog/index/map checks before runner work selection."""
+    repo_root = repo_root.resolve()
+    backlog = repo_root / BACKLOG_RELATIVE_PATH
+    index_path = repo_root / INDEX_RELATIVE_PATH
+    result = check_dispatch_index(backlog, index_path, repo_root=repo_root)
+    errors = list(result.errors)
+    warnings = list(result.warnings)
+
+    if not result.ok:
+        return CheckResult(ok=False, errors=errors, warnings=warnings)
+
+    index = json.loads(index_path.read_text())
+    items = {item.get("id"): item for item in index.get("items", []) if isinstance(item, dict)}
+    selected_item = None
+    if selected_item_id:
+        selected_item = items.get(selected_item_id)
+        if selected_item is None:
+            errors.append(f"selected item {selected_item_id!r} is not present in the dispatch index")
+    elif items:
+        selected_item = next(iter(items.values()))
+    else:
+        errors.append("dispatch index has no selectable items")
+
+    impact_map = _load_default_impact_map(repo_root)
+    if selected_item is not None:
+        for key in ("next_action", "verifier", "risk_gate", "touched_surfaces"):
+            if selected_item.get(key) in (None, "", []):
+                errors.append(f"selected item {selected_item.get('id', '<missing-id>')}: missing {key}")
+        if selected_item.get("risk_gate") not in {"none", "shared_checkout", "original_runtime_non_mutating"}:
+            errors.append(
+                f"selected item {selected_item.get('id', '<missing-id>')}: risk_gate {selected_item.get('risk_gate')!r} requires explicit human gate before autonomous dispatch"
+            )
+        if impact_map is not None:
+            cheap_required: list[str] = []
+            for touched_surface in selected_item.get("touched_surfaces", []):
+                matches = _matching_verifier_surfaces(touched_surface, impact_map)
+                if not matches:
+                    errors.append(f"selected item {selected_item.get('id', '<missing-id>')}: unmapped touched_surface {touched_surface!r}")
+                for match in matches:
+                    cheap_required.extend(impact_map["surfaces"][match].get("cheap_required", []))
+            if cheap_required:
+                unique = sorted(set(cheap_required))
+                warnings.append(
+                    f"selected item {selected_item.get('id', '<missing-id>')}: required verifier families: {', '.join(unique)}"
+                )
+
+    return CheckResult(ok=not errors, errors=errors, warnings=warnings)
+
+
 def _print_result(result: CheckResult) -> None:
     for warning in result.warnings:
         print(f"WARNING: {warning}")
@@ -522,10 +607,11 @@ def _print_result(result: CheckResult) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", choices=("build", "check", "print"), nargs="?", default="check")
+    parser.add_argument("mode", choices=("build", "check", "print", "runner-preflight"), nargs="?", default="check")
     parser.add_argument("--repo", type=Path, default=Path.cwd())
     parser.add_argument("--backlog", type=Path)
     parser.add_argument("--index", type=Path)
+    parser.add_argument("--selected-item-id")
     args = parser.parse_args(argv)
 
     repo = args.repo.resolve()
@@ -554,6 +640,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.mode == "print":
         print(json.dumps(build_dispatch_index(backlog, repo_root=repo), indent=2, sort_keys=True))
         return 0
+    if args.mode == "runner-preflight":
+        result = runner_preflight(repo, selected_item_id=args.selected_item_id)
+        _print_result(result)
+        return 0 if result.ok else 1
 
     result = check_dispatch_index(backlog, index, repo_root=repo)
     _print_result(result)

@@ -36,6 +36,25 @@ def run(cmd: list[str], *, cwd: Path | None = None, timeout: int = 45) -> str:
     )
 
 
+def run_checked(cmd: list[str], *, cwd: Path | None = None, timeout: int = 45) -> tuple[int, str]:
+    try:
+        completed = subprocess.run(
+            cmd,
+            cwd=str(cwd) if cwd else None,
+            stderr=subprocess.STDOUT,
+            stdout=subprocess.PIPE,
+            text=True,
+            timeout=timeout,
+            check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        output = exc.stdout or ""
+        if isinstance(output, bytes):
+            output = output.decode(errors="replace")
+        return 124, output + f"\ncommand timed out after {timeout}s"
+    return completed.returncode, completed.stdout
+
+
 def git_status_lines() -> list[str]:
     return run(["git", "status", "--short", "--branch"], cwd=REPO, timeout=10).splitlines()
 
@@ -68,8 +87,14 @@ def save_state(**updates: object) -> None:
 
 
 def board_tasks() -> list[dict]:
-    raw = run(PROFILE_ARGS + ["kanban", "--board", BOARD, "list", "--json"], timeout=60)
-    data = json.loads(raw)
+    code, raw = run_checked(PROFILE_ARGS + ["kanban", "--board", BOARD, "list", "--json"], timeout=60)
+    if code != 0:
+        raise RuntimeError(f"kanban list failed with exit {code}: {raw.strip()}")
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        excerpt = raw.strip().splitlines()[0] if raw.strip() else "<empty output>"
+        raise RuntimeError(f"kanban list --json returned non-JSON output: {excerpt}") from exc
     if isinstance(data, list):
         return data
     if isinstance(data, dict) and isinstance(data.get("tasks"), list):
@@ -90,6 +115,15 @@ def dispatch(dry_run: bool) -> str:
     ).strip()
 
 
+def pre_dispatch_preflight(dry_run: bool) -> str:
+    if dry_run:
+        return "dry-run-runner-preflight"
+    code, raw = run_checked(["python3", "tools/backlog_dispatch_index.py", "runner-preflight"], cwd=REPO, timeout=90)
+    if code != 0:
+        raise RuntimeError(f"runner-preflight failed with exit {code}: {raw.strip()}")
+    return raw.strip()
+
+
 def continuation_body(head: str) -> str:
     return f"""Continue Terminal Velocity tv-spec implementation from current live repo state using the durable long-running task envelope.
 
@@ -100,6 +134,7 @@ Base: current origin/main. Inspect live git state before editing; do not trust c
 Required preflight:
 - Read .hermes/long-running/tv-spec-implementation/task-ledger.json and tail .hermes/long-running/tv-spec-implementation/events.jsonl.
 - Read docs/prompts/tv-spec-implementation-long-task-prompt.md and docs/research/tv-spec.md; use docs/checklists/ev-classic-fidelity-implementation-backlog.md for next work selection.
+- Run python3 tools/backlog_dispatch_index.py runner-preflight before selecting work; fail closed on checker, verifier-map, playable-priority, or selected-item metadata errors.
 - Run git fetch origin, git status --short --branch, inspect HEAD/origin/main before edits.
 - Preserve runner-state artifacts; do not start/stop/restart live continuous runner, cron jobs, gateway/supervision, providers, accounts, or credential/config surfaces.
 
@@ -145,10 +180,6 @@ def create_continuation(dry_run: bool) -> str:
             "source-and-fidelity",
             "--skill",
             "artifact-governance",
-            "--skill",
-            "living-backlog-governance",
-            "--skill",
-            "ev-terminal-velocity-play",
             "--max-runtime",
             "45m",
             "--idempotency-key",
@@ -169,7 +200,12 @@ def main() -> int:
     args = parser.parse_args()
 
     now = datetime.now(timezone.utc).isoformat()
-    tasks = board_tasks()
+    try:
+        tasks = board_tasks()
+    except Exception as exc:
+        save_state(last_problem="kanban_unavailable", last_problem_at=now, last_active="")
+        print(f"TV runner autostart blocked: kanban state unavailable: {exc}")
+        return 0
     running = assignee_tasks(tasks, "running")
     ready = assignee_tasks(tasks, "ready")
     blocked = assignee_tasks(tasks, "blocked")
@@ -187,6 +223,13 @@ def main() -> int:
         return 0
 
     if ready:
+        try:
+            pre_dispatch_preflight(args.dry_run)
+        except Exception as exc:
+            save_state(last_problem="runner_preflight_failed", last_problem_at=now, last_active="")
+            print(f"TV runner autostart blocked: runner-preflight failed before dispatch: {exc}")
+            print("repo: " + git_status_summary())
+            return 0
         out = dispatch(args.dry_run)
         save_state(last_action="dispatch_ready", last_action_at=now, last_active="")
         print(f"TV runner autostart: dispatched ready task; ready_before={len(ready)} blocked_ignored={len(blocked)}")
@@ -204,6 +247,14 @@ def main() -> int:
         print("TV runner autostart blocked: idle lane but repo has uncommitted work; integration owner must cohere/publish or preserve it before seeding new work.")
         print("repo: " + git_status_summary())
         print(f"blocked_tasks_ignored={len(blocked)}")
+        return 0
+
+    try:
+        pre_dispatch_preflight(args.dry_run)
+    except Exception as exc:
+        save_state(last_problem="runner_preflight_failed", last_problem_at=now, last_active="")
+        print(f"TV runner autostart blocked: runner-preflight failed before seeding continuation: {exc}")
+        print("repo: " + git_status_summary())
         return 0
 
     created = create_continuation(args.dry_run)

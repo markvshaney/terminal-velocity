@@ -24,11 +24,15 @@ Do not keep adding prose to `living-backlog-governance` for rules that can be ch
 
 Make the skill a compact policy wrapper and move enforceable TV rules into repo-local tools plus machine-readable artifacts. Future runners should fail fast on checker output rather than relying on an agent to remember prose from the skill.
 
+Important implementation boundary: this is a mechanization/refactor of existing backlog infrastructure, not a greenfield checker suite. Prefer extending `tools/backlog_dispatch_index.py` and the existing checked-in JSON maps before adding parallel tools. Add a new tool only when the existing checker would become unclear or overloaded.
+
 ## Proposed mechanical surfaces
 
 ### 1. Backlog contract checker
 
-Candidate tool: `tools/check_ev_fidelity_backlog.py`
+Primary surface: extend `tools/backlog_dispatch_index.py check`.
+
+Candidate split-out tool only if needed: `tools/check_ev_fidelity_backlog.py`
 
 Checks:
 
@@ -38,11 +42,15 @@ Checks:
 - selection rule exists;
 - compaction / anti-staleness rule exists.
 
-Primary failure prevented: the live-backlog contract exists only in chat, prompts, or memory.
+Current state: the canonical backlog already declares a live execution purpose, use contract, anti-staleness rule, generated dispatch index, playable priority overlay, and status vocabulary. The checker should protect that contract from regression rather than perform an initial repair.
+
+Primary failure prevented: the live-backlog contract regresses into chat-, prompt-, or memory-only state.
 
 ### 2. Active item schema checker
 
-Candidate tool: extend `tools/check_ev_fidelity_backlog.py` or add a focused parser module used by it.
+Primary surface: extend `tools/backlog_dispatch_index.py` parsing/validation.
+
+Candidate split-out parser module only if the parser needs to be reused by multiple commands.
 
 For each active/open backlog item, require explicit fields or project-equivalent values:
 
@@ -57,11 +65,13 @@ For each active/open backlog item, require explicit fields or project-equivalent
 
 Primary failure prevented: broad `candidate` or `needs evidence` entries being treated as runnable implementation tasks.
 
+Implementation boundary: conform active/open items incrementally. Do not rewrite completed or historical entries for schema purity unless they block dispatch or create current ambiguity.
+
 ### 3. Generated dispatch index freshness
 
-Candidate tool: `tools/build_ev_fidelity_backlog_index.py`
+Existing tool: `tools/backlog_dispatch_index.py`
 
-Candidate artifact: `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json`
+Existing artifact: `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json`
 
 Rules:
 
@@ -73,9 +83,13 @@ Rules:
 
 Primary failure prevented: long-running runners repeatedly parse a huge markdown file or select stale/incomplete items.
 
+Implementation boundary: keep the markdown backlog canonical and keep the existing index path stable unless there is a concrete migration reason.
+
 ### 4. Verifier impact map validation
 
-Candidate artifact: `docs/checklists/tv-verifier-impact-map.json`
+Existing artifact: `docs/checklists/tv-verifier-impact-map.json`
+
+Primary surface: extend `tools/backlog_dispatch_index.py check` to validate the map against active dispatch items.
 
 Checks:
 
@@ -88,7 +102,9 @@ Primary failure prevented: verifier selection is scattered in prompts or chosen 
 
 ### 5. Playable milestone priority map validation
 
-Candidate artifact: `docs/checklists/tv-playable-milestone-priority-map.json`
+Existing artifact: `docs/checklists/tv-playable-milestone-priority-map.json`
+
+Primary surface: extend `tools/backlog_dispatch_index.py check` to validate the map against the generated dispatch index and canonical promotion metadata.
 
 Checks:
 
@@ -102,7 +118,9 @@ Primary failure prevented: autonomous runners choose easy isolated static/resour
 
 ### 6. Pre-worker executability report
 
-Candidate command: `python3 tools/check_ev_fidelity_backlog.py --audit-workers`
+Candidate command: `python3 tools/backlog_dispatch_index.py audit-workers`
+
+Alternative only if the command becomes too broad: `python3 tools/check_ev_fidelity_backlog.py --audit-workers`
 
 Read-only report should include:
 
@@ -117,7 +135,9 @@ Primary failure prevented: adding mutating workers while the shared checkout is 
 
 ### 7. Runner preflight gate
 
-Candidate command: `python3 tools/check_tv_runner_preflight.py`
+Candidate command: `python3 tools/backlog_dispatch_index.py runner-preflight`
+
+Alternative only if runner state checks need a clearer separate boundary: `python3 tools/check_tv_runner_preflight.py`
 
 Before dispatching or continuing an autonomous TV runner, require:
 
@@ -130,6 +150,8 @@ Before dispatching or continuing an autonomous TV runner, require:
 - selected item is compatible with current gate/dirty-state policy.
 
 Primary failure prevented: prompt says the right thing but a worker ignores or forgets it.
+
+This is the highest-value integration point. Static validation is useful only if runner selection and autonomous dispatch actually fail closed on it.
 
 ## What should remain in the skill
 
@@ -145,23 +167,23 @@ Keep `living-backlog-governance` responsible for judgment that is not safely red
 
 ## Proposed implementation order
 
-1. Add minimal parser/checker for the current backlog header contract and active item field presence.
-2. Add RED tests with a small fixture backlog missing required fields.
-3. Add generated dispatch index builder and stale-index check.
-4. Add verifier impact map JSON and validation.
-5. Add playable milestone priority map JSON and validation.
-6. Wire TV runner/autostart prompt/spec to call the checker before selecting work.
+1. Extend `tools/backlog_dispatch_index.py check` with contract-regression and active-item field validation.
+2. Add RED tests with small fixture backlogs/maps for missing live-backlog contract, missing active dispatch fields, stale generated index, unknown `touched_surfaces`, and invalid playable priority metadata.
+3. Strengthen validation of existing `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json` rather than creating a second generated index path.
+4. Strengthen validation of existing `docs/checklists/tv-verifier-impact-map.json`.
+5. Strengthen validation of existing `docs/checklists/tv-playable-milestone-priority-map.json`.
+6. Wire TV runner/autostart prompt/spec to call the checker before selecting work, or add a small runner-preflight command that composes the existing checks.
 7. Shrink `living-backlog-governance` text to the judgment/policy wrapper and link this artifact plus the checker commands.
 
 ## Acceptance checks
 
 A mechanized fix is done when:
 
-- a checker command fails on at least one fixture missing the live-backlog contract;
-- a checker command fails on at least one active item missing dispatch fields;
-- a stale generated index is detected;
-- an unknown `touched_surfaces` value is rejected;
-- an invalid playable priority map is rejected;
+- `tools/backlog_dispatch_index.py check` or its test fixture equivalent fails on at least one fixture missing the live-backlog contract;
+- `tools/backlog_dispatch_index.py check` or its test fixture equivalent fails on at least one active item missing dispatch fields;
+- a stale generated index is detected using the existing checked-in index path;
+- an unknown `touched_surfaces` value is rejected against the existing verifier impact map;
+- an invalid playable priority map is rejected against the existing playable priority map path;
 - the TV runner preflight uses these checks before selecting work;
 - `living-backlog-governance` no longer needs to carry long mechanical rule lists inline, only links and judgment boundaries.
 
@@ -183,6 +205,8 @@ Gates:
 ## Relationship to existing artifacts
 
 - Complements `docs/checklists/ev-classic-fidelity-implementation-backlog.md` as the canonical backlog surface.
+- Refactors and extends `tools/backlog_dispatch_index.py`; do not add duplicate backlog/index checker commands unless the existing command boundary becomes unclear.
+- Extends the existing generated index and maps: `docs/checklists/ev-classic-fidelity-implementation-backlog.index.json`, `docs/checklists/tv-verifier-impact-map.json`, and `docs/checklists/tv-playable-milestone-priority-map.json`.
 - Complements `docs/research/terminal-velocity-coordination-topology.md` by making parts of its coordination advice enforceable before worker dispatch.
 - Complements `docs/research/tv-spec.md` by protecting source/fidelity execution from prompt-only runner drift.
 - Should be cross-linked from the `living-backlog-governance` skill if/when implementation begins.
