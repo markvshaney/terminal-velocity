@@ -19,6 +19,8 @@ This file preserves the remaining actionable implementation/tooling work from th
 
 ### 1. Consume closeout packets and Kanban comments as first-class recovery evidence
 
+Status: implemented for `tools/tv_runner_recovery_preflight.py` on 2026-06-13. The recovery classifier now treats task JSON `latest_summary` and `comments` as first-class evidence when available, preserves closeout-packet matching, and emits top-level `matched_changed_files`, `missing_changed_files`, and `extra_dirty_paths` provenance fields. Remaining alignment work is tracked in item 2.
+
 Target surfaces:
 
 - `tools/tv_runner_recovery_preflight.py`

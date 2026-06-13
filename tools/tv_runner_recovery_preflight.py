@@ -132,11 +132,45 @@ def load_tasks(path: Path | None, board: str) -> tuple[list[dict[str, Any]], str
 
 
 def task_text(task: dict[str, Any]) -> str:
+    return "\n".join(text for _, text in task_evidence_texts(task))
+
+
+def _comment_text(comment: Any) -> str:
+    if isinstance(comment, str):
+        return comment
+    if not isinstance(comment, dict):
+        return ""
     values: list[str] = []
+    for key in ("body", "content", "text", "summary", "result"):
+        if comment.get(key) is not None:
+            values.append(str(comment.get(key)))
+    return "\n".join(values)
+
+
+def task_evidence_texts(task: dict[str, Any]) -> list[tuple[str, str]]:
+    """Return ordered handoff evidence text surfaces for a Kanban task.
+
+    Recovery must prefer the places where workers actually leave structured
+    closeout evidence. Task-list prose remains a fallback; comments and latest
+    summaries are first-class sources when present in task JSON.
+    """
+    surfaces: list[tuple[str, str]] = []
+    latest_summary = task.get("latest_summary")
+    if latest_summary is not None:
+        surfaces.append(("kanban_latest_summary", str(latest_summary)))
+    comments = task.get("comments")
+    if isinstance(comments, list):
+        comment_values = [_comment_text(comment) for comment in comments]
+        comment_text = "\n".join(value for value in comment_values if value)
+        if comment_text:
+            surfaces.append(("kanban_comment", comment_text))
+    task_values: list[str] = []
     for key in ("id", "title", "body", "result", "summary", "reason", "status", "current_step_key"):
         if task.get(key) is not None:
-            values.append(str(task.get(key)))
-    return "\n".join(values)
+            task_values.append(str(task.get(key)))
+    if task_values:
+        surfaces.append(("kanban_task_text", "\n".join(task_values)))
+    return surfaces
 
 
 def path_safe(path: str) -> bool:
@@ -228,15 +262,24 @@ def choose_handoff(
             continue
         if task.get("status") not in {"blocked", "done", "running"}:
             continue
-        text = task_text(task)
+        evidence_surfaces = task_evidence_texts(task)
+        text = "\n".join(surface_text for _, surface_text in evidence_surfaces)
         lower = text.lower()
         if task.get("status") != "blocked" and not any(term in lower for term in REVIEW_TERMS):
             continue
 
-        task_evidence_paths = {path for path in dirty_paths if path.lower() in lower}
+        task_evidence_paths: set[str] = set()
+        sources: list[str] = []
+        evidence_text_parts: list[str] = []
+        for source, surface_text in evidence_surfaces:
+            source_paths = {path for path in dirty_paths if path.lower() in surface_text.lower()}
+            if source_paths or (source == "kanban_latest_summary" and focused_verifier_status(surface_text) != "missing"):
+                if source not in sources:
+                    sources.append(source)
+                evidence_text_parts.append(surface_text)
+            task_evidence_paths.update(source_paths)
         matched, match_detail = dirty_match(dirty_paths, task_evidence_paths)
-        evidence_text = text
-        sources = ["kanban_task_text"] if task_evidence_paths else []
+        evidence_text = "\n".join(evidence_text_parts) if evidence_text_parts else text
 
         if not matched:
             for packet in packets_by_task_id.get(str(task.get("id")), []):
@@ -284,6 +327,9 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
             "missing_from_evidence": dirty_paths,
             "extra_in_evidence": [],
         },
+        "matched_changed_files": [],
+        "missing_changed_files": dirty_paths,
+        "extra_dirty_paths": [],
         "sensitive_path_check": sensitive_path_check(dirty_paths),
         "focused_verifier_status": "not_applicable",
         "known_unrelated_failures": [],
@@ -309,6 +355,9 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
     payload["handoff_match"] = matched
     payload["handoff_evidence_sources"] = evidence_sources
     payload["handoff_dirty_path_match"] = match_detail
+    payload["matched_changed_files"] = match_detail["matched_paths"]
+    payload["missing_changed_files"] = match_detail["extra_in_evidence"]
+    payload["extra_dirty_paths"] = match_detail["missing_from_evidence"]
     payload["focused_verifier_status"] = verifier_status
     if handoff:
         payload["candidate_handoff"] = {

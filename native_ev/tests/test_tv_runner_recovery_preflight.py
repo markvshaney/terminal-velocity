@@ -149,6 +149,39 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
         self.assertEqual(payload["handoff_dirty_path_match"]["extra_in_evidence"], [])
         self.assertIsNone(payload["explicit_gate"])
 
+    def test_kanban_comments_and_latest_summary_are_handoff_evidence(self):
+        repo = self.make_repo()
+        (repo / "native_ev/tests").mkdir(parents=True)
+        (repo / "native_ev/scenario_eval.py").write_text("dirty\n")
+        (repo / "native_ev/tests/test_scenario_eval.py").write_text("dirty\n")
+        tasks = [{
+            "id": "t_comment",
+            "status": "blocked",
+            "assignee": "terminal-velocity",
+            "title": "Continue TV tv-spec autonomous loop",
+            "body": "push_ready handoff recorded; details are in comments/latest summary.",
+            "latest_summary": "Focused verifier passed: python3 -m unittest native_ev.tests.test_scenario_eval -v",
+            "comments": [{
+                "author": "terminal-velocity",
+                "body": "handoff JSON: {\"changed_files\": [\"native_ev/scenario_eval.py\", \"native_ev/tests/test_scenario_eval.py\"], \"verification\": {\"targeted_unittest\": \"passed\"}}",
+            }],
+        }]
+
+        code, payload = self.run_preflight(repo, tasks)
+
+        self.assertEqual(code, 0, payload)
+        self.assertEqual(payload["recommended_action"], "checkpoint_and_push_ready")
+        self.assertTrue(payload["handoff_match"])
+        self.assertEqual(payload["candidate_handoff"]["id"], "t_comment")
+        self.assertEqual(payload["focused_verifier_status"], "passed")
+        self.assertIn("kanban_comment", payload["handoff_evidence_sources"])
+        self.assertIn("kanban_latest_summary", payload["handoff_evidence_sources"])
+        self.assertEqual(payload["handoff_dirty_path_match"]["missing_from_evidence"], [])
+        self.assertEqual(payload["handoff_dirty_path_match"]["extra_in_evidence"], [])
+        self.assertEqual(payload["matched_changed_files"], ["native_ev/scenario_eval.py", "native_ev/tests/test_scenario_eval.py"])
+        self.assertEqual(payload["missing_changed_files"], [])
+        self.assertEqual(payload["extra_dirty_paths"], [])
+
     def test_checkpoint_mode_commits_matching_handoff_bundle_and_reports_push_ready(self):
         repo = self.make_repo()
         (repo / "native_ev/tests").mkdir(parents=True)
