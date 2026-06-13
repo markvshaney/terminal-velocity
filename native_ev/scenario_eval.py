@@ -336,6 +336,13 @@ def _record_strategy_skill_checkpoint(state: dict[str, Any], action: dict[str, A
         'heldTradeCargoTons': held_trade_cargo_tons,
         'activeJobs': [job.get('id') for job in active_jobs],
         'completedJobs': list(state.get('completedJobs', [])),
+        'playerShipId': state.get('playerShipId'),
+        'ownedOutfits': dict(state.get('ownedOutfits', {})),
+        'ownedWeapons': dict(state.get('ownedWeapons', {})),
+        'maxFuel': int(state.get('maxFuel', 0)),
+        'fuel': int(state.get('fuel', 0)),
+        'maxHull': int(state.get('maxHull', 0)),
+        'currentHull': int(state.get('currentHull', 0)),
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-strategy-skill-rotation-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'strategy_skill_progression_pending_ev_family_source_trace'),
     }
@@ -4002,6 +4009,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'scanned_upgrade_service_matrix': 'passed' if service_scans and service_scans[-1].get('hasOutfitter') and service_scans[-1].get('hasShipyard') and service_scans[-1].get('hasWeapons') else 'failed',
             'bought_outfit_weapon_and_ship_upgrade': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and state.get('ownedWeapons', {}).get('laser_cannon') == 1 and state.get('playerShipId') == 'light_freighter' else 'failed',
             'recorded_upgrade_readiness_strategy_checkpoints': 'passed' if [event.get('skill') for event in checkpoints] == ['service_scout', 'outfitter', 'weapons', 'ship_buyer'] else 'failed',
+            'surfaced_upgrade_inventory_context': 'passed' if any(event.get('skill') == 'service_scout' and event.get('playerShipId') == 'shuttlecraft' and event.get('ownedOutfits') == {} and event.get('ownedWeapons') == {} and event.get('cargoCapacity') == STARTING_CARGO_CAPACITY for event in checkpoints) and any(event.get('skill') == 'outfitter' and event.get('ownedOutfits', {}).get('cargo_pod') == 1 and event.get('cargoCapacity') == STARTING_CARGO_CAPACITY + 10 for event in checkpoints) and any(event.get('skill') == 'weapons' and event.get('ownedWeapons', {}).get('laser_cannon') == 1 for event in checkpoints) and any(event.get('skill') == 'ship_buyer' and event.get('playerShipId') == 'light_freighter' and event.get('cargoCapacity') == 150 and event.get('maxFuel') == 300 and event.get('maxHull') == 300 for event in checkpoints) else 'failed',
             'recorded_upgrade_readiness_source_boundary': 'passed' if checkpoints and service_scans and buys and all(event.get('sourceLabel') == 'terminal-velocity-upgrade-readiness-strategy-scaffold' and event.get('oracleStatus') == 'upgrade_strategy_progression_pending_ev_family_source_trace' for event in checkpoints + service_scans + buys) else 'failed',
         })
     elif name == 'upgrade_affordability_trade_loop':

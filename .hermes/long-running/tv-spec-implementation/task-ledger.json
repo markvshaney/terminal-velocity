@@ -21,12 +21,12 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "strategy-skill-cargo-context-20260613T052600Z",
-  "last_progress_token": "0f7ecbb3dafea6a8c3d05d1014e5ae100bd4247b64cbf0befb2da4c6d1a6bca8",
+  "last_material_event_id": "upgrade-readiness-inventory-context-20260613T043310Z",
+  "last_progress_token": "b727a8ae5f01d63c9dabe0dbd228a869cd2e4fffe3f8f283105f15992c725940",
   "last_reconciled_live_git": {
-    "active_kanban_task": "t_c46ad01c",
-    "checked_at": "2026-06-13T05:26:00Z",
-    "checkpoint_decision": "safe_local_strategy_cargo_context_increment_verified_continue_successor",
+    "active_kanban_task": "t_4ad7b9e5",
+    "checked_at": "2026-06-13T04:33:10Z",
+    "checkpoint_decision": "safe_local_upgrade_readiness_inventory_context_increment_verified_continue_successor",
     "checkpoint_files": [
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_scenario_eval.py",
@@ -34,42 +34,39 @@
       "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_c46ad01c.json"
+      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_4ad7b9e5.json"
     ],
     "git_status_short_branch": [
       "## main...origin/main",
       " M .hermes/long-running/tv-spec-implementation/events.jsonl",
-      " M .hermes/long-running/tv-spec-implementation/task-ledger.json",
       " M docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
       " M docs/checklists/ev-classic-fidelity-implementation-backlog.md",
       " M native_ev/scenario_eval.py",
       " M native_ev/tests/test_scenario_eval.py",
-      "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_18cc79a3.json",
-      "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_6cf23923.json",
-      "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_c46ad01c.json"
+      "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_4ad7b9e5.json",
+      "?? .hermes/long-running/tv-spec-implementation/update_checkpoint_t_4ad7b9e5.py"
     ],
-    "head_before_slice": "d8aa618a1ee79a2a04dd50e2df9df41515b8c94e",
-    "origin_main_before_slice": "d8aa618a1ee79a2a04dd50e2df9df41515b8c94e",
-    "successor_kanban_task": "t_4ad7b9e5"
+    "head_before_slice": "0b4f87c1382732c5dfa3b907c3bc9ec8cafa84b8",
+    "origin_main_before_slice": "0b4f87c1382732c5dfa3b907c3bc9ec8cafa84b8",
+    "successor_kanban_task": null
   },
   "last_runner_summary_path": null,
   "last_verified": {
     "live_truth_sources": {
       "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all --pretty; summary total 99, passed 99, failed 0",
-      "backlog_dispatch_index_runner_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
       "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
       "git_diff_check": "passed; git diff --check produced no whitespace errors",
-      "ledger_events_json_parse": "passed; ledger/events JSON parse sweep before checkpoint; events=193",
       "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
-      "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py strategy_skill_rotation_loop --pretty; success true; 6/6 checks passed including surfaced_strategy_cargo_context",
-      "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_strategy_skill_rotation_loop_records_distinct_playstyle_checkpoints -v; Ran 1 test OK"
+      "npm_test": "blocked/not_applicable; npm test -- --run failed ENOENT because repo has no package.json at project root",
+      "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py upgrade_readiness_strategy_loop --pretty; success true; checks include surfaced_upgrade_inventory_context=passed",
+      "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_upgrade_readiness_strategy_loop_records_service_outfit_weapon_and_ship_checkpoints -v; Ran 1 test OK"
     },
-    "timestamp": "2026-06-13T05:26:00Z",
-    "verified_by": "kanban-worker:t_c46ad01c"
+    "timestamp": "2026-06-13T04:33:10Z",
+    "verified_by": "kanban-worker:t_4ad7b9e5"
   },
   "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
   "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Successor Kanban task t_4ad7b9e5 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve strategy cargo-context scaffold labels and do not promote exact EV Classic strategy/progression UI wording without original-runtime/manual/source evidence.",
+  "next_resume_action": "Continue from standard preflight with the next safe, evidence-bounded EV Classic fidelity backlog slice; candidate adjacent slices include further upgrade/ship/outfitter guardrail context or static topology evidence, but do not promote exact Classic UI/topology semantics without accepted evidence.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
@@ -87,6 +84,6 @@
   "schema_version": 2,
   "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity under loki-game profile. No cron mutation, gateway/provider/account change, push, force-push, deletion, or publication is authorized by this ledger entry.",
   "status": "running",
-  "successor_kanban_task": "t_4ad7b9e5",
+  "successor_kanban_task": null,
   "task_id": "tv-spec-implementation"
 }
