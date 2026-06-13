@@ -97,6 +97,66 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         finally:
             conn.close()
 
+    def add_blocked_tv_tasks(self, profile: Path) -> None:
+        db = profile / "kanban.db"
+        conn = sqlite3.connect(db)
+        try:
+            conn.executescript("""
+                CREATE TABLE tasks (
+                    id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    body TEXT,
+                    assignee TEXT,
+                    status TEXT NOT NULL,
+                    tenant TEXT,
+                    workspace_path TEXT,
+                    claim_lock TEXT,
+                    worker_pid INTEGER
+                );
+            """)
+            rows = [
+                (
+                    "t_push",
+                    "TV push ready handoff",
+                    "push_ready: local checkpoint abc123 verified; integration owner should publish",
+                    "terminal-velocity",
+                    "blocked",
+                    "terminal-velocity",
+                    str(REPO),
+                    None,
+                    None,
+                ),
+                (
+                    "t_review_bug",
+                    "TV stale review gate",
+                    "review-required: tests passed for verified safe-local docs update",
+                    "terminal-velocity",
+                    "blocked",
+                    "terminal-velocity",
+                    str(REPO),
+                    None,
+                    None,
+                ),
+                (
+                    "t_unsafe",
+                    "TV unsafe dirty handoff",
+                    "blocked: unsafe_dirty_state includes unrelated files",
+                    "terminal-velocity",
+                    "blocked",
+                    "terminal-velocity",
+                    str(REPO),
+                    None,
+                    None,
+                ),
+            ]
+            conn.executemany(
+                "INSERT INTO tasks (id, title, body, assignee, status, tenant, workspace_path, claim_lock, worker_pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                rows,
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
     def test_clean_idle_gateway_startup_reports_start_action(self):
         _, repo, profile = self.make_fixture()
 
@@ -146,6 +206,20 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         self.assertEqual(payload["recommended_action"], "blocked:topology_conflict")
         self.assertEqual(payload["explicit_gate"], "topology_conflict")
         self.assertFalse(payload["safe_to_start"])
+
+    def test_blocked_cards_are_enriched_from_live_kanban_state(self):
+        _, repo, profile = self.make_fixture()
+        self.add_blocked_tv_tasks(profile)
+
+        code, payload = self.run_preflight(repo, profile, "--startup-owner", "gateway_kanban_dispatcher")
+
+        self.assertEqual(code, 0, payload)
+        self.assertEqual(payload["blocked_cards"]["status"], "inspected")
+        classes = {card["id"]: card["canonical_class"] for card in payload["blocked_cards"]["cards"]}
+        self.assertEqual(classes["t_push"], "push_ready")
+        self.assertEqual(classes["t_review_bug"], "review_required_process_bug")
+        self.assertEqual(classes["t_unsafe"], "unsafe_dirty_state")
+        self.assertEqual(payload["blocked_cards"]["counts_by_class"]["push_ready"], 1)
 
 
 if __name__ == "__main__":

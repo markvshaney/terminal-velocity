@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sqlite3
 import subprocess
 import sys
 from pathlib import Path
@@ -141,14 +142,86 @@ def capability_check(repo: Path) -> dict[str, Any]:
     return {"status": "ok" if not missing else "missing", "missing": missing, "resolved": resolved}
 
 
+def canonical_block_class(task: dict[str, Any]) -> str:
+    text = " ".join(str(task.get(key) or "") for key in ("title", "body", "status")).lower()
+    if "push_ready" in text or "push ready" in text:
+        return "push_ready"
+    if "unsafe_dirty_state" in text or "unsafe dirty" in text:
+        return "unsafe_dirty_state"
+    if "verifier_failed" in text or "verifier failed" in text:
+        return "verifier_failed"
+    if "explicit_human_gate" in text or "explicit human gate" in text:
+        return "explicit_human_gate"
+    if "review-required" in text or "review_required" in text or "review required" in text:
+        return "review_required_process_bug"
+    return "blocked:unclassified"
+
+
+def _query_blocked_cards(db_path: Path) -> list[dict[str, Any]]:
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
+        wanted = [column for column in ("id", "title", "body", "assignee", "status", "tenant", "workspace_path") if column in columns]
+        if not {"id", "status"}.issubset(columns):
+            return []
+        rows = conn.execute(
+            f"SELECT {', '.join(wanted)} FROM tasks WHERE status = ? ORDER BY id",
+            ("blocked",),
+        ).fetchall()
+    finally:
+        conn.close()
+
+    cards: list[dict[str, Any]] = []
+    for row in rows:
+        task = {key: row[key] for key in row.keys()}
+        text = " ".join(str(task.get(key) or "") for key in ("title", "body", "assignee", "tenant", "workspace_path")).lower()
+        if "terminal-velocity" not in text and "tv" not in text:
+            continue
+        cards.append({
+            "id": task.get("id"),
+            "title": task.get("title"),
+            "assignee": task.get("assignee"),
+            "status": task.get("status"),
+            "canonical_class": canonical_block_class(task),
+        })
+    return cards
+
+
 def blocked_cards(topology: dict[str, Any]) -> dict[str, Any]:
-    # Keep this wrapper read-only and bounded. The topology checker already names
-    # Kanban DB candidates and live owners; blocked-card detail can be added as a
-    # later ledger/Kanban normalization layer without weakening start safety.
+    candidates = [Path(path) for path in (topology.get("paths") or {}).get("kanban_db_candidates", [])]
+    inspected: list[str] = []
+    errors: list[dict[str, str]] = []
+    cards: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for db_path in candidates:
+        if not db_path.exists():
+            continue
+        inspected.append(str(db_path))
+        try:
+            for card in _query_blocked_cards(db_path):
+                card_id = str(card.get("id") or "")
+                if card_id in seen:
+                    continue
+                seen.add(card_id)
+                cards.append(card)
+        except sqlite3.Error as exc:
+            errors.append({"path": str(db_path), "error": str(exc)})
+    counts: dict[str, int] = {}
+    for card in cards:
+        klass = str(card.get("canonical_class"))
+        counts[klass] = counts.get(klass, 0) + 1
+    status = "inspected" if inspected else "no_db_found"
+    if errors and not inspected:
+        status = "error"
     return {
-        "status": "not_inspected_detail",
-        "source": "topology_paths",
-        "kanban_db_candidates": (topology.get("paths") or {}).get("kanban_db_candidates", []),
+        "status": status,
+        "source": "kanban_db",
+        "kanban_db_candidates": [str(path) for path in candidates],
+        "inspected_paths": inspected,
+        "errors": errors,
+        "cards": cards,
+        "counts_by_class": counts,
     }
 
 

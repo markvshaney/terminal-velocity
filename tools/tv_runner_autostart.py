@@ -156,6 +156,41 @@ def recovery_preflight(tasks: list[dict]) -> tuple[int, str]:
             pass
 
 
+def start_resume_preflight() -> tuple[int, dict]:
+    code, raw = run_checked(
+        ["python3", "tools/tv_runner_start_resume_preflight.py", "--startup-owner", "gateway_kanban_dispatcher"],
+        cwd=REPO,
+        timeout=60,
+    )
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"start/resume preflight returned non-JSON output: {raw.strip()[:240]}") from exc
+    return code, payload
+
+
+def require_start_resume_safe(now: str) -> bool:
+    try:
+        code, payload = start_resume_preflight()
+    except Exception as exc:
+        save_state(last_problem="start_resume_preflight_failed", last_problem_at=now, last_active="")
+        print(f"TV runner autostart blocked: start/resume preflight failed: {exc}")
+        print("repo: " + git_status_summary())
+        return False
+    if code != 0 or payload.get("explicit_gate") is not None or not payload.get("safe_to_start"):
+        save_state(
+            last_problem="start_resume_preflight_blocked",
+            last_problem_at=now,
+            last_active="",
+            last_start_resume_action=payload.get("recommended_action"),
+        )
+        print("TV runner autostart blocked: start/resume preflight blocked dispatch/seeding.")
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        print("repo: " + git_status_summary())
+        return False
+    return True
+
+
 def target_profile_skill_names() -> set[str]:
     """Return skill names available in the active target Hermes profile."""
     if not PROFILE_SKILLS_ROOT.exists():
@@ -267,6 +302,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if ready:
+        if not require_start_resume_safe(now):
+            return 0
         try:
             pre_dispatch_preflight(args.dry_run)
         except Exception as exc:
@@ -296,6 +333,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     try:
+        if not require_start_resume_safe(now):
+            return 0
         pre_dispatch_preflight(args.dry_run)
     except Exception as exc:
         save_state(last_problem="runner_preflight_failed", last_problem_at=now, last_active="")

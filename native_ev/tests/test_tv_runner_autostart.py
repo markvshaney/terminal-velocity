@@ -1,3 +1,4 @@
+import json
 import unittest
 from unittest.mock import patch
 
@@ -42,6 +43,43 @@ class TvRunnerAutostartTests(unittest.TestCase):
                 tv_runner_autostart.pre_dispatch_preflight(dry_run=False)
 
         self.assertIn("runner-preflight failed", str(raised.exception))
+
+    def test_start_resume_preflight_blocks_dispatch_when_not_safe(self):
+        tasks = [{"id": "t_ready", "assignee": "terminal-velocity", "status": "ready"}]
+        packet = {"recommended_action": "blocked:topology_conflict", "explicit_gate": "topology_conflict", "safe_to_start": False}
+
+        with patch.object(tv_runner_autostart, "board_tasks", return_value=tasks), \
+             patch.object(tv_runner_autostart, "assignee_tasks", side_effect=lambda all_tasks, status: [t for t in all_tasks if t["status"] == status]), \
+             patch.object(tv_runner_autostart, "start_resume_preflight", return_value=(1, packet)), \
+             patch.object(tv_runner_autostart, "dispatch") as dispatch, \
+             patch.object(tv_runner_autostart, "save_state") as save_state, \
+             patch("builtins.print") as printed:
+            code = tv_runner_autostart.main([])
+
+        self.assertEqual(code, 0)
+        dispatch.assert_not_called()
+        save_state.assert_called()
+        lines = [call.args[0] for call in printed.call_args_list]
+        self.assertTrue(any("start/resume preflight blocked" in line for line in lines))
+        self.assertIn(json.dumps(packet, indent=2, sort_keys=True), lines)
+
+    def test_idle_clean_autostart_consumes_start_resume_preflight_before_seeding(self):
+        packet = {"recommended_action": "start_gateway_kanban_dispatcher", "explicit_gate": None, "safe_to_start": True}
+
+        with patch.object(tv_runner_autostart, "board_tasks", return_value=[]), \
+             patch.object(tv_runner_autostart, "assignee_tasks", return_value=[]), \
+             patch.object(tv_runner_autostart, "git_dirty", return_value=False), \
+             patch.object(tv_runner_autostart, "start_resume_preflight", return_value=(0, packet)) as preflight, \
+             patch.object(tv_runner_autostart, "pre_dispatch_preflight", return_value="ok"), \
+             patch.object(tv_runner_autostart, "create_continuation", return_value="t_created"), \
+             patch.object(tv_runner_autostart, "dispatch", return_value="dry-run-dispatch"), \
+             patch.object(tv_runner_autostart, "git_status_summary", return_value="## main...origin/main"), \
+             patch.object(tv_runner_autostart, "save_state"), \
+             patch("builtins.print"):
+            code = tv_runner_autostart.main([])
+
+        self.assertEqual(code, 0)
+        preflight.assert_called_once()
 
     def test_idle_dirty_autostart_reports_recovery_preflight_before_seeding(self):
         tasks = [{"id": "t_blocked", "assignee": "terminal-velocity", "status": "blocked"}]

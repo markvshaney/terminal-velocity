@@ -536,7 +536,25 @@ Verified behavior:
 - active matching gateway owner -> `resume_existing_owner`;
 - conflicting live owner -> `blocked:topology_conflict`.
 
-Remaining follow-up: enrich the `blocked_cards` section from the live Kanban board/DB instead of leaving it as topology-path metadata, then feed this preflight into `tv_runner_autostart.py` before dispatch/seeding.
+### Applied implementation note — 2026-06-12 blocked-card enrichment and autostart preflight wiring
+
+Status: partial P2.7/P3 implementation.
+
+Implemented surfaces:
+
+- `tools/tv_runner_start_resume_preflight.py` now enriches `blocked_cards` from live Kanban SQLite task state when a topology candidate DB exists.
+- Blocked TV cards are classified into canonical classes including `push_ready`, `review_required_process_bug`, `unsafe_dirty_state`, `verifier_failed`, `explicit_human_gate`, and `blocked:unclassified`.
+- `tools/tv_runner_autostart.py` now consumes the structured start/resume preflight before dispatching a ready task or seeding a successor, and fails closed on any `explicit_gate`/unsafe result.
+- Regression coverage lives in `native_ev/tests/test_tv_runner_start_resume_preflight.py` and `native_ev/tests/test_tv_runner_autostart.py`.
+
+Verified behavior:
+
+- live blocked TV cards are listed with `counts_by_class`;
+- stale generic `review-required` cards classify as `review_required_process_bug` rather than a human gate;
+- autostart does not dispatch/seed when start/resume preflight reports a gate;
+- idle clean autostart calls the structured start/resume preflight before seeding.
+
+Remaining follow-up: promote these canonical blocked-card classes into ledger/events or Kanban comments when integration-owner recovery resolves a gate, so the board itself stops carrying stale ambiguous `review-required` language.
 
 ### P3 — tighten reporting and observability
 
