@@ -233,6 +233,45 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertIn("tv_push_ready_recovery", comments[0][1])
             self.assertEqual([row[1] for row in events], ["tv_push_ready_recovered"])
 
+    def test_recover_unsafe_dirty_state_dry_run_plans_stale_clean_closeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, _db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+
+            code, payload = self.run_integrator(repo, "--recover-unsafe-dirty-state", "--profile", str(profile))
+
+            self.assertEqual(code, 0, payload)
+            recovery = payload["unsafe_dirty_recovery"]
+            self.assertFalse(recovery["applied"])
+            self.assertEqual(recovery["recommended_action"], "close_stale_unsafe_dirty_state_handoffs")
+            self.assertEqual([item["task_id"] for item in recovery["planned_closeouts"]], ["t_unsafe"])
+            self.assertEqual(recovery["skipped"]["t_push"], "push_ready")
+            self.assertEqual(recovery["skipped"]["t_review"], "review_required_process_bug")
+
+    def test_recover_unsafe_dirty_state_apply_closes_stale_clean_handoff_idempotently(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+
+            first_code, first_payload = self.run_integrator(repo, "--recover-unsafe-dirty-state", "--apply-unsafe-dirty-recovery", "--profile", str(profile))
+            second_code, second_payload = self.run_integrator(repo, "--recover-unsafe-dirty-state", "--apply-unsafe-dirty-recovery", "--profile", str(profile))
+
+            self.assertEqual(first_code, 0, first_payload)
+            self.assertEqual(second_code, 0, second_payload)
+            self.assertEqual(first_payload["unsafe_dirty_recovery"]["closeouts_written"], 1)
+            self.assertEqual(second_payload["unsafe_dirty_recovery"]["closeouts_written"], 0)
+            conn = sqlite3.connect(db)
+            try:
+                status = conn.execute("SELECT status FROM tasks WHERE id = 't_unsafe'").fetchone()[0]
+                comments = conn.execute("SELECT task_id, body FROM task_comments WHERE task_id = 't_unsafe' ORDER BY id").fetchall()
+                events = conn.execute("SELECT task_id, kind FROM task_events WHERE task_id = 't_unsafe' ORDER BY id").fetchall()
+            finally:
+                conn.close()
+            self.assertEqual(status, "done")
+            self.assertEqual(len(comments), 1)
+            self.assertIn("tv_unsafe_dirty_recovery", comments[0][1])
+            self.assertEqual([row[1] for row in events], ["tv_unsafe_dirty_recovered"])
+
 
 if __name__ == "__main__":
     unittest.main()

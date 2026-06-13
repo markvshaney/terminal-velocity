@@ -46,6 +46,7 @@ ACTIVE_STATUSES = {"running"}
 TV_TERMS = ("terminal velocity", "terminal-velocity", "tv-spec", "continue tv", " tv ")
 GATE_NORMALIZATION_MARKER = "tv_gate_normalization"
 PUSH_READY_RECOVERY_MARKER = "tv_push_ready_recovery"
+UNSAFE_DIRTY_RECOVERY_MARKER = "tv_unsafe_dirty_recovery"
 ACTIONABLE_GATE_CLASSES = {"push_ready", "review_required_process_bug"}
 
 
@@ -385,6 +386,149 @@ def recover_push_ready_handoffs(
     }
 
 
+def unsafe_dirty_recovery_comment_body(task: dict[str, Any]) -> str:
+    return (
+        f"{UNSAFE_DIRTY_RECOVERY_MARKER}: canonical_class=unsafe_dirty_state\n"
+        f"source_task={task.get('id')} title={task.get('title')}\n"
+        "resolution=repo is currently clean and synced; treating this unsafe_dirty_state handoff as stale for start-resume gating"
+    )
+
+
+def task_has_unsafe_dirty_recovery_comment(conn: sqlite3.Connection, task_id: str) -> bool:
+    tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if "task_comments" not in tables:
+        return False
+    row = conn.execute(
+        "SELECT 1 FROM task_comments WHERE task_id = ? AND body LIKE ? LIMIT 1",
+        (task_id, f"%{UNSAFE_DIRTY_RECOVERY_MARKER}: canonical_class=unsafe_dirty_state%"),
+    ).fetchone()
+    return row is not None
+
+
+def close_unsafe_dirty_task(conn: sqlite3.Connection, task: dict[str, Any], author: str, task_columns: set[str]) -> bool:
+    task_id = str(task["id"])
+    if task_has_unsafe_dirty_recovery_comment(conn, task_id):
+        return False
+    now = int(time.time())
+    tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if "task_comments" in tables:
+        conn.execute(
+            "INSERT INTO task_comments (task_id, author, body, created_at) VALUES (?, ?, ?, ?)",
+            (task_id, author, unsafe_dirty_recovery_comment_body(task), now),
+        )
+    set_parts = ["status = 'done'"]
+    params: list[Any] = []
+    if "completed_at" in task_columns:
+        set_parts.append("completed_at = ?")
+        params.append(now)
+    if "result" in task_columns:
+        set_parts.append("result = ?")
+        params.append("unsafe_dirty_state handoff is stale because repo is clean/synced; closed by TV integration-owner recovery")
+    params.append(task_id)
+    conn.execute(f"UPDATE tasks SET {', '.join(set_parts)} WHERE id = ? AND status = 'blocked'", params)
+    if "task_events" in tables:
+        conn.execute(
+            "INSERT INTO task_events (task_id, run_id, kind, payload, created_at) VALUES (?, ?, ?, ?, ?)",
+            (
+                task_id,
+                None,
+                "tv_unsafe_dirty_recovered",
+                json.dumps({"author": author, "resolution": "stale_clean_handoff_closed"}, sort_keys=True),
+                now,
+            ),
+        )
+    return True
+
+
+def recover_unsafe_dirty_handoffs(
+    profile: Path,
+    repo: Path,
+    classification: dict[str, Any],
+    *,
+    apply: bool,
+    author: str = "integration_owner",
+) -> dict[str, Any]:
+    planned: list[dict[str, Any]] = []
+    skipped: dict[str, str] = {}
+    inspected_paths: list[str] = []
+    errors: list[dict[str, str]] = []
+    closeouts_written = 0
+
+    if classification.get("status_porcelain"):
+        recommended_action = "repair_live_dirty_state_first"
+    elif classification.get("behind_count", 0) > 0:
+        recommended_action = "sync_branch_before_recovery"
+    elif classification.get("ahead_count", 0) > 0:
+        recommended_action = "publish_local_checkpoint_before_closeout"
+    elif classification.get("active_worker_claims"):
+        recommended_action = "wait_for_active_worker"
+    else:
+        recommended_action = "close_stale_unsafe_dirty_state_handoffs"
+
+    for db_path in kanban_db_candidates(profile):
+        if not db_path.exists():
+            continue
+        inspected_paths.append(str(db_path))
+        uri = f"file:{db_path}?mode={'rwc' if apply else 'ro'}"
+        try:
+            conn = sqlite3.connect(uri, uri=True)
+            conn.row_factory = sqlite3.Row
+        except sqlite3.Error as exc:
+            errors.append({"path": str(db_path), "error": str(exc)})
+            continue
+        try:
+            tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            if "tasks" not in tables:
+                continue
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
+            wanted = [column for column in ("id", "title", "body", "assignee", "status", "tenant", "workspace_path") if column in columns]
+            if not {"id", "status"}.issubset(columns):
+                continue
+            rows = conn.execute(
+                f"SELECT {', '.join(wanted)} FROM tasks WHERE status = ? ORDER BY id",
+                ("blocked",),
+            ).fetchall()
+            for row in rows:
+                task = dict(row)
+                if not row_is_tv_related(task, repo):
+                    continue
+                klass = canonical_gate_class(task)
+                task_id = str(task.get("id") or "")
+                if klass != "unsafe_dirty_state":
+                    skipped[task_id] = klass
+                    continue
+                action = {
+                    "db_path": str(db_path),
+                    "task_id": task_id,
+                    "title": task.get("title"),
+                    "canonical_class": klass,
+                    "comment_marker": UNSAFE_DIRTY_RECOVERY_MARKER,
+                }
+                planned.append(action)
+                if apply and recommended_action == "close_stale_unsafe_dirty_state_handoffs":
+                    if "task_comments" not in tables:
+                        errors.append({"path": str(db_path), "error": "task_comments table missing"})
+                    elif close_unsafe_dirty_task(conn, task, author, columns):
+                        closeouts_written += 1
+            if apply:
+                conn.commit()
+        except sqlite3.Error as exc:
+            errors.append({"path": str(db_path), "error": str(exc)})
+        finally:
+            conn.close()
+
+    return {
+        "applied": apply,
+        "author": author,
+        "recommended_action": recommended_action,
+        "inspected_paths": inspected_paths,
+        "planned_closeouts": planned,
+        "skipped": skipped,
+        "closeouts_written": closeouts_written,
+        "errors": errors,
+    }
+
+
 def normalize_gate_comments(profile: Path, repo: Path, *, apply: bool, author: str = "integration_owner") -> dict[str, Any]:
     planned: list[dict[str, Any]] = []
     skipped: dict[str, str] = {}
@@ -540,6 +684,8 @@ def main() -> int:
     parser.add_argument("--apply-gate-comments", action="store_true", help="With --normalize-gates, write idempotent Kanban comments/events for planned gate normalization.")
     parser.add_argument("--recover-push-ready-handoff", action="store_true", help="Plan stale clean push_ready handoff closeout for start/resume recovery.")
     parser.add_argument("--apply-push-ready-recovery", action="store_true", help="With --recover-push-ready-handoff, close stale clean push_ready Kanban gates idempotently.")
+    parser.add_argument("--recover-unsafe-dirty-state", action="store_true", help="Plan stale clean unsafe_dirty_state handoff closeout for start/resume recovery.")
+    parser.add_argument("--apply-unsafe-dirty-recovery", action="store_true", help="With --recover-unsafe-dirty-state, close stale clean unsafe_dirty_state Kanban gates idempotently.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -562,6 +708,14 @@ def main() -> int:
             repo,
             payload,
             apply=bool(args.apply_push_ready_recovery),
+        )
+
+    if args.recover_unsafe_dirty_state:
+        payload["unsafe_dirty_recovery"] = recover_unsafe_dirty_handoffs(
+            profile,
+            repo,
+            payload,
+            apply=bool(args.apply_unsafe_dirty_recovery),
         )
 
     if args.push:
