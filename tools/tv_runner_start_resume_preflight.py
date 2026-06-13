@@ -225,6 +225,28 @@ def blocked_cards(topology: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def blocked_card_start_gate(blocked: dict[str, Any]) -> tuple[str, str] | None:
+    """Return the unresolved handoff/gate that must be resolved before idle start.
+
+    Blocked cards are not an implementation owner, but several canonical classes
+    represent unfinished integration/recovery work. When the lane is otherwise
+    idle and clean, autostart must not seed or dispatch over those handoffs.
+    """
+    counts = blocked.get("counts_by_class") or {}
+    priority = (
+        ("push_ready", "recover_push_ready_handoff", "push_ready_integration_required"),
+        ("review_required_process_bug", "normalize_blocked_gates", "gate_normalization_required"),
+        ("verifier_failed", "rerun_focused_verifier", "verifier_failed"),
+        ("unsafe_dirty_state", "blocked:unsafe_dirty_state", "unsafe_dirty_state"),
+        ("explicit_human_gate", "blocked:explicit_human_gate", "explicit_human_gate"),
+        ("blocked:unclassified", "blocked:unclassified_blocked_card", "unclassified_blocked_card"),
+    )
+    for klass, action, gate in priority:
+        if int(counts.get(klass) or 0) > 0:
+            return action, gate
+    return None
+
+
 def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
     repo_state, dirty_paths, git_error = git_state(repo)
     topology_code, topology = run_topology(repo, profile, startup_owner)
@@ -232,6 +254,7 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
     capability = capability_check(repo)
     live_owner = topology.get("live_implementation_owner")
 
+    blocked = blocked_cards(topology)
     payload: dict[str, Any] = {
         "repo": str(repo),
         "profile": str(profile),
@@ -241,7 +264,7 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
         "git_error": git_error,
         "topology": topology,
         "topology_exit_code": topology_code,
-        "blocked_cards": blocked_cards(topology),
+        "blocked_cards": blocked,
         "stop_lock_state": stop_lock,
         "watchdog_reporter_state": watchdog_reporter_state(repo, profile),
         "capability_check": capability,
@@ -270,10 +293,16 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
         payload["safe_to_start"] = True
         payload["explicit_gate"] = None
     elif live_owner == "none_active":
-        action_suffix = startup_owner
-        payload["recommended_action"] = f"start_{action_suffix}"
-        payload["safe_to_start"] = True
-        payload["explicit_gate"] = None
+        blocked_gate = blocked_card_start_gate(blocked)
+        if blocked_gate is not None:
+            action, gate = blocked_gate
+            payload["recommended_action"] = action
+            payload["explicit_gate"] = gate
+        else:
+            action_suffix = startup_owner
+            payload["recommended_action"] = f"start_{action_suffix}"
+            payload["safe_to_start"] = True
+            payload["explicit_gate"] = None
     else:
         payload["recommended_action"] = "blocked:topology_conflict"
         payload["explicit_gate"] = "topology_conflict"

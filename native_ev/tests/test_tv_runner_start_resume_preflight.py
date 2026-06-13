@@ -213,13 +213,23 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
 
         code, payload = self.run_preflight(repo, profile, "--startup-owner", "gateway_kanban_dispatcher")
 
-        self.assertEqual(code, 0, payload)
         self.assertEqual(payload["blocked_cards"]["status"], "inspected")
         classes = {card["id"]: card["canonical_class"] for card in payload["blocked_cards"]["cards"]}
         self.assertEqual(classes["t_push"], "push_ready")
         self.assertEqual(classes["t_review_bug"], "review_required_process_bug")
         self.assertEqual(classes["t_unsafe"], "unsafe_dirty_state")
         self.assertEqual(payload["blocked_cards"]["counts_by_class"]["push_ready"], 1)
+
+    def test_push_ready_blocked_card_routes_to_integration_owner_before_start(self):
+        _, repo, profile = self.make_fixture()
+        self.add_blocked_tv_tasks(profile)
+
+        code, payload = self.run_preflight(repo, profile, "--startup-owner", "gateway_kanban_dispatcher")
+
+        self.assertEqual(code, 1, payload)
+        self.assertEqual(payload["recommended_action"], "recover_push_ready_handoff")
+        self.assertEqual(payload["explicit_gate"], "push_ready_integration_required")
+        self.assertFalse(payload["safe_to_start"])
 
 
 if __name__ == "__main__":

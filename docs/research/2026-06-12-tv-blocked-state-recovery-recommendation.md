@@ -263,6 +263,50 @@ Avoid vague gate states such as `review required` for normal TV recovery. Use ca
 
 Each class should map to a deterministic remediation or a precise stop condition.
 
+## Relationship to prior autostart/start-restart recommendation
+
+The prior recommendation to automate Terminal Velocity continuous-runner start/restart with a script-only autostart watchdog remains valid, but this artifact qualifies its ordering.
+
+Autostart is a liveness mechanism, not an integration-owner substitute. It may dispatch or seed a successor only after blocked-state recovery and integration-owner preflight determine that there is no unresolved completed handoff, dirty bundle, verifier gap, branch update, active worker, or explicit hazard to resolve first.
+
+Correct ordering:
+
+```text
+start/resume tick -> blocked-state recovery preflight -> integration-owner recovery/publish if needed -> seed/dispatch successor only after no real gate remains
+```
+
+Autostart must not seed over these states:
+
+- `push_ready`;
+- attributable dirty handoff;
+- verifier-missing or verifier-failed handoff;
+- branch-behind/divergent publication state;
+- active worker;
+- sensitive, unrelated, or unmatched tracked dirty state.
+
+### Why autostart must not seed over `push_ready`
+
+`push_ready` means the previous worker finished a coherent local slice and handed it to the integration owner for publication/review. It is not an idle lane.
+
+Seeding over `push_ready` is unsafe because it can:
+
+- bury completed but unpublished work behind a new running card;
+- create overlapping ownership between the integration owner and a new worker;
+- mix old and new file changes, making attribution and staging unsafe;
+- invalidate verifier evidence that applied to the earlier bundle;
+- increase local/remote divergence before the completed checkpoint is normalized;
+- hide the required publication action behind a false progress signal;
+- blur the worker/autostart/integration-owner authority boundary.
+
+The safe handling is:
+
+1. detect `push_ready`;
+2. prevent autostart successor seeding;
+3. have the integration owner inspect intended files, verifier output, secrets/proprietary risk, and remote state;
+4. checkpoint/push/fetch/verify when safe under the standing normal non-force TV policy;
+5. normalize/complete the handoff card;
+6. only then allow autostart to dispatch or seed the next successor.
+
 ## Recommended command behavior
 
 ### First slice: `--recover-dirty-handoff`
