@@ -1,0 +1,34 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1db4d53e.json"
+  ],
+  "classification": "continue",
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "kanban_task": "t_1db4d53e",
+  "next_resume_action": "Successor Kanban task t_57c3df52 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve balanced upgrade purchase-goal scaffold labels and do not promote exact EV Classic outfitter UI semantics without original-runtime/source evidence.",
+  "oracleStatus": "balanced_upgrade_budget_pending_classic_runtime_trace",
+  "safe_local": true,
+  "sourceLabel": "terminal-velocity-balanced-upgrade-trade-scaffold",
+  "source_boundary": "Terminal Velocity deterministic symbolic scenario scaffold only; no exact EV Classic outfitter purchase-goal UI claim added.",
+  "successor_kanban_task": "t_57c3df52",
+  "summary": "Safe-local balanced upgrade purchase-goal scaffold increment verified: insufficient-credit Hull Plating outfitter blocks now surface an activePurchaseGoal, carry it through the funding trade, and clear it into completedPurchaseGoals on final refit purchase; exact EV Classic outfitter purchase-goal UI remains pending original-runtime/source evidence.",
+  "timestamp": "2026-06-13T14:05:45Z",
+  "verification": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all --pretty; summary total 99, passed 99, failed 0",
+    "backlog_dispatch_index_runner_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
+    "final_git_status": "main...origin/main with intended modified implementation/test/docs/index files before ledger/events/closeout packet update",
+    "git_diff_check": "passed; git diff --check produced no whitespace errors",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
+    "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py balanced_upgrade_trade_loop --pretty; success true; surfaced_outfit_purchase_goal_context=passed; completedPurchaseGoals includes hull_plating price 1800 deficit 900",
+    "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_balanced_upgrade_trade_loop_funds_final_refit_with_trade_run -v; Ran 1 test OK"
+  }
+}

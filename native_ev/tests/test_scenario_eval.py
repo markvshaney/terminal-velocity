@@ -512,13 +512,21 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['blocked_third_lot_before_cargo_pod'], 'passed')
         self.assertEqual(result['checks']['bought_cargo_pod_capacity_upgrade'], 'passed')
         self.assertEqual(result['checks']['completed_expanded_three_lot_trade_run'], 'passed')
+        self.assertEqual(result['checks']['surfaced_cargo_expansion_goal_context'], 'passed')
         self.assertEqual(result['checks']['recorded_cargo_expansion_source_boundary'], 'passed')
         blocked_buy_events = [event for event in result['trace'] if event['type'] == 'blocked_buy_commodity_lot']
         self.assertEqual(blocked_buy_events[0]['reason'], 'insufficient cargo space')
+        self.assertEqual(blocked_buy_events[0]['cargoExpansionGoal']['additionalCapacityNeeded'], 10)
         checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
         self.assertEqual([event['skill'] for event in checkpoints], ['capacity_gap', 'cargo_pod_upgrade', 'expanded_trade_run'])
+        self.assertEqual(checkpoints[0]['activeCargoExpansionGoal']['commodity'], 'food')
+        self.assertEqual(checkpoints[0]['activeCargoExpansionGoal']['cargoCapacityAtBlock'], 20)
+        self.assertEqual(checkpoints[1]['activeCargoExpansionGoal']['additionalCapacityNeeded'], 10)
+        self.assertEqual(checkpoints[-1]['activeCargoExpansionGoal'], {})
+        self.assertEqual(checkpoints[-1]['completedCargoExpansionGoals'][-1]['completedCargoCapacity'], 30)
         trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
         self.assertEqual([event['commodity'] for event in trade_events], ['food', 'food', 'food', 'food', 'food', 'food'])
+        self.assertEqual(trade_events[2]['completedCargoExpansionGoal']['commodity'], 'food')
         self.assertEqual(result['state']['currentSystem'], 'Levo')
         self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
         self.assertEqual(result['state']['cargoCapacity'], 30)
@@ -580,6 +588,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['completed_balanced_upgrade_trade_run'], 'passed')
         self.assertEqual(result['checks']['bought_cargo_fuel_and_hull_upgrades'], 'passed')
         self.assertEqual(result['checks']['repaired_final_hull_refit'], 'passed')
+        self.assertEqual(result['checks']['surfaced_outfit_purchase_goal_context'], 'passed')
         self.assertEqual(result['checks']['recorded_balanced_upgrade_source_boundary'], 'passed')
         checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
         self.assertEqual([event['skill'] for event in checkpoints], ['budget_gap_after_cargo_and_fuel', 'trade_funded_final_refit', 'balanced_refit_complete'])
@@ -587,8 +596,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(blocked_outfit_events[0]['itemId'], 'hull_plating')
         self.assertEqual(blocked_outfit_events[0]['reason'], 'insufficient credits')
         self.assertEqual(blocked_outfit_events[0]['credits'], 900)
+        self.assertEqual(blocked_outfit_events[0]['purchaseGoal']['itemId'], 'hull_plating')
+        self.assertEqual(blocked_outfit_events[0]['purchaseGoal']['creditDeficit'], 900)
+        self.assertEqual(checkpoints[0]['activePurchaseGoal']['itemId'], 'hull_plating')
+        self.assertEqual(checkpoints[0]['activePurchaseGoal']['creditDeficit'], 900)
         outfit_events = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon']
         self.assertEqual([event['itemId'] for event in outfit_events], ['cargo_pod', 'fuel_tank', 'hull_plating'])
+        self.assertEqual(outfit_events[-1]['completedPurchaseGoal']['itemId'], 'hull_plating')
+        self.assertEqual(checkpoints[-1]['activePurchaseGoal'], {})
+        self.assertEqual(checkpoints[-1]['completedPurchaseGoals'][-1]['itemId'], 'hull_plating')
         trade_events = [event for event in result['trace'] if event['type'] in {'buy_commodity_lot', 'sell_commodity_lot'}]
         self.assertEqual([event['commodity'] for event in trade_events], ['food', 'food', 'food', 'food'])
         repair_events = [event for event in result['trace'] if event['type'] == 'repair_hull']
@@ -1787,6 +1803,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['state']['currentSystem'], 'Sol')
         self.assertEqual(result['state']['landedBody'], 'Earth')
         self.assertEqual(result['checks']['blocked_overfull_ship_transfer'], 'passed')
+        self.assertEqual(result['checks']['surfaced_shipyard_cargo_transfer_goal_context'], 'passed')
         self.assertEqual(result['checks']['preserved_overfull_cargo_before_recovery'], 'passed')
         self.assertEqual(result['checks']['recovered_after_freeing_cargo'], 'passed')
         self.assertEqual(result['checks']['recorded_shipyard_cargo_guardrail_source_boundary'], 'passed')
@@ -1794,6 +1811,12 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(blocked['reason'], 'cargo exceeds target ship capacity')
         self.assertEqual(blocked['cargoUsed'], 30)
         self.assertEqual(blocked['targetCargoCapacity'], 20)
+        self.assertEqual(blocked['cargoToFree'], 10)
+        self.assertEqual(blocked['shipTransferGoal']['cargoHoldAtBlock']['food'], 30)
+        bought = [event for event in result['trace'] if event['type'] == 'buy_ship'][-1]
+        self.assertEqual(bought['completedShipTransferGoal']['shipId'], 'shuttlecraft')
+        self.assertEqual(bought['completedShipTransferGoal']['completedCargoUsed'], 10)
+        self.assertEqual(result['state']['completedShipTransferGoals'][-1]['shipId'], 'shuttlecraft')
         self.assertEqual(result['state']['playerShipId'], 'shuttlecraft')
         self.assertEqual(result['state']['cargoUsed'], 10)
         self.assertEqual(result['state']['cargoHold']['food'], 10)
