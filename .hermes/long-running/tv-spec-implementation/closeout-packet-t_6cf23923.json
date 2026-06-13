@@ -1,0 +1,19 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "classification": "continue",
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "known_unrelated_failure_surface": "",
+  "next_resume_action": "Successor Kanban task t_c46ad01c should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve destination-sale cargo-release scaffold labels and do not promote exact mixed mission/trade cargo UI wording without original-runtime evidence.",
+  "oracleStatus": "mission_trade_destination_sale_pending_classic_runtime_trace",
+  "safe_local": true,
+  "sourceLabel": "terminal-velocity-mission-trade-destination-sale-scaffold",
+  "status": "productive batch checkpoint",
+  "successor_kanban_task": "t_c46ad01c",
+  "summary": "Safe-local mission/trade destination-sale cargo-release scaffold increment verified: complete_cargo_job now exposes reserved-cargo release and retained trade-cargo context, and mission_trade_destination_sale_loop verifies the intro courier releases 3 reserved tons while the 10-ton Food lot remains aboard for destination sale; exact EV Classic cargo UI wording remains pending original-runtime evidence."
+}

@@ -315,18 +315,33 @@ def _evaluate_trade_margin(state: dict[str, Any], action: dict[str, Any], trace:
 
 def _record_strategy_skill_checkpoint(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     skill = str(action['skill'])
-    trace.append({
+    active_jobs = list(state.get('activeJobs', []))
+    reserved_cargo_tons = sum(
+        int(job.get('reservedCargoTons', job.get('tons', 0)) or 0)
+        for job in active_jobs
+    )
+    cargo_used = int(state.get('cargoUsed', 0))
+    cargo_capacity = int(state.get('cargoCapacity', 0))
+    held_trade_cargo_tons = max(0, cargo_used - reserved_cargo_tons)
+    event = {
         'type': 'strategy_skill_checkpoint',
         'skill': skill,
         'currentSystem': state.get('currentSystem'),
         'landedBody': state.get('landedBody'),
         'credits': state.get('credits'),
-        'cargoUsed': state.get('cargoUsed'),
-        'activeJobs': [job.get('id') for job in state.get('activeJobs', [])],
+        'cargoUsed': cargo_used,
+        'cargoCapacity': cargo_capacity,
+        'freeCargoTons': max(0, cargo_capacity - cargo_used),
+        'reservedCargoTons': reserved_cargo_tons,
+        'heldTradeCargoTons': held_trade_cargo_tons,
+        'activeJobs': [job.get('id') for job in active_jobs],
         'completedJobs': list(state.get('completedJobs', [])),
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-strategy-skill-rotation-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'strategy_skill_progression_pending_ev_family_source_trace'),
-    })
+    }
+    if held_trade_cargo_tons:
+        event['heldTradeCargo'] = {commodity: tons for commodity, tons in state.get('cargoHold', {}).items() if tons}
+    trace.append(event)
     return True
 
 
@@ -387,6 +402,14 @@ def _route_fuel_status(state: dict[str, Any], action: dict[str, Any], trace: lis
     route_queue = list(state.get('routeQueue', []))
     fuel = int(state.get('fuel', 0))
     required = len(route_queue)
+    active_jobs = list(state.get('activeJobs', []))
+    reserved_cargo_tons = sum(
+        int(job.get('reservedCargoTons', job.get('tons', 0)) or 0)
+        for job in active_jobs
+    )
+    cargo_used = int(state.get('cargoUsed', 0))
+    cargo_capacity = int(state.get('cargoCapacity', 0))
+    held_trade_cargo_tons = max(0, cargo_used - reserved_cargo_tons)
     refuel_body = None
     recovery_hint = None
     if not route_queue:
@@ -416,9 +439,17 @@ def _route_fuel_status(state: dict[str, Any], action: dict[str, Any], trace: lis
         'fuelRequired': required,
         'fuelDeficit': max(0, required - fuel),
         'fuelStatus': fuel_status,
+        'activeMissionIds': [job.get('id') for job in active_jobs],
+        'reservedCargoTons': reserved_cargo_tons,
+        'cargoUsed': cargo_used,
+        'cargoCapacity': cargo_capacity,
+        'freeCargoTons': max(0, cargo_capacity - cargo_used),
+        'heldTradeCargoTons': held_trade_cargo_tons,
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-route-fuel-feedback-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'classic_runtime_route_fuel_feedback_pending'),
     }
+    if held_trade_cargo_tons:
+        event['heldTradeCargo'] = {commodity: tons for commodity, tons in state.get('cargoHold', {}).items() if tons}
     if reachable_prefix:
         event['nextReachableStop'] = reachable_prefix[-1]
     if blocked_tail:
@@ -2053,15 +2084,40 @@ def _pay_legal_clemency(state: dict[str, Any], action: dict[str, Any], trace: li
 def _complete_cargo_jobs(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
     remaining = []
     completed_any = False
+    total_reserved_before = sum(
+        int(job.get('reservedCargoTons', job.get('tons', 0)) or 0)
+        for job in state['activeJobs']
+    )
+    current_reserved_after = total_reserved_before
     for job in state['activeJobs']:
         if job['destinationSystem'] == state['currentSystem'] and job['destinationBody'] == state['landedBody']:
+            cargo_used_before = int(state.get('cargoUsed', 0))
+            released_reserved_cargo = int(job.get('reservedCargoTons', job.get('tons', 0)) or 0)
+            held_trade_cargo_before = max(0, cargo_used_before - current_reserved_after)
             state['credits'] += int(job['pay'])
             state['cargoUsed'] -= int(job['tons'])
+            current_reserved_after = max(0, current_reserved_after - released_reserved_cargo)
+            cargo_used_after = int(state.get('cargoUsed', 0))
+            held_trade_cargo_after = max(0, cargo_used_after - current_reserved_after)
             state['completedJobs'].append(job['id'])
             for flag in job.get('completionFlags', []):
                 if flag not in state['storyFlags']:
                     state['storyFlags'].append(flag)
-            trace.append({'type': 'complete_cargo_job', **job, 'creditsAfter': state['credits'], 'cargoUsed': state['cargoUsed']})
+            event = {
+                'type': 'complete_cargo_job',
+                **job,
+                'creditsAfter': state['credits'],
+                'cargoUsedBefore': cargo_used_before,
+                'cargoUsed': cargo_used_after,
+                'cargoCapacity': int(state.get('cargoCapacity', 0)),
+                'freeCargoTonsAfter': max(0, int(state.get('cargoCapacity', 0)) - cargo_used_after),
+                'releasedReservedCargoTons': released_reserved_cargo,
+                'heldTradeCargoTonsBefore': held_trade_cargo_before,
+                'heldTradeCargoTonsAfter': held_trade_cargo_after,
+            }
+            if held_trade_cargo_after:
+                event['heldTradeCargoAfter'] = {commodity: tons for commodity, tons in state.get('cargoHold', {}).items() if tons}
+            trace.append(event)
             completed_any = True
         else:
             remaining.append(job)
@@ -3023,6 +3079,11 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'fuel': 0}},
             {'type': 'depart'},
             {'type': 'route_to_active_mission_destination'},
+            {
+                'type': 'route_fuel_status',
+                'sourceLabel': 'terminal-velocity-mission-trade-route-fuel-cargo-scaffold',
+                'oracleStatus': 'mission_trade_route_fuel_cargo_pending_classic_runtime_trace',
+            },
             {'type': 'jump', 'destinationSystem': 'Centauri', 'expectBlocked': True},
             {'type': 'land', 'body': 'Earth'},
             {'type': 'refuel'},
@@ -3930,6 +3991,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'recorded_strategy_skill_rotation': 'passed' if [event.get('skill') for event in checkpoints] == ['merchant', 'mission_runner', 'route_planner'] else 'failed',
             'completed_strategy_trade_leg': 'passed' if any(event.get('type') == 'buy_commodity_lot' and event.get('commodity') == 'food' for event in trace) and any(event.get('type') == 'sell_commodity_lot' and event.get('commodity') == 'food' for event in trace) and any(event.get('type') == 'trade_margin_decision' and event.get('decision') == 'carry' for event in trace) else 'failed',
             'completed_strategy_mission_leg': 'passed' if 'intro_courier_earth_hera' in state.get('completedJobs', []) and state.get('cargoUsed') == 0 else 'failed',
+            'surfaced_strategy_cargo_context': 'passed' if any(event.get('skill') == 'merchant' and event.get('heldTradeCargoTons') == COMMODITY_LOT_SIZE and event.get('reservedCargoTons') == 0 and event.get('freeCargoTons') == STARTING_CARGO_CAPACITY - COMMODITY_LOT_SIZE for event in checkpoints) and any(event.get('skill') == 'mission_runner' and event.get('reservedCargoTons') == 3 and event.get('heldTradeCargoTons') == COMMODITY_LOT_SIZE and event.get('heldTradeCargo', {}).get('food') == COMMODITY_LOT_SIZE for event in checkpoints) and any(event.get('skill') == 'route_planner' and event.get('activeJobs') == ['intro_courier_earth_hera'] and event.get('reservedCargoTons') == 3 and event.get('heldTradeCargoTons') == COMMODITY_LOT_SIZE for event in checkpoints) else 'failed',
             'recorded_strategy_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-strategy-skill-rotation-scaffold' and event.get('oracleStatus') == 'strategy_skill_progression_pending_ev_family_source_trace' for event in source_events) else 'failed',
         })
     elif name == 'upgrade_readiness_strategy_loop':
@@ -4292,10 +4354,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
     elif name == 'mission_trade_refuel_delivery_loop':
         mission_trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'complete_cargo_job'}]
         route_events = [event for event in trace if event.get('type') == 'route_to_active_mission_destination']
+        route_fuel_events = [event for event in trace if event.get('type') == 'route_fuel_status']
         latest_route = route_events[-1] if route_events else {}
+        latest_route_fuel = route_fuel_events[-1] if route_fuel_events else {}
         checks.update({
             'accepted_intro_mission_and_trade_lot': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'intro_courier_earth_hera' and event.get('reservedCargoTons') == 3 for event in trace) and any(event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food' and event.get('cargoUsed') == 13 for event in trace) else 'failed',
             'surfaced_mission_trade_route_cargo_context': 'passed' if latest_route.get('missionId') == 'intro_courier_earth_hera' and latest_route.get('originSystem') == 'Sol' and latest_route.get('greenRoutePath') == ['Sol', 'Centauri'] and latest_route.get('reservedCargoTons') == 3 and latest_route.get('heldTradeCargoTons') == COMMODITY_LOT_SIZE and latest_route.get('heldTradeCargo', {}).get('food') == COMMODITY_LOT_SIZE and latest_route.get('cargoUsed') == 13 and latest_route.get('freeCargoTons') == 7 and latest_route.get('fuelWarning') is True and latest_route.get('firstBlockedStop') == 'Centauri' else 'failed',
+            'surfaced_route_fuel_cargo_context': 'passed' if latest_route_fuel.get('originSystem') == 'Sol' and latest_route_fuel.get('routeQueue') == ['Centauri'] and latest_route_fuel.get('fuelStatus') == 'empty fuel for route' and latest_route_fuel.get('activeMissionIds') == ['intro_courier_earth_hera'] and latest_route_fuel.get('reservedCargoTons') == 3 and latest_route_fuel.get('heldTradeCargoTons') == COMMODITY_LOT_SIZE and latest_route_fuel.get('heldTradeCargo', {}).get('food') == COMMODITY_LOT_SIZE and latest_route_fuel.get('cargoUsed') == 13 and latest_route_fuel.get('freeCargoTons') == 7 and latest_route_fuel.get('firstBlockedStop') == 'Centauri' and latest_route_fuel.get('sourceLabel') == 'terminal-velocity-mission-trade-route-fuel-cargo-scaffold' and latest_route_fuel.get('oracleStatus') == 'mission_trade_route_fuel_cargo_pending_classic_runtime_trace' else 'failed',
             'blocked_delivery_leg_on_low_fuel': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('destinationSystem') == 'Centauri' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
             'refueled_before_delivery_leg': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
             'completed_delivery_with_trade_cargo_held': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['intro_courier_earth_hera'] and state.get('cargoUsed') == COMMODITY_LOT_SIZE and int(state.get('cargoHold', {}).get('food', 0)) == COMMODITY_LOT_SIZE and state.get('credits') == STARTING_CREDITS - (42 * COMMODITY_LOT_SIZE) + 1800 else 'failed',
@@ -4306,6 +4371,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         checks.update({
             'accepted_intro_mission_and_trade_lot': 'passed' if any(event.get('type') == 'accept_cargo_job' and event.get('id') == 'intro_courier_earth_hera' and event.get('reservedCargoTons') == 3 for event in trace) and any(event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food' and event.get('cargoUsed') == 13 for event in trace) else 'failed',
             'delivered_mission_before_trade_sale': 'passed' if any(event.get('type') == 'complete_cargo_job' and event.get('id') == 'intro_courier_earth_hera' for event in trace) and state.get('completedJobs') == ['intro_courier_earth_hera'] else 'failed',
+            'surfaced_delivery_cargo_release_context': 'passed' if any(event.get('type') == 'complete_cargo_job' and event.get('id') == 'intro_courier_earth_hera' and event.get('cargoUsedBefore') == 13 and event.get('releasedReservedCargoTons') == 3 and event.get('heldTradeCargoTonsBefore') == COMMODITY_LOT_SIZE and event.get('heldTradeCargoTonsAfter') == COMMODITY_LOT_SIZE and event.get('heldTradeCargoAfter', {}).get('food') == COMMODITY_LOT_SIZE and event.get('freeCargoTonsAfter') == 10 for event in trace) else 'failed',
             'sold_trade_cargo_at_destination_market': 'passed' if any(event.get('type') == 'sell_commodity_lot' and event.get('system') == 'Centauri' and event.get('body') == 'Luna' and event.get('commodity') == 'food' and event.get('unitPrice') == 49 and event.get('cargoUsed') == 0 for event in trace) and state.get('cargoUsed') == 0 and int(state.get('cargoHold', {}).get('food', 0)) == 0 and state.get('credits') == STARTING_CREDITS - (42 * COMMODITY_LOT_SIZE) + 1800 + (49 * COMMODITY_LOT_SIZE) else 'failed',
             'recorded_destination_sale_source_boundary': 'passed' if mission_trade_events and all(event.get('sourceLabel') == 'terminal-velocity-mission-trade-destination-sale-scaffold' and event.get('oracleStatus') == 'mission_trade_destination_sale_pending_classic_runtime_trace' for event in mission_trade_events) else 'failed',
         })

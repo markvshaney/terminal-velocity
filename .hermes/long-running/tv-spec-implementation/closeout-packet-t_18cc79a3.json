@@ -1,0 +1,19 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "classification": "continue",
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "known_unrelated_failure_surface": "",
+  "next_resume_action": "Successor Kanban task t_6cf23923 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve route-fuel cargo-context scaffold labels and do not promote exact EV Classic Mission Computer/map wording without original-runtime evidence.",
+  "oracleStatus": "mission_trade_route_fuel_cargo_pending_classic_runtime_trace",
+  "safe_local": true,
+  "sourceLabel": "terminal-velocity-mission-trade-route-fuel-cargo-scaffold",
+  "status": "productive batch checkpoint",
+  "successor_kanban_task": "t_6cf23923",
+  "summary": "Safe-local mission/trade route-fuel cargo-context scaffold increment verified: route_fuel_status now distinguishes active mission reserved cargo from retained Food trade cargo during mission_trade_refuel_delivery_loop low-fuel recovery; exact EV Classic Mission Computer/map wording remains pending original-runtime evidence."
+}

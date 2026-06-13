@@ -1,0 +1,19 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "classification": "continue",
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "known_unrelated_failure_surface": "",
+  "next_resume_action": "Successor Kanban task t_4ad7b9e5 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve strategy cargo-context scaffold labels and do not promote exact EV Classic strategy/progression UI wording without original-runtime/manual/source evidence.",
+  "oracleStatus": "strategy_skill_progression_pending_ev_family_source_trace",
+  "safe_local": true,
+  "sourceLabel": "terminal-velocity-strategy-skill-rotation-scaffold",
+  "status": "productive batch checkpoint",
+  "successor_kanban_task": "t_4ad7b9e5",
+  "summary": "Safe-local strategy-skill cargo-context scaffold increment verified: strategy_skill_checkpoint now exposes reserved mission cargo, free cargo, and retained Food trade cargo context; strategy_skill_rotation_loop verifies merchant/mission_runner/route_planner checkpoints distinguish the 3-ton courier reservation from the 10-ton Food lot before delivery. Exact EV Classic strategy/progression UI wording remains pending original-runtime/manual/source evidence."
+}
