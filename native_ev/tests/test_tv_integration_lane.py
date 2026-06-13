@@ -194,6 +194,45 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertTrue(all("tv_gate_normalization" in row[1] for row in comments))
             self.assertEqual([row[1] for row in events], ["tv_gate_normalized", "tv_gate_normalized"])
 
+    def test_recover_push_ready_handoff_dry_run_plans_stale_clean_handoff_closeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, _db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+
+            code, payload = self.run_integrator(repo, "--recover-push-ready-handoff", "--profile", str(profile))
+
+            self.assertEqual(code, 0, payload)
+            recovery = payload["push_ready_recovery"]
+            self.assertFalse(recovery["applied"])
+            self.assertEqual(recovery["recommended_action"], "close_stale_push_ready_handoffs")
+            self.assertEqual([item["task_id"] for item in recovery["planned_closeouts"]], ["t_push"])
+            self.assertEqual(recovery["skipped"]["t_review"], "review_required_process_bug")
+            self.assertEqual(recovery["skipped"]["t_unsafe"], "unsafe_dirty_state")
+
+    def test_recover_push_ready_handoff_apply_closes_stale_clean_handoff_idempotently(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+
+            first_code, first_payload = self.run_integrator(repo, "--recover-push-ready-handoff", "--apply-push-ready-recovery", "--profile", str(profile))
+            second_code, second_payload = self.run_integrator(repo, "--recover-push-ready-handoff", "--apply-push-ready-recovery", "--profile", str(profile))
+
+            self.assertEqual(first_code, 0, first_payload)
+            self.assertEqual(second_code, 0, second_payload)
+            self.assertEqual(first_payload["push_ready_recovery"]["closeouts_written"], 1)
+            self.assertEqual(second_payload["push_ready_recovery"]["closeouts_written"], 0)
+            conn = sqlite3.connect(db)
+            try:
+                status = conn.execute("SELECT status FROM tasks WHERE id = 't_push'").fetchone()[0]
+                comments = conn.execute("SELECT task_id, body FROM task_comments WHERE task_id = 't_push' ORDER BY id").fetchall()
+                events = conn.execute("SELECT task_id, kind FROM task_events WHERE task_id = 't_push' ORDER BY id").fetchall()
+            finally:
+                conn.close()
+            self.assertEqual(status, "done")
+            self.assertEqual(len(comments), 1)
+            self.assertIn("tv_push_ready_recovery", comments[0][1])
+            self.assertEqual([row[1] for row in events], ["tv_push_ready_recovered"])
+
 
 if __name__ == "__main__":
     unittest.main()
