@@ -1,0 +1,40 @@
+{
+  "branch": "main",
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/event-blocked-route-progress-context-20260613T204325Z.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_dd13e3b2.json"
+  ],
+  "completion_recommendation": "safe-local code/docs increment verified; ready for review/integration checkpoint rather than EV Classic fidelity promotion",
+  "event_packet": ".hermes/long-running/tv-spec-implementation/event-blocked-route-progress-context-20260613T204325Z.json",
+  "head_before_slice": "f123bf98a1f0844de0ff0baeee8b392f955478f8",
+  "kanban_task": "t_dd13e3b2",
+  "source_fidelity_boundary": {
+    "caveat": "Exact EV Classic blocked-route, low-fuel, and near-center refusal UI wording/timing remain pending original-runtime capture.",
+    "promotion_status": "scaffold_only; no EV Classic UI/fidelity promotion for helper route-progress context without original-runtime evidence",
+    "preserved_labels": [
+      "terminal-velocity-navigation-guardrail-scaffold for blocked hyperspace refusal helpers",
+      "classic_runtime_jump_refusal_ui_pending for low-fuel blocked jump refusal UI",
+      "original-runtime-observed for near-center refusal existence",
+      "near_center_jump_failure_observed_exact_distance_pending for exact near-center threshold/timing boundary"
+    ]
+  },
+  "summary": "Added structured blocked routeProgress context for queued-route low-fuel and near-center hyperspace refusals, preserving route/fuel/system state and keeping the behavior labeled as Terminal Velocity helper/scaffold pending stronger EV Classic runtime UI evidence.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-13T20:43:25Z",
+  "verification": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build and python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
+    "focused_near_center_and_route_progress_unittests": "passed; focused ScenarioEvalHarnessTests covering near_center_jump_block and route-progress scenarios; selected tests OK",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -q; Ran 103 tests OK",
+    "runner_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "targeted_low_fuel_scenario": "passed; python3 tools/run_gameplay_scenarios.py manual_route_low_fuel_recovery_landing_loop --pretty; success true with surfaced_blocked_route_progress_feedback passed",
+    "targeted_near_center_scenario": "passed; python3 tools/run_gameplay_scenarios.py near_center_jump_block --pretty; success true with surfaced_near_center_route_progress_feedback passed"
+  }
+}

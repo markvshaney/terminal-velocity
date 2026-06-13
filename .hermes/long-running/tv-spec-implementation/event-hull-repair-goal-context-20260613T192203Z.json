@@ -1,0 +1,41 @@
+{
+  "backlog_update": "none; implementation surfaces existing hull_plating_repair_loop and balanced_upgrade_trade_loop checks without changing dispatch/backlog future execution state.",
+  "behavior_claim": "Native EV gameplay scenario checkpoints now surface active/completed hull repair goal context for Hull Plating repair and balanced-upgrade final refit loops.",
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "event": "increment_verified",
+  "event_id": "hull-repair-goal-context-20260613T192203Z",
+  "lane_class": "native gameplay scenario increment",
+  "long_running_task": "tv-spec-implementation",
+  "next_resume_action": "Successor continuation should run standard preflight, inspect live dirty state, then choose the next safe source-labeled EV Classic fidelity backlog slice or hand off to integration owner if checkpoint policy requires publication.",
+  "oracle_class": "tv-scaffold/evaluator",
+  "promotion_status": "scaffold_pending_original_runtime_trace",
+  "source_basis": "Terminal Velocity deterministic scenario evaluator scaffold; no exact EV Classic runtime repair/outfitter semantics promoted.",
+  "source_fidelity_labels": {
+    "balanced_upgrade_oracleStatus": "balanced_upgrade_budget_pending_classic_runtime_trace",
+    "balanced_upgrade_sourceLabel": "terminal-velocity-balanced-upgrade-trade-scaffold",
+    "hull_plating_refit_oracleStatus": "hull_plating_repair_pending_classic_runtime_trace",
+    "hull_plating_refit_sourceLabel": "terminal-velocity-hull-plating-repair-scaffold",
+    "repair_service_oracleStatus": "repair_service_pending_ev_classic_runtime_trace",
+    "repair_service_sourceLabel": "terminal-velocity-repair-service-scaffold"
+  },
+  "successor_kanban_task": "t_4d550a4f",
+  "task_id": "t_3f025aee",
+  "timestamp": "2026-06-13T19:22:03Z",
+  "uncertainty_gates": [
+    "exact EV Classic repair/outfitter UI/runtime semantics remain pending original-runtime/manual/source confirmation"
+  ],
+  "verification": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_closeout_guard": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build; wrote ev-classic-fidelity-implementation-backlog.index.json; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
+    "targeted_scenario_balanced_upgrade": "passed; python3 tools/run_gameplay_scenarios.py balanced_upgrade_trade_loop --pretty; surfaced_final_hull_repair_goal_context=passed",
+    "targeted_scenario_hull_plating": "passed; python3 tools/run_gameplay_scenarios.py hull_plating_repair_loop --pretty; surfaced_hull_repair_goal_context=passed",
+    "targeted_unittest_balanced_upgrade": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_balanced_upgrade_trade_loop_funds_final_refit_with_trade_run -v; Ran 1 test OK",
+    "targeted_unittest_hull_plating": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_hull_plating_repair_loop_buys_armor_and_repairs_added_hull -v; Ran 1 test OK"
+  }
+}

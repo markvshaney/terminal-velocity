@@ -194,6 +194,10 @@ def initial_gameplay_state() -> dict[str, Any]:
         'completedCargoExpansionGoals': [],
         'activeFuelReserveGoal': {},
         'completedFuelReserveGoals': [],
+        'activeHullRepairGoal': {},
+        'completedHullRepairGoals': [],
+        'activeRepairFundingGoal': {},
+        'completedRepairFundingGoals': [],
         'maxHull': 100,
         'currentHull': 100,
         'playerDisabled': False,
@@ -321,7 +325,26 @@ def _evaluate_trade_margin(state: dict[str, Any], action: dict[str, Any], trace:
     )
     free_cargo_tons = max(0, cargo_capacity - cargo_used)
     enough_free_cargo = free_cargo_tons >= lot_tons
-    trace.append({
+    repair_funding_goal = None
+    max_hull = int(state.get('maxHull', 0))
+    current_hull = int(state.get('currentHull', max_hull))
+    if 'repair' in str(action.get('sourceLabel', '')) and current_hull < max_hull and margin > 0:
+        repair_price = int(outfit_manifest().get('repair', {}).get('pricePerHullPoint', 8))
+        repair_funding_goal = {
+            'type': 'repair_funding',
+            'commodity': commodity,
+            'originSystem': origin,
+            'destinationSystem': destination,
+            'hullBeforeRepair': current_hull,
+            'maxHull': max_hull,
+            'hullRepairNeeded': max_hull - current_hull,
+            'repairCost': (max_hull - current_hull) * repair_price,
+            'creditsAtGoal': int(state.get('credits', 0)),
+            'lotTons': lot_tons,
+            'projectedLotProfit': margin * lot_tons,
+        }
+        state['activeRepairFundingGoal'] = repair_funding_goal
+    event = {
         'type': 'trade_margin_decision',
         'commodity': commodity,
         'originSystem': origin,
@@ -343,7 +366,10 @@ def _evaluate_trade_margin(state: dict[str, Any], action: dict[str, Any], trace:
         'recoveryHint': 'skip non-positive return cargo and finish the active contract chain' if margin <= 0 else 'carry only if mission deadlines, route fuel, and free hold margins stay safe',
         'sourceLabel': action.get('sourceLabel', 'terminal-velocity-trade-margin-scaffold'),
         'oracleStatus': action.get('oracleStatus', 'trade_margin_pending_classic_runtime_trace'),
-    })
+    }
+    if repair_funding_goal is not None:
+        event['activeRepairFundingGoal'] = dict(repair_funding_goal)
+    trace.append(event)
     return True
 
 
@@ -377,6 +403,10 @@ def _record_strategy_skill_checkpoint(state: dict[str, Any], action: dict[str, A
         'completedCargoExpansionGoals': list(state.get('completedCargoExpansionGoals', [])),
         'activeFuelReserveGoal': dict(state.get('activeFuelReserveGoal', {})),
         'completedFuelReserveGoals': list(state.get('completedFuelReserveGoals', [])),
+        'activeHullRepairGoal': dict(state.get('activeHullRepairGoal', {})),
+        'completedHullRepairGoals': list(state.get('completedHullRepairGoals', [])),
+        'activeRepairFundingGoal': dict(state.get('activeRepairFundingGoal', {})),
+        'completedRepairFundingGoals': list(state.get('completedRepairFundingGoals', [])),
         'activePurchaseGoal': dict(state.get('activePurchaseGoal', {})),
         'completedPurchaseGoals': list(state.get('completedPurchaseGoals', [])),
         'activeShipTransferGoal': dict(state.get('activeShipTransferGoal', {})),
@@ -1481,8 +1511,23 @@ def _blocked_jump_event(
     event: dict[str, Any] = {'type': 'blocked_jump', 'originSystem': origin, 'destinationSystem': destination, 'reason': reason}
     if route_queue:
         event['routeQueue'] = list(route_queue)
+        event['routeProgress'] = {
+            'completedQueuedStop': False,
+            'completedRouteStop': None,
+            'routeLengthBefore': len(route_queue),
+            'routeLengthAfter': len(route_queue),
+            'nextRouteStop': route_queue[0],
+            'routeComplete': False,
+            'blockedBeforeProgress': True,
+            'blockedReason': reason,
+            'blockedOriginSystem': origin,
+            'blockedDestinationSystem': destination,
+        }
     if state is not None:
         event['fuel'] = int(state.get('fuel', 0))
+        if route_queue and reason == 'insufficient fuel':
+            event['routeProgress']['blockedFuel'] = int(state.get('fuel', 0))
+            event['routeProgress']['fuelRequired'] = 1
     if universe is not None:
         event['linkedStopsFromOrigin'] = list(_system(universe, origin).get('links', []))
     if reason == 'no destination selected':
@@ -1550,6 +1595,9 @@ def _jump(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, A
         )
         event['distanceFromSystemCenter'] = distance_from_center
         event['minJumpDistance'] = MIN_JUMP_DISTANCE
+        if 'routeProgress' in event:
+            event['routeProgress']['blockedDistanceFromSystemCenter'] = distance_from_center
+            event['routeProgress']['minJumpDistance'] = MIN_JUMP_DISTANCE
         event['sourceLabel'] = 'original-runtime-observed'
         event['oracleStatus'] = 'near_center_jump_failure_observed_exact_distance_pending'
         trace.append(event)
@@ -1559,10 +1607,29 @@ def _jump(state: dict[str, Any], action: dict[str, Any], trace: list[dict[str, A
     state['landedBody'] = None
     state['fuel'] -= 1
     state['distanceFromSystemCenter'] = 0
-    if previous_route and previous_route[0] == destination:
+    completed_queued_stop = bool(previous_route and previous_route[0] == destination)
+    if completed_queued_stop:
         state['routeQueue'].pop(0)
+    remaining_route = list(state.get('routeQueue', []))
     state['knownSystems'] = sorted(set(state.get('knownSystems', [])) | {destination} | set(_system(universe, destination).get('links', [])))
-    trace.append({'type': 'jump', 'originSystem': origin, 'destinationSystem': destination, 'fuelAfter': state['fuel'], 'previousRoute': previous_route, 'remainingRoute': list(state.get('routeQueue', []))})
+    trace.append({
+        'type': 'jump',
+        'originSystem': origin,
+        'destinationSystem': destination,
+        'fuelAfter': state['fuel'],
+        'previousRoute': previous_route,
+        'remainingRoute': remaining_route,
+        'routeProgress': {
+            'completedQueuedStop': completed_queued_stop,
+            'completedRouteStop': destination if completed_queued_stop else None,
+            'routeLengthBefore': len(previous_route),
+            'routeLengthAfter': len(remaining_route),
+            'nextRouteStop': remaining_route[0] if remaining_route else None,
+            'routeComplete': completed_queued_stop and not remaining_route,
+        },
+        'sourceLabel': state.get('routeSourceLabel') or 'terminal-velocity-navigation-scaffold',
+        'oracleStatus': 'route_progress_feedback_pending_ev_classic_ui_trace',
+    })
     return True
 
 
@@ -1643,11 +1710,56 @@ def _repair_hull(state: dict[str, Any], _action: dict[str, Any], trace: list[dic
     repair_price = int(outfit_manifest().get('repair', {}).get('pricePerHullPoint', 8))
     cost = missing * repair_price
     if int(state.get('credits', 0)) < cost:
-        trace.append({'type': 'blocked_repair_hull', 'reason': 'insufficient credits', 'system': state['currentSystem'], 'body': state['landedBody'], 'cost': cost, 'credits': state.get('credits', 0), 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
+        blocked_event = {
+            'type': 'blocked_repair_hull',
+            'reason': 'insufficient credits',
+            'system': state['currentSystem'],
+            'body': state['landedBody'],
+            'hullBefore': hull_before,
+            'maxHull': max_hull,
+            'hullRepairNeeded': missing,
+            'pricePerHullPoint': repair_price,
+            'cost': cost,
+            'credits': state.get('credits', 0),
+            'creditDeficit': cost - int(state.get('credits', 0)),
+            'sourceLabel': 'terminal-velocity-repair-service-scaffold',
+            'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace',
+        }
+        if state.get('activeHullRepairGoal'):
+            blocked_event['activeHullRepairGoal'] = dict(state.get('activeHullRepairGoal', {}))
+        if state.get('activeRepairFundingGoal'):
+            blocked_event['activeRepairFundingGoal'] = dict(state.get('activeRepairFundingGoal', {}))
+        trace.append(blocked_event)
         return False
+    active_hull_repair_goal = dict(state.get('activeHullRepairGoal', {}))
+    active_repair_funding_goal = dict(state.get('activeRepairFundingGoal', {}))
+    completed_hull_repair_goal = None
+    completed_repair_funding_goal = None
+    if active_hull_repair_goal.get('type') == 'hull_repair' and int(active_hull_repair_goal.get('hullAfterUpgrade', 0)) == max_hull:
+        completed_hull_repair_goal = {
+            **active_hull_repair_goal,
+            'repairCost': cost,
+            'completedHull': max_hull,
+            'completedAtCredits': int(state.get('credits', 0)) - cost,
+        }
+        state.setdefault('completedHullRepairGoals', []).append(completed_hull_repair_goal)
+        state.pop('activeHullRepairGoal', None)
+    if active_repair_funding_goal.get('type') == 'repair_funding' and int(active_repair_funding_goal.get('hullBeforeRepair', -1)) == hull_before and int(active_repair_funding_goal.get('maxHull', 0)) == max_hull:
+        completed_repair_funding_goal = {
+            **active_repair_funding_goal,
+            'completedHull': max_hull,
+            'completedAtCredits': int(state.get('credits', 0)) - cost,
+        }
+        state.setdefault('completedRepairFundingGoals', []).append(completed_repair_funding_goal)
+        state.pop('activeRepairFundingGoal', None)
     state['credits'] = int(state.get('credits', 0)) - cost
     state['currentHull'] = max_hull
-    trace.append({'type': 'repair_hull', 'system': state['currentSystem'], 'body': state['landedBody'], 'hullBefore': hull_before, 'hullAfter': state['currentHull'], 'maxHull': max_hull, 'pricePerHullPoint': repair_price, 'cost': cost, 'creditsAfter': state['credits'], 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'})
+    repair_event = {'type': 'repair_hull', 'system': state['currentSystem'], 'body': state['landedBody'], 'hullBefore': hull_before, 'hullAfter': state['currentHull'], 'maxHull': max_hull, 'pricePerHullPoint': repair_price, 'cost': cost, 'creditsAfter': state['credits'], 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace'}
+    if completed_hull_repair_goal is not None:
+        repair_event['completedHullRepairGoal'] = completed_hull_repair_goal
+    if completed_repair_funding_goal is not None:
+        repair_event['completedRepairFundingGoal'] = completed_repair_funding_goal
+    trace.append(repair_event)
     return True
 
 
@@ -1894,9 +2006,21 @@ def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: 
     else:
         state['ownedOutfits'][item_id] = int(state['ownedOutfits'].get(item_id, 0)) + 1
         effects = item.get('effects', {})
+        hull_before_upgrade = int(state.get('maxHull', 0))
         state['cargoCapacity'] += int(effects.get('cargoSpace', 0))
         state['maxHull'] += int(effects.get('maxHull', 0))
         state['maxFuel'] += int(effects.get('maxFuel', 0))
+        if int(effects.get('maxHull', 0)) > 0 and int(state.get('currentHull', 0)) < int(state.get('maxHull', 0)):
+            state['activeHullRepairGoal'] = {
+                'type': 'hull_repair',
+                'itemId': item_id,
+                'hullBeforeUpgrade': hull_before_upgrade,
+                'hullAfterUpgrade': int(state.get('maxHull', 0)),
+                'currentHullAtGoal': int(state.get('currentHull', 0)),
+                'hullRepairNeeded': int(state.get('maxHull', 0)) - int(state.get('currentHull', 0)),
+                'system': state['currentSystem'],
+                'body': state['landedBody'],
+            }
         if active_fuel_reserve_goal.get('type') == 'fuel_reserve' and active_fuel_reserve_goal.get('itemId') == item_id and int(effects.get('maxFuel', 0)) > 0:
             completed_fuel_reserve_goal = {
                 **active_fuel_reserve_goal,
@@ -1926,6 +2050,8 @@ def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: 
         trace[-1]['completedPurchaseGoal'] = completed_purchase_goal
     if completed_fuel_reserve_goal is not None:
         trace[-1]['completedFuelReserveGoal'] = completed_fuel_reserve_goal
+    if state.get('activeHullRepairGoal', {}).get('itemId') == item_id:
+        trace[-1]['activeHullRepairGoal'] = dict(state['activeHullRepairGoal'])
     return True
 
 
@@ -2630,6 +2756,10 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'armor_refit_gap', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'buy_outfit_or_weapon', 'itemId': 'hull_plating', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'hull_plating_upgrade', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'set_state', 'values': {'credits': 50}},
+            {'type': 'repair_hull', 'expectBlocked': True},
+            {'type': 'record_strategy_skill_checkpoint', 'skill': 'repair_service_credit_gap', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'set_state', 'values': {'credits': 8200}},
             {'type': 'repair_hull'},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'repair_service_fill', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
         ]
@@ -2873,6 +3003,7 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'repair_margin_gap', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
+            {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace', 'expectBlocked': True},
             {'type': 'depart'},
             {'type': 'jump', 'destinationSystem': START_SYSTEM},
             {'type': 'land', 'body': START_BODY},
@@ -2903,6 +3034,7 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status}
             for _ in range(3)
         ] + [
+            {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace', 'expectBlocked': True},
             {'type': 'depart'},
             {'type': 'jump', 'destinationSystem': START_SYSTEM},
             {'type': 'land', 'body': START_BODY},
@@ -2936,6 +3068,7 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status}
             for _ in range(3)
         ] + [
+            {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace', 'expectBlocked': True},
             {'type': 'set_state', 'values': {'fuel': 1}},
             {'type': 'depart'},
             {'type': 'jump', 'destinationSystem': START_SYSTEM},
@@ -2988,6 +3121,7 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'buy_commodity_lot', 'commodity': 'food', 'sourceLabel': source_label, 'oracleStatus': oracle_status}
             for _ in range(3)
         ] + [
+            {'type': 'repair_hull', 'sourceLabel': 'terminal-velocity-repair-service-scaffold', 'oracleStatus': 'repair_service_pending_ev_classic_runtime_trace', 'expectBlocked': True},
             {'type': 'set_state', 'values': {'fuel': 1}},
             {'type': 'depart'},
             {'type': 'jump', 'destinationSystem': START_SYSTEM},
@@ -4178,10 +4312,13 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
         outfit_events = [event for event in trace if event.get('type') == 'buy_outfit_or_weapon' and event.get('itemId') == 'hull_plating']
         repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        blocked_repair_events = [event for event in trace if event.get('type') == 'blocked_repair_hull' and event.get('reason') == 'insufficient credits']
         source_events = checkpoints + outfit_events
         checks.update({
             'bought_hull_plating_upgrade': 'passed' if outfit_events and outfit_events[-1].get('maxHull') == STARTING_MAX_HULL + 25 and state.get('ownedOutfits', {}).get('hull_plating') == 1 else 'failed',
             'repaired_added_hull_capacity': 'passed' if repair_events and repair_events[-1].get('hullBefore') == STARTING_MAX_HULL and repair_events[-1].get('hullAfter') == STARTING_MAX_HULL + 25 and repair_events[-1].get('cost') == 25 * 8 and state.get('currentHull') == state.get('maxHull') == STARTING_MAX_HULL + 25 else 'failed',
+            'surfaced_hull_repair_goal_context': 'passed' if any(event.get('itemId') == 'hull_plating' and event.get('activeHullRepairGoal', {}).get('hullRepairNeeded') == 25 for event in outfit_events) and any(event.get('skill') == 'hull_plating_upgrade' and event.get('activeHullRepairGoal', {}).get('itemId') == 'hull_plating' and event.get('activeHullRepairGoal', {}).get('hullAfterUpgrade') == STARTING_MAX_HULL + 25 for event in checkpoints) and any(event.get('completedHullRepairGoal', {}).get('itemId') == 'hull_plating' and event.get('completedHullRepairGoal', {}).get('completedHull') == STARTING_MAX_HULL + 25 for event in repair_events) and any(event.get('skill') == 'repair_service_fill' and event.get('activeHullRepairGoal') == {} and event.get('completedHullRepairGoals', [{}])[-1].get('itemId') == 'hull_plating' for event in checkpoints) else 'failed',
+            'surfaced_blocked_hull_repair_credit_context': 'passed' if blocked_repair_events and blocked_repair_events[-1].get('cost') == 200 and blocked_repair_events[-1].get('credits') == 50 and blocked_repair_events[-1].get('creditDeficit') == 150 and blocked_repair_events[-1].get('activeHullRepairGoal', {}).get('itemId') == 'hull_plating' and any(event.get('skill') == 'repair_service_credit_gap' and event.get('activeHullRepairGoal', {}).get('hullRepairNeeded') == 25 for event in checkpoints) else 'failed',
             'recorded_hull_refit_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-hull-plating-repair-scaffold' and event.get('oracleStatus') == 'hull_plating_repair_pending_classic_runtime_trace' for event in source_events) and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
         })
     elif name == 'balanced_upgrade_trade_loop':
@@ -4197,6 +4334,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_cargo_fuel_and_hull_upgrades': 'passed' if state.get('ownedOutfits', {}).get('cargo_pod') == 1 and state.get('ownedOutfits', {}).get('fuel_tank') == 1 and state.get('ownedOutfits', {}).get('hull_plating') == 1 and state.get('cargoCapacity') == STARTING_CARGO_CAPACITY + 10 and state.get('maxFuel') == STARTING_FUEL + 25 and state.get('maxHull') == STARTING_MAX_HULL + 25 else 'failed',
             'repaired_final_hull_refit': 'passed' if repair_events and repair_events[-1].get('hullBefore') == STARTING_MAX_HULL and repair_events[-1].get('hullAfter') == STARTING_MAX_HULL + 25 and state.get('currentHull') == STARTING_MAX_HULL + 25 and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' else 'failed',
             'surfaced_outfit_purchase_goal_context': 'passed' if any(event.get('itemId') == 'hull_plating' and event.get('purchaseGoal', {}).get('creditDeficit', 0) > 0 for event in blocked_outfit_events) and any(event.get('skill') == 'budget_gap_after_cargo_and_fuel' and event.get('activePurchaseGoal', {}).get('itemId') == 'hull_plating' for event in checkpoints) and any(event.get('itemId') == 'hull_plating' and event.get('completedPurchaseGoal', {}).get('itemId') == 'hull_plating' for event in outfit_events) and any(event.get('skill') == 'balanced_refit_complete' and event.get('activePurchaseGoal') == {} and event.get('completedPurchaseGoals', []) for event in checkpoints) else 'failed',
+            'surfaced_final_hull_repair_goal_context': 'passed' if any(event.get('itemId') == 'hull_plating' and event.get('activeHullRepairGoal', {}).get('hullRepairNeeded') == 25 for event in outfit_events) and any(event.get('completedHullRepairGoal', {}).get('itemId') == 'hull_plating' and event.get('completedHullRepairGoal', {}).get('repairCost') == 200 for event in repair_events) and any(event.get('skill') == 'balanced_refit_complete' and event.get('activeHullRepairGoal') == {} and event.get('completedHullRepairGoals', [{}])[-1].get('completedHull') == STARTING_MAX_HULL + 25 for event in checkpoints) else 'failed',
             'recorded_balanced_upgrade_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-balanced-upgrade-trade-scaffold' and event.get('oracleStatus') == 'balanced_upgrade_budget_pending_classic_runtime_trace' for event in source_events) and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
         })
     elif name == 'light_freighter_capacity_trade_loop':
@@ -4305,13 +4443,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         decisions = [event for event in trace if event.get('type') == 'trade_margin_decision']
         trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
         repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        blocked_repair_events = [event for event in trace if event.get('type') == 'blocked_repair_hull']
         source_events = checkpoints + buy_ship_events + decisions + trade_events
         checks.update({
             'bought_light_freighter_for_repair_margin': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
             'identified_profitable_repair_margin_food': 'passed' if any(event.get('commodity') == 'food' and event.get('originSystem') == 'Sol' and event.get('destinationSystem') == START_SYSTEM and event.get('marginPerTon') == 78 and event.get('decision') == 'carry' for event in decisions) else 'failed',
             'funded_repair_with_margin_sale': 'passed' if len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 2 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 2 and any(event.get('type') == 'sell_commodity_lot' and int(event.get('creditsAfter', 0)) >= 320 for event in trade_events) else 'failed',
+            'blocked_repair_after_allocating_margin_capital': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('hullBefore') == 260 and event.get('maxHull') == 300 and event.get('hullRepairNeeded') == 40 and event.get('cost') == 320 and event.get('credits') == 0 and event.get('creditDeficit') == 320 and event.get('activeRepairFundingGoal', {}).get('projectedLotProfit') == 780 for event in blocked_repair_events) else 'failed',
             'repaired_light_freighter_hull_after_trade': 'passed' if repair_events and repair_events[-1].get('system') == 'Sol' and repair_events[-1].get('body') == 'Earth' and repair_events[-1].get('hullBefore') == 260 and repair_events[-1].get('hullAfter') == 300 and repair_events[-1].get('cost') == 320 and state.get('currentHull') == 300 and state.get('maxHull') == 300 else 'failed',
-            'recorded_light_freighter_repair_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
+            'surfaced_repair_funding_goal_context': 'passed' if any(event.get('commodity') == 'food' and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 and event.get('activeRepairFundingGoal', {}).get('projectedLotProfit') == 780 for event in decisions) and any(event.get('skill') == 'repair_margin_gap' and event.get('activeRepairFundingGoal', {}).get('hullRepairNeeded') == 40 for event in checkpoints) and any(event.get('completedRepairFundingGoal', {}).get('commodity') == 'food' and event.get('completedRepairFundingGoal', {}).get('completedHull') == 300 for event in repair_events) and any(event.get('skill') == 'light_freighter_repaired' and event.get('activeRepairFundingGoal') == {} and event.get('completedRepairFundingGoals', [{}])[-1].get('repairCost') == 320 for event in checkpoints) else 'failed',
+            'recorded_light_freighter_repair_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and blocked_repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events + blocked_repair_events) else 'failed',
         })
     elif name == 'light_freighter_repair_mission_margin_loop':
         checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
@@ -4321,14 +4462,17 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         decisions = [event for event in trace if event.get('type') == 'trade_margin_decision']
         trade_events = [event for event in trace if event.get('type') in {'buy_commodity_lot', 'sell_commodity_lot'}]
         repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        blocked_repair_events = [event for event in trace if event.get('type') == 'blocked_repair_hull']
         source_events = checkpoints + buy_ship_events + mission_accepts + complete_events + decisions + trade_events
         checks.update({
             'bought_light_freighter_for_repair_mission_margin': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
             'reserved_bulk_delivery_while_damaged': 'passed' if mission_accepts and mission_accepts[-1].get('id') == 'levo_bulk_repair_margin_supply' and mission_accepts[-1].get('reservedCargoTons') == 120 and mission_accepts[-1].get('cargoUsed') == 120 and any(event.get('skill') == 'damaged_freighter_mission_margin_choice' for event in checkpoints) else 'failed',
             'filled_remaining_hold_with_profitable_repair_cargo': 'passed' if any(event.get('commodity') == 'food' and event.get('originSystem') == 'Sol' and event.get('destinationSystem') == START_SYSTEM and event.get('marginPerTon') == 78 and event.get('decision') == 'carry' for event in decisions) and any(event.get('commodity') == 'equipment' and event.get('originSystem') == START_SYSTEM and event.get('destinationSystem') == 'Sol' and event.get('marginPerTon') == -210 and event.get('decision') == 'skip' for event in decisions) and len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 3 and max([event.get('cargoUsed', 0) for event in trade_events], default=0) == 150 else 'failed',
             'completed_bulk_mission_and_sold_repair_margin_cargo': 'passed' if complete_events and complete_events[-1].get('id') == 'levo_bulk_repair_margin_supply' and complete_events[-1].get('cargoUsed') == 30 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 3 and any(event.get('skill') == 'mission_margin_repair_budget' for event in checkpoints) else 'failed',
+            'blocked_repair_after_mission_margin_capital_allocation': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('hullBefore') == 260 and event.get('maxHull') == 300 and event.get('hullRepairNeeded') == 40 and event.get('cost') == 320 and event.get('credits') == 0 and event.get('creditDeficit') == 320 and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 and event.get('activeRepairFundingGoal', {}).get('projectedLotProfit') == 780 for event in blocked_repair_events) else 'failed',
             'repaired_light_freighter_after_bulk_mission_margin': 'passed' if repair_events and repair_events[-1].get('system') == 'Sol' and repair_events[-1].get('body') == 'Earth' and repair_events[-1].get('hullBefore') == 260 and repair_events[-1].get('hullAfter') == 300 and repair_events[-1].get('cost') == 320 and state.get('currentHull') == 300 and state.get('maxHull') == 300 and state.get('credits') == 9302 else 'failed',
-            'recorded_light_freighter_repair_mission_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-mission-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_mission_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
+            'surfaced_mission_repair_funding_goal_context': 'passed' if any(event.get('commodity') == 'food' and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 and event.get('activeRepairFundingGoal', {}).get('projectedLotProfit') == 780 for event in decisions) and any(event.get('skill') == 'damaged_freighter_mission_margin_choice' and event.get('activeRepairFundingGoal', {}).get('hullRepairNeeded') == 40 for event in checkpoints) and any(event.get('completedRepairFundingGoal', {}).get('commodity') == 'food' and event.get('completedRepairFundingGoal', {}).get('completedHull') == 300 for event in repair_events) and any(event.get('skill') == 'mission_margin_light_freighter_repaired' and event.get('activeRepairFundingGoal') == {} and event.get('completedRepairFundingGoals', [{}])[-1].get('repairCost') == 320 for event in checkpoints) else 'failed',
+            'recorded_light_freighter_repair_mission_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-mission-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_mission_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and blocked_repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events + blocked_repair_events) else 'failed',
         })
     elif name == 'light_freighter_repair_refuel_mission_margin_loop':
         checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
@@ -4340,14 +4484,17 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         blocked_jumps = [event for event in trace if event.get('type') == 'blocked_jump']
         refuel_events = [event for event in trace if event.get('type') == 'refuel']
         repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        blocked_repair_events = [event for event in trace if event.get('type') == 'blocked_repair_hull']
         source_events = checkpoints + buy_ship_events + mission_accepts + complete_events + decisions + trade_events
         checks.update({
             'bought_light_freighter_for_repair_refuel_mission_margin': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
             'reserved_bulk_delivery_while_damaged_and_low_fuel': 'passed' if mission_accepts and mission_accepts[-1].get('id') == 'levo_bulk_repair_refuel_margin_supply' and mission_accepts[-1].get('reservedCargoTons') == 120 and any(event.get('skill') == 'damaged_freighter_refuel_repair_margin_choice' for event in checkpoints) else 'failed',
             'blocked_empty_fuel_repair_return_after_delivery': 'passed' if any(event.get('reason') == 'insufficient fuel' and event.get('originSystem') == START_SYSTEM and event.get('destinationSystem') == 'Sol' for event in blocked_jumps) and complete_events and complete_events[-1].get('id') == 'levo_bulk_repair_refuel_margin_supply' and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 3 else 'failed',
+            'blocked_repair_before_refuel_margin_departure': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('hullBefore') == 260 and event.get('maxHull') == 300 and event.get('hullRepairNeeded') == 40 and event.get('cost') == 320 and event.get('credits') == 0 and event.get('creditDeficit') == 320 and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 for event in blocked_repair_events) else 'failed',
             'refueled_before_repair_port_return': 'passed' if refuel_events and refuel_events[-1].get('system') == START_SYSTEM and refuel_events[-1].get('body') == START_BODY and refuel_events[-1].get('fuelAfter') == 300 and any(event.get('skill') == 'refueled_repair_return_budget' for event in checkpoints) else 'failed',
             'repaired_light_freighter_after_refueled_bulk_mission_margin': 'passed' if repair_events and repair_events[-1].get('system') == 'Sol' and repair_events[-1].get('body') == 'Earth' and repair_events[-1].get('hullBefore') == 260 and repair_events[-1].get('hullAfter') == 300 and repair_events[-1].get('cost') == 320 and state.get('currentHull') == 300 and state.get('maxHull') == 300 and state.get('fuel') == 299 and state.get('credits') == 9302 else 'failed',
-            'recorded_light_freighter_repair_refuel_mission_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
+            'surfaced_refuel_repair_funding_goal_context': 'passed' if any(event.get('commodity') == 'food' and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 and event.get('activeRepairFundingGoal', {}).get('projectedLotProfit') == 780 for event in decisions) and any(event.get('skill') == 'damaged_freighter_refuel_repair_margin_choice' and event.get('activeRepairFundingGoal', {}).get('hullRepairNeeded') == 40 for event in checkpoints) and any(event.get('skill') == 'refueled_repair_return_budget' and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 for event in checkpoints) and any(event.get('completedRepairFundingGoal', {}).get('commodity') == 'food' and event.get('completedRepairFundingGoal', {}).get('completedHull') == 300 for event in repair_events) and any(event.get('skill') == 'refueled_mission_margin_light_freighter_repaired' and event.get('activeRepairFundingGoal') == {} and event.get('completedRepairFundingGoals', [{}])[-1].get('repairCost') == 320 for event in checkpoints) else 'failed',
+            'recorded_light_freighter_repair_refuel_mission_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and blocked_repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events + blocked_repair_events) else 'failed',
         })
     elif name == 'light_freighter_deadline_repair_refuel_margin_loop':
         checkpoints = [event for event in trace if event.get('type') == 'strategy_skill_checkpoint']
@@ -4359,15 +4506,18 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         blocked_jumps = [event for event in trace if event.get('type') == 'blocked_jump']
         refuel_events = [event for event in trace if event.get('type') == 'refuel']
         repair_events = [event for event in trace if event.get('type') == 'repair_hull']
+        blocked_repair_events = [event for event in trace if event.get('type') == 'blocked_repair_hull']
         source_events = checkpoints + buy_ship_events + mission_accepts + complete_events + decisions + trade_events
         checks.update({
             'bought_light_freighter_for_deadline_repair_refuel_margin': 'passed' if buy_ship_events and buy_ship_events[-1].get('shipId') == 'light_freighter' and buy_ship_events[-1].get('cargoCapacityAfter') == 150 and state.get('playerShipId') == 'light_freighter' else 'failed',
             'reserved_timed_bulk_delivery_while_damaged_and_low_fuel': 'passed' if mission_accepts and mission_accepts[-1].get('id') == 'levo_bulk_deadline_repair_refuel_margin_supply' and mission_accepts[-1].get('reservedCargoTons') == 120 and mission_accepts[-1].get('timeLimitDays') == 2 and any(event.get('skill') == 'timed_damaged_freighter_refuel_repair_margin_choice' for event in checkpoints) else 'failed',
             'delivered_timed_bulk_before_repair_return': 'passed' if complete_events and complete_events[-1].get('id') == 'levo_bulk_deadline_repair_refuel_margin_supply' and complete_events[-1].get('cargoUsed') == 30 and state.get('currentDay') == 2 and state.get('failedJobs', []) == [] and 'fail_mission_bit_45' not in state.get('storyFlags', []) and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 3 else 'failed',
             'blocked_empty_fuel_deadline_repair_return_after_delivery': 'passed' if any(event.get('reason') == 'insufficient fuel' and event.get('originSystem') == START_SYSTEM and event.get('destinationSystem') == 'Sol' for event in blocked_jumps) and state.get('completedJobs') == ['levo_bulk_deadline_repair_refuel_margin_supply'] else 'failed',
+            'blocked_repair_before_deadline_margin_departure': 'passed' if any(event.get('reason') == 'insufficient credits' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('hullBefore') == 260 and event.get('maxHull') == 300 and event.get('hullRepairNeeded') == 40 and event.get('cost') == 320 and event.get('credits') == 0 and event.get('creditDeficit') == 320 and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 for event in blocked_repair_events) else 'failed',
             'refueled_before_deadline_repair_port_return': 'passed' if refuel_events and refuel_events[-1].get('system') == START_SYSTEM and refuel_events[-1].get('body') == START_BODY and refuel_events[-1].get('fuelAfter') == 300 and any(event.get('skill') == 'deadline_margin_repair_return_budget' for event in checkpoints) else 'failed',
             'repaired_light_freighter_after_deadline_refuel_margin': 'passed' if repair_events and repair_events[-1].get('system') == 'Sol' and repair_events[-1].get('body') == 'Earth' and repair_events[-1].get('hullBefore') == 260 and repair_events[-1].get('hullAfter') == 300 and repair_events[-1].get('cost') == 320 and state.get('currentHull') == 300 and state.get('maxHull') == 300 and state.get('fuel') == 299 and state.get('credits') == 9302 else 'failed',
-            'recorded_light_freighter_deadline_repair_refuel_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-deadline-repair-refuel-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_deadline_repair_refuel_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events) else 'failed',
+            'surfaced_deadline_repair_funding_goal_context': 'passed' if any(event.get('commodity') == 'food' and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 and event.get('activeRepairFundingGoal', {}).get('projectedLotProfit') == 780 for event in decisions) and any(event.get('skill') == 'timed_damaged_freighter_refuel_repair_margin_choice' and event.get('activeRepairFundingGoal', {}).get('hullRepairNeeded') == 40 for event in checkpoints) and any(event.get('skill') == 'deadline_margin_repair_return_budget' and event.get('activeRepairFundingGoal', {}).get('repairCost') == 320 for event in checkpoints) and any(event.get('completedRepairFundingGoal', {}).get('commodity') == 'food' and event.get('completedRepairFundingGoal', {}).get('completedHull') == 300 for event in repair_events) and any(event.get('skill') == 'deadline_refueled_light_freighter_repaired' and event.get('activeRepairFundingGoal') == {} and event.get('completedRepairFundingGoals', [{}])[-1].get('repairCost') == 320 for event in checkpoints) else 'failed',
+            'recorded_light_freighter_deadline_repair_refuel_margin_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-light-freighter-deadline-repair-refuel-margin-scaffold' and event.get('oracleStatus') == 'light_freighter_deadline_repair_refuel_margin_pending_classic_runtime_trace' for event in source_events) and repair_events and blocked_repair_events and all(event.get('sourceLabel') == 'terminal-velocity-repair-service-scaffold' and event.get('oracleStatus') == 'repair_service_pending_ev_classic_runtime_trace' for event in repair_events + blocked_repair_events) else 'failed',
         })
     elif name == 'mission_runner_first_delivery':
         checks.update({
@@ -4783,6 +4933,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
         checks.update({
             'green_multi_stop_route': 'passed' if appended_paths and appended_paths[-1] == ['Levo', 'Sol', 'Sirius'] and state.get('routeSourceLabel') == 'original-runtime-observed' else 'failed',
             'consumed_first_leg_only': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == ['Sirius'] and any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol', 'Sirius'] and event.get('remainingRoute') == ['Sirius'] for event in trace) else 'failed',
+            'surfaced_route_progress_feedback': 'passed' if any(event.get('type') == 'jump' and event.get('routeProgress', {}).get('completedQueuedStop') is True and event.get('routeProgress', {}).get('completedRouteStop') == 'Sol' and event.get('routeProgress', {}).get('nextRouteStop') == 'Sirius' and event.get('routeProgress', {}).get('routeComplete') is False and event.get('sourceLabel') == 'original-runtime-observed' and event.get('oracleStatus') == 'route_progress_feedback_pending_ev_classic_ui_trace' for event in trace) else 'failed',
         })
     elif name == 'route_queue_invalid_stop_guardrail':
         blocked_reasons = [event.get('reason') for event in trace if event.get('type') == 'blocked_append_route_stop']
@@ -4805,6 +4956,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_jump_after_clear': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'no destination selected' for event in trace) else 'failed',
             'reselected_after_clear': 'passed' if any(event.get('type') == 'append_route_stop' and event.get('destinationSystem') == 'Sol' and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' for event in trace) else 'failed',
             'jumped_after_reselect': 'passed' if state.get('currentSystem') == 'Sol' and state.get('routeQueue') == [] and any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol'] and event.get('remainingRoute') == [] for event in trace) else 'failed',
+            'surfaced_reselected_route_completion_feedback': 'passed' if any(event.get('type') == 'jump' and event.get('previousRoute') == ['Sol'] and event.get('remainingRoute') == [] and event.get('routeProgress', {}).get('completedQueuedStop') is True and event.get('routeProgress', {}).get('completedRouteStop') == 'Sol' and event.get('routeProgress', {}).get('routeLengthBefore') == 1 and event.get('routeProgress', {}).get('routeLengthAfter') == 0 and event.get('routeProgress', {}).get('nextRouteStop') is None and event.get('routeProgress', {}).get('routeComplete') is True and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' and event.get('oracleStatus') == 'route_progress_feedback_pending_ev_classic_ui_trace' for event in trace) else 'failed',
             'surfaced_clear_reselect_recovery_hint': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('originSystem') == START_SYSTEM and 'Sol' in event.get('linkedStopsFromOrigin', []) and 'select an adjacent linked destination' in event.get('recoveryHint', '') for event in trace) else 'failed',
         })
     elif name == 'near_center_jump_block':
@@ -4812,6 +4964,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_near_center_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'too close to system center' and event.get('sourceLabel') == 'original-runtime-observed' for event in trace) else 'failed',
             'preserved_system_after_center_block': 'passed' if state.get('currentSystem') == START_SYSTEM else 'failed',
             'preserved_fuel_after_center_block': 'passed' if state.get('fuel') == STARTING_FUEL else 'failed',
+            'surfaced_near_center_route_progress_feedback': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'too close to system center' and event.get('routeProgress', {}).get('blockedBeforeProgress') is True and event.get('routeProgress', {}).get('blockedOriginSystem') == START_SYSTEM and event.get('routeProgress', {}).get('blockedDestinationSystem') == 'Sol' and event.get('routeProgress', {}).get('nextRouteStop') == 'Sol' and event.get('routeProgress', {}).get('routeLengthBefore') == 1 and event.get('routeProgress', {}).get('routeLengthAfter') == 1 and event.get('routeProgress', {}).get('blockedDistanceFromSystemCenter') == 0 and event.get('routeProgress', {}).get('minJumpDistance') == MIN_JUMP_DISTANCE and event.get('routeProgress', {}).get('routeComplete') is False and event.get('sourceLabel') == 'original-runtime-observed' and event.get('oracleStatus') == 'near_center_jump_failure_observed_exact_distance_pending' for event in trace) else 'failed',
         })
     elif name == 'route_planner_refuel_loop':
         checks.update({
@@ -4828,6 +4981,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'surfaced_route_fuel_recovery_hint': 'passed' if route_status and route_status[-1].get('originSystem') == START_SYSTEM and route_status[-1].get('fuel') == 1 and route_status[-1].get('fuelRequired') == 2 and route_status[-1].get('fuelDeficit') == 1 and route_status[-1].get('refuelRecoveryBody') == START_BODY and 'fuel service port' in route_status[-1].get('recoveryHint', '') else 'failed',
             'surfaced_partial_route_reachability': 'passed' if route_status and route_status[-1].get('reachableRoutePrefix') == ['Sol'] and route_status[-1].get('blockedRouteTail') == ['Sirius'] and route_status[-1].get('nextReachableStop') == 'Sol' and route_status[-1].get('firstBlockedStop') == 'Sirius' else 'failed',
             'blocked_without_consuming_route_or_fuel': 'passed' if blocked and blocked[-1].get('routeQueue') == ['Sol', 'Sirius'] and any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('fuel') == 0 for event in trace) else 'failed',
+            'surfaced_blocked_route_progress_feedback': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel' and event.get('routeProgress', {}).get('blockedBeforeProgress') is True and event.get('routeProgress', {}).get('nextRouteStop') == 'Sol' and event.get('routeProgress', {}).get('routeLengthBefore') == 2 and event.get('routeProgress', {}).get('routeLengthAfter') == 2 and event.get('routeProgress', {}).get('routeComplete') is False and event.get('sourceLabel') == 'terminal-velocity-navigation-guardrail-scaffold' and event.get('oracleStatus') == 'classic_runtime_jump_refusal_ui_pending' for event in trace) else 'failed',
             'recovered_by_refueling_and_reselecting_route': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == START_SYSTEM and event.get('fuelAfter') == STARTING_FUEL for event in trace) and [event.get('destinationSystem') for event in post_recovery_appends] == ['Sol', 'Sirius'] else 'failed',
             'landed_after_recovery': 'passed' if state.get('currentSystem') == 'Sirius' and state.get('landedBody') == 'Sirius Station' and state.get('routeQueue') == [] and state.get('fuel') == STARTING_FUEL - 2 else 'failed',
         })

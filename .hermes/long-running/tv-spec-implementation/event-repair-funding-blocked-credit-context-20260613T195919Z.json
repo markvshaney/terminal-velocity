@@ -1,0 +1,59 @@
+{
+  "behavior": {
+    "blocked_repair_event": {
+      "activeRepairFundingGoal.projectedLotProfit": 780,
+      "activeRepairFundingGoal.repairCost": 320,
+      "body": "Earth",
+      "cost": 320,
+      "creditDeficit": 320,
+      "credits": 0,
+      "hullBefore": 260,
+      "hullRepairNeeded": 40,
+      "maxHull": 300,
+      "reason": "insufficient credits",
+      "system": "Sol",
+      "type": "blocked_repair_hull"
+    },
+    "final_repair": {
+      "completedRepairFundingGoal.completedHull": 300,
+      "currentHull": 300,
+      "finalCredits": 2080,
+      "maxHull": 300
+    },
+    "scenario": "light_freighter_repair_margin_loop"
+  },
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "checks_added": [
+    "blocked_repair_after_allocating_margin_capital"
+  ],
+  "event_id": "repair-funding-blocked-credit-context-20260613T195919Z",
+  "kanban_task": "t_e4a732db",
+  "kind": "verified_safe_local_increment",
+  "source_fidelity": {
+    "caveat": "exact EV Classic repair-credit UI remains pending original-runtime/source evidence",
+    "oracle_status": "scaffold_pending_original_runtime_trace",
+    "preserved_labels": [
+      "terminal-velocity-light-freighter-repair-margin-scaffold / light_freighter_repair_margin_pending_classic_runtime_trace",
+      "terminal-velocity-repair-service-scaffold / repair_service_pending_ev_classic_runtime_trace"
+    ]
+  },
+  "summary": "Light Freighter repair-margin loop now surfaces an insufficient-credit repair-service event after repair capital is allocated to cargo, preserving scaffold/oracle boundaries pending EV Classic runtime/source confirmation.",
+  "task_id": "tv-spec-implementation",
+  "tests": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -q; Ran 103 tests in 0.628s OK",
+    "preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK; git fetch origin; HEAD and origin/main were f123bf98a1f0844de0ff0baeee8b392f955478f8 before edits",
+    "targeted_adjacent_repair_unittests": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_hull_plating_repair_loop_buys_armor_and_repairs_added_hull native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_margin_loop_funds_hull_repair_after_margin_sale native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_mission_margin_loop_repairs_after_bulk_delivery_and_margin_sale -v; Ran 3 tests OK",
+    "targeted_light_freighter_repair_margin_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_margin_loop_funds_hull_repair_after_margin_sale -v; Ran 1 test OK",
+    "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py light_freighter_repair_margin_loop --pretty; success true; all checks passed including blocked_repair_after_allocating_margin_capital; final credits=2080 currentHull=300 maxHull=300"
+  },
+  "timestamp": "2026-06-13T19:59:19Z"
+}

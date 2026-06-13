@@ -1,0 +1,43 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/event-reselected-route-completion-feedback-20260613T202603Z.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_570b6ee0.json"
+  ],
+  "classification": "continue",
+  "event_id": "reselected-route-completion-feedback-20260613T202603Z",
+  "event_packet": ".hermes/long-running/tv-spec-implementation/event-reselected-route-completion-feedback-20260613T202603Z.json",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_570b6ee0",
+  "next_resume_action": "Successor Kanban task t_679ce962 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve scaffold/oracle-status boundaries and avoid promoting exact Classic UI without source/runtime evidence.",
+  "safe_local": true,
+  "source_fidelity": {
+    "caveat": "exact EV Classic map-route completion UI wording and timing remain pending original-runtime evidence",
+    "oracle_status": "route_progress_feedback_pending_ev_classic_ui_trace",
+    "preserved_labels": [
+      "terminal-velocity-route-guardrail for clear/reselect recovery route helper events",
+      "route_progress_feedback_pending_ev_classic_ui_trace for structured routeProgress feedback pending Classic UI trace",
+      "no promotion of route completion feedback to EV Classic fidelity without original-runtime UI evidence"
+    ]
+  },
+  "successor_kanban_task": "t_679ce962",
+  "summary": "route_queue_clear_reselect_guardrail now verifies completion-grade routeProgress feedback after route clear/reselect: final Levo -> Sol jump completes the queued stop, drains the route queue, and records routeComplete=true under Terminal Velocity scaffold/oracle labels pending EV Classic UI trace evidence.",
+  "task_id": "tv-spec-implementation",
+  "tests": {
+    "adjacent_route_queue_unittest_pair": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_clear_reselect_guardrail_recovers_after_new_route_selection -v; Ran 2 tests OK",
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; wrote index; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -q; Ran 103 tests OK",
+    "targeted_reselected_route_completion_scenario": "passed; python3 tools/run_gameplay_scenarios.py route_queue_clear_reselect_guardrail --pretty; success true with all_actions_valid, blocked_jump_after_clear, jumped_after_reselect, reselected_after_clear, surfaced_clear_reselect_recovery_hint, surfaced_reselected_route_completion_feedback passed",
+    "targeted_reselected_route_completion_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_clear_reselect_guardrail_recovers_after_new_route_selection -v; Ran 1 test OK"
+  },
+  "timestamp": "2026-06-13T20:26:03Z"
+}

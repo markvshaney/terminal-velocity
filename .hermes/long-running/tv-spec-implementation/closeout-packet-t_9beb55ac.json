@@ -1,0 +1,45 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/event-mixed-mission-repair-funding-goal-context-20260613T193713Z.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_9beb55ac.json"
+  ],
+  "classification": "continue",
+  "event_id": "mixed-mission-repair-funding-goal-context-20260613T193713Z",
+  "event_packet": ".hermes/long-running/tv-spec-implementation/event-mixed-mission-repair-funding-goal-context-20260613T193713Z.json",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_9beb55ac",
+  "next_resume_action": "Successor Kanban task t_221b244b should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve scaffold/oracle-status boundaries and avoid promoting exact Classic UI without source/runtime evidence.",
+  "safe_local": true,
+  "source_fidelity": {
+    "oracle_status": "scaffold_pending_original_runtime_trace",
+    "preserved_labels": [
+      "terminal-velocity-light-freighter-repair-mission-margin-scaffold / light_freighter_repair_mission_margin_pending_classic_runtime_trace",
+      "terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold / light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace",
+      "terminal-velocity-light-freighter-deadline-repair-refuel-margin-scaffold / light_freighter_deadline_repair_refuel_margin_pending_classic_runtime_trace",
+      "terminal-velocity-repair-service-scaffold / repair_service_pending_ev_classic_runtime_trace"
+    ]
+  },
+  "successor_kanban_task": "t_221b244b",
+  "summary": "Safe-local mixed mission repair-funding goal-context scaffold increment verified: Light Freighter mission/margin loops now check activeRepairFundingGoal through bulk delivery, retained Sol Food margin sale, low-fuel refuel recovery, deadline pressure, and final Earth repair completion; exact EV Classic mixed mission/trade/repair UI remains pending original-runtime/source evidence.",
+  "task_id": "tv-spec-implementation",
+  "tests": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_runner_preflight": "passed after implementation; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "git_fetch_status": "passed; git fetch origin; git status --short --branch showed main...origin/main with expected local modified/untracked checkpoint files",
+    "ledger_json_parse": "passed; task-ledger.json parsed and events.jsonl parsed 204 events before appending this event",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -q; Ran 103 tests in 0.685s OK",
+    "targeted_scenarios": "passed; run_gameplay_scenarios for light_freighter_repair_mission_margin_loop, light_freighter_repair_refuel_mission_margin_loop, light_freighter_deadline_repair_refuel_margin_loop; all success true and new surfaced_*_repair_funding_goal_context checks passed",
+    "targeted_unittests": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_mission_margin_loop_repairs_after_bulk_delivery_and_margin_sale native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_refuel_mission_margin_loop_refuels_before_repair_return native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_deadline_repair_refuel_margin_loop_delivers_before_repair -v; Ran 3 tests OK after fixing deadline final checkpoint name",
+    "tv_closeout_guard": "passed; python3 tools/tv_closeout_guard.py --packet .hermes/long-running/tv-spec-implementation/closeout-packet-t_9beb55ac.json; decision=valid classification=continue"
+  },
+  "timestamp": "2026-06-13T19:37:13Z"
+}

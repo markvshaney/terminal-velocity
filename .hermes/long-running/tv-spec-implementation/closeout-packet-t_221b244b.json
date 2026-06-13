@@ -1,0 +1,44 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/event-repair-service-blocked-credit-context-20260613T194813Z.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_221b244b.json"
+  ],
+  "classification": "continue",
+  "event_id": "repair-service-blocked-credit-context-20260613T194813Z",
+  "event_packet": ".hermes/long-running/tv-spec-implementation/event-repair-service-blocked-credit-context-20260613T194813Z.json",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_221b244b",
+  "next_resume_action": "Successor Kanban task t_e4a732db should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve scaffold/oracle-status boundaries and avoid promoting exact Classic UI without source/runtime evidence.",
+  "safe_local": true,
+  "source_fidelity": {
+    "caveat": "exact EV Classic repair-service blocked-credit UI remains pending original-runtime/source evidence",
+    "oracle_status": "scaffold_pending_original_runtime_trace",
+    "preserved_labels": [
+      "terminal-velocity-hull-plating-repair-scaffold / hull_plating_repair_pending_classic_runtime_trace",
+      "terminal-velocity-repair-service-scaffold / repair_service_pending_ev_classic_runtime_trace"
+    ]
+  },
+  "successor_kanban_task": "t_e4a732db",
+  "summary": "Hull Plating repair loop now surfaces insufficient-credit repair-service context before final funded repair, preserving scaffold/oracle boundaries pending EV Classic runtime/source confirmation.",
+  "task_id": "tv-spec-implementation",
+  "tests": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "git_fetch_status": "passed; git fetch origin; HEAD and origin/main were f123bf98a1f0844de0ff0baeee8b392f955478f8 before edits; status main...origin/main with expected local checkpoint modifications",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -q; Ran 103 tests in 0.670s OK",
+    "targeted_adjacent_repair_margin_unittests": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_balanced_upgrade_trade_loop_funds_final_refit_with_trade_run native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_margin_loop_funds_hull_repair_after_margin_sale -v; Ran 2 tests OK",
+    "targeted_hull_plating_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_hull_plating_repair_loop_buys_armor_and_repairs_added_hull -v; Ran 1 test OK",
+    "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py hull_plating_repair_loop --pretty; success true; checks all passed including surfaced_blocked_hull_repair_credit_context; final credits=8000 currentHull=125 maxHull=125",
+    "tv_closeout_guard": "passed; python3 tools/tv_closeout_guard.py --packet .hermes/long-running/tv-spec-implementation/closeout-packet-t_221b244b.json; decision=valid classification=continue"
+  },
+  "timestamp": "2026-06-13T19:48:13Z"
+}

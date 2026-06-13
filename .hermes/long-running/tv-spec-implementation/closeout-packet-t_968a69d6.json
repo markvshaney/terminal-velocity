@@ -1,0 +1,42 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/event-route-progress-feedback-20260613T201909Z.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_968a69d6.json"
+  ],
+  "classification": "continue",
+  "event_id": "route-progress-feedback-20260613T201909Z",
+  "event_packet": ".hermes/long-running/tv-spec-implementation/event-route-progress-feedback-20260613T201909Z.json",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_968a69d6",
+  "next_resume_action": "Successor Kanban task t_570b6ee0 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve scaffold/oracle-status boundaries and avoid promoting exact Classic UI without source/runtime evidence.",
+  "safe_local": true,
+  "source_fidelity": {
+    "caveat": "exact EV Classic multi-hop route-progress UI wording and timing remain pending original-runtime evidence",
+    "oracle_status": "route_progress_feedback_pending_ev_classic_ui_trace",
+    "preserved_labels": [
+      "original-runtime-observed where existing routeSourceLabel already marks observed Shift-click route behavior",
+      "terminal-velocity-navigation-scaffold fallback for unlabeled direct navigation jumps",
+      "route_progress_feedback_pending_ev_classic_ui_trace for structured routeProgress feedback pending Classic UI trace"
+    ]
+  },
+  "successor_kanban_task": "t_570b6ee0",
+  "summary": "Successful jump events now expose structured routeProgress metadata; shift_click_multi_stop_route_queue verifies the first queued leg is consumed while the next stop remains queued, with scaffold/oracle boundaries explicit pending EV Classic route-progress UI evidence.",
+  "task_id": "tv-spec-implementation",
+  "tests": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; wrote index; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; exit 0",
+    "targeted_route_progress_scenario": "passed; python3 tools/run_gameplay_scenarios.py shift_click_multi_stop_route_queue --pretty; success true with all_actions_valid, consumed_first_leg_only, green_multi_stop_route, surfaced_route_progress_feedback passed",
+    "targeted_route_progress_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_shift_click_multi_stop_route_queue_draws_green_path_and_consumes_first_leg -v; Ran 1 test OK"
+  },
+  "timestamp": "2026-06-13T20:19:09Z"
+}

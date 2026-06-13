@@ -1,0 +1,34 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/event-hull-repair-goal-context-20260613T192203Z.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_3f025aee.json"
+  ],
+  "classification": "continue",
+  "evidence_boundary": "No exact EV Classic repair service, outfitter UI, or hull-refit runtime semantics were promoted; all new behavior remains Terminal Velocity scaffold evidence pending original-runtime/source confirmation.",
+  "focused_verifiers_passed": true,
+  "known_unrelated_failure_surface": null,
+  "long_running_task": "tv-spec-implementation",
+  "next_resume_action": "Successor continuation should run standard preflight, inspect live dirty state, then choose the next safe source-labeled EV Classic fidelity backlog slice or hand off to integration owner if checkpoint policy requires publication.",
+  "safe_local": true,
+  "source_basis": "Terminal Velocity deterministic scenario evaluator scaffold; no exact EV Classic runtime repair/outfitter semantics promoted.",
+  "status": "productive batch checkpoint",
+  "successor_kanban_task": "t_4d550a4f",
+  "summary": "Extended native_ev hull repair/refit scenario goal context: Hull Plating purchases now surface activeHullRepairGoal, repairs emit completedHullRepairGoal, and checkpoints retain completedHullRepairGoals while preserving scaffold/pending Classic evidence labels.",
+  "task_id": "t_3f025aee",
+  "timestamp": "2026-06-13T19:22:03Z",
+  "verification": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_closeout_guard": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build; wrote ev-classic-fidelity-implementation-backlog.index.json; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
+    "targeted_scenario_balanced_upgrade": "passed; python3 tools/run_gameplay_scenarios.py balanced_upgrade_trade_loop --pretty; surfaced_final_hull_repair_goal_context=passed",
+    "targeted_scenario_hull_plating": "passed; python3 tools/run_gameplay_scenarios.py hull_plating_repair_loop --pretty; surfaced_hull_repair_goal_context=passed",
+    "targeted_unittest_balanced_upgrade": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_balanced_upgrade_trade_loop_funds_final_refit_with_trade_run -v; Ran 1 test OK",
+    "targeted_unittest_hull_plating": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_hull_plating_repair_loop_buys_armor_and_repairs_added_hull -v; Ran 1 test OK"
+  }
+}

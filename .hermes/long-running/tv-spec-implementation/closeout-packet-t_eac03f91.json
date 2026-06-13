@@ -1,0 +1,45 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/event-mixed-mission-repair-blocked-credit-context-20260613T201025Z.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_eac03f91.json"
+  ],
+  "classification": "continue",
+  "event_id": "mixed-mission-repair-blocked-credit-context-20260613T201025Z",
+  "event_packet": ".hermes/long-running/tv-spec-implementation/event-mixed-mission-repair-blocked-credit-context-20260613T201025Z.json",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_eac03f91",
+  "next_resume_action": "Successor Kanban task t_968a69d6 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve scaffold/oracle-status boundaries and avoid promoting exact Classic UI without source/runtime evidence.",
+  "safe_local": true,
+  "source_fidelity": {
+    "caveat": "exact EV Classic repair-credit UI remains pending original-runtime/source evidence",
+    "oracle_status": "scaffold_pending_original_runtime_trace",
+    "preserved_labels": [
+      "terminal-velocity-light-freighter-repair-mission-margin-scaffold / light_freighter_repair_mission_margin_pending_classic_runtime_trace",
+      "terminal-velocity-light-freighter-repair-refuel-mission-margin-scaffold / light_freighter_repair_refuel_mission_margin_pending_classic_runtime_trace",
+      "terminal-velocity-light-freighter-deadline-repair-refuel-margin-scaffold / light_freighter_deadline_repair_refuel_margin_pending_classic_runtime_trace",
+      "terminal-velocity-repair-service-scaffold / repair_service_pending_ev_classic_runtime_trace"
+    ]
+  },
+  "successor_kanban_task": "t_968a69d6",
+  "summary": "Light Freighter mixed repair/margin mission loops now surface insufficient-credit repair-service events after repair budget is spent on Sol Food, before delivery/refuel/deadline recovery and final funded Earth repair; scaffold/oracle boundaries remain explicit pending EV Classic runtime/source confirmation.",
+  "task_id": "tv-spec-implementation",
+  "tests": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
+    "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
+    "backlog_index_build_preflight": "passed after rebuild; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py runner-preflight; wrote index; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check exit 0",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests in 0.632s OK",
+    "npm_workspace_check": "not applicable at repo root; npm test -- --run && npm run build failed with ENOENT because /home/bh/workspaces/loki/terminal-velocity/package.json does not exist",
+    "targeted_mixed_repair_scenarios": "passed; python3 tools/run_gameplay_scenarios.py light_freighter_repair_mission_margin_loop --pretty && python3 tools/run_gameplay_scenarios.py light_freighter_repair_refuel_mission_margin_loop --pretty && python3 tools/run_gameplay_scenarios.py light_freighter_deadline_repair_refuel_margin_loop --pretty; all three success true and all new blocked_repair_* checks passed",
+    "targeted_mixed_repair_unittests": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_mission_margin_loop_repairs_after_bulk_delivery_and_margin_sale native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_repair_refuel_mission_margin_loop_refuels_before_repair_return native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_light_freighter_deadline_repair_refuel_margin_loop_delivers_before_repair -v; Ran 3 tests OK",
+    "tv_closeout_guard": "passed; python3 tools/tv_closeout_guard.py --packet .hermes/long-running/tv-spec-implementation/closeout-packet-t_eac03f91.json; decision=valid classification=continue"
+  },
+  "timestamp": "2026-06-13T20:10:25Z"
+}
