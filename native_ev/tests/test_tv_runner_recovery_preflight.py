@@ -126,6 +126,53 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
         status = subprocess.run(["git", "status", "--porcelain"], cwd=repo, text=True, stdout=subprocess.PIPE, check=True)
         self.assertEqual(status.stdout.strip(), "?? tasks.json")
 
+    def test_repair_mode_moves_untracked_non_sensitive_debris_and_reclassifies_clean(self):
+        repo = self.make_repo()
+        quarantine_root = repo.parent / "quarantine"
+        (repo / "scratch").mkdir()
+        (repo / "scratch/debug-note.txt").write_text("not project work\n")
+
+        code, payload = self.run_preflight(
+            repo,
+            [],
+            "--repair-unsafe-debris",
+            "--quarantine-root",
+            str(quarantine_root),
+        )
+
+        self.assertEqual(code, 0, payload)
+        self.assertEqual(payload["repair"]["action"], "moved_untracked_debris")
+        self.assertEqual(payload["repair"]["moved_paths"], ["scratch/debug-note.txt"])
+        self.assertFalse((repo / "scratch/debug-note.txt").exists())
+        moved = quarantine_root / payload["repair"]["quarantine_id"] / "scratch/debug-note.txt"
+        self.assertEqual(moved.read_text(), "not project work\n")
+        self.assertEqual(payload["post_repair"]["repo_state"], "clean")
+        self.assertEqual(payload["recommended_action"], "seed_successor")
+
+    def test_repair_mode_does_not_move_sensitive_or_tracked_dirty_files(self):
+        repo = self.make_repo()
+        quarantine_root = repo.parent / "quarantine"
+        (repo / "secret.txt").write_text("token=do-not-touch\n")
+        (repo / "README.md").write_text("tracked\n")
+        subprocess.run(["git", "add", "README.md"], cwd=repo, check=True)
+        subprocess.run(["git", "-c", "user.email=test@example.invalid", "-c", "user.name=Test User", "commit", "-m", "fixture"], cwd=repo, check=True, stdout=subprocess.PIPE)
+        (repo / "README.md").write_text("tracked dirty\n")
+
+        code, payload = self.run_preflight(
+            repo,
+            [],
+            "--repair-unsafe-debris",
+            "--quarantine-root",
+            str(quarantine_root),
+        )
+
+        self.assertEqual(code, 1, payload)
+        self.assertEqual(payload["recommended_action"], "unsafe_dirty_state")
+        self.assertEqual(payload["repair"]["action"], "not_repairable")
+        self.assertEqual(sorted(payload["repair"]["blocked_paths"]), ["README.md", "secret.txt"])
+        self.assertTrue((repo / "secret.txt").exists())
+        self.assertTrue((repo / "README.md").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

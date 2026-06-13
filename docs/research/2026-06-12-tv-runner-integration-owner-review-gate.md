@@ -506,6 +506,7 @@ Implemented surfaces:
 
 - `tools/tv_runner_recovery_preflight.py` now performs idle-dirty classification and emits structured JSON for `repo_state`, `dirty_paths`, `candidate_handoff`, `handoff_match`, `sensitive_path_check`, `focused_verifier_status`, `known_unrelated_failures`, `active_worker`, `recommended_action`, and `explicit_gate`.
 - `tools/tv_runner_recovery_preflight.py --checkpoint` now creates a local checkpoint commit only when the dirty bundle is classified `checkpoint_and_push_ready`, then reports `push_ready` plus checkpoint metadata for the integration lane.
+- `tools/tv_runner_recovery_preflight.py --repair-unsafe-debris` now repairs one safe subset of `unsafe_dirty_state`: clearly non-sensitive, untracked, non-project debris is moved to a quarantine directory outside the worktree and the repo is reclassified immediately.
 - `tools/tv_runner_autostart.py` now runs the recovery preflight on idle dirty state and reports that JSON before refusing to seed overlapping work.
 - Regression coverage lives in `native_ev/tests/test_tv_runner_recovery_preflight.py` and `native_ev/tests/test_tv_runner_autostart.py`.
 
@@ -515,9 +516,11 @@ Verified behavior:
 - dirty repo without matching handoff -> `unsafe_dirty_state`;
 - dirty repo matching a blocked handoff with focused verifier pass -> `checkpoint_and_push_ready`;
 - dirty repo matching a blocked handoff without focused verifier evidence -> `rerun_focused_verifier`;
-- `--checkpoint` on a matching, verifier-passed handoff stages only the matched dirty paths, runs `git diff --cached --check`, creates a local checkpoint commit, leaves the task JSON untracked, and reports `push_ready`.
+- `--checkpoint` on a matching, verifier-passed handoff stages only the matched dirty paths, runs `git diff --cached --check`, creates a local checkpoint commit, leaves the task JSON untracked, and reports `push_ready`;
+- `--repair-unsafe-debris` moves only untracked, non-sensitive, non-project debris to quarantine and then returns `seed_successor` when the worktree is clean;
+- `--repair-unsafe-debris` refuses to move tracked changes, sensitive paths, or plausible project paths and keeps `unsafe_dirty_state` explicit.
 
-Remaining follow-up: wire the checkpoint recovery path into a fuller integration-owner command that records or normalizes the Kanban/ledger `push_ready` packet and then runs the existing publish guard.
+Remaining follow-up: wire the checkpoint/repaired-clean recovery path into a fuller integration-owner command that records or normalizes the Kanban/ledger `push_ready` packet and then runs the existing publish guard; separately decide whether autostart should call `--repair-unsafe-debris` automatically for this narrow debris class or keep it as explicit integration-owner operation.
 
 ### Applied implementation note — 2026-06-12 start/resume preflight first slice
 

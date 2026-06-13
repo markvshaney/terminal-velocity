@@ -11,8 +11,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -81,21 +83,30 @@ def run_checked(cmd: list[str], *, cwd: Path | None = None, timeout: int = 45) -
     return completed.returncode, completed.stdout
 
 
-def git_dirty_paths(repo: Path, exclude: set[Path]) -> tuple[str, list[str], str | None]:
+def git_dirty_entries(repo: Path, exclude: set[Path]) -> tuple[list[dict[str, str]], str | None]:
     code, raw = run_checked(["git", "status", "--porcelain", "--untracked-files=all"], cwd=repo, timeout=15)
     if code != 0:
-        return "unknown", [], raw.strip() or "git status failed"
-    paths: list[str] = []
+        return [], raw.strip() or "git status failed"
+    entries: list[dict[str, str]] = []
     for line in raw.splitlines():
         if not line:
             continue
+        status = line[:2]
         status_path = line[3:] if len(line) > 3 else ""
         if " -> " in status_path:
             status_path = status_path.split(" -> ", 1)[1]
         full = (repo / status_path).resolve()
         if full in exclude:
             continue
-        paths.append(status_path)
+        entries.append({"status": status, "path": status_path})
+    return sorted(entries, key=lambda item: item["path"]), None
+
+
+def git_dirty_paths(repo: Path, exclude: set[Path]) -> tuple[str, list[str], str | None]:
+    entries, error = git_dirty_entries(repo, exclude)
+    if error:
+        return "unknown", [], error
+    paths = [entry["path"] for entry in entries]
     return ("dirty" if paths else "clean"), sorted(paths), None
 
 
@@ -235,6 +246,93 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
     return payload
 
 
+def path_has_sensitive_terms(path: str) -> bool:
+    return any(part in path.lower() for part in SENSITIVE_PATH_PARTS)
+
+
+def empty_parent_dirs_until_repo(repo: Path, path: Path) -> None:
+    current = path.parent
+    repo = repo.resolve()
+    while current != repo and repo in current.parents:
+        try:
+            current.rmdir()
+        except OSError:
+            return
+        current = current.parent
+
+
+def repair_unsafe_debris(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None, assignee: str, quarantine_root: Path) -> dict[str, Any]:
+    """Move only clearly non-sensitive untracked non-project debris, then reclassify."""
+    payload = classify(repo, tasks, tasks_json=tasks_json, assignee=assignee)
+    payload["repair"] = {
+        "attempted": True,
+        "action": "not_needed",
+        "moved_paths": [],
+        "blocked_paths": [],
+        "quarantine_root": str(quarantine_root),
+    }
+    if payload.get("recommended_action") != "unsafe_dirty_state":
+        return payload
+
+    exclude: set[Path] = set()
+    if tasks_json is not None:
+        try:
+            exclude.add(tasks_json.resolve())
+        except Exception:
+            pass
+    entries, error = git_dirty_entries(repo, exclude)
+    if error:
+        payload["repair"]["action"] = "not_repairable"
+        payload["repair"]["error"] = error
+        return payload
+
+    movable: list[str] = []
+    blocked: list[str] = []
+    for entry in entries:
+        path = entry["path"]
+        status = entry["status"]
+        if status == "??" and not path_safe(path) and not path_has_sensitive_terms(path):
+            movable.append(path)
+        else:
+            blocked.append(path)
+
+    if blocked or not movable:
+        payload["repair"]["action"] = "not_repairable"
+        payload["repair"]["blocked_paths"] = sorted(blocked or [entry["path"] for entry in entries])
+        return payload
+
+    quarantine_id = f"tv-unsafe-debris-{int(time.time())}"
+    quarantine_dir = quarantine_root / quarantine_id
+    moved: list[str] = []
+    try:
+        for path in sorted(movable):
+            source = repo / path
+            destination = quarantine_dir / path
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(source), str(destination))
+            empty_parent_dirs_until_repo(repo, source)
+            moved.append(path)
+    except Exception as exc:
+        payload["repair"]["action"] = "repair_failed"
+        payload["repair"]["error"] = str(exc)
+        payload["repair"]["moved_paths"] = moved
+        payload["repair"]["quarantine_id"] = quarantine_id
+        return payload
+
+    payload["repair"].update({
+        "action": "moved_untracked_debris",
+        "moved_paths": moved,
+        "quarantine_id": quarantine_id,
+    })
+    post = classify(repo, tasks, tasks_json=tasks_json, assignee=assignee)
+    payload["post_repair"] = post
+    payload["repo_state"] = post.get("repo_state")
+    payload["dirty_paths"] = post.get("dirty_paths")
+    payload["recommended_action"] = post.get("recommended_action")
+    payload["explicit_gate"] = post.get("explicit_gate")
+    return payload
+
+
 def exit_code_for(payload: dict[str, Any]) -> int:
     return 0 if payload.get("recommended_action") in {"seed_successor", "checkpoint_and_push_ready", "push_ready"} else 1
 
@@ -310,11 +408,16 @@ def main() -> int:
     parser.add_argument("--board", default=DEFAULT_BOARD)
     parser.add_argument("--assignee", default=DEFAULT_ASSIGNEE)
     parser.add_argument("--checkpoint", action="store_true", help="Create a local checkpoint commit when the dirty handoff is classified checkpoint_and_push_ready.")
+    parser.add_argument("--repair-unsafe-debris", action="store_true", help="Move clearly non-sensitive untracked non-project debris out of the repo and reclassify instead of stopping at unsafe_dirty_state.")
+    parser.add_argument("--quarantine-root", type=Path, default=Path("/home/bh/.hermes/profiles/loki-game/unsafe-dirty-quarantine"), help="Directory where repaired untracked debris is preserved outside the worktree.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
     tasks, task_error = load_tasks(args.tasks_json, args.board)
-    payload = classify(repo, tasks, tasks_json=args.tasks_json, assignee=args.assignee)
+    if args.repair_unsafe_debris and not task_error:
+        payload = repair_unsafe_debris(repo, tasks, tasks_json=args.tasks_json, assignee=args.assignee, quarantine_root=args.quarantine_root.resolve())
+    else:
+        payload = classify(repo, tasks, tasks_json=args.tasks_json, assignee=args.assignee)
     if task_error:
         payload["task_source_warning"] = task_error
         if payload.get("repo_state") == "dirty" and payload.get("recommended_action") == "unsafe_dirty_state":
