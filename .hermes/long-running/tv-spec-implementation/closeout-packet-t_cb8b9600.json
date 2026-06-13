@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kanban_task": "t_cb8b9600",
+  "timestamp": "2026-06-13T13:30:15Z",
+  "summary": "Implemented purchase-goal context persistence for upgrade_affordability_trade_loop: blocked Light Freighter purchase records activePurchaseGoal, trade funding carries it, successful purchase moves it to completedPurchaseGoals and clears active goal.",
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "verification": {
+    "backlog_index_build": "passed; python3 tools/backlog_dispatch_index.py build; wrote docs/checklists/ev-classic-fidelity-implementation-backlog.index.json; BACKLOG DISPATCH INDEX OK",
+    "backlog_dispatch_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests in 0.721s OK",
+    "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py upgrade_affordability_trade_loop --pretty; success true; surfaced_upgrade_purchase_goal_context=passed",
+    "git_status": "main...origin/main with intended modifications in scenario_eval.py, test_scenario_eval.py, backlog markdown, regenerated backlog index, and this checkpoint packet",
+    "git_diff_stat": "4 implementation/index files changed before checkpoint; checkpoint also updates long-running ledger/events and adds closeout packet/update script"
+  },
+  "source_boundary": {
+    "sourceLabel": "terminal-velocity-upgrade-affordability-strategy-scaffold",
+    "oracleStatus": "upgrade_affordability_progression_pending_ev_family_source_trace",
+    "caveat": "Exact EV Classic shipyard purchase-goal UI remains pending source/runtime evidence."
+  },
+  "deterministic_values": {
+    "lightFreighterPrice": 58822,
+    "creditsAtBlock": 10000,
+    "creditDeficit": 48822,
+    "tradeFundingCheckpointCredits": 59260,
+    "finalCreditsAfterPurchase": 438,
+    "finalShipId": "light_freighter"
+  }
+}

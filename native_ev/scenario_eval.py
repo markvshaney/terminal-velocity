@@ -339,6 +339,8 @@ def _record_strategy_skill_checkpoint(state: dict[str, Any], action: dict[str, A
         'playerShipId': state.get('playerShipId'),
         'ownedOutfits': dict(state.get('ownedOutfits', {})),
         'ownedWeapons': dict(state.get('ownedWeapons', {})),
+        'activePurchaseGoal': dict(state.get('activePurchaseGoal', {})),
+        'completedPurchaseGoals': list(state.get('completedPurchaseGoals', [])),
         'maxFuel': int(state.get('maxFuel', 0)),
         'fuel': int(state.get('fuel', 0)),
         'maxHull': int(state.get('maxHull', 0)),
@@ -1879,7 +1881,16 @@ def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[st
     listing = listings[ship_id]
     price = int(listing.get('price', 0))
     if state['credits'] < price:
-        trace.append({'type': 'blocked_buy_ship', 'reason': 'insufficient credits', 'shipId': ship_id, 'price': price, 'credits': state['credits'], 'sourceLabel': source_label, 'oracleStatus': oracle_status})
+        state['activePurchaseGoal'] = {
+            'type': 'ship',
+            'shipId': ship_id,
+            'price': price,
+            'creditsAtBlock': int(state['credits']),
+            'creditDeficit': price - int(state['credits']),
+            'system': state['currentSystem'],
+            'body': state['landedBody'],
+        }
+        trace.append({'type': 'blocked_buy_ship', 'reason': 'insufficient credits', 'shipId': ship_id, 'price': price, 'credits': state['credits'], 'creditDeficit': price - int(state['credits']), 'purchaseGoal': dict(state['activePurchaseGoal']), 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     ship = ships[ship_id]
     new_cargo_capacity = int(ship.get('cargoSpace', state['cargoCapacity']))
@@ -1896,6 +1907,15 @@ def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[st
         return False
     previous_ship = state['playerShipId']
     previous_cargo = state['cargoCapacity']
+    active_purchase_goal = dict(state.get('activePurchaseGoal', {}))
+    completed_purchase_goal = None
+    if active_purchase_goal.get('type') == 'ship' and active_purchase_goal.get('shipId') == ship_id:
+        completed_purchase_goal = {
+            **active_purchase_goal,
+            'completedAtCredits': int(state['credits'] - price),
+        }
+        state.setdefault('completedPurchaseGoals', []).append(completed_purchase_goal)
+        state.pop('activePurchaseGoal', None)
     state['credits'] -= price
     state['playerShipId'] = ship_id
     state['cargoCapacity'] = new_cargo_capacity
@@ -1913,6 +1933,8 @@ def _buy_ship(state: dict[str, Any], action: dict[str, Any], trace: list[dict[st
         'sourceLabel': source_label,
         'oracleStatus': oracle_status,
     })
+    if completed_purchase_goal is not None:
+        trace[-1]['completedPurchaseGoal'] = completed_purchase_goal
     return True
 
 
@@ -4022,6 +4044,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_initial_light_freighter_purchase': 'passed' if any(event.get('shipId') == 'light_freighter' and event.get('reason') == 'insufficient credits' and event.get('credits') == STARTING_CREDITS for event in blocked_ship_events) else 'failed',
             'completed_upgrade_funding_trade_run': 'passed' if len([event for event in trade_events if event.get('type') == 'buy_commodity_lot' and event.get('system') == 'Sol' and event.get('commodity') == 'food']) == 2 and len([event for event in trade_events if event.get('type') == 'sell_commodity_lot' and event.get('system') == START_SYSTEM and event.get('commodity') == 'food']) == 2 else 'failed',
             'bought_affordable_light_freighter_upgrade': 'passed' if state.get('playerShipId') == 'light_freighter' and state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and any(event.get('shipId') == 'light_freighter' for event in buy_ship_events) else 'failed',
+            'surfaced_upgrade_purchase_goal_context': 'passed' if any(event.get('skill') == 'affordability_gap' and event.get('activePurchaseGoal', {}).get('shipId') == 'light_freighter' and event.get('activePurchaseGoal', {}).get('creditDeficit', 0) > 0 for event in checkpoints) and any(event.get('skill') == 'trade_funding_run' and event.get('activePurchaseGoal', {}).get('shipId') == 'light_freighter' and event.get('credits', 0) >= event.get('activePurchaseGoal', {}).get('price', 0) for event in checkpoints) and any(event.get('skill') == 'ship_buyer' and event.get('activePurchaseGoal') == {} and event.get('completedPurchaseGoals', [{}])[-1].get('shipId') == 'light_freighter' for event in checkpoints) and any(event.get('completedPurchaseGoal', {}).get('shipId') == 'light_freighter' for event in buy_ship_events) else 'failed',
             'recorded_upgrade_affordability_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-upgrade-affordability-strategy-scaffold' and event.get('oracleStatus') == 'upgrade_affordability_progression_pending_ev_family_source_trace' for event in source_events) else 'failed',
         })
     elif name == 'cargo_expansion_trade_loop':

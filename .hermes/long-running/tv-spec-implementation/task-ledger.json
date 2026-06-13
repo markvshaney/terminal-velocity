@@ -21,12 +21,12 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "upgrade-readiness-inventory-context-20260613T043310Z",
-  "last_progress_token": "b727a8ae5f01d63c9dabe0dbd228a869cd2e4fffe3f8f283105f15992c725940",
+  "last_material_event_id": "upgrade-affordability-purchase-goal-context-20260613T133015Z",
+  "last_progress_token": "1fb1ebaafc9530db1a92c10c7bfe632c7afbbf0a32ba467574a6325f7f982ee9",
   "last_reconciled_live_git": {
-    "active_kanban_task": "t_4ad7b9e5",
-    "checked_at": "2026-06-13T04:33:10Z",
-    "checkpoint_decision": "safe_local_upgrade_readiness_inventory_context_increment_verified_continue_successor",
+    "active_kanban_task": "t_cb8b9600",
+    "checked_at": "2026-06-13T13:30:15Z",
+    "checkpoint_decision": "safe_local_upgrade_affordability_purchase_goal_context_increment_verified_continue_successor",
     "checkpoint_files": [
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_scenario_eval.py",
@@ -34,39 +34,35 @@
       "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_4ad7b9e5.json"
+      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_cb8b9600.json"
     ],
     "git_status_short_branch": [
       "## main...origin/main",
-      " M .hermes/long-running/tv-spec-implementation/events.jsonl",
       " M docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
       " M docs/checklists/ev-classic-fidelity-implementation-backlog.md",
       " M native_ev/scenario_eval.py",
-      " M native_ev/tests/test_scenario_eval.py",
-      "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_4ad7b9e5.json",
-      "?? .hermes/long-running/tv-spec-implementation/update_checkpoint_t_4ad7b9e5.py"
+      " M native_ev/tests/test_scenario_eval.py"
     ],
-    "head_before_slice": "0b4f87c1382732c5dfa3b907c3bc9ec8cafa84b8",
-    "origin_main_before_slice": "0b4f87c1382732c5dfa3b907c3bc9ec8cafa84b8",
+    "head_before_slice": "981e8332e4b5c809297544576654b7d14325b48d",
+    "origin_main_before_slice": "981e8332e4b5c809297544576654b7d14325b48d",
     "successor_kanban_task": null
   },
   "last_runner_summary_path": null,
   "last_verified": {
+    "timestamp": "2026-06-13T13:30:15Z",
+    "verified_by": "kanban-worker:t_cb8b9600",
     "live_truth_sources": {
-      "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all --pretty; summary total 99, passed 99, failed 0",
-      "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
-      "git_diff_check": "passed; git diff --check produced no whitespace errors",
-      "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
-      "npm_test": "blocked/not_applicable; npm test -- --run failed ENOENT because repo has no package.json at project root",
-      "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py upgrade_readiness_strategy_loop --pretty; success true; checks include surfaced_upgrade_inventory_context=passed",
-      "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_upgrade_readiness_strategy_loop_records_service_outfit_weapon_and_ship_checkpoints -v; Ran 1 test OK"
-    },
-    "timestamp": "2026-06-13T04:33:10Z",
-    "verified_by": "kanban-worker:t_4ad7b9e5"
+      "backlog_index_build": "passed; python3 tools/backlog_dispatch_index.py build; wrote docs/checklists/ev-classic-fidelity-implementation-backlog.index.json; BACKLOG DISPATCH INDEX OK",
+      "backlog_dispatch_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+      "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests in 0.721s OK",
+      "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py upgrade_affordability_trade_loop --pretty; success true; surfaced_upgrade_purchase_goal_context=passed",
+      "git_status": "main...origin/main with intended modifications in scenario_eval.py, test_scenario_eval.py, backlog markdown, regenerated backlog index, and this checkpoint packet",
+      "git_diff_stat": "4 implementation/index files changed before checkpoint; checkpoint also updates long-running ledger/events and adds closeout packet/update script"
+    }
   },
   "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
   "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Continue from standard preflight with the next safe, evidence-bounded EV Classic fidelity backlog slice; candidate adjacent slices include further upgrade/ship/outfitter guardrail context or static topology evidence, but do not promote exact Classic UI/topology semantics without accepted evidence.",
+  "next_resume_action": "Continue from standard preflight with the next safe, evidence-bounded EV Classic fidelity backlog slice; candidate adjacent slices include further upgrade/ship/outfitter guardrail context or deterministic verifier coverage, but do not promote exact Classic UI/topology semantics without accepted evidence.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",

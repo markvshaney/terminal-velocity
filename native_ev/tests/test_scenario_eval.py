@@ -481,6 +481,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['blocked_initial_light_freighter_purchase'], 'passed')
         self.assertEqual(result['checks']['completed_upgrade_funding_trade_run'], 'passed')
         self.assertEqual(result['checks']['bought_affordable_light_freighter_upgrade'], 'passed')
+        self.assertEqual(result['checks']['surfaced_upgrade_purchase_goal_context'], 'passed')
         self.assertEqual(result['checks']['recorded_upgrade_affordability_source_boundary'], 'passed')
         blocked_ship_events = [event for event in result['trace'] if event['type'] == 'blocked_buy_ship']
         self.assertEqual(blocked_ship_events[0]['reason'], 'insufficient credits')
@@ -488,6 +489,15 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertGreaterEqual(len(trade_events), 2)
         checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
         self.assertEqual([event['skill'] for event in checkpoints], ['affordability_gap', 'trade_funding_run', 'ship_buyer'])
+        self.assertEqual(checkpoints[0]['activePurchaseGoal']['shipId'], 'light_freighter')
+        self.assertEqual(checkpoints[0]['activePurchaseGoal']['creditDeficit'], 48822)
+        self.assertEqual(checkpoints[1]['activePurchaseGoal']['shipId'], 'light_freighter')
+        self.assertEqual(checkpoints[1]['credits'], 59260)
+        self.assertEqual(checkpoints[-1]['activePurchaseGoal'], {})
+        self.assertEqual(checkpoints[-1]['completedPurchaseGoals'][-1]['shipId'], 'light_freighter')
+        self.assertEqual(blocked_ship_events[0]['purchaseGoal']['creditDeficit'], 48822)
+        buy_ship_events = [event for event in result['trace'] if event['type'] == 'buy_ship']
+        self.assertEqual(buy_ship_events[-1]['completedPurchaseGoal']['shipId'], 'light_freighter')
         self.assertTrue(all(event['sourceLabel'] == 'terminal-velocity-upgrade-affordability-strategy-scaffold' for event in checkpoints))
         self.assertTrue(all(event['oracleStatus'] == 'upgrade_affordability_progression_pending_ev_family_source_trace' for event in checkpoints))
         self.assertEqual(result['state']['currentSystem'], 'Sol')
