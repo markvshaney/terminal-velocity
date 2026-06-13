@@ -475,9 +475,10 @@ The fixes below are ordered by urgency. Before implementation, each fix item mus
 ### P2.7 — instantiate deterministic automation with light LLM supervision
 
 26. **Move routine state classification from prose/LLM judgment into a dry-run recovery classifier.**
-   - Extend `tools/tv_integration_lane.py` or add `tools/tv_runner_recovery_preflight.py` with a dry-run mode that emits structured JSON for: `repo_state`, `dirty_paths`, `candidate_handoff`, `handoff_match`, `sensitive_path_check`, `focused_verifier_status`, `known_unrelated_failures`, `active_worker`, `recommended_action`, `requires_llm_review`, and `explicit_gate`.
+   - Extend `tools/tv_integration_lane.py` or add `tools/tv_runner_recovery_preflight.py` with a dry-run mode that emits structured JSON for: `repo_state`, `dirty_paths`, `candidate_handoff`, `handoff_evidence_sources`, `matched_changed_files`, `missing_changed_files`, `extra_dirty_paths`, `handoff_match`, `sensitive_path_check`, `focused_verifier_status`, `known_unrelated_failures`, `active_worker`, `recommended_action`, `requires_llm_review`, and `explicit_gate`.
+   - Recovery evidence sources must include Kanban comments/latest summary and local `.hermes/long-running/tv-spec-implementation/closeout-packet-*.json` files before falling back to task-list prose; ledger `last_reconciled_live_git` and event-tail checkpoints may provide corroborating evidence but must not override live dirty-path/sensitive-path checks.
    - Expected recommended actions for uncommitted recovery are exactly: `checkpoint_and_push_ready`, `rerun_focused_verifier`, `unsafe_dirty_state`, or `missing_handoff`.
-   - Additional non-recovery actions may be emitted only when the classifier is operating in start/publish orchestration mode: `push_ready_publish`, `seed_successor`, or `missing_live_owner`.
+   - Additional non-recovery actions may be emitted only when the classifier is operating in start/publish orchestration mode: `push_ready_publish`, `seed_successor`, `missing_live_owner`, or `normalize_ledger_state`.
    - LLM role: review the exact JSON plus exact diff only when the deterministic classifier returns a safe candidate requiring judgment; do not ask the LLM to discover routine state from prose logs.
 
 27. **Make verifier selection mechanically routed.**
@@ -485,10 +486,12 @@ The fixes below are ordered by urgency. Before implementation, each fix item mus
    - Worker prompts must call this command before any broad native discovery.
    - Test cases: scenario-only change routes to focused scenario/unit verifier; docs/process-only change routes to readback/search plus `git diff --check`; unknown/high-risk native surface may recommend full native discovery as checkpoint-optional or risk-boundary verification.
 
-28. **Make closeout packet completeness mechanically validated.**
+28. **Make closeout packet completeness mechanically validated and consumable by recovery.**
    - Add a validator for `push_ready`/`blocked:*` packets that checks canonical status, commit SHA when required, intended files, verifier commands/results, known unrelated failures, explicit gate class, and next action.
+   - Require closeout packets intended for recovery to include `task_id`, `changed_files`, structured `verification`, evidence boundary/source-fidelity note when applicable, and enough verifier command text for a later recovery pass to choose `checkpoint_and_push_ready` vs `rerun_focused_verifier`.
+   - Recovery classifiers must be able to read these packets directly; otherwise the system can write a valid handoff that no deterministic owner can consume.
    - Reject `ready_for_review_or_integration` unless it is historical evidence; reject `review-required` unless paired with a concrete `blocked: explicit_human_gate` reason.
-   - Add a regression fixture for the evidence-case shape: safe dirty bundle + focused verifier passed + unrelated broad failures + no commit yet -> `checkpoint_and_push_ready` or `rerun_focused_verifier`, never generic `review-required`.
+   - Add a regression fixture for the evidence-case shape: safe dirty bundle + focused verifier passed + unrelated broad failures + no commit yet + local closeout packet/Kanban comment evidence -> `checkpoint_and_push_ready` or `rerun_focused_verifier`, never generic `review-required` or `unsafe_dirty_state`.
 
 29. **Convert watchdog/reporting into script-first, LLM-light supervision.**
    - Routine watchdogs must be no-agent or deterministic-script jobs that stay silent unless a material state transition occurs: stale gate converted, integration pushed, real explicit gate found, successor started, or watchdog/tooling failure.
@@ -577,6 +580,69 @@ Verified behavior:
 
 Remaining follow-up: wire the normalization step into the publish/recovery closeout path so integration-owner actions can normalize a specific gate after verifying and publishing its bundle, rather than relying on an operator to run the planner manually.
 
+### Evidence update — 2026-06-13 closeout-packet, recovery-classifier, and ledger-staleness bugs
+
+Status: newly diagnosed follow-up bug cluster; source-backed by live readback of `tools/tv_runner_recovery_preflight.py`, `tools/tv_runner_start_resume_preflight.py`, `tools/check_tv_runner_topology.py`, `.hermes/long-running/tv-spec-implementation/closeout-packet-t_4ad7b9e5.json`, `.hermes/long-running/tv-spec-implementation/task-ledger.json`, and `hermes -p loki-game kanban --board terminal-velocity show t_4ad7b9e5 --json`.
+
+#### Bug A — closeout evidence exists but is split across unconsumed surfaces
+
+The current `t_4ad7b9e5` closeout packet does contain usable handoff evidence: `task_id`, exact `changed_files`, targeted verifier results, full scenario/unit verification summaries, `git diff --check`, and an explicit EV Classic source-boundary note. The Kanban card also contains the handoff JSON in a comment.
+
+The failure is therefore not missing evidence. The failure is evidence-source mismatch: the recovery classifier does not currently consume the local closeout packet or Kanban comments where the evidence lives.
+
+Proposed fix:
+
+- Treat local closeout packets under `.hermes/long-running/tv-spec-implementation/closeout-packet-*.json` as first-class handoff evidence when they name the active blocked task and dirty bundle.
+- Treat Kanban comments and `latest_summary` as first-class handoff evidence for blocked-card recovery, not only task body/result/summary fields from `kanban list`.
+- Match current dirty paths against packet `changed_files` and comment `changed_files`, allowing exact equality plus explicitly safe generated/checkpoint artifacts such as the packet itself.
+- Extract verifier status from structured `verification` fields before falling back to prose search.
+- Regression: a dirty repo matching `closeout-packet-t_4ad7b9e5.json` plus a blocked `push_ready`/review-required Kanban card must classify as `checkpoint_and_push_ready` or `rerun_focused_verifier`, never generic `unsafe_dirty_state`.
+
+#### Bug B — recovery classifier is narrower than the start/resume preflight
+
+`tools/tv_runner_start_resume_preflight.py` can see the live blocked Kanban card and route dirty state to `recover_dirty_handoff`, but `tools/tv_runner_recovery_preflight.py` then searches only limited task-list fields:
+
+- `id`
+- `title`
+- `body`
+- `result`
+- `summary`
+- `reason`
+- `status`
+- `current_step_key`
+
+It does not currently inspect Kanban comments, local closeout packets, ledger `last_reconciled_live_git.checkpoint_files`, or events tail records. That means start/resume can correctly identify recovery work while recovery preflight misclassifies the same state as `unsafe_dirty_state`.
+
+Proposed fix:
+
+- Add an evidence-aggregation layer for dirty-handoff recovery with ordered sources: live Kanban comments/latest summary, local closeout packets, ledger checkpoint files/last verification, then task-list prose as fallback.
+- Emit provenance in classifier JSON, e.g. `handoff_evidence_sources: ["kanban_comment", "closeout_packet"]`, `matched_changed_files`, `missing_changed_files`, and `extra_dirty_paths`.
+- Keep `unsafe_dirty_state` for true mismatch cases: sensitive paths, unrelated dirty paths not explained by the handoff, missing handoff evidence after all sources are checked, or failed relevant verifier.
+- If matching evidence exists but verifier freshness is uncertain, return `rerun_focused_verifier` with the exact verifier command(s) from the packet, not `unsafe_dirty_state`.
+- Wire autostart/start-resume to call the same evidence aggregator, so `recover_dirty_handoff` and the recovery classifier cannot disagree on candidate identity.
+
+#### Bug C — ledger staleness recurs because `running` and `none_active` are allowed to coexist
+
+The live ledger currently contains `status: running` while both top-level `declared_owner` and nested `runner_ownership.implementation_owner` are `none_active`. `tools/check_tv_runner_topology.py` treats most non-stopped statuses, including `running`, as declaring active runner intent. When a start/resume command supplies `--startup-owner continuous_kanban_runner`, the checker correctly warns that startup owner differs from the stale ledger owner.
+
+This is a bookkeeping/invariant bug, not evidence of a real active owner conflict. The ledger is useful as checkpoint/provenance state, but it must not remain a primary runtime truth surface after the live owner has stopped or a worker has blocked.
+
+Proposed fix:
+
+- Add a ledger invariant: `status: running` requires a live or declared implementation owner other than `none_active`, or a fresh active-worker/heartbeat claim. If neither exists, normalize the ledger to a non-running recovery state.
+- Introduce explicit ledger states for unresolved handoffs, e.g. `waiting_integration_recovery`, `push_ready_recovery`, `waiting_focused_verifier`, or `blocked_unsafe_dirty_state`; avoid `running + none_active`.
+- When a worker blocks as `push_ready` or stale `review-required`, update ledger `status`, `declared_owner`, `runner_ownership.implementation_owner`, `last_reconciled_live_git`, and `current_gate_classification` coherently in the same closeout/normalization path.
+- Topology/preflight should continue deriving live owner truth from live process/Kanban/cron/lock/git surfaces first, but should report stale ledger as a repairable metadata mismatch with a named normalization action.
+- Regression: a ledger fixture with `status: running` and owner `none_active` plus no live owner must produce a ledger-normalization recommendation, not an ambiguous perpetual `ledger_stale` warning.
+
+#### Revised next implementation order from this evidence update
+
+1. Extend dirty-handoff recovery evidence aggregation to consume closeout packets and Kanban comments.
+2. Add regression fixtures for `t_4ad7b9e5` shape: packet/comment evidence present, dirty bundle safe, verifier pass recorded.
+3. Add ledger-state invariant/normalizer so worker closeout cannot leave `running + none_active` after a blocked/push-ready handoff.
+4. Wire the richer recovery classifier into integration-owner checkpoint/publish closeout and autostart reporting.
+5. Only after the mechanical recovery path is fixed, revisit candidate `tv-spec.md` prose to avoid documenting a stale or incomplete tooling contract.
+
 ### P3 — tighten reporting and observability
 
 31. **Use material progress reports, not process-chatter loops.**
@@ -624,6 +690,8 @@ If targeted verifier(s) passed for the touched TV surface and any broad-suite fa
 Worker verifier selection must start from `docs/checklists/tv-verifier-impact-map.json`: run the focused required verifier for the touched surface first, using the cheapest sufficient verifier family that proves the changed claim. Full native discovery (`python3 -m unittest discover -s native_ev/tests -p 'test_*.py'`) is checkpoint-optional, not a default gate; run it only when justified by the touched native/model surface, checkpoint/handoff boundary, integration-owner preflight, unclear dependency risk, large accumulated bundle sealing, or explicit user request. If full discovery is run and known unrelated failures appear, record them as `known_unrelated_failure_surface` without overriding a passing focused verifier for the slice.
 
 `ready_for_review_or_integration` is non-canonical wording. Normalize it to `push_ready` when the next step is integration-owner publication, or to a concrete `blocked:*` status when a real blocker exists.
+
+Closeout packets, Kanban comments, and ledger/event checkpoint records are handoff evidence, not separate optional prose. A blocked or dirty-handoff recovery path must inspect structured closeout packets such as `.hermes/long-running/tv-spec-implementation/closeout-packet-*.json`, Kanban comment handoffs, `latest_summary`, ledger `last_reconciled_live_git`, and event-tail checkpoint records before classifying a safe dirty bundle as missing handoff evidence. If these surfaces agree on `changed_files` and relevant verifier success, recovery must return `checkpoint_and_push_ready` or `push_ready`; if verifier freshness is uncertain, return `rerun_focused_verifier` with the exact verifier commands. Reserve `unsafe_dirty_state` for sensitive paths, unrelated extra paths, failed relevant verifier, or no matching handoff after all listed evidence surfaces were inspected.
 ```
 
 Apply the following edit to the Integration-owner paragraph that currently begins `The integration owner performs final status/diff review...`:
@@ -631,7 +699,7 @@ Apply the following edit to the Integration-owner paragraph that currently begin
 ```markdown
 The integration owner performs final status/diff review, runs required checkpoint verification, creates or validates the local checkpoint commit when recovering a stale worker handoff, pushes normal non-force bundles, fetches, verifies local `HEAD == origin/main`, and records the pushed checkpoint. Integration is event-triggered: publish as infrequently as possible while preventing worker blockage, stale coordination, context/reset loss, or inspection-expensive local divergence. Do not push by maximum-frequency cadence, per-commit habit, or arbitrary commit-count batching. The deterministic publish preflight is `python3 tools/tv_integration_lane.py --dry-run`; it must report no active worker, no unsafe dirty worktree, no branch-behind state, only safe TV paths, `git diff --check`, and committed-diff secret scan before an LLM review may return `publish`. Actual push uses `python3 tools/tv_integration_lane.py --push --llm-approved` only after that exact-bundle review. One clean commit may be pushed immediately if it unblocks another lane; several adjacent commits may remain local when no one is blocked and the stack remains coherent and easy to inspect.
 
-When the lane is idle but the worktree is dirty, classify the dirty bundle before publish preflight or successor seeding. Match by evidence, not by vague recency: compare the dirty file set against the active or newest dirty-matching Kanban task, handoff intended-file list, ledger/event tail, and verifier output covering the exact dirty bundle. Old clean-history blocked cards are ignored for liveness unless their intended files match the current dirty set. If the bundle matches, handle it as integration recovery before publish preflight: validate intended dirty files against the handoff and ledger/event tail, scan for sensitive/proprietary/unrelated paths, verify or rerun the focused relevant verifier, create the coherent local checkpoint if missing, record or normalize `push_ready`, run the deterministic integration lane, and then dispatch exactly one successor if no real gate remains. An autostart watchdog may detect, report, or route this state, but only the integration owner mutates repo/task state, creates commits, or pushes. If dirty paths do not match a handoff, block as `unsafe_dirty_state` with exact paths instead of seeding overlapping work.
+When the lane is idle but the worktree is dirty, classify the dirty bundle before publish preflight or successor seeding. Match by evidence, not by vague recency: compare the dirty file set against the active or newest dirty-matching Kanban task, handoff intended-file list, closeout packet `changed_files`, Kanban comment handoff, `latest_summary`, ledger/event tail, and verifier output covering the exact dirty bundle. Old clean-history blocked cards are ignored for liveness unless their intended files match the current dirty set. If the bundle matches, handle it as integration recovery before publish preflight: validate intended dirty files against the handoff and ledger/event tail, scan for sensitive/proprietary/unrelated paths, verify or rerun the focused relevant verifier, create the coherent local checkpoint if missing, record or normalize `push_ready`, run the deterministic integration lane, and then dispatch exactly one successor if no real gate remains. An autostart watchdog may detect, report, or route this state, but only the integration owner mutates repo/task state, creates commits, or pushes. If dirty paths do not match a handoff after inspecting Kanban comments, closeout packets, ledger/event records, and task-list prose, block as `unsafe_dirty_state` or `missing_handoff` with exact paths and evidence surfaces inspected instead of seeding overlapping work.
 
 A publish guard that reports `dirty_worktree`/`nothing_to_publish` is not itself a recovery failure for an uncommitted worker slice; it means the integration owner must run the uncommitted-handoff recovery classifier first, then rerun the normal publish guard after a coherent checkpoint exists.
 ```
@@ -647,7 +715,9 @@ The start protocol performs a broad **process-blocker** search, not broad native
 
 Each blocker class must map to a listed safe-local correction or explicit gate: evidence-matched stale worker handoff -> integration-owner recovery; clean repo plus stale legacy blocked cards -> ignore for liveness only when blocked-card enrichment classifies them as non-actionable historical cards rather than unresolved handoffs/gates; `push_ready` blocked handoff -> `recover_push_ready_handoff` / `push_ready_integration_required` before any successor seed; unexplained dirty state -> `blocked: unsafe_dirty_state` with exact paths; stale selected-wrapper stop/lock -> clear only for that wrapper after recording why stale; autostart state file but no scheduled/running watchdog -> report `missing_live_owner` unless the user has explicitly requested watchdog creation/repair; profile/skill crash-loop -> block/supersede only the bad TV task/card and create a corrected TV card only after target-worker capability verification passes, otherwise `blocked: capability_check_failed`; topology mismatch -> preserve one named implementation owner and keep only non-mutating passive reporters outside it. Safe-local correction mode is limited to selecting one owner, running/reporting integration recovery, clearing a proved-stale wrapper-local stop/lock, ignoring stale non-actionable legacy cards for liveness, and seeding one successor only when the repo is clean and no real gate remains; all account/provider/gateway/config/scheduled-job changes remain explicit gates.
 
-The preflight is machine-checkable and defaults to dry-run/report mode, emitting `startup_intent`, `owner_surface`, `repo_state`, `active_worker`, `blocked_cards`, `stop_lock_state`, `watchdog_state`, `reporter_state`, `capability_check`, `ledger_process_bug`, `recommended_action`, `correction_applied`, and `explicit_gate`. Correction mode may apply only safe-local remediations; it must not perform external/account/provider/gateway/config changes, destructive original-EV actions, force/history operations, or raw proprietary publication. After a start/correction, verify more than "scheduled": check a running/claimed task, heartbeat/log/summary update, or completed integration-recovery action.
+The preflight is machine-checkable and defaults to dry-run/report mode, emitting `startup_intent`, `owner_surface`, `repo_state`, `active_worker`, `blocked_cards`, `stop_lock_state`, `watchdog_state`, `reporter_state`, `capability_check`, `ledger_process_bug`, `ledger_state_invariant`, `recommended_action`, `correction_applied`, and `explicit_gate`. Correction mode may apply only safe-local remediations; it must not perform external/account/provider/gateway/config changes, destructive original-EV actions, force/history operations, or raw proprietary publication. After a start/correction, verify more than "scheduled": check a running/claimed task, heartbeat/log/summary update, or completed integration-recovery action.
+
+The ledger must not remain `status: running` with `declared_owner: none_active` / `runner_ownership.implementation_owner: none_active` after a worker has blocked or no live owner exists. That state is stale intent, not live ownership. The start/resume or closeout-normalization path must either claim/start one owner with live proof, or normalize the ledger to an explicit non-running recovery state such as `waiting_integration_recovery`, `push_ready_recovery`, `waiting_focused_verifier`, or `blocked_unsafe_dirty_state`. A recurring `ledger_stale` warning without a named normalization action is a process bug.
 ```
 
 Apply the following edit to the Human gates / Not gated section by adding these bullets under `Not gated:`

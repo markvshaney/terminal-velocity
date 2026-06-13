@@ -165,8 +165,64 @@ def focused_verifier_status(text: str) -> str:
     return "missing"
 
 
-def choose_handoff(tasks: list[dict[str, Any]], dirty_paths: list[str], assignee: str) -> tuple[dict[str, Any] | None, str, bool]:
-    candidates: list[tuple[int, dict[str, Any], str]] = []
+def closeout_packet_text(packet: dict[str, Any]) -> str:
+    values: list[str] = []
+    for key in ("task_id", "summary", "successor_recommendation", "evidence_boundary"):
+        if packet.get(key) is not None:
+            values.append(str(packet.get(key)))
+    verification = packet.get("verification")
+    if isinstance(verification, dict):
+        values.extend(f"{key}: {value}" for key, value in verification.items())
+    return "\n".join(values)
+
+
+def load_closeout_packets(repo: Path) -> list[dict[str, Any]]:
+    packet_root = repo / ".hermes/long-running/tv-spec-implementation"
+    packets: list[dict[str, Any]] = []
+    for path in sorted(packet_root.glob("closeout-packet-*.json")):
+        try:
+            packet = json.loads(path.read_text())
+        except Exception:
+            continue
+        if not isinstance(packet, dict):
+            continue
+        changed_files = packet.get("changed_files")
+        if not isinstance(changed_files, list):
+            continue
+        normalized_files = [str(item) for item in changed_files if isinstance(item, str) and item]
+        if not normalized_files:
+            continue
+        packet["_path"] = str(path.relative_to(repo))
+        packet["_changed_files"] = sorted(set(normalized_files))
+        packet["_text"] = closeout_packet_text(packet)
+        packets.append(packet)
+    return packets
+
+
+def dirty_match(dirty_paths: list[str], evidence_paths: set[str]) -> tuple[bool, dict[str, list[str]]]:
+    dirty_set = set(dirty_paths)
+    return dirty_set == evidence_paths, {
+        "matched_paths": sorted(dirty_set & evidence_paths),
+        "missing_from_evidence": sorted(dirty_set - evidence_paths),
+        "extra_in_evidence": sorted(evidence_paths - dirty_set),
+    }
+
+
+def choose_handoff(
+    repo: Path,
+    tasks: list[dict[str, Any]],
+    dirty_paths: list[str],
+    assignee: str,
+) -> tuple[dict[str, Any] | None, str, bool, list[str], dict[str, list[str]]]:
+    packets = load_closeout_packets(repo)
+    packets_by_task_id: dict[str, list[dict[str, Any]]] = {}
+    for packet in packets:
+        task_id = packet.get("task_id")
+        if task_id is not None:
+            packets_by_task_id.setdefault(str(task_id), []).append(packet)
+
+    candidates: list[tuple[int, dict[str, Any], str, list[str], dict[str, list[str]]]] = []
+    empty_match = {"matched_paths": [], "missing_from_evidence": dirty_paths, "extra_in_evidence": []}
     for task in tasks:
         if task.get("assignee") != assignee:
             continue
@@ -176,14 +232,36 @@ def choose_handoff(tasks: list[dict[str, Any]], dirty_paths: list[str], assignee
         lower = text.lower()
         if task.get("status") != "blocked" and not any(term in lower for term in REVIEW_TERMS):
             continue
-        matched = sum(1 for path in dirty_paths if path.lower() in lower)
-        if dirty_paths and matched == len(dirty_paths):
-            candidates.append((int(task.get("created_at") or task.get("started_at") or 0), task, text))
+
+        task_evidence_paths = {path for path in dirty_paths if path.lower() in lower}
+        matched, match_detail = dirty_match(dirty_paths, task_evidence_paths)
+        evidence_text = text
+        sources = ["kanban_task_text"] if task_evidence_paths else []
+
+        if not matched:
+            for packet in packets_by_task_id.get(str(task.get("id")), []):
+                packet_paths = set(packet["_changed_files"])
+                packet_matched, packet_match_detail = dirty_match(dirty_paths, packet_paths)
+                if packet_matched:
+                    matched = True
+                    match_detail = packet_match_detail
+                    evidence_text = text + "\n" + str(packet.get("_text") or "")
+                    sources = ["closeout_packet"]
+                    if task_evidence_paths:
+                        sources.insert(0, "kanban_task_text")
+                    break
+                if len(packet_match_detail["matched_paths"]) > len(match_detail["matched_paths"]):
+                    match_detail = packet_match_detail
+
+        if dirty_paths and matched:
+            candidates.append((int(task.get("created_at") or task.get("started_at") or 0), task, evidence_text, sources, match_detail))
+        elif match_detail["matched_paths"] and not candidates:
+            empty_match = match_detail
     if not candidates:
-        return None, "missing", False
+        return None, "missing", False, [], empty_match
     candidates.sort(key=lambda item: item[0], reverse=True)
-    _, task, text = candidates[0]
-    return task, focused_verifier_status(text), True
+    _, task, text, sources, match_detail = candidates[0]
+    return task, focused_verifier_status(text), True, sources, match_detail
 
 
 def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None = None, assignee: str = DEFAULT_ASSIGNEE) -> dict[str, Any]:
@@ -200,6 +278,12 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
         "dirty_paths": dirty_paths,
         "candidate_handoff": None,
         "handoff_match": False,
+        "handoff_evidence_sources": [],
+        "handoff_dirty_path_match": {
+            "matched_paths": [],
+            "missing_from_evidence": dirty_paths,
+            "extra_in_evidence": [],
+        },
         "sensitive_path_check": sensitive_path_check(dirty_paths),
         "focused_verifier_status": "not_applicable",
         "known_unrelated_failures": [],
@@ -221,8 +305,10 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
         payload["explicit_gate"] = "unsafe_dirty_state"
         return payload
 
-    handoff, verifier_status, matched = choose_handoff(tasks, dirty_paths, assignee)
+    handoff, verifier_status, matched, evidence_sources, match_detail = choose_handoff(repo, tasks, dirty_paths, assignee)
     payload["handoff_match"] = matched
+    payload["handoff_evidence_sources"] = evidence_sources
+    payload["handoff_dirty_path_match"] = match_detail
     payload["focused_verifier_status"] = verifier_status
     if handoff:
         payload["candidate_handoff"] = {

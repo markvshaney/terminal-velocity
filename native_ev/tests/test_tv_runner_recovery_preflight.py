@@ -102,6 +102,53 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
         self.assertTrue(payload["handoff_match"])
         self.assertEqual(payload["explicit_gate"], "rerun_focused_verifier")
 
+    def test_closeout_packet_changed_files_are_handoff_evidence(self):
+        repo = self.make_repo()
+        (repo / "native_ev/tests").mkdir(parents=True)
+        (repo / "docs/checklists").mkdir(parents=True)
+        packet_dir = repo / ".hermes/long-running/tv-spec-implementation"
+        packet_dir.mkdir(parents=True)
+        changed_files = [
+            "native_ev/scenario_eval.py",
+            "native_ev/tests/test_scenario_eval.py",
+            "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+            ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+            ".hermes/long-running/tv-spec-implementation/events.jsonl",
+            ".hermes/long-running/tv-spec-implementation/closeout-packet-t_packet.json",
+        ]
+        for path in changed_files:
+            full_path = repo / path
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+            full_path.write_text(f"dirty {path}\n")
+        (packet_dir / "closeout-packet-t_packet.json").write_text(json.dumps({
+            "task_id": "t_packet",
+            "changed_files": changed_files,
+            "verification": {
+                "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v",
+                "git_diff_check": "passed; git diff --check produced no whitespace errors",
+            },
+            "summary": "Recovered worker closeout packet with targeted verifier evidence.",
+        }))
+        tasks = [{
+            "id": "t_packet",
+            "status": "blocked",
+            "assignee": "terminal-velocity",
+            "title": "Continue TV tv-spec autonomous loop",
+            "body": "push_ready handoff recorded; see closeout packet for changed files and verification.",
+        }]
+
+        code, payload = self.run_preflight(repo, tasks)
+
+        self.assertEqual(code, 0, payload)
+        self.assertEqual(payload["recommended_action"], "checkpoint_and_push_ready")
+        self.assertTrue(payload["handoff_match"])
+        self.assertEqual(payload["focused_verifier_status"], "passed")
+        self.assertEqual(payload["candidate_handoff"]["id"], "t_packet")
+        self.assertIn("closeout_packet", payload["handoff_evidence_sources"])
+        self.assertEqual(payload["handoff_dirty_path_match"]["missing_from_evidence"], [])
+        self.assertEqual(payload["handoff_dirty_path_match"]["extra_in_evidence"], [])
+        self.assertIsNone(payload["explicit_gate"])
+
     def test_checkpoint_mode_commits_matching_handoff_bundle_and_reports_push_ready(self):
         repo = self.make_repo()
         (repo / "native_ev/tests").mkdir(parents=True)
