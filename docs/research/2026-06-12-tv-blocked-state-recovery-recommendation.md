@@ -9,7 +9,8 @@ Source / evidence basis:
   - `tools/tv_integration_lane.py`
   - `native_ev/tests/test_tv_runner_recovery_preflight.py`
   - `native_ev/tests/test_tv_integration_lane.py`
-  - `docs/research/2026-06-12-tv-runner-integration-owner-review-gate.md`
+  - `docs/research/2026-06-13-tv-runner-recovery-ledger-follow-up.md`
+  - archived provenance copy outside repo: `/home/bh/.hermes/profiles/loki-game/home/terminal-velocity-archived-research/2026-06-12-tv-runner-integration-owner-review-gate.md`
 
 ## How this artifact should be used
 
