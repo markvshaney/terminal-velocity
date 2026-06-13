@@ -1,0 +1,27 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1d5ea6d9.json"
+  ],
+  "long_task": "tv-spec-implementation",
+  "next_resume_action": "Continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve fuel-reserve scaffold labels and do not promote exact EV Classic fuel-upgrade UI semantics without original-runtime/source evidence.",
+  "source_fidelity_note": "Fuel reserve goal context remains Terminal Velocity scaffold evidence under terminal-velocity-fuel-reserve-upgrade-scaffold / fuel_reserve_upgrade_pending_classic_runtime_trace; no exact EV Classic UI promotion claimed.",
+  "summary": "Added active/completed fuel-reserve goal context to fuel_reserve_upgrade_loop and verified the deterministic evaluator/scenario surfaces.",
+  "task_id": "t_1d5ea6d9",
+  "timestamp": "2026-06-13T19:05:00Z",
+  "verification": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary scenarios=99 failed=0",
+    "backlog_dispatch_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "backlog_index_build_preflight": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed; git diff --check produced no whitespace errors",
+    "native_ev_discover": "partial environmental failure; python3 -m unittest discover -s native_ev/tests -p test_*.py had 8 unrelated runner-topology/integration-lane failures due active_worker_claims/live gateway_kanban_dispatcher while scenario_eval suite passed",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
+    "npm_test": "not applicable; npm test failed at repository root because no package.json exists",
+    "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py fuel_reserve_upgrade_loop --pretty; surfaced_fuel_reserve_goal_context=passed and completedFuelReserveGoals captured the Auxiliary Fuel Tank reserve goal",
+    "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_fuel_reserve_upgrade_loop_buys_aux_tank_and_refuels_expanded_reserve -v; Ran 1 test OK"
+  }
+}

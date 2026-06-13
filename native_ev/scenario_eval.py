@@ -192,6 +192,8 @@ def initial_gameplay_state() -> dict[str, Any]:
         'ownedWeapons': {},
         'activeCargoExpansionGoal': {},
         'completedCargoExpansionGoals': [],
+        'activeFuelReserveGoal': {},
+        'completedFuelReserveGoals': [],
         'maxHull': 100,
         'currentHull': 100,
         'playerDisabled': False,
@@ -373,6 +375,8 @@ def _record_strategy_skill_checkpoint(state: dict[str, Any], action: dict[str, A
         'ownedWeapons': dict(state.get('ownedWeapons', {})),
         'activeCargoExpansionGoal': dict(state.get('activeCargoExpansionGoal', {})),
         'completedCargoExpansionGoals': list(state.get('completedCargoExpansionGoals', [])),
+        'activeFuelReserveGoal': dict(state.get('activeFuelReserveGoal', {})),
+        'completedFuelReserveGoals': list(state.get('completedFuelReserveGoals', [])),
         'activePurchaseGoal': dict(state.get('activePurchaseGoal', {})),
         'completedPurchaseGoals': list(state.get('completedPurchaseGoals', [])),
         'activeShipTransferGoal': dict(state.get('activeShipTransferGoal', {})),
@@ -1874,7 +1878,9 @@ def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: 
         trace.append({'type': 'blocked_buy_outfit_or_weapon', 'reason': 'insufficient credits', 'itemId': item_id, 'price': price, 'credits': state['credits'], 'creditDeficit': price - int(state['credits']), 'purchaseGoal': dict(state['activePurchaseGoal']), 'sourceLabel': source_label, 'oracleStatus': oracle_status})
         return False
     active_purchase_goal = dict(state.get('activePurchaseGoal', {}))
+    active_fuel_reserve_goal = dict(state.get('activeFuelReserveGoal', {}))
     completed_purchase_goal = None
+    completed_fuel_reserve_goal = None
     if active_purchase_goal.get('type') == sale_type and active_purchase_goal.get('itemId') == item_id:
         completed_purchase_goal = {
             **active_purchase_goal,
@@ -1891,6 +1897,15 @@ def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: 
         state['cargoCapacity'] += int(effects.get('cargoSpace', 0))
         state['maxHull'] += int(effects.get('maxHull', 0))
         state['maxFuel'] += int(effects.get('maxFuel', 0))
+        if active_fuel_reserve_goal.get('type') == 'fuel_reserve' and active_fuel_reserve_goal.get('itemId') == item_id and int(effects.get('maxFuel', 0)) > 0:
+            completed_fuel_reserve_goal = {
+                **active_fuel_reserve_goal,
+                'completedMaxFuel': int(state.get('maxFuel', 0)),
+                'completedFuel': int(state.get('fuel', 0)),
+                'completedAtCredits': int(state['credits']),
+            }
+            state.setdefault('completedFuelReserveGoals', []).append(completed_fuel_reserve_goal)
+            state.pop('activeFuelReserveGoal', None)
     trace.append({
         'type': 'buy_outfit_or_weapon',
         'saleType': sale_type,
@@ -1909,6 +1924,8 @@ def _buy_outfit_or_weapon(state: dict[str, Any], action: dict[str, Any], trace: 
     })
     if completed_purchase_goal is not None:
         trace[-1]['completedPurchaseGoal'] = completed_purchase_goal
+    if completed_fuel_reserve_goal is not None:
+        trace[-1]['completedFuelReserveGoal'] = completed_fuel_reserve_goal
     return True
 
 
@@ -2593,7 +2610,7 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'depart'},
             {'type': 'jump', 'destinationSystem': 'Sol'},
             {'type': 'land', 'body': 'Earth'},
-            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'set_state', 'values': {'fuel': 0, 'activeFuelReserveGoal': {'type': 'fuel_reserve', 'itemId': 'fuel_tank', 'system': 'Sol', 'body': 'Earth', 'fuelAtGoal': 0, 'maxFuelAtGoal': STARTING_FUEL, 'reserveGainNeeded': 25, 'recoveryRoute': ['Sol', START_SYSTEM]}}},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'fuel_range_gap', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'buy_outfit_or_weapon', 'itemId': 'fuel_tank', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
             {'type': 'record_strategy_skill_checkpoint', 'skill': 'fuel_tank_upgrade', 'sourceLabel': source_label, 'oracleStatus': oracle_status},
@@ -4154,6 +4171,7 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'bought_auxiliary_fuel_tank_upgrade': 'passed' if outfit_events and outfit_events[-1].get('maxFuel') == STARTING_FUEL + 25 and state.get('ownedOutfits', {}).get('fuel_tank') == 1 else 'failed',
             'refueled_to_expanded_reserve': 'passed' if refuel_events and refuel_events[-1].get('fuelAfter') == STARTING_FUEL + 25 else 'failed',
             'completed_fuel_reserve_return_hop': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('landedBody') == START_BODY and state.get('maxFuel') == STARTING_FUEL + 25 and state.get('fuel') == STARTING_FUEL + 24 and any(event.get('originSystem') == 'Sol' and event.get('destinationSystem') == START_SYSTEM for event in jump_events) else 'failed',
+            'surfaced_fuel_reserve_goal_context': 'passed' if any(event.get('skill') == 'fuel_range_gap' and event.get('activeFuelReserveGoal', {}).get('itemId') == 'fuel_tank' and event.get('activeFuelReserveGoal', {}).get('fuelAtGoal') == 0 for event in checkpoints) and any(event.get('itemId') == 'fuel_tank' and event.get('completedFuelReserveGoal', {}).get('completedMaxFuel') == STARTING_FUEL + 25 for event in outfit_events) and any(event.get('skill') == 'fuel_tank_upgrade' and event.get('activeFuelReserveGoal') == {} and event.get('completedFuelReserveGoals', [{}])[-1].get('itemId') == 'fuel_tank' for event in checkpoints) and any(event.get('skill') == 'expanded_reserve_return' and event.get('completedFuelReserveGoals', [{}])[-1].get('completedMaxFuel') == STARTING_FUEL + 25 for event in checkpoints) else 'failed',
             'recorded_fuel_reserve_source_boundary': 'passed' if source_events and all(event.get('sourceLabel') == 'terminal-velocity-fuel-reserve-upgrade-scaffold' and event.get('oracleStatus') == 'fuel_reserve_upgrade_pending_classic_runtime_trace' for event in source_events) else 'failed',
         })
     elif name == 'hull_plating_repair_loop':

@@ -543,9 +543,19 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['bought_auxiliary_fuel_tank_upgrade'], 'passed')
         self.assertEqual(result['checks']['refueled_to_expanded_reserve'], 'passed')
         self.assertEqual(result['checks']['completed_fuel_reserve_return_hop'], 'passed')
+        self.assertEqual(result['checks']['surfaced_fuel_reserve_goal_context'], 'passed')
         self.assertEqual(result['checks']['recorded_fuel_reserve_source_boundary'], 'passed')
         checkpoints = [event for event in result['trace'] if event['type'] == 'strategy_skill_checkpoint']
         self.assertEqual([event['skill'] for event in checkpoints], ['fuel_range_gap', 'fuel_tank_upgrade', 'expanded_reserve_return'])
+        self.assertEqual(checkpoints[0]['activeFuelReserveGoal']['itemId'], 'fuel_tank')
+        self.assertEqual(checkpoints[0]['activeFuelReserveGoal']['fuelAtGoal'], 0)
+        self.assertEqual(checkpoints[0]['activeFuelReserveGoal']['reserveGainNeeded'], 25)
+        self.assertEqual(checkpoints[1]['activeFuelReserveGoal'], {})
+        self.assertEqual(checkpoints[1]['completedFuelReserveGoals'][-1]['itemId'], 'fuel_tank')
+        self.assertEqual(checkpoints[-1]['completedFuelReserveGoals'][-1]['completedMaxFuel'], 31)
+        outfit_events = [event for event in result['trace'] if event['type'] == 'buy_outfit_or_weapon' and event['itemId'] == 'fuel_tank']
+        self.assertEqual(outfit_events[-1]['completedFuelReserveGoal']['maxFuelAtGoal'], 6)
+        self.assertEqual(outfit_events[-1]['completedFuelReserveGoal']['completedMaxFuel'], 31)
         refuel_events = [event for event in result['trace'] if event['type'] == 'refuel']
         self.assertEqual(refuel_events[-1]['fuelAfter'], 31)
         self.assertEqual(result['state']['currentSystem'], 'Levo')

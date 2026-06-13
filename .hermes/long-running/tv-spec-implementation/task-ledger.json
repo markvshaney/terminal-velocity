@@ -21,12 +21,12 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_material_event_id": "cargo-expansion-goal-context-20260613T142433Z",
-  "last_progress_token": "c1f17eb1ea590d2a37e60c9c43dfdfaaff70b06f9e51636281fe855a4bd3edeb",
+  "last_material_event_id": "fuel-reserve-goal-context-20260613T190500Z",
+  "last_progress_token": "fuel-reserve-goal-context-t_1d5ea6d9-verified",
   "last_reconciled_live_git": {
-    "active_kanban_task": "t_c3ac071a",
-    "checked_at": "2026-06-13T14:24:33Z",
-    "checkpoint_decision": "safe_local_cargo_expansion_goal_context_increment_verified_continue",
+    "active_kanban_task": "t_1d5ea6d9",
+    "checked_at": "2026-06-13T19:05:00Z",
+    "checkpoint_decision": "safe_local_fuel_reserve_goal_context_increment_verified_continue",
     "checkpoint_files": [
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_scenario_eval.py",
@@ -34,7 +34,8 @@
       "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_c3ac071a.json"
+      ".hermes/long-running/tv-spec-implementation/event-fuel-reserve-goal-context-20260613T190500Z.json",
+      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1d5ea6d9.json"
     ],
     "git_status_short_branch": [
       "## main...origin/main",
@@ -46,29 +47,30 @@
       " M native_ev/tests/test_scenario_eval.py",
       "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_1db4d53e.json",
       "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_57c3df52.json",
-      "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_c3ac071a.json"
+      "?? .hermes/long-running/tv-spec-implementation/closeout-packet-t_1d5ea6d9.json"
     ],
-    "head_before_slice": "d91442cfeec3ec567d47f26631156dafcad10001",
-    "origin_main_before_slice": "d91442cfeec3ec567d47f26631156dafcad10001"
+    "head_before_slice": "dba51ea2e7267a6d520241ecffba6f14136db729",
+    "origin_main_before_slice": "dba51ea2e7267a6d520241ecffba6f14136db729"
   },
   "last_runner_summary_path": null,
   "last_verified": {
-    "timestamp": "2026-06-13T14:24:33Z",
-    "verified_by": "kanban-worker:t_c3ac071a",
+    "timestamp": "2026-06-13T19:05:00Z",
+    "verified_by": "kanban-worker:t_1d5ea6d9",
     "live_truth_sources": {
       "backlog_dispatch_preflight": "passed earlier in this run; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
-      "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_cargo_expansion_trade_loop_uses_cargo_pod_for_third_trade_lot native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_commodity_buy_blocked_recovery_loop_labels_blockers_and_recovers native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_commodity_partial_hold_recovery_loop_frees_space_then_buys_lot -v; Ran 3 tests OK",
-      "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py cargo_expansion_trade_loop --pretty; surfaced_cargo_expansion_goal_context=passed and completedCargoExpansionGoals captured Sol Food third-lot capacity goal",
+      "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_fuel_reserve_upgrade_loop_buys_aux_tank_and_refuels_expanded_reserve -v; Ran 1 test OK",
+      "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py fuel_reserve_upgrade_loop --pretty; surfaced_fuel_reserve_goal_context=passed and completedFuelReserveGoals captured the Auxiliary Fuel Tank reserve goal",
       "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
-      "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total 99, passed 99, failed 0",
-      "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
+      "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary scenarios=99 failed=0",
+      "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
       "git_diff_check": "passed; git diff --check produced no whitespace errors",
-      "npm_test": "not applicable; npm test -- --run failed because repository root has no package.json"
+      "native_ev_discover": "partial environmental failure; python3 -m unittest discover -s native_ev/tests -p test_*.py had 8 unrelated runner-topology/integration-lane failures due active_worker_claims/live gateway_kanban_dispatcher while scenario_eval suite passed",
+      "npm_test": "not applicable; npm test failed at repository root because no package.json exists"
     }
   },
   "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
   "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve cargo-expansion scaffold labels and do not promote exact EV Classic cargo-upgrade UI semantics without original-runtime/source evidence.",
+  "next_resume_action": "Continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve fuel-reserve scaffold labels and do not promote exact EV Classic fuel-upgrade UI semantics without original-runtime/source evidence.",
   "runner_ownership": {
     "allowed_surfaces": {
       "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
@@ -86,6 +88,6 @@
   "schema_version": 2,
   "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity under loki-game profile. No cron mutation, gateway/provider/account change, push, force-push, deletion, or publication is authorized by this ledger entry.",
   "status": "running",
-  "successor_kanban_task": "t_c3ac071a",
+  "successor_kanban_task": "t_1d5ea6d9",
   "task_id": "tv-spec-implementation"
 }

@@ -1,0 +1,38 @@
+{
+  "active_gate": null,
+  "artifacts_touched": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1d5ea6d9.json"
+  ],
+  "event_id": "fuel-reserve-goal-context-20260613T190500Z",
+  "event_type": "verification",
+  "kanban_task": "t_1d5ea6d9",
+  "next_resume_action": "Continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve fuel-reserve scaffold labels and do not promote exact EV Classic fuel-upgrade UI semantics without original-runtime/source evidence.",
+  "packet": {
+    "behavior_or_claim": "fuel_reserve_upgrade_loop now surfaces activeFuelReserveGoal for an empty-reserve Auxiliary Fuel Tank recovery and clears it into completedFuelReserveGoals after the tank is bought.",
+    "lane_class": "EV Classic playable milestone fuel-upgrade/travel recovery scaffold",
+    "oracle_class": "deterministic-symbolic-scenario",
+    "promotion_status": "scaffold behavior promoted; exact EV Classic fuel-upgrade UI remains pending",
+    "source_basis": [
+      "terminal-velocity-scenario-scaffold",
+      "existing-fuel-reserve-upgrade-loop",
+      "backlog-dispatch-preflight"
+    ],
+    "source_fidelity_label": "terminal-velocity-fuel-reserve-goal-context-scaffold",
+    "uncertainty_gates": "No exact EV Classic fuel-tank stats, fuel-upgrade goal UI wording, or original runtime trace promoted."
+  },
+  "summary": "Safe-local fuel reserve goal-context scaffold increment verified: the fuel reserve upgrade loop now preserves activeFuelReserveGoal at the empty-reserve gap, clears it into completedFuelReserveGoals on Auxiliary Fuel Tank purchase, and verifies surfaced_fuel_reserve_goal_context=passed.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-13T19:05:00Z",
+  "type": "material_checkpoint",
+  "verification": {
+    "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary scenarios=99 failed=0",
+    "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v; Ran 103 tests OK",
+    "targeted_scenario": "passed; python3 tools/run_gameplay_scenarios.py fuel_reserve_upgrade_loop --pretty; surfaced_fuel_reserve_goal_context=passed",
+    "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_fuel_reserve_upgrade_loop_buys_aux_tank_and_refuels_expanded_reserve -v; Ran 1 test OK"
+  }
+}
