@@ -554,7 +554,26 @@ Verified behavior:
 - autostart does not dispatch/seed when start/resume preflight reports a gate;
 - idle clean autostart calls the structured start/resume preflight before seeding.
 
-Remaining follow-up: promote these canonical blocked-card classes into ledger/events or Kanban comments when integration-owner recovery resolves a gate, so the board itself stops carrying stale ambiguous `review-required` language.
+Remaining follow-up: promote canonical gate normalization into the integration lane so actionable `push_ready` / stale `review_required_process_bug` cards can get idempotent comments/events while unsafe gates remain untouched.
+
+### Applied implementation note — 2026-06-12 integration-owner gate normalization
+
+Status: partial P3 implementation.
+
+Implemented surfaces:
+
+- `tools/tv_integration_lane.py` now accepts `--normalize-gates` to plan canonical gate comments for actionable blocked TV Kanban cards.
+- `--apply-gate-comments` writes idempotent `tv_gate_normalization` comments and `tv_gate_normalized` events for `push_ready` and stale `review_required_process_bug` cards.
+- Non-actionable gates such as `unsafe_dirty_state`, `verifier_failed`, `explicit_human_gate`, and `blocked:unclassified` are reported under `skipped` and are not commented by default.
+- Regression coverage lives in `native_ev/tests/test_tv_integration_lane.py`.
+
+Verified behavior:
+
+- dry-run plans comments only for actionable `push_ready` / `review_required_process_bug` cards;
+- apply mode inserts one comment/event per actionable card;
+- repeated apply is idempotent and writes zero duplicate comments.
+
+Remaining follow-up: wire the normalization step into the publish/recovery closeout path so integration-owner actions can normalize a specific gate after verifying and publishing its bundle, rather than relying on an operator to run the planner manually.
 
 ### P3 — tighten reporting and observability
 

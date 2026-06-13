@@ -16,6 +16,7 @@ import re
 import sqlite3
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -43,6 +44,8 @@ SECRET_PATTERNS = (
 )
 ACTIVE_STATUSES = {"running"}
 TV_TERMS = ("terminal velocity", "terminal-velocity", "tv-spec", "continue tv", " tv ")
+GATE_NORMALIZATION_MARKER = "tv_gate_normalization"
+ACTIONABLE_GATE_CLASSES = {"push_ready", "review_required_process_bug"}
 
 
 def run(cmd: list[str], repo: Path, *, check: bool = False) -> subprocess.CompletedProcess[str]:
@@ -178,6 +181,137 @@ def active_worker_claims(profile: Path, repo: Path) -> list[str]:
     return sorted(set(claims))
 
 
+def canonical_gate_class(task: dict[str, Any]) -> str:
+    text = " ".join(str(task.get(key) or "") for key in ("title", "body", "status")).lower()
+    if "push_ready" in text or "push ready" in text:
+        return "push_ready"
+    if "unsafe_dirty_state" in text or "unsafe dirty" in text:
+        return "unsafe_dirty_state"
+    if "verifier_failed" in text or "verifier failed" in text:
+        return "verifier_failed"
+    if "explicit_human_gate" in text or "explicit human gate" in text:
+        return "explicit_human_gate"
+    if "review-required" in text or "review_required" in text or "review required" in text:
+        return "review_required_process_bug"
+    return "blocked:unclassified"
+
+
+def normalization_comment_body(task: dict[str, Any], klass: str) -> str:
+    next_action = {
+        "push_ready": "integration owner should verify bundle state, publish if still current, then close or supersede this gate",
+        "review_required_process_bug": "generic review-required is stale for verified safe-local TV work; convert to push_ready, verifier_failed, unsafe_dirty_state, explicit_human_gate, or continue",
+    }.get(klass, "inspect and convert to a concrete TV gate class")
+    return (
+        f"{GATE_NORMALIZATION_MARKER}: canonical_class={klass}\n"
+        f"source_task={task.get('id')} title={task.get('title')}\n"
+        f"next_action={next_action}"
+    )
+
+
+def task_has_normalization_comment(conn: sqlite3.Connection, task_id: str, klass: str) -> bool:
+    tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if "task_comments" not in tables:
+        return False
+    needle = f"{GATE_NORMALIZATION_MARKER}: canonical_class={klass}"
+    row = conn.execute(
+        "SELECT 1 FROM task_comments WHERE task_id = ? AND body LIKE ? LIMIT 1",
+        (task_id, f"%{needle}%"),
+    ).fetchone()
+    return row is not None
+
+
+def insert_normalization_comment(conn: sqlite3.Connection, task: dict[str, Any], klass: str, author: str) -> None:
+    now = int(time.time())
+    body = normalization_comment_body(task, klass)
+    conn.execute(
+        "INSERT INTO task_comments (task_id, author, body, created_at) VALUES (?, ?, ?, ?)",
+        (task["id"], author, body, now),
+    )
+    tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if "task_events" in tables:
+        conn.execute(
+            "INSERT INTO task_events (task_id, run_id, kind, payload, created_at) VALUES (?, ?, ?, ?, ?)",
+            (
+                task["id"],
+                None,
+                "tv_gate_normalized",
+                json.dumps({"canonical_class": klass, "author": author}, sort_keys=True),
+                now,
+            ),
+        )
+
+
+def normalize_gate_comments(profile: Path, repo: Path, *, apply: bool, author: str = "integration_owner") -> dict[str, Any]:
+    planned: list[dict[str, Any]] = []
+    skipped: dict[str, str] = {}
+    inspected_paths: list[str] = []
+    errors: list[dict[str, str]] = []
+    comments_written = 0
+
+    for db_path in kanban_db_candidates(profile):
+        if not db_path.exists():
+            continue
+        inspected_paths.append(str(db_path))
+        uri = f"file:{db_path}?mode={'rwc' if apply else 'ro'}"
+        try:
+            conn = sqlite3.connect(uri, uri=True)
+            conn.row_factory = sqlite3.Row
+        except sqlite3.Error as exc:
+            errors.append({"path": str(db_path), "error": str(exc)})
+            continue
+        try:
+            tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            if "tasks" not in tables:
+                continue
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
+            wanted = [column for column in ("id", "title", "body", "assignee", "status", "tenant", "workspace_path") if column in columns]
+            if not {"id", "status"}.issubset(columns):
+                continue
+            rows = conn.execute(
+                f"SELECT {', '.join(wanted)} FROM tasks WHERE status = ? ORDER BY id",
+                ("blocked",),
+            ).fetchall()
+            for row in rows:
+                task = dict(row)
+                if not row_is_tv_related(task, repo):
+                    continue
+                klass = canonical_gate_class(task)
+                task_id = str(task.get("id") or "")
+                if klass not in ACTIONABLE_GATE_CLASSES:
+                    skipped[task_id] = klass
+                    continue
+                action = {
+                    "db_path": str(db_path),
+                    "task_id": task_id,
+                    "title": task.get("title"),
+                    "canonical_class": klass,
+                    "comment_marker": GATE_NORMALIZATION_MARKER,
+                }
+                planned.append(action)
+                if apply:
+                    if "task_comments" not in tables:
+                        errors.append({"path": str(db_path), "error": "task_comments table missing"})
+                    elif not task_has_normalization_comment(conn, task_id, klass):
+                        insert_normalization_comment(conn, task, klass, author)
+                        comments_written += 1
+            if apply:
+                conn.commit()
+        except sqlite3.Error as exc:
+            errors.append({"path": str(db_path), "error": str(exc)})
+        finally:
+            conn.close()
+
+    return {
+        "applied": apply,
+        "author": author,
+        "inspected_paths": inspected_paths,
+        "planned_comments": planned,
+        "skipped": skipped,
+        "comments_written": comments_written,
+        "errors": errors,
+    }
+
+
 def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dict[str, Any]:
     blockers: list[str] = []
     warnings: list[str] = []
@@ -258,6 +392,8 @@ def main() -> int:
     parser.add_argument("--push", action="store_true", help="After successful deterministic+LLM approval, push normally and verify HEAD == origin/main.")
     parser.add_argument("--llm-approved", action="store_true", help="Structured LLM review already returned publish for this exact bundle.")
     parser.add_argument("--allow-process-artifacts", action="store_true", help="Allow repo-local .hermes/long-running files in a bundle.")
+    parser.add_argument("--normalize-gates", action="store_true", help="Plan canonical comments for actionable blocked TV Kanban gates.")
+    parser.add_argument("--apply-gate-comments", action="store_true", help="With --normalize-gates, write idempotent Kanban comments/events for planned gate normalization.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -266,6 +402,13 @@ def main() -> int:
     payload["dry_run"] = bool(args.dry_run or not args.push)
     payload["would_push"] = False
     payload["pushed"] = False
+
+    if args.normalize_gates:
+        payload["gate_normalization"] = normalize_gate_comments(
+            profile,
+            repo,
+            apply=bool(args.apply_gate_comments),
+        )
 
     if args.push:
         if payload["decision"] != "publish":

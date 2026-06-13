@@ -110,6 +110,90 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(payload["decision"], "needs_human")
             self.assertIn("active_worker", payload["blockers"])
 
+    def make_profile_with_blocked_cards(self, root: Path, repo: Path) -> tuple[Path, Path]:
+        profile = root / "profile"
+        profile.mkdir()
+        db = profile / "kanban.db"
+        conn = sqlite3.connect(db)
+        try:
+            conn.executescript("""
+                CREATE TABLE tasks (
+                    id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    body TEXT,
+                    assignee TEXT,
+                    status TEXT NOT NULL,
+                    tenant TEXT,
+                    workspace_path TEXT,
+                    claim_lock TEXT,
+                    worker_pid INTEGER
+                );
+                CREATE TABLE task_comments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id TEXT NOT NULL,
+                    author TEXT NOT NULL,
+                    body TEXT NOT NULL,
+                    created_at INTEGER NOT NULL
+                );
+                CREATE TABLE task_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id TEXT NOT NULL,
+                    run_id INTEGER,
+                    kind TEXT NOT NULL,
+                    payload TEXT,
+                    created_at INTEGER NOT NULL
+                );
+            """)
+            rows = [
+                ("t_push", "TV push handoff", "push_ready: commit abc verified", "terminal-velocity", "blocked", "terminal-velocity", str(repo), None, None),
+                ("t_review", "TV stale review", "review-required: verified safe-local docs update", "terminal-velocity", "blocked", "terminal-velocity", str(repo), None, None),
+                ("t_unsafe", "TV unsafe handoff", "blocked: unsafe_dirty_state has unrelated files", "terminal-velocity", "blocked", "terminal-velocity", str(repo), None, None),
+            ]
+            conn.executemany(
+                "INSERT INTO tasks (id, title, body, assignee, status, tenant, workspace_path, claim_lock, worker_pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                rows,
+            )
+            conn.commit()
+        finally:
+            conn.close()
+        return profile, db
+
+    def test_gate_normalization_dry_run_plans_only_actionable_gate_comments(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, _db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+
+            code, payload = self.run_integrator(repo, "--normalize-gates", "--profile", str(profile))
+
+            self.assertEqual(code, 0, payload)
+            normalization = payload["gate_normalization"]
+            self.assertFalse(normalization["applied"])
+            planned = {action["task_id"]: action["canonical_class"] for action in normalization["planned_comments"]}
+            self.assertEqual(planned, {"t_push": "push_ready", "t_review": "review_required_process_bug"})
+            self.assertEqual(normalization["skipped"]["t_unsafe"], "unsafe_dirty_state")
+
+    def test_gate_normalization_apply_inserts_idempotent_comments_and_events(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+
+            first_code, first_payload = self.run_integrator(repo, "--normalize-gates", "--apply-gate-comments", "--profile", str(profile))
+            second_code, second_payload = self.run_integrator(repo, "--normalize-gates", "--apply-gate-comments", "--profile", str(profile))
+
+            self.assertEqual(first_code, 0, first_payload)
+            self.assertEqual(second_code, 0, second_payload)
+            self.assertEqual(first_payload["gate_normalization"]["comments_written"], 2)
+            self.assertEqual(second_payload["gate_normalization"]["comments_written"], 0)
+            conn = sqlite3.connect(db)
+            try:
+                comments = conn.execute("SELECT task_id, body FROM task_comments ORDER BY task_id").fetchall()
+                events = conn.execute("SELECT task_id, kind FROM task_events ORDER BY task_id").fetchall()
+            finally:
+                conn.close()
+            self.assertEqual([row[0] for row in comments], ["t_push", "t_review"])
+            self.assertTrue(all("tv_gate_normalization" in row[1] for row in comments))
+            self.assertEqual([row[1] for row in events], ["tv_gate_normalized", "tv_gate_normalized"])
+
 
 if __name__ == "__main__":
     unittest.main()
