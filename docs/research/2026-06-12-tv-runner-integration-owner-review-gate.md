@@ -5,10 +5,10 @@ Source: Loki Game Telegram assistant posts in session `20260611_225234_b37aa40b`
 - `03:07:24 EDT`, message id `57534`: runner status.
 - `03:10:48 EDT`, message id `57544`: integration-owner policy check.
 - `03:14:38 EDT`, message id `57559`: worker `push_ready` failure diagnosis.
-Status: systemic control-plane failure analysis; source text is summarized, not copied verbatim.
+Status: systemic control-plane failure analysis with partial implementation notes through the current start/resume/autostart guard setup; source text is summarized, not copied verbatim.
 Reconstruction note: this artifact was reconstructed after accidental deletion. Treat reconstructed prose and any "now says" live-state claims as needing source/readback verification before implementation.
 
-Purpose: comprehensive current-setup deficiency review plus proposed `tv-spec.md` edit. The embedded spec patch is an intentional deliverable of this artifact, not evidence that the spec has already changed.
+Purpose: comprehensive current-setup deficiency review plus proposed `tv-spec.md` edit. The embedded spec patch is an intentional deliverable of this artifact, not evidence that the spec has already changed. Later applied notes distinguish implemented control-plane behavior from still-recommended follow-up.
 
 Status legend:
 
@@ -414,8 +414,10 @@ The fixes below are ordered by urgency. Before implementation, each fix item mus
     - When the ledger says `review_required_process_bug: true` and identifies a Kanban task whose intended files match the current dirty bundle, the next start/resume path routes to integration recovery before ordinary dispatch.
     - If no recovery owner is available, record `blocked: missing_live_owner` with the exact command/surface needed rather than leaving `status: running` with no live process.
 
-17. **Keep stale blocked legacy cards ignored only for start/restart liveness.**
-    - Old blocked cards do not stop a clean lane from continuing.
+17. **Keep stale blocked legacy cards ignored only when they are not actionable handoffs.**
+    - Old blocked cards do not stop a clean lane from continuing only when they are historical/non-actionable and do not represent unresolved integration/recovery work.
+    - A clean repo with no live owner is not idle if a live blocked TV card is classed as `push_ready`, stale `review_required_process_bug`, `verifier_failed`, `unsafe_dirty_state`, `explicit_human_gate`, or `blocked:unclassified`.
+    - A `push_ready` card is an integration-owner handoff and must route to `recover_push_ready_handoff` / `push_ready_integration_required` before autostart can seed a successor.
     - An active dirty worktree plus a blocked task whose intended files match the current dirty set is integration recovery work, not ignored history.
 
 ### P2.5 — add a runner-start protocol and blocker-remediation sweep
@@ -432,8 +434,8 @@ The fixes below are ordered by urgency. Before implementation, each fix item mus
 
 20. **Pair every discovered blocker class with a safe correction mechanism.**
     - `stale_review_required` with matching safe dirty bundle -> integration-owner recovery: intended-file/sensitive-path check, focused relevant verifier, local checkpoint if missing, normalize to `push_ready`, deterministic integration lane, successor dispatch if clean.
-    - `push_ready` local checkpoint with no active worker -> integration-owner dry-run/review/push path, then fetch and verify `HEAD == origin/main`.
-    - clean repo plus stale blocked legacy cards -> ignore for liveness, seed/dispatch exactly one successor, and leave old cards as historical unless explicitly doing backlog cleanup.
+    - `push_ready` local checkpoint or blocked handoff with no active worker -> integration-owner dry-run/review/push or gate-normalization path; autostart must not seed over it. The current start/resume preflight reports `recover_push_ready_handoff` with `push_ready_integration_required` for this class until the integration-owner closeout path resolves it.
+    - clean repo plus stale blocked legacy cards -> ignore for liveness only after blocked-card enrichment shows they are non-actionable historical cards rather than `push_ready`, stale `review_required_process_bug`, failed-verifier, unsafe, explicit-human, or unclassified TV gates.
     - unexplained dirty/untracked repo state -> preserve/move clearly unrelated process debris when safe; otherwise block as `unsafe_dirty_state` with exact paths.
     - stale lock/stop-file for the selected wrapper -> clear only if restarting that same wrapper and after recording why it is stale; otherwise report what surface it affects.
     - worker profile/skill crash-loop -> block/supersede the bad card with the concrete startup reason, create a corrected card only after profile capability is verified.
@@ -522,42 +524,39 @@ Verified behavior:
 
 Remaining follow-up: wire the checkpoint/repaired-clean recovery path into a fuller integration-owner command that records or normalizes the Kanban/ledger `push_ready` packet and then runs the existing publish guard; separately decide whether autostart should call `--repair-unsafe-debris` automatically for this narrow debris class or keep it as explicit integration-owner operation.
 
-### Applied implementation note — 2026-06-12 start/resume preflight first slice
+### Applied implementation note — 2026-06-12/13 start/resume preflight and blocked-card start gate
 
-Status: partial P2.7/P3 implementation.
+Status: partial P2.7/P3 implementation; the current setup now treats clean-idle `push_ready` as unresolved integration work, not as an idle lane.
 
 Implemented surfaces:
 
-- `tools/tv_runner_start_resume_preflight.py` now wraps the topology checker and live repo checks into a structured start/resume decision packet.
+- `tools/tv_runner_start_resume_preflight.py` wraps the topology checker and live repo checks into a structured start/resume decision packet.
 - The packet includes `repo_state`, `dirty_paths`, `topology`, `blocked_cards`, `stop_lock_state`, `watchdog_reporter_state`, `capability_check`, `recommended_action`, `safe_to_start`, and `explicit_gate`.
-- Regression coverage lives in `native_ev/tests/test_tv_runner_start_resume_preflight.py`.
-
-Verified behavior:
-
-- clean idle repo + gateway startup owner -> `start_gateway_kanban_dispatcher`;
-- dirty repo -> `recover_dirty_handoff` with `recovery_preflight_required` before any start;
-- active matching gateway owner -> `resume_existing_owner`;
-- conflicting live owner -> `blocked:topology_conflict`.
-
-### Applied implementation note — 2026-06-12 blocked-card enrichment and autostart preflight wiring
-
-Status: partial P2.7/P3 implementation.
-
-Implemented surfaces:
-
-- `tools/tv_runner_start_resume_preflight.py` now enriches `blocked_cards` from live Kanban SQLite task state when a topology candidate DB exists.
+- `tools/tv_runner_start_resume_preflight.py` enriches `blocked_cards` from live Kanban SQLite task state when a topology candidate DB exists.
 - Blocked TV cards are classified into canonical classes including `push_ready`, `review_required_process_bug`, `unsafe_dirty_state`, `verifier_failed`, `explicit_human_gate`, and `blocked:unclassified`.
-- `tools/tv_runner_autostart.py` now consumes the structured start/resume preflight before dispatching a ready task or seeding a successor, and fails closed on any `explicit_gate`/unsafe result.
+- `tools/tv_runner_start_resume_preflight.py` now applies `blocked_card_start_gate(...)` when the lane is otherwise clean and has `live_implementation_owner: none_active`. That guard blocks start/seed over unresolved blocked-card handoffs and routes the highest-priority class to a concrete recovery action/gate:
+  - `push_ready` -> `recover_push_ready_handoff` with `push_ready_integration_required`;
+  - `review_required_process_bug` -> `normalize_blocked_gates` with `gate_normalization_required`;
+  - `verifier_failed` -> `rerun_focused_verifier`;
+  - `unsafe_dirty_state`, `explicit_human_gate`, and `blocked:unclassified` -> concrete blocked gates.
+- `tools/tv_runner_autostart.py` consumes the structured start/resume preflight before dispatching a ready task or seeding a successor, and fails closed on any `explicit_gate`/unsafe result.
 - Regression coverage lives in `native_ev/tests/test_tv_runner_start_resume_preflight.py` and `native_ev/tests/test_tv_runner_autostart.py`.
 
 Verified behavior:
 
+- clean idle repo + gateway startup owner + no unresolved blocked-card handoff -> `start_gateway_kanban_dispatcher`;
+- clean idle repo + `push_ready` blocked TV card -> `recover_push_ready_handoff`, `explicit_gate: push_ready_integration_required`, `safe_to_start: false`;
+- dirty repo -> `recover_dirty_handoff` with `recovery_preflight_required` before any start;
+- active matching gateway owner -> `resume_existing_owner`;
+- conflicting live owner -> `blocked:topology_conflict`;
 - live blocked TV cards are listed with `counts_by_class`;
 - stale generic `review-required` cards classify as `review_required_process_bug` rather than a human gate;
 - autostart does not dispatch/seed when start/resume preflight reports a gate;
 - idle clean autostart calls the structured start/resume preflight before seeding.
 
-Remaining follow-up: promote canonical gate normalization into the integration lane so actionable `push_ready` / stale `review_required_process_bug` cards can get idempotent comments/events while unsafe gates remain untouched.
+Current implication for this artifact: earlier text that says old blocked cards may be ignored for liveness is now qualified. Clean historical blocked cards may be ignored only when they do not represent an actionable unresolved handoff. A clean repo with no live owner is not idle if the live Kanban board still contains a `push_ready` handoff, stale `review_required_process_bug`, failed verifier gate, unsafe dirty-state gate, explicit human gate, or unclassified blocked TV card.
+
+Remaining follow-up: promote canonical gate normalization and specific handoff recovery into the integration lane closeout path so the `recover_push_ready_handoff` and `normalize_blocked_gates` recommendations can be resolved automatically after deterministic review, instead of merely blocking autostart from seeding over them.
 
 ### Applied implementation note — 2026-06-12 integration-owner gate normalization
 
@@ -646,7 +645,7 @@ Starting or resuming the TV game-development runner is a control-plane operation
 
 The start protocol performs a broad **process-blocker** search, not broad native test discovery. It looks for dirty worktree or branch divergence, active worker/process/claim heartbeat, blocked `review-required`/`push_ready`/`ready_for_review_or_integration` cards, stale locks/stop files, untracked repo artifacts, profile/skill startup failures, topology mismatches, autostart state without a live watchdog, ledger `review_required_process_bug` without a consuming executor, and known unrelated failure surfaces that could be misread as current gates. Code/test verification remains governed by `docs/checklists/tv-verifier-impact-map.json`: run the focused relevant verifier for the touched surface first, and treat full native discovery as checkpoint-optional unless separately justified.
 
-Each blocker class must map to a listed safe-local correction or explicit gate: evidence-matched stale worker handoff -> integration-owner recovery; clean repo plus stale legacy blocked cards -> ignore for liveness and seed exactly one successor; unexplained dirty state -> `blocked: unsafe_dirty_state` with exact paths; stale selected-wrapper stop/lock -> clear only for that wrapper after recording why stale; autostart state file but no scheduled/running watchdog -> report `missing_live_owner` unless the user has explicitly requested watchdog creation/repair; profile/skill crash-loop -> block/supersede only the bad TV task/card and create a corrected TV card only after target-worker capability verification passes, otherwise `blocked: capability_check_failed`; topology mismatch -> preserve one named implementation owner and keep only non-mutating passive reporters outside it. Safe-local correction mode is limited to selecting one owner, running/reporting integration recovery, clearing a proved-stale wrapper-local stop/lock, ignoring stale legacy cards for liveness, and seeding one successor only when the repo is clean and no real gate remains; all account/provider/gateway/config/scheduled-job changes remain explicit gates.
+Each blocker class must map to a listed safe-local correction or explicit gate: evidence-matched stale worker handoff -> integration-owner recovery; clean repo plus stale legacy blocked cards -> ignore for liveness only when blocked-card enrichment classifies them as non-actionable historical cards rather than unresolved handoffs/gates; `push_ready` blocked handoff -> `recover_push_ready_handoff` / `push_ready_integration_required` before any successor seed; unexplained dirty state -> `blocked: unsafe_dirty_state` with exact paths; stale selected-wrapper stop/lock -> clear only for that wrapper after recording why stale; autostart state file but no scheduled/running watchdog -> report `missing_live_owner` unless the user has explicitly requested watchdog creation/repair; profile/skill crash-loop -> block/supersede only the bad TV task/card and create a corrected TV card only after target-worker capability verification passes, otherwise `blocked: capability_check_failed`; topology mismatch -> preserve one named implementation owner and keep only non-mutating passive reporters outside it. Safe-local correction mode is limited to selecting one owner, running/reporting integration recovery, clearing a proved-stale wrapper-local stop/lock, ignoring stale non-actionable legacy cards for liveness, and seeding one successor only when the repo is clean and no real gate remains; all account/provider/gateway/config/scheduled-job changes remain explicit gates.
 
 The preflight is machine-checkable and defaults to dry-run/report mode, emitting `startup_intent`, `owner_surface`, `repo_state`, `active_worker`, `blocked_cards`, `stop_lock_state`, `watchdog_state`, `reporter_state`, `capability_check`, `ledger_process_bug`, `recommended_action`, `correction_applied`, and `explicit_gate`. Correction mode may apply only safe-local remediations; it must not perform external/account/provider/gateway/config changes, destructive original-EV actions, force/history operations, or raw proprietary publication. After a start/correction, verify more than "scheduled": check a running/claimed task, heartbeat/log/summary update, or completed integration-recovery action.
 ```
