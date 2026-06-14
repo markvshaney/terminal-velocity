@@ -263,6 +263,7 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(second_code, 2, second_payload)
             self.assertEqual(forced_code, 2, forced_payload)
             self.assertEqual(first_payload["blocked_runner_report"]["status"], "sent")
+            self.assertEqual(first_payload["blocked_runner_report"]["delivery_stage"], "send_confirmed")
             self.assertEqual(second_payload["blocked_runner_report"]["status"], "skipped")
             self.assertEqual(second_payload["blocked_runner_report"]["reason"], "duplicate_fingerprint")
             self.assertEqual(forced_payload["blocked_runner_report"]["status"], "sent")
@@ -270,6 +271,41 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(len(calls), 2)
             state = json.loads((repo / ".hermes/long-running/tv-spec-implementation/report-state.json").read_text())
             self.assertEqual(state["blocked_runner_report"]["fingerprint"], first_payload["blocked_runner_report"]["fingerprint"])
+            artifact = repo / first_payload["blocked_runner_report"]["artifact"]
+            packet = json.loads(artifact.read_text())
+            self.assertEqual(packet["fingerprint"], first_payload["blocked_runner_report"]["fingerprint"])
+            self.assertIn("report_id", packet)
+            self.assertIn("TV runner blocked by integration owner", packet["message"])
+            self.assertIn("no push attempted", packet["message"])
+
+    def test_resend_last_blocked_runner_report_uses_persisted_artifact(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            repo = self.make_repo(root)
+            (repo / "scratch.txt").write_text("untracked\n")
+            fake_send = self.make_fake_hermes_send_bin(root, {"success": True})
+
+            first_code, first_payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+                env_overrides={"HERMES_SEND_BIN": str(fake_send)},
+            )
+            resend_code, resend_payload = self.run_integrator(
+                repo,
+                "--resend-last-blocked-report",
+                env_overrides={"HERMES_SEND_BIN": str(fake_send)},
+            )
+
+            self.assertEqual(first_code, 2, first_payload)
+            self.assertEqual(resend_code, 0, resend_payload)
+            resend = resend_payload["blocked_runner_report"]
+            self.assertEqual(resend["status"], "sent")
+            self.assertTrue(resend["resend"])
+            self.assertEqual(resend["artifact"], first_payload["blocked_runner_report"]["artifact"])
+            calls = (root / "send-cli-call.jsonl").read_text().splitlines()
+            self.assertEqual(len(calls), 2)
 
     def test_blocked_runner_report_dry_run_never_writes_dedupe_state(self):
         with tempfile.TemporaryDirectory() as tmp:

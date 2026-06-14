@@ -51,6 +51,7 @@ PUSH_READY_RECOVERY_MARKER = "tv_push_ready_recovery"
 UNSAFE_DIRTY_RECOVERY_MARKER = "tv_unsafe_dirty_recovery"
 ACTIONABLE_GATE_CLASSES = {"push_ready", "review_required_process_bug"}
 REPORT_STATE_PATH = Path(".hermes/long-running/tv-spec-implementation/report-state.json")
+REPORTS_DIR = Path(".hermes/long-running/tv-spec-implementation/reports")
 
 
 def run(cmd: list[str], repo: Path, *, check: bool = False) -> subprocess.CompletedProcess[str]:
@@ -77,7 +78,7 @@ def git_text(repo: Path, *args: str) -> str:
 
 
 def dirty_status(repo: Path) -> list[str]:
-    return git_lines(repo, "status", "--porcelain")
+    return _without_blocked_report_artifact_status(git_lines(repo, "status", "--porcelain", "-uall"))
 
 
 def recovery_preflight(repo: Path) -> dict[str, Any] | None:
@@ -809,12 +810,18 @@ def deliver_message_report(
     hermes_agent: Path | None = None,
 ) -> dict[str, Any]:
     if dry_run:
-        return {"target": target, "status": "dry_run", "message": message}
+        return {
+            "target": target,
+            "status": "dry_run",
+            "delivery_stage": "rendered",
+            "message": message,
+        }
     hermes_send_bin = os.environ.get("HERMES_SEND_BIN") or shutil.which("hermes")
     if not hermes_send_bin:
         return {
             "target": target,
             "status": "failed",
+            "delivery_stage": "send_failed",
             "returncode": 127,
             "output": "Hermes CLI not found for report delivery",
             "message": message,
@@ -840,14 +847,17 @@ def deliver_message_report(
             "target": target,
             "delivery_target": " ".join(cmd),
             "status": "failed",
+            "delivery_stage": "send_failed",
             "returncode": 127,
             "output": str(exc),
             "message": message,
         }
+    status = "sent" if _report_delivery_succeeded(result) else "failed"
     return {
         "target": target,
         "delivery_target": " ".join(cmd),
-        "status": "sent" if _report_delivery_succeeded(result) else "failed",
+        "status": status,
+        "delivery_stage": "send_confirmed" if status == "sent" else "send_failed",
         "returncode": result.returncode,
         "output": result.stdout.strip(),
         "message": message,
@@ -868,11 +878,28 @@ def deliver_post_push_report(target: str, message: str, *, dry_run: bool = False
     return deliver_message_report(target, message, dry_run=dry_run, profile=profile)
 
 
+def _without_blocked_report_artifact_status(status: list[str]) -> list[str]:
+    report_prefixes = (
+        f"?? {REPORT_STATE_PATH}",
+        f"?? {REPORTS_DIR}/",
+        f" M {REPORT_STATE_PATH}",
+        f" M {REPORTS_DIR}/",
+    )
+    return [item for item in status if not item.startswith(report_prefixes)]
+
+
+def _without_blocked_report_artifact_paths(paths: list[str]) -> list[str]:
+    return [
+        item for item in paths
+        if item != str(REPORT_STATE_PATH) and not item.startswith(f"{REPORTS_DIR}/")
+    ]
+
+
 def build_blocked_runner_report(payload: dict[str, Any]) -> str:
     """Build a concise deterministic TV report when integration blocks runner progress."""
     blockers = [str(item) for item in payload.get("blockers") or []]
     warnings = [str(item) for item in payload.get("warnings") or []]
-    status = [str(item) for item in payload.get("status_porcelain") or []]
+    status = _without_blocked_report_artifact_status([str(item) for item in payload.get("status_porcelain") or []])
     active = [str(item) for item in payload.get("active_worker_claims") or []]
     unsafe = [str(item) for item in payload.get("unsafe_files") or []]
     changed_files = [str(item) for item in payload.get("changed_files") or []]
@@ -902,7 +929,7 @@ def build_blocked_runner_report(payload: dict[str, Any]) -> str:
         ("extra unexplained dirty paths:", "extra_unexplained_dirty_paths"),
     )
     for heading, key in bucket_specs:
-        values = [str(item) for item in recovery.get(key) or []]
+        values = _without_blocked_report_artifact_paths([str(item) for item in recovery.get(key) or []])
         if values:
             lines.append(heading)
             lines.extend(_bullet_list(values, limit=8))
@@ -919,6 +946,10 @@ def build_blocked_runner_report(payload: dict[str, Any]) -> str:
     if next_action:
         lines.append("next safe action:")
         lines.append(f"- {next_action}")
+    non_actions = [str(item) for item in payload.get("non_actions") or []]
+    if non_actions:
+        lines.append("non-actions:")
+        lines.extend(_bullet_list(non_actions, limit=6))
     return "\n".join(lines)
 
 
@@ -940,13 +971,13 @@ def blocked_runner_report_fingerprint(payload: dict[str, Any]) -> str:
         "blockers": sorted(str(item) for item in payload.get("blockers") or []),
         "warnings": sorted(str(item) for item in payload.get("warnings") or []),
         "active_worker_claims": sorted(str(item) for item in payload.get("active_worker_claims") or []),
-        "status_porcelain": sorted(str(item) for item in payload.get("status_porcelain") or []),
+        "status_porcelain": sorted(_without_blocked_report_artifact_status([str(item) for item in payload.get("status_porcelain") or []])),
         "head": payload.get("head") or git_head_from_payload(payload),
         "recovery_recommended_action": recovery.get("recommended_action"),
-        "matched_handoff_paths": sorted(str(item) for item in recovery.get("matched_handoff_paths") or []),
-        "control_plane_dirty_paths": sorted(str(item) for item in recovery.get("control_plane_dirty_paths") or []),
-        "historical_runner_metadata_dirty_paths": sorted(str(item) for item in recovery.get("historical_runner_metadata_dirty_paths") or []),
-        "extra_unexplained_dirty_paths": sorted(str(item) for item in recovery.get("extra_unexplained_dirty_paths") or []),
+        "matched_handoff_paths": sorted(_without_blocked_report_artifact_paths([str(item) for item in recovery.get("matched_handoff_paths") or []])),
+        "control_plane_dirty_paths": sorted(_without_blocked_report_artifact_paths([str(item) for item in recovery.get("control_plane_dirty_paths") or []])),
+        "historical_runner_metadata_dirty_paths": sorted(_without_blocked_report_artifact_paths([str(item) for item in recovery.get("historical_runner_metadata_dirty_paths") or []])),
+        "extra_unexplained_dirty_paths": sorted(_without_blocked_report_artifact_paths([str(item) for item in recovery.get("extra_unexplained_dirty_paths") or []])),
         "push_ready_task_ids": sorted(
             str(item.get("task_id"))
             for item in (payload.get("push_ready_recovery") or {}).get("planned_closeouts", [])
@@ -983,6 +1014,45 @@ def write_report_state(repo: Path, state: dict[str, Any]) -> None:
     path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
 
 
+def write_blocked_report_artifact(repo: Path, packet: dict[str, Any]) -> Path:
+    reports_dir = repo / REPORTS_DIR
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    created_at = int(packet.get("created_at") or time.time())
+    fingerprint = str(packet.get("fingerprint") or "unknown")
+    path = reports_dir / f"blocked-{created_at}-{fingerprint[:8]}.json"
+    path.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n")
+    return path
+
+
+def build_blocked_report_packet(
+    payload: dict[str, Any],
+    *,
+    target: str,
+    message: str,
+    fingerprint: str,
+) -> dict[str, Any]:
+    report_id = f"blocked-{int(time.time())}-{fingerprint[:8]}"
+    return {
+        "report_id": report_id,
+        "created_at": int(time.time()),
+        "fingerprint": fingerprint,
+        "target": target,
+        "message": message,
+        "decision": payload.get("decision"),
+        "blockers": [str(item) for item in payload.get("blockers") or []],
+        "warnings": [str(item) for item in payload.get("warnings") or []],
+        "head": payload.get("head") or git_head_from_payload(payload),
+        "active_worker_claims": [str(item) for item in payload.get("active_worker_claims") or []],
+        "status_porcelain": [str(item) for item in payload.get("status_porcelain") or []],
+        "dirty_state_recovery": payload.get("dirty_state_recovery"),
+        "non_actions": [str(item) for item in payload.get("non_actions") or []],
+    }
+
+
+def deliver_blocked_report_packet(packet: dict[str, Any], *, profile: Path, dry_run: bool = False) -> dict[str, Any]:
+    return deliver_message_report(str(packet["target"]), str(packet["message"]), dry_run=dry_run, profile=profile)
+
+
 def maybe_deliver_blocked_runner_report(
     payload: dict[str, Any],
     target: str,
@@ -994,9 +1064,16 @@ def maybe_deliver_blocked_runner_report(
 ) -> dict[str, Any]:
     message = build_blocked_runner_report(payload)
     fingerprint = blocked_runner_report_fingerprint(payload)
+    packet = build_blocked_report_packet(
+        payload,
+        target=target,
+        message=message,
+        fingerprint=fingerprint,
+    )
     if dry_run:
-        report = deliver_message_report(target, message, dry_run=True, profile=profile)
+        report = deliver_blocked_report_packet(packet, profile=profile, dry_run=True)
         report["fingerprint"] = fingerprint
+        report["report_packet"] = packet
         return report
     state = read_report_state(repo)
     prior = state.get("blocked_runner_report") if isinstance(state.get("blocked_runner_report"), dict) else {}
@@ -1007,15 +1084,54 @@ def maybe_deliver_blocked_runner_report(
             "reason": "duplicate_fingerprint",
             "fingerprint": fingerprint,
             "message": message,
+            "report_id": prior.get("report_id"),
+            "artifact": prior.get("artifact"),
         }
-    report = deliver_message_report(target, message, dry_run=False, profile=profile)
+    report = deliver_blocked_report_packet(packet, profile=profile, dry_run=False)
     report["fingerprint"] = fingerprint
+    report["report_id"] = packet["report_id"]
     if report.get("status") == "sent":
+        packet["delivery"] = {
+            "status": report.get("status"),
+            "delivery_stage": report.get("delivery_stage"),
+            "target": report.get("target"),
+            "delivery_target": report.get("delivery_target"),
+        }
+        artifact = write_blocked_report_artifact(repo, packet)
+        report["artifact"] = str(artifact.relative_to(repo))
         state["blocked_runner_report"] = {
             "fingerprint": fingerprint,
             "target": target,
-            "sent_at": int(time.time()),
+            "sent_at": packet["created_at"],
+            "report_id": packet["report_id"],
+            "artifact": str(artifact.relative_to(repo)),
         }
+        write_report_state(repo, state)
+    return report
+
+
+def resend_last_blocked_runner_report(repo: Path, profile: Path, *, target: str | None = None, dry_run: bool = False) -> dict[str, Any]:
+    state = read_report_state(repo)
+    prior = state.get("blocked_runner_report") if isinstance(state.get("blocked_runner_report"), dict) else {}
+    artifact_rel = prior.get("artifact")
+    if not artifact_rel:
+        return {"status": "failed", "reason": "no_previous_blocked_report_artifact"}
+    artifact = repo / str(artifact_rel)
+    try:
+        packet = json.loads(artifact.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        return {"status": "failed", "reason": "blocked_report_artifact_unreadable", "artifact": str(artifact_rel), "output": str(exc)}
+    if target:
+        packet["target"] = target
+    report = deliver_blocked_report_packet(packet, profile=profile, dry_run=dry_run)
+    report["fingerprint"] = packet.get("fingerprint")
+    report["report_id"] = packet.get("report_id")
+    report["artifact"] = str(artifact_rel)
+    report["resend"] = True
+    if report.get("status") == "sent":
+        prior["resent_at"] = int(time.time())
+        prior["target"] = packet.get("target")
+        state["blocked_runner_report"] = prior
         write_report_state(repo, state)
     return report
 
@@ -1138,10 +1254,28 @@ def main() -> int:
     )
     parser.add_argument("--blocked-report-dry-run", action="store_true", help="Build the blocked-runner report payload without sending it.")
     parser.add_argument("--force-blocked-report", action="store_true", help="Send the blocked-runner report even when its dedupe fingerprint was already sent.")
+    parser.add_argument("--resend-last-blocked-report", action="store_true", help="Resend the most recent persisted blocked-runner report artifact and exit.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
     profile = args.profile.resolve()
+    if args.resend_last_blocked_report:
+        payload = {
+            "decision": "hold",
+            "blockers": [],
+            "repo": str(repo),
+            "profile": str(profile),
+            "blocked_runner_report": resend_last_blocked_runner_report(
+                repo,
+                profile,
+                target=args.blocked_report_target,
+                dry_run=bool(args.blocked_report_dry_run),
+            ),
+        }
+        apply_report_delivery_failure_gate(payload, "blocked_runner_report", payload["blocked_runner_report"])
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0 if not payload["blockers"] else 2
+
     payload = classify(repo, profile, allow_process_artifacts=args.allow_process_artifacts)
     payload["dry_run"] = bool(args.dry_run or not args.push)
     payload["would_push"] = False
@@ -1211,6 +1345,16 @@ def main() -> int:
                 if not payload["pushed"]:
                     payload["blockers"] = sorted(set(payload["blockers"] + ["post_push_head_mismatch"]))
                     payload["decision"] = "needs_human"
+
+    payload["non_actions"] = []
+    if not payload.get("would_push"):
+        payload["non_actions"].append("no push attempted")
+    if not payload.get("pushed"):
+        payload["non_actions"].append("no verified push")
+    payload["non_actions"].extend([
+        "no successor seeded by integration lane",
+        "no dirty files moved by integration lane",
+    ])
 
     if args.post_push_report_target:
         if payload.get("pushed") or args.post_push_report_dry_run:
