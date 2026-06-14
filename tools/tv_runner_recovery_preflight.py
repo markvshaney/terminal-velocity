@@ -208,6 +208,24 @@ def is_control_plane_path(path: str) -> bool:
     return path in CONTROL_PLANE_PATHS
 
 
+def is_runner_metadata_path(path: str) -> bool:
+    """Return true for repo-local runner sidecar/provenance files.
+
+    These files are safe-local TV runner metadata, but a closeout packet for one
+    handoff will not necessarily name every historical event/closeout sidecar
+    that accumulated in the same idle worktree. Treat them as a separate known
+    bucket so the integration lane can split/recover instead of collapsing a
+    coherent handoff into generic unsafe_dirty_state.
+    """
+    prefix = ".hermes/long-running/tv-spec-implementation/"
+    if path in RUNNER_METADATA_PATHS:
+        return True
+    if not path.startswith(prefix):
+        return False
+    name = path[len(prefix):]
+    return (name.startswith("closeout-packet-") or name.startswith("event-")) and name.endswith(".json")
+
+
 def event_packet_paths(packet: dict[str, Any]) -> set[str]:
     paths: set[str] = set()
     ids: list[str] = []
@@ -413,6 +431,7 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
         "extra_dirty_paths": [],
         "matched_handoff_paths": [],
         "control_plane_dirty_paths": [],
+        "historical_runner_metadata_dirty_paths": [],
         "extra_unexplained_dirty_paths": dirty_paths,
         "sensitive_dirty_paths": [],
         "sensitive_path_check": sensitive_path_check(dirty_paths),
@@ -448,8 +467,15 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
     payload["matched_handoff_paths"] = match_detail["matched_paths"]
     unmatched_dirty = list(match_detail["missing_from_evidence"])
     control_plane_dirty = sorted(path for path in unmatched_dirty if is_control_plane_path(path))
-    extra_unexplained_dirty = sorted(path for path in unmatched_dirty if path not in set(control_plane_dirty))
+    known_extra = set(control_plane_dirty)
+    historical_runner_metadata_dirty = sorted(
+        path for path in unmatched_dirty
+        if path not in known_extra and is_runner_metadata_path(path)
+    )
+    known_extra.update(historical_runner_metadata_dirty)
+    extra_unexplained_dirty = sorted(path for path in unmatched_dirty if path not in known_extra)
     payload["control_plane_dirty_paths"] = control_plane_dirty
+    payload["historical_runner_metadata_dirty_paths"] = historical_runner_metadata_dirty
     payload["extra_unexplained_dirty_paths"] = extra_unexplained_dirty
     payload["focused_verifier_status"] = verifier_status
     payload["closeout_packet_contract"] = closeout_contract
@@ -461,10 +487,10 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
             "assignee": handoff.get("assignee"),
         }
     if not matched:
-        if match_detail["matched_paths"] and control_plane_dirty and not extra_unexplained_dirty:
+        if match_detail["matched_paths"] and (control_plane_dirty or historical_runner_metadata_dirty) and not extra_unexplained_dirty:
             payload["handoff_match"] = "partial"
-            payload["recommended_action"] = "split_or_review_control_plane_dirty_state"
-            payload["explicit_gate"] = "control_plane_dirty_state"
+            payload["recommended_action"] = "split_or_review_control_plane_dirty_state" if control_plane_dirty else "split_or_checkpoint_runner_metadata_dirty_state"
+            payload["explicit_gate"] = "control_plane_dirty_state" if control_plane_dirty else "runner_metadata_dirty_state"
         else:
             payload["recommended_action"] = "unsafe_dirty_state"
             payload["explicit_gate"] = "unsafe_dirty_state"
