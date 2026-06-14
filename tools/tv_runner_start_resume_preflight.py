@@ -228,6 +228,64 @@ def _query_blocked_cards(db_path: Path) -> list[dict[str, Any]]:
     return cards
 
 
+def _query_handoff_candidates(db_path: Path) -> list[dict[str, Any]]:
+    """Return Kanban tasks that may explain a dirty push-ready handoff.
+
+    Blocked cards are only one durable surface. Normal workers can finish as
+    ``done`` while leaving the push_ready evidence in latest_summary, comments,
+    run metadata, and repo-local closeout packets. Dirty recovery needs those
+    done candidates too; otherwise it sees an empty task set and misclassifies a
+    verified handoff as generic unsafe dirt.
+    """
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
+        wanted = [
+            column
+            for column in (
+                "id",
+                "title",
+                "body",
+                "latest_summary",
+                "assignee",
+                "status",
+                "tenant",
+                "workspace_path",
+                "created_at",
+                "started_at",
+                "updated_at",
+            )
+            if column in columns
+        ]
+        if not {"id", "status"}.issubset(columns):
+            return []
+        rows = conn.execute(
+            f"SELECT {', '.join(wanted)} FROM tasks WHERE status IN (?, ?, ?) ORDER BY id",
+            ("blocked", "done", "running"),
+        ).fetchall()
+        task_ids = [str(row["id"]) for row in rows]
+        comments_by_task = _task_comments(conn, task_ids)
+    finally:
+        conn.close()
+
+    candidates: list[dict[str, Any]] = []
+    for row in rows:
+        task = {key: row[key] for key in row.keys()}
+        comments = comments_by_task.get(str(task.get("id"))) or []
+        text_values = [str(task.get(key) or "") for key in ("title", "body", "latest_summary", "assignee", "tenant", "workspace_path")]
+        text_values.extend(comment.get("body", "") for comment in comments)
+        text = " ".join(text_values).lower()
+        if "terminal-velocity" not in text and "tv" not in text:
+            continue
+        candidate = dict(task)
+        if comments:
+            candidate["comments"] = comments
+        candidate["canonical_class"] = canonical_block_class(candidate, [comment.get("body", "") for comment in comments])
+        candidates.append(candidate)
+    return candidates
+
+
 def blocked_cards(topology: dict[str, Any]) -> dict[str, Any]:
     candidates = [Path(path) for path in (topology.get("paths") or {}).get("kanban_db_candidates", [])]
     inspected: list[str] = []
@@ -265,6 +323,60 @@ def blocked_cards(topology: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def handoff_candidates(topology: dict[str, Any]) -> dict[str, Any]:
+    """Collect Kanban handoff evidence across blocked/running/done tasks."""
+    candidates = [Path(path) for path in (topology.get("paths") or {}).get("kanban_db_candidates", [])]
+    inspected: list[str] = []
+    errors: list[dict[str, str]] = []
+    tasks: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for db_path in candidates:
+        if not db_path.exists():
+            continue
+        inspected.append(str(db_path))
+        try:
+            for task in _query_handoff_candidates(db_path):
+                task_id = str(task.get("id") or "")
+                if task_id in seen:
+                    continue
+                seen.add(task_id)
+                tasks.append(task)
+        except sqlite3.Error as exc:
+            errors.append({"path": str(db_path), "error": str(exc)})
+    counts: dict[str, int] = {}
+    for task in tasks:
+        task_status = str(task.get("status") or "unknown")
+        counts[task_status] = counts.get(task_status, 0) + 1
+    status = "inspected" if inspected else "no_db_found"
+    if errors and not inspected:
+        status = "error"
+    return {
+        "status": status,
+        "source": "kanban_db",
+        "kanban_db_candidates": [str(path) for path in candidates],
+        "inspected_paths": inspected,
+        "errors": errors,
+        "tasks": tasks,
+        "counts_by_status": counts,
+    }
+
+
+def compact_handoff_candidates(handoffs: dict[str, Any]) -> dict[str, Any]:
+    """Return a report-safe summary without embedding historic task prose."""
+    compact = {key: value for key, value in handoffs.items() if key != "tasks"}
+    compact["tasks"] = [
+        {
+            "id": task.get("id"),
+            "title": task.get("title"),
+            "status": task.get("status"),
+            "assignee": task.get("assignee"),
+            "canonical_class": task.get("canonical_class"),
+        }
+        for task in (handoffs.get("tasks") or [])
+    ]
+    return compact
+
+
 def blocked_card_start_gate(blocked: dict[str, Any]) -> tuple[str, str] | None:
     """Return the unresolved handoff/gate that must be resolved before idle start.
 
@@ -295,6 +407,7 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
     live_owner = topology.get("live_implementation_owner")
 
     blocked = blocked_cards(topology)
+    handoffs = handoff_candidates(topology)
     payload: dict[str, Any] = {
         "repo": str(repo),
         "profile": str(profile),
@@ -305,6 +418,7 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
         "topology": topology,
         "topology_exit_code": topology_code,
         "blocked_cards": blocked,
+        "handoff_candidates": compact_handoff_candidates(handoffs),
         "stop_lock_state": stop_lock,
         "watchdog_reporter_state": watchdog_reporter_state(repo, profile),
         "capability_check": capability,
@@ -318,7 +432,7 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
         payload["recommended_action"] = "blocked:git_state_unreadable"
         payload["explicit_gate"] = "git_state_unreadable"
     elif repo_state == "dirty":
-        recovery = recovery_preflight.classify(repo, blocked.get("cards") or [])
+        recovery = recovery_preflight.classify(repo, handoffs.get("tasks") or blocked.get("cards") or [])
         payload["dirty_handoff_recovery"] = recovery
         payload["recommended_action"] = recovery.get("recommended_action") or "recover_dirty_handoff"
         payload["explicit_gate"] = recovery.get("explicit_gate")

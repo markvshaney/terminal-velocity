@@ -206,6 +206,77 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         finally:
             conn.close()
 
+    def add_done_push_ready_handoff(self, repo: Path, profile: Path) -> None:
+        packet_dir = repo / ".hermes/long-running/tv-spec-implementation"
+        packet_dir.mkdir(parents=True, exist_ok=True)
+        changed_files = [
+            "native_ev/scenario_eval.py",
+            "native_ev/tests/test_scenario_eval.py",
+            ".hermes/long-running/tv-spec-implementation/closeout-packet-t_done_push.json",
+        ]
+        (packet_dir / "closeout-packet-t_done_push.json").write_text(json.dumps({
+            "contract_version": "machine_contract_v1",
+            "closeout_class": "push_ready",
+            "kanban_task": "t_done_push",
+            "changed_files": changed_files,
+            "focused_verifiers_passed": True,
+            "verification": {
+                "targeted_unittest": {
+                    "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+                    "result": "passed",
+                },
+            },
+            "next_action": "integration owner should checkpoint and push this verified handoff",
+            "summary": "Focused verifier passed for done-task handoff.",
+        }) + "\n")
+        db = profile / "kanban.db"
+        conn = sqlite3.connect(db)
+        try:
+            conn.executescript("""
+                CREATE TABLE tasks (
+                    id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    body TEXT,
+                    latest_summary TEXT,
+                    assignee TEXT,
+                    status TEXT NOT NULL,
+                    tenant TEXT,
+                    workspace_path TEXT,
+                    claim_lock TEXT,
+                    worker_pid INTEGER
+                );
+                CREATE TABLE task_comments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id TEXT NOT NULL,
+                    body TEXT NOT NULL
+                );
+            """)
+            conn.execute(
+                "INSERT INTO tasks (id, title, body, latest_summary, assignee, status, tenant, workspace_path, claim_lock, worker_pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    "t_done_push",
+                    "Continue TV EV Classic fidelity backlog slice",
+                    "push_ready handoff recorded; closeout packet has changed files and verification.",
+                    "Focused verifier passed: python3 -m unittest native_ev.tests.test_scenario_eval -v",
+                    "terminal-velocity",
+                    "done",
+                    "terminal-velocity",
+                    str(repo),
+                    None,
+                    None,
+                ),
+            )
+            conn.execute(
+                "INSERT INTO task_comments (task_id, body) VALUES (?, ?)",
+                (
+                    "t_done_push",
+                    "push_ready handoff: changed files native_ev/scenario_eval.py, native_ev/tests/test_scenario_eval.py; focused verifier passed",
+                ),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
     def test_clean_idle_gateway_startup_reports_start_action(self):
         _, repo, profile = self.make_fixture()
 
@@ -301,6 +372,30 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         self.assertIn("kanban_comment", recovery["handoff_evidence_sources"])
         self.assertIn("kanban_latest_summary", recovery["handoff_evidence_sources"])
         self.assertEqual(recovery["matched_changed_files"], ["native_ev/scenario_eval.py", "native_ev/tests/test_scenario_eval.py"])
+        self.assertEqual(recovery["extra_dirty_paths"], [])
+
+    def test_dirty_repo_uses_done_push_ready_handoff_candidate(self):
+        _, repo, profile = self.make_fixture()
+        self.add_done_push_ready_handoff(repo, profile)
+        (repo / "native_ev/tests").mkdir(parents=True, exist_ok=True)
+        for path in [
+            "native_ev/scenario_eval.py",
+            "native_ev/tests/test_scenario_eval.py",
+        ]:
+            (repo / path).write_text(f"dirty {path}\n")
+
+        code, payload = self.run_preflight(repo, profile, "--startup-owner", "gateway_kanban_dispatcher")
+
+        self.assertEqual(code, 1, payload)
+        self.assertEqual(payload["repo_state"], "dirty")
+        self.assertEqual(payload["blocked_cards"]["cards"], [])
+        self.assertEqual(payload["recommended_action"], "checkpoint_and_push_ready")
+        self.assertIsNone(payload["explicit_gate"])
+        recovery = payload["dirty_handoff_recovery"]
+        self.assertEqual(recovery["candidate_handoff"]["id"], "t_done_push")
+        self.assertEqual(recovery["candidate_handoff"]["status"], "done")
+        self.assertIn("validated_closeout_packet", recovery["handoff_evidence_sources"])
+        self.assertEqual(recovery["focused_verifier_status"], "passed")
         self.assertEqual(recovery["extra_dirty_paths"], [])
 
     def test_active_gateway_owner_reports_resume_existing_owner(self):
