@@ -1,0 +1,59 @@
+{
+  "changed_files": [
+    "native_ev/data/gameplay_curriculum.json",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "tools/extract_ev_system_semantics.py"
+  ],
+  "closeout_class": "continue",
+  "contract_version": "machine_contract_v1",
+  "event_id": "start-neighborhood-calibration-priority-20260614T104734Z",
+  "event_ids": [
+    "start-neighborhood-calibration-priority-20260614T104734Z"
+  ],
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_48cb1dd0",
+  "next_action": "Continue adjacent EV Classic/Terminal Velocity fidelity backlog work from successor task t_9b203bf7; do not redo start-neighborhood runtime calibration priority or prior route recovery slices.",
+  "safe_local": true,
+  "successor_kanban_task": "t_9b203bf7",
+  "summary": "Added start-neighborhood runtime calibration priority scout: Con4/resource 131 is prioritized for future Classic map/runtime calibration capture after comparing decoded Con-slot distance and angular order, without promoting display/map truth.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T10:47:34Z",
+  "verification": {
+    "all_gameplay_scenarios": {
+      "command": "python3 tools/run_gameplay_scenarios.py --all --pretty > /tmp/tv_all_scenarios_t_48cb1dd0.json",
+      "result": "passed; summary total=102 passed=102 failed=0"
+    },
+    "backlog_dispatch_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; refreshed native_ev/data/sourced_ev_systems.json"
+    },
+    "full_pytest": {
+      "command": "python3 -m pytest -q",
+      "result": "failed; 340 passed, 12 failed due live board active-worker/topology discovery while t_48cb1dd0 was active, not touched gameplay/static-topology code"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "npm_test": {
+      "command": "npm test -- --runInBand",
+      "result": "not run; repository root has no package.json"
+    },
+    "static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_start_neighborhood_runtime_calibration_priority_summary passed"
+    },
+    "targeted_model_and_scenario_tests": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py -q",
+      "result": "passed; 274 passed in 1.69s"
+    }
+  }
+}

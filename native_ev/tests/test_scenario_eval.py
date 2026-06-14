@@ -2055,6 +2055,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_start_neighborhood_display_vector_summary',
             'recorded_start_neighborhood_slot_vector_order_summary',
             'recorded_start_neighborhood_slot_angular_order_summary',
+            'recorded_start_neighborhood_runtime_calibration_priority_summary',
             'recorded_exact_start_system_mapping',
             'recorded_record_to_name_promotion_readiness_summary',
             'recorded_record_name_oracle_evidence_matrix',
@@ -2276,6 +2277,13 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('one capture packet per required target resource ID 129-131 before any route-label join review', readiness['runtimeRouteLabelProbeExecutionGateCapturePacketValidationRules'])
         self.assertIn('do not run route-label probes on Strict Play or reusable pilots', readiness['runtimeRouteLabelProbeExecutionGateSafetyBlockers'])
         self.assertIn('not-promoted', readiness['runtimeRouteLabelProbeExecutionGatePromotionStatus'])
+        self.assertEqual(readiness['runtimeRouteLabelProbePrioritySourceLabel'], 'decoded-resource-and-runtime-gate-backed-route-label-probe-priority')
+        self.assertEqual(readiness['runtimeRouteLabelProbePriorityOracleStatus'], 'route_label_probe_priority_pending_disposable_runtime_capture')
+        self.assertEqual(readiness['runtimeRouteLabelProbePriorityTargetResourceIds'], [131, 129, 130])
+        self.assertEqual(readiness['runtimeRouteLabelProbePriorityConSlots'], ['Con4', 'Con2', 'Con3'])
+        self.assertEqual(readiness['runtimeRouteLabelProbePriorityFirstTargetResourceId'], 131)
+        self.assertEqual(readiness['runtimeRouteLabelProbePriorityFirstConSlot'], 'Con4')
+        self.assertIn('not-promoted', readiness['runtimeRouteLabelProbePriorityPromotionStatus'])
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)
@@ -2491,6 +2499,16 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['startNeighborhoodSlotAngularOrderCon4AngleRank'], 1)
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotAngularOrderSourceLabel'], 'decoded-resource-backed-start-neighborhood-slot-angular-order-scout')
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodSlotAngularOrderFirstAngleResourceId'], 131)
+        self.assertEqual(readiness['startNeighborhoodRuntimeCalibrationPrioritySourceLabel'], 'decoded-resource-backed-start-neighborhood-runtime-calibration-priority-scout')
+        self.assertEqual(readiness['startNeighborhoodRuntimeCalibrationPriorityOracleStatus'], 'coordinate_display_capture_blocked_pending_classic_map_pixel_click_evidence')
+        self.assertEqual(readiness['startNeighborhoodRuntimeCalibrationPriorityTargetResourceIds'], [131, 129, 130])
+        self.assertEqual(readiness['startNeighborhoodRuntimeCalibrationPriorityConSlots'], ['Con4', 'Con2', 'Con3'])
+        self.assertEqual(readiness['startNeighborhoodRuntimeCalibrationPriorityFirstTargetResourceId'], 131)
+        self.assertEqual(readiness['startNeighborhoodRuntimeCalibrationPriorityFirstConSlot'], 'Con4')
+        self.assertTrue(readiness['startNeighborhoodRuntimeCalibrationPriorityDistanceAngleOrderConflict'])
+        self.assertIn('not-promoted', readiness['startNeighborhoodRuntimeCalibrationPriorityPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodRuntimeCalibrationPrioritySourceLabel'], 'decoded-resource-backed-start-neighborhood-runtime-calibration-priority-scout')
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['startNeighborhoodRuntimeCalibrationPriorityFirstTargetResourceId'], 131)
         self.assertEqual(readiness['exactSystemNameResource128'], 'Levo')
         self.assertIn('original-runtime-observed', readiness['exactSystemNameSourceBasis'])
         self.assertEqual(readiness['sourceLabel'], 'decoded-resource-backed-static-readiness')

@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v54",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -591,6 +591,89 @@
     "allowedUse": "prepare disposable original-runtime capture packets for Levo route-label probes only; preserve every resource-ID/name join as blocked until captured evidence exists",
     "promotionStatus": "not-promoted; execution gate documents safe evidence capture requirements only",
     "sourceNote": "This gate turns the v49 probe-targeting matrix into an executable safety checklist without performing original-runtime probing or promoting any Classic route labels. It prevents the next worker from treating a target list as evidence."
+  },
+  "runtimeRouteLabelProbePrioritySummary": {
+    "sourceLabel": "decoded-resource-and-runtime-gate-backed-route-label-probe-priority",
+    "oracleStatus": "route_label_probe_priority_pending_disposable_runtime_capture",
+    "sourceReferences": [
+      "runtimeRouteLabelProbeTargetingSummary",
+      "runtimeRouteLabelProbeExecutionGateSummary",
+      "startNeighborhoodRuntimeCalibrationPrioritySummary"
+    ],
+    "candidateStartResourceId": 128,
+    "candidateStartSystemName": "Levo",
+    "requiredProbeTargetResourceIds": [
+      129,
+      130,
+      131
+    ],
+    "displayCalibrationPriorityTargetResourceIds": [
+      131,
+      129,
+      130
+    ],
+    "priorityTargetResourceIds": [
+      131,
+      129,
+      130
+    ],
+    "priorityConSlots": [
+      "Con4",
+      "Con2",
+      "Con3"
+    ],
+    "firstPriorityTargetResourceId": 131,
+    "firstPriorityConSlot": "Con4",
+    "probePriorityEntries": [
+      {
+        "priorityRank": 1,
+        "targetResourceId": 131,
+        "slotName": "Con4",
+        "capturePacketTemplateAvailable": true,
+        "displayQuadrantCandidate": "south-east",
+        "distanceRankAmongNonSelfCandidates": 1,
+        "angleRankAmongNonSelfCandidates": 1,
+        "priorityReason": "nearest-and-lowest-angle-candidate",
+        "joinPromotionStatus": "not-promoted; capture priority only, no visible label assigned to decoded resource ID"
+      },
+      {
+        "priorityRank": 2,
+        "targetResourceId": 129,
+        "slotName": "Con2",
+        "capturePacketTemplateAvailable": true,
+        "displayQuadrantCandidate": "north-east",
+        "distanceRankAmongNonSelfCandidates": 2,
+        "angleRankAmongNonSelfCandidates": 3,
+        "priorityReason": "required-neighbor-calibration-target",
+        "joinPromotionStatus": "not-promoted; capture priority only, no visible label assigned to decoded resource ID"
+      },
+      {
+        "priorityRank": 3,
+        "targetResourceId": 130,
+        "slotName": "Con3",
+        "capturePacketTemplateAvailable": true,
+        "displayQuadrantCandidate": "north-east",
+        "distanceRankAmongNonSelfCandidates": 3,
+        "angleRankAmongNonSelfCandidates": 2,
+        "priorityReason": "required-neighbor-calibration-target",
+        "joinPromotionStatus": "not-promoted; capture priority only, no visible label assigned to decoded resource ID"
+      }
+    ],
+    "executionGatePacketTemplateCount": 3,
+    "observedRuntimeLabels": [
+      "Rigel",
+      "Kathoon",
+      "Yemuro",
+      "Torgo"
+    ],
+    "promotionBlockers": [
+      "priority order is derived from non-promoted decoded coordinate/vector candidates and execution gate requirements",
+      "observed runtime labels remain unassigned to resource IDs 129-131 until disposable capture packets are executed",
+      "this matrix may order future probes but must not promote named topology, display scale, or record-to-name joins"
+    ],
+    "allowedUse": "schedule disposable original-runtime route-label capture attempts in highest-information order only",
+    "promotionStatus": "not-promoted; route-label probe priority only, no decoded resource-ID/name join",
+    "sourceNote": "This packet connects the route-label execution gate to the start-neighborhood calibration priority so the next probe can be run in a deterministic order. It does not assign Rigel, Kathoon, Yemuro, or Torgo to decoded resources and does not promote map scaling."
   },
   "recordToNamePromotionReadinessSummary": {
     "sourceLabel": "decoded-resource-backed-record-to-name-promotion-readiness-scout",
@@ -6278,6 +6361,89 @@
     "firstSignedAngleNonSelfSlotName": "Con4",
     "firstSignedAngleNonSelfResourceId": 131,
     "sourceNote": "This cross-walks decoded Levo/resource 128 Con-slot order with non-promoted signed-angle/quadrant candidates for later map orientation and route-UI comparison. It does not claim EV Classic angular ordering, route ordering, map pixels, projection, axis orientation, exact target system names, or broad runtime topology."
+  },
+  "startNeighborhoodRuntimeCalibrationPrioritySummary": {
+    "sourceLabel": "decoded-resource-backed-start-neighborhood-runtime-calibration-priority-scout",
+    "oracleStatus": "coordinate_display_capture_blocked_pending_classic_map_pixel_click_evidence",
+    "startResourceId": 128,
+    "startExactSystemName": "Levo",
+    "candidateFamilies": [
+      "start-neighborhood runtime calibration target priority candidates",
+      "Con-slot versus distance-rank and angular-rank comparison candidates",
+      "runtime capture gate target ordering without display-scale promotion"
+    ],
+    "requiredRuntimeCaptureTargetResourceIds": [
+      129,
+      130,
+      131
+    ],
+    "requiredRuntimeCaptureConSlots": [
+      "Con2",
+      "Con3",
+      "Con4"
+    ],
+    "priorityTargetResourceIds": [
+      131,
+      129,
+      130
+    ],
+    "priorityConSlots": [
+      "Con4",
+      "Con2",
+      "Con3"
+    ],
+    "firstPriorityTargetResourceId": 131,
+    "firstPriorityConSlot": "Con4",
+    "distanceAngleOrderConflict": true,
+    "nonSelfResourceIdsByDistanceCandidate": [
+      131,
+      129,
+      130
+    ],
+    "nonSelfResourceIdsBySignedAngleCandidate": [
+      131,
+      130,
+      129
+    ],
+    "priorityEntries": [
+      {
+        "slotName": "Con4",
+        "targetResourceId": 131,
+        "targetNameJoinStatus": "unjoined",
+        "displayQuadrantCandidate": "south-east",
+        "distanceRankAmongNonSelfCandidates": 1,
+        "angleRankAmongNonSelfCandidates": 1,
+        "requiredByRuntimeCaptureGate": true,
+        "priorityReason": "nearest-and-lowest-angle-candidate"
+      },
+      {
+        "slotName": "Con2",
+        "targetResourceId": 129,
+        "targetNameJoinStatus": "unjoined",
+        "displayQuadrantCandidate": "north-east",
+        "distanceRankAmongNonSelfCandidates": 2,
+        "angleRankAmongNonSelfCandidates": 3,
+        "requiredByRuntimeCaptureGate": true,
+        "priorityReason": "required-neighbor-calibration-target"
+      },
+      {
+        "slotName": "Con3",
+        "targetResourceId": 130,
+        "targetNameJoinStatus": "unjoined",
+        "displayQuadrantCandidate": "north-east",
+        "distanceRankAmongNonSelfCandidates": 3,
+        "angleRankAmongNonSelfCandidates": 2,
+        "requiredByRuntimeCaptureGate": true,
+        "priorityReason": "required-neighbor-calibration-target"
+      }
+    ],
+    "promotionBlockers": [
+      "priority order is computed from non-promoted decoded coordinate candidates, not observed Classic map pixels",
+      "target system names remain unjoined for resources 129-131",
+      "runtime capture packets must tie visible labels and map positions to decoded Con slots before display-scale or route-label promotion"
+    ],
+    "promotionStatus": "not-promoted; target priority only for future non-strict runtime calibration capture",
+    "sourceNote": "This selects the most information-rich Levo-neighborhood runtime calibration order from existing decoded Con-slot, distance, and angular candidates. It does not promote EV Classic map projection, route ordering, target names, or display units."
   },
   "exactSystemNameMappings": [
     {
@@ -24732,5 +24898,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted"
+  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, route-label probe priority matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted"
 }

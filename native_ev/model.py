@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v54':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -590,6 +590,17 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest route-label probe execution gate missing Strict Play/reusable-pilot blocker')
     if 'not-promoted' not in route_label_probe_execution_gate.get('promotionStatus', ''):
         raise ValueError('sourced EV systems manifest route-label probe execution gate must not promote named topology')
+    route_label_probe_priority = data.get('runtimeRouteLabelProbePrioritySummary', {})
+    if route_label_probe_priority.get('sourceLabel') != 'decoded-resource-and-runtime-gate-backed-route-label-probe-priority':
+        raise ValueError('sourced EV systems manifest missing runtime route-label probe priority matrix')
+    if route_label_probe_priority.get('oracleStatus') != 'route_label_probe_priority_pending_disposable_runtime_capture':
+        raise ValueError('sourced EV systems manifest route-label probe priority must remain pending capture')
+    if route_label_probe_priority.get('priorityTargetResourceIds') != [131, 129, 130]:
+        raise ValueError('sourced EV systems manifest route-label probe priority changed target order')
+    if route_label_probe_priority.get('firstPriorityConSlot') != 'Con4' or route_label_probe_priority.get('requiredProbeTargetResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest route-label probe priority changed execution boundary')
+    if 'not-promoted' not in route_label_probe_priority.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest route-label probe priority must not promote named topology')
     topology_readiness = data.get('topologyPromotionReadinessSummary', {})
     if topology_readiness.get('sourceLabel') != 'decoded-resource-backed-topology-promotion-readiness-matrix':
         raise ValueError('sourced EV systems manifest missing topology promotion readiness matrix source label')
@@ -1014,6 +1025,17 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest start-neighborhood slot-angular order has unexpected angle order')
     if slot_angular.get('firstSignedAngleNonSelfSlotName') != 'Con4' or slot_angular.get('firstSignedAngleNonSelfResourceId') != 131:
         raise ValueError('sourced EV systems manifest start-neighborhood slot-angular order has unexpected first angle candidate')
+    calibration_priority = data.get('startNeighborhoodRuntimeCalibrationPrioritySummary', {})
+    if calibration_priority.get('sourceLabel') != 'decoded-resource-backed-start-neighborhood-runtime-calibration-priority-scout':
+        raise ValueError('sourced EV systems manifest missing start-neighborhood runtime calibration priority source label')
+    if calibration_priority.get('oracleStatus') != 'coordinate_display_capture_blocked_pending_classic_map_pixel_click_evidence':
+        raise ValueError('sourced EV systems manifest start-neighborhood runtime calibration priority should keep runtime capture blocked')
+    if calibration_priority.get('priorityTargetResourceIds') != [131, 129, 130]:
+        raise ValueError('sourced EV systems manifest start-neighborhood runtime calibration priority has unexpected target order')
+    if calibration_priority.get('firstPriorityConSlot') != 'Con4' or calibration_priority.get('distanceAngleOrderConflict') is not True:
+        raise ValueError('sourced EV systems manifest start-neighborhood runtime calibration priority has unexpected first target/conflict flag')
+    if 'not-promoted' not in calibration_priority.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest start-neighborhood runtime calibration priority must remain non-promoted')
     mappings = data.get('exactSystemNameMappings', [])
     if len(mappings) != 1 or mappings[0].get('resourceId') != 128 or mappings[0].get('systemName') != 'Levo':
         raise ValueError('sourced EV systems manifest missing exact Levo resource mapping')
@@ -1028,6 +1050,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         or 'resource ID 128 to Levo' not in boundary
         or 'start-neighborhood slot-vector-order analysis' not in boundary
         or 'start-neighborhood slot-angular-order analysis' not in boundary
+        or 'start-neighborhood runtime-calibration priority analysis' not in boundary
         or 'integer-band/fractional residual candidates' not in boundary
     ):
         raise ValueError('sourced EV systems manifest missing promotion boundary')

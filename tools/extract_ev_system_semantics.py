@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v54'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, route-label probe priority matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -1349,6 +1349,67 @@ def _start_neighborhood_slot_angular_order_summary(systems: list[dict]) -> dict:
     }
 
 
+def _start_neighborhood_runtime_calibration_priority_summary(systems: list[dict]) -> dict:
+    """Prioritize start-neighborhood runtime calibration targets without promotion."""
+    slot_order = _start_neighborhood_slot_vector_order_summary(systems)
+    slot_angle = _start_neighborhood_slot_angular_order_summary(systems)
+    runtime_gate = _coordinate_display_runtime_capture_gate_summary(systems)
+    entries = [entry for entry in slot_angle['linkedSlotAngularOrder'] if not entry['isSelfLink']]
+    by_distance = slot_order['nonSelfResourceIdsByDistanceCandidate']
+    by_angle = slot_angle['nonSelfResourceIdsBySignedAngleCandidate']
+    required_targets = runtime_gate.get('requiredTargetResourceIds', [])
+    priority_entries = []
+    for entry in entries:
+        resource_id = entry['targetResourceId']
+        priority_entries.append({
+            'slotName': entry['slotName'],
+            'targetResourceId': resource_id,
+            'targetNameJoinStatus': entry['targetNameJoinStatus'],
+            'displayQuadrantCandidate': entry['displayQuadrantCandidate'],
+            'distanceRankAmongNonSelfCandidates': entry['distanceRankAmongNonSelfCandidates'],
+            'angleRankAmongNonSelfCandidates': entry['angleRankAmongNonSelfCandidates'],
+            'requiredByRuntimeCaptureGate': resource_id in required_targets,
+            'priorityReason': 'nearest-and-lowest-angle-candidate' if resource_id == by_distance[0] == by_angle[0] else 'required-neighbor-calibration-target',
+        })
+    priority_entries = sorted(
+        priority_entries,
+        key=lambda entry: (
+            0 if entry['priorityReason'] == 'nearest-and-lowest-angle-candidate' else 1,
+            entry['distanceRankAmongNonSelfCandidates'],
+            entry['angleRankAmongNonSelfCandidates'],
+            entry['slotName'],
+        ),
+    )
+    return {
+        'sourceLabel': 'decoded-resource-backed-start-neighborhood-runtime-calibration-priority-scout',
+        'oracleStatus': 'coordinate_display_capture_blocked_pending_classic_map_pixel_click_evidence',
+        'startResourceId': slot_order['startResourceId'],
+        'startExactSystemName': slot_order['startExactSystemName'],
+        'candidateFamilies': [
+            'start-neighborhood runtime calibration target priority candidates',
+            'Con-slot versus distance-rank and angular-rank comparison candidates',
+            'runtime capture gate target ordering without display-scale promotion',
+        ],
+        'requiredRuntimeCaptureTargetResourceIds': required_targets,
+        'requiredRuntimeCaptureConSlots': runtime_gate.get('requiredConSlots', []),
+        'priorityTargetResourceIds': [entry['targetResourceId'] for entry in priority_entries],
+        'priorityConSlots': [entry['slotName'] for entry in priority_entries],
+        'firstPriorityTargetResourceId': priority_entries[0]['targetResourceId'] if priority_entries else None,
+        'firstPriorityConSlot': priority_entries[0]['slotName'] if priority_entries else None,
+        'distanceAngleOrderConflict': by_distance != by_angle,
+        'nonSelfResourceIdsByDistanceCandidate': by_distance,
+        'nonSelfResourceIdsBySignedAngleCandidate': by_angle,
+        'priorityEntries': priority_entries,
+        'promotionBlockers': [
+            'priority order is computed from non-promoted decoded coordinate candidates, not observed Classic map pixels',
+            'target system names remain unjoined for resources 129-131',
+            'runtime capture packets must tie visible labels and map positions to decoded Con slots before display-scale or route-label promotion',
+        ],
+        'promotionStatus': 'not-promoted; target priority only for future non-strict runtime calibration capture',
+        'sourceNote': 'This selects the most information-rich Levo-neighborhood runtime calibration order from existing decoded Con-slot, distance, and angular candidates. It does not promote EV Classic map projection, route ordering, target names, or display units.',
+    }
+
+
 def _system_name_seed_summary(names: dict) -> dict:
     """Summarize heuristic name seeds without claiming record-to-name joins."""
     system_seeds = names.get('systemNames', [])
@@ -1802,6 +1863,70 @@ def _runtime_route_label_probe_execution_gate_summary(systems: list[dict]) -> di
         'allowedUse': 'prepare disposable original-runtime capture packets for Levo route-label probes only; preserve every resource-ID/name join as blocked until captured evidence exists',
         'promotionStatus': 'not-promoted; execution gate documents safe evidence capture requirements only',
         'sourceNote': 'This gate turns the v49 probe-targeting matrix into an executable safety checklist without performing original-runtime probing or promoting any Classic route labels. It prevents the next worker from treating a target list as evidence.',
+    }
+
+
+def _runtime_route_label_probe_priority_summary(systems: list[dict]) -> dict:
+    """Prioritize route-label probe packets using decoded start-neighborhood candidates without joining names."""
+    targeting = _runtime_route_label_probe_targeting_summary(systems)
+    execution_gate = _runtime_route_label_probe_execution_gate_summary(systems)
+    calibration_priority = _start_neighborhood_runtime_calibration_priority_summary(systems)
+    priority_ids = calibration_priority.get('priorityTargetResourceIds', [])
+    slot_by_resource = {
+        entry['targetResourceId']: entry['slotName']
+        for entry in targeting.get('probeTargets', [])
+    }
+    execution_targets = execution_gate.get('requiredProbeTargetResourceIds', [])
+    ordered_targets = [resource_id for resource_id in priority_ids if resource_id in execution_targets]
+    ordered_targets.extend(resource_id for resource_id in execution_targets if resource_id not in ordered_targets)
+    packet_templates = {
+        entry['targetResourceId']: entry
+        for entry in execution_gate.get('capturePacketTemplates', [])
+    }
+    priority_entries = []
+    for priority_rank, resource_id in enumerate(ordered_targets, start=1):
+        calibration_entry = next(
+            (entry for entry in calibration_priority.get('priorityEntries', []) if entry.get('targetResourceId') == resource_id),
+            {},
+        )
+        priority_entries.append({
+            'priorityRank': priority_rank,
+            'targetResourceId': resource_id,
+            'slotName': slot_by_resource.get(resource_id),
+            'capturePacketTemplateAvailable': resource_id in packet_templates,
+            'displayQuadrantCandidate': calibration_entry.get('displayQuadrantCandidate'),
+            'distanceRankAmongNonSelfCandidates': calibration_entry.get('distanceRankAmongNonSelfCandidates'),
+            'angleRankAmongNonSelfCandidates': calibration_entry.get('angleRankAmongNonSelfCandidates'),
+            'priorityReason': calibration_entry.get('priorityReason', 'route-label-execution-gate-required-target'),
+            'joinPromotionStatus': 'not-promoted; capture priority only, no visible label assigned to decoded resource ID',
+        })
+    return {
+        'sourceLabel': 'decoded-resource-and-runtime-gate-backed-route-label-probe-priority',
+        'oracleStatus': 'route_label_probe_priority_pending_disposable_runtime_capture',
+        'sourceReferences': [
+            'runtimeRouteLabelProbeTargetingSummary',
+            'runtimeRouteLabelProbeExecutionGateSummary',
+            'startNeighborhoodRuntimeCalibrationPrioritySummary',
+        ],
+        'candidateStartResourceId': targeting['candidateStartResourceId'],
+        'candidateStartSystemName': targeting['candidateStartSystemName'],
+        'requiredProbeTargetResourceIds': execution_targets,
+        'displayCalibrationPriorityTargetResourceIds': priority_ids,
+        'priorityTargetResourceIds': ordered_targets,
+        'priorityConSlots': [entry['slotName'] for entry in priority_entries],
+        'firstPriorityTargetResourceId': ordered_targets[0] if ordered_targets else None,
+        'firstPriorityConSlot': priority_entries[0]['slotName'] if priority_entries else None,
+        'probePriorityEntries': priority_entries,
+        'executionGatePacketTemplateCount': len(execution_gate.get('capturePacketTemplates', [])),
+        'observedRuntimeLabels': targeting.get('observedRuntimeLabels', []),
+        'promotionBlockers': [
+            'priority order is derived from non-promoted decoded coordinate/vector candidates and execution gate requirements',
+            'observed runtime labels remain unassigned to resource IDs 129-131 until disposable capture packets are executed',
+            'this matrix may order future probes but must not promote named topology, display scale, or record-to-name joins',
+        ],
+        'allowedUse': 'schedule disposable original-runtime route-label capture attempts in highest-information order only',
+        'promotionStatus': 'not-promoted; route-label probe priority only, no decoded resource-ID/name join',
+        'sourceNote': 'This packet connects the route-label execution gate to the start-neighborhood calibration priority so the next probe can be run in a deterministic order. It does not assign Rigel, Kathoon, Yemuro, or Torgo to decoded resources and does not promote map scaling.',
     }
 
 
@@ -2476,6 +2601,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'runtimeRouteLabelObservationBridgeGapSummary': _runtime_route_label_observation_bridge_gap_summary(systems),
         'runtimeRouteLabelProbeTargetingSummary': _runtime_route_label_probe_targeting_summary(systems),
         'runtimeRouteLabelProbeExecutionGateSummary': _runtime_route_label_probe_execution_gate_summary(systems),
+        'runtimeRouteLabelProbePrioritySummary': _runtime_route_label_probe_priority_summary(systems),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
@@ -2510,6 +2636,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'startNeighborhoodDisplayVectorSummary': _start_neighborhood_display_vector_summary(systems),
         'startNeighborhoodSlotVectorOrderSummary': _start_neighborhood_slot_vector_order_summary(systems),
         'startNeighborhoodSlotAngularOrderSummary': _start_neighborhood_slot_angular_order_summary(systems),
+        'startNeighborhoodRuntimeCalibrationPrioritySummary': _start_neighborhood_runtime_calibration_priority_summary(systems),
         'exactSystemNameMappings': [
             _exact_system_name_mapping(resource_id)
             for resource_id in sorted(EXACT_SYSTEM_NAME_MAPPINGS)

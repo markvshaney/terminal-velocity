@@ -80,10 +80,13 @@
     "system_service_provisioning_scout",
     "shift_click_multi_stop_route_queue",
     "route_queue_invalid_stop_guardrail",
+    "route_queue_unlinked_jump_guardrail",
     "route_queue_clear_guardrail",
     "route_queue_clear_reselect_guardrail",
     "near_center_jump_block",
+    "near_center_route_recovery_loop",
     "route_planner_refuel_loop",
+    "route_planner_refuel_retry_progress_loop",
     "manual_route_low_fuel_recovery_landing_loop",
     "low_fuel_jump_recovery",
     "blocked_reason_curriculum",
@@ -169,6 +172,10 @@
       "purpose": "Route-planner loop: spend fuel on a jump, detect insufficient fuel as a blocker, and refuel while landed.",
       "surface": "route planning/refuel"
     },
+    "route_planner_refuel_retry_progress_loop": {
+      "purpose": "Route planner refuel retry loop: preserve route progress across an insufficient-fuel block, refuel at the recovery port, and retry the planned return leg.",
+      "surface": "map route planning/refuel recovery scaffold"
+    },
     "low_fuel_jump_recovery": {
       "purpose": "Low-fuel recovery loop: force empty fuel, block a route jump without changing systems, and refuel at the current landed port.",
       "surface": "route planning/refuel recovery"
@@ -253,6 +260,10 @@
       "purpose": "Map route guardrail loop: preserve the current green route queue when a duplicate/current-system or unlinked stop is attempted from the route tail.",
       "surface": "map route planning/Terminal Velocity guardrail scaffold"
     },
+    "route_queue_unlinked_jump_guardrail": {
+      "purpose": "Map route guardrail loop: preserve a queued route when a later unlinked jump target is attempted, block the jump, and surface route-tail recovery context.",
+      "surface": "map route planning/Terminal Velocity guardrail scaffold"
+    },
     "route_queue_clear_guardrail": {
       "purpose": "Map route guardrail loop: clear a queued multi-stop route explicitly, then block jump until another destination is selected.",
       "surface": "map route planning/Terminal Velocity guardrail scaffold"
@@ -264,6 +275,10 @@
     "near_center_jump_block": {
       "purpose": "Hyperspace distance guardrail: block a queued route jump while still near the system center, preserve system/fuel state, and label the behavior from original-runtime near-center failure evidence while exact distance remains pending.",
       "surface": "hyperspace feedback/source-backed guardrail"
+    },
+    "near_center_route_recovery_loop": {
+      "purpose": "Hyperspace distance recovery loop: block a queued route jump near the system center, fly outward, retry the same route, and refuel after arrival.",
+      "surface": "hyperspace feedback/source-backed recovery scaffold"
     },
     "mission_destination_route_hint": {
       "purpose": "Mission objective route hint: after accepting an active courier contract, queue the contract destination as the next map route leg.",
