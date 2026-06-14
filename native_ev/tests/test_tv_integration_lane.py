@@ -53,21 +53,6 @@ class TvIntegrationLaneTests(unittest.TestCase):
         subprocess.run(["git", "update-ref", "refs/remotes/origin/main", head], cwd=repo, check=True)
         return repo
 
-    def make_fake_hermes_agent(self, root: Path, response: dict) -> Path:
-        agent = root / "fake-hermes-agent"
-        tools = agent / "tools"
-        tools.mkdir(parents=True)
-        (tools / "__init__.py").write_text("\n")
-        (tools / "send_message_tool.py").write_text(textwrap.dedent(f"""
-            import json
-            from pathlib import Path
-
-            def send_message_tool(args, **_kw):
-                Path({str(root / "send-call.json")!r}).write_text(json.dumps(args, sort_keys=True))
-                return json.dumps({response!r})
-        """))
-        return agent
-
     def make_fake_hermes_send_bin(self, root: Path, response: dict) -> Path:
         bin_path = root / "fake-hermes"
         bin_path.write_text(textwrap.dedent(f"""\
@@ -76,10 +61,14 @@ class TvIntegrationLaneTests(unittest.TestCase):
             import sys
             from pathlib import Path
 
-            Path({str(root / "send-cli-call.json")!r}).write_text(json.dumps({{
+            payload = {{
                 "argv": sys.argv[1:],
                 "stdin": sys.stdin.read(),
-            }}, sort_keys=True))
+            }}
+            log_path = Path({str(root / "send-cli-call.jsonl")!r})
+            previous = log_path.read_text() if log_path.exists() else ""
+            log_path.write_text(previous + json.dumps(payload, sort_keys=True) + "\\n")
+            Path({str(root / "send-cli-call.json")!r}).write_text(json.dumps(payload, sort_keys=True))
             print(json.dumps({response!r}))
         """))
         bin_path.chmod(0o755)
@@ -216,6 +205,88 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(code, 2, payload)
             self.assertEqual(payload["blocked_runner_report"]["status"], "failed")
             self.assertIn("blocked_runner_report_failed", payload["blockers"])
+
+    def test_blocked_runner_report_includes_recovery_dirty_buckets(self):
+        report = tv_integration_lane.build_blocked_runner_report({
+            "decision": "needs_human",
+            "blockers": ["dirty_worktree", "control_plane_dirty_state"],
+            "dirty_state_recovery": {
+                "matched_handoff_paths": ["native_ev/model.py"],
+                "control_plane_dirty_paths": ["tools/tv_integration_lane.py"],
+                "historical_runner_metadata_dirty_paths": [".hermes/long-running/tv-spec-implementation/old.json"],
+                "extra_unexplained_dirty_paths": ["scratch.txt"],
+                "recommended_action": "split_or_review_control_plane_dirty_state",
+            },
+        })
+
+        self.assertIn("matched handoff paths:", report)
+        self.assertIn("native_ev/model.py", report)
+        self.assertIn("control-plane dirty paths:", report)
+        self.assertIn("tools/tv_integration_lane.py", report)
+        self.assertIn("historical runner metadata dirty paths:", report)
+        self.assertIn("old.json", report)
+        self.assertIn("extra unexplained dirty paths:", report)
+        self.assertIn("scratch.txt", report)
+        self.assertIn("next safe action:", report)
+
+    def test_blocked_runner_report_suppresses_duplicate_fingerprint_and_force_resends(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            repo = self.make_repo(root)
+            (repo / "scratch.txt").write_text("untracked\n")
+            fake_send = self.make_fake_hermes_send_bin(root, {"success": True})
+
+            first_code, first_payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+                env_overrides={"HERMES_SEND_BIN": str(fake_send)},
+            )
+            second_code, second_payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+                env_overrides={"HERMES_SEND_BIN": str(fake_send)},
+            )
+            forced_code, forced_payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+                "--force-blocked-report",
+                env_overrides={"HERMES_SEND_BIN": str(fake_send)},
+            )
+
+            self.assertEqual(first_code, 2, first_payload)
+            self.assertEqual(second_code, 2, second_payload)
+            self.assertEqual(forced_code, 2, forced_payload)
+            self.assertEqual(first_payload["blocked_runner_report"]["status"], "sent")
+            self.assertEqual(second_payload["blocked_runner_report"]["status"], "skipped")
+            self.assertEqual(second_payload["blocked_runner_report"]["reason"], "duplicate_fingerprint")
+            self.assertEqual(forced_payload["blocked_runner_report"]["status"], "sent")
+            calls = (root / "send-cli-call.jsonl").read_text().splitlines()
+            self.assertEqual(len(calls), 2)
+            state = json.loads((repo / ".hermes/long-running/tv-spec-implementation/report-state.json").read_text())
+            self.assertEqual(state["blocked_runner_report"]["fingerprint"], first_payload["blocked_runner_report"]["fingerprint"])
+
+    def test_blocked_runner_report_dry_run_never_writes_dedupe_state(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            (repo / "scratch.txt").write_text("untracked\n")
+
+            code, payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+                "--blocked-report-dry-run",
+            )
+
+            self.assertEqual(code, 2, payload)
+            self.assertEqual(payload["blocked_runner_report"]["status"], "dry_run")
+            self.assertFalse((repo / ".hermes/long-running/tv-spec-implementation/report-state.json").exists())
 
     def test_delivery_targets_named_profile_when_profile_path_is_named_profile(self):
         with tempfile.TemporaryDirectory() as tmp:

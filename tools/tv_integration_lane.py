@@ -10,6 +10,7 @@ for an LLM/coordinator lane to review or record.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -49,6 +50,7 @@ GATE_NORMALIZATION_MARKER = "tv_gate_normalization"
 PUSH_READY_RECOVERY_MARKER = "tv_push_ready_recovery"
 UNSAFE_DIRTY_RECOVERY_MARKER = "tv_unsafe_dirty_recovery"
 ACTIONABLE_GATE_CLASSES = {"push_ready", "review_required_process_bug"}
+REPORT_STATE_PATH = Path(".hermes/long-running/tv-spec-implementation/report-state.json")
 
 
 def run(cmd: list[str], repo: Path, *, check: bool = False) -> subprocess.CompletedProcess[str]:
@@ -786,16 +788,6 @@ def build_post_push_report(payload: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def _profile_scoped_delivery_target(target: str, profile: Path | None) -> str:
-    """Return a send_message target scoped to the integration-owner profile when possible."""
-    if not profile or target.startswith("profile:"):
-        return target
-    resolved = profile.resolve()
-    if resolved.parent.name == "profiles" and resolved.parent.parent.name == ".hermes":
-        return f"profile:{resolved.name}:{target}"
-    return target
-
-
 def _report_delivery_succeeded(result: subprocess.CompletedProcess[str]) -> bool:
     if result.returncode != 0:
         return False
@@ -818,15 +810,23 @@ def deliver_message_report(
 ) -> dict[str, Any]:
     if dry_run:
         return {"target": target, "status": "dry_run", "message": message}
-    delivery_target = _profile_scoped_delivery_target(target, profile)
     hermes_send_bin = os.environ.get("HERMES_SEND_BIN") or shutil.which("hermes")
-    if hermes_send_bin:
-        cmd = [hermes_send_bin]
-        if profile and not target.startswith("profile:"):
-            resolved = profile.resolve()
-            if resolved.parent.name == "profiles" and resolved.parent.parent.name == ".hermes":
-                cmd.extend(["-p", resolved.name])
-        cmd.extend(["send", "--json", "--to", target])
+    if not hermes_send_bin:
+        return {
+            "target": target,
+            "status": "failed",
+            "returncode": 127,
+            "output": "Hermes CLI not found for report delivery",
+            "message": message,
+        }
+
+    cmd = [hermes_send_bin]
+    if profile and not target.startswith("profile:"):
+        resolved = profile.resolve()
+        if resolved.parent.name == "profiles" and resolved.parent.parent.name == ".hermes":
+            cmd.extend(["-p", resolved.name])
+    cmd.extend(["send", "--json", "--to", target])
+    try:
         result = subprocess.run(
             cmd,
             input=message,
@@ -835,40 +835,18 @@ def deliver_message_report(
             stderr=subprocess.STDOUT,
             timeout=60,
         )
+    except OSError as exc:
         return {
             "target": target,
             "delivery_target": " ".join(cmd),
-            "status": "sent" if _report_delivery_succeeded(result) else "failed",
-            "returncode": result.returncode,
-            "output": result.stdout.strip(),
+            "status": "failed",
+            "returncode": 127,
+            "output": str(exc),
             "message": message,
         }
-
-    hermes_agent = hermes_agent or Path(os.environ.get("HERMES_AGENT_HOME", "/home/bh/.hermes/hermes-agent"))
-    code = (
-        "import sys; "
-        "from tools.send_message_tool import send_message_tool; "
-        "target=sys.argv[1]; message=sys.stdin.read(); "
-        "print(send_message_tool({'action':'send','target':target,'message':message}))"
-    )
-    env = os.environ.copy()
-    env["PYTHONPATH"] = str(hermes_agent) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
-    if profile:
-        env["HERMES_HOME"] = str(profile)
-        if profile.parent.name == "profiles":
-            env["HERMES_PROFILE"] = profile.name
-    result = subprocess.run(
-        [sys.executable or "python3", "-c", code, delivery_target],
-        input=message,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        env=env,
-        timeout=60,
-    )
     return {
         "target": target,
-        "delivery_target": delivery_target,
+        "delivery_target": " ".join(cmd),
         "status": "sent" if _report_delivery_succeeded(result) else "failed",
         "returncode": result.returncode,
         "output": result.stdout.strip(),
@@ -899,6 +877,7 @@ def build_blocked_runner_report(payload: dict[str, Any]) -> str:
     unsafe = [str(item) for item in payload.get("unsafe_files") or []]
     changed_files = [str(item) for item in payload.get("changed_files") or []]
     commit_summaries = [str(item) for item in payload.get("commit_summaries") or []]
+    recovery = payload.get("dirty_state_recovery") or {}
 
     lines = [
         "TV runner blocked by integration owner",
@@ -916,6 +895,17 @@ def build_blocked_runner_report(payload: dict[str, Any]) -> str:
     if status:
         lines.append("dirty worktree:")
         lines.extend(_bullet_list(status, limit=8))
+    bucket_specs = (
+        ("matched handoff paths:", "matched_handoff_paths"),
+        ("control-plane dirty paths:", "control_plane_dirty_paths"),
+        ("historical runner metadata dirty paths:", "historical_runner_metadata_dirty_paths"),
+        ("extra unexplained dirty paths:", "extra_unexplained_dirty_paths"),
+    )
+    for heading, key in bucket_specs:
+        values = [str(item) for item in recovery.get(key) or []]
+        if values:
+            lines.append(heading)
+            lines.extend(_bullet_list(values, limit=8))
     if unsafe:
         lines.append("unsafe files:")
         lines.extend(_bullet_list(unsafe, limit=8))
@@ -925,7 +915,109 @@ def build_blocked_runner_report(payload: dict[str, Any]) -> str:
     if changed_files:
         lines.append("changed areas:")
         lines.extend(_bullet_list(deterministic_changed_areas(changed_files), limit=6))
+    next_action = recovery.get("recommended_action") or payload.get("recommended_action")
+    if next_action:
+        lines.append("next safe action:")
+        lines.append(f"- {next_action}")
     return "\n".join(lines)
+
+
+def git_head_from_payload(payload: dict[str, Any]) -> str | None:
+    repo = payload.get("repo")
+    if not repo:
+        return None
+    try:
+        return git_text(Path(repo), "rev-parse", "HEAD")
+    except Exception:
+        return None
+
+
+def blocked_runner_report_fingerprint(payload: dict[str, Any]) -> str:
+    """Return a stable dedupe fingerprint for semantically identical blocked reports."""
+    recovery = payload.get("dirty_state_recovery") or {}
+    material = {
+        "decision": payload.get("decision"),
+        "blockers": sorted(str(item) for item in payload.get("blockers") or []),
+        "warnings": sorted(str(item) for item in payload.get("warnings") or []),
+        "active_worker_claims": sorted(str(item) for item in payload.get("active_worker_claims") or []),
+        "status_porcelain": sorted(str(item) for item in payload.get("status_porcelain") or []),
+        "head": payload.get("head") or git_head_from_payload(payload),
+        "recovery_recommended_action": recovery.get("recommended_action"),
+        "matched_handoff_paths": sorted(str(item) for item in recovery.get("matched_handoff_paths") or []),
+        "control_plane_dirty_paths": sorted(str(item) for item in recovery.get("control_plane_dirty_paths") or []),
+        "historical_runner_metadata_dirty_paths": sorted(str(item) for item in recovery.get("historical_runner_metadata_dirty_paths") or []),
+        "extra_unexplained_dirty_paths": sorted(str(item) for item in recovery.get("extra_unexplained_dirty_paths") or []),
+        "push_ready_task_ids": sorted(
+            str(item.get("task_id"))
+            for item in (payload.get("push_ready_recovery") or {}).get("planned_closeouts", [])
+            if item.get("task_id")
+        ),
+        "unsafe_dirty_task_ids": sorted(
+            str(item.get("task_id"))
+            for item in (payload.get("unsafe_dirty_recovery") or {}).get("planned_closeouts", [])
+            if item.get("task_id")
+        ),
+    }
+    encoded = json.dumps(material, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def _report_state_path(repo: Path) -> Path:
+    return repo / REPORT_STATE_PATH
+
+
+def read_report_state(repo: Path) -> dict[str, Any]:
+    path = _report_state_path(repo)
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text())
+    except json.JSONDecodeError:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def write_report_state(repo: Path, state: dict[str, Any]) -> None:
+    path = _report_state_path(repo)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
+
+
+def maybe_deliver_blocked_runner_report(
+    payload: dict[str, Any],
+    target: str,
+    *,
+    repo: Path,
+    profile: Path,
+    dry_run: bool = False,
+    force: bool = False,
+) -> dict[str, Any]:
+    message = build_blocked_runner_report(payload)
+    fingerprint = blocked_runner_report_fingerprint(payload)
+    if dry_run:
+        report = deliver_message_report(target, message, dry_run=True, profile=profile)
+        report["fingerprint"] = fingerprint
+        return report
+    state = read_report_state(repo)
+    prior = state.get("blocked_runner_report") if isinstance(state.get("blocked_runner_report"), dict) else {}
+    if not force and prior.get("fingerprint") == fingerprint:
+        return {
+            "target": target,
+            "status": "skipped",
+            "reason": "duplicate_fingerprint",
+            "fingerprint": fingerprint,
+            "message": message,
+        }
+    report = deliver_message_report(target, message, dry_run=False, profile=profile)
+    report["fingerprint"] = fingerprint
+    if report.get("status") == "sent":
+        state["blocked_runner_report"] = {
+            "fingerprint": fingerprint,
+            "target": target,
+            "sent_at": int(time.time()),
+        }
+        write_report_state(repo, state)
+    return report
 
 
 def should_send_blocked_runner_report(payload: dict[str, Any]) -> bool:
@@ -1045,6 +1137,7 @@ def main() -> int:
         help="When the integration owner blocks runner progress, send the why-blocked report to this Hermes messaging target, e.g. 'telegram:Loki GameTV'.",
     )
     parser.add_argument("--blocked-report-dry-run", action="store_true", help="Build the blocked-runner report payload without sending it.")
+    parser.add_argument("--force-blocked-report", action="store_true", help="Send the blocked-runner report even when its dedupe fingerprint was already sent.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -1138,12 +1231,13 @@ def main() -> int:
 
     if args.blocked_report_target:
         if should_send_blocked_runner_report(payload) or args.blocked_report_dry_run:
-            report = build_blocked_runner_report(payload)
-            payload["blocked_runner_report"] = deliver_message_report(
+            payload["blocked_runner_report"] = maybe_deliver_blocked_runner_report(
+                payload,
                 args.blocked_report_target,
-                report,
-                dry_run=bool(args.blocked_report_dry_run),
+                repo=repo,
                 profile=profile,
+                dry_run=bool(args.blocked_report_dry_run),
+                force=bool(args.force_blocked_report),
             )
             apply_report_delivery_failure_gate(payload, "blocked_runner_report", payload["blocked_runner_report"])
         else:
