@@ -68,6 +68,23 @@ class TvIntegrationLaneTests(unittest.TestCase):
         """))
         return agent
 
+    def make_fake_hermes_send_bin(self, root: Path, response: dict) -> Path:
+        bin_path = root / "fake-hermes"
+        bin_path.write_text(textwrap.dedent(f"""\
+            #!/usr/bin/env python3
+            import json
+            import sys
+            from pathlib import Path
+
+            Path({str(root / "send-cli-call.json")!r}).write_text(json.dumps({{
+                "argv": sys.argv[1:],
+                "stdin": sys.stdin.read(),
+            }}, sort_keys=True))
+            print(json.dumps({response!r}))
+        """))
+        bin_path.chmod(0o755)
+        return bin_path
+
     def test_dry_run_allows_clean_ahead_safe_local_bundle(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = self.make_repo(Path(tmp))
@@ -179,15 +196,22 @@ class TvIntegrationLaneTests(unittest.TestCase):
             root = Path(tmp)
             repo = self.make_repo(root)
             (repo / "scratch.txt").write_text("untracked\n")
-            fake_agent = self.make_fake_hermes_agent(root, {"error": "Platform telegram is not configured"})
+            fake_send = self.make_fake_hermes_send_bin(root, {"error": "Platform telegram is not configured"})
 
-            code, payload = self.run_integrator(
-                repo,
-                "--dry-run",
-                "--blocked-report-target",
-                "telegram:Loki GameTV",
-                env_overrides={"HERMES_AGENT_HOME": str(fake_agent)},
-            )
+            old_bin = os.environ.get("HERMES_SEND_BIN")
+            os.environ["HERMES_SEND_BIN"] = str(fake_send)
+            try:
+                code, payload = self.run_integrator(
+                    repo,
+                    "--dry-run",
+                    "--blocked-report-target",
+                    "telegram:Loki GameTV",
+                )
+            finally:
+                if old_bin is None:
+                    os.environ.pop("HERMES_SEND_BIN", None)
+                else:
+                    os.environ["HERMES_SEND_BIN"] = old_bin
 
             self.assertEqual(code, 2, payload)
             self.assertEqual(payload["blocked_runner_report"]["status"], "failed")
@@ -196,18 +220,26 @@ class TvIntegrationLaneTests(unittest.TestCase):
     def test_delivery_targets_named_profile_when_profile_path_is_named_profile(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            fake_agent = self.make_fake_hermes_agent(root, {"success": True})
+            fake_send = self.make_fake_hermes_send_bin(root, {"success": True})
             profile = root / ".hermes" / "profiles" / "loki-game"
-            result = tv_integration_lane.deliver_message_report(
-                "telegram:Loki GameTV",
-                "hello",
-                profile=profile,
-                hermes_agent=fake_agent,
-            )
+            old_bin = os.environ.get("HERMES_SEND_BIN")
+            os.environ["HERMES_SEND_BIN"] = str(fake_send)
+            try:
+                result = tv_integration_lane.deliver_message_report(
+                    "telegram:Loki GameTV",
+                    "hello",
+                    profile=profile,
+                )
+            finally:
+                if old_bin is None:
+                    os.environ.pop("HERMES_SEND_BIN", None)
+                else:
+                    os.environ["HERMES_SEND_BIN"] = old_bin
 
-            sent = json.loads((root / "send-call.json").read_text())
+            sent = json.loads((root / "send-cli-call.json").read_text())
             self.assertEqual(result["status"], "sent")
-            self.assertEqual(sent["target"], "profile:loki-game:telegram:Loki GameTV")
+            self.assertEqual(sent["argv"], ["-p", "loki-game", "send", "--json", "--to", "telegram:Loki GameTV"])
+            self.assertEqual(sent["stdin"], "hello")
 
     def test_failed_post_push_report_changes_publish_packet_to_needs_human(self):
         payload = {"decision": "publish", "blockers": [], "pushed": True}

@@ -13,6 +13,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sqlite3
 import subprocess
 import sys
@@ -817,8 +818,33 @@ def deliver_message_report(
 ) -> dict[str, Any]:
     if dry_run:
         return {"target": target, "status": "dry_run", "message": message}
-    hermes_agent = hermes_agent or Path(os.environ.get("HERMES_AGENT_HOME", "/home/bh/.hermes/hermes-agent"))
     delivery_target = _profile_scoped_delivery_target(target, profile)
+    hermes_send_bin = os.environ.get("HERMES_SEND_BIN") or shutil.which("hermes")
+    if hermes_send_bin:
+        cmd = [hermes_send_bin]
+        if profile and not target.startswith("profile:"):
+            resolved = profile.resolve()
+            if resolved.parent.name == "profiles" and resolved.parent.parent.name == ".hermes":
+                cmd.extend(["-p", resolved.name])
+        cmd.extend(["send", "--json", "--to", target])
+        result = subprocess.run(
+            cmd,
+            input=message,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            timeout=60,
+        )
+        return {
+            "target": target,
+            "delivery_target": " ".join(cmd),
+            "status": "sent" if _report_delivery_succeeded(result) else "failed",
+            "returncode": result.returncode,
+            "output": result.stdout.strip(),
+            "message": message,
+        }
+
+    hermes_agent = hermes_agent or Path(os.environ.get("HERMES_AGENT_HOME", "/home/bh/.hermes/hermes-agent"))
     code = (
         "import sys; "
         "from tools.send_message_tool import send_message_tool; "
