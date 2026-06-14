@@ -530,6 +530,17 @@ def recover_unsafe_dirty_handoffs(
 
 
 def normalize_gate_comments(profile: Path, repo: Path, *, apply: bool, author: str = "integration_owner") -> dict[str, Any]:
+    return normalize_gate_comments_for_tasks(profile, repo, apply=apply, author=author, only_task_ids=None)
+
+
+def normalize_gate_comments_for_tasks(
+    profile: Path,
+    repo: Path,
+    *,
+    apply: bool,
+    author: str = "integration_owner",
+    only_task_ids: set[str] | None = None,
+) -> dict[str, Any]:
     planned: list[dict[str, Any]] = []
     skipped: dict[str, str] = {}
     inspected_paths: list[str] = []
@@ -565,6 +576,9 @@ def normalize_gate_comments(profile: Path, repo: Path, *, apply: bool, author: s
                     continue
                 klass = canonical_gate_class(task)
                 task_id = str(task.get("id") or "")
+                if only_task_ids is not None and task_id not in only_task_ids:
+                    skipped[task_id] = f"outside_recovery_scope:{klass}"
+                    continue
                 if klass not in ACTIONABLE_GATE_CLASSES:
                     skipped[task_id] = klass
                     continue
@@ -598,6 +612,34 @@ def normalize_gate_comments(profile: Path, repo: Path, *, apply: bool, author: s
         "comments_written": comments_written,
         "errors": errors,
     }
+
+
+def reconcile_ledger_projection(repo: Path, profile: Path, *, apply: bool) -> dict[str, Any]:
+    cmd = [
+        sys.executable or "python3",
+        str(repo / "tools/tv_ledger_reconcile.py"),
+        "--repo",
+        str(repo),
+        "--profile",
+        str(profile),
+    ]
+    if apply:
+        cmd.append("--write")
+    result = run(cmd, repo)
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {
+            "applied": apply,
+            "error": "ledger_reconcile_json_parse_failed",
+            "returncode": result.returncode,
+            "output": result.stdout,
+        }
+    payload["applied"] = apply
+    payload["returncode"] = result.returncode
+    if result.returncode not in {0, 1}:
+        payload.setdefault("errors", []).append("ledger_reconcile_failed")
+    return payload
 
 
 def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dict[str, Any]:
@@ -686,6 +728,8 @@ def main() -> int:
     parser.add_argument("--apply-push-ready-recovery", action="store_true", help="With --recover-push-ready-handoff, close stale clean push_ready Kanban gates idempotently.")
     parser.add_argument("--recover-unsafe-dirty-state", action="store_true", help="Plan stale clean unsafe_dirty_state handoff closeout for start/resume recovery.")
     parser.add_argument("--apply-unsafe-dirty-recovery", action="store_true", help="With --recover-unsafe-dirty-state, close stale clean unsafe_dirty_state Kanban gates idempotently.")
+    parser.add_argument("--reconcile-ledger", action="store_true", help="Attach deterministic task-ledger reconciliation dry-run payload.")
+    parser.add_argument("--apply-ledger-reconcile", action="store_true", help="With --reconcile-ledger, write the normalized task-ledger projection.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -695,19 +739,30 @@ def main() -> int:
     payload["would_push"] = False
     payload["pushed"] = False
 
-    if args.normalize_gates:
-        payload["gate_normalization"] = normalize_gate_comments(
-            profile,
-            repo,
-            apply=bool(args.apply_gate_comments),
-        )
-
+    scoped_normalization_task_ids: set[str] | None = None
     if args.recover_push_ready_handoff:
         payload["push_ready_recovery"] = recover_push_ready_handoffs(
             profile,
             repo,
             payload,
-            apply=bool(args.apply_push_ready_recovery),
+            apply=False,
+        )
+        scoped_normalization_task_ids = {str(item.get("task_id")) for item in payload["push_ready_recovery"].get("planned_closeouts", [])}
+
+    if args.normalize_gates:
+        payload["gate_normalization"] = normalize_gate_comments_for_tasks(
+            profile,
+            repo,
+            apply=bool(args.apply_gate_comments),
+            only_task_ids=scoped_normalization_task_ids,
+        )
+
+    if args.recover_push_ready_handoff and args.apply_push_ready_recovery:
+        payload["push_ready_recovery"] = recover_push_ready_handoffs(
+            profile,
+            repo,
+            payload,
+            apply=True,
         )
 
     if args.recover_unsafe_dirty_state:
@@ -716,6 +771,13 @@ def main() -> int:
             repo,
             payload,
             apply=bool(args.apply_unsafe_dirty_recovery),
+        )
+
+    if args.reconcile_ledger:
+        payload["ledger_reconciliation"] = reconcile_ledger_projection(
+            repo,
+            profile,
+            apply=bool(args.apply_ledger_reconcile),
         )
 
     if args.push:

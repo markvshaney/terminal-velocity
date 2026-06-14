@@ -233,6 +233,66 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertIn("tv_push_ready_recovery", comments[0][1])
             self.assertEqual([row[1] for row in events], ["tv_push_ready_recovered"])
 
+    def test_recover_push_ready_can_normalize_only_the_resolved_gate_and_reconcile_ledger(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+            task_dir = repo / ".hermes/long-running/tv-spec-implementation"
+            task_dir.mkdir(parents=True)
+            ledger = {
+                "schema_version": 1,
+                "task_id": "tv-spec-implementation",
+                "status": "running",
+                "declared_owner": "continuous_kanban_runner",
+                "updated_at": "2026-06-13T09:00Z",
+            }
+            (task_dir / "task-ledger.json").write_text(json.dumps(ledger) + "\n")
+            (task_dir / "events.jsonl").write_text(json.dumps({
+                "event_id": "evt-integrated",
+                "timestamp": "2026-06-13T10:00Z",
+                "event_type": "checkpoint_published",
+                "task_id": "t_push",
+                "changed_files": ["tools/tv_integration_lane.py"],
+            }) + "\n")
+            subprocess.run([
+                "git",
+                "add",
+                ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+                ".hermes/long-running/tv-spec-implementation/events.jsonl",
+            ], cwd=repo, check=True)
+            subprocess.run(["git", "commit", "-q", "-m", "fixture ledger projection"], cwd=repo, check=True)
+            subprocess.run(["git", "update-ref", "refs/remotes/origin/main", "HEAD"], cwd=repo, check=True)
+
+            first_code, first_payload = self.run_integrator(
+                repo,
+                "--recover-push-ready-handoff",
+                "--apply-push-ready-recovery",
+                "--normalize-gates",
+                "--apply-gate-comments",
+                "--reconcile-ledger",
+                "--apply-ledger-reconcile",
+                "--profile",
+                str(profile),
+            )
+            self.assertEqual(first_code, 0, first_payload)
+            self.assertTrue(first_payload["ledger_reconciliation"]["write_applied"])
+            self.assertEqual(first_payload["gate_normalization"]["comments_written"], 1)
+            self.assertEqual([item["task_id"] for item in first_payload["gate_normalization"]["planned_comments"]], ["t_push"])
+            self.assertNotIn("t_review", {item["task_id"] for item in first_payload["gate_normalization"]["planned_comments"]})
+            written = json.loads((task_dir / "task-ledger.json").read_text())
+            self.assertEqual(written["status"], "waiting_integration_recovery")
+            self.assertEqual(written["generated_from"]["latest_event_id"], "evt-integrated")
+            conn = sqlite3.connect(db)
+            try:
+                comments = conn.execute("SELECT task_id, body FROM task_comments ORDER BY id").fetchall()
+                events = conn.execute("SELECT task_id, kind FROM task_events ORDER BY id").fetchall()
+            finally:
+                conn.close()
+            self.assertEqual([row[0] for row in comments], ["t_push", "t_push"])
+            self.assertTrue(any("tv_gate_normalization" in row[1] for row in comments))
+            self.assertTrue(any("tv_push_ready_recovery" in row[1] for row in comments))
+            self.assertEqual(sorted(row[1] for row in events), ["tv_gate_normalized", "tv_push_ready_recovered"])
+
     def test_recover_unsafe_dirty_state_dry_run_plans_stale_clean_closeout(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = self.make_repo(Path(tmp))

@@ -109,6 +109,8 @@ Verifier/regression:
 
 ### 5. Wire recovery and gate normalization into integration-owner closeout/publish path
 
+Status: implemented for `tools/tv_integration_lane.py` on 2026-06-13. The integration lane can now attach ledger reconciliation dry-run payloads with `--reconcile-ledger`, explicitly write the normalized projection with `--apply-ledger-reconcile`, and scope gate-normalization comments to the exact `push_ready` recovery task when recovery and normalization are run together. The combined path preserves idempotent recovery/comment markers and emits the reconciler result in the integration-owner JSON payload.
+
 Target surfaces:
 
 - `tools/tv_integration_lane.py`
