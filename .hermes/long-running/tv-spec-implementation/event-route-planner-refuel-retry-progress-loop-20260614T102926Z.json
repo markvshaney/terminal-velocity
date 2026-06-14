@@ -1,0 +1,50 @@
+{
+  "behavior_claim": "Route planner return-route recovery preserves queued progress on low-fuel refusal and completes the same queued stop after refuel/retry.",
+  "changed_files": [
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "event_id": "route-planner-refuel-retry-progress-loop-20260614T102926Z",
+  "fidelity_boundary": {
+    "original_runtime_observed": [
+      "initial Levo -> Sol route append source label"
+    ],
+    "pending_oracle_status": [
+      "route_progress_feedback_pending_ev_classic_ui_trace"
+    ],
+    "terminal_velocity_scaffold": [
+      "return route refuel/retry helper UX"
+    ]
+  },
+  "kanban_task": "t_2eabf668",
+  "scenario": "route_planner_refuel_retry_progress_loop",
+  "successor_kanban_task": "t_48cb1dd0",
+  "summary": "Added route_planner_refuel_retry_progress_loop symbolic scenario: a queued Sol -> Levo return route survives an insufficient-fuel blocked jump, refuels at Earth, then retries and completes with routeProgress completion telemetry.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T10:29:26Z",
+  "type": "verified_increment_checkpoint",
+  "verification": {
+    "all_gameplay_scenarios": {
+      "command": "python3 tools/run_gameplay_scenarios.py --all --pretty",
+      "result": "passed; summary total=102 passed=102 failed=0"
+    },
+    "backlog_dispatch_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "native_scenario_eval_suite": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+      "result": "passed; Ran 106 tests OK"
+    },
+    "targeted_route_refuel_retry_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_planner_refuel_retry_progress_loop_preserves_route_then_completes -v",
+      "result": "passed; Ran 1 test OK"
+    }
+  }
+}

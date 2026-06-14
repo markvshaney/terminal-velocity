@@ -116,11 +116,13 @@ SCENARIO_CURRICULUM = [
     'system_service_provisioning_scout',
     'shift_click_multi_stop_route_queue',
     'route_queue_invalid_stop_guardrail',
+    'route_queue_unlinked_jump_guardrail',
     'route_queue_clear_guardrail',
     'route_queue_clear_reselect_guardrail',
     'near_center_jump_block',
     'near_center_route_recovery_loop',
     'route_planner_refuel_loop',
+    'route_planner_refuel_retry_progress_loop',
     'manual_route_low_fuel_recovery_landing_loop',
     'low_fuel_jump_recovery',
     'blocked_reason_curriculum',
@@ -3928,6 +3930,12 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'append_route_stop', 'destinationSystem': 'Levo', 'sourceLabel': 'terminal-velocity-route-guardrail'},
             {'type': 'append_route_stop', 'destinationSystem': 'Antares', 'sourceLabel': 'terminal-velocity-route-guardrail'},
         ]
+    if name == 'route_queue_unlinked_jump_guardrail':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Sirius', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'jump', 'destinationSystem': 'Antares', 'expectBlocked': True},
+        ]
     if name == 'route_queue_clear_guardrail':
         return [
             {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
@@ -3966,6 +3974,19 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'fuel': 0}},
             {'type': 'jump', 'destinationSystem': 'Levo', 'expectBlocked': True},
             {'type': 'refuel'},
+        ]
+    if name == 'route_planner_refuel_retry_progress_loop':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'jump'},
+            {'type': 'land', 'body': 'Earth'},
+            {'type': 'append_route_stop', 'destinationSystem': 'Levo', 'sourceLabel': 'terminal-velocity-route-planner-refuel-scaffold'},
+            {'type': 'set_state', 'values': {'fuel': 0}},
+            {'type': 'jump', 'expectBlocked': True},
+            {'type': 'refuel'},
+            {'type': 'depart'},
+            {'type': 'jump'},
+            {'type': 'land', 'body': START_BODY},
         ]
     if name == 'manual_route_low_fuel_recovery_landing_loop':
         return [
@@ -4979,6 +5000,14 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'blocked_unlinked_route_tail_stop': 'passed' if 'not linked from route tail' in blocked_reasons else 'failed',
             'surfaced_adjacent_stop_recovery_hint': 'passed' if any(event.get('destinationSystem') == 'Antares' and event.get('tailSystem') == 'Sol' and 'Sirius' in event.get('linkedStopsFromTail', []) and 'adjacent linked stop' in event.get('recoveryHint', '') and event.get('sourceLabel') == 'terminal-velocity-route-guardrail' for event in blocked_events) else 'failed',
         })
+    elif name == 'route_queue_unlinked_jump_guardrail':
+        blocked = [event for event in trace if event.get('type') == 'blocked_jump' and event.get('destinationSystem') == 'Antares']
+        blocked_progress = blocked[-1].get('routeProgress', {}) if blocked else {}
+        checks.update({
+            'blocked_unlinked_direct_jump': 'passed' if blocked and blocked[-1].get('reason') == 'Antares not linked from Levo' else 'failed',
+            'preserved_route_after_unlinked_direct_jump': 'passed' if state.get('currentSystem') == START_SYSTEM and state.get('routeQueue') == ['Sol', 'Sirius'] and state.get('fuel') == STARTING_FUEL else 'failed',
+            'surfaced_unlinked_jump_route_progress': 'passed' if blocked_progress.get('completedQueuedStop') is False and blocked_progress.get('completedRouteStop') is None and blocked_progress.get('routeLengthBefore') == 2 and blocked_progress.get('routeLengthAfter') == 2 and blocked_progress.get('nextRouteStop') == 'Sol' and blocked_progress.get('routeComplete') is False and blocked_progress.get('blockedBeforeProgress') is True and blocked_progress.get('blockedReason') == 'Antares not linked from Levo' and blocked_progress.get('blockedOriginSystem') == START_SYSTEM and blocked_progress.get('blockedDestinationSystem') == 'Antares' and blocked[-1].get('sourceLabel') == 'terminal-velocity-navigation-guardrail-scaffold' and blocked[-1].get('oracleStatus') == 'classic_runtime_jump_refusal_ui_pending' else 'failed',
+        })
     elif name == 'route_queue_clear_guardrail':
         checks.update({
             'cleared_multi_stop_route': 'passed' if any(event.get('type') == 'clear_route_queue' and event.get('previousRoute') == ['Sol', 'Sirius'] and event.get('routeQueue') == [] for event in trace) and state.get('routeQueue') == [] else 'failed',
@@ -5015,6 +5044,17 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'spent_fuel_on_jump': 'passed' if any(event.get('type') == 'jump' and event.get('fuelAfter') == STARTING_FUEL - 1 for event in trace) else 'failed',
             'blocked_empty_fuel_jump': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
             'refueled_while_landed': 'passed' if any(event.get('type') == 'refuel' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
+        })
+    elif name == 'route_planner_refuel_retry_progress_loop':
+        blocked = [event for event in trace if event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel']
+        return_jumps = [event for event in trace if event.get('type') == 'jump' and event.get('destinationSystem') == START_SYSTEM]
+        blocked_progress = blocked[-1].get('routeProgress', {}) if blocked else {}
+        return_progress = return_jumps[-1].get('routeProgress', {}) if return_jumps else {}
+        checks.update({
+            'blocked_return_route_before_refuel': 'passed' if blocked and blocked[-1].get('originSystem') == 'Sol' and blocked[-1].get('destinationSystem') == START_SYSTEM else 'failed',
+            'preserved_return_route_after_empty_fuel_block': 'passed' if blocked and blocked[-1].get('routeQueue') == [START_SYSTEM] and blocked_progress.get('blockedBeforeProgress') is True and blocked_progress.get('nextRouteStop') == START_SYSTEM and blocked_progress.get('routeLengthBefore') == 1 and blocked_progress.get('routeLengthAfter') == 1 and blocked_progress.get('blockedFuel') == 0 and blocked_progress.get('fuelRequired') == 1 else 'failed',
+            'refueled_for_return_retry': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
+            'surfaced_return_route_completion_feedback': 'passed' if return_progress.get('completedQueuedStop') is True and return_progress.get('completedRouteStop') == START_SYSTEM and return_progress.get('routeLengthBefore') == 1 and return_progress.get('routeLengthAfter') == 0 and return_progress.get('nextRouteStop') is None and return_progress.get('routeComplete') is True and return_jumps[-1].get('sourceLabel') == 'terminal-velocity-route-planner-refuel-scaffold' and return_jumps[-1].get('oracleStatus') == 'route_progress_feedback_pending_ev_classic_ui_trace' else 'failed',
         })
     elif name == 'manual_route_low_fuel_recovery_landing_loop':
         blocked = [event for event in trace if event.get('type') == 'blocked_jump' and event.get('reason') == 'insufficient fuel']

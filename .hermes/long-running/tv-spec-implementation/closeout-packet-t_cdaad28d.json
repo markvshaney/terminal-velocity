@@ -1,0 +1,64 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "classification": "continue",
+  "closeout_class": "continue",
+  "contract_version": "machine_contract_v1",
+  "event_id": "unlinked-jump-route-progress-guardrail-20260614T102104Z",
+  "event_ids": [
+    "unlinked-jump-route-progress-guardrail-20260614T102104Z",
+    "successor-created-t_2eabf668-20260614T102104Z"
+  ],
+  "event_packet": ".hermes/long-running/tv-spec-implementation/event-unlinked-jump-route-progress-guardrail-20260614T102104Z.json",
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "kanban_task": "t_cdaad28d",
+  "known_unrelated_failure_surface": "",
+  "next_action": "Successor Kanban task t_2eabf668 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve unlinked-destination/original-runtime-observed boundaries and do not promote exact Classic UI wording, timing, or refusal behavior without original-runtime evidence.",
+  "next_resume_action": "Successor Kanban task t_2eabf668 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve unlinked-destination/original-runtime-observed boundaries and do not promote exact Classic UI wording, timing, or refusal behavior without original-runtime evidence.",
+  "oracleStatus": "classic_runtime_jump_refusal_ui_pending / user_demonstrated_pending_original_trace",
+  "safe_local": true,
+  "sourceLabel": "terminal-velocity-navigation-guardrail-scaffold / original-runtime-observed",
+  "successor_kanban_task": "t_2eabf668",
+  "summary": "Added route_queue_unlinked_jump_guardrail symbolic scenario: a valid queued Levo -> Sol -> Sirius route survives a direct unlinked Levo -> Antares hyperspace refusal with blocked route-progress context; exact EV Classic unlinked-destination refusal wording/timing remains pending original-runtime evidence.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T10:21:04Z",
+  "verification": {
+    "all_gameplay_scenarios": {
+      "command": "python3 tools/run_gameplay_scenarios.py --all --pretty",
+      "result": "passed; summary total=101 passed=101 failed=0"
+    },
+    "backlog_dispatch_tests": {
+      "command": "python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v",
+      "result": "passed; Ran 18 tests OK"
+    },
+    "backlog_index_build_check": {
+      "command": "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; wrote ev-classic-fidelity-implementation-backlog.index.json; BACKLOG DISPATCH INDEX OK"
+    },
+    "focused_route_guardrail_unittests": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_route_queue_unlinked_jump_guardrail_preserves_queued_route native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_near_center_route_recovery_loop_keeps_route_then_completes_jump native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_route_refuel_delivery_loop_recovers_and_delivers -v",
+      "result": "passed; Ran 4 tests OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "native_scenario_eval_suite": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval -q",
+      "result": "passed; Ran 105 tests OK"
+    },
+    "preflight": {
+      "command": "git fetch origin && git rev-parse HEAD && git rev-parse origin/main && python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; HEAD and origin/main both 44724304922a1fa7a2dbced930ba1558888f5ab8; BACKLOG DISPATCH INDEX OK"
+    },
+    "targeted_unlinked_route_scenario": {
+      "command": "python3 tools/run_gameplay_scenarios.py route_queue_unlinked_jump_guardrail --pretty",
+      "result": "passed; success true; checks all passed; final currentSystem=Levo fuel=6 routeQueue=[Sol,Sirius]"
+    }
+  }
+}

@@ -94,11 +94,13 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'system_service_provisioning_scout',
                 'shift_click_multi_stop_route_queue',
                 'route_queue_invalid_stop_guardrail',
+                'route_queue_unlinked_jump_guardrail',
                 'route_queue_clear_guardrail',
                 'route_queue_clear_reselect_guardrail',
                 'near_center_jump_block',
                 'near_center_route_recovery_loop',
                 'route_planner_refuel_loop',
+                'route_planner_refuel_retry_progress_loop',
                 'manual_route_low_fuel_recovery_landing_loop',
                 'low_fuel_jump_recovery',
                 'blocked_reason_curriculum',
@@ -2647,6 +2649,39 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(blocked['sourceLabel'], 'original-runtime-observed')
         self.assertEqual(blocked['oracleStatus'], 'near_center_jump_failure_observed_exact_distance_pending')
 
+    def test_route_queue_unlinked_jump_guardrail_preserves_queued_route(self):
+        result = run_scripted_scenario('route_queue_unlinked_jump_guardrail')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], START_SYSTEM)
+        self.assertEqual(result['state']['routeQueue'], ['Sol', 'Sirius'])
+        self.assertEqual(result['checks']['blocked_unlinked_direct_jump'], 'passed')
+        self.assertEqual(result['checks']['preserved_route_after_unlinked_direct_jump'], 'passed')
+        self.assertEqual(result['checks']['surfaced_unlinked_jump_route_progress'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
+        self.assertEqual(blocked['destinationSystem'], 'Antares')
+        self.assertEqual(blocked['reason'], 'Antares not linked from Levo')
+        self.assertEqual(blocked['routeQueue'], ['Sol', 'Sirius'])
+        self.assertEqual(
+            blocked['routeProgress'],
+            {
+                'completedQueuedStop': False,
+                'completedRouteStop': None,
+                'routeLengthBefore': 2,
+                'routeLengthAfter': 2,
+                'nextRouteStop': 'Sol',
+                'routeComplete': False,
+                'blockedBeforeProgress': True,
+                'blockedReason': 'Antares not linked from Levo',
+                'blockedOriginSystem': 'Levo',
+                'blockedDestinationSystem': 'Antares',
+            },
+        )
+        self.assertIn('adjacent linked stop', blocked['recoveryHint'])
+        self.assertIn('Sol', blocked['linkedStopsFromOrigin'])
+        self.assertEqual(blocked['sourceLabel'], 'terminal-velocity-navigation-guardrail-scaffold')
+        self.assertEqual(blocked['oracleStatus'], 'classic_runtime_jump_refusal_ui_pending')
+
     def test_near_center_route_recovery_loop_keeps_route_then_completes_jump(self):
         result = run_scripted_scenario('near_center_route_recovery_loop')
 
@@ -2700,6 +2735,55 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             {'type': 'refuel', 'system': 'Sol', 'body': 'Earth', 'fuelAfter': 6},
             result['trace'],
         )
+
+    def test_route_planner_refuel_retry_progress_loop_preserves_route_then_completes(self):
+        result = run_scripted_scenario('route_planner_refuel_retry_progress_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Levo')
+        self.assertEqual(result['state']['landedBody'], 'Levo Spaceport')
+        self.assertEqual(result['state']['routeQueue'], [])
+        self.assertEqual(result['state']['fuel'], 5)
+        self.assertEqual(result['metrics']['jumps'], 2)
+        self.assertEqual(result['checks']['blocked_return_route_before_refuel'], 'passed')
+        self.assertEqual(result['checks']['preserved_return_route_after_empty_fuel_block'], 'passed')
+        self.assertEqual(result['checks']['refueled_for_return_retry'], 'passed')
+        self.assertEqual(result['checks']['surfaced_return_route_completion_feedback'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
+        jump = [event for event in result['trace'] if event['type'] == 'jump'][-1]
+        self.assertEqual(blocked['originSystem'], 'Sol')
+        self.assertEqual(blocked['destinationSystem'], 'Levo')
+        self.assertEqual(blocked['routeQueue'], ['Levo'])
+        self.assertEqual(
+            blocked['routeProgress'],
+            {
+                'completedQueuedStop': False,
+                'completedRouteStop': None,
+                'routeLengthBefore': 1,
+                'routeLengthAfter': 1,
+                'nextRouteStop': 'Levo',
+                'routeComplete': False,
+                'blockedBeforeProgress': True,
+                'blockedReason': 'insufficient fuel',
+                'blockedOriginSystem': 'Sol',
+                'blockedDestinationSystem': 'Levo',
+                'blockedFuel': 0,
+                'fuelRequired': 1,
+            },
+        )
+        self.assertEqual(
+            jump['routeProgress'],
+            {
+                'completedQueuedStop': True,
+                'completedRouteStop': 'Levo',
+                'routeLengthBefore': 1,
+                'routeLengthAfter': 0,
+                'nextRouteStop': None,
+                'routeComplete': True,
+            },
+        )
+        self.assertEqual(jump['sourceLabel'], 'terminal-velocity-route-planner-refuel-scaffold')
+        self.assertEqual(jump['oracleStatus'], 'route_progress_feedback_pending_ev_classic_ui_trace')
 
     def test_manual_route_low_fuel_recovery_landing_loop_keeps_route_and_recovers(self):
         result = run_scripted_scenario('manual_route_low_fuel_recovery_landing_loop')
