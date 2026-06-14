@@ -673,12 +673,77 @@ def _bullet_list(items: list[str], *, limit: int = 5) -> list[str]:
     return [f"- {item}" for item in visible]
 
 
+def _unique_preserving_order(items: list[str]) -> list[str]:
+    seen: set[str] = set()
+    unique: list[str] = []
+    for item in items:
+        if item and item not in seen:
+            seen.add(item)
+            unique.append(item)
+    return unique
+
+
+def deterministic_game_dev_content(changed_files: list[str], commit_summaries: list[str]) -> list[str]:
+    """Describe TV game-dev content from deterministic file/commit patterns only."""
+    descriptions: list[str] = []
+    changed = set(changed_files)
+    commit_text = "\n".join(commit_summaries).lower()
+
+    if any(path in changed for path in {
+        "tools/extract_ev_system_semantics.py",
+        "native_ev/data/sourced_ev_systems.json",
+    }):
+        descriptions.append("EV Classic sourced systems manifest / galaxy topology semantics")
+    if any(path in changed for path in {
+        "native_ev/model.py",
+        "native_ev/scenario_eval.py",
+    }) or any(path.startswith("native_ev/tests/test_") for path in changed):
+        descriptions.append("Native EV model validation and scenario readiness surfaces")
+    if any(path.startswith("godot_ev/") for path in changed):
+        descriptions.append("Godot runtime/player-visible implementation")
+    if any(path.startswith("docs/checklists/ev-classic-fidelity-implementation-backlog") for path in changed):
+        descriptions.append("Fidelity backlog/source-readiness docs")
+    if any(path.startswith("native_ev/data/") and "sourced_ev_" in path for path in changed):
+        descriptions.append("Source-backed Native EV data manifest updates")
+    if any(path.startswith("tools/tv_") for path in changed) or "runner" in commit_text or "integration" in commit_text:
+        descriptions.append("TV runner/integration workflow reporting")
+    if any(path.startswith(".hermes/long-running/") for path in changed):
+        descriptions.append("Long-running TV task ledger/provenance update")
+    return _unique_preserving_order(descriptions)
+
+
+def deterministic_changed_areas(changed_files: list[str]) -> list[str]:
+    """Group changed paths into human-readable, non-LLM TV areas."""
+    changed = set(changed_files)
+    areas: list[str] = []
+    if any(path in changed for path in {
+        "tools/extract_ev_system_semantics.py",
+        "native_ev/data/sourced_ev_systems.json",
+    }):
+        areas.append("Native EV sourced systems extractor and manifest")
+    if any(path in changed for path in {"native_ev/model.py", "native_ev/scenario_eval.py"}):
+        areas.append("Native EV model/scenario readiness surfaces")
+    if any(path.startswith("native_ev/tests/") for path in changed):
+        areas.append("Native EV regression tests")
+    if any(path.startswith("godot_ev/") for path in changed):
+        areas.append("Godot runtime")
+    if any(path.startswith("docs/checklists/") for path in changed):
+        areas.append("Fidelity backlog/checklist artifacts")
+    if any(path.startswith("tools/tv_") for path in changed):
+        areas.append("TV integration/runner tooling")
+    if any(path.startswith(".hermes/long-running/") for path in changed):
+        areas.append("Long-running runner ledger/provenance")
+    return _unique_preserving_order(areas) or changed_files
+
+
 def build_post_push_report(payload: dict[str, Any]) -> str:
-    """Build a concise TV progress report for Loki GameTV after a verified push."""
+    """Build a concise deterministic TV progress report for Loki GameTV after a verified push."""
     head = str(payload.get("head") or payload.get("origin_main") or "")
     short_head = head[:7] if head else "unknown"
     commits = [str(item) for item in payload.get("commit_summaries") or []]
-    changed = [str(item) for item in payload.get("changed_files") or []]
+    changed_files = [str(item) for item in payload.get("changed_files") or []]
+    changed = deterministic_changed_areas(changed_files)
+    game_dev_content = deterministic_game_dev_content(changed_files, commits)
     checks = [str(item) for item in payload.get("passed_checks") or []]
 
     lines = [
@@ -688,6 +753,9 @@ def build_post_push_report(payload: dict[str, Any]) -> str:
     if commits:
         lines.append("Bundle:")
         lines.extend(_bullet_list(commits, limit=4))
+    if game_dev_content:
+        lines.append("Game-dev content:")
+        lines.extend(_bullet_list(game_dev_content, limit=6))
     if changed:
         lines.append("Changed:")
         lines.extend(_bullet_list(changed, limit=6))

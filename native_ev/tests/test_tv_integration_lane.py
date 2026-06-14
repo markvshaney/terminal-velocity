@@ -70,22 +70,31 @@ class TvIntegrationLaneTests(unittest.TestCase):
             "head": "abcdef1234567890",
             "origin_main": "abcdef1234567890",
             "commit_summaries": [
-                "fix(runner): make task ledger provenance-only",
+                "feat(native): promote coordinate map readiness",
                 "chore(ledger): refresh provenance",
             ],
             "changed_files": [
-                "tools/tv_integration_lane.py",
+                "tools/extract_ev_system_semantics.py",
+                "native_ev/data/sourced_ev_systems.json",
+                "native_ev/model.py",
+                "native_ev/scenario_eval.py",
+                "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
                 ".hermes/long-running/tv-spec-implementation/task-ledger.json",
             ],
-            "passed_checks": ["git_diff_check", "committed_diff_secret_scan"],
+            "passed_checks": ["extractor_idempotence", "focused_model_scenario_tests", "git_diff_check"],
         }
 
         report = tv_integration_lane.build_post_push_report(payload)
 
         self.assertIn("TV progress published", report)
         self.assertIn("abcdef1", report)
-        self.assertIn("fix(runner): make task ledger provenance-only", report)
-        self.assertIn("tools/tv_integration_lane.py", report)
+        self.assertIn("feat(native): promote coordinate map readiness", report)
+        self.assertIn("Game-dev content:", report)
+        self.assertIn("EV Classic sourced systems manifest / galaxy topology semantics", report)
+        self.assertIn("Native EV model validation and scenario readiness surfaces", report)
+        self.assertIn("Fidelity backlog/source-readiness docs", report)
+        self.assertIn("Changed:", report)
+        self.assertIn("Native EV sourced systems extractor and manifest", report)
         self.assertIn("git_diff_check", report)
 
     def test_post_push_report_dry_run_payload_uses_requested_target(self):
