@@ -81,9 +81,10 @@ The 10:54 p.m. post made five concrete suggestions. This review incorporates the
 >
 - custom topology checker:
   - `tools/check_tv_runner_topology.py`
-  - should be extended to classify proposed outcomes such as:
+  - should classify outcomes such as:
     - `active_owner_conflict`
-    - `ledger_stale`
+    - `ledger_projection_stale`
+    - `ledger_historical_owner_mismatch`
     - `passive_reporter_ignored`
     - `stale_bootstrap_job_ignored`
     - `gateway_global_enabled_warning`

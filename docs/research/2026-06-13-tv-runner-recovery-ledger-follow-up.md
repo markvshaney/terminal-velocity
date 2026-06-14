@@ -64,6 +64,8 @@ Verifier/regression:
 
 ### 3. Demote ledger owner/status fields from live authority
 
+Status: implemented for topology preflight on 2026-06-13. `tools/check_tv_runner_topology.py` now keeps live-owner truth derived from live cron/process/loop/Kanban surfaces, demotes stale ledger owner/status/`allowed_surfaces` disagreement to `ledger_historical_owner_mismatch`, demotes old topology gates to `ledger_projection_stale`, and emits `ledger_reconciliation_actions: ["normalize_ledger_projection"]` instead of treating stale ledger projection data as a live-owner conflict. Remaining ledger writer/schema normalization belongs to item 4.
+
 Target surfaces:
 
 - `tools/check_tv_runner_topology.py`

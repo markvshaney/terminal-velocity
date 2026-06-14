@@ -136,7 +136,10 @@ class TvRunnerTopologyTests(unittest.TestCase):
             self.assertEqual(code, 0, payload)
             self.assertFalse(payload["topology_conflict"])
             self.assertEqual(payload["live_implementation_owner"], "none_active")
-            self.assertIn("ledger_stale", payload["warning_types"])
+            self.assertIn("ledger_historical_owner_mismatch", payload["warning_types"])
+            self.assertIn("ledger_projection_stale", payload["warning_types"])
+            self.assertIn("normalize_ledger_projection", payload["ledger_reconciliation_actions"])
+            self.assertNotIn("ledger_stale", payload["warning_types"])
             self.assertIn("passive_reporter_ignored", payload["warning_types"])
             self.assertNotIn("gateway_global_enabled_warning", payload["warning_types"])
             self.assertNotIn("active_owner_conflict", payload["conflict_types"])
@@ -165,8 +168,35 @@ class TvRunnerTopologyTests(unittest.TestCase):
 
             self.assertEqual(code, 0, payload)
             self.assertEqual(payload["live_implementation_owner"], "none_active")
-            self.assertIn("ledger_stale", payload["warning_types"])
+            self.assertIn("ledger_historical_owner_mismatch", payload["warning_types"])
+            self.assertNotIn("ledger_stale", payload["warning_types"])
+            self.assertIn("normalize_ledger_projection", payload["ledger_reconciliation_actions"])
             self.assertNotIn("active_owner_conflict", payload["conflict_types"])
+
+    def test_historical_allowed_surfaces_do_not_block_clean_idle_gateway_start(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo, profile, task_dir = self.make_topology_fixture(Path(tmp))
+            (task_dir / "task-ledger.json").write_text(json.dumps({
+                "task_id": "tv-spec-implementation",
+                "status": "running",
+                "runner_ownership": {
+                    "implementation_owner": "gateway_kanban_dispatcher",
+                    "allowed_surfaces": {"gateway_kanban_dispatcher": "disabled"},
+                    "last_verified_at": "2026-06-10T23:13:44Z",
+                },
+            }) + "\n")
+            (profile / "cron/jobs.json").write_text(json.dumps({"jobs": []}) + "\n")
+            self.write_kanban_db(profile, active_tv_task=False)
+
+            code, payload = self.run_checker(repo, profile, "--startup-owner", "gateway_kanban_dispatcher")
+
+            self.assertEqual(code, 0, payload)
+            self.assertFalse(payload["topology_conflict"])
+            self.assertEqual(payload["live_implementation_owner"], "none_active")
+            self.assertIn("ledger_historical_owner_mismatch", payload["warning_types"])
+            self.assertIn("gateway_global_enabled_warning", payload["warning_types"])
+            self.assertIn("normalize_ledger_projection", payload["ledger_reconciliation_actions"])
+            self.assertNotIn("ledger_invalid", payload["conflict_types"])
 
     def test_active_continuous_loop_conflicts_with_startup_owner(self):
         with tempfile.TemporaryDirectory() as tmp:

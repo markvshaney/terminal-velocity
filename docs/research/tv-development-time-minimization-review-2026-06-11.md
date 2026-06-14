@@ -82,7 +82,7 @@ Current state:
 - declared implementation owner: `none_active` for direct implementation; autonomous integration owner is available for normal non-force checkpoint fan-in
 - live implementation owner: no direct-session implementation owner is active; the Kanban lane is the intended owner surface, and scheduler autostart is responsible for re-dispatching/seed-on-idle after reset
 - topology conflict: `false`
-- topology warnings: current live checker may report `ledger_stale` or `gateway_global_enabled_warning`; those are warnings, not a restart blocker when no live TV owner conflict exists
+- topology warnings: current live checker may report `ledger_projection_stale`, `ledger_historical_owner_mismatch`, or `gateway_global_enabled_warning`; those are warnings, not a restart blocker when no live TV owner conflict exists
 - ledger active gate: `null`
 - ledger status: running/idle state must be verified live before dispatch; stale ledger owner alone is not a human gate
 - last integrated checkpoint: verify with `git rev-parse HEAD origin/main`; do not trust copied SHAs

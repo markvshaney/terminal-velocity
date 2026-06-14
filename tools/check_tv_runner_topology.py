@@ -333,7 +333,7 @@ def main() -> int:
     if declared_owner and declared_owner != live_owner and ledger_declares_active_owner:
         add_issue(
             warnings,
-            "ledger_stale",
+            "ledger_historical_owner_mismatch",
             f"ledger declared owner {declared_owner!r} does not match derived live owner {live_owner!r}",
         )
     if (
@@ -345,14 +345,14 @@ def main() -> int:
     ):
         add_issue(
             warnings,
-            "ledger_stale",
+            "ledger_historical_owner_mismatch",
             f"startup owner {startup_owner!r} differs from stale ledger owner {declared_owner!r}; update ledger intent after preflight",
         )
     active_gate = ledger.get("active_gate")
     if isinstance(active_gate, dict) and active_gate.get("type") == "topology_conflict" and not conflicts:
         add_issue(
             warnings,
-            "ledger_stale",
+            "ledger_projection_stale",
             "ledger still records an old topology_conflict gate, but live topology has no active owner conflict",
         )
 
@@ -367,7 +367,16 @@ def main() -> int:
     elif gateway_enabled and declared_owner == "gateway_kanban_dispatcher":
         gateway_state = (runner_ownership.get("allowed_surfaces") or {}).get("gateway_kanban_dispatcher")
         if gateway_state not in {"owner", "active_owner", "declared_owner"}:
-            add_issue(conflicts, "ledger_invalid", "gateway dispatch is ledger owner but allowed_surfaces does not mark it as owner")
+            add_issue(
+                warnings,
+                "ledger_historical_owner_mismatch",
+                "ledger allowed_surfaces does not mark gateway dispatch as owner; treating it as historical projection data",
+            )
+
+    warning_types = sorted({item["type"] for item in warnings})
+    ledger_reconciliation_actions = []
+    if "ledger_historical_owner_mismatch" in warning_types or "ledger_projection_stale" in warning_types:
+        ledger_reconciliation_actions.append("normalize_ledger_projection")
 
     result = {
         "ok": not conflicts,
@@ -376,7 +385,8 @@ def main() -> int:
         "declared_implementation_owner": declared_owner,
         "startup_owner": startup_owner,
         "conflict_types": sorted({item["type"] for item in conflicts}),
-        "warning_types": sorted({item["type"] for item in warnings}),
+        "warning_types": warning_types,
+        "ledger_reconciliation_actions": ledger_reconciliation_actions,
         "conflicts": conflicts,
         "warnings": warnings,
         "problems": [item["message"] for item in conflicts],
