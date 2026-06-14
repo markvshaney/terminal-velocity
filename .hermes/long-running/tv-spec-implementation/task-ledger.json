@@ -1,16 +1,79 @@
 {
-  "active_gate": null,
-  "current_gate_classification": {
-    "active_owner_conflict": false,
-    "dirty_worktree_reconciliation": false,
-    "gateway_global_enabled_warning": false,
-    "ledger_stale": false,
-    "passive_reporter_ignored": false,
-    "review_required_process_bug": true,
-    "stale_bootstrap_job_ignored": false,
-    "verification_note": "review-required/human-review was reclassified as a process bug on 2026-06-11: long-running TV safe-local increments should be resolved by the autonomous integration owner, not wait for human review."
+  "diagnostics": {
+    "active_gate_at_reconcile_time": {
+      "dirty_paths": [
+        "native_ev/tests/test_tv_integration_lane.py",
+        "native_ev/tests/test_tv_ledger_reconcile.py",
+        "native_ev/tests/test_tv_runner_start_resume_preflight.py",
+        "tools/tv_integration_lane.py",
+        "tools/tv_ledger_reconcile.py",
+        "tools/tv_runner_start_resume_preflight.py"
+      ],
+      "type": "unsafe_dirty_state"
+    },
+    "generated_from": {
+      "closeout_packets": [
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_4ad7b9e5.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_cb8b9600.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1db4d53e.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_57c3df52.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_c3ac071a.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1d5ea6d9.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_3f025aee.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_4d550a4f.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_9beb55ac.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_221b244b.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_e4a732db.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_eac03f91.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_968a69d6.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_570b6ee0.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_679ce962.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_dd13e3b2.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_18cc79a3.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_6cf23923.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_c46ad01c.json"
+      ],
+      "command": "tools/tv_ledger_reconcile.py",
+      "event_count": 213,
+      "events_jsonl": ".hermes/long-running/tv-spec-implementation/events.jsonl",
+      "git": {
+        "all_dirty_paths": [
+          ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+          "native_ev/tests/test_tv_integration_lane.py",
+          "native_ev/tests/test_tv_ledger_reconcile.py",
+          "native_ev/tests/test_tv_runner_start_resume_preflight.py",
+          "tools/tv_integration_lane.py",
+          "tools/tv_ledger_reconcile.py",
+          "tools/tv_runner_start_resume_preflight.py"
+        ],
+        "dirty_paths": [
+          "native_ev/tests/test_tv_integration_lane.py",
+          "native_ev/tests/test_tv_ledger_reconcile.py",
+          "native_ev/tests/test_tv_runner_start_resume_preflight.py",
+          "tools/tv_integration_lane.py",
+          "tools/tv_ledger_reconcile.py",
+          "tools/tv_runner_start_resume_preflight.py"
+        ],
+        "head": "cea13be8e2c308bdb24aeba1f3d83e63baf15ead",
+        "head_error": null,
+        "ignored_control_projection_paths": [
+          ".hermes/long-running/tv-spec-implementation/task-ledger.json"
+        ],
+        "repo_state": "dirty",
+        "status_error": null
+      },
+      "latest_event_id": "blocked-route-progress-context-20260613T204325Z",
+      "matching_closeout_packet": null,
+      "topology": {
+        "conflict_types": [],
+        "live_implementation_owner": "none_active",
+        "warning_types": [
+          "gateway_global_enabled_warning"
+        ]
+      }
+    },
+    "live_state_class_at_reconcile_time": "blocked_unsafe_dirty_state"
   },
-  "declared_owner": "none_active",
   "evidence_pointers": {
     "basilisk_speed_qualification": "docs/research/basilisk-speed-qualification.json",
     "debug_snapshot": ".hermes/long-running/tv-spec-implementation/tv-spec-debug-artifact-2026-06-10.md",
@@ -21,31 +84,26 @@
     "topology_tests": "native_ev/tests/test_tv_spec_continuous_runner.py",
     "workflow_policy": "docs/research/tv-spec.md"
   },
-  "last_closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_dd13e3b2.json",
-  "last_event_packet": ".hermes/long-running/tv-spec-implementation/event-blocked-route-progress-context-20260613T204325Z.json",
-  "last_material_event_id": "blocked-route-progress-context-20260613T204325Z",
-  "last_progress_token": "blocked-route-progress-context-t_dd13e3b2-verified",
-  "last_reconciled_live_git": {
-    "active_kanban_task": "t_dd13e3b2",
-    "checked_at": "2026-06-13T20:43:25Z",
-    "checkpoint_decision": "safe_local_blocked_route_progress_context_increment_verified",
-    "checkpoint_files": [
+  "historical_notes": {
+    "classifications": [
+      "unsafe_dirty_state"
+    ],
+    "event_parse_errors": []
+  },
+  "latest_worker_handoff": {
+    "changed_files": [
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_scenario_eval.py",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
-      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
-      ".hermes/long-running/tv-spec-implementation/events.jsonl",
-      ".hermes/long-running/tv-spec-implementation/task-ledger.json",
-      ".hermes/long-running/tv-spec-implementation/event-blocked-route-progress-context-20260613T204325Z.json",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_dd13e3b2.json"
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
     ],
-    "head_before_slice": "f123bf98a1f0844de0ff0baeee8b392f955478f8",
-    "origin_main_before_slice": "f123bf98a1f0844de0ff0baeee8b392f955478f8",
-    "successor_kanban_task": null
-  },
-  "last_runner_summary_path": null,
-  "last_verified": {
-    "live_truth_sources": {
+    "closeout_packet": null,
+    "event_id": "blocked-route-progress-context-20260613T204325Z",
+    "matched_dirty_paths": [],
+    "summary": "Added structured blocked routeProgress context for queued-route low-fuel and near-center hyperspace refusals, preserving route/fuel/system state and keeping the behavior labeled as Terminal Velocity helper/scaffold pending stronger EV Classic runtime UI evidence.",
+    "task_id": "t_dd13e3b2",
+    "timestamp": "2026-06-13T20:43:25Z",
+    "verification": {
       "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
       "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
       "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build and python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
@@ -54,31 +112,23 @@
       "runner_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
       "targeted_low_fuel_scenario": "passed; python3 tools/run_gameplay_scenarios.py manual_route_low_fuel_recovery_landing_loop --pretty; success true with surfaced_blocked_route_progress_feedback passed",
       "targeted_near_center_scenario": "passed; python3 tools/run_gameplay_scenarios.py near_center_jump_block --pretty; success true with surfaced_near_center_route_progress_feedback passed"
-    },
-    "timestamp": "2026-06-13T20:43:25Z",
-    "verified_by": "kanban-worker:t_dd13e3b2"
+    }
   },
-  "latest_runner_summary_deleted_at": "2026-06-11T17:02:59Z",
-  "latest_runner_summary_deletion_note": "Deleted stale continuous-runner/latest-summary.json by explicit user request; run-specific summary files and events.jsonl remain as historical provenance. Current truth is live git, this ledger, and topology checker output.",
-  "next_resume_action": "Continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve helper/scaffold labels unless backed by original-runtime evidence.",
-  "runner_ownership": {
-    "allowed_surfaces": {
-      "continuous_kanban_runner": "available_after_checkpoint_push_and_topology_preflight",
-      "direct_session": "available_for_checkpoint_and_push",
-      "gateway_kanban_dispatcher": "not_live",
-      "integration_owner": "autonomous_available_for_checkpoint_review_push"
-    },
-    "implementation_owner": "none_active",
-    "last_verified_at": "2026-06-13T04:45:00Z"
+  "policy": {
+    "generic_review_required_allowed": false,
+    "valid_closeout_classes": [
+      "continue",
+      "push_ready",
+      "blocked:<concrete_reason>"
+    ]
   },
-  "runner_policy": {
-    "progress_token_definition": "sha256 of ledger status, active gate, next action, HEAD, git status, event count, and last event digest"
+  "resume_hint": {
+    "not_authoritative": true,
+    "text": null
   },
-  "runtime_truth_rule": "Derive current runtime truth from live cron/process/loop/gateway/Kanban/git surfaces first. Reconcile this ledger only as declared intent/checkpoint state; do not treat old gates or derived interpretations here as primary runtime truth.",
-  "schema_version": 2,
-  "scope": "Terminal Velocity repo /home/bh/workspaces/loki/terminal-velocity under loki-game profile. No cron mutation, gateway/provider/account change, push, force-push, deletion, or publication is authorized by this ledger entry.",
-  "status": "running",
-  "successor_kanban_task": null,
+  "runtime_truth_rule": "Live runner state is derived from Kanban/topology/git/processes, not this ledger.",
+  "schema_version": 3,
+  "scope": "Terminal Velocity long-running implementation provenance. This ledger is not a live runner status source.",
   "task_id": "tv-spec-implementation",
   "updated_at": "2026-06-13T20:43:25Z"
 }

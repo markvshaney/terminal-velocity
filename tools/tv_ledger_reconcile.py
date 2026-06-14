@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Deterministically normalize the TV long-running task ledger projection.
+"""Normalize the TV long-running task ledger to provenance-only form.
 
 Dry-run is the default and is side-effect-free. With --write, this command
 rewrites only .hermes/long-running/tv-spec-implementation/task-ledger.json to a
-projection derived from events, closeout packets, git state, and live topology
-truth. It never starts workers, mutates Kanban, commits, or pushes.
+schema that preserves durable provenance, policy, event/closeout pointers, and
+resume hints. It deliberately removes mutable live-status fields; live runner
+truth is derived from Kanban, topology, git, and process state at preflight time.
+It never starts workers, mutates Kanban, commits, or pushes.
 """
 from __future__ import annotations
 
@@ -249,56 +251,57 @@ def build_projection(repo: Path, profile: Path) -> dict[str, Any]:
     classifications = sorted(set(classifications))
 
     if "live_owner_conflict" in classifications:
-        status = "blocked_live_owner_conflict"
+        live_state_class = "blocked_live_owner_conflict"
         active_gate = {"type": "live_owner_conflict", "topology_conflicts": topology.get("conflict_types") or []}
     elif "unsafe_dirty_state" in classifications:
-        status = "blocked_unsafe_dirty_state"
+        live_state_class = "blocked_unsafe_dirty_state"
         active_gate = {"type": "unsafe_dirty_state", "dirty_paths": git["dirty_paths"]}
     elif "dirty_handoff_pending" in classifications:
-        status = "push_ready_recovery"
+        live_state_class = "push_ready_recovery"
         active_gate = {"type": "dirty_handoff_pending", "dirty_paths": git["dirty_paths"]}
     elif "ledger_projection_stale" in classifications or "ledger_historical_owner_mismatch" in classifications:
-        status = "waiting_integration_recovery"
+        live_state_class = "waiting_integration_recovery"
         active_gate = None
     else:
-        status = "idle_clean"
+        live_state_class = "idle_clean"
         active_gate = None
 
     planned = {
         "schema_version": 3,
         "task_id": "tv-spec-implementation",
-        "status": status,
-        "active_gate": active_gate,
-        "declared_owner": live_owner if live_owner in {"none_active", "direct_session", "continuous_kanban_runner", "gateway_kanban_dispatcher", "integration_owner"} else "none_active",
-        "runner_ownership": {
-            "implementation_owner": live_owner if live_owner in {"none_active", "direct_session", "continuous_kanban_runner", "gateway_kanban_dispatcher", "integration_owner"} else "none_active",
-            "source": "live_topology_preflight",
+        "scope": "Terminal Velocity long-running implementation provenance. This ledger is not a live runner status source.",
+        "runtime_truth_rule": "Live runner state is derived from Kanban/topology/git/processes, not this ledger.",
+        "policy": {
+            "valid_closeout_classes": ["continue", "push_ready", "blocked:<concrete_reason>"],
+            "generic_review_required_allowed": False,
         },
-        "last_integrated_checkpoint": {
-            "git_head": git.get("head"),
-            "repo_state": git.get("repo_state"),
-            "dirty_paths": git.get("dirty_paths"),
-        },
+        "evidence_pointers": current_ledger.get("evidence_pointers", {}) if isinstance(current_ledger, dict) else {},
         "latest_worker_handoff": handoff,
+        "resume_hint": {
+            "text": current_ledger.get("next_resume_action") if isinstance(current_ledger, dict) else None,
+            "not_authoritative": True,
+        },
         "historical_notes": {
-            "previous_status": current_ledger.get("status") if isinstance(current_ledger, dict) else None,
-            "previous_declared_owner": ledger_owner,
             "classifications": classifications,
             "event_parse_errors": event_errors,
         },
-        "generated_from": {
-            "command": "tools/tv_ledger_reconcile.py",
-            "events_jsonl": str(events_path.relative_to(repo)),
-            "event_count": len(events),
-            "latest_event_id": (latest or {}).get("event_id") or (latest or {}).get("id"),
-            "closeout_packets": [packet.get("_path") for packet in packets],
-            "matching_closeout_packet": matching_packet.get("_path") if matching_packet else None,
-            "topology": {
-                "live_implementation_owner": live_owner,
-                "warning_types": topology.get("warning_types") or [],
-                "conflict_types": topology.get("conflict_types") or [],
+        "diagnostics": {
+            "live_state_class_at_reconcile_time": live_state_class,
+            "active_gate_at_reconcile_time": active_gate,
+            "generated_from": {
+                "command": "tools/tv_ledger_reconcile.py",
+                "events_jsonl": str(events_path.relative_to(repo)),
+                "event_count": len(events),
+                "latest_event_id": (latest or {}).get("event_id") or (latest or {}).get("id"),
+                "closeout_packets": [packet.get("_path") for packet in packets],
+                "matching_closeout_packet": matching_packet.get("_path") if matching_packet else None,
+                "topology": {
+                    "live_implementation_owner": live_owner,
+                    "warning_types": topology.get("warning_types") or [],
+                    "conflict_types": topology.get("conflict_types") or [],
+                },
+                "git": git,
             },
-            "git": git,
         },
     }
     if latest_event_time:
@@ -309,7 +312,7 @@ def build_projection(repo: Path, profile: Path) -> dict[str, Any]:
     changed = planned != current_ledger
     recommended = "none"
     if changed:
-        recommended = "write_normalized_projection"
+        recommended = "write_normalized_provenance"
     payload = {
         "repo": str(repo),
         "profile": str(profile),

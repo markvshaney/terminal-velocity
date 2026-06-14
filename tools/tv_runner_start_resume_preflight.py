@@ -144,8 +144,12 @@ def capability_check(repo: Path) -> dict[str, Any]:
     return {"status": "ok" if not missing else "missing", "missing": missing, "resolved": resolved}
 
 
-def canonical_block_class(task: dict[str, Any]) -> str:
-    text = " ".join(str(task.get(key) or "") for key in ("title", "body", "status")).lower()
+def canonical_block_class(task: dict[str, Any], evidence_texts: list[str] | None = None) -> str:
+    base_keys = ("title", "body", "status", "latest_summary", "result", "reason", "summary")
+    values = [str(task.get(key) or "") for key in base_keys]
+    if evidence_texts:
+        values.extend(str(item or "") for item in evidence_texts)
+    text = " ".join(values).lower()
     if "push_ready" in text or "push ready" in text:
         return "push_ready"
     if "unsafe_dirty_state" in text or "unsafe dirty" in text:
@@ -208,6 +212,7 @@ def _query_blocked_cards(db_path: Path) -> list[dict[str, Any]]:
         text = " ".join(str(task.get(key) or "") for key in ("title", "body", "latest_summary", "assignee", "tenant", "workspace_path")).lower()
         if "terminal-velocity" not in text and "tv" not in text:
             continue
+        comments = comments_by_task.get(str(task.get("id"))) or []
         card = {
             "id": task.get("id"),
             "title": task.get("title"),
@@ -215,9 +220,8 @@ def _query_blocked_cards(db_path: Path) -> list[dict[str, Any]]:
             "latest_summary": task.get("latest_summary"),
             "assignee": task.get("assignee"),
             "status": task.get("status"),
-            "canonical_class": canonical_block_class(task),
+            "canonical_class": canonical_block_class(task, [comment.get("body", "") for comment in comments]),
         }
-        comments = comments_by_task.get(str(task.get("id"))) or []
         if comments:
             card["comments"] = comments
         cards.append(card)

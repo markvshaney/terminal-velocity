@@ -183,8 +183,12 @@ def active_worker_claims(profile: Path, repo: Path) -> list[str]:
     return sorted(set(claims))
 
 
-def canonical_gate_class(task: dict[str, Any]) -> str:
-    text = " ".join(str(task.get(key) or "") for key in ("title", "body", "status")).lower()
+def canonical_gate_class(task: dict[str, Any], evidence_texts: list[str] | None = None) -> str:
+    base_keys = ("title", "body", "status", "latest_summary", "result", "reason", "summary")
+    values = [str(task.get(key) or "") for key in base_keys]
+    if evidence_texts:
+        values.extend(str(item or "") for item in evidence_texts)
+    text = " ".join(values).lower()
     if "push_ready" in text or "push ready" in text:
         return "push_ready"
     if "unsafe_dirty_state" in text or "unsafe dirty" in text:
@@ -196,6 +200,26 @@ def canonical_gate_class(task: dict[str, Any]) -> str:
     if "review-required" in text or "review_required" in text or "review required" in text:
         return "review_required_process_bug"
     return "blocked:unclassified"
+
+
+def task_comment_bodies(conn: sqlite3.Connection, task_id: str) -> list[str]:
+    tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if "task_comments" not in tables:
+        return []
+    try:
+        rows = conn.execute(
+            "SELECT body FROM task_comments WHERE task_id = ? ORDER BY id",
+            (task_id,),
+        ).fetchall()
+    except sqlite3.Error:
+        return []
+    bodies: list[str] = []
+    for row in rows:
+        body = str(row[0] or "")
+        if any(marker in body for marker in (GATE_NORMALIZATION_MARKER, PUSH_READY_RECOVERY_MARKER, UNSAFE_DIRTY_RECOVERY_MARKER)):
+            continue
+        bodies.append(body)
+    return bodies
 
 
 def normalization_comment_body(task: dict[str, Any], klass: str) -> str:
@@ -349,8 +373,8 @@ def recover_push_ready_handoffs(
                 task = dict(row)
                 if not row_is_tv_related(task, repo):
                     continue
-                klass = canonical_gate_class(task)
                 task_id = str(task.get("id") or "")
+                klass = canonical_gate_class(task, task_comment_bodies(conn, task_id))
                 if klass != "push_ready":
                     skipped[task_id] = klass
                     continue
@@ -492,8 +516,8 @@ def recover_unsafe_dirty_handoffs(
                 task = dict(row)
                 if not row_is_tv_related(task, repo):
                     continue
-                klass = canonical_gate_class(task)
                 task_id = str(task.get("id") or "")
+                klass = canonical_gate_class(task, task_comment_bodies(conn, task_id))
                 if klass != "unsafe_dirty_state":
                     skipped[task_id] = klass
                     continue
@@ -574,8 +598,8 @@ def normalize_gate_comments_for_tasks(
                 task = dict(row)
                 if not row_is_tv_related(task, repo):
                     continue
-                klass = canonical_gate_class(task)
                 task_id = str(task.get("id") or "")
+                klass = canonical_gate_class(task, task_comment_bodies(conn, task_id))
                 if only_task_ids is not None and task_id not in only_task_ids:
                     skipped[task_id] = f"outside_recovery_scope:{klass}"
                     continue

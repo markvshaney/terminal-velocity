@@ -157,6 +157,55 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         finally:
             conn.close()
 
+    def add_comment_only_review_block(self, profile: Path) -> None:
+        db = profile / "kanban.db"
+        conn = sqlite3.connect(db)
+        try:
+            conn.executescript("""
+                CREATE TABLE tasks (
+                    id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    body TEXT,
+                    latest_summary TEXT,
+                    assignee TEXT,
+                    status TEXT NOT NULL,
+                    tenant TEXT,
+                    workspace_path TEXT,
+                    claim_lock TEXT,
+                    worker_pid INTEGER
+                );
+                CREATE TABLE task_comments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id TEXT NOT NULL,
+                    body TEXT NOT NULL
+                );
+            """)
+            conn.execute(
+                "INSERT INTO tasks (id, title, body, latest_summary, assignee, status, tenant, workspace_path, claim_lock, worker_pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    "t_comment_review",
+                    "Continue TV EV Classic fidelity backlog slice",
+                    "Pick the next safe bounded backlog item after parent checkpoint.",
+                    None,
+                    "terminal-velocity",
+                    "blocked",
+                    "terminal-velocity",
+                    str(REPO),
+                    None,
+                    None,
+                ),
+            )
+            conn.execute(
+                "INSERT INTO task_comments (task_id, body) VALUES (?, ?)",
+                (
+                    "t_comment_review",
+                    "review-required handoff: verified safe-local TV work; focused tests passed; needs integration review",
+                ),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
     def test_clean_idle_gateway_startup_reports_start_action(self):
         _, repo, profile = self.make_fixture()
 
@@ -290,6 +339,18 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         self.assertEqual(classes["t_review_bug"], "review_required_process_bug")
         self.assertEqual(classes["t_unsafe"], "unsafe_dirty_state")
         self.assertEqual(payload["blocked_cards"]["counts_by_class"]["push_ready"], 1)
+
+    def test_blocked_card_classification_uses_comments_when_task_fields_are_generic(self):
+        _, repo, profile = self.make_fixture()
+        self.add_comment_only_review_block(profile)
+
+        code, payload = self.run_preflight(repo, profile, "--startup-owner", "gateway_kanban_dispatcher")
+
+        self.assertEqual(code, 1, payload)
+        classes = {card["id"]: card["canonical_class"] for card in payload["blocked_cards"]["cards"]}
+        self.assertEqual(classes["t_comment_review"], "review_required_process_bug")
+        self.assertEqual(payload["recommended_action"], "normalize_blocked_gates")
+        self.assertEqual(payload["explicit_gate"], "gate_normalization_required")
 
     def test_push_ready_blocked_card_routes_to_integration_owner_before_start(self):
         _, repo, profile = self.make_fixture()

@@ -158,6 +158,21 @@ class TvIntegrationLaneTests(unittest.TestCase):
             conn.close()
         return profile, db
 
+    def add_comment_only_blocked_card(self, db: Path, repo: Path) -> None:
+        conn = sqlite3.connect(db)
+        try:
+            conn.execute(
+                "INSERT INTO tasks (id, title, body, assignee, status, tenant, workspace_path, claim_lock, worker_pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                ("t_comment_review", "TV generic blocked handoff", "Needs follow-up", "terminal-velocity", "blocked", "terminal-velocity", str(repo), None, None),
+            )
+            conn.execute(
+                "INSERT INTO task_comments (task_id, author, body, created_at) VALUES (?, ?, ?, ?)",
+                ("t_comment_review", "worker", "review-required handoff: verified safe-local TV work", 123),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
     def test_gate_normalization_dry_run_plans_only_actionable_gate_comments(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = self.make_repo(Path(tmp))
@@ -171,6 +186,18 @@ class TvIntegrationLaneTests(unittest.TestCase):
             planned = {action["task_id"]: action["canonical_class"] for action in normalization["planned_comments"]}
             self.assertEqual(planned, {"t_push": "push_ready", "t_review": "review_required_process_bug"})
             self.assertEqual(normalization["skipped"]["t_unsafe"], "unsafe_dirty_state")
+
+    def test_gate_normalization_dry_run_uses_comment_evidence_for_generic_blocked_cards(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            profile, db = self.make_profile_with_blocked_cards(Path(tmp), repo)
+            self.add_comment_only_blocked_card(db, repo)
+
+            code, payload = self.run_integrator(repo, "--normalize-gates", "--profile", str(profile))
+
+            self.assertEqual(code, 0, payload)
+            planned = {action["task_id"]: action["canonical_class"] for action in payload["gate_normalization"]["planned_comments"]}
+            self.assertEqual(planned["t_comment_review"], "review_required_process_bug")
 
     def test_gate_normalization_apply_inserts_idempotent_comments_and_events(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -280,8 +307,11 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual([item["task_id"] for item in first_payload["gate_normalization"]["planned_comments"]], ["t_push"])
             self.assertNotIn("t_review", {item["task_id"] for item in first_payload["gate_normalization"]["planned_comments"]})
             written = json.loads((task_dir / "task-ledger.json").read_text())
-            self.assertEqual(written["status"], "waiting_integration_recovery")
-            self.assertEqual(written["generated_from"]["latest_event_id"], "evt-integrated")
+            self.assertNotIn("status", written)
+            self.assertNotIn("declared_owner", written)
+            self.assertNotIn("runner_ownership", written)
+            self.assertEqual(written["runtime_truth_rule"], "Live runner state is derived from Kanban/topology/git/processes, not this ledger.")
+            self.assertEqual(written["diagnostics"]["generated_from"]["latest_event_id"], "evt-integrated")
             conn = sqlite3.connect(db)
             try:
                 comments = conn.execute("SELECT task_id, body FROM task_comments ORDER BY id").fetchall()
