@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v54':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v57':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -485,6 +485,60 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest word-domain coverage changed sentinel/zero coverage')
     if 'complete syst field-order oracle is still missing' not in word_domain.get('promotionBlockers', []):
         raise ValueError('sourced EV systems manifest word-domain coverage missing field-order blocker')
+    runtime_probe_priority = data.get('nonTopologySystRuntimeProbePrioritySummary', {})
+    if runtime_probe_priority.get('sourceLabel') != 'decoded-resource-backed-non-topology-syst-runtime-probe-priority':
+        raise ValueError('sourced EV systems manifest missing non-topology syst runtime-probe priority source label')
+    if runtime_probe_priority.get('oracleStatus') != 'non_topology_syst_runtime_probe_blocked_pending_offset_or_runtime_oracle':
+        raise ValueError('sourced EV systems manifest non-topology runtime-probe priority has unexpected oracle status')
+    if runtime_probe_priority.get('recordCount') != 67 or runtime_probe_priority.get('evidenceInputSummaryCount') != 4:
+        raise ValueError('sourced EV systems manifest non-topology runtime-probe priority has unexpected counts')
+    if runtime_probe_priority.get('firstPriorityProbeFamily') != 'government-message-hazard-visibility-disambiguation':
+        raise ValueError('sourced EV systems manifest non-topology runtime-probe priority has unexpected first probe family')
+    if runtime_probe_priority.get('firstPriorityCandidateWordIndices') != [22, 23, 24, 25, 26]:
+        raise ValueError('sourced EV systems manifest non-topology runtime-probe priority has unexpected first word indices')
+    if runtime_probe_priority.get('percentLikeValueWords') != [20, 21, 22, 23]:
+        raise ValueError('sourced EV systems manifest non-topology runtime-probe priority has unexpected percent-like words')
+    if 'priority groups are a capture worklist, not promoted syst field offsets' not in runtime_probe_priority.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest non-topology runtime-probe priority missing worklist blocker')
+    if 'not-promoted' not in runtime_probe_priority.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest non-topology runtime-probe priority must remain non-promoted')
+    runtime_capture_gate = data.get('nonTopologySystRuntimeCaptureGateSummary', {})
+    if runtime_capture_gate.get('sourceLabel') != 'decoded-resource-backed-non-topology-syst-runtime-capture-gate':
+        raise ValueError('sourced EV systems manifest missing non-topology syst runtime-capture gate')
+    if runtime_capture_gate.get('oracleStatus') != 'non_topology_syst_capture_blocked_pending_disposable_runtime_probe':
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate has unexpected oracle status')
+    if runtime_capture_gate.get('recordCount') != 67 or runtime_capture_gate.get('evidenceInputSummaryCount') != 3:
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate has unexpected counts')
+    if runtime_capture_gate.get('firstPriorityProbeFamily') != 'government-message-hazard-visibility-disambiguation':
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate changed first probe family')
+    if runtime_capture_gate.get('firstPriorityCandidateWordIndices') != [22, 23, 24, 25, 26]:
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate changed first word indices')
+    if 'disposableNonStrictPilot' not in runtime_capture_gate.get('requiredCaptureFields', []):
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate missing disposable-pilot field')
+    if runtime_capture_gate.get('capturePacketSchemaVersion') != 1 or runtime_capture_gate.get('requiredCapturePacketCount') != 2:
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate changed packet schema')
+    packet_ids = [entry.get('packetId') for entry in runtime_capture_gate.get('capturePacketTemplates', [])]
+    if 'non-topology-gov-message-hazard-visibility-positive-control' not in packet_ids:
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate missing positive control packet')
+    if 'do not run destructive or reputation-changing probes on Strict Play or reusable pilots' not in runtime_capture_gate.get('safetyBlockers', []):
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate missing safety blocker')
+    if 'not-promoted' not in runtime_capture_gate.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture gate must remain non-promoted')
+    runtime_capture_reconciliation = data.get('nonTopologySystRuntimeCaptureReconciliationSummary', {})
+    if runtime_capture_reconciliation.get('sourceLabel') != 'decoded-resource-backed-non-topology-syst-runtime-capture-reconciliation-plan':
+        raise ValueError('sourced EV systems manifest missing non-topology runtime-capture reconciliation plan')
+    if runtime_capture_reconciliation.get('oracleStatus') != 'non_topology_syst_capture_reconciliation_blocked_pending_validated_runtime_packets':
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture reconciliation has unexpected oracle status')
+    if runtime_capture_reconciliation.get('recordCount') != 67 or runtime_capture_reconciliation.get('evidenceInputSummaryCount') != 4:
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture reconciliation has unexpected counts')
+    if runtime_capture_reconciliation.get('firstPriorityProbeFamily') != 'government-message-hazard-visibility-disambiguation':
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture reconciliation changed first probe family')
+    if runtime_capture_reconciliation.get('requiredValidatedCapturePacketCount') != 2:
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture reconciliation changed packet count')
+    if 'post-capture reconciliation is a gate, not a promotion packet' not in runtime_capture_reconciliation.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture reconciliation missing promotion blocker')
+    if 'not-promoted' not in runtime_capture_reconciliation.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest non-topology runtime-capture reconciliation must remain non-promoted')
     seed_summary = data.get('systemNameSeedSummary', {})
     if seed_summary.get('sourceLabel') != 'decoded-resource-backed-system-name-seed-join-scout':
         raise ValueError('sourced EV systems manifest missing system-name seed summary source label')
@@ -601,6 +655,29 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest route-label probe priority changed execution boundary')
     if 'not-promoted' not in route_label_probe_priority.get('promotionStatus', ''):
         raise ValueError('sourced EV systems manifest route-label probe priority must not promote named topology')
+    route_label_capture_reconciliation = data.get('runtimeRouteLabelCaptureReconciliationSummary', {})
+    if route_label_capture_reconciliation.get('sourceLabel') != 'decoded-resource-and-runtime-backed-route-label-capture-reconciliation-plan':
+        raise ValueError('sourced EV systems manifest missing route-label capture reconciliation plan')
+    if route_label_capture_reconciliation.get('oracleStatus') != 'route_label_capture_reconciliation_blocked_pending_validated_probe_packets':
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation has unexpected oracle status')
+    if route_label_capture_reconciliation.get('evidenceInputSummaryCount') != 5:
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation changed input summary count')
+    if route_label_capture_reconciliation.get('observedRuntimeLabels') != ['Rigel', 'Kathoon', 'Yemuro', 'Torgo']:
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation changed observed-label inventory')
+    if route_label_capture_reconciliation.get('requiredProbeTargetResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation changed required targets')
+    if route_label_capture_reconciliation.get('priorityTargetResourceIds') != [131, 129, 130]:
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation changed priority targets')
+    if route_label_capture_reconciliation.get('requiredProbeConSlots') != ['Con2', 'Con3', 'Con4'] or route_label_capture_reconciliation.get('priorityConSlots') != ['Con4', 'Con2', 'Con3']:
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation changed Con-slot boundary')
+    if route_label_capture_reconciliation.get('requiredValidatedCapturePacketCount') != 3:
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation changed packet count')
+    if 'route-label-con4-resource-131' not in route_label_capture_reconciliation.get('requiredCapturePacketIds', []):
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation missing priority packet id')
+    if 'post-capture reconciliation is a gate, not a route-label promotion packet' not in route_label_capture_reconciliation.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation missing promotion blocker')
+    if 'not-promoted' not in route_label_capture_reconciliation.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest route-label capture reconciliation must remain non-promoted')
     topology_readiness = data.get('topologyPromotionReadinessSummary', {})
     if topology_readiness.get('sourceLabel') != 'decoded-resource-backed-topology-promotion-readiness-matrix':
         raise ValueError('sourced EV systems manifest missing topology promotion readiness matrix source label')
@@ -875,6 +952,21 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest coordinate display runtime capture template missing map pixel bounds')
     if 'not-promoted' not in display_runtime_capture_gate.get('promotionStatus', ''):
         raise ValueError('sourced EV systems manifest coordinate display runtime capture gate must not promote display units')
+    display_runtime_capture_reconciliation = data.get('coordinateDisplayRuntimeCaptureReconciliationSummary', {})
+    if display_runtime_capture_reconciliation.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-runtime-capture-reconciliation-plan':
+        raise ValueError('sourced EV systems manifest missing coordinate display runtime capture reconciliation plan')
+    if display_runtime_capture_reconciliation.get('oracleStatus') != 'coordinate_display_runtime_capture_reconciliation_blocked_pending_validated_map_packets':
+        raise ValueError('sourced EV systems manifest coordinate display runtime capture reconciliation has unexpected oracle status')
+    if display_runtime_capture_reconciliation.get('recordCount') != 67 or display_runtime_capture_reconciliation.get('evidenceInputSummaryCount') != 4:
+        raise ValueError('sourced EV systems manifest coordinate display runtime capture reconciliation has unexpected counts')
+    if display_runtime_capture_reconciliation.get('requiredValidatedCapturePacketCount') != 3:
+        raise ValueError('sourced EV systems manifest coordinate display runtime capture reconciliation changed packet count')
+    if display_runtime_capture_reconciliation.get('requiredCapturePacketTargetResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest coordinate display runtime capture reconciliation changed target resources')
+    if 'post-capture reconciliation is a gate, not a display-unit promotion packet' not in display_runtime_capture_reconciliation.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest coordinate display runtime capture reconciliation missing promotion blocker')
+    if 'not-promoted' not in display_runtime_capture_reconciliation.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate display runtime capture reconciliation must remain non-promoted')
     display_extrema = data.get('coordinateDisplayExtremaSummary', {})
     if display_extrema.get('sourceLabel') != 'decoded-resource-backed-coordinate-display-extrema-scout':
         raise ValueError('sourced EV systems manifest missing coordinate display-extrema summary source label')

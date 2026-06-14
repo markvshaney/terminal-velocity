@@ -2027,6 +2027,9 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_syst_ev_family_variant_divergence_guardrail',
             'recorded_syst_word_domain_coverage_summary',
             'recorded_non_topology_syst_oracle_gap',
+            'recorded_non_topology_syst_runtime_probe_priority_summary',
+            'recorded_non_topology_syst_runtime_capture_gate',
+            'recorded_non_topology_syst_runtime_capture_reconciliation_summary',
             'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',
             'recorded_system_name_byte_order_oracle_gap',
@@ -2043,6 +2046,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_coordinate_display_quantization_summary',
             'recorded_coordinate_display_scale_interpretation_summary',
             'recorded_coordinate_display_calibration_gate_summary',
+            'recorded_coordinate_display_unit_map_scaling_readiness_summary',
             'recorded_coordinate_display_runtime_capture_gate_summary',
             'recorded_coordinate_display_extrema_summary',
             'recorded_candidate_link_family',
@@ -2063,6 +2067,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_runtime_route_label_observation_bridge_gap',
             'recorded_runtime_route_label_probe_targeting_matrix',
             'recorded_runtime_route_label_probe_execution_gate',
+            'recorded_runtime_route_label_probe_priority_summary',
+            'recorded_runtime_route_label_capture_reconciliation_summary',
             'recorded_static_topology_source_boundary',
         ]:
             self.assertEqual(result['checks'][check], 'passed')
@@ -2179,6 +2185,47 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('do not route AI, hazards, message buoys, visibility, or government ownership from unresolved word windows', readiness['nonTopologySystOracleGapPromotionBlockers'])
         self.assertIn('blocked', readiness['nonTopologySystOracleGapReadinessStatus'])
         self.assertIn('source-level syst struct declaration', readiness['nonTopologySystOracleGapNextEvidenceFamilies'][0])
+        self.assertEqual(readiness['nonTopologySystRuntimeProbePrioritySourceLabel'], 'decoded-resource-backed-non-topology-syst-runtime-probe-priority')
+        self.assertEqual(readiness['nonTopologySystRuntimeProbePriorityOracleStatus'], 'non_topology_syst_runtime_probe_blocked_pending_offset_or_runtime_oracle')
+        self.assertEqual(readiness['nonTopologySystRuntimeProbePriorityInputSummaryCount'], 4)
+        self.assertEqual(readiness['nonTopologySystRuntimeProbePriorityFirstProbeFamily'], 'government-message-hazard-visibility-disambiguation')
+        self.assertEqual(readiness['nonTopologySystRuntimeProbePriorityFirstWordIndices'], [22, 23, 24, 25, 26])
+        self.assertEqual(readiness['nonTopologySystRuntimeProbePriorityPercentLikeWords'], [20, 21, 22, 23])
+        self.assertEqual(readiness['nonTopologySystRuntimeProbePriorityZeroOnlyTailWords'], list(range(24, 44)))
+        self.assertIn('Govt/Message/Asteroids/Interference/VisBit environment and visibility controls', readiness['nonTopologySystRuntimeProbePriorityBlockedFamilies'])
+        self.assertIn('priority groups are a capture worklist, not promoted syst field offsets', readiness['nonTopologySystRuntimeProbePriorityPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['nonTopologySystRuntimeProbePriorityPromotionStatus'])
+        self.assertIn('runtime captures comparing government/message/hazard/visibility behavior', readiness['nonTopologySystRuntimeProbePriorityNextEvidenceFamilies'][0])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['nonTopologySystRuntimeProbePriorityFirstProbeFamily'], 'government-message-hazard-visibility-disambiguation')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureGateSourceLabel'], 'decoded-resource-backed-non-topology-syst-runtime-capture-gate')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureGateOracleStatus'], 'non_topology_syst_capture_blocked_pending_disposable_runtime_probe')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureGateInputSummaryCount'], 3)
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureGateFirstProbeFamily'], 'government-message-hazard-visibility-disambiguation')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureGateFirstWordIndices'], [22, 23, 24, 25, 26])
+        self.assertIn('government ownership or landing/legal-affiliation behavior', readiness['nonTopologySystRuntimeCaptureGateRequiredComparisonAxes'])
+        self.assertIn('disposableNonStrictPilot', readiness['nonTopologySystRuntimeCaptureGateRequiredCaptureFields'])
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureGateCapturePacketSchemaVersion'], 1)
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureGateRequiredCapturePacketCount'], 2)
+        self.assertIn('non-topology-gov-message-hazard-visibility-positive-control', readiness['nonTopologySystRuntimeCaptureGateCapturePacketIds'])
+        self.assertIn('positive and negative controls must be recorded before any field-order promotion claim', readiness['nonTopologySystRuntimeCaptureGateCaptureValidationRules'])
+        self.assertIn('do not run destructive or reputation-changing probes on Strict Play or reusable pilots', readiness['nonTopologySystRuntimeCaptureGateSafetyBlockers'])
+        self.assertIn('not-promoted', readiness['nonTopologySystRuntimeCaptureGatePromotionStatus'])
+        self.assertIn('disposable original-runtime captures for government/message/hazard/visibility behavior', readiness['nonTopologySystRuntimeCaptureGateNextEvidenceFamilies'][0])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['nonTopologySystRuntimeCaptureGateFirstProbeFamily'], 'government-message-hazard-visibility-disambiguation')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationSourceLabel'], 'decoded-resource-backed-non-topology-syst-runtime-capture-reconciliation-plan')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationOracleStatus'], 'non_topology_syst_capture_reconciliation_blocked_pending_validated_runtime_packets')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationInputSummaryCount'], 4)
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationFirstProbeFamily'], 'government-message-hazard-visibility-disambiguation')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationFirstWordIndices'], [22, 23, 24, 25, 26])
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationPacketCount'], 2)
+        self.assertIn('non-topology-gov-message-hazard-visibility-positive-control', readiness['nonTopologySystRuntimeCaptureReconciliationPacketIds'])
+        self.assertIn('validate every required positive and negative control packet against the capture gate schema', readiness['nonTopologySystRuntimeCaptureReconciliationSteps'])
+        self.assertIn('source-runtime-corroborated; still requires field-order/source packet before gameplay use', readiness['nonTopologySystRuntimeCaptureReconciliationDecisionStates'])
+        self.assertIn('assigning Govt/Message/Asteroids/Interference/VisBit offsets from runtime observation alone', readiness['nonTopologySystRuntimeCaptureReconciliationBlockedClaims'])
+        self.assertIn('python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty', readiness['nonTopologySystRuntimeCaptureReconciliationRequiredVerifiers'])
+        self.assertIn('post-capture reconciliation is a gate, not a promotion packet', readiness['nonTopologySystRuntimeCaptureReconciliationPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['nonTopologySystRuntimeCaptureReconciliationPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['nonTopologySystRuntimeCaptureReconciliationFirstProbeFamily'], 'government-message-hazard-visibility-disambiguation')
         self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
         self.assertEqual(readiness['topologyPromotionReadinessOracleStatus'], 'topology_semantic_promotion_pending_field_family_mapping')
         self.assertIn('complete decoded coordinate word pairs and link slots for all 67 records', readiness['topologyPromotionReadinessReadyStaticInputFamilies'])
@@ -2284,8 +2331,23 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['runtimeRouteLabelProbePriorityFirstTargetResourceId'], 131)
         self.assertEqual(readiness['runtimeRouteLabelProbePriorityFirstConSlot'], 'Con4')
         self.assertIn('not-promoted', readiness['runtimeRouteLabelProbePriorityPromotionStatus'])
-        self.assertEqual(readiness['topologyPromotionReadinessSourceLabel'], 'decoded-resource-backed-topology-promotion-readiness-matrix')
-        self.assertEqual(readiness['candidateCoordinateWordIndices'], [0, 1, 2, 3])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['runtimeRouteLabelProbePrioritySourceLabel'], 'decoded-resource-and-runtime-gate-backed-route-label-probe-priority')
+        self.assertEqual(readiness['runtimeRouteLabelCaptureReconciliationSourceLabel'], 'decoded-resource-and-runtime-backed-route-label-capture-reconciliation-plan')
+        self.assertEqual(readiness['runtimeRouteLabelCaptureReconciliationOracleStatus'], 'route_label_capture_reconciliation_blocked_pending_validated_probe_packets')
+        self.assertEqual(readiness['runtimeRouteLabelCaptureReconciliationInputSummaryCount'], 5)
+        self.assertEqual(readiness['runtimeRouteLabelCaptureReconciliationObservedLabels'], ['Rigel', 'Kathoon', 'Yemuro', 'Torgo'])
+        self.assertEqual(readiness['runtimeRouteLabelCaptureReconciliationPacketCount'], 3)
+        self.assertIn('route-label-con4-resource-131', readiness['runtimeRouteLabelCaptureReconciliationPacketIds'])
+        self.assertEqual(readiness['runtimeRouteLabelCaptureReconciliationTargetResourceIds'], [129, 130, 131])
+        self.assertEqual(readiness['runtimeRouteLabelCaptureReconciliationConSlots'], ['Con2', 'Con3', 'Con4'])
+        self.assertIn('validate every route-label packet against the execution gate schema before considering any resource-ID/name join', readiness['runtimeRouteLabelCaptureReconciliationSteps'])
+        self.assertIn('partial-packets; route-label capture worklist remains open and no named topology may be promoted', readiness['runtimeRouteLabelCaptureReconciliationDecisionStates'])
+        self.assertIn('assigning Rigel, Kathoon, Yemuro, or Torgo to decoded resource IDs 129-131 without validated target packets', readiness['runtimeRouteLabelCaptureReconciliationBlockedClaims'])
+        self.assertIn('python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty', readiness['runtimeRouteLabelCaptureReconciliationRequiredVerifiers'])
+        self.assertIn('post-capture reconciliation is a gate, not a route-label promotion packet', readiness['runtimeRouteLabelCaptureReconciliationPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['runtimeRouteLabelCaptureReconciliationPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['runtimeRouteLabelCaptureReconciliationSourceLabel'], 'decoded-resource-and-runtime-backed-route-label-capture-reconciliation-plan')
+        self.assertEqual(readiness['coordinateDomainSourceLabel'], 'decoded-resource-backed-coordinate-domain-scout')
         self.assertEqual(readiness['candidateCoordinateXRawLongResource128'], 65664)
         self.assertEqual(readiness['candidateCoordinateYRawLongResource128'], 8327168)
         self.assertEqual(readiness['candidateCoordinateSourceConfidence'], 'resource-bible-field-family-plus-decoded-raw-word-pair-domain-summary-plus-raw-signed-long-candidate')
@@ -2402,7 +2464,20 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('destinationPixelPosition', readiness['coordinateDisplayRuntimeCaptureGateFirstObservationFields'])
         self.assertIn('minimum two named observed map positions tied to decoded resource IDs or Con slots before any display-scale review', readiness['coordinateDisplayRuntimeCaptureGateCaptureValidationRules'])
         self.assertIn('not-promoted', readiness['coordinateDisplayRuntimeCaptureGatePromotionStatus'])
-        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayRuntimeCaptureGateSourceLabel'], 'original-runtime-coordinate-map-calibration-capture-gate')
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureReconciliationSourceLabel'], 'decoded-resource-backed-coordinate-display-runtime-capture-reconciliation-plan')
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureReconciliationOracleStatus'], 'coordinate_display_runtime_capture_reconciliation_blocked_pending_validated_map_packets')
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureReconciliationInputSummaryCount'], 4)
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureReconciliationTargetResourceIds'], [129, 130, 131])
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureReconciliationConSlots'], ['Con2', 'Con3', 'Con4'])
+        self.assertEqual(readiness['coordinateDisplayRuntimeCaptureReconciliationPacketCount'], 3)
+        self.assertIn('coordinate-display-map-calibration-con2-resource-129', readiness['coordinateDisplayRuntimeCaptureReconciliationPacketIds'])
+        self.assertIn('validate every required map calibration packet against the coordinate display runtime capture gate schema', readiness['coordinateDisplayRuntimeCaptureReconciliationSteps'])
+        self.assertIn('source-runtime-corroborated; may propose a narrow coordinate display calibration packet but not broad universe replacement', readiness['coordinateDisplayRuntimeCaptureReconciliationDecisionStates'])
+        self.assertIn('assigning Classic map pixel scale from static coordinate candidates alone', readiness['coordinateDisplayRuntimeCaptureReconciliationBlockedClaims'])
+        self.assertIn('python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty', readiness['coordinateDisplayRuntimeCaptureReconciliationRequiredVerifiers'])
+        self.assertIn('post-capture reconciliation is a gate, not a display-unit promotion packet', readiness['coordinateDisplayRuntimeCaptureReconciliationPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['coordinateDisplayRuntimeCaptureReconciliationPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['coordinateDisplayRuntimeCaptureReconciliationSourceLabel'], 'decoded-resource-backed-coordinate-display-runtime-capture-reconciliation-plan')
         self.assertEqual(readiness['coordinateDisplayExtremaSourceLabel'], 'decoded-resource-backed-coordinate-display-extrema-scout')
         self.assertEqual(readiness['coordinateDisplayExtremaXLowWordMinMaxResourceIds'], [[133, 144, 155, 156], [192]])
         self.assertEqual(readiness['coordinateDisplayExtremaYSignedLongMinMaxResourceIds'], [[168, 169, 170, 172, 183, 186], [182]])

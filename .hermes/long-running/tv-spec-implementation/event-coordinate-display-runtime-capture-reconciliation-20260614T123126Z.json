@@ -1,0 +1,50 @@
+{
+  "backlog_update": "none; no dispatch metadata change required for this verifier-backed source-readiness packet",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "coordinate-display-runtime-capture-reconciliation-20260614T123126Z",
+  "event_type": "increment_checkpoint",
+  "fidelity_boundary": "Do not claim EV Classic coordinate display units, map pixel scale, projection, origin, centering, axis inversion, route-label map ordering, or broad runtime universe replacement from static decoded coordinates; validated runtime/source capture packets remain required.",
+  "lane": "Lane A static topology source readiness",
+  "oracle_class": "source_readiness_runtime_capture_reconciliation_plan",
+  "promotion_status": "not-promoted; runtime capture reconciliation gate only",
+  "source_basis": [
+    "decoded-resource-backed syst coordinate/link records",
+    "existing coordinate display runtime capture gate templates",
+    "runtime capture still required before promotion"
+  ],
+  "source_fidelity_label": "decoded-resource-backed-coordinate-display-runtime-capture-reconciliation-plan",
+  "successor_task": "t_0b416938",
+  "summary": "Added coordinateDisplayRuntimeCaptureReconciliationSummary, a non-promoted post-capture reconciliation plan that binds coordinate display runtime capture packets to source-readiness state without claiming Classic display units, scale, projection, origin, or centering.",
+  "task_id": "t_1c57f165",
+  "timestamp": "2026-06-14T12:31:26Z",
+  "verification": {
+    "backlog_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json and validated JSON syntax"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; all static topology checks passed with coordinate display runtime capture reconciliation state exposed"
+    },
+    "targeted_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py -q",
+      "result": "passed; 274 passed in 1.62s"
+    }
+  }
+}

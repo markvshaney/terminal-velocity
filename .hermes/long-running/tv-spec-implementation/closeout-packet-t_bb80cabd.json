@@ -1,0 +1,36 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "continue",
+  "event": "slice_completed",
+  "event_id": "non-topology-syst-runtime-capture-gate-20260614T121042Z",
+  "fidelity_boundary": "The capture gate is a runtime evidence schema only; government, hazard, message, visibility, NavDef, population/AI, Con6-Con16, display units, route labels, and broad 67-system runtime replacement remain not-promoted pending Classic/source/runtime oracles.",
+  "kanban_task": "t_bb80cabd",
+  "next_action": "Continue selecting verifier-backed backlog work from tv-playable-milestone-priority-map/tv-verifier-impact-map; do not promote capture gates into gameplay until runtime/source evidence lands.",
+  "summary": "Added nonTopologySystRuntimeCaptureGateSummary, turning the first non-topology syst runtime-probe priority into safe positive/negative disposable original-runtime capture packet templates without promoting unresolved syst offsets.",
+  "timestamp": "2026-06-14T12:10:42Z",
+  "verification": {
+    "backlog_dispatch_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with nonTopologySystRuntimeCaptureGateSummary"
+    },
+    "npm_test_attempt": {
+      "command": "npm test -- --run",
+      "result": "blocked; no package.json at repository root (npm ENOENT)"
+    },
+    "targeted_native_ev_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py -q",
+      "result": "passed; 274 passed"
+    }
+  }
+}

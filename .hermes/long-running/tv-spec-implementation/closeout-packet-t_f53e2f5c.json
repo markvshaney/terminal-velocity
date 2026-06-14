@@ -1,0 +1,52 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "continue",
+  "contract_version": "machine_contract_v1",
+  "event_id": "non-topology-syst-runtime-probe-priority-20260614T120054Z",
+  "event_ids": [
+    "non-topology-syst-runtime-probe-priority-20260614T120054Z"
+  ],
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "kanban_task": "t_f53e2f5c",
+  "next_action": "Successor Kanban task t_bb80cabd should continue with standard tv-spec preflight and select the next coherent source-aligned backlog slice; preserve non-topology syst probe priority as a worklist only, not gameplay semantics.",
+  "safe_local": true,
+  "successor_kanban_task": "t_bb80cabd",
+  "summary": "Added nonTopologySystRuntimeProbePrioritySummary v55, a non-promoted Lane A worklist prioritizing government/message/hazard/visibility, NavDef, population/AI, and split Con6-Con16 runtime/source probes without assigning unresolved syst offsets.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T12:00:54Z",
+  "verification": {
+    "backlog_dispatch_check": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json v55"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "native_ev_tests_attempt": {
+      "command": "python -m pytest native_ev/tests",
+      "failure_note": "Failures were TV runner/integration ownership fixtures seeing live active_worker_claims/live implementation owner for current task t_f53e2f5c; not caused by EV source-readiness changes.",
+      "result": "343 passed, 13 failed"
+    },
+    "static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty > /tmp/tv_static_topology_t_f53e2f5c.json",
+      "result": "passed; output written to /tmp/tv_static_topology_t_f53e2f5c.json"
+    },
+    "targeted_sourced_systems_and_static_topology_pytest": {
+      "command": "python -m pytest native_ev/tests/test_model.py::NativeEvModelTests::test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev/tests/test_scenario_eval.py::ScenarioEvalHarnessTests::test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary",
+      "result": "passed; 2 passed"
+    }
+  }
+}

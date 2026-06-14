@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v54'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v57'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, route-label probe priority matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -800,6 +800,68 @@ def _coordinate_display_unit_map_scaling_readiness_summary(systems: list[dict]) 
         'readinessStatus': 'ready-for-runtime-calibration-capture; display units not promoted',
         'displayUnitPromotionStatus': 'not-promoted; this is a bounded readiness promotion for capture/review inputs only',
         'sourceNote': 'This promotes only the deterministic static readiness state needed to run bounded Classic map calibration captures. It does not promote coordinate display units, map scaling, projection, origin, centering, y-axis orientation, route UI behavior, or broad runtime universe replacement.',
+    }
+
+
+def _coordinate_display_runtime_capture_reconciliation_summary(systems: list[dict]) -> dict:
+    """Record how validated Classic map calibration captures can be reconciled without over-promoting display units."""
+    readiness = _coordinate_display_unit_map_scaling_readiness_summary(systems)
+    runtime_capture_gate = _coordinate_display_runtime_capture_gate_summary(systems)
+    packet_ids = [
+        f"coordinate-display-map-calibration-{entry['slotName'].lower()}-resource-{entry['targetResourceId']}"
+        for entry in runtime_capture_gate.get('capturePacketTemplates', [])
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-runtime-capture-reconciliation-plan',
+        'oracleStatus': 'coordinate_display_runtime_capture_reconciliation_blocked_pending_validated_map_packets',
+        'sourceBasis': ['decoded-record-family', 'resource-bible-field', 'original-runtime-required'],
+        'recordCount': len(systems),
+        'evidenceInputSummaries': [
+            'coordinateDisplayRuntimeCaptureGateSummary',
+            'coordinateDisplayUnitMapScalingReadinessSummary',
+            'coordinateDisplayCalibrationGateSummary',
+            'startNeighborhoodRuntimeCalibrationPrioritySummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'candidateStartResourceId': runtime_capture_gate['candidateStartResourceId'],
+        'candidateStartSystemName': runtime_capture_gate['startSystemExactName'],
+        'requiredValidatedCapturePacketCount': runtime_capture_gate['requiredCapturePacketCount'],
+        'requiredCapturePacketTargetResourceIds': runtime_capture_gate['requiredTargetResourceIds'],
+        'requiredCapturePacketConSlots': runtime_capture_gate['requiredConSlots'],
+        'requiredCapturePacketIds': packet_ids,
+        'readinessStatus': readiness['readinessStatus'],
+        'postCaptureReconciliationSteps': [
+            'validate every required map calibration packet against the coordinate display runtime capture gate schema',
+            'tie each visible destination label and pixel/click coordinate to a decoded resource ID or Con slot only when the packet evidence explicitly supports that join',
+            'compare captured pixel deltas against static coordinate candidate families before proposing scale, origin, projection, or y-axis orientation claims',
+            'record contradictions as blocker evidence instead of silently choosing a coordinate transform',
+            'rerun static_topology_source_readiness_scout before any follow-on display-unit or named-route promotion packet',
+        ],
+        'promotionDecisionStates': [
+            'no-packets; coordinate display units remain blocked',
+            'partial-packets; capture worklist remains open and no broad display transform may be promoted',
+            'source-runtime-corroborated; may propose a narrow coordinate display calibration packet but not broad universe replacement',
+            'contradicted; reopen coordinate display calibration gate and keep display units not-promoted',
+        ],
+        'blockedPromotionClaims': [
+            'assigning Classic map pixel scale from static coordinate candidates alone',
+            'assigning projection, origin, centering, or y-axis orientation without validated map pixel/click captures',
+            'joining visible route labels to decoded resource IDs without packet-level resource ID or Con-slot evidence',
+            'using coordinate calibration captures as broad named topology or runtime universe replacement proof',
+        ],
+        'requiredVerifierBeforeGameplay': [
+            'python3 tools/extract_ev_system_semantics.py',
+            'python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v',
+            'python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty',
+        ],
+        'promotionBlockers': [
+            'post-capture reconciliation is a gate, not a display-unit promotion packet',
+            'minimum two named observed map positions tied to decoded resource IDs or Con slots are still required before display-scale review',
+            'raw proprietary screenshots/transcripts remain local-only unless explicitly approved',
+        ],
+        'allowedUse': 'validate and reconcile future coordinate-display capture packets; do not promote display units, named route topology, or broad runtime universe replacement from this plan alone',
+        'promotionStatus': 'not-promoted; post-capture reconciliation plan only',
+        'sourceNote': 'This plan defines how future Classic map pixel/click calibration packets can refine coordinate display evidence while keeping display scale, projection, named topology, and broad universe replacement blocked until validated packet-level evidence exists.',
     }
 
 
@@ -1930,6 +1992,72 @@ def _runtime_route_label_probe_priority_summary(systems: list[dict]) -> dict:
     }
 
 
+def _runtime_route_label_capture_reconciliation_summary(systems: list[dict]) -> dict:
+    """Define post-capture reconciliation for route-label probes before any name/topology promotion."""
+    bridge_gap = _runtime_route_label_observation_bridge_gap_summary(systems)
+    execution_gate = _runtime_route_label_probe_execution_gate_summary(systems)
+    priority = _runtime_route_label_probe_priority_summary(systems)
+    packet_ids = [
+        f"route-label-{entry['slotName'].lower()}-resource-{entry['targetResourceId']}"
+        for entry in execution_gate.get('capturePacketTemplates', [])
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-and-runtime-backed-route-label-capture-reconciliation-plan',
+        'oracleStatus': 'route_label_capture_reconciliation_blocked_pending_validated_probe_packets',
+        'sourceBasis': ['original-runtime-observed', 'decoded-original-variable', 'resource-bible-field', 'original-runtime-required'],
+        'candidateStartResourceId': execution_gate['candidateStartResourceId'],
+        'candidateStartSystemName': execution_gate['candidateStartSystemName'],
+        'observedRuntimeLabelCount': bridge_gap['observedRuntimeLabelCount'],
+        'observedRuntimeLabels': [entry.get('label') for entry in bridge_gap.get('observedRuntimeLabels', [])],
+        'requiredProbeTargetResourceIds': execution_gate['requiredProbeTargetResourceIds'],
+        'requiredProbeConSlots': [entry.get('slotName') for entry in execution_gate.get('capturePacketTemplates', [])],
+        'priorityTargetResourceIds': priority['priorityTargetResourceIds'],
+        'priorityConSlots': priority['priorityConSlots'],
+        'requiredValidatedCapturePacketCount': execution_gate['requiredCapturePacketCount'],
+        'requiredCapturePacketIds': packet_ids,
+        'evidenceInputSummaries': [
+            'runtimeRouteLabelObservationBridgeGapSummary',
+            'runtimeRouteLabelProbeTargetingSummary',
+            'runtimeRouteLabelProbeExecutionGateSummary',
+            'runtimeRouteLabelProbePrioritySummary',
+            'coordinateDisplayRuntimeCaptureReconciliationSummary',
+        ],
+        'evidenceInputSummaryCount': 5,
+        'postCaptureReconciliationSteps': [
+            'validate every route-label packet against the execution gate schema before considering any resource-ID/name join',
+            'tie each visible label to a decoded resource ID or Con slot only when the packet includes direct selection/click/order evidence for that target',
+            'compare route-label joins against coordinate-display capture reconciliation before using labels as map-scale, projection, or display-order evidence',
+            'classify partial packets as probe-priority refinements rather than named topology promotion',
+            'rerun static_topology_source_readiness_scout before any record-name, named-route, or runtime-universe promotion packet',
+        ],
+        'promotionDecisionStates': [
+            'no-packets; visible runtime labels remain unjoined observations',
+            'partial-packets; route-label capture worklist remains open and no named topology may be promoted',
+            'source-runtime-corroborated; may propose a narrow resource-ID/name join for captured targets only',
+            'contradicted; reopen route-label bridge gap and keep named route topology blocked',
+        ],
+        'blockedPromotionClaims': [
+            'assigning Rigel, Kathoon, Yemuro, or Torgo to decoded resource IDs 129-131 without validated target packets',
+            'using visible route-label order as Con-slot order without direct selection/click/order evidence',
+            'promoting broad named topology or runtime universe replacement from a partial start-neighborhood route-label capture',
+            'using route-label captures as coordinate display scale or projection proof without the coordinate-display reconciliation gate',
+        ],
+        'requiredVerifierBeforeGameplay': [
+            'python3 tools/extract_ev_system_semantics.py',
+            'python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v',
+            'python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty',
+        ],
+        'promotionBlockers': [
+            'post-capture reconciliation is a gate, not a route-label promotion packet',
+            'every proposed resource-ID/name join must be backed by validated packet-level target evidence',
+            'coordinate display, record-name, and broad runtime-universe blockers still apply independently',
+        ],
+        'allowedUse': 'validate and reconcile future route-label capture packets; do not promote names, named route topology, display units, or broad universe replacement from this plan alone',
+        'promotionStatus': 'not-promoted; post-capture reconciliation plan only',
+        'sourceNote': 'This plan defines how future Classic route-label probe packets can refine record-name and route-topology evidence while keeping observed labels unassigned until packet-level target evidence exists.',
+    }
+
+
 def _word_group_summary(run: dict, word_indices: list[int]) -> dict:
     values = [
         _word(record, word_index)
@@ -2408,6 +2536,221 @@ def _non_topology_syst_oracle_gap_summary(run: dict) -> dict:
     }
 
 
+def _non_topology_syst_runtime_probe_priority_summary(run: dict) -> dict:
+    """Prioritize future non-topology syst probes without assigning unresolved offsets."""
+    word_domain = _syst_word_domain_coverage_summary(run)
+    field_order_gap = _non_topology_syst_oracle_gap_summary(run)
+    priority_groups = [
+        {
+            'probeFamily': 'government-message-hazard-visibility-disambiguation',
+            'resourceBibleFamilies': ['Govt', 'Message', 'Asteroids', 'Interference', 'VisBit1', 'VisBit2'],
+            'candidateWordIndices': [22, 23, 24, 25, 26],
+            'priorityReason': 'environment ownership and hazard semantics gate safe broad universe replacement',
+            'blockedGameplayClaims': ['government ownership', 'message buoys', 'asteroid density', 'interference', 'visibility bits'],
+        },
+        {
+            'probeFamily': 'navigation-default-runtime-disambiguation',
+            'resourceBibleFamilies': ['NavDef F1-F4'],
+            'candidateWordIndices': [9, 10, 11, 12],
+            'priorityReason': 'navigation defaults affect radar/target selection and must not be inferred from current link scouts',
+            'blockedGameplayClaims': ['navigation defaults', 'radar-default object binding'],
+        },
+        {
+            'probeFamily': 'population-ai-presence-disambiguation',
+            'resourceBibleFamilies': ['DudeTypes', '%Prob', 'AvgShips'],
+            'candidateWordIndices': list(range(13, 22)),
+            'priorityReason': 'AI population claims need runtime/source confirmation before encounter generation',
+            'blockedGameplayClaims': ['NPC ship families', 'NPC spawn probability', 'average ship counts'],
+        },
+        {
+            'probeFamily': 'split-con6-con16-link-placement-disambiguation',
+            'resourceBibleFamilies': ['Con6-Con16'],
+            'candidateWordIndices': list(range(27, 38)),
+            'priorityReason': 'sequential Resource Bible projection currently lands on all-zero words and conflicts with the active link scout window',
+            'blockedGameplayClaims': ['additional hyperspace links beyond the current contiguous link scout'],
+        },
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-non-topology-syst-runtime-probe-priority',
+        'oracleStatus': 'non_topology_syst_runtime_probe_blocked_pending_offset_or_runtime_oracle',
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': [
+            'nonTopologySystOracleGapSummary',
+            'systWordDomainCoverageSummary',
+            'systFieldOrderConflictSummary',
+            'runtimeUniverseReplacementGateSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'priorityProbeGroups': priority_groups,
+        'firstPriorityProbeFamily': priority_groups[0]['probeFamily'],
+        'firstPriorityCandidateWordIndices': priority_groups[0]['candidateWordIndices'],
+        'percentLikeValueWords': word_domain.get('coverageSignals', {}).get('percentLikeValueWords', []),
+        'zeroOnlyTailWords': word_domain.get('coverageSignals', {}).get('zeroOnlyTailWords', []),
+        'blockedResourceBibleFamilies': field_order_gap.get('blockedResourceBibleFamilies', []),
+        'promotionBlockers': [
+            'priority groups are a capture worklist, not promoted syst field offsets',
+            'government, hazard, message, visibility, navigation, and AI semantics remain blocked until a field-order or runtime oracle lands',
+            'do not replace runtime universe environment data from candidate word groups alone',
+        ],
+        'nextEvidenceFamilies': [
+            'runtime captures comparing government/message/hazard/visibility behavior across known systems',
+            'source-level syst struct declaration or Classic-specific template with byte offsets',
+            'runtime probes that toggle or observe NavDef, population, and split Con6-Con16 behavior independently',
+        ],
+        'promotionStatus': 'not-promoted; runtime probe priority only',
+        'sourceNote': 'This worklist gives the next safe runtime/source evidence order for non-topology syst fields. It intentionally keeps all candidate word groups behind the existing offset/runtime-oracle gate and does not route governments, hazards, visibility, messages, AI, or ports from decoded data.',
+    }
+
+
+def _non_topology_syst_runtime_capture_gate_summary(run: dict) -> dict:
+    """Define the gated capture packet for the first non-topology syst probe family."""
+    priority = _non_topology_syst_runtime_probe_priority_summary(run)
+    first_group = priority.get('priorityProbeGroups', [{}])[0]
+    return {
+        'sourceLabel': 'decoded-resource-backed-non-topology-syst-runtime-capture-gate',
+        'oracleStatus': 'non_topology_syst_capture_blocked_pending_disposable_runtime_probe',
+        'sourceBasis': ['decoded-record-family', 'resource-bible-field', 'original-runtime-capture-required'],
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': [
+            'nonTopologySystRuntimeProbePrioritySummary',
+            'nonTopologySystOracleGapSummary',
+            'runtimeUniverseReplacementGateSummary',
+        ],
+        'evidenceInputSummaryCount': 3,
+        'firstPriorityProbeFamily': first_group.get('probeFamily'),
+        'firstPriorityCandidateWordIndices': first_group.get('candidateWordIndices', []),
+        'requiredComparisonAxes': [
+            'government ownership or landing/legal-affiliation behavior',
+            'message buoy or system-message visibility',
+            'asteroid/hazard density and interference behavior',
+            'visibility-bit gated object or route/map visibility behavior',
+        ],
+        'requiredCaptureFields': [
+            'disposableNonStrictPilot',
+            'originalRuntimeVersionAndScenarioBuild',
+            'startSystemNameAndResourceIdHypothesis',
+            'targetSystemNameOrRouteLabel',
+            'observedGovernmentOrLegalAffiliation',
+            'observedSystemMessageOrBuoyText',
+            'observedAsteroidOrInterferenceBehavior',
+            'observedVisibilityBitEffect',
+            'negativeControlSystemOrFieldFamily',
+        ],
+        'capturePacketSchemaVersion': 1,
+        'requiredCapturePacketCount': 2,
+        'capturePacketTemplates': [
+            {
+                'packetId': 'non-topology-gov-message-hazard-visibility-positive-control',
+                'probeFamily': first_group.get('probeFamily'),
+                'candidateWordIndices': first_group.get('candidateWordIndices', []),
+                'requiredObservationFields': [
+                    'observedGovernmentOrLegalAffiliation',
+                    'observedSystemMessageOrBuoyText',
+                    'observedAsteroidOrInterferenceBehavior',
+                    'observedVisibilityBitEffect',
+                ],
+                'promotionBoundary': 'observation may prioritize field-order/source follow-up but must not assign syst offsets by itself',
+            },
+            {
+                'packetId': 'non-topology-gov-message-hazard-visibility-negative-control',
+                'probeFamily': first_group.get('probeFamily'),
+                'candidateWordIndices': first_group.get('candidateWordIndices', []),
+                'requiredObservationFields': [
+                    'negativeControlSystemOrFieldFamily',
+                    'unchangedCoordinateAndRouteTopologyEvidence',
+                    'unchangedRuntimeSubsetEvidence',
+                ],
+                'promotionBoundary': 'negative control prevents environment/hazard observations from being confused with coordinate or route topology probes',
+            },
+        ],
+        'captureValidationRules': [
+            'capture packets must name the original runtime build and pilot safety class',
+            'positive and negative controls must be recorded before any field-order promotion claim',
+            'observations can refine the next probe queue but cannot promote government, hazard, message, or visibility offsets alone',
+        ],
+        'safetyBlockers': [
+            'do not run destructive or reputation-changing probes on Strict Play or reusable pilots',
+            'do not replace runtime universe environment, government, hazard, or visibility behavior from capture templates alone',
+        ],
+        'promotionBlockers': [
+            'capture gate is a runtime evidence schema, not a decoded byte-offset oracle',
+            'Resource Bible family names remain unjoined to concrete syst words until source/runtime evidence is reconciled',
+        ],
+        'nextEvidenceFamilies': [
+            'disposable original-runtime captures for government/message/hazard/visibility behavior',
+            'source-level syst struct declaration or Classic-specific template with byte offsets',
+            'post-capture reconciliation against word-domain and field-order conflict summaries',
+        ],
+        'promotionStatus': 'not-promoted; capture gate only',
+        'sourceNote': 'This gate turns the first priority non-topology worklist item into a safe, disposable runtime capture packet while explicitly preserving the unresolved offset boundary.',
+    }
+
+
+def _non_topology_syst_runtime_capture_reconciliation_summary(run: dict) -> dict:
+    """Define post-capture reconciliation gates before any non-topology syst promotion."""
+    priority = _non_topology_syst_runtime_probe_priority_summary(run)
+    capture_gate = _non_topology_syst_runtime_capture_gate_summary(run)
+    first_group = priority.get('priorityProbeGroups', [{}])[0]
+    required_packet_ids = [
+        packet.get('packetId')
+        for packet in capture_gate.get('capturePacketTemplates', [])
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-non-topology-syst-runtime-capture-reconciliation-plan',
+        'oracleStatus': 'non_topology_syst_capture_reconciliation_blocked_pending_validated_runtime_packets',
+        'sourceBasis': ['decoded-record-family', 'resource-bible-field', 'original-runtime-capture-required'],
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': [
+            'nonTopologySystRuntimeCaptureGateSummary',
+            'nonTopologySystRuntimeProbePrioritySummary',
+            'nonTopologySystOracleGapSummary',
+            'systWordDomainCoverageSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'firstPriorityProbeFamily': first_group.get('probeFamily'),
+        'firstPriorityCandidateWordIndices': first_group.get('candidateWordIndices', []),
+        'requiredCapturePacketIds': required_packet_ids,
+        'requiredValidatedCapturePacketCount': len(required_packet_ids),
+        'postCaptureReconciliationSteps': [
+            'validate every required positive and negative control packet against the capture gate schema',
+            'compare observed government/message/hazard/visibility behavior against candidate word-domain and field-order conflict summaries',
+            'classify observations as priority refinement, contradiction, or source/runtime corroboration without assigning offsets by observation alone',
+            'require a field-order/source packet before any gameplay-visible government, hazard, message, visibility, or broad universe replacement use',
+        ],
+        'promotionDecisionStates': [
+            'no-promotion; runtime capture packets incomplete or controls missing',
+            'priority-refined; capture narrows the next source/runtime query but offsets remain unresolved',
+            'source-runtime-corroborated; still requires field-order/source packet before gameplay use',
+        ],
+        'blockedPromotionClaims': [
+            'assigning Govt/Message/Asteroids/Interference/VisBit offsets from runtime observation alone',
+            'routing government ownership, message buoys, hazards, interference, or visibility bits into gameplay from candidate word groups alone',
+            'expanding the runtime universe from non-topology syst observations before name/topology/display gates are satisfied',
+        ],
+        'requiredVerifierBeforeGameplay': [
+            'python3 tools/extract_ev_system_semantics.py',
+            'focused sourced-system manifest tests',
+            'python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty',
+        ],
+        'promotionBlockers': [
+            'post-capture reconciliation is a gate, not a promotion packet',
+            'runtime observations must be reconciled with word-domain, field-order, and source/template evidence before offset assignment',
+            'positive and negative controls do not override existing coordinate, route-label, record-name, or runtime-universe replacement blockers',
+        ],
+        'nextEvidenceFamilies': [
+            'validated disposable original-runtime positive and negative capture packets',
+            'Classic-specific source/template/struct evidence tying syst words to non-topology field names',
+            'post-capture contradiction checks against coordinate, route-label, and broad runtime-universe gates',
+        ],
+        'promotionStatus': 'not-promoted; post-capture reconciliation plan only',
+        'sourceNote': 'This packet states what must happen after the first non-topology runtime captures land. It prevents capture evidence from being mistaken for byte-offset or gameplay promotion authority.',
+    }
+
+
 def _topology_promotion_readiness_summary(systems: list[dict], names: dict) -> dict:
     """Summarize ready Lane A static inputs versus still-blocked topology promotions."""
     resource_ids = {system['resourceId'] for system in systems}
@@ -2602,6 +2945,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'runtimeRouteLabelProbeTargetingSummary': _runtime_route_label_probe_targeting_summary(systems),
         'runtimeRouteLabelProbeExecutionGateSummary': _runtime_route_label_probe_execution_gate_summary(systems),
         'runtimeRouteLabelProbePrioritySummary': _runtime_route_label_probe_priority_summary(systems),
+        'runtimeRouteLabelCaptureReconciliationSummary': _runtime_route_label_capture_reconciliation_summary(systems),
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
@@ -2610,6 +2954,9 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'resourceBibleSystSequentialFieldProjectionSummary': _resource_bible_syst_sequential_field_projection_summary(run),
         'systWordDomainCoverageSummary': _syst_word_domain_coverage_summary(run),
         'nonTopologySystOracleGapSummary': _non_topology_syst_oracle_gap_summary(run),
+        'nonTopologySystRuntimeProbePrioritySummary': _non_topology_syst_runtime_probe_priority_summary(run),
+        'nonTopologySystRuntimeCaptureGateSummary': _non_topology_syst_runtime_capture_gate_summary(run),
+        'nonTopologySystRuntimeCaptureReconciliationSummary': _non_topology_syst_runtime_capture_reconciliation_summary(run),
         'topologyPromotionReadinessSummary': _topology_promotion_readiness_summary(systems, names),
         'runtimeUniverseReplacementGateSummary': _runtime_universe_replacement_gate_summary(systems, names),
         'coordinateDomainSummary': _coordinate_domain_summary(systems),
@@ -2626,6 +2973,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDisplayCalibrationGateSummary': _coordinate_display_calibration_gate_summary(systems),
         'coordinateDisplayUnitMapScalingReadinessSummary': _coordinate_display_unit_map_scaling_readiness_summary(systems),
         'coordinateDisplayRuntimeCaptureGateSummary': _coordinate_display_runtime_capture_gate_summary(systems),
+        'coordinateDisplayRuntimeCaptureReconciliationSummary': _coordinate_display_runtime_capture_reconciliation_summary(systems),
         'coordinateDisplayExtremaSummary': _coordinate_display_extrema_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),
         'candidateGraphConnectivitySummary': _candidate_graph_connectivity_summary(systems),

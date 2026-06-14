@@ -1,0 +1,62 @@
+{
+  "backlog_item": "fuller-ev-classic-galaxy-topology-and-coordinates",
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "classification": "continue",
+  "event_id": "route-label-probe-priority-scenario-verifier-20260614T113744Z",
+  "kanban_task": "t_283b2b02",
+  "kind": "verified_safe_local_increment",
+  "lane_class": "Lane A: static galaxy topology semantics",
+  "new_checks": [
+    "recorded_runtime_route_label_probe_priority_summary"
+  ],
+  "next_resume_action": "Successor Kanban task t_7cc2ee75 should continue with standard tv-spec preflight, then select the next source-aligned backlog slice; preserve route-label probe priority as a worklist/capture-priority matrix, not a resource-ID/name/topology promotion.",
+  "scenario": "static_topology_source_readiness_scout",
+  "source_fidelity": {
+    "caveat": "No Classic route label, display coordinate, broad topology, or runtime universe promotion was made.",
+    "preserved_labels": [
+      "decoded-resource-and-runtime-gate-backed-route-label-probe-priority",
+      "route_label_probe_priority_pending_disposable_runtime_capture"
+    ],
+    "promotion_status": "not-promoted; route-label probe priority remains a future disposable runtime capture worklist, not a decoded resource-ID/name join",
+    "source_basis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field",
+      "original-runtime-required"
+    ]
+  },
+  "successor_kanban_task": "t_7cc2ee75",
+  "summary": "Added static_topology_source_readiness_scout verifier coverage for runtimeRouteLabelProbePrioritySummary, so the route-label probe priority matrix is now enforced in deterministic scenario checks while remaining not-promoted pending disposable runtime capture.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T11:37:44Z",
+  "type": "verified_increment_checkpoint",
+  "verification": {
+    "all_gameplay_scenarios": {
+      "command": "python3 tools/run_gameplay_scenarios.py --all --pretty > /tmp/tv_all_scenarios_t_283b2b02.json",
+      "result": "passed; summary total=102 passed=102 failed=0"
+    },
+    "backlog_dispatch_check": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "native_scenario_eval_suite": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+      "result": "passed; Ran 106 tests OK"
+    },
+    "static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_runtime_route_label_probe_priority_summary passed"
+    },
+    "targeted_static_topology_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; Ran 1 test OK"
+    }
+  }
+}

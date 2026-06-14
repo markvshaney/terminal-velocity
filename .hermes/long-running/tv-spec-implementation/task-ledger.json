@@ -2,7 +2,6 @@
   "diagnostics": {
     "active_gate_at_reconcile_time": {
       "dirty_paths": [
-        "native_ev/data/gameplay_curriculum.json",
         "native_ev/data/sourced_ev_systems.json",
         "native_ev/model.py",
         "native_ev/scenario_eval.py",
@@ -36,18 +35,35 @@
         ".hermes/long-running/tv-spec-implementation/closeout-packet-t_3e5b7805.json",
         ".hermes/long-running/tv-spec-implementation/closeout-packet-t_cdaad28d.json",
         ".hermes/long-running/tv-spec-implementation/closeout-packet-t_2eabf668.json",
-        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_48cb1dd0.json"
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_48cb1dd0.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_283b2b02.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_7cc2ee75.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_f53e2f5c.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_bb80cabd.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_2327f51d.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1c57f165.json",
+        ".hermes/long-running/tv-spec-implementation/closeout-packet-t_0b416938.json"
       ],
       "command": "tools/tv_ledger_reconcile.py",
-      "event_count": 220,
+      "event_count": 227,
       "events_jsonl": ".hermes/long-running/tv-spec-implementation/events.jsonl",
       "git": {
         "all_dirty_paths": [
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_48cb1dd0.json",
-          ".hermes/long-running/tv-spec-implementation/event-start-neighborhood-calibration-priority-20260614T104734Z.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_0b416938.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1c57f165.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_2327f51d.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_283b2b02.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_7cc2ee75.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_bb80cabd.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_f53e2f5c.json",
+          ".hermes/long-running/tv-spec-implementation/event-coordinate-display-readiness-scenario-verifier-20260614T114436Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-coordinate-display-runtime-capture-reconciliation-20260614T123126Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-non-topology-syst-runtime-capture-gate-20260614T121042Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-non-topology-syst-runtime-capture-reconciliation-20260614T122108Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-route-label-probe-priority-scenario-verifier-20260614T113744Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-runtime-route-label-capture-reconciliation-20260614T124514Z.json",
           ".hermes/long-running/tv-spec-implementation/events.jsonl",
           ".hermes/long-running/tv-spec-implementation/task-ledger.json",
-          "native_ev/data/gameplay_curriculum.json",
           "native_ev/data/sourced_ev_systems.json",
           "native_ev/model.py",
           "native_ev/scenario_eval.py",
@@ -56,7 +72,6 @@
           "tools/extract_ev_system_semantics.py"
         ],
         "dirty_paths": [
-          "native_ev/data/gameplay_curriculum.json",
           "native_ev/data/sourced_ev_systems.json",
           "native_ev/model.py",
           "native_ev/scenario_eval.py",
@@ -64,19 +79,30 @@
           "native_ev/tests/test_scenario_eval.py",
           "tools/extract_ev_system_semantics.py"
         ],
-        "head": "d86044d2503058da0c32fad0d5bff3084a748006",
+        "head": "1d3786ab9b8740181e112954b6d2df211bb45326",
         "head_error": null,
         "ignored_control_projection_paths": [
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_48cb1dd0.json",
-          ".hermes/long-running/tv-spec-implementation/event-start-neighborhood-calibration-priority-20260614T104734Z.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_0b416938.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_1c57f165.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_2327f51d.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_283b2b02.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_7cc2ee75.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_bb80cabd.json",
+          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_f53e2f5c.json",
+          ".hermes/long-running/tv-spec-implementation/event-coordinate-display-readiness-scenario-verifier-20260614T114436Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-coordinate-display-runtime-capture-reconciliation-20260614T123126Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-non-topology-syst-runtime-capture-gate-20260614T121042Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-non-topology-syst-runtime-capture-reconciliation-20260614T122108Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-route-label-probe-priority-scenario-verifier-20260614T113744Z.json",
+          ".hermes/long-running/tv-spec-implementation/event-runtime-route-label-capture-reconciliation-20260614T124514Z.json",
           ".hermes/long-running/tv-spec-implementation/events.jsonl",
           ".hermes/long-running/tv-spec-implementation/task-ledger.json"
         ],
         "repo_state": "dirty",
         "status_error": null
       },
-      "latest_event_id": "start-neighborhood-calibration-priority-20260614T104734Z",
-      "matching_closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_48cb1dd0.json",
+      "latest_event_id": "runtime-route-label-capture-reconciliation-20260614T124514Z",
+      "matching_closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_0b416938.json",
       "topology": {
         "conflict_types": [],
         "live_implementation_owner": "gateway_kanban_dispatcher",
@@ -103,7 +129,6 @@
   },
   "latest_worker_handoff": {
     "changed_files": [
-      "native_ev/data/gameplay_curriculum.json",
       "native_ev/data/sourced_ev_systems.json",
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
@@ -111,10 +136,9 @@
       "native_ev/tests/test_scenario_eval.py",
       "tools/extract_ev_system_semantics.py"
     ],
-    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_48cb1dd0.json",
-    "event_id": "start-neighborhood-calibration-priority-20260614T104734Z",
+    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_0b416938.json",
+    "event_id": "runtime-route-label-capture-reconciliation-20260614T124514Z",
     "matched_dirty_paths": [
-      "native_ev/data/gameplay_curriculum.json",
       "native_ev/data/sourced_ev_systems.json",
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
@@ -122,41 +146,25 @@
       "native_ev/tests/test_scenario_eval.py",
       "tools/extract_ev_system_semantics.py"
     ],
-    "summary": "Added start-neighborhood runtime calibration priority scout: Con4/resource 131 is prioritized for future Classic map/runtime calibration capture after comparing decoded Con-slot distance and angular order, without promoting display/map truth.",
-    "task_id": "tv-spec-implementation",
-    "timestamp": "2026-06-14T10:47:34Z",
+    "summary": "Added runtimeRouteLabelCaptureReconciliationSummary and scenario/model verifier coverage, preserving observed Classic route labels as unjoined observations while defining packet-level reconciliation requirements before any resource-ID/name/topology promotion.",
+    "task_id": "t_0b416938",
+    "timestamp": "2026-06-14T12:45:14Z",
     "verification": {
-      "all_gameplay_scenarios": {
-        "command": "python3 tools/run_gameplay_scenarios.py --all --pretty > /tmp/tv_all_scenarios_t_48cb1dd0.json",
-        "result": "passed; summary total=102 passed=102 failed=0"
-      },
-      "backlog_dispatch_runner_preflight": {
-        "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
-        "result": "passed; BACKLOG DISPATCH INDEX OK"
+      "backlog_runner_preflight": {
+        "command": "git fetch origin && git status --short --branch && git rev-parse HEAD && git rev-parse origin/main && python3 tools/backlog_dispatch_index.py runner-preflight",
+        "result": "passed; command exited 0"
       },
       "extract_ev_system_semantics": {
-        "command": "python3 tools/extract_ev_system_semantics.py",
-        "result": "passed; refreshed native_ev/data/sourced_ev_systems.json"
+        "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
+        "result": "passed; regenerated native_ev/data/sourced_ev_systems.json v57 and validated JSON syntax"
       },
-      "full_pytest": {
-        "command": "python3 -m pytest -q",
-        "result": "failed; 340 passed, 12 failed due live board active-worker/topology discovery while t_48cb1dd0 was active, not touched gameplay/static-topology code"
-      },
-      "git_diff_check": {
-        "command": "git diff --check",
-        "result": "passed; exit 0"
-      },
-      "npm_test": {
-        "command": "npm test -- --runInBand",
-        "result": "not run; repository root has no package.json"
-      },
-      "static_topology_source_readiness_scout": {
+      "scenario_verifier": {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; recorded_start_neighborhood_runtime_calibration_priority_summary passed"
+        "result": "passed; recorded_runtime_route_label_capture_reconciliation_summary and all static topology checks passed"
       },
-      "targeted_model_and_scenario_tests": {
+      "targeted_pytest": {
         "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py -q",
-        "result": "passed; 274 passed in 1.69s"
+        "result": "passed; 274 passed in 1.79s after updating method expectation"
       }
     }
   },
@@ -176,5 +184,5 @@
   "schema_version": 3,
   "scope": "Terminal Velocity long-running implementation provenance. This ledger is not a live runner status source.",
   "task_id": "tv-spec-implementation",
-  "updated_at": "2026-06-14T10:47:34Z"
+  "updated_at": "2026-06-14T12:45:14Z"
 }

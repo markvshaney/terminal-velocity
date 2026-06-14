@@ -1,0 +1,36 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "runtime-route-label-capture-reconciliation-20260614T124514Z",
+  "fidelity_boundary": "Runtime route-label capture reconciliation is a gate only: Rigel, Kathoon, Yemuro, and Torgo remain unjoined observations until validated packet-level target evidence exists; no decoded resource-ID/name join, named topology, map display unit, or runtime universe promotion was made.",
+  "next_action": "Continue Lane A static topology/source-readiness work from the current dispatch index; use runtimeRouteLabelCaptureReconciliationSummary only as a route-label capture gate and preserve coordinate display, record-name, named topology, non-topology syst field, and runtime-universe blockers until validated Classic runtime/source packets exist.",
+  "successor_recommendation": "Continue adjacent source-aligned fidelity work after route-label capture reconciliation; likely next families remain exact record-to-name/runtime topology mapping, source-level name/order oracles, coordinate-display runtime/source calibration, or non-topology syst field-order evidence.",
+  "summary": "Added runtimeRouteLabelCaptureReconciliationSummary and scenario/model verifier coverage, preserving observed Classic route labels as unjoined observations while defining packet-level reconciliation requirements before any resource-ID/name/topology promotion.",
+  "task_id": "t_0b416938",
+  "timestamp": "2026-06-14T12:45:14Z",
+  "verification": {
+    "backlog_runner_preflight": {
+      "command": "git fetch origin && git status --short --branch && git rev-parse HEAD && git rev-parse origin/main && python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; command exited 0"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json v57 and validated JSON syntax"
+    },
+    "targeted_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py -q",
+      "result": "passed; 274 passed in 1.79s after updating method expectation"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_runtime_route_label_capture_reconciliation_summary and all static topology checks passed"
+    }
+  }
+}

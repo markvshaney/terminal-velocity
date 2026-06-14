@@ -1,0 +1,55 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "continue",
+  "contract_version": "machine_contract_v1",
+  "event_id": "coordinate-display-readiness-scenario-verifier-20260614T114436Z",
+  "event_ids": [
+    "coordinate-display-readiness-scenario-verifier-20260614T114436Z"
+  ],
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "kanban_task": "t_7cc2ee75",
+  "next_action": "Successor Kanban task t_f53e2f5c should continue with standard tv-spec preflight, then select the next source-aligned backlog slice; preserve coordinate display unit/map scaling readiness as bounded static readiness for runtime calibration capture, not display pixel/projection/origin truth.",
+  "safe_local": true,
+  "successor_kanban_task": "t_f53e2f5c",
+  "summary": "Added static_topology_source_readiness_scout verifier coverage for coordinateDisplayUnitMapScalingReadinessSummary, so bounded coordinate display readiness is enforced while display units/map pixels remain not-promoted pending Classic calibration capture.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T11:44:36Z",
+  "verification": {
+    "all_gameplay_scenarios": {
+      "command": "python3 tools/run_gameplay_scenarios.py --all --pretty > /tmp/tv_all_scenarios_t_7cc2ee75.json",
+      "result": "passed; summary total=102 passed=102 failed=0"
+    },
+    "backlog_dispatch_check": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "backlog_dispatch_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "native_scenario_eval_suite": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+      "result": "passed; Ran 106 tests OK"
+    },
+    "sourced_systems_manifest_targeted_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "result": "passed; Ran 1 test OK"
+    },
+    "static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty > /tmp/tv_static_topology_t_7cc2ee75.json",
+      "result": "passed; recorded_coordinate_display_unit_map_scaling_readiness_summary passed"
+    },
+    "targeted_static_topology_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; Ran 1 test OK"
+    }
+  }
+}

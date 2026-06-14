@@ -1,0 +1,46 @@
+{
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "continue",
+  "contract_version": "machine_contract_v1",
+  "event_ids": [
+    "route-label-probe-priority-scenario-verifier-20260614T113744Z"
+  ],
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "kanban_task": "t_283b2b02",
+  "next_action": "Successor Kanban task t_7cc2ee75 should continue with standard tv-spec preflight, then select the next source-aligned backlog slice; preserve route-label probe priority as a worklist/capture-priority matrix, not a resource-ID/name/topology promotion.",
+  "safe_local": true,
+  "successor_kanban_task": "t_7cc2ee75",
+  "summary": "Added static_topology_source_readiness_scout verifier coverage for runtimeRouteLabelProbePrioritySummary, so the route-label probe priority matrix is now enforced in deterministic scenario checks while remaining not-promoted pending disposable runtime capture.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T11:37:44Z",
+  "verification": {
+    "all_gameplay_scenarios": {
+      "command": "python3 tools/run_gameplay_scenarios.py --all --pretty > /tmp/tv_all_scenarios_t_283b2b02.json",
+      "result": "passed; summary total=102 passed=102 failed=0"
+    },
+    "backlog_dispatch_check": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "native_scenario_eval_suite": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+      "result": "passed; Ran 106 tests OK"
+    },
+    "static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_runtime_route_label_probe_priority_summary passed"
+    },
+    "targeted_static_topology_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; Ran 1 test OK"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "changed_files": [
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "tools/extract_ev_system_semantics.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "non-topology-syst-runtime-capture-reconciliation-20260614T122108Z",
+  "next_action": "Use the new reconciliation packet only as a gate/worklist; do not promote non-topology syst offsets or gameplay routing until validated runtime packets are reconciled with field-order/source evidence.",
+  "successor_recommendation": "Continue Lane A static topology work from playable_travel_loop priority; next high-value families remain coordinate display-unit/map-scaling interpretation, exact record-to-name/runtime topology mapping, then hazards/government/ports with source/runtime gates preserved.",
+  "summary": "Added nonTopologySystRuntimeCaptureReconciliationSummary, a post-capture gate that defines how validated disposable runtime packets can refine non-topology syst evidence without assigning offsets or promoting gameplay behavior.",
+  "task_id": "t_2327f51d",
+  "timestamp": "2026-06-14T12:21:08Z",
+  "verification": {
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json and validated JSON syntax"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_non_topology_syst_runtime_capture_reconciliation_summary and all static topology checks passed"
+    },
+    "targeted_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; 2 tests OK"
+    },
+    "targeted_unittest_initial_attempt": {
+      "command": "python3 -m unittest native_ev.tests.test_model.TestSourcedEvSystemsModel native_ev.tests.test_scenario_eval.TestScenarioEval.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "failed; incorrect unittest class names only (AttributeError), corrected in next run"
+    }
+  }
+}
