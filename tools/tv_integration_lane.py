@@ -785,10 +785,40 @@ def build_post_push_report(payload: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def deliver_message_report(target: str, message: str, *, dry_run: bool = False) -> dict[str, Any]:
+def _profile_scoped_delivery_target(target: str, profile: Path | None) -> str:
+    """Return a send_message target scoped to the integration-owner profile when possible."""
+    if not profile or target.startswith("profile:"):
+        return target
+    resolved = profile.resolve()
+    if resolved.parent.name == "profiles" and resolved.parent.parent.name == ".hermes":
+        return f"profile:{resolved.name}:{target}"
+    return target
+
+
+def _report_delivery_succeeded(result: subprocess.CompletedProcess[str]) -> bool:
+    if result.returncode != 0:
+        return False
+    try:
+        payload = json.loads(result.stdout or "{}")
+    except json.JSONDecodeError:
+        return '"error"' not in result.stdout
+    if isinstance(payload, dict):
+        return not payload.get("error")
+    return True
+
+
+def deliver_message_report(
+    target: str,
+    message: str,
+    *,
+    dry_run: bool = False,
+    profile: Path | None = None,
+    hermes_agent: Path | None = None,
+) -> dict[str, Any]:
     if dry_run:
         return {"target": target, "status": "dry_run", "message": message}
-    hermes_agent = Path(os.environ.get("HERMES_AGENT_HOME", "/home/bh/.hermes/hermes-agent"))
+    hermes_agent = hermes_agent or Path(os.environ.get("HERMES_AGENT_HOME", "/home/bh/.hermes/hermes-agent"))
+    delivery_target = _profile_scoped_delivery_target(target, profile)
     code = (
         "import sys; "
         "from tools.send_message_tool import send_message_tool; "
@@ -797,8 +827,12 @@ def deliver_message_report(target: str, message: str, *, dry_run: bool = False) 
     )
     env = os.environ.copy()
     env["PYTHONPATH"] = str(hermes_agent) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+    if profile:
+        env["HERMES_HOME"] = str(profile)
+        if profile.parent.name == "profiles":
+            env["HERMES_PROFILE"] = profile.name
     result = subprocess.run(
-        [sys.executable or "python3", "-c", code, target],
+        [sys.executable or "python3", "-c", code, delivery_target],
         input=message,
         text=True,
         stdout=subprocess.PIPE,
@@ -808,15 +842,26 @@ def deliver_message_report(target: str, message: str, *, dry_run: bool = False) 
     )
     return {
         "target": target,
-        "status": "sent" if result.returncode == 0 and '\"error\"' not in result.stdout else "failed",
+        "delivery_target": delivery_target,
+        "status": "sent" if _report_delivery_succeeded(result) else "failed",
         "returncode": result.returncode,
         "output": result.stdout.strip(),
         "message": message,
     }
 
 
-def deliver_post_push_report(target: str, message: str, *, dry_run: bool = False) -> dict[str, Any]:
-    return deliver_message_report(target, message, dry_run=dry_run)
+def apply_report_delivery_failure_gate(payload: dict[str, Any], report_key: str, report: dict[str, Any]) -> None:
+    """Make failed integration-owner report delivery visible to runners/coordinators."""
+    if report.get("status") != "failed":
+        return
+    payload[report_key] = report
+    blocker = f"{report_key}_failed"
+    payload["blockers"] = sorted(set([str(item) for item in payload.get("blockers") or []] + [blocker]))
+    payload["decision"] = "needs_human"
+
+
+def deliver_post_push_report(target: str, message: str, *, dry_run: bool = False, profile: Path | None = None) -> dict[str, Any]:
+    return deliver_message_report(target, message, dry_run=dry_run, profile=profile)
 
 
 def build_blocked_runner_report(payload: dict[str, Any]) -> str:
@@ -1055,7 +1100,9 @@ def main() -> int:
                 args.post_push_report_target,
                 report,
                 dry_run=bool(args.post_push_report_dry_run),
+                profile=profile,
             )
+            apply_report_delivery_failure_gate(payload, "post_push_report", payload["post_push_report"])
         else:
             payload["post_push_report"] = {
                 "target": args.post_push_report_target,
@@ -1070,7 +1117,9 @@ def main() -> int:
                 args.blocked_report_target,
                 report,
                 dry_run=bool(args.blocked_report_dry_run),
+                profile=profile,
             )
+            apply_report_delivery_failure_gate(payload, "blocked_runner_report", payload["blocked_runner_report"])
         else:
             payload["blocked_runner_report"] = {
                 "target": args.blocked_report_target,

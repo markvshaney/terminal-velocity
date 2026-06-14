@@ -5,6 +5,7 @@ import shutil
 import sqlite3
 import subprocess
 import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -18,9 +19,13 @@ _SPEC.loader.exec_module(tv_integration_lane)
 
 
 class TvIntegrationLaneTests(unittest.TestCase):
-    def run_integrator(self, repo: Path, *args: str) -> tuple[int, dict]:
+    def run_integrator(self, repo: Path, *args: str, env_overrides: dict[str, str] | None = None) -> tuple[int, dict]:
         env = os.environ.copy()
         env["TV_INTEGRATOR_REPO"] = str(repo)
+        if "--profile" not in args:
+            env["TV_INTEGRATOR_PROFILE"] = str(repo / ".test-profile")
+        if env_overrides:
+            env.update(env_overrides)
         result = subprocess.run(
             ["python3", str(INTEGRATOR), *args],
             cwd=repo,
@@ -47,6 +52,21 @@ class TvIntegrationLaneTests(unittest.TestCase):
         head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
         subprocess.run(["git", "update-ref", "refs/remotes/origin/main", head], cwd=repo, check=True)
         return repo
+
+    def make_fake_hermes_agent(self, root: Path, response: dict) -> Path:
+        agent = root / "fake-hermes-agent"
+        tools = agent / "tools"
+        tools.mkdir(parents=True)
+        (tools / "__init__.py").write_text("\n")
+        (tools / "send_message_tool.py").write_text(textwrap.dedent(f"""
+            import json
+            from pathlib import Path
+
+            def send_message_tool(args, **_kw):
+                Path({str(root / "send-call.json")!r}).write_text(json.dumps(args, sort_keys=True))
+                return json.dumps({response!r})
+        """))
+        return agent
 
     def test_dry_run_allows_clean_ahead_safe_local_bundle(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -153,6 +173,52 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(code, 0, payload)
             self.assertEqual(payload["blocked_runner_report"]["status"], "skipped")
             self.assertEqual(payload["blocked_runner_report"]["reason"], "integration_not_blocked")
+
+    def test_blocked_runner_report_failure_adds_runner_visible_blocker(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            repo = self.make_repo(root)
+            (repo / "scratch.txt").write_text("untracked\n")
+            fake_agent = self.make_fake_hermes_agent(root, {"error": "Platform telegram is not configured"})
+
+            code, payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+                env_overrides={"HERMES_AGENT_HOME": str(fake_agent)},
+            )
+
+            self.assertEqual(code, 2, payload)
+            self.assertEqual(payload["blocked_runner_report"]["status"], "failed")
+            self.assertIn("blocked_runner_report_failed", payload["blockers"])
+
+    def test_delivery_targets_named_profile_when_profile_path_is_named_profile(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            fake_agent = self.make_fake_hermes_agent(root, {"success": True})
+            profile = root / ".hermes" / "profiles" / "loki-game"
+            result = tv_integration_lane.deliver_message_report(
+                "telegram:Loki GameTV",
+                "hello",
+                profile=profile,
+                hermes_agent=fake_agent,
+            )
+
+            sent = json.loads((root / "send-call.json").read_text())
+            self.assertEqual(result["status"], "sent")
+            self.assertEqual(sent["target"], "profile:loki-game:telegram:Loki GameTV")
+
+    def test_failed_post_push_report_changes_publish_packet_to_needs_human(self):
+        payload = {"decision": "publish", "blockers": [], "pushed": True}
+        tv_integration_lane.apply_report_delivery_failure_gate(
+            payload,
+            "post_push_report",
+            {"status": "failed", "output": '{"error":"Platform telegram is not configured"}'},
+        )
+
+        self.assertEqual(payload["decision"], "needs_human")
+        self.assertIn("post_push_report_failed", payload["blockers"])
 
     def test_blocks_dirty_untracked_files_before_review(self):
         with tempfile.TemporaryDirectory() as tmp:
