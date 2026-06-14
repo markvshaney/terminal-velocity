@@ -134,6 +134,8 @@ Verifier/regression:
 
 ### 6. Validate closeout packets as consumable machine contracts
 
+Status: implemented for `tools/tv_closeout_guard.py` and `tools/tv_runner_recovery_preflight.py` on 2026-06-14. The closeout guard now recognizes `machine_contract_v1` packets via `closeout_class`, requires task id, non-empty `changed_files`, structured verification entries with `command` and `result`, and `next_action`, rejects current `ready_for_review_or_integration` / generic review classes, preserves explicit human-gate boundary checks, and reports timestamped schema-loose packets as `legacy` instead of treating them as current contract packets. Recovery preflight validates matching closeout packets before accepting them as safe handoff evidence, emits `closeout_packet_contract`, distinguishes `validated_closeout_packet` from `legacy_closeout_packet`, and refuses invalid current packets as safe recovery evidence.
+
 Target surfaces:
 
 - closeout packet writer/validator;

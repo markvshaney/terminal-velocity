@@ -121,12 +121,20 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
             full_path.parent.mkdir(parents=True, exist_ok=True)
             full_path.write_text(f"dirty {path}\n")
         (packet_dir / "closeout-packet-t_packet.json").write_text(json.dumps({
-            "task_id": "t_packet",
+            "closeout_class": "push_ready",
+            "kanban_task": "t_packet",
             "changed_files": changed_files,
             "verification": {
-                "targeted_unittest": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -v",
-                "git_diff_check": "passed; git diff --check produced no whitespace errors",
+                "targeted_unittest": {
+                    "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+                    "result": "passed",
+                },
+                "git_diff_check": {
+                    "command": "git diff --check",
+                    "result": "passed",
+                },
             },
+            "next_action": "integration owner should checkpoint and publish this verified handoff",
             "summary": "Recovered worker closeout packet with targeted verifier evidence.",
         }))
         tasks = [{
@@ -144,10 +152,47 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
         self.assertTrue(payload["handoff_match"])
         self.assertEqual(payload["focused_verifier_status"], "passed")
         self.assertEqual(payload["candidate_handoff"]["id"], "t_packet")
-        self.assertIn("closeout_packet", payload["handoff_evidence_sources"])
+        self.assertIn("validated_closeout_packet", payload["handoff_evidence_sources"])
+        self.assertEqual(payload["closeout_packet_contract"]["decision"], "valid")
         self.assertEqual(payload["handoff_dirty_path_match"]["missing_from_evidence"], [])
         self.assertEqual(payload["handoff_dirty_path_match"]["extra_in_evidence"], [])
         self.assertIsNone(payload["explicit_gate"])
+
+    def test_invalid_current_closeout_packet_is_not_recovered_as_safe_handoff(self):
+        repo = self.make_repo()
+        (repo / "native_ev").mkdir(parents=True)
+        packet_dir = repo / ".hermes/long-running/tv-spec-implementation"
+        packet_dir.mkdir(parents=True)
+        changed_files = ["native_ev/scenario_eval.py"]
+        (repo / "native_ev/scenario_eval.py").write_text("dirty\n")
+        (packet_dir / "closeout-packet-t_bad.json").write_text(json.dumps({
+            "closeout_class": "ready_for_review_or_integration",
+            "task_id": "t_bad",
+            "changed_files": changed_files,
+            "verification": {
+                "targeted_unittest": {
+                    "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+                    "result": "passed",
+                },
+            },
+            "next_action": "needs human review because files changed",
+            "safe_local": True,
+        }))
+        tasks = [{
+            "id": "t_bad",
+            "status": "blocked",
+            "assignee": "terminal-velocity",
+            "title": "Continue TV tv-spec autonomous loop",
+            "body": "push_ready handoff recorded; see closeout packet for changed files and verification.",
+        }]
+
+        code, payload = self.run_preflight(repo, tasks)
+
+        self.assertEqual(code, 1, payload)
+        self.assertEqual(payload["recommended_action"], "unsafe_dirty_state")
+        self.assertFalse(payload["handoff_match"])
+        self.assertEqual(payload["closeout_packet_contract"]["decision"], "invalid")
+        self.assertIn("ready_for_review_or_integration_not_current_contract", payload["closeout_packet_contract"]["problems"])
 
     def test_kanban_comments_and_latest_summary_are_handoff_evidence(self):
         repo = self.make_repo()
