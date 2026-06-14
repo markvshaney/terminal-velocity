@@ -1,0 +1,40 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "classification": "continue",
+  "event_id": "mission-route-progress-recovery-20260614T095104Z",
+  "kanban_task": "t_ee9c22c9",
+  "kind": "verified_safe_local_increment",
+  "lane_class": "native_ev_symbolic_gameplay_scenario",
+  "new_checks": [
+    "surfaced_blocked_mission_route_progress",
+    "surfaced_mission_route_completion_feedback"
+  ],
+  "next_resume_action": "Continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve mission-route/helper scaffold labels and do not promote exact Classic UI wording, timing, or route behavior without original-runtime evidence.",
+  "scenario": "mission_route_refuel_delivery_loop",
+  "source_fidelity": {
+    "caveat": "Exact EV Classic mission-route/refuel/route-progress UI wording and timing remain pending original-runtime evidence.",
+    "preserved_labels": [
+      "terminal-velocity-design-scaffold",
+      "mission_objective_hint_pending_ev_classic_ui_trace",
+      "terminal-velocity-navigation-guardrail-scaffold",
+      "classic_runtime_jump_refusal_ui_pending",
+      "route_progress_feedback_pending_ev_classic_ui_trace"
+    ],
+    "promotion_status": "scaffold_only for mission route-progress/refuel recovery feedback; no exact EV Classic UI/timing promotion.",
+    "source_basis": "Terminal Velocity deterministic native scenario evaluator; no EV Classic mission-route UI wording promoted."
+  },
+  "summary": "mission_route_refuel_delivery_loop now verifies routeProgress through the active-mission low-fuel recovery path: the blocked Centauri jump preserves the queued mission stop with refusal context, and the post-refuel retry consumes the route with completion feedback before Luna delivery.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T09:51:04Z",
+  "verification": {
+    "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build then check; BACKLOG DISPATCH INDEX OK",
+    "focused_route_progress_unittests": "passed; python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_mission_route_refuel_delivery_loop_recovers_and_delivers native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_near_center_route_recovery_loop_keeps_route_then_completes_jump -v; Ran 2 tests OK",
+    "targeted_mission_route_scenario": "passed; python3 tools/run_gameplay_scenarios.py mission_route_refuel_delivery_loop --pretty; success true; all route/refuel/progress checks passed"
+  }
+}

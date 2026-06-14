@@ -119,6 +119,7 @@ SCENARIO_CURRICULUM = [
     'route_queue_clear_guardrail',
     'route_queue_clear_reselect_guardrail',
     'near_center_jump_block',
+    'near_center_route_recovery_loop',
     'route_planner_refuel_loop',
     'manual_route_low_fuel_recovery_landing_loop',
     'low_fuel_jump_recovery',
@@ -3949,6 +3950,15 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
             {'type': 'set_state', 'values': {'distanceFromSystemCenter': 0}},
             {'type': 'jump', 'expectBlocked': True},
         ]
+    if name == 'near_center_route_recovery_loop':
+        return [
+            {'type': 'append_route_stop', 'destinationSystem': 'Sol', 'sourceLabel': 'original-runtime-observed'},
+            {'type': 'set_state', 'values': {'distanceFromSystemCenter': 0}},
+            {'type': 'jump', 'expectBlocked': True},
+            {'type': 'set_state', 'values': {'distanceFromSystemCenter': MIN_JUMP_DISTANCE + 50}},
+            {'type': 'jump'},
+            {'type': 'land', 'body': 'Earth'},
+        ]
     if name == 'route_planner_refuel_loop':
         return [
             {'type': 'jump', 'destinationSystem': 'Sol'},
@@ -4641,12 +4651,18 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
                 'warned_low_fuel_before_mission_route': 'passed' if latest_route.get('fuelWarning') is True and latest_route.get('fuelAvailable') == 0 and latest_route.get('refuelRecoveryBody') == 'Earth' and 'nearest refuel: Earth' in latest_route.get('objectiveHint', '') else 'failed',
             })
         if name == 'mission_route_refuel_delivery_loop':
+            blocked_jumps = [event for event in trace if event.get('type') == 'blocked_jump' and event.get('destinationSystem') == 'Centauri']
+            delivery_jumps = [event for event in trace if event.get('type') == 'jump' and event.get('destinationSystem') == 'Centauri']
+            blocked_progress = blocked_jumps[-1].get('routeProgress', {}) if blocked_jumps else {}
+            delivery_progress = delivery_jumps[-1].get('routeProgress', {}) if delivery_jumps else {}
             checks.update({
-                'blocked_jump_before_refuel': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('destinationSystem') == 'Centauri' and event.get('reason') == 'insufficient fuel' for event in trace) else 'failed',
+                'blocked_jump_before_refuel': 'passed' if any(event.get('reason') == 'insufficient fuel' for event in blocked_jumps) else 'failed',
                 'refueled_at_recovery_body': 'passed' if any(event.get('type') == 'refuel' and event.get('system') == 'Sol' and event.get('body') == 'Earth' and event.get('fuelAfter') == STARTING_FUEL for event in trace) else 'failed',
                 'delivered_mission_after_route_refuel': 'passed' if state.get('currentSystem') == 'Centauri' and state.get('landedBody') == 'Luna' and state.get('completedJobs') == ['intro_courier_earth_hera'] and state.get('routeQueue') == [] and state.get('cargoUsed') == 0 and state.get('credits') == STARTING_CREDITS + 1800 else 'failed',
                 'recorded_route_refuel_source_boundary': 'passed' if latest_route.get('sourceLabel') == 'terminal-velocity-design-scaffold' and latest_route.get('oracleStatus') == 'mission_objective_hint_pending_ev_classic_ui_trace' else 'failed',
                 'surfaced_mission_route_fuel_recovery': 'passed' if latest_route.get('originSystem') == 'Sol' and latest_route.get('greenRoutePath') == ['Sol', 'Centauri'] and latest_route.get('reachableRoutePrefix') == [] and latest_route.get('blockedRouteTail') == ['Centauri'] and latest_route.get('firstBlockedStop') == 'Centauri' and latest_route.get('fuelDeficit') == 1 and latest_route.get('refuelRecoveryBody') == 'Earth' and 'fuel service port' in latest_route.get('recoveryHint', '') else 'failed',
+                'surfaced_blocked_mission_route_progress': 'passed' if blocked_progress.get('completedQueuedStop') is False and blocked_progress.get('completedRouteStop') is None and blocked_progress.get('routeLengthBefore') == 1 and blocked_progress.get('routeLengthAfter') == 1 and blocked_progress.get('nextRouteStop') == 'Centauri' and blocked_progress.get('routeComplete') is False and blocked_progress.get('blockedBeforeProgress') is True and blocked_progress.get('blockedReason') == 'insufficient fuel' and blocked_progress.get('blockedOriginSystem') == 'Sol' and blocked_progress.get('blockedDestinationSystem') == 'Centauri' and blocked_progress.get('blockedFuel') == 0 and blocked_progress.get('fuelRequired') == 1 else 'failed',
+                'surfaced_mission_route_completion_feedback': 'passed' if delivery_progress.get('completedQueuedStop') is True and delivery_progress.get('completedRouteStop') == 'Centauri' and delivery_progress.get('routeLengthBefore') == 1 and delivery_progress.get('routeLengthAfter') == 0 and delivery_progress.get('nextRouteStop') is None and delivery_progress.get('routeComplete') is True else 'failed',
             })
     elif name == 'mission_trade_hybrid_capacity_planning':
         checks.update({
@@ -4984,6 +5000,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'preserved_system_after_center_block': 'passed' if state.get('currentSystem') == START_SYSTEM else 'failed',
             'preserved_fuel_after_center_block': 'passed' if state.get('fuel') == STARTING_FUEL else 'failed',
             'surfaced_near_center_route_progress_feedback': 'passed' if any(event.get('type') == 'blocked_jump' and event.get('reason') == 'too close to system center' and event.get('routeProgress', {}).get('blockedBeforeProgress') is True and event.get('routeProgress', {}).get('blockedOriginSystem') == START_SYSTEM and event.get('routeProgress', {}).get('blockedDestinationSystem') == 'Sol' and event.get('routeProgress', {}).get('nextRouteStop') == 'Sol' and event.get('routeProgress', {}).get('routeLengthBefore') == 1 and event.get('routeProgress', {}).get('routeLengthAfter') == 1 and event.get('routeProgress', {}).get('blockedDistanceFromSystemCenter') == 0 and event.get('routeProgress', {}).get('minJumpDistance') == MIN_JUMP_DISTANCE and event.get('routeProgress', {}).get('routeComplete') is False and event.get('sourceLabel') == 'original-runtime-observed' and event.get('oracleStatus') == 'near_center_jump_failure_observed_exact_distance_pending' for event in trace) else 'failed',
+        })
+    elif name == 'near_center_route_recovery_loop':
+        blocked = [event for event in trace if event.get('type') == 'blocked_jump' and event.get('reason') == 'too close to system center']
+        jumps = [event for event in trace if event.get('type') == 'jump']
+        checks.update({
+            'blocked_before_center_recovery': 'passed' if blocked and blocked[-1].get('routeProgress', {}).get('blockedBeforeProgress') is True and blocked[-1].get('routeProgress', {}).get('nextRouteStop') == 'Sol' else 'failed',
+            'preserved_route_after_center_block': 'passed' if blocked and blocked[-1].get('routeQueue') == ['Sol'] and blocked[-1].get('routeProgress', {}).get('routeLengthAfter') == 1 else 'failed',
+            'recovered_after_flying_clear': 'passed' if state.get('currentSystem') == 'Sol' and state.get('landedBody') == 'Earth' and state.get('routeQueue') == [] and any(event.get('type') == 'state_adjustment' and event.get('values', {}).get('distanceFromSystemCenter') == MIN_JUMP_DISTANCE + 50 for event in trace) else 'failed',
+            'surfaced_center_recovery_completion_feedback': 'passed' if jumps and jumps[-1].get('routeProgress', {}).get('completedQueuedStop') is True and jumps[-1].get('routeProgress', {}).get('completedRouteStop') == 'Sol' and jumps[-1].get('routeProgress', {}).get('routeLengthBefore') == 1 and jumps[-1].get('routeProgress', {}).get('routeLengthAfter') == 0 and jumps[-1].get('routeProgress', {}).get('routeComplete') is True and jumps[-1].get('sourceLabel') == 'original-runtime-observed' and jumps[-1].get('oracleStatus') == 'route_progress_feedback_pending_ev_classic_ui_trace' else 'failed',
         })
     elif name == 'route_planner_refuel_loop':
         checks.update({

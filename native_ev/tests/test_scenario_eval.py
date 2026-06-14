@@ -97,6 +97,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'route_queue_clear_guardrail',
                 'route_queue_clear_reselect_guardrail',
                 'near_center_jump_block',
+                'near_center_route_recovery_loop',
                 'route_planner_refuel_loop',
                 'manual_route_low_fuel_recovery_landing_loop',
                 'low_fuel_jump_recovery',
@@ -1465,6 +1466,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['delivered_mission_after_route_refuel'], 'passed')
         self.assertEqual(result['checks']['recorded_route_refuel_source_boundary'], 'passed')
         self.assertEqual(result['checks']['surfaced_mission_route_fuel_recovery'], 'passed')
+        self.assertEqual(result['checks']['surfaced_blocked_mission_route_progress'], 'passed')
+        self.assertEqual(result['checks']['surfaced_mission_route_completion_feedback'], 'passed')
         self.assertEqual(result['state']['currentSystem'], 'Centauri')
         self.assertEqual(result['state']['landedBody'], 'Luna')
         self.assertEqual(result['state']['completedJobs'], ['intro_courier_earth_hera'])
@@ -1484,6 +1487,38 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(mission_route['firstBlockedStop'], 'Centauri')
         self.assertEqual(mission_route['fuelDeficit'], 1)
         self.assertIn('fuel service port', mission_route['recoveryHint'])
+        blocked = [event for event in result['trace'] if event.get('type') == 'blocked_jump'][-1]
+        self.assertEqual(
+            blocked['routeProgress'],
+            {
+                'completedQueuedStop': False,
+                'completedRouteStop': None,
+                'routeLengthBefore': 1,
+                'routeLengthAfter': 1,
+                'nextRouteStop': 'Centauri',
+                'routeComplete': False,
+                'blockedBeforeProgress': True,
+                'blockedReason': 'insufficient fuel',
+                'blockedOriginSystem': 'Sol',
+                'blockedDestinationSystem': 'Centauri',
+                'blockedFuel': 0,
+                'fuelRequired': 1,
+            },
+        )
+        delivery_jump = [event for event in result['trace'] if event.get('type') == 'jump' and event.get('destinationSystem') == 'Centauri'][-1]
+        self.assertEqual(
+            delivery_jump['routeProgress'],
+            {
+                'completedQueuedStop': True,
+                'completedRouteStop': 'Centauri',
+                'routeLengthBefore': 1,
+                'routeLengthAfter': 0,
+                'nextRouteStop': None,
+                'routeComplete': True,
+            },
+        )
+        self.assertEqual(delivery_jump['sourceLabel'], 'terminal-velocity-design-scaffold')
+        self.assertEqual(delivery_jump['oracleStatus'], 'route_progress_feedback_pending_ev_classic_ui_trace')
 
     def test_mission_trade_hybrid_capacity_planning_preserves_trade_cargo(self):
         result = run_scripted_scenario('mission_trade_hybrid_capacity_planning')
@@ -2611,6 +2646,37 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('Sol', blocked['linkedStopsFromOrigin'])
         self.assertEqual(blocked['sourceLabel'], 'original-runtime-observed')
         self.assertEqual(blocked['oracleStatus'], 'near_center_jump_failure_observed_exact_distance_pending')
+
+    def test_near_center_route_recovery_loop_keeps_route_then_completes_jump(self):
+        result = run_scripted_scenario('near_center_route_recovery_loop')
+
+        self.assertTrue(result['success'], result)
+        self.assertEqual(result['state']['currentSystem'], 'Sol')
+        self.assertEqual(result['state']['landedBody'], 'Earth')
+        self.assertEqual(result['state']['routeQueue'], [])
+        self.assertEqual(result['state']['fuel'], 5)
+        self.assertEqual(result['checks']['blocked_before_center_recovery'], 'passed')
+        self.assertEqual(result['checks']['preserved_route_after_center_block'], 'passed')
+        self.assertEqual(result['checks']['recovered_after_flying_clear'], 'passed')
+        self.assertEqual(result['checks']['surfaced_center_recovery_completion_feedback'], 'passed')
+        blocked = [event for event in result['trace'] if event['type'] == 'blocked_jump'][-1]
+        jump = [event for event in result['trace'] if event['type'] == 'jump'][-1]
+        self.assertEqual(blocked['routeProgress']['routeLengthAfter'], 1)
+        self.assertEqual(blocked['routeProgress']['nextRouteStop'], 'Sol')
+        self.assertEqual(jump['previousRoute'], ['Sol'])
+        self.assertEqual(
+            jump['routeProgress'],
+            {
+                'completedQueuedStop': True,
+                'completedRouteStop': 'Sol',
+                'routeLengthBefore': 1,
+                'routeLengthAfter': 0,
+                'nextRouteStop': None,
+                'routeComplete': True,
+            },
+        )
+        self.assertEqual(jump['sourceLabel'], 'original-runtime-observed')
+        self.assertEqual(jump['oracleStatus'], 'route_progress_feedback_pending_ev_classic_ui_trace')
 
     def test_route_planner_refuel_loop_spends_fuel_blocks_empty_jump_then_refuels(self):
         result = run_scripted_scenario('route_planner_refuel_loop')

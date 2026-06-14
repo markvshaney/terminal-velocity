@@ -1,0 +1,85 @@
+{
+  "active_gate": null,
+  "changed_files": [
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+    "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+  ],
+  "classification": "continue",
+  "event_id": "near-center-route-recovery-loop-20260614T094133Z",
+  "expected_route_progress": {
+    "blocked_jump": {
+      "blockedBeforeProgress": true,
+      "blockedReason": "too close to system center",
+      "nextRouteStop": "Sol",
+      "routeComplete": false,
+      "routeLengthAfter": 1,
+      "routeLengthBefore": 1
+    },
+    "recovery_jump": {
+      "completedQueuedStop": true,
+      "completedRouteStop": "Sol",
+      "nextRouteStop": null,
+      "routeComplete": true,
+      "routeLengthAfter": 0,
+      "routeLengthBefore": 1
+    }
+  },
+  "kanban_task": "t_3e5b7805",
+  "kind": "verified_safe_local_increment",
+  "lane_class": "native_ev_symbolic_gameplay_scenario",
+  "new_checks": [
+    "blocked_before_center_recovery",
+    "preserved_route_after_center_block",
+    "recovered_after_flying_clear",
+    "surfaced_center_recovery_completion_feedback"
+  ],
+  "next_resume_action": "Successor Kanban task t_ee9c22c9 should continue with the next safe EV Classic fidelity backlog slice after standard preflight; preserve near-center/original-runtime-observed boundaries and do not promote exact Classic UI wording, timing, or thresholds without original-runtime evidence.",
+  "scenario": "near_center_route_recovery_loop",
+  "source_fidelity": {
+    "caveat": "Exact EV Classic refusal/retry wording, threshold, timing, and route-progress UI copy remain pending original-runtime evidence.",
+    "preserved_labels": [
+      "original-runtime-observed",
+      "near_center_jump_failure_observed_exact_distance_pending",
+      "route_progress_feedback_pending_ev_classic_ui_trace"
+    ],
+    "promotion_status": "scaffold_only for route-progress/recovery feedback; no exact EV Classic UI/timing/threshold promotion.",
+    "source_basis": "Terminal Velocity deterministic native scenario evaluator plus existing original-runtime-observed near-center refusal existence boundary."
+  },
+  "successor_kanban_task": "t_ee9c22c9",
+  "summary": "Added near_center_route_recovery_loop symbolic scenario: queued Levo -> Sol route survives near-center hyperspace refusal, then completes after flying beyond the current Terminal Velocity jump-distance threshold and landing at Earth; exact EV Classic refusal/retry wording, threshold, timing, and route-progress UI remain pending original-runtime evidence.",
+  "task_id": "tv-spec-implementation",
+  "timestamp": "2026-06-14T09:41:33Z",
+  "type": "verified_safe_local_increment",
+  "verification": {
+    "all_gameplay_scenarios": {
+      "command": "python3 tools/run_gameplay_scenarios.py --all --pretty",
+      "result": "passed; summary total=100 passed=100 failed=0"
+    },
+    "backlog_dispatch_tests": {
+      "command": "python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v",
+      "result": "passed; Ran 18 tests OK"
+    },
+    "backlog_index_build_check": {
+      "command": "python3 tools/backlog_dispatch_index.py build && python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; wrote ev-classic-fidelity-implementation-backlog.index.json; BACKLOG DISPATCH INDEX OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "preflight": {
+      "command": "git fetch origin && git status --short --branch && git rev-parse HEAD && git rev-parse origin/main && python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; HEAD and origin/main both ebbc804e493c3b8d1432f92d949a1e8dfdb948d3; BACKLOG DISPATCH INDEX OK"
+    },
+    "targeted_near_center_route_scenario": {
+      "command": "python3 tools/run_gameplay_scenarios.py near_center_route_recovery_loop --pretty",
+      "result": "passed; success true; checks all passed; final currentSystem=Sol landedBody=Earth fuel=5 routeQueue=[]"
+    },
+    "targeted_near_center_route_unittests": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_available_scenarios_exposes_curriculum_order native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_near_center_jump_block_preserves_state_with_original_runtime_label native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_near_center_route_recovery_loop_keeps_route_then_completes_jump native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_manual_route_low_fuel_recovery_landing_loop_keeps_route_and_recovers -v",
+      "result": "passed; Ran 4 tests OK"
+    }
+  }
+}
