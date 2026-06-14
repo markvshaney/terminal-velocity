@@ -64,6 +64,20 @@ SAFE_TV_PREFIXES = (
     "godot_ev/",
     ".hermes/long-running/tv-spec-implementation/",
 )
+RUNNER_METADATA_PATHS = {
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+}
+CONTROL_PLANE_PATHS = {
+    "tools/tv_integration_lane.py",
+    "tools/tv_runner_recovery_preflight.py",
+    "tools/tv_runner_autostart.py",
+    "tools/check_tv_runner_topology.py",
+    "native_ev/tests/test_tv_integration_lane.py",
+    "native_ev/tests/test_tv_runner_recovery_preflight.py",
+    "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+    "docs/research/tv-spec.md",
+}
 
 
 def run_checked(cmd: list[str], *, cwd: Path | None = None, timeout: int = 45) -> tuple[int, str]:
@@ -190,6 +204,56 @@ def sensitive_path_check(paths: list[str]) -> dict[str, Any]:
     }
 
 
+def is_control_plane_path(path: str) -> bool:
+    return path in CONTROL_PLANE_PATHS
+
+
+def event_packet_paths(packet: dict[str, Any]) -> set[str]:
+    paths: set[str] = set()
+    ids: list[str] = []
+    for key in ("event_id", "event_packet"):
+        value = packet.get(key)
+        if isinstance(value, str) and value:
+            ids.append(value)
+    event_ids = packet.get("event_ids")
+    if isinstance(event_ids, list):
+        ids.extend(str(item) for item in event_ids if isinstance(item, str) and item)
+    for item in ids:
+        if item.startswith(".hermes/") and item.endswith(".json"):
+            paths.add(item)
+        else:
+            paths.add(f".hermes/long-running/tv-spec-implementation/event-{item}.json")
+    return paths
+
+
+def packet_evidence_paths(packet: dict[str, Any], dirty_paths: list[str]) -> set[str]:
+    dirty_set = set(dirty_paths)
+    paths = set(packet.get("_changed_files") or [])
+    packet_path = packet.get("_path")
+    if isinstance(packet_path, str) and packet_path in dirty_set:
+        paths.add(packet_path)
+    paths.update(path for path in event_packet_paths(packet) if path in dirty_set)
+    paths.update(path for path in RUNNER_METADATA_PATHS if path in dirty_set)
+    return paths
+
+
+def task_metadata_changed_files(task: dict[str, Any]) -> set[str]:
+    paths: set[str] = set()
+    runs = task.get("runs")
+    if not isinstance(runs, list):
+        return paths
+    for run in runs:
+        if not isinstance(run, dict):
+            continue
+        metadata = run.get("metadata")
+        if not isinstance(metadata, dict):
+            continue
+        changed_files = metadata.get("changed_files")
+        if isinstance(changed_files, list):
+            paths.update(str(item) for item in changed_files if isinstance(item, str) and item)
+    return paths
+
+
 def focused_verifier_status(text: str) -> str:
     lower = text.lower()
     if "focused" not in lower and "targeted" not in lower:
@@ -279,9 +343,11 @@ def choose_handoff(
         if task.get("status") != "blocked" and not any(term in lower for term in REVIEW_TERMS):
             continue
 
-        task_evidence_paths: set[str] = set()
+        task_evidence_paths: set[str] = task_metadata_changed_files(task)
         sources: list[str] = []
         evidence_text_parts: list[str] = []
+        if task_evidence_paths:
+            sources.append("kanban_run_metadata")
         for source, surface_text in evidence_surfaces:
             source_paths = {path for path in dirty_paths if path.lower() in surface_text.lower()}
             if source_paths or (source == "kanban_latest_summary" and focused_verifier_status(surface_text) != "missing"):
@@ -293,27 +359,27 @@ def choose_handoff(
         evidence_text = "\n".join(evidence_text_parts) if evidence_text_parts else text
 
         matched_contract: dict[str, Any] | None = None
-        if not matched:
-            for packet in packets_by_task_id.get(str(task.get("id")), []):
-                packet_paths = set(packet["_changed_files"])
-                packet_matched, packet_match_detail = dirty_match(dirty_paths, packet_paths)
-                contract = packet.get("_contract") if isinstance(packet.get("_contract"), dict) else None
-                if packet_matched and contract and contract.get("decision") in {"valid", "legacy"}:
-                    matched = True
-                    match_detail = packet_match_detail
-                    evidence_text = text + "\n" + str(packet.get("_text") or "")
-                    matched_contract = contract
-                    sources = ["validated_closeout_packet" if contract.get("decision") == "valid" else "legacy_closeout_packet"]
-                    if task_evidence_paths:
-                        sources.insert(0, "kanban_task_text")
-                    break
-                if len(packet_match_detail["matched_paths"]) > len(match_detail["matched_paths"]):
-                    match_detail = packet_match_detail
-                    closest_contract = contract
+        for packet in packets_by_task_id.get(str(task.get("id")), []):
+            packet_paths = packet_evidence_paths(packet, dirty_paths)
+            combined_paths = task_evidence_paths | packet_paths
+            packet_matched, packet_match_detail = dirty_match(dirty_paths, combined_paths)
+            contract = packet.get("_contract") if isinstance(packet.get("_contract"), dict) else None
+            if packet_matched and contract and contract.get("decision") in {"valid", "legacy"}:
+                matched = True
+                match_detail = packet_match_detail
+                evidence_text = text + "\n" + str(packet.get("_text") or "")
+                matched_contract = contract
+                packet_source = "validated_closeout_packet" if contract.get("decision") == "valid" else "legacy_closeout_packet"
+                if packet_source not in sources:
+                    sources.append(packet_source)
+                break
+            if len(packet_match_detail["matched_paths"]) > len(match_detail["matched_paths"]):
+                match_detail = packet_match_detail
+                closest_contract = contract
 
         if dirty_paths and matched:
             candidates.append((int(task.get("created_at") or task.get("started_at") or 0), task, evidence_text, sources, match_detail, matched_contract))
-        elif match_detail["matched_paths"] and not candidates:
+        elif len(match_detail["matched_paths"]) > len(empty_match["matched_paths"]):
             empty_match = match_detail
     if not candidates:
         return None, "missing", False, [], empty_match, closest_contract
@@ -345,6 +411,10 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
         "matched_changed_files": [],
         "missing_changed_files": dirty_paths,
         "extra_dirty_paths": [],
+        "matched_handoff_paths": [],
+        "control_plane_dirty_paths": [],
+        "extra_unexplained_dirty_paths": dirty_paths,
+        "sensitive_dirty_paths": [],
         "sensitive_path_check": sensitive_path_check(dirty_paths),
         "focused_verifier_status": "not_applicable",
         "closeout_packet_contract": None,
@@ -363,6 +433,7 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
         payload["recommended_action"] = "seed_successor"
         return payload
     if payload["sensitive_path_check"]["status"] != "safe":
+        payload["sensitive_dirty_paths"] = payload["sensitive_path_check"]["unsafe_paths"]
         payload["recommended_action"] = "unsafe_dirty_state"
         payload["explicit_gate"] = "unsafe_dirty_state"
         return payload
@@ -374,6 +445,12 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
     payload["matched_changed_files"] = match_detail["matched_paths"]
     payload["missing_changed_files"] = match_detail["extra_in_evidence"]
     payload["extra_dirty_paths"] = match_detail["missing_from_evidence"]
+    payload["matched_handoff_paths"] = match_detail["matched_paths"]
+    unmatched_dirty = list(match_detail["missing_from_evidence"])
+    control_plane_dirty = sorted(path for path in unmatched_dirty if is_control_plane_path(path))
+    extra_unexplained_dirty = sorted(path for path in unmatched_dirty if path not in set(control_plane_dirty))
+    payload["control_plane_dirty_paths"] = control_plane_dirty
+    payload["extra_unexplained_dirty_paths"] = extra_unexplained_dirty
     payload["focused_verifier_status"] = verifier_status
     payload["closeout_packet_contract"] = closeout_contract
     if handoff:
@@ -384,8 +461,13 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
             "assignee": handoff.get("assignee"),
         }
     if not matched:
-        payload["recommended_action"] = "unsafe_dirty_state"
-        payload["explicit_gate"] = "unsafe_dirty_state"
+        if match_detail["matched_paths"] and control_plane_dirty and not extra_unexplained_dirty:
+            payload["handoff_match"] = "partial"
+            payload["recommended_action"] = "split_or_review_control_plane_dirty_state"
+            payload["explicit_gate"] = "control_plane_dirty_state"
+        else:
+            payload["recommended_action"] = "unsafe_dirty_state"
+            payload["explicit_gate"] = "unsafe_dirty_state"
     elif verifier_status == "passed":
         payload["recommended_action"] = "checkpoint_and_push_ready"
         payload["explicit_gate"] = None

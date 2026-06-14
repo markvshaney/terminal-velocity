@@ -227,6 +227,114 @@ class TvRunnerRecoveryPreflightTests(unittest.TestCase):
         self.assertEqual(payload["missing_changed_files"], [])
         self.assertEqual(payload["extra_dirty_paths"], [])
 
+    def test_run_metadata_and_closeout_cover_normal_runner_metadata_artifacts(self):
+        repo = self.make_repo()
+        packet_dir = repo / ".hermes/long-running/tv-spec-implementation"
+        packet_dir.mkdir(parents=True)
+        worker_paths = [
+            "native_ev/data/gameplay_curriculum.json",
+            "native_ev/model.py",
+            "native_ev/tests/test_model.py",
+        ]
+        metadata_paths = [
+            ".hermes/long-running/tv-spec-implementation/events.jsonl",
+            ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+            ".hermes/long-running/tv-spec-implementation/closeout-packet-t_worker.json",
+            ".hermes/long-running/tv-spec-implementation/event-worker-20260614T000000Z.json",
+        ]
+        for path in worker_paths + metadata_paths:
+            full_path = repo / path
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+            full_path.write_text(f"dirty {path}\n")
+        (packet_dir / "closeout-packet-t_worker.json").write_text(json.dumps({
+            "contract_version": "machine_contract_v1",
+            "closeout_class": "continue",
+            "kanban_task": "t_worker",
+            "changed_files": worker_paths,
+            "event_id": "worker-20260614T000000Z",
+            "focused_verifiers_passed": True,
+            "verification": {
+                "targeted_unittest": {
+                    "command": "python3 -m pytest native_ev/tests/test_model.py -q",
+                    "result": "passed",
+                },
+            },
+            "next_action": "continue from successor",
+            "summary": "Focused verifier passed for worker bundle.",
+        }))
+        tasks = [{
+            "id": "t_worker",
+            "status": "done",
+            "assignee": "terminal-velocity",
+            "title": "Continue TV tv-spec autonomous loop",
+            "body": "push_ready handoff recorded; closeout packet has verification.",
+            "runs": [{"metadata": {"changed_files": worker_paths + metadata_paths}}],
+        }]
+
+        code, payload = self.run_preflight(repo, tasks)
+
+        self.assertEqual(code, 0, payload)
+        self.assertEqual(payload["recommended_action"], "checkpoint_and_push_ready")
+        self.assertTrue(payload["handoff_match"])
+        self.assertEqual(payload["extra_unexplained_dirty_paths"], [])
+        self.assertEqual(payload["control_plane_dirty_paths"], [])
+        self.assertIn("kanban_run_metadata", payload["handoff_evidence_sources"])
+        self.assertIn("validated_closeout_packet", payload["handoff_evidence_sources"])
+
+    def test_mixed_worker_handoff_and_control_plane_dirty_state_is_split_gate(self):
+        repo = self.make_repo()
+        packet_dir = repo / ".hermes/long-running/tv-spec-implementation"
+        packet_dir.mkdir(parents=True)
+        worker_paths = ["native_ev/model.py", "native_ev/tests/test_model.py"]
+        metadata_paths = [
+            ".hermes/long-running/tv-spec-implementation/events.jsonl",
+            ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+            ".hermes/long-running/tv-spec-implementation/closeout-packet-t_worker.json",
+        ]
+        control_plane_paths = [
+            "tools/tv_integration_lane.py",
+            "native_ev/tests/test_tv_integration_lane.py",
+            "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+            "docs/research/tv-spec.md",
+        ]
+        for path in worker_paths + metadata_paths + control_plane_paths:
+            full_path = repo / path
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+            full_path.write_text(f"dirty {path}\n")
+        (packet_dir / "closeout-packet-t_worker.json").write_text(json.dumps({
+            "contract_version": "machine_contract_v1",
+            "closeout_class": "continue",
+            "kanban_task": "t_worker",
+            "changed_files": worker_paths,
+            "focused_verifiers_passed": True,
+            "verification": {
+                "targeted_unittest": {
+                    "command": "python3 -m pytest native_ev/tests/test_model.py -q",
+                    "result": "passed",
+                },
+            },
+            "next_action": "continue from successor",
+            "summary": "Focused verifier passed for worker bundle.",
+        }))
+        tasks = [{
+            "id": "t_worker",
+            "status": "done",
+            "assignee": "terminal-velocity",
+            "title": "Continue TV tv-spec autonomous loop",
+            "body": "push_ready handoff recorded; closeout packet has verification.",
+            "runs": [{"metadata": {"changed_files": worker_paths + metadata_paths}}],
+        }]
+
+        code, payload = self.run_preflight(repo, tasks)
+
+        self.assertEqual(code, 1, payload)
+        self.assertEqual(payload["handoff_match"], "partial")
+        self.assertEqual(payload["recommended_action"], "split_or_review_control_plane_dirty_state")
+        self.assertEqual(payload["explicit_gate"], "control_plane_dirty_state")
+        self.assertEqual(payload["control_plane_dirty_paths"], sorted(control_plane_paths))
+        self.assertEqual(payload["extra_unexplained_dirty_paths"], [])
+        self.assertTrue(set(worker_paths + metadata_paths).issubset(set(payload["matched_handoff_paths"])))
+
     def test_checkpoint_mode_commits_matching_handoff_bundle_and_reports_push_ready(self):
         repo = self.make_repo()
         (repo / "native_ev/tests").mkdir(parents=True)

@@ -77,6 +77,26 @@ def dirty_status(repo: Path) -> list[str]:
     return git_lines(repo, "status", "--porcelain")
 
 
+def recovery_preflight(repo: Path) -> dict[str, Any] | None:
+    script = repo / "tools/tv_runner_recovery_preflight.py"
+    if not script.exists():
+        return None
+    result = subprocess.run(
+        ["python3", str(script), "--repo", str(repo)],
+        cwd=repo,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        timeout=90,
+    )
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {"recommended_action": "unavailable", "error": result.stdout.strip()}
+    payload["returncode"] = result.returncode
+    return payload
+
+
 def ahead_count(repo: Path) -> int:
     result = run(["git", "rev-list", "--count", "origin/main..HEAD"], repo)
     if result.returncode != 0:
@@ -765,7 +785,7 @@ def build_post_push_report(payload: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def deliver_post_push_report(target: str, message: str, *, dry_run: bool = False) -> dict[str, Any]:
+def deliver_message_report(target: str, message: str, *, dry_run: bool = False) -> dict[str, Any]:
     if dry_run:
         return {"target": target, "status": "dry_run", "message": message}
     hermes_agent = Path(os.environ.get("HERMES_AGENT_HOME", "/home/bh/.hermes/hermes-agent"))
@@ -795,6 +815,65 @@ def deliver_post_push_report(target: str, message: str, *, dry_run: bool = False
     }
 
 
+def deliver_post_push_report(target: str, message: str, *, dry_run: bool = False) -> dict[str, Any]:
+    return deliver_message_report(target, message, dry_run=dry_run)
+
+
+def build_blocked_runner_report(payload: dict[str, Any]) -> str:
+    """Build a concise deterministic TV report when integration blocks runner progress."""
+    blockers = [str(item) for item in payload.get("blockers") or []]
+    warnings = [str(item) for item in payload.get("warnings") or []]
+    status = [str(item) for item in payload.get("status_porcelain") or []]
+    active = [str(item) for item in payload.get("active_worker_claims") or []]
+    unsafe = [str(item) for item in payload.get("unsafe_files") or []]
+    changed_files = [str(item) for item in payload.get("changed_files") or []]
+    commit_summaries = [str(item) for item in payload.get("commit_summaries") or []]
+
+    lines = [
+        "TV runner blocked by integration owner",
+        f"decision: {payload.get('decision') or 'unknown'}",
+    ]
+    if blockers:
+        lines.append("why blocked:")
+        lines.extend(_bullet_list(blockers, limit=8))
+    if warnings:
+        lines.append("warnings:")
+        lines.extend(_bullet_list(warnings, limit=6))
+    if active:
+        lines.append("active worker claims:")
+        lines.extend(_bullet_list(active, limit=6))
+    if status:
+        lines.append("dirty worktree:")
+        lines.extend(_bullet_list(status, limit=8))
+    if unsafe:
+        lines.append("unsafe files:")
+        lines.extend(_bullet_list(unsafe, limit=8))
+    if commit_summaries:
+        lines.append("local commits pending integration:")
+        lines.extend(_bullet_list(commit_summaries, limit=4))
+    if changed_files:
+        lines.append("changed areas:")
+        lines.extend(_bullet_list(deterministic_changed_areas(changed_files), limit=6))
+    return "\n".join(lines)
+
+
+def should_send_blocked_runner_report(payload: dict[str, Any]) -> bool:
+    """Return true when this integration packet explains a runner-stopping block."""
+    if payload.get("decision") == "needs_human":
+        return True
+    if payload.get("blockers"):
+        return True
+    for key in ("push_ready_recovery", "unsafe_dirty_recovery"):
+        recovery = payload.get(key) or {}
+        action = recovery.get("recommended_action")
+        if action and action not in {
+            "close_stale_push_ready_handoffs",
+            "close_stale_unsafe_dirty_state_handoffs",
+        }:
+            return True
+    return False
+
+
 def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dict[str, Any]:
     blockers: list[str] = []
     warnings: list[str] = []
@@ -804,8 +883,11 @@ def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dic
         blockers.append("not_git_repo")
 
     status = dirty_status(repo) if not blockers else []
+    dirty_recovery = recovery_preflight(repo) if status else None
     if status:
         blockers.append("dirty_worktree")
+        if dirty_recovery and dirty_recovery.get("explicit_gate") == "control_plane_dirty_state":
+            blockers.append("control_plane_dirty_state")
 
     active_claims = active_worker_claims(profile, repo)
     if active_claims:
@@ -849,6 +931,7 @@ def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dic
         "repo": str(repo),
         "profile": str(profile),
         "status_porcelain": status,
+        "dirty_state_recovery": dirty_recovery,
         "ahead_count": ahead,
         "behind_count": behind,
         "changed_files": files,
@@ -885,6 +968,12 @@ def main() -> int:
     parser.add_argument("--apply-ledger-reconcile", action="store_true", help="With --reconcile-ledger, write the normalized task-ledger projection.")
     parser.add_argument("--post-push-report-target", help="After a verified push, post a concise TV progress report to this Hermes messaging target, e.g. 'telegram:Loki GameTV'.")
     parser.add_argument("--post-push-report-dry-run", action="store_true", help="Build the post-push report payload without sending it.")
+    parser.add_argument(
+        "--blocked-report-target",
+        default=os.environ.get("TV_INTEGRATOR_BLOCKED_REPORT_TARGET"),
+        help="When the integration owner blocks runner progress, send the why-blocked report to this Hermes messaging target, e.g. 'telegram:Loki GameTV'.",
+    )
+    parser.add_argument("--blocked-report-dry-run", action="store_true", help="Build the blocked-runner report payload without sending it.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -972,6 +1061,21 @@ def main() -> int:
                 "target": args.post_push_report_target,
                 "status": "skipped",
                 "reason": "push_not_verified",
+            }
+
+    if args.blocked_report_target:
+        if should_send_blocked_runner_report(payload) or args.blocked_report_dry_run:
+            report = build_blocked_runner_report(payload)
+            payload["blocked_runner_report"] = deliver_message_report(
+                args.blocked_report_target,
+                report,
+                dry_run=bool(args.blocked_report_dry_run),
+            )
+        else:
+            payload["blocked_runner_report"] = {
+                "target": args.blocked_report_target,
+                "status": "skipped",
+                "reason": "integration_not_blocked",
             }
 
     print(json.dumps(payload, indent=2, sort_keys=True))

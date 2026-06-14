@@ -118,6 +118,42 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(payload["post_push_report"]["status"], "dry_run")
             self.assertIn("TV progress published", payload["post_push_report"]["message"])
 
+    def test_blocked_runner_report_dry_run_summarizes_integration_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            (repo / "scratch.txt").write_text("untracked\n")
+
+            code, payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+                "--blocked-report-dry-run",
+            )
+
+            self.assertEqual(code, 2, payload)
+            report = payload["blocked_runner_report"]
+            self.assertEqual(report["target"], "telegram:Loki GameTV")
+            self.assertEqual(report["status"], "dry_run")
+            self.assertIn("TV runner blocked by integration owner", report["message"])
+            self.assertIn("dirty_worktree", report["message"])
+            self.assertIn("scratch.txt", report["message"])
+
+    def test_blocked_runner_report_skips_when_integration_not_blocked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+
+            code, payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--blocked-report-target",
+                "telegram:Loki GameTV",
+            )
+
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(payload["blocked_runner_report"]["status"], "skipped")
+            self.assertEqual(payload["blocked_runner_report"]["reason"], "integration_not_blocked")
+
     def test_blocks_dirty_untracked_files_before_review(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = self.make_repo(Path(tmp))
