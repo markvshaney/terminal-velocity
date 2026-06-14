@@ -89,6 +89,8 @@ Verifier/regression:
 
 ### 4. Add or extend deterministic ledger reconciliation
 
+Status: implemented for `tools/tv_ledger_reconcile.py` on 2026-06-13. Dry-run reports source deltas, precise classifications, and a planned normalized projection; `--write` rewrites only `task-ledger.json`. The projection reads events, closeout packets, current git state, and live topology truth, emits `last_integrated_checkpoint`, `latest_worker_handoff`, `historical_notes`, and `generated_from`, selects the newest closeout packet matching current dirty paths, and refuses to promote stale ledger owner/status metadata into live owner truth.
+
 Target surface:
 
 - add or extend a command such as `python3 tools/tv_ledger_reconcile.py --write`.
