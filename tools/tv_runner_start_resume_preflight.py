@@ -16,6 +16,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import tv_runner_recovery_preflight as recovery_preflight
+
 
 DEFAULT_REPO = Path(__file__).resolve().parents[1]
 DEFAULT_PROFILE = Path("/home/bh/.hermes/profiles/loki-game")
@@ -157,34 +159,68 @@ def canonical_block_class(task: dict[str, Any]) -> str:
     return "blocked:unclassified"
 
 
+def _task_comments(conn: sqlite3.Connection, task_ids: list[str]) -> dict[str, list[dict[str, str]]]:
+    if not task_ids:
+        return {}
+    comment_tables = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'task_comments'"
+    ).fetchall()
+    if not comment_tables:
+        return {}
+    columns = {row[1] for row in conn.execute("PRAGMA table_info(task_comments)")}
+    if not {"task_id", "body"}.issubset(columns):
+        return {}
+    placeholders = ",".join("?" for _ in task_ids)
+    rows = conn.execute(
+        f"SELECT task_id, body FROM task_comments WHERE task_id IN ({placeholders}) ORDER BY id",
+        task_ids,
+    ).fetchall()
+    comments: dict[str, list[dict[str, str]]] = {}
+    for row in rows:
+        comments.setdefault(str(row["task_id"]), []).append({"body": str(row["body"] or "")})
+    return comments
+
+
 def _query_blocked_cards(db_path: Path) -> list[dict[str, Any]]:
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     try:
         columns = {row[1] for row in conn.execute("PRAGMA table_info(tasks)")}
-        wanted = [column for column in ("id", "title", "body", "assignee", "status", "tenant", "workspace_path") if column in columns]
+        wanted = [
+            column
+            for column in ("id", "title", "body", "latest_summary", "assignee", "status", "tenant", "workspace_path")
+            if column in columns
+        ]
         if not {"id", "status"}.issubset(columns):
             return []
         rows = conn.execute(
             f"SELECT {', '.join(wanted)} FROM tasks WHERE status = ? ORDER BY id",
             ("blocked",),
         ).fetchall()
+        task_ids = [str(row["id"]) for row in rows]
+        comments_by_task = _task_comments(conn, task_ids)
     finally:
         conn.close()
 
     cards: list[dict[str, Any]] = []
     for row in rows:
         task = {key: row[key] for key in row.keys()}
-        text = " ".join(str(task.get(key) or "") for key in ("title", "body", "assignee", "tenant", "workspace_path")).lower()
+        text = " ".join(str(task.get(key) or "") for key in ("title", "body", "latest_summary", "assignee", "tenant", "workspace_path")).lower()
         if "terminal-velocity" not in text and "tv" not in text:
             continue
-        cards.append({
+        card = {
             "id": task.get("id"),
             "title": task.get("title"),
+            "body": task.get("body"),
+            "latest_summary": task.get("latest_summary"),
             "assignee": task.get("assignee"),
             "status": task.get("status"),
             "canonical_class": canonical_block_class(task),
-        })
+        }
+        comments = comments_by_task.get(str(task.get("id"))) or []
+        if comments:
+            card["comments"] = comments
+        cards.append(card)
     return cards
 
 
@@ -268,6 +304,7 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
         "stop_lock_state": stop_lock,
         "watchdog_reporter_state": watchdog_reporter_state(repo, profile),
         "capability_check": capability,
+        "dirty_handoff_recovery": None,
         "safe_to_start": False,
         "recommended_action": "blocked:unknown",
         "explicit_gate": "unknown",
@@ -277,8 +314,10 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
         payload["recommended_action"] = "blocked:git_state_unreadable"
         payload["explicit_gate"] = "git_state_unreadable"
     elif repo_state == "dirty":
-        payload["recommended_action"] = "recover_dirty_handoff"
-        payload["explicit_gate"] = "recovery_preflight_required"
+        recovery = recovery_preflight.classify(repo, blocked.get("cards") or [])
+        payload["dirty_handoff_recovery"] = recovery
+        payload["recommended_action"] = recovery.get("recommended_action") or "recover_dirty_handoff"
+        payload["explicit_gate"] = recovery.get("explicit_gate")
     elif topology.get("topology_conflict") or topology_code != 0:
         payload["recommended_action"] = "blocked:topology_conflict"
         payload["explicit_gate"] = "topology_conflict"

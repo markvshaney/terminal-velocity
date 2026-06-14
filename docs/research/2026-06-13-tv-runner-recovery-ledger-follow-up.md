@@ -44,6 +44,8 @@ Verifier/regression:
 
 ### 2. Keep start/resume and recovery classifiers aligned
 
+Status: implemented for dirty-repo start/resume preflight on 2026-06-13. `tools/tv_runner_start_resume_preflight.py` now enriches blocked-card records with Kanban `latest_summary` and `task_comments`, invokes the recovery preflight classifier for dirty worktrees, embeds its payload as `dirty_handoff_recovery`, and mirrors its `recommended_action` / `explicit_gate` so start/resume and recovery name the same candidate and next action.
+
 Target surfaces:
 
 - shared evidence aggregation module or function used by both start/resume and recovery preflight;

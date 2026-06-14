@@ -179,9 +179,80 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         self.assertEqual(code, 1, payload)
         self.assertEqual(payload["repo_state"], "dirty")
         self.assertEqual(payload["dirty_paths"], ["native_ev/scenario_eval.py"])
-        self.assertEqual(payload["recommended_action"], "recover_dirty_handoff")
-        self.assertEqual(payload["explicit_gate"], "recovery_preflight_required")
+        self.assertEqual(payload["recommended_action"], "unsafe_dirty_state")
+        self.assertEqual(payload["explicit_gate"], "unsafe_dirty_state")
+        self.assertEqual(payload["dirty_handoff_recovery"]["recommended_action"], "unsafe_dirty_state")
         self.assertFalse(payload["safe_to_start"])
+
+    def test_dirty_repo_uses_recovery_classifier_candidate_and_action(self):
+        _, repo, profile = self.make_fixture()
+        (repo / "native_ev/tests").mkdir(parents=True)
+        (repo / "native_ev/scenario_eval.py").write_text("dirty\n")
+        (repo / "native_ev/tests/test_scenario_eval.py").write_text("dirty\n")
+        db = profile / "kanban.db"
+        conn = sqlite3.connect(db)
+        try:
+            conn.executescript("""
+                CREATE TABLE tasks (
+                    id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    body TEXT,
+                    latest_summary TEXT,
+                    assignee TEXT,
+                    status TEXT NOT NULL,
+                    tenant TEXT,
+                    workspace_path TEXT,
+                    claim_lock TEXT,
+                    worker_pid INTEGER
+                );
+                CREATE TABLE task_comments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id TEXT NOT NULL,
+                    body TEXT NOT NULL
+                );
+            """)
+            conn.execute(
+                "INSERT INTO tasks (id, title, body, latest_summary, assignee, status, tenant, workspace_path, claim_lock, worker_pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    "t_4ad7b9e5",
+                    "TV push ready dirty handoff",
+                    "push_ready handoff recorded; changed files and verification are in task comments/latest summary.",
+                    "Focused verifier passed: python3 -m unittest native_ev.tests.test_scenario_eval -v",
+                    "terminal-velocity",
+                    "blocked",
+                    "terminal-velocity",
+                    str(REPO),
+                    None,
+                    None,
+                ),
+            )
+            conn.execute(
+                "INSERT INTO task_comments (task_id, body) VALUES (?, ?)",
+                (
+                    "t_4ad7b9e5",
+                    "handoff JSON: {\"changed_files\": [\"native_ev/scenario_eval.py\", \"native_ev/tests/test_scenario_eval.py\"], \"verification\": {\"targeted_unittest\": \"passed\"}}",
+                ),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
+        code, payload = self.run_preflight(repo, profile, "--startup-owner", "gateway_kanban_dispatcher")
+
+        self.assertEqual(code, 1, payload)
+        self.assertEqual(payload["repo_state"], "dirty")
+        self.assertEqual(payload["recommended_action"], "checkpoint_and_push_ready")
+        self.assertIsNone(payload["explicit_gate"])
+        self.assertFalse(payload["safe_to_start"])
+        recovery = payload["dirty_handoff_recovery"]
+        self.assertEqual(recovery["recommended_action"], payload["recommended_action"])
+        self.assertEqual(recovery["explicit_gate"], payload["explicit_gate"])
+        self.assertEqual(recovery["candidate_handoff"]["id"], "t_4ad7b9e5")
+        self.assertEqual(recovery["focused_verifier_status"], "passed")
+        self.assertIn("kanban_comment", recovery["handoff_evidence_sources"])
+        self.assertIn("kanban_latest_summary", recovery["handoff_evidence_sources"])
+        self.assertEqual(recovery["matched_changed_files"], ["native_ev/scenario_eval.py", "native_ev/tests/test_scenario_eval.py"])
+        self.assertEqual(recovery["extra_dirty_paths"], [])
 
     def test_active_gateway_owner_reports_resume_existing_owner(self):
         _, repo, profile = self.make_fixture()
