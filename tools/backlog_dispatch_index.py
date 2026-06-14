@@ -421,6 +421,9 @@ def validate_verifier_impact_map(impact_map: dict[str, Any]) -> CheckResult:
                 errors.append(f"{prefix}: cheap_required must not be empty")
             elif not all(isinstance(item, str) and item for item in value):
                 errors.append(f"{prefix}: {key} values must be non-empty strings")
+        for command in entry.get("cheap_required", []) if isinstance(entry.get("cheap_required"), list) else []:
+            if "unittest discover" in command and "native_ev/tests" in command:
+                errors.append(f"{prefix}: broad native discovery must be checkpoint_optional, not cheap_required")
         if not isinstance(entry.get("notes"), str) or not entry.get("notes", "").strip():
             errors.append(f"{prefix}: notes must be a non-empty string")
         matchers = []
@@ -443,6 +446,9 @@ def _matching_verifier_surfaces(touched_surface: str, impact_map: dict[str, Any]
         if any(touched_surface.endswith(suffix) for suffix in entry.get("path_suffixes", [])):
             matches.append(surface)
             continue
+    if matches:
+        return matches
+    for surface, entry in surfaces.items():
         if any(part in touched_surface for part in entry.get("path_contains", [])):
             matches.append(surface)
     return matches
@@ -453,6 +459,113 @@ def _load_default_impact_map(repo_root: Path) -> dict[str, Any] | None:
     if not impact_map_path.exists():
         return None
     return load_verifier_impact_map(impact_map_path)
+
+
+def _dedupe_preserving_order(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value in seen:
+            continue
+        seen.add(value)
+        result.append(value)
+    return result
+
+
+def resolve_verifier_plan(changed_paths: list[str], impact_map: dict[str, Any]) -> dict[str, Any]:
+    """Resolve the cheapest verifier families for a set of changed repo paths.
+
+    Broad native discovery is intentionally kept out of ``cheap_required``. Map
+    entries may list it under ``checkpoint_optional`` for handoff/integration
+    boundaries, but focused per-surface commands remain the worker default.
+    """
+    surfaces = impact_map.get("surfaces", {}) if isinstance(impact_map, dict) else {}
+    matched_surfaces: list[str] = []
+    unmatched_paths: list[str] = []
+    cheap_required: list[str] = []
+    checkpoint_optional: list[str] = []
+    verifier_hints: list[str] = []
+
+    for changed_path in changed_paths:
+        matches = _matching_verifier_surfaces(changed_path, impact_map)
+        if not matches:
+            unmatched_paths.append(changed_path)
+            continue
+        matched_surfaces.extend(matches)
+        for match in matches:
+            entry = surfaces.get(match, {})
+            cheap_required.extend(entry.get("cheap_required", []))
+            checkpoint_optional.extend(entry.get("checkpoint_optional", []))
+            verifier_hints.extend(entry.get("verifier_hints", []))
+
+    unique_surfaces = sorted(set(matched_surfaces))
+    unique_cheap = _dedupe_preserving_order(cheap_required)
+    unique_checkpoint = _dedupe_preserving_order(checkpoint_optional)
+    broad_native = "not_applicable"
+    if any("unittest discover" in command and "native_ev/tests" in command for command in unique_checkpoint):
+        broad_native = "checkpoint_optional"
+    elif any("unittest discover" in command and "native_ev/tests" in command for command in unique_cheap):
+        broad_native = "cheap_required"
+    elif unique_checkpoint:
+        broad_native = "checkpoint_optional"
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "ok": not unmatched_paths and bool(unique_surfaces),
+        "changed_paths": changed_paths,
+        "surfaces": unique_surfaces,
+        "unmatched_paths": unmatched_paths,
+        "cheap_required": unique_cheap,
+        "checkpoint_optional": unique_checkpoint,
+        "verifier_hints": _dedupe_preserving_order(verifier_hints),
+        "broad_native_discovery": broad_native,
+    }
+
+
+MATERIAL_GATE_TRANSITIONS = {
+    ("stale_review_required", "push_ready"): "stale_gate_converted",
+    ("review_required_process_bug", "push_ready"): "stale_gate_converted",
+    ("push_ready", "published"): "integration_pushed",
+    ("push_ready", "clean_idle"): "integration_pushed",
+    ("clean_idle", "explicit_gate"): "explicit_gate_found",
+    ("clean_idle", "running"): "successor_started",
+}
+
+
+def build_quiet_transition_report(previous: dict[str, Any] | None, current: dict[str, Any]) -> dict[str, Any]:
+    """Return a bounded reporter packet only for material runner transitions."""
+    previous = previous or {}
+    material: list[str] = []
+    previous_gate = previous.get("gate_state")
+    current_gate = current.get("gate_state")
+    transition_class = MATERIAL_GATE_TRANSITIONS.get((previous_gate, current_gate))
+    if transition_class:
+        material.append(transition_class)
+    if previous.get("pushed_commit") != current.get("pushed_commit") and current.get("pushed_commit"):
+        if "integration_pushed" not in material:
+            material.append("integration_pushed")
+    if previous.get("successor_task") != current.get("successor_task") and current.get("successor_task"):
+        if "successor_started" not in material:
+            material.append("successor_started")
+    if current.get("watchdog_failure"):
+        material.append("watchdog_failure")
+
+    material = _dedupe_preserving_order(material)
+    if not material:
+        return {"schema_version": SCHEMA_VERSION, "should_report": False, "material_transitions": [], "packet": {}}
+
+    packet = {
+        "schema_version": SCHEMA_VERSION,
+        "transition_class": material[0],
+        "material_transitions": material,
+        "from_gate_state": previous_gate,
+        "to_gate_state": current_gate,
+        "pushed_commit": current.get("pushed_commit"),
+        "successor_task": current.get("successor_task"),
+        "explicit_gate": current.get("explicit_gate"),
+        "watchdog_failure": current.get("watchdog_failure"),
+    }
+    return {"schema_version": SCHEMA_VERSION, "should_report": True, "material_transitions": material, "packet": packet}
 
 
 def validate_dispatch_index(index: dict[str, Any], impact_map: dict[str, Any] | None = None) -> CheckResult:

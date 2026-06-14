@@ -9,9 +9,11 @@ from tools.backlog_dispatch_index import (
     REQUIRED_VERIFIER_IMPACT_SURFACES,
     build_dispatch_index,
     audit_workers,
+    build_quiet_transition_report,
     check_dispatch_index,
     load_playable_milestone_priority_map,
     load_verifier_impact_map,
+    resolve_verifier_plan,
     runner_preflight,
     validate_dispatch_index,
     validate_backlog_contract,
@@ -393,6 +395,75 @@ class BacklogDispatchIndexTests(unittest.TestCase):
         self.assertIn("safe_for_read_only_scouting", report)
         self.assertIn("unsafe_for_mutation", report)
         self.assertTrue(report["backlog_check_ok"], report["backlog_check_errors"])
+
+    def test_validate_verifier_impact_map_rejects_broad_native_discovery_as_cheap_required(self):
+        impact_map = {
+            "schema_version": 1,
+            "surfaces": {
+                surface: {
+                    "cheap_required": ["python3 -m unittest discover -s native_ev/tests -p 'test_*.py'"],
+                    "checkpoint_optional": [],
+                    "path_prefixes": ["native_ev/scenarios/"] if surface == "scenario" else [f"{surface}/"],
+                    "path_suffixes": [],
+                    "path_contains": [],
+                    "verifier_hints": ["test"],
+                    "notes": "test",
+                }
+                for surface in REQUIRED_VERIFIER_IMPACT_SURFACES
+            },
+        }
+
+        result = validate_verifier_impact_map(impact_map)
+
+        self.assertFalse(result.ok)
+        self.assertIn("broad native discovery", "\n".join(result.errors))
+
+    def test_resolve_verifier_plan_routes_scenario_change_to_focused_verifiers(self):
+        repo = Path(__file__).resolve().parents[2]
+        impact_map = load_verifier_impact_map(repo / "docs/checklists/tv-verifier-impact-map.json")
+
+        plan = resolve_verifier_plan(["native_ev/scenarios/first_mission_delivery.py"], impact_map)
+
+        self.assertTrue(plan["ok"], plan)
+        self.assertEqual(plan["surfaces"], ["scenario"])
+        self.assertTrue(any("run_gameplay_scenarios.py" in command for command in plan["cheap_required"]))
+        self.assertNotIn("python3 -m unittest discover -s native_ev/tests -p 'test_*.py'", plan["cheap_required"])
+        self.assertTrue(any("--all" in command for command in plan["checkpoint_optional"]))
+        self.assertEqual(plan["broad_native_discovery"], "checkpoint_optional")
+
+    def test_resolve_verifier_plan_routes_docs_process_only_to_readback_and_diff_check(self):
+        repo = Path(__file__).resolve().parents[2]
+        impact_map = load_verifier_impact_map(repo / "docs/checklists/tv-verifier-impact-map.json")
+
+        plan = resolve_verifier_plan(["docs/research/tv-spec.md"], impact_map)
+
+        self.assertTrue(plan["ok"], plan)
+        self.assertEqual(plan["surfaces"], ["docs_process_only"])
+        self.assertIn("git diff --check", plan["cheap_required"])
+        self.assertTrue(any("readback" in command or "search" in command for command in plan["cheap_required"]))
+        self.assertNotIn("python3 -m unittest discover -s native_ev/tests -p 'test_*.py'", plan["cheap_required"])
+
+    def test_build_quiet_transition_report_stays_silent_without_material_change(self):
+        previous = {"gate_state": "clean_idle", "pushed_commit": "abc", "successor_task": "t_1"}
+        current = {"gate_state": "clean_idle", "pushed_commit": "abc", "successor_task": "t_1"}
+
+        report = build_quiet_transition_report(previous, current)
+
+        self.assertFalse(report["should_report"])
+        self.assertEqual(report["material_transitions"], [])
+        self.assertEqual(report["packet"], {})
+
+    def test_build_quiet_transition_report_emits_bounded_packet_for_stale_gate_conversion(self):
+        previous = {"gate_state": "stale_review_required", "pushed_commit": None, "successor_task": None}
+        current = {"gate_state": "push_ready", "pushed_commit": None, "successor_task": None}
+
+        report = build_quiet_transition_report(previous, current)
+
+        self.assertTrue(report["should_report"])
+        self.assertEqual(report["material_transitions"], ["stale_gate_converted"])
+        self.assertEqual(report["packet"]["transition_class"], "stale_gate_converted")
+        self.assertEqual(report["packet"]["from_gate_state"], "stale_review_required")
+        self.assertEqual(report["packet"]["to_gate_state"], "push_ready")
 
 
 if __name__ == "__main__":

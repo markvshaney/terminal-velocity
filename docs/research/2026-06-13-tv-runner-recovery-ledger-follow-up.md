@@ -154,6 +154,8 @@ Verifier/regression:
 
 ### 7. Preserve narrow verifier routing and reporting discipline
 
+Status: implemented for `tools/backlog_dispatch_index.py` on 2026-06-14. The dispatch tooling now exposes `resolve_verifier_plan()` to map changed paths through `docs/checklists/tv-verifier-impact-map.json`, keeps focused `cheap_required` verifiers separate from checkpoint-only broad suites, treats broad native discovery in `cheap_required` as an invalid verifier-map contract, and resolves docs/process-only paths without overmatching generic Godot probes. It also exposes `build_quiet_transition_report()` for script-first watchdog/reporting paths so no-change ticks stay silent while stale-gate conversion, integration push, successor start, explicit gate, or watchdog failure produce a bounded packet.
+
 Target surfaces:
 
 - verifier-map command/checker, possibly `tools/backlog_dispatch_index.py check` or a dedicated verifier-map command;
