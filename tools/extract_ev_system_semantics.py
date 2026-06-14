@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, coordinate display runtime capture gate matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector/quadrant analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, and Resource Bible syst field-family source-readiness are preserved; coordinate display units/map scaling/projection, complete exact name joins, named runtime topology, non-topology syst field offsets/semantics, and broad universe replacement remain unpromoted'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -763,6 +763,43 @@ def _coordinate_display_runtime_capture_gate_summary(systems: list[dict]) -> dic
         'allowedUse': 'prepare disposable original-runtime map calibration captures only; do not promote coordinate display units, named topology, or broad runtime universe replacement from this gate',
         'promotionStatus': 'not-promoted; capture gate records exact evidence requirements only',
         'sourceNote': 'This turns the coordinate display calibration blocker into concrete per-target capture templates for Levo candidate neighbors while deliberately withholding display-unit/map-scaling/projection and record-name promotion.',
+    }
+
+
+def _coordinate_display_unit_map_scaling_readiness_summary(systems: list[dict]) -> dict:
+    """Promote bounded static readiness for runtime calibration without promoting display units."""
+    calibration_gate = _coordinate_display_calibration_gate_summary(systems)
+    runtime_capture_gate = _coordinate_display_runtime_capture_gate_summary(systems)
+    candidate_input_summaries = [
+        *calibration_gate['candidateInputSummaries'],
+        'coordinateDisplayCalibrationGateSummary',
+        'coordinateDisplayRuntimeCaptureGateSummary',
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-display-unit-map-scaling-readiness',
+        'oracleStatus': 'coordinate_display_units_map_scaling_bounded_static_readiness_promoted',
+        'recordCount': len(systems),
+        'candidateInputSummaries': candidate_input_summaries,
+        'candidateInputSummaryCount': len(candidate_input_summaries),
+        'promotedReadinessClaims': [
+            'complete decoded xPos/yPos coordinate fields for all 67 syst-like records',
+            'Resource Bible xPos/yPos map-placement field intent is recorded separately from display units',
+            'static coordinate candidate families, blockers, and extrema are available for bounded calibration review',
+            'runtime calibration capture packet templates are defined for Levo neighbor candidates',
+        ],
+        'blockedPromotionClaims': [
+            'Classic map pixel scale, projection, origin, and centering are still unpromoted',
+            'axis orientation/y inversion is still unpromoted',
+            'candidate coordinate families still disagree on scale/aspect interpretation',
+            'remaining 66 system record-to-name joins are unpromoted, so broad named topology remains blocked',
+        ],
+        'requiredRuntimeCaptureTargetResourceIds': runtime_capture_gate['requiredTargetResourceIds'],
+        'requiredRuntimeCaptureConSlots': runtime_capture_gate['requiredConSlots'],
+        'requiredCapturePacketCount': runtime_capture_gate['requiredCapturePacketCount'],
+        'capturePacketSchemaVersion': runtime_capture_gate['capturePacketSchemaVersion'],
+        'readinessStatus': 'ready-for-runtime-calibration-capture; display units not promoted',
+        'displayUnitPromotionStatus': 'not-promoted; this is a bounded readiness promotion for capture/review inputs only',
+        'sourceNote': 'This promotes only the deterministic static readiness state needed to run bounded Classic map calibration captures. It does not promote coordinate display units, map scaling, projection, origin, centering, y-axis orientation, route UI behavior, or broad runtime universe replacement.',
     }
 
 
@@ -2461,6 +2498,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateDisplayQuantizationSummary': _coordinate_display_quantization_summary(systems),
         'coordinateDisplayScaleInterpretationSummary': _coordinate_display_scale_interpretation_summary(systems),
         'coordinateDisplayCalibrationGateSummary': _coordinate_display_calibration_gate_summary(systems),
+        'coordinateDisplayUnitMapScalingReadinessSummary': _coordinate_display_unit_map_scaling_readiness_summary(systems),
         'coordinateDisplayRuntimeCaptureGateSummary': _coordinate_display_runtime_capture_gate_summary(systems),
         'coordinateDisplayExtremaSummary': _coordinate_display_extrema_summary(systems),
         'candidateLinkGraphSummary': _candidate_link_graph_summary(systems),

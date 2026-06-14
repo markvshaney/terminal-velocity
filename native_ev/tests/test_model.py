@@ -3414,7 +3414,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds(self):
         data = sourced_ev_systems_manifest()
-        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52')
+        self.assertEqual(data['method'], 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v52')
         self.assertEqual(data['recordRun']['candidateType'], 'syst-like')
         self.assertEqual(data['recordRun']['recordSize'], 88)
         topology_constants = data['resourceBibleTopologyConstantsSummary']
@@ -3724,6 +3724,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertEqual(display_calibration_gate['promotionReadinessStatus'], 'blocked; static coordinate candidates are analysis inputs only')
         self.assertIn('candidate coordinate families disagree on scale/aspect interpretation', display_calibration_gate['promotionBlockers'])
         self.assertIn('original-runtime map screenshot/click calibration', display_calibration_gate['nextEvidenceFamilies'][0])
+        display_readiness = data['coordinateDisplayUnitMapScalingReadinessSummary']
+        self.assertEqual(display_readiness['sourceLabel'], 'decoded-resource-backed-coordinate-display-unit-map-scaling-readiness')
+        self.assertEqual(display_readiness['oracleStatus'], 'coordinate_display_units_map_scaling_bounded_static_readiness_promoted')
+        self.assertEqual(display_readiness['recordCount'], 67)
+        self.assertEqual(display_readiness['candidateInputSummaryCount'], 10)
+        self.assertIn('coordinateDisplayRuntimeCaptureGateSummary', display_readiness['candidateInputSummaries'])
+        self.assertIn('complete decoded xPos/yPos coordinate fields for all 67 syst-like records', display_readiness['promotedReadinessClaims'])
+        self.assertIn('runtime calibration capture packet templates are defined for Levo neighbor candidates', display_readiness['promotedReadinessClaims'])
+        self.assertIn('Classic map pixel scale, projection, origin, and centering are still unpromoted', display_readiness['blockedPromotionClaims'])
+        self.assertEqual(display_readiness['requiredRuntimeCaptureTargetResourceIds'], [129, 130, 131])
+        self.assertEqual(display_readiness['readinessStatus'], 'ready-for-runtime-calibration-capture; display units not promoted')
+        self.assertIn('not-promoted', display_readiness['displayUnitPromotionStatus'])
         display_runtime_capture_gate = data['coordinateDisplayRuntimeCaptureGateSummary']
         self.assertEqual(display_runtime_capture_gate['sourceLabel'], 'original-runtime-coordinate-map-calibration-capture-gate')
         self.assertEqual(display_runtime_capture_gate['oracleStatus'], 'coordinate_display_capture_blocked_pending_classic_map_pixel_click_evidence')
