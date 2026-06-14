@@ -1,16 +1,6 @@
 {
   "diagnostics": {
-    "active_gate_at_reconcile_time": {
-      "dirty_paths": [
-        "native_ev/tests/test_tv_integration_lane.py",
-        "native_ev/tests/test_tv_ledger_reconcile.py",
-        "native_ev/tests/test_tv_runner_start_resume_preflight.py",
-        "tools/tv_integration_lane.py",
-        "tools/tv_ledger_reconcile.py",
-        "tools/tv_runner_start_resume_preflight.py"
-      ],
-      "type": "unsafe_dirty_state"
-    },
+    "active_gate_at_reconcile_time": null,
     "generated_from": {
       "closeout_packets": [
         ".hermes/long-running/tv-spec-implementation/closeout-packet-t_4ad7b9e5.json",
@@ -37,33 +27,16 @@
       "event_count": 213,
       "events_jsonl": ".hermes/long-running/tv-spec-implementation/events.jsonl",
       "git": {
-        "all_dirty_paths": [
-          ".hermes/long-running/tv-spec-implementation/task-ledger.json",
-          "native_ev/tests/test_tv_integration_lane.py",
-          "native_ev/tests/test_tv_ledger_reconcile.py",
-          "native_ev/tests/test_tv_runner_start_resume_preflight.py",
-          "tools/tv_integration_lane.py",
-          "tools/tv_ledger_reconcile.py",
-          "tools/tv_runner_start_resume_preflight.py"
-        ],
-        "dirty_paths": [
-          "native_ev/tests/test_tv_integration_lane.py",
-          "native_ev/tests/test_tv_ledger_reconcile.py",
-          "native_ev/tests/test_tv_runner_start_resume_preflight.py",
-          "tools/tv_integration_lane.py",
-          "tools/tv_ledger_reconcile.py",
-          "tools/tv_runner_start_resume_preflight.py"
-        ],
-        "head": "cea13be8e2c308bdb24aeba1f3d83e63baf15ead",
+        "all_dirty_paths": [],
+        "dirty_paths": [],
+        "head": "f2e21e9400fefb5ef9bca6ae505a65b22de63f8c",
         "head_error": null,
-        "ignored_control_projection_paths": [
-          ".hermes/long-running/tv-spec-implementation/task-ledger.json"
-        ],
-        "repo_state": "dirty",
+        "ignored_control_projection_paths": [],
+        "repo_state": "clean",
         "status_error": null
       },
       "latest_event_id": "blocked-route-progress-context-20260613T204325Z",
-      "matching_closeout_packet": null,
+      "matching_closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_c46ad01c.json",
       "topology": {
         "conflict_types": [],
         "live_implementation_owner": "none_active",
@@ -72,7 +45,7 @@
         ]
       }
     },
-    "live_state_class_at_reconcile_time": "blocked_unsafe_dirty_state"
+    "live_state_class_at_reconcile_time": "idle_clean"
   },
   "evidence_pointers": {
     "basilisk_speed_qualification": "docs/research/basilisk-speed-qualification.json",
@@ -85,34 +58,23 @@
     "workflow_policy": "docs/research/tv-spec.md"
   },
   "historical_notes": {
-    "classifications": [
-      "unsafe_dirty_state"
-    ],
+    "classifications": [],
     "event_parse_errors": []
   },
   "latest_worker_handoff": {
     "changed_files": [
-      "native_ev/scenario_eval.py",
-      "native_ev/tests/test_scenario_eval.py",
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
-      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
+      "native_ev/scenario_eval.py",
+      "native_ev/tests/test_scenario_eval.py"
     ],
-    "closeout_packet": null,
-    "event_id": "blocked-route-progress-context-20260613T204325Z",
+    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_c46ad01c.json",
+    "event_id": null,
     "matched_dirty_paths": [],
-    "summary": "Added structured blocked routeProgress context for queued-route low-fuel and near-center hyperspace refusals, preserving route/fuel/system state and keeping the behavior labeled as Terminal Velocity helper/scaffold pending stronger EV Classic runtime UI evidence.",
-    "task_id": "t_dd13e3b2",
-    "timestamp": "2026-06-13T20:43:25Z",
-    "verification": {
-      "all_gameplay_scenarios": "passed; python3 tools/run_gameplay_scenarios.py --all; summary total=99 passed=99 failed=0",
-      "backlog_dispatch_tests": "passed; python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v; Ran 13 tests OK",
-      "backlog_index_build_check": "passed; python3 tools/backlog_dispatch_index.py build and python3 tools/backlog_dispatch_index.py check; BACKLOG DISPATCH INDEX OK",
-      "focused_near_center_and_route_progress_unittests": "passed; focused ScenarioEvalHarnessTests covering near_center_jump_block and route-progress scenarios; selected tests OK",
-      "native_ev_scenario_unittest_suite": "passed; python3 -m unittest native_ev.tests.test_scenario_eval -q; Ran 103 tests OK",
-      "runner_preflight": "passed; python3 tools/backlog_dispatch_index.py runner-preflight; BACKLOG DISPATCH INDEX OK",
-      "targeted_low_fuel_scenario": "passed; python3 tools/run_gameplay_scenarios.py manual_route_low_fuel_recovery_landing_loop --pretty; success true with surfaced_blocked_route_progress_feedback passed",
-      "targeted_near_center_scenario": "passed; python3 tools/run_gameplay_scenarios.py near_center_jump_block --pretty; success true with surfaced_near_center_route_progress_feedback passed"
-    }
+    "summary": "Safe-local strategy-skill cargo-context scaffold increment verified: strategy_skill_checkpoint now exposes reserved mission cargo, free cargo, and retained Food trade cargo context; strategy_skill_rotation_loop verifies merchant/mission_runner/route_planner checkpoints distinguish the 3-ton courier reservation from the 10-ton Food lot before delivery. Exact EV Classic strategy/progression UI wording remains pending original-runtime/manual/source evidence.",
+    "task_id": null,
+    "timestamp": null,
+    "verification": {}
   },
   "policy": {
     "generic_review_required_allowed": false,
