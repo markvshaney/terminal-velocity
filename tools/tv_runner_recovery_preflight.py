@@ -394,6 +394,8 @@ def choose_handoff(
             if len(packet_match_detail["matched_paths"]) > len(match_detail["matched_paths"]):
                 match_detail = packet_match_detail
                 closest_contract = contract
+            elif contract and contract.get("decision") in {"valid", "legacy"} and packet_match_detail["matched_paths"]:
+                closest_contract = contract
 
         if dirty_paths and matched:
             candidates.append((int(task.get("created_at") or task.get("started_at") or 0), task, evidence_text, sources, match_detail, matched_contract))
@@ -488,9 +490,14 @@ def classify(repo: Path, tasks: list[dict[str, Any]], *, tasks_json: Path | None
         }
     if not matched:
         if match_detail["matched_paths"] and (control_plane_dirty or historical_runner_metadata_dirty) and not extra_unexplained_dirty:
-            payload["handoff_match"] = "partial"
-            payload["recommended_action"] = "split_or_review_control_plane_dirty_state" if control_plane_dirty else "split_or_checkpoint_runner_metadata_dirty_state"
-            payload["explicit_gate"] = "control_plane_dirty_state" if control_plane_dirty else "runner_metadata_dirty_state"
+            if historical_runner_metadata_dirty and not control_plane_dirty and closeout_contract and closeout_contract.get("decision") in {"valid", "legacy"}:
+                payload["handoff_match"] = "partial_metadata"
+                payload["recommended_action"] = "checkpoint_and_push_ready"
+                payload["explicit_gate"] = None
+            else:
+                payload["handoff_match"] = "partial"
+                payload["recommended_action"] = "split_or_review_control_plane_dirty_state" if control_plane_dirty else "split_or_checkpoint_runner_metadata_dirty_state"
+                payload["explicit_gate"] = "control_plane_dirty_state" if control_plane_dirty else "runner_metadata_dirty_state"
         else:
             payload["recommended_action"] = "unsafe_dirty_state"
             payload["explicit_gate"] = "unsafe_dirty_state"
