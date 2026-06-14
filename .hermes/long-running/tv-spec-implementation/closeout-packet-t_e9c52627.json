@@ -1,0 +1,54 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "syst-template-offset-oracle-gap-20260614T181926Z",
+  "fidelity_boundary": "Decoded 67-record syst data remains source-readiness evidence only; Resource Bible syst field families and the surfaced template-offset gap do not promote exact byte offsets, Con6-Con16 split placement, non-topology gameplay semantics, coordinate display calibration, or broad runtime universe replacement.",
+  "kanban_task": "t_e9c52627",
+  "next_action": "Successor Kanban task t_6d66ab8d should continue from live repo state and current backlog/priority/verifier maps; likely next source-readiness work remains complete name/order oracle evidence, validated route-label packets tied to decoded IDs/Con slots, coordinate display calibration evidence, or non-topology syst field-order evidence.",
+  "promotion_status": "not-promoted; syst template/offset oracle gap remains blocked pending exact Classic TMPL/ResEdit/source offset evidence",
+  "safe_local": true,
+  "schema_version": 1,
+  "source_fidelity_label": "repo-reference-backed-syst-template-offset-oracle-gap",
+  "successor_recommendation": "Continue adjacent EV Classic Lane A source-readiness backlog work without promoting decoded static syst records into broad runtime topology until named topology, display calibration, route-label, and non-topology field-order gates close.",
+  "successor_task": "t_6d66ab8d",
+  "summary": "Surfaced the nested syst TMPL/ResEdit/source offset oracle gap as a first-class manifest/scenario gate so future workers can see why Resource Bible field-family prose cannot yet assign exact decoded word/byte offsets.",
+  "task_id": "t_e9c52627",
+  "timestamp": "2026-06-14T18:19:26Z",
+  "verification": {
+    "backlog_dispatch_index": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.json.check",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetOracleGapSummary and validated JSON syntax"
+    },
+    "focused_model_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "result": "passed; OK"
+    },
+    "focused_scenario_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; scenario checks all passed with recorded_syst_resedit_template_source_availability_gap and flattened systTemplateOffsetOracleGap fields"
+    },
+    "unittest_model_and_scenario_eval": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
+      "result": "passed; Ran 274 tests in 1.519s; OK"
+    }
+  }
+}

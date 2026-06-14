@@ -1,0 +1,50 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "runtime-universe-replacement-gate-hardening-20260614T180534Z",
+  "fidelity_boundary": "Decoded 67-record syst data remains source-readiness evidence only; broad runtime universe replacement stays not-ready/not-promoted until coordinate display calibration, complete record-name joins, route-label target/resource/Con-slot evidence, and non-topology syst field semantics are reconciled.",
+  "kanban_task": "t_945c8b13",
+  "next_action": "Successor Kanban task t_e9c52627 should continue from live repo state and current backlog/priority/verifier maps; preserve not-promoted runtime universe replacement status until all gateClosureChecklist evidence is satisfied.",
+  "promotion_status": "not-promoted; runtime universe replacement gate remains blocked/not-ready",
+  "safe_local": true,
+  "schema_version": 1,
+  "source_fidelity_label": "decoded-resource-backed-runtime-universe-replacement-gate-hardening",
+  "successor_recommendation": "Continue adjacent EV Classic source-readiness backlog work; likely next families are complete name/order oracle evidence, validated runtime route-label packets tied to decoded IDs/Con slots, coordinate display runtime/source calibration, or non-topology syst field-order evidence.",
+  "successor_task": "t_e9c52627",
+  "summary": "Hardened runtimeUniverseReplacementGateSummary so broad runtime universe replacement is visibly blocked on five reconciliation evidence inputs and an explicit closure checklist before any decoded static syst records can replace runtime topology.",
+  "task_id": "t_945c8b13",
+  "timestamp": "2026-06-14T18:05:34Z",
+  "verification": {
+    "backlog_dispatch_index": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with runtime-universe replacement gate evidence/checklist fields and validated JSON syntax"
+    },
+    "focused_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; Ran 2 tests; OK"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty >/tmp/static_topology_source_readiness_scout.json",
+      "result": "passed; 64 checks, failed=0; runtime universe replacement gate evidence/checklist keys present in scenario output"
+    },
+    "unittest_model_and_scenario_eval": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
+      "result": "passed; Ran 274 tests in 1.544s; OK"
+    }
+  }
+}

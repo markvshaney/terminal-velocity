@@ -1,0 +1,58 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_ids": [
+    "syst-template-offset-evidence-packet-contract-20260614T185436Z"
+  ],
+  "fidelity_boundary": "The packet contract is an acceptance schema only; it is not Classic byte-offset evidence and cannot promote Resource Bible prose, EV-family templates/source variants, decoded word windows, runtime observations, or field layouts without Classic-specific provenance and verifier replay.",
+  "focused_verifiers_passed": true,
+  "human_gate_boundary": "",
+  "kanban_task": "t_b170a99a",
+  "known_unrelated_failure_surface": "Full python3 -m pytest currently fails only in runner-topology tests because the live terminal-velocity kanban DB reports gateway_kanban_dispatcher; targeted EV manifest/scenario verifiers pass.",
+  "next_action": "Successor Kanban task t_76f94cf2 should continue from live repo state and current backlog/priority/verifier maps; likely next work remains exact Classic syst TMPL/ResEdit/source struct evidence, validated runtime offset surrogate packets, or related name/topology/display/runtime reconciliation oracles.",
+  "promotion_status": "not-promoted; packet acceptance contract only",
+  "safe_local": true,
+  "schema_version": 1,
+  "source_fidelity_label": "repo-reference-backed-syst-template-offset-evidence-packet-contract",
+  "successor_task": "t_76f94cf2",
+  "summary": "Added systTemplateOffsetEvidencePacketContractSummary as a non-promoting acceptance schema for future Classic-specific syst template/offset evidence packets, with manifest/model/scenario readiness validation and deterministic verifier coverage.",
+  "task_id": "t_b170a99a",
+  "timestamp": "2026-06-14T18:54:36Z",
+  "verification": {
+    "backlog_dispatch_index": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems_t_b170a99a.json.check",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json v61 and validated JSON syntax"
+    },
+    "full_pytest": {
+      "command": "python3 -m pytest",
+      "result": "non-gating unrelated surface; 355 passed, 10 failed in runner-topology tests expecting none_active while live terminal-velocity kanban DB reports gateway_kanban_dispatcher"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "npm_project_checks": {
+      "command": "npm test -- --runInBand",
+      "result": "not applicable; repository root has no package.json (npm ENOENT)"
+    },
+    "pytest_model_and_scenario_eval": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py",
+      "result": "passed; 274 passed in 1.81s"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty >/tmp/static_topology_source_readiness_scout_t_b170a99a.json",
+      "result": "passed; failed_count=0 and recorded_syst_template_offset_evidence_packet_contract present"
+    }
+  }
+}

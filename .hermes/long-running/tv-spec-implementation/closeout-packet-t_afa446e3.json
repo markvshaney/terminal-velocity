@@ -1,0 +1,54 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "syst-template-offset-source-search-priority-20260614T184025Z",
+  "fidelity_boundary": "This records search priority and missing-evidence blockers only; it does not promote Resource Bible prose, EV-family templates, arithmetic field budgets, or decoded word windows into Classic syst byte offsets or runtime-integrated non-topology behavior.",
+  "kanban_task": "t_afa446e3",
+  "next_action": "Successor Kanban task t_b170a99a should continue from live repo state and current backlog/priority/verifier maps; likely next evidence work remains exact Classic syst TMPL/ResEdit/source struct evidence, validated runtime offset surrogate packets, or related name/topology/display/runtime reconciliation oracles.",
+  "promotion_status": "not-promoted; Classic syst template/offset search priority is a worklist pending Classic-specific TMPL/ResEdit/source struct or validated runtime-offset surrogate evidence",
+  "safe_local": true,
+  "schema_version": 1,
+  "source_fidelity_label": "repo-reference-backed-syst-template-offset-source-search-priority",
+  "successor_recommendation": "Continue adjacent Lane A source-readiness work without promoting static syst offsets until Classic-specific template/source/runtime evidence closes the offset oracle gap.",
+  "successor_task": "t_b170a99a",
+  "summary": "Added systTemplateOffsetSourceSearchPrioritySummary as a source-backed priority worklist for blocked Classic syst TMPL/ResEdit/template offset evidence, with model validation, scenario readiness fields, and a recorded_syst_template_offset_source_search_priority verifier while keeping offset promotion not-promoted.",
+  "task_id": "t_afa446e3",
+  "timestamp": "2026-06-14T18:40:25Z",
+  "verification": {
+    "backlog_dispatch_index": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "closeout_guard": {
+      "command": "python3 tools/tv_closeout_guard.py --packet .hermes/long-running/tv-spec-implementation/closeout-packet-t_afa446e3.json",
+      "result": "passed; decision valid, classification push_ready"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems_t_afa446e3.json.check",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json v60 and validated JSON syntax"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "npm_project_checks": {
+      "command": "npm test -- --run && npm run build",
+      "result": "not applicable; repository root has no package.json (npm ENOENT)"
+    },
+    "pytest_model_and_scenario_eval": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py -q",
+      "result": "passed; 274 passed in 1.59s after restoring EV-family guardrail verifier compatibility"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty >/tmp/static_topology_source_readiness_scout_t_afa446e3.json && python3 tools/run_gameplay_scenarios.py --all >/tmp/run_gameplay_scenarios_all_t_afa446e3.json",
+      "result": "passed; static_topology_source_readiness_scout passed including recorded_syst_template_offset_source_search_priority; full scenario curriculum exited 0"
+    }
+  }
+}

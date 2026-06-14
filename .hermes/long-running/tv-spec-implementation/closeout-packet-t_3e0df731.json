@@ -1,0 +1,67 @@
+{
+  "backlog_update": "none; verifier-backed recovery plan only, no dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "syst-template-offset-evidence-packet-recovery-plan-20260614T195240Z",
+  "fidelity_boundary": "systTemplateOffsetEvidencePacketRecoveryPlanSummary is a next-evidence recovery checklist only; it adds no real packet evidence and does not promote Classic syst byte offsets, field widths, runtime surrogate/EV-family transfer, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement.",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Successor Kanban task t_50a674ba should continue from live repo state and current backlog/priority/verifier maps; likely next work remains exact Classic syst TMPL/ResEdit/source struct evidence, validated runtime offset surrogate packets, or related name/topology/display/runtime reconciliation oracles.",
+  "promotion_status": "not-promoted; packet recovery plan only pending real Classic-specific packet",
+  "schema_version": 1,
+  "source_basis": [
+    "systTemplateOffsetEvidencePacketFailureTaxonomySummary",
+    "systTemplateOffsetEvidencePacketIntakeTriageSummary",
+    "systTemplateOffsetEvidencePacketReplayReadinessSummary",
+    "runtimeUniverseReplacementGateSummary"
+  ],
+  "source_fidelity_label": "repo-reference-backed-syst-template-offset-evidence-packet-recovery-plan",
+  "successor_task": "t_50a674ba",
+  "summary": "Added systTemplateOffsetEvidencePacketRecoveryPlanSummary as a non-promoting recovery-action checklist for rejected or incomplete future Classic-specific syst template/offset packets.",
+  "task_id": "t_3e0df731",
+  "timestamp": "2026-06-14T19:52:40Z",
+  "verification": {
+    "backlog_dispatch_index_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "closeout_guard": {
+      "command": "python3 tools/tv_closeout_guard.py --packet .hermes/long-running/tv-spec-implementation/closeout-packet-t_3e0df731.json",
+      "result": "passed; decision valid"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketRecoveryPlanSummary"
+    },
+    "generated_manifest_recovery_plan": {
+      "command": "python3 .hermes/tmp/check_recovery_plan.py",
+      "result": "passed; source label/oracle status/5 action IDs present; method contains recovery-plan"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json",
+      "result": "passed; JSON valid"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_syst_template_offset_evidence_packet_recovery_plan present and all checks passed"
+    },
+    "targeted_native_ev_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py",
+      "result": "passed; 274 tests passed"
+    },
+    "targeted_native_ev_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed after updating model/test method guard; 2 tests ok"
+    }
+  }
+}

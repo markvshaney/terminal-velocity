@@ -266,7 +266,7 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV systems manifest has unexpected schema version')
-    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v57':
+    if data.get('method') != 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v62':
         raise ValueError('sourced EV systems manifest has unexpected extraction method')
     if data.get('sourceBasis') != 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs':
         raise ValueError('sourced EV systems manifest has unexpected source basis')
@@ -453,6 +453,171 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest variant guardrail missing Nova NavDef divergence')
     if 'EV-family field-count variants cannot be transposed onto EV Classic unresolved words' not in variant_guardrail.get('promotionBlockers', []):
         raise ValueError('sourced EV systems manifest variant guardrail missing transfer blocker')
+    top_level_template_gap = data.get('systTemplateOffsetOracleGapSummary', {})
+    if top_level_template_gap.get('sourceLabel') != 'repo-reference-backed-syst-resedit-template-source-availability-gap':
+        raise ValueError('sourced EV systems manifest missing top-level syst template/offset oracle gap')
+    if top_level_template_gap.get('oracleStatus') != 'syst_template_offset_mapping_blocked_pending_exact_tmpl_or_resedit_source':
+        raise ValueError('sourced EV systems manifest top-level template/offset gap must stay blocked pending exact source')
+    if top_level_template_gap.get('evidenceInputSummaryCount') != 4:
+        raise ValueError('sourced EV systems manifest top-level template/offset gap changed evidence input count')
+    if 'resourceBibleSystSequentialFieldProjectionSummary' not in top_level_template_gap.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest top-level template/offset gap missing sequential projection input')
+    if 'no exact syst TMPL/resource-template artifact' not in ' '.join(top_level_template_gap.get('missingEvidence', [])):
+        raise ValueError('sourced EV systems manifest top-level template/offset gap missing exact TMPL absence evidence')
+    if 'template/source absence means Resource Bible prose cannot be converted into byte offsets by assertion' not in top_level_template_gap.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest top-level template/offset gap missing offset assertion blocker')
+    if 'not-promoted' not in top_level_template_gap.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest top-level template/offset gap must remain non-promoted')
+    template_search_priority = data.get('systTemplateOffsetSourceSearchPrioritySummary', {})
+    if template_search_priority.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-source-search-priority':
+        raise ValueError('sourced EV systems manifest missing template/offset source search priority')
+    if template_search_priority.get('oracleStatus') != 'syst_template_offset_search_blocked_pending_classic_specific_evidence':
+        raise ValueError('sourced EV systems manifest template/offset search priority changed oracle status')
+    if template_search_priority.get('evidenceInputSummaryCount') != 4 or 'systTemplateOffsetOracleGapSummary' not in template_search_priority.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset search priority missing evidence inputs')
+    if template_search_priority.get('firstPriorityTargetId') != 'classic-syst-tmpl-or-resedit-template':
+        raise ValueError('sourced EV systems manifest template/offset search priority changed first target')
+    if 'classic-source-syst-struct' not in template_search_priority.get('priorityTargetIds', []):
+        raise ValueError('sourced EV systems manifest template/offset search priority missing source struct target')
+    if 'search priority is a worklist, not Classic byte-offset evidence' not in template_search_priority.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset search priority missing worklist blocker')
+    if 'not-promoted' not in template_search_priority.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset search priority must remain non-promoted')
+    template_packet_contract = data.get('systTemplateOffsetEvidencePacketContractSummary', {})
+    if template_packet_contract.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-evidence-packet-contract':
+        raise ValueError('sourced EV systems manifest missing template/offset evidence packet contract')
+    if template_packet_contract.get('oracleStatus') != 'syst_template_offset_evidence_packets_blocked_pending_validated_classic_specific_packet':
+        raise ValueError('sourced EV systems manifest template/offset packet contract changed oracle status')
+    if template_packet_contract.get('evidenceInputSummaryCount') != 5 or 'systTemplateOffsetSourceSearchPrioritySummary' not in template_packet_contract.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset packet contract missing evidence inputs')
+    if template_packet_contract.get('firstAcceptedEvidenceClassId') != 'classic-syst-tmpl-or-resedit-template':
+        raise ValueError('sourced EV systems manifest template/offset packet contract changed first evidence class')
+    if 'classic-source-syst-struct' not in template_packet_contract.get('acceptedEvidenceClassIds', []):
+        raise ValueError('sourced EV systems manifest template/offset packet contract missing source-struct evidence class')
+    if template_packet_contract.get('requiredPacketSchemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest template/offset packet contract changed schema version')
+    if 'packet must name Classic-specific provenance before any byte-offset or field-width claim is considered' not in template_packet_contract.get('validationRules', []):
+        raise ValueError('sourced EV systems manifest template/offset packet contract missing Classic provenance validation rule')
+    if 'evidence packet contract is an acceptance schema, not Classic byte-offset evidence' not in template_packet_contract.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset packet contract missing non-evidence blocker')
+    if 'not-promoted' not in template_packet_contract.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset packet contract must remain non-promoted')
+    packet_validation_matrix = data.get('systTemplateOffsetEvidencePacketValidationMatrixSummary', {})
+    if packet_validation_matrix.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-evidence-packet-validation-matrix':
+        raise ValueError('sourced EV systems manifest missing template/offset evidence packet validation matrix')
+    if packet_validation_matrix.get('oracleStatus') != 'syst_template_offset_packet_validation_blocked_pending_real_packet':
+        raise ValueError('sourced EV systems manifest template/offset validation matrix changed oracle status')
+    if packet_validation_matrix.get('evidenceInputSummaryCount') != 4 or 'systTemplateOffsetEvidencePacketContractSummary' not in packet_validation_matrix.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset validation matrix missing evidence inputs')
+    if packet_validation_matrix.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest template/offset validation matrix changed contract schema version')
+    if packet_validation_matrix.get('validationCaseCount') != 4:
+        raise ValueError('sourced EV systems manifest template/offset validation matrix changed case count')
+    if packet_validation_matrix.get('firstValidationCaseId') != 'accept-classic-template-field-offset-packet':
+        raise ValueError('sourced EV systems manifest template/offset validation matrix changed first case')
+    if 'reject-ev-family-template-transfer-packet' not in packet_validation_matrix.get('rejectionCaseIds', []):
+        raise ValueError('sourced EV systems manifest template/offset validation matrix missing EV-family rejection case')
+    if 'EV-family/adaptation-only packets must be rejected as Classic syst offset evidence' not in packet_validation_matrix.get('requiredVerifierOutcomes', []):
+        raise ValueError('sourced EV systems manifest template/offset validation matrix missing EV-family rejection outcome')
+    if 'validation matrix is a verifier fixture, not a validated evidence packet' not in packet_validation_matrix.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset validation matrix missing fixture blocker')
+    if 'not-promoted' not in packet_validation_matrix.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset validation matrix must remain non-promoted')
+    packet_replay_readiness = data.get('systTemplateOffsetEvidencePacketReplayReadinessSummary', {})
+    if packet_replay_readiness.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-evidence-packet-replay-readiness':
+        raise ValueError('sourced EV systems manifest missing template/offset evidence packet replay readiness')
+    if packet_replay_readiness.get('oracleStatus') != 'syst_template_offset_packet_replay_blocked_pending_real_packet':
+        raise ValueError('sourced EV systems manifest template/offset replay readiness changed oracle status')
+    if packet_replay_readiness.get('evidenceInputSummaryCount') != 4 or 'systTemplateOffsetEvidencePacketValidationMatrixSummary' not in packet_replay_readiness.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset replay readiness missing evidence inputs')
+    if packet_replay_readiness.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest template/offset replay readiness changed schema version')
+    if packet_replay_readiness.get('replayStepCount') != 4 or packet_replay_readiness.get('firstReplayStepId') != 'packet-artifact-readback':
+        raise ValueError('sourced EV systems manifest template/offset replay readiness changed replay steps')
+    if 'local-verifier-replay' not in [step.get('stepId') for step in packet_replay_readiness.get('replaySteps', [])]:
+        raise ValueError('sourced EV systems manifest template/offset replay readiness missing local verifier step')
+    if 'promoting runtime surrogate packets into Classic byte offsets without Classic source/template corroboration' not in packet_replay_readiness.get('blockedPromotionClaims', []):
+        raise ValueError('sourced EV systems manifest template/offset replay readiness missing runtime surrogate blocker')
+    if 'replay readiness is a handoff checklist, not a validated evidence packet' not in packet_replay_readiness.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset replay readiness missing checklist blocker')
+    if 'not-promoted' not in packet_replay_readiness.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset replay readiness must remain non-promoted')
+    packet_intake_triage = data.get('systTemplateOffsetEvidencePacketIntakeTriageSummary', {})
+    if packet_intake_triage.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-evidence-packet-intake-triage':
+        raise ValueError('sourced EV systems manifest missing template/offset evidence packet intake triage')
+    if packet_intake_triage.get('oracleStatus') != 'syst_template_offset_packet_triage_blocked_pending_real_packet':
+        raise ValueError('sourced EV systems manifest template/offset intake triage changed oracle status')
+    if packet_intake_triage.get('evidenceInputSummaryCount') != 4 or 'systTemplateOffsetEvidencePacketReplayReadinessSummary' not in packet_intake_triage.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset intake triage missing evidence inputs')
+    if packet_intake_triage.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest template/offset intake triage changed schema version')
+    if packet_intake_triage.get('triageDecisionCount') != 4 or 'triage-runtime-surrogate-packet' not in packet_intake_triage.get('triageDecisionIds', []):
+        raise ValueError('sourced EV systems manifest template/offset intake triage changed decision set')
+    if 'local-verifier-replay' not in packet_intake_triage.get('replayStepIds', []):
+        raise ValueError('sourced EV systems manifest template/offset intake triage missing replay step')
+    if 'triage-ev-family-or-adaptation-only-packet' not in packet_intake_triage.get('triageDecisionIds', []):
+        raise ValueError('sourced EV systems manifest template/offset intake triage missing EV-family rejection triage')
+    if 'intake triage is a routing checklist, not a validated evidence packet' not in packet_intake_triage.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset intake triage missing routing-checklist blocker')
+    if 'not-promoted' not in packet_intake_triage.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset intake triage must remain non-promoted')
+    packet_failure_taxonomy = data.get('systTemplateOffsetEvidencePacketFailureTaxonomySummary', {})
+    if packet_failure_taxonomy.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-evidence-packet-failure-taxonomy':
+        raise ValueError('sourced EV systems manifest missing template/offset evidence packet failure taxonomy')
+    if packet_failure_taxonomy.get('oracleStatus') != 'syst_template_offset_packet_failure_taxonomy_blocked_pending_real_packet':
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy changed oracle status')
+    if packet_failure_taxonomy.get('evidenceInputSummaryCount') != 4 or 'systTemplateOffsetEvidencePacketIntakeTriageSummary' not in packet_failure_taxonomy.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy missing evidence inputs')
+    if packet_failure_taxonomy.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy changed schema version')
+    if packet_failure_taxonomy.get('failureClassCount') != 5 or 'verifier-replay-missing-or-failed' not in packet_failure_taxonomy.get('failureClassIds', []):
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy changed failure classes')
+    if 'triage-ev-family-or-adaptation-only-packet' not in packet_failure_taxonomy.get('triageDecisionIds', []):
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy missing EV-family triage decision')
+    if 'packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks' not in packet_failure_taxonomy.get('blockedPromotionClaims', []):
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy missing verifier-replay failure claim')
+    if 'failure taxonomy is a rejection/recovery map, not Classic byte-offset evidence' not in packet_failure_taxonomy.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy missing non-evidence blocker')
+    if 'not-promoted' not in packet_failure_taxonomy.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset failure taxonomy must remain non-promoted')
+    packet_recovery_plan = data.get('systTemplateOffsetEvidencePacketRecoveryPlanSummary', {})
+    if packet_recovery_plan.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-evidence-packet-recovery-plan':
+        raise ValueError('sourced EV systems manifest missing template/offset evidence packet recovery plan')
+    if packet_recovery_plan.get('oracleStatus') != 'syst_template_offset_packet_recovery_plan_blocked_pending_real_packet':
+        raise ValueError('sourced EV systems manifest template/offset recovery plan changed oracle status')
+    if packet_recovery_plan.get('evidenceInputSummaryCount') != 4 or 'systTemplateOffsetEvidencePacketFailureTaxonomySummary' not in packet_recovery_plan.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset recovery plan missing evidence inputs')
+    if packet_recovery_plan.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest template/offset recovery plan changed schema version')
+    if packet_recovery_plan.get('recoveryActionCount') != 5 or 'recover-verifier-replay-missing-or-failed' not in packet_recovery_plan.get('recoveryActionIds', []):
+        raise ValueError('sourced EV systems manifest template/offset recovery plan changed recovery actions')
+    if packet_recovery_plan.get('failureClassIds') != packet_failure_taxonomy.get('failureClassIds'):
+        raise ValueError('sourced EV systems manifest template/offset recovery plan no longer covers all failure classes')
+    if 'successful local replay of extractor, focused model validation, and static_topology_source_readiness_scout with captured actual output' not in ' '.join(action.get('requiredNextEvidence', '') for action in packet_recovery_plan.get('recoveryActions', [])):
+        raise ValueError('sourced EV systems manifest template/offset recovery plan missing verifier recovery evidence')
+    if 'recovery plan is a next-evidence checklist, not Classic byte-offset evidence' not in packet_recovery_plan.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset recovery plan missing non-evidence blocker')
+    if 'not-promoted' not in packet_recovery_plan.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset recovery plan must remain non-promoted')
+    packet_reentry_guardrail = data.get('systTemplateOffsetEvidencePacketReentryGuardrailSummary', {})
+    if packet_reentry_guardrail.get('sourceLabel') != 'repo-reference-backed-syst-template-offset-evidence-packet-reentry-guardrail':
+        raise ValueError('sourced EV systems manifest missing template/offset evidence packet reentry guardrail')
+    if packet_reentry_guardrail.get('oracleStatus') != 'syst_template_offset_packet_reentry_blocked_pending_recovered_real_packet':
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail changed oracle status')
+    if packet_reentry_guardrail.get('evidenceInputSummaryCount') != 4 or 'systTemplateOffsetEvidencePacketRecoveryPlanSummary' not in packet_reentry_guardrail.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail missing evidence inputs')
+    if packet_reentry_guardrail.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail changed schema version')
+    if packet_reentry_guardrail.get('failureClassIds') != packet_recovery_plan.get('failureClassIds'):
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail no longer covers all failure classes')
+    if packet_reentry_guardrail.get('reentryStepCount') != 4 or 'recovered-packet-contract-matrix-triage-rerun' not in packet_reentry_guardrail.get('reentryStepIds', []):
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail changed reentry steps')
+    if 'do not resume from the failure point or skip earlier acceptance gates because a packet was revised' not in packet_reentry_guardrail.get('blockedShortcuts', []):
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail missing shortcut blocker')
+    if 'reentry guardrail is a replay path, not Classic byte-offset evidence' not in packet_reentry_guardrail.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail missing non-evidence blocker')
+    if 'not-promoted' not in packet_reentry_guardrail.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest template/offset reentry guardrail must remain non-promoted')
     budget_candidates = {entry.get('candidate'): entry for entry in field_count_budget.get('projectedWordBudgetCandidates', [])}
     if budget_candidates.get('16-bit xPos/yPos plus 16-bit downstream fields', {}).get('unassignedTailWordCount') != 8:
         raise ValueError('sourced EV systems manifest field-count budget changed 16-bit tail count')
@@ -582,6 +747,23 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest record-name oracle evidence matrix must not promote byte-proximity joins')
     if not record_name_oracle.get('nextEvidenceFamilies', [''])[0].startswith('decoded complete name/list resource'):
         raise ValueError('sourced EV systems manifest record-name oracle evidence matrix missing complete name/list evidence family')
+    record_name_reconciliation = data.get('recordNameRuntimeJoinReconciliationSummary', {})
+    if record_name_reconciliation.get('sourceLabel') != 'decoded-resource-and-runtime-backed-record-name-join-reconciliation-plan':
+        raise ValueError('sourced EV systems manifest missing record-name runtime join reconciliation plan')
+    if record_name_reconciliation.get('oracleStatus') != 'record_name_join_reconciliation_blocked_pending_complete_name_or_runtime_packets':
+        raise ValueError('sourced EV systems manifest record-name runtime join reconciliation changed oracle status')
+    if record_name_reconciliation.get('evidenceInputSummaryCount') != 5 or 'recordNameOracleEvidenceMatrixSummary' not in record_name_reconciliation.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV systems manifest record-name runtime join reconciliation missing evidence inputs')
+    if record_name_reconciliation.get('exactMappedResourceIds') != [128] or record_name_reconciliation.get('unjoinedRecordCount') != 66:
+        raise ValueError('sourced EV systems manifest record-name runtime join reconciliation changed mapping boundary')
+    if record_name_reconciliation.get('unjoinedStartNeighborResourceIds') != [129, 130, 131]:
+        raise ValueError('sourced EV systems manifest record-name runtime join reconciliation changed start-neighbor boundary')
+    if 'route-label-con4-resource-131' not in record_name_reconciliation.get('requiredRuntimePacketIds', []):
+        raise ValueError('sourced EV systems manifest record-name runtime join reconciliation missing priority route-label packet')
+    if 'post-evidence reconciliation is a gate, not a record-name promotion packet' not in record_name_reconciliation.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest record-name runtime join reconciliation missing promotion blocker')
+    if 'not-promoted' not in record_name_reconciliation.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest record-name runtime join reconciliation must remain non-promoted')
     named_route_gap = data.get('namedRouteTopologyOracleGapSummary', {})
     if named_route_gap.get('sourceLabel') != 'decoded-resource-backed-named-route-topology-oracle-gap':
         raise ValueError('sourced EV systems manifest missing named route topology oracle gap')
@@ -715,8 +897,28 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
             raise ValueError('sourced EV systems manifest runtime universe replacement gate missing blocker')
     if 'not-ready' not in runtime_gate.get('replacementReadinessStatus', ''):
         raise ValueError('sourced EV systems manifest runtime universe replacement gate must not mark replacement ready')
+    if runtime_gate.get('evidenceInputSummaryCount') != 6:
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate changed evidence input count')
+    for expected_input in [
+        'topologyPromotionReadinessSummary',
+        'coordinateDisplayRuntimeCaptureReconciliationSummary',
+        'recordNameRuntimeJoinReconciliationSummary',
+        'runtimeRouteLabelCaptureReconciliationSummary',
+        'nonTopologySystRuntimeCaptureReconciliationSummary',
+        'systTemplateOffsetOracleGapSummary',
+    ]:
+        if expected_input not in runtime_gate.get('evidenceInputSummaries', []):
+            raise ValueError('sourced EV systems manifest runtime universe replacement gate missing reconciliation evidence input')
+    if 'syst_template_offset_oracle_gap' not in gate_names:
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate missing template/offset oracle blocker')
+    if 'record-name joins closed by complete source/name table or validated packet-level target evidence' not in runtime_gate.get('gateClosureChecklist', []):
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate missing closure checklist')
+    if 'syst template/offset gap closed by Classic-specific TMPL/ResEdit/source evidence before assigning unresolved byte offsets or Con6-Con16 split placement' not in runtime_gate.get('gateClosureChecklist', []):
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate missing template/offset closure checklist')
     if 'do not infer Classic-faithful broad universe behavior from the decoded syst run alone' not in runtime_gate.get('promotionBlockers', []):
         raise ValueError('sourced EV systems manifest runtime universe replacement gate missing fidelity blocker')
+    if 'do not convert Resource Bible syst prose into byte offsets or Con6-Con16 split placement without a Classic-specific template/source oracle' not in runtime_gate.get('promotionBlockers', []):
+        raise ValueError('sourced EV systems manifest runtime universe replacement gate missing template/offset fidelity blocker')
     landing_proximity = data.get('systemNameLandingProximitySummary', {})
     if landing_proximity.get('sourceLabel') != 'decoded-resource-backed-system-name-landing-proximity-scout':
         raise ValueError('sourced EV systems manifest missing system-name landing-proximity source label')

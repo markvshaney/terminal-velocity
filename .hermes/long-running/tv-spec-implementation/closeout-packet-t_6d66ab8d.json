@@ -1,0 +1,46 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "runtime-universe-template-offset-crosslink-gate-20260614T182918Z",
+  "fidelity_boundary": "Decoded 67-record syst data remains source-readiness evidence only; Resource Bible syst prose cannot assign exact byte offsets or Con6-Con16 split placement, and broad runtime universe replacement remains blocked pending Classic-specific TMPL/ResEdit/source template-offset evidence plus name/topology/display/runtime reconciliation oracles.",
+  "kanban_task": "t_6d66ab8d",
+  "next_action": "Successor Kanban task t_afa446e3 should continue from live repo state and current backlog/priority/verifier maps; likely next source-readiness work remains complete name/order oracle evidence, validated route-label packets tied to decoded IDs/Con slots, coordinate display calibration evidence, or non-topology syst field-order evidence.",
+  "promotion_status": "not-promoted; runtime universe replacement gate remains not-ready and now explicitly blocked on syst_template_offset_oracle_gap",
+  "safe_local": true,
+  "schema_version": 1,
+  "source_fidelity_label": "decoded-resource-backed-runtime-universe-template-offset-crosslink-replacement-gate",
+  "successor_recommendation": "Continue adjacent EV Classic Lane A source-readiness backlog work without promoting decoded static syst records into broad runtime topology until named topology, display calibration, route-label, non-topology field-order, and Classic template-offset gates close.",
+  "successor_task": "t_afa446e3",
+  "summary": "Added systTemplateOffsetOracleGapSummary as an explicit runtime universe replacement evidence dependency and blocker so broad runtime universe replacement cannot proceed from Resource Bible prose or decoded syst records without Classic-specific template/offset proof.",
+  "task_id": "t_6d66ab8d",
+  "timestamp": "2026-06-14T18:29:18Z",
+  "verification": {
+    "backlog_dispatch_index": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems_t_6d66ab8d.json.check",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json v59 and validated JSON syntax"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty >/tmp/static_topology_source_readiness_scout_t_6d66ab8d.json",
+      "result": "passed; all static topology checks passed with runtimeUniverseReplacementGateSummary requiring systTemplateOffsetOracleGapSummary and syst_template_offset_oracle_gap"
+    },
+    "pytest_model_and_scenario_eval": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py",
+      "result": "passed; 274 passed in 1.66s"
+    }
+  }
+}

@@ -2023,6 +2023,10 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_resource_bible_syst_byte_size_padding_gap_negative_oracle',
             'recorded_resource_bible_syst_field_width_offset_oracle_gap',
             'recorded_syst_resedit_template_source_availability_gap',
+            'recorded_syst_template_offset_source_search_priority',
+            'recorded_syst_template_offset_evidence_packet_contract',
+            'recorded_syst_template_offset_evidence_packet_validation_matrix',
+            'recorded_syst_template_offset_evidence_packet_replay_readiness',
             'recorded_syst_ev_family_template_transfer_guardrail',
             'recorded_syst_ev_family_variant_divergence_guardrail',
             'recorded_syst_word_domain_coverage_summary',
@@ -2063,6 +2067,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_exact_start_system_mapping',
             'recorded_record_to_name_promotion_readiness_summary',
             'recorded_record_name_oracle_evidence_matrix',
+            'recorded_record_name_runtime_join_reconciliation_summary',
             'recorded_named_route_topology_oracle_gap',
             'recorded_runtime_route_label_observation_bridge_gap',
             'recorded_runtime_route_label_probe_targeting_matrix',
@@ -2165,6 +2170,59 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('blocked', readiness['resourceBibleSystSequentialProjectionReadinessStatus'])
         self.assertIn('source-level syst struct declaration', readiness['resourceBibleSystSequentialProjectionNextEvidenceFamilies'][0])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['resourceBibleSystSequentialProjectionSourceLabel'], 'resource-bible-backed-syst-sequential-field-projection-negative-oracle')
+        self.assertEqual(readiness['systTemplateOffsetOracleGapSourceLabel'], 'repo-reference-backed-syst-resedit-template-source-availability-gap')
+        self.assertEqual(readiness['systTemplateOffsetOracleGapOracleStatus'], 'syst_template_offset_mapping_blocked_pending_exact_tmpl_or_resedit_source')
+        self.assertEqual(readiness['systTemplateOffsetOracleGapInputSummaryCount'], 4)
+        self.assertIn('resourceBibleSystSequentialFieldProjectionSummary', readiness['systTemplateOffsetOracleGapInputSummaries'])
+        self.assertIn('no exact syst TMPL/resource-template artifact is recorded in the local source manifest', readiness['systTemplateOffsetOracleGapMissingEvidence'])
+        self.assertIn('template/source absence means Resource Bible prose cannot be converted into byte offsets by assertion', readiness['systTemplateOffsetOracleGapPromotionBlockers'])
+        self.assertIn('Classic-specific syst TMPL/ResEdit/source offset oracle is absent', readiness['systTemplateOffsetOracleGapTopLevelGateStatus'])
+        self.assertIn('not-promoted', readiness['systTemplateOffsetOracleGapPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systTemplateOffsetOracleGapSourceLabel'], 'repo-reference-backed-syst-resedit-template-source-availability-gap')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketContractSourceLabel'], 'repo-reference-backed-syst-template-offset-evidence-packet-contract')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketContractOracleStatus'], 'syst_template_offset_evidence_packets_blocked_pending_validated_classic_specific_packet')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketContractInputSummaryCount'], 5)
+        self.assertIn('systTemplateOffsetSourceSearchPrioritySummary', readiness['systTemplateOffsetEvidencePacketContractInputs'])
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketContractFirstClassId'], 'classic-syst-tmpl-or-resedit-template')
+        self.assertIn('classic-source-syst-struct', readiness['systTemplateOffsetEvidencePacketContractClassIds'])
+        self.assertIn('validated-runtime-offset-surrogate', readiness['systTemplateOffsetEvidencePacketContractClassIds'])
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketContractSchemaVersion'], 1)
+        self.assertIn('packet must name Classic-specific provenance before any byte-offset or field-width claim is considered', readiness['systTemplateOffsetEvidencePacketContractValidationRules'])
+        self.assertIn('using EV-family TMPL/source variants as EV Classic byte-offset proof', readiness['systTemplateOffsetEvidencePacketContractBlockedClaims'])
+        self.assertIn('evidence packet contract is an acceptance schema, not Classic byte-offset evidence', readiness['systTemplateOffsetEvidencePacketContractPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['systTemplateOffsetEvidencePacketContractPromotionStatus'])
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketRecoveryPlanSourceLabel'], 'repo-reference-backed-syst-template-offset-evidence-packet-recovery-plan')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketRecoveryPlanOracleStatus'], 'syst_template_offset_packet_recovery_plan_blocked_pending_real_packet')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketRecoveryPlanInputSummaryCount'], 4)
+        self.assertIn('systTemplateOffsetEvidencePacketFailureTaxonomySummary', readiness['systTemplateOffsetEvidencePacketRecoveryPlanInputs'])
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketRecoveryPlanSchemaVersion'], 1)
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketRecoveryPlanActionCount'], 5)
+        self.assertIn('recover-missing-replayable-artifact', readiness['systTemplateOffsetEvidencePacketRecoveryPlanActionIds'])
+        self.assertIn('recover-classic-provenance-absent', readiness['systTemplateOffsetEvidencePacketRecoveryPlanActionIds'])
+        self.assertIn('recover-verifier-replay-missing-or-failed', readiness['systTemplateOffsetEvidencePacketRecoveryPlanActionIds'])
+        self.assertIn('recover-scope-overreach-beyond-covered-fields', readiness['systTemplateOffsetEvidencePacketRecoveryPlanActionIds'])
+        self.assertIn('recover-ev-family-or-adaptation-only-transfer', readiness['systTemplateOffsetEvidencePacketRecoveryPlanActionIds'])
+        self.assertIn('verifier-replay-missing-or-failed', readiness['systTemplateOffsetEvidencePacketRecoveryPlanFailureClassIds'])
+        self.assertIn('successful local replay of extractor, focused model validation, and static_topology_source_readiness_scout with captured actual output', readiness['systTemplateOffsetEvidencePacketRecoveryPlanRequiredNextEvidence'])
+        self.assertIn('treating a recovery plan as evidence that a previously rejected packet has been fixed', readiness['systTemplateOffsetEvidencePacketRecoveryPlanBlockedClaims'])
+        self.assertIn('recovery plan is a next-evidence checklist, not Classic byte-offset evidence', readiness['systTemplateOffsetEvidencePacketRecoveryPlanPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['systTemplateOffsetEvidencePacketRecoveryPlanPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systTemplateOffsetEvidencePacketRecoveryPlanSourceLabel'], 'repo-reference-backed-syst-template-offset-evidence-packet-recovery-plan')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketReentryGuardrailSourceLabel'], 'repo-reference-backed-syst-template-offset-evidence-packet-reentry-guardrail')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketReentryGuardrailOracleStatus'], 'syst_template_offset_packet_reentry_blocked_pending_recovered_real_packet')
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketReentryGuardrailInputSummaryCount'], 4)
+        self.assertIn('systTemplateOffsetEvidencePacketRecoveryPlanSummary', readiness['systTemplateOffsetEvidencePacketReentryGuardrailInputs'])
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketReentryGuardrailSchemaVersion'], 1)
+        self.assertIn('verifier-replay-missing-or-failed', readiness['systTemplateOffsetEvidencePacketReentryGuardrailFailureClassIds'])
+        self.assertIn('recover-verifier-replay-missing-or-failed', readiness['systTemplateOffsetEvidencePacketReentryGuardrailRecoveryActionIds'])
+        self.assertEqual(readiness['systTemplateOffsetEvidencePacketReentryGuardrailStepCount'], 4)
+        self.assertIn('recovered-packet-contract-matrix-triage-rerun', readiness['systTemplateOffsetEvidencePacketReentryGuardrailStepIds'])
+        self.assertIn('do not resume from the failure point or skip earlier acceptance gates because a packet was revised', readiness['systTemplateOffsetEvidencePacketReentryGuardrailBlockedShortcuts'])
+        self.assertIn('python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty', readiness['systTemplateOffsetEvidencePacketReentryGuardrailRequiredVerifiers'])
+        self.assertIn('treating a recovered packet as accepted before artifact readback, failure-class closure, full replay, and narrow-scope quarantine', readiness['systTemplateOffsetEvidencePacketReentryGuardrailBlockedClaims'])
+        self.assertIn('reentry guardrail is a replay path, not Classic byte-offset evidence', readiness['systTemplateOffsetEvidencePacketReentryGuardrailPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['systTemplateOffsetEvidencePacketReentryGuardrailPromotionStatus'])
+        self.assertEqual(result['state']['sourceReadiness']['staticTopology']['systTemplateOffsetEvidencePacketReentryGuardrailSourceLabel'], 'repo-reference-backed-syst-template-offset-evidence-packet-reentry-guardrail')
         self.assertEqual(readiness['systWordDomainCoverageSourceLabel'], 'decoded-resource-backed-syst-word-domain-coverage-scout')
         self.assertEqual(readiness['systWordDomainCoverageOracleStatus'], 'syst_field_order_mapping_pending_complete_oracle')
         self.assertEqual(readiness['systWordDomainCoverageWordCount'], 44)
@@ -2249,8 +2307,14 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('remaining_record_to_name_joins', readiness['runtimeUniverseReplacementGateBlockingGateNames'])
         self.assertIn('named_route_topology_labels', readiness['runtimeUniverseReplacementGateBlockingGateNames'])
         self.assertIn('non_topology_syst_field_semantics', readiness['runtimeUniverseReplacementGateBlockingGateNames'])
+        self.assertIn('syst_template_offset_oracle_gap', readiness['runtimeUniverseReplacementGateBlockingGateNames'])
         self.assertIn('not-ready', readiness['runtimeUniverseReplacementGateReadinessStatus'])
+        self.assertIn('recordNameRuntimeJoinReconciliationSummary', readiness['runtimeUniverseReplacementGateEvidenceInputs'])
+        self.assertIn('systTemplateOffsetOracleGapSummary', readiness['runtimeUniverseReplacementGateEvidenceInputs'])
+        self.assertIn('record-name joins closed by complete source/name table or validated packet-level target evidence', readiness['runtimeUniverseReplacementGateClosureChecklist'])
+        self.assertIn('syst template/offset gap closed by Classic-specific TMPL/ResEdit/source evidence before assigning unresolved byte offsets or Con6-Con16 split placement', readiness['runtimeUniverseReplacementGateClosureChecklist'])
         self.assertIn('do not infer Classic-faithful broad universe behavior from the decoded syst run alone', readiness['runtimeUniverseReplacementGatePromotionBlockers'])
+        self.assertIn('do not convert Resource Bible syst prose into byte offsets or Con6-Con16 split placement without a Classic-specific template/source oracle', readiness['runtimeUniverseReplacementGatePromotionBlockers'])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['runtimeUniverseReplacementGateUnjoinedRecordCount'], 66)
         self.assertEqual(readiness['systemNameSeedSummarySourceLabel'], 'decoded-resource-backed-system-name-seed-join-scout')
         self.assertEqual(readiness['systemNameSeedSummaryOracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')

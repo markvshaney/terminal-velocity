@@ -1,0 +1,53 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py",
+    ".hermes/long-running/tv-spec-implementation/events.jsonl",
+    ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+    ".hermes/long-running/tv-spec-implementation/closeout-packet-t_76f94cf2.json"
+  ],
+  "closeout_class": "push_ready",
+  "event_ids": [
+    "syst-template-offset-evidence-packet-validation-matrix-20260614T190453Z"
+  ],
+  "fidelity_boundary": "systTemplateOffsetEvidencePacketValidationMatrixSummary is a verifier fixture only; no real packet evidence, Classic syst byte offsets, field widths, EV-family transfer, runtime surrogate promotion, Con6-Con16 split placement, or non-topology behavior was promoted.",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_76f94cf2",
+  "known_unrelated_failure_surface": "npm checks are not applicable because this repo root has no package.json; prior full pytest runner-topology failures remain unrelated to this Lane A manifest verifier slice.",
+  "next_action": "successor task t_5d4527f5 should continue the tv-spec loop from live repo state and current backlog/priority maps.",
+  "safe_local": true,
+  "successor_task": "t_5d4527f5",
+  "summary": "Added systTemplateOffsetEvidencePacketValidationMatrixSummary as a non-promoting verifier fixture for future Classic-specific syst template/offset evidence packet acceptance/rejection cases.",
+  "task_id": "t_76f94cf2",
+  "timestamp": "2026-06-14T19:04:53Z",
+  "verification": {
+    "backlog_dispatch_index_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketValidationMatrixSummary"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "npm_project_checks": {
+      "command": "npm test",
+      "result": "not applicable; repository root has no package.json (npm ENOENT)"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; all checks passed including recorded_syst_template_offset_evidence_packet_validation_matrix"
+    },
+    "targeted_unittest_model_and_scenario": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; 2 tests OK"
+    }
+  }
+}

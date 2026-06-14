@@ -1,0 +1,58 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_ids": [
+    "syst-template-offset-evidence-packet-replay-readiness-20260614T191302Z"
+  ],
+  "fidelity_boundary": "systTemplateOffsetEvidencePacketReplayReadinessSummary is a replay-readiness checklist only; no real packet evidence, Classic syst byte offsets, field widths, EV-family transfer, runtime surrogate promotion, Con6-Con16 split placement, or non-topology behavior was promoted.",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_5d4527f5",
+  "known_unrelated_failure_surface": "npm checks are not applicable because this repo root has no package.json; prior full pytest runner-topology failures remain unrelated to this Lane A manifest verifier slice.",
+  "next_action": "successor task t_7da45d64 should continue the tv-spec loop from live repo state and current backlog/priority maps.",
+  "safe_local": true,
+  "successor_task": "t_7da45d64",
+  "summary": "Added systTemplateOffsetEvidencePacketReplayReadinessSummary as a non-promoting replay handoff/checklist for future Classic-specific syst template/offset evidence packets.",
+  "task_id": "t_5d4527f5",
+  "timestamp": "2026-06-14T19:13:02Z",
+  "verification": {
+    "backlog_dispatch_index_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "closeout_guard": {
+      "command": "python3 tools/tv_closeout_guard.py --packet .hermes/long-running/tv-spec-implementation/closeout-packet-t_5d4527f5.json",
+      "result": "passed; decision valid, warning known_unrelated_failure_surface_is_non_gating"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketReplayReadinessSummary"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems_t_5d4527f5.json.check",
+      "result": "passed; JSON valid"
+    },
+    "native_ev_model_and_scenario_unittest_modules": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
+      "result": "passed; 274 tests OK"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; success true, failed_count 0, including recorded_syst_template_offset_evidence_packet_replay_readiness"
+    },
+    "targeted_unittest_model_and_scenario": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; 2 tests OK"
+    }
+  }
+}

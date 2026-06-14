@@ -1,0 +1,66 @@
+{
+  "changed_files": [
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "tools/extract_ev_system_semantics.py"
+  ],
+  "closeout_class": "push_ready",
+  "contract_version": "machine_contract_v1",
+  "event_id": "syst-template-offset-evidence-packet-intake-triage-20260614T192735Z",
+  "event_ids": [
+    "syst-template-offset-evidence-packet-intake-triage-20260614T192735Z"
+  ],
+  "fidelity_boundary": "systTemplateOffsetEvidencePacketIntakeTriageSummary is intake triage only; it does not prove a real Classic packet exists and does not promote Classic syst byte offsets, field widths, runtime surrogate/EV-family transfer, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement.",
+  "focused_verifiers_passed": true,
+  "git_status": "dirty with modified source/data/test/ledger artifacts and untracked historical closeout packets plus closeout-packet-t_7da45d64.json; no push performed",
+  "human_gate_boundary": "",
+  "kanban_task": "t_7da45d64",
+  "known_unrelated_failure_surface": "npm_test_repo_root_missing_package_json; no package.json exists at repo root for npm test -- --run",
+  "next_action": "Successor task t_5796b56e should continue the source-aligned tv-spec loop from live dirty repo state and avoid redoing this intake-triage checkpoint.",
+  "safe_local": true,
+  "successor_task": "t_5796b56e",
+  "summary": "Added systTemplateOffsetEvidencePacketIntakeTriageSummary as a non-promoting routing/checklist layer for future Classic-specific syst template/offset evidence packets.",
+  "task_id": "t_7da45d64",
+  "timestamp": "2026-06-14T19:27:35Z",
+  "verification": {
+    "backlog_dispatch_index_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketIntakeTriageSummary"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems_t_7da45d64.json.check",
+      "result": "passed; JSON valid"
+    },
+    "native_ev_model_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py",
+      "result": "passed; 168 tests passed"
+    },
+    "native_ev_scenario_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval -v",
+      "result": "passed; 106 tests OK"
+    },
+    "npm_test_repo_root": {
+      "command": "npm test -- --run",
+      "result": "not_applicable; failed ENOENT because /home/bh/workspaces/loki/terminal-velocity/package.json is absent at repo root"
+    },
+    "py_compile": {
+      "command": "python3 -m py_compile tools/extract_ev_system_semantics.py native_ev/model.py native_ev/scenario_eval.py native_ev/tests/test_model.py",
+      "result": "passed; exit 0"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_syst_template_offset_evidence_packet_intake_triage present and all checks passed"
+    }
+  }
+}

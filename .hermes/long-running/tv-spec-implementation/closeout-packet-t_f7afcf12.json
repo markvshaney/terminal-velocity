@@ -1,0 +1,47 @@
+{
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "record-name-runtime-join-reconciliation-20260614T175736Z",
+  "fidelity_boundary": "Do not assign resource IDs 129-194 to Classic system names, named route topology, coordinate-display semantics, or broad runtime universe replacement from heuristic/static decoded data or observed route-label strings; complete name/order evidence or validated packet-level target evidence remains required.",
+  "next_action": "Continue the tv-spec-implementation backlog from the next safe EV Classic fidelity item; preserve oracle-safe boundaries and do not promote record-name joins, named topology, display coordinates, or runtime universe replacement without validated evidence.",
+  "promotion_status": "not-promoted; record-name join reconciliation plan only",
+  "schema_version": 1,
+  "source_fidelity_label": "decoded-resource-and-runtime-backed-record-name-join-reconciliation-plan",
+  "successor_recommendation": "Continue adjacent Lane A source-readiness work after record-name runtime join reconciliation; likely next families remain source-level complete name/order oracle, validated runtime route-label packets, coordinate-display runtime/source calibration, or non-topology syst field-order evidence.",
+  "summary": "Added recordNameRuntimeJoinReconciliationSummary and verifier coverage, preserving only resource 128 -> Levo as exact while defining a non-promoted gate for future complete name-table or validated runtime route-label packets before any additional resource-ID/name joins.",
+  "task_id": "t_f7afcf12",
+  "timestamp": "2026-06-14T17:57:36Z",
+  "verification": {
+    "backlog_dispatch_index": {
+      "command": "python3 tools/backlog_dispatch_index.py check",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with record-name-runtime-join-reconciliation method token and validated JSON syntax"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "pytest_attempt": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py -q",
+      "result": "not run; pytest is unavailable in this environment (/usr/bin/python3: No module named pytest), so unittest was used for full targeted coverage"
+    },
+    "scenario_verifier": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty >/tmp/static_topology_source_readiness_scout.json",
+      "result": "passed; 64 checks, failed=[]; recorded_record_name_runtime_join_reconciliation_summary=passed"
+    },
+    "unittest_model_and_scenario_eval": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v >/tmp/tv-unittest.log 2>&1 && tail -n 8 /tmp/tv-unittest.log",
+      "result": "passed; Ran 274 tests in 1.491s; OK"
+    }
+  }
+}

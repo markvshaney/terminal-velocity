@@ -1,0 +1,55 @@
+{
+  "backlog_update": "none; verifier-backed failure taxonomy only, no dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "syst-template-offset-evidence-packet-failure-taxonomy-20260614T193758Z",
+  "fidelity_boundary": "systTemplateOffsetEvidencePacketFailureTaxonomySummary is a rejection/recovery taxonomy only; it adds no real packet evidence and does not promote Classic syst byte offsets, field widths, runtime surrogate/EV-family transfer, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement.",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Successor Kanban task t_3e0df731 should continue from live repo state and current backlog/priority/verifier maps; likely next work remains exact Classic syst TMPL/ResEdit/source struct evidence, validated runtime offset surrogate packets, or related name/topology/display/runtime reconciliation oracles.",
+  "promotion_status": "not-promoted; packet failure taxonomy only pending real Classic-specific packet",
+  "schema_version": 1,
+  "source_basis": [
+    "systTemplateOffsetEvidencePacketIntakeTriageSummary",
+    "systTemplateOffsetEvidencePacketReplayReadinessSummary",
+    "systTemplateOffsetEvidencePacketValidationMatrixSummary",
+    "runtimeUniverseReplacementGateSummary"
+  ],
+  "source_fidelity_label": "repo-reference-backed-syst-template-offset-evidence-packet-failure-taxonomy",
+  "successor_task": "t_3e0df731",
+  "summary": "Added systTemplateOffsetEvidencePacketFailureTaxonomySummary as a non-promoting failure taxonomy/recovery map for rejected or incomplete future Classic-specific syst template/offset packets.",
+  "task_id": "t_5796b56e",
+  "timestamp": "2026-06-14T19:37:58Z",
+  "verification": {
+    "backlog_dispatch_index_runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketFailureTaxonomySummary"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json",
+      "result": "passed; JSON valid"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_syst_template_offset_evidence_packet_failure_taxonomy present and all checks passed"
+    },
+    "targeted_native_ev_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py",
+      "result": "passed; 274 tests passed"
+    }
+  }
+}

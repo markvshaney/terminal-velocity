@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-promotion-readiness-landing-proximity-runtime-universe-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v57",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v62",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -273,6 +273,88 @@
       "source-level variable/struct evidence identifying system-name resource storage and ordering"
     ],
     "sourceNote": "This matrix is a negative gate for record-to-name promotion. It keeps the heuristic system-name and landing-name seeds useful for scouting while requiring a complete name/order oracle or runtime label evidence before assigning any additional Classic system names to decoded syst records."
+  },
+  "recordNameRuntimeJoinReconciliationSummary": {
+    "sourceLabel": "decoded-resource-and-runtime-backed-record-name-join-reconciliation-plan",
+    "oracleStatus": "record_name_join_reconciliation_blocked_pending_complete_name_or_runtime_packets",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field",
+      "original-runtime-observed",
+      "original-runtime-required"
+    ],
+    "recordCount": 67,
+    "exactMappedResourceIds": [
+      128
+    ],
+    "exactMappedSystemNames": [
+      "Levo"
+    ],
+    "unjoinedRecordCount": 66,
+    "unjoinedResourceIdRange": [
+      129,
+      194
+    ],
+    "candidateStartResourceId": 128,
+    "candidateStartSystemName": "Levo",
+    "unjoinedStartNeighborResourceIds": [
+      129,
+      130,
+      131
+    ],
+    "observedRuntimeLabels": [
+      "Rigel",
+      "Kathoon",
+      "Yemuro",
+      "Torgo"
+    ],
+    "requiredRuntimePacketIds": [
+      "route-label-con2-resource-129",
+      "route-label-con3-resource-130",
+      "route-label-con4-resource-131"
+    ],
+    "requiredRuntimePacketCount": 3,
+    "evidenceInputSummaries": [
+      "recordNameOracleEvidenceMatrixSummary",
+      "runtimeRouteLabelObservationBridgeGapSummary",
+      "runtimeRouteLabelCaptureReconciliationSummary",
+      "coordinateDisplayRuntimeCaptureReconciliationSummary",
+      "namedRouteTopologyOracleGapSummary"
+    ],
+    "evidenceInputSummaryCount": 5,
+    "postEvidenceReconciliationSteps": [
+      "validate complete source/name-table evidence or packet-level runtime route-label evidence before proposing any new resource-ID/name join",
+      "preserve resource 128 -> Levo as an invariant while checking every proposed join against decoded Con-slot/resource-ID context",
+      "require coordinate-display reconciliation before using map positions, click geometry, or label order as a record-name oracle",
+      "classify partial runtime packets as worklist refinements, not broad record-name promotion",
+      "rerun static_topology_source_readiness_scout and model manifest tests before any runtime universe replacement or named topology promotion"
+    ],
+    "promotionDecisionStates": [
+      "no-new-oracle; only resource 128 -> Levo remains exact-mapped",
+      "partial-runtime-packets; captured labels may refine priorities but unjoined records remain blocked",
+      "complete-source-name-order; may propose narrow record-name joins only for covered resource IDs",
+      "source-runtime-contradiction; reopen record-name oracle evidence matrix and keep broad topology blocked"
+    ],
+    "blockedPromotionClaims": [
+      "assigning any of resource IDs 129-194 to Classic system names without complete name-order or validated runtime packet evidence",
+      "using landing-name byte proximity or heuristic text seed order as a complete syst record-name oracle",
+      "promoting named route topology or runtime universe replacement from start-neighborhood labels alone",
+      "using map-label position/order as record-name proof without coordinate display reconciliation"
+    ],
+    "requiredVerifierBeforePromotion": [
+      "python3 tools/extract_ev_system_semantics.py",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty"
+    ],
+    "promotionBlockers": [
+      "post-evidence reconciliation is a gate, not a record-name promotion packet",
+      "complete name/order or validated packet-level target evidence is required before assigning any new syst resource name",
+      "coordinate display, named-route topology, and broad runtime-universe blockers still apply independently"
+    ],
+    "allowedUse": "reconcile future complete name-table or validated runtime route-label packets into narrow record-name join proposals only; do not promote names or runtime topology from this plan alone",
+    "promotionStatus": "not-promoted; record-name join reconciliation plan only",
+    "sourceNote": "This plan connects the record-name oracle matrix with route-label and coordinate-display reconciliation gates so future evidence can promote only packet-backed resource-ID/name joins while keeping broad topology blocked."
   },
   "namedRouteTopologyOracleGapSummary": {
     "sourceLabel": "decoded-resource-backed-named-route-topology-oracle-gap",
@@ -2294,6 +2376,927 @@
     ],
     "sourceNote": "This packet preserves the Resource Bible sequential field-family text as a testable projection while explicitly blocking non-topology gameplay semantics where the projection conflicts with decoded word-domain evidence."
   },
+  "systTemplateOffsetOracleGapSummary": {
+    "sourceLabel": "repo-reference-backed-syst-resedit-template-source-availability-gap",
+    "oracleStatus": "syst_template_offset_mapping_blocked_pending_exact_tmpl_or_resedit_source",
+    "checkedReferenceFamilies": [
+      "EV Classic Resource Bible syst prose at docs/references/ev-family/ev-classic-resource-bible.txt lines 924-989",
+      "local decoded primitive 88-byte syst-like records in native_ev/data/sourced_ev_structures.json",
+      "local reference archive search terms: TMPL/template/ResEdit/sÿst/syst field names"
+    ],
+    "availableEvidence": [
+      "Resource Bible field-family order and value domains for xPos/yPos, Con1-Con5, NavDef, DudeTypes/%Prob/AvgShips, Govt/Message/Asteroids/Interference/VisBit, and Con6-Con16",
+      "decoded record size and word-domain coverage for 67 syst-like records"
+    ],
+    "missingEvidence": [
+      "no exact syst TMPL/resource-template artifact is recorded in the local source manifest",
+      "no ResEdit field-offset screenshot/export is recorded in the local source manifest",
+      "no source-level Classic syst struct declaration is recorded in the local source manifest"
+    ],
+    "promotionBlockers": [
+      "template/source absence means Resource Bible prose cannot be converted into byte offsets by assertion",
+      "decoded word-domain scouts remain negative/candidate evidence until an exact template or runtime behavior oracle resolves offsets"
+    ],
+    "evFamilyTemplateTransferGuardrailSummary": {
+      "sourceLabel": "ev-family-reference-backed-template-transfer-guardrail",
+      "oracleStatus": "ev_family_template_evidence_not_classic_syst_offset_oracle",
+      "weakerReferenceFamilies": [
+        "EV Nova Bible documents a sÿst family and field-style documentation in docs/references/ev-family/ev-nova-bible.html but is not EV Classic-specific source evidence",
+        "EV Override Resource Bible and EV-family documentation may guide search terms but do not prove EV Classic syst byte layout",
+        "community Rezilla/TMPL export workflows in docs/research/ev-community-engine-survey.md describe EV Nova extraction paths, not a Classic syst TMPL artifact in this repo"
+      ],
+      "promotionBlockers": [
+        "EV-family TMPL/resource-editor workflows cannot promote EV Classic syst byte offsets without a Classic-specific template/source oracle",
+        "EV Nova/Override field documentation may seed hypotheses only; Classic runtime/source confirmation is still required before assigning unresolved syst words to gameplay semantics"
+      ],
+      "allowedUse": "search-term and hypothesis guidance only for locating a Classic-specific syst template, source struct, or runtime probe target",
+      "promotionStatus": "not-promoted; EV-family template evidence remains a transfer guardrail, not a Classic offset oracle"
+    },
+    "evFamilySystVariantDivergenceGuardrailSummary": {
+      "sourceLabel": "ev-family-reference-backed-syst-variant-divergence-guardrail",
+      "oracleStatus": "ev_family_syst_field_count_variants_not_classic_offset_oracles",
+      "classicReference": {
+        "sourceReference": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-989",
+        "navDefCount": 4,
+        "dudeTypeCount": 4,
+        "probabilityCount": 4,
+        "asteroidRange": [
+          0,
+          10
+        ],
+        "visibilitySetRange": [
+          0,
+          255
+        ],
+        "visibilityClearedRange": [
+          1000,
+          1255
+        ],
+        "conLinkCount": 16
+      },
+      "overrideReference": {
+        "sourceReference": "docs/references/ev-family/ev-override-resource-bible-1.0.2.txt lines 1170-1239",
+        "navDefCount": 4,
+        "dudeTypeCount": 4,
+        "probabilityCount": 4,
+        "asteroidRange": [
+          0,
+          10
+        ],
+        "visibilitySetRange": [
+          0,
+          511
+        ],
+        "visibilityClearedRange": [
+          1000,
+          1511
+        ],
+        "conLinkCount": 16,
+        "extraTailFamily": "AlwaysPers fields after Con6-Con16"
+      },
+      "novaReference": {
+        "sourceReference": "docs/references/ev-family/ev-nova-bible.html lines 3064-3188",
+        "navDefCount": 16,
+        "dudeTypeCount": 8,
+        "probabilityCount": 8,
+        "asteroidRange": [
+          0,
+          16
+        ],
+        "visibilityModel": "control-bit expression rather than Classic VisBit numeric ranges",
+        "conLinkCount": 16,
+        "extraTailFamilies": [
+          "BkgndColor",
+          "Murk",
+          "AstTypes",
+          "ReinfFleet",
+          "ReinfTime",
+          "ReinfIntrval"
+        ]
+      },
+      "divergenceSignals": [
+        "Override preserves Classic NavDef/DudeTypes counts but widens VisBit mission-bit ranges and adds AlwaysPers tail fields",
+        "Nova expands NavDef/DudeTypes and introduces post-visibility fields, changing field-count and tail-placement assumptions",
+        "Classic Resource Bible prose remains the only current Classic field-family source, but it still lacks byte widths and offsets"
+      ],
+      "promotionBlockers": [
+        "EV-family field-count variants cannot be transposed onto EV Classic unresolved words",
+        "variant Resource Bible agreement on some field names is not equivalent to an EV Classic byte-offset oracle",
+        "visibility, population, and tail-field divergences reinforce the need for a Classic-specific template/source/runtime oracle"
+      ],
+      "allowedUse": "negative oracle and search guidance only; use EV-family differences to avoid importing Override/Nova tail fields into Classic syst semantics",
+      "promotionStatus": "not-promoted; EV-family variant divergence blocks offset/field-count transfer into Classic unresolved words"
+    },
+    "nextEvidenceFamilies": [
+      "recover original EV Classic syst TMPL/template or equivalent ResEdit field map",
+      "obtain source-level struct declaration with byte widths, padding, and field offsets",
+      "capture Classic runtime probes that expose one blocked non-topology syst family at a time"
+    ],
+    "promotionStatus": "not-promoted; records that the template/ResEdit offset source is still absent from the local evidence bundle",
+    "evidenceInputSummaries": [
+      "resourceBibleSystSequentialFieldProjectionSummary",
+      "systFieldLayoutSourceReadinessSummary",
+      "systFieldOrderConflictSummary",
+      "systWordDomainCoverageSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "topLevelGateStatus": "blocked; Classic-specific syst TMPL/ResEdit/source offset oracle is absent",
+    "sourceNote": "This top-level gate mirrors the nested template-source availability gap so dispatchers, scenario evaluators, and reviewers can see that EV-family templates and Resource Bible prose remain hypothesis inputs only. It does not assign any unresolved syst byte offsets or gameplay semantics."
+  },
+  "systTemplateOffsetSourceSearchPrioritySummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-source-search-priority",
+    "oracleStatus": "syst_template_offset_search_blocked_pending_classic_specific_evidence",
+    "sourceBasis": [
+      "resource-bible-field",
+      "decoded-record-family",
+      "source-search-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetOracleGapSummary",
+      "resourceBibleSystSequentialFieldProjectionSummary",
+      "systWordDomainCoverageSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "priorityTargets": [
+      {
+        "targetId": "classic-syst-tmpl-or-resedit-template",
+        "targetEvidenceFamily": "Classic-specific syst TMPL/template or ResEdit field map",
+        "requiredEvidence": [
+          "field name",
+          "byte offset or ordered template slot",
+          "field width",
+          "Classic EV provenance"
+        ],
+        "promotionUse": "may close the template/offset gate only for fields whose offset and width are explicitly identified"
+      },
+      {
+        "targetId": "classic-source-syst-struct",
+        "targetEvidenceFamily": "Classic source-level syst struct declaration",
+        "requiredEvidence": [
+          "struct member order",
+          "member byte width",
+          "padding or packed-field rule",
+          "resource serialization mapping"
+        ],
+        "promotionUse": "may reconcile Resource Bible prose with decoded 88-byte records after source/file provenance is recorded"
+      },
+      {
+        "targetId": "validated-runtime-offset-surrogate",
+        "targetEvidenceFamily": "validated original-runtime packet tied to a candidate field family",
+        "requiredEvidence": [
+          "positive control",
+          "negative control",
+          "candidate word group",
+          "unchanged coordinate/name/topology guardrails"
+        ],
+        "promotionUse": "may refine probe priority, but cannot by itself assign byte offsets without a source/template oracle"
+      }
+    ],
+    "priorityTargetIds": [
+      "classic-syst-tmpl-or-resedit-template",
+      "classic-source-syst-struct",
+      "validated-runtime-offset-surrogate"
+    ],
+    "firstPriorityTargetId": "classic-syst-tmpl-or-resedit-template",
+    "checkedReferenceFamilies": [
+      "EV Classic Resource Bible syst prose at docs/references/ev-family/ev-classic-resource-bible.txt lines 924-989",
+      "local decoded primitive 88-byte syst-like records in native_ev/data/sourced_ev_structures.json",
+      "local reference archive search terms: TMPL/template/ResEdit/sÿst/syst field names"
+    ],
+    "missingEvidence": [
+      "no exact syst TMPL/resource-template artifact is recorded in the local source manifest",
+      "no ResEdit field-offset screenshot/export is recorded in the local source manifest",
+      "no source-level Classic syst struct declaration is recorded in the local source manifest"
+    ],
+    "promotionBlockers": [
+      "search priority is a worklist, not Classic byte-offset evidence",
+      "EV-family or adaptation templates remain transfer guardrails unless Classic-specific provenance is recorded",
+      "runtime packets can refine target order but cannot assign byte offsets without source/template evidence",
+      "broad runtime universe replacement remains blocked until this search priority yields a closed template/offset oracle or an explicit scaffold boundary"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; executable source-search priority only",
+    "sourceNote": "This packet converts the template/offset oracle gap into a deterministic search-priority worklist. It preserves the Classic-specific evidence boundary and does not assign unresolved syst byte offsets, Con6-Con16 split placement, or non-topology gameplay semantics."
+  },
+  "systTemplateOffsetEvidencePacketContractSummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-contract",
+    "oracleStatus": "syst_template_offset_evidence_packets_blocked_pending_validated_classic_specific_packet",
+    "sourceBasis": [
+      "source-search-required",
+      "resource-bible-field",
+      "decoded-record-family",
+      "original-runtime-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetSourceSearchPrioritySummary",
+      "systTemplateOffsetOracleGapSummary",
+      "resourceBibleSystSequentialFieldProjectionSummary",
+      "systWordDomainCoverageSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 5,
+    "acceptedEvidenceClasses": [
+      {
+        "evidenceClassId": "classic-syst-tmpl-or-resedit-template",
+        "requiredPacketFields": [
+          "classicProvenance",
+          "templateOrEditorArtifactPath",
+          "fieldName",
+          "byteOffsetOrOrderedTemplateSlot",
+          "fieldWidth",
+          "recordSerializationScope"
+        ],
+        "allowedPromotionUse": "may close the template/offset gate only for explicitly identified Classic syst fields after verifier replay"
+      },
+      {
+        "evidenceClassId": "classic-source-syst-struct",
+        "requiredPacketFields": [
+          "classicProvenance",
+          "sourceArtifactPath",
+          "structMemberOrder",
+          "memberByteWidths",
+          "paddingOrPackingRule",
+          "resourceSerializationMapping"
+        ],
+        "allowedPromotionUse": "may reconcile Resource Bible field prose with decoded record offsets only for struct members covered by Classic provenance"
+      },
+      {
+        "evidenceClassId": "validated-runtime-offset-surrogate",
+        "requiredPacketFields": [
+          "classicCapturePath",
+          "disposablePilotOrNonMutatingSurface",
+          "positiveControl",
+          "negativeControl",
+          "candidateWordGroup",
+          "unchangedCoordinateNameTopologyGuardrails"
+        ],
+        "allowedPromotionUse": "may refine source-search priority or runtime probe targeting, but cannot assign byte offsets without Classic source/template corroboration"
+      }
+    ],
+    "acceptedEvidenceClassIds": [
+      "classic-syst-tmpl-or-resedit-template",
+      "classic-source-syst-struct",
+      "validated-runtime-offset-surrogate"
+    ],
+    "firstAcceptedEvidenceClassId": "classic-syst-tmpl-or-resedit-template",
+    "requiredPacketSchemaVersion": 1,
+    "requiredCommonPacketFields": [
+      "packetId",
+      "evidenceClassId",
+      "sourceFidelityLabel",
+      "sourceBasis",
+      "classicSpecificProvenance",
+      "evidenceArtifactPaths",
+      "claimScope",
+      "verifierCommand",
+      "actualVerifierResult",
+      "promotionDecision",
+      "remainingUncertainty"
+    ],
+    "validationRules": [
+      "packet evidenceClassId must match one accepted source-search priority target",
+      "packet must name Classic-specific provenance before any byte-offset or field-width claim is considered",
+      "packet verifier output must replay locally before manifest promotion",
+      "runtime surrogate packets must include positive and negative controls plus unchanged coordinate/name/topology guardrails",
+      "EV-family/adaptation-only packets must be classified as guardrails, not Classic syst offset evidence"
+    ],
+    "promotionDecisionStates": [
+      "accepted-classic-template-source-packet; exact covered fields may be proposed for promotion after verifier replay",
+      "accepted-runtime-surrogate-packet; probe priority may change but byte offsets remain unpromoted",
+      "rejected-or-weaker-evidence; preserve blocker and update search notes only"
+    ],
+    "blockedPromotionClaims": [
+      "assigning unresolved syst byte offsets without a Classic-specific template/source packet",
+      "using EV-family TMPL/source variants as EV Classic byte-offset proof",
+      "using runtime observations alone to place Con6-Con16, government, hazard, message, visibility, population, or NavDef bytes",
+      "broad runtime universe replacement from a packet that does not close name/topology/display/non-topology gates"
+    ],
+    "searchPriorityTargetIds": [
+      "classic-syst-tmpl-or-resedit-template",
+      "classic-source-syst-struct",
+      "validated-runtime-offset-surrogate"
+    ],
+    "promotionBlockers": [
+      "evidence packet contract is an acceptance schema, not Classic byte-offset evidence",
+      "no packet has been validated against this contract yet",
+      "validated runtime surrogates can reprioritize probes but cannot replace Classic-specific TMPL/source evidence"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; packet acceptance contract only",
+    "sourceNote": "This contract makes future syst template/offset evidence review deterministic. It does not add a packet, assign byte offsets, or integrate non-topology syst behavior."
+  },
+  "systTemplateOffsetEvidencePacketValidationMatrixSummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-validation-matrix",
+    "oracleStatus": "syst_template_offset_packet_validation_blocked_pending_real_packet",
+    "sourceBasis": [
+      "source-search-required",
+      "packet-contract-required",
+      "classic-specific-provenance-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetEvidencePacketContractSummary",
+      "systTemplateOffsetSourceSearchPrioritySummary",
+      "systTemplateOffsetOracleGapSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "contractAcceptedEvidenceClassIds": [
+      "classic-syst-tmpl-or-resedit-template",
+      "classic-source-syst-struct",
+      "validated-runtime-offset-surrogate"
+    ],
+    "contractPromotionDecisionStates": [
+      "accepted-classic-template-source-packet; exact covered fields may be proposed for promotion after verifier replay",
+      "accepted-runtime-surrogate-packet; probe priority may change but byte offsets remain unpromoted",
+      "rejected-or-weaker-evidence; preserve blocker and update search notes only"
+    ],
+    "validationCases": [
+      {
+        "caseId": "accept-classic-template-field-offset-packet",
+        "evidenceClassId": "classic-syst-tmpl-or-resedit-template",
+        "requiredDecision": "accepted-classic-template-source-packet",
+        "requiredAssertions": [
+          "packet names Classic-specific provenance",
+          "packet includes field name, byte offset or ordered template slot, field width, and serialization scope",
+          "verifier output replays locally before any covered-field promotion proposal"
+        ],
+        "allowedPromotionUse": "exact covered fields may be proposed for promotion after verifier replay; uncovered syst words remain blocked"
+      },
+      {
+        "caseId": "accept-classic-source-struct-packet",
+        "evidenceClassId": "classic-source-syst-struct",
+        "requiredDecision": "accepted-classic-template-source-packet",
+        "requiredAssertions": [
+          "packet includes struct member order, member byte widths, padding or packing rule, and resource serialization mapping",
+          "packet artifact has Classic EV provenance recorded in the manifest evidence bundle"
+        ],
+        "allowedPromotionUse": "may reconcile only Classic-provenanced struct members with decoded record offsets"
+      },
+      {
+        "caseId": "accept-runtime-surrogate-for-priority-only",
+        "evidenceClassId": "validated-runtime-offset-surrogate",
+        "requiredDecision": "accepted-runtime-surrogate-packet",
+        "requiredAssertions": [
+          "packet includes positive and negative controls",
+          "packet preserves unchanged coordinate/name/topology guardrails",
+          "packet does not claim byte offsets without source/template corroboration"
+        ],
+        "allowedPromotionUse": "may reprioritize probe/search targets only; byte offsets remain unpromoted"
+      },
+      {
+        "caseId": "reject-ev-family-template-transfer-packet",
+        "evidenceClassId": "ev-family-template-or-adaptation-only",
+        "requiredDecision": "rejected-or-weaker-evidence",
+        "requiredAssertions": [
+          "packet lacks Classic-specific syst provenance",
+          "EV Nova/Override/adaptation template fields are classified as guardrails and search guidance only"
+        ],
+        "allowedPromotionUse": "no Classic syst offset, field-width, Con6-Con16, or non-topology gameplay promotion"
+      }
+    ],
+    "validationCaseCount": 4,
+    "firstValidationCaseId": "accept-classic-template-field-offset-packet",
+    "rejectionCaseIds": [
+      "reject-ev-family-template-transfer-packet"
+    ],
+    "requiredVerifierOutcomes": [
+      "accepted Classic template/source packets may only propose promotion for explicitly covered fields after verifier replay",
+      "accepted runtime surrogate packets may only update probe priority and must leave byte offsets unpromoted",
+      "EV-family/adaptation-only packets must be rejected as Classic syst offset evidence"
+    ],
+    "promotionBlockers": [
+      "validation matrix is a verifier fixture, not a validated evidence packet",
+      "no real Classic-specific packet has passed this matrix yet",
+      "runtime or EV-family-only evidence cannot close the template/offset oracle gap",
+      "broad runtime universe replacement remains blocked until a real accepted packet also satisfies name, topology, display, and non-topology gates"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; packet validation matrix only",
+    "sourceNote": "This matrix turns the packet contract into deterministic acceptance/rejection cases. It adds no real packet evidence and preserves the Classic-specific TMPL/source/runtime boundary."
+  },
+  "systTemplateOffsetEvidencePacketReplayReadinessSummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-replay-readiness",
+    "oracleStatus": "syst_template_offset_packet_replay_blocked_pending_real_packet",
+    "sourceBasis": [
+      "packet-contract-required",
+      "deterministic-verifier-replay-required",
+      "classic-specific-provenance-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetEvidencePacketValidationMatrixSummary",
+      "systTemplateOffsetEvidencePacketContractSummary",
+      "systTemplateOffsetSourceSearchPrioritySummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "validationCaseIds": [
+      "accept-classic-template-field-offset-packet",
+      "accept-classic-source-struct-packet",
+      "accept-runtime-surrogate-for-priority-only",
+      "reject-ev-family-template-transfer-packet"
+    ],
+    "replayStepCount": 4,
+    "firstReplayStepId": "packet-artifact-readback",
+    "replaySteps": [
+      {
+        "stepId": "packet-artifact-readback",
+        "requiredEvidence": [
+          "packet JSON or capture artifact path exists in repo-local or archived evidence surface",
+          "packet names packetId, evidenceClassId, sourceFidelityLabel, sourceBasis, and classicSpecificProvenance"
+        ],
+        "failureState": "reject packet as missing replayable artifact provenance"
+      },
+      {
+        "stepId": "contract-and-matrix-classification",
+        "requiredEvidence": [
+          "evidenceClassId is one of the accepted contract classes or is explicitly classified as weaker evidence",
+          "validation matrix caseId and requiredDecision are recorded before any promotion proposal"
+        ],
+        "failureState": "preserve template/offset oracle gap and record only search-note changes"
+      },
+      {
+        "stepId": "local-verifier-replay",
+        "requiredEvidence": [
+          "verifierCommand is rerun locally and actualVerifierResult is captured in the packet handoff",
+          "runtime surrogate packets keep positive/negative controls and unchanged coordinate/name/topology guardrails"
+        ],
+        "failureState": "reject promotion proposal until verifier output is replayable"
+      },
+      {
+        "stepId": "narrow-promotion-scope-review",
+        "requiredEvidence": [
+          "accepted Classic template/source packets enumerate exactly covered fields and remaining unresolved syst words",
+          "runtime surrogate packets update probe priority only and leave byte offsets unpromoted"
+        ],
+        "failureState": "block broad runtime universe replacement and keep covered-field proposal out of gameplay data"
+      }
+    ],
+    "requiredVerifierBeforePromotion": [
+      "python3 tools/extract_ev_system_semantics.py",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty"
+    ],
+    "blockedPromotionClaims": [
+      "promoting packet claims whose artifact path or verifier output cannot be replayed locally",
+      "promoting runtime surrogate packets into Classic byte offsets without Classic source/template corroboration",
+      "using a covered-field packet to lift unrelated syst words, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement"
+    ],
+    "promotionBlockers": [
+      "replay readiness is a handoff checklist, not a validated evidence packet",
+      "no real Classic-specific packet has been read back, classified, and replayed against this checklist",
+      "accepted packets must still pass narrow scope review before any manifest promotion proposal"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; packet replay readiness checklist only",
+    "sourceNote": "This checklist makes future packet acceptance auditable by requiring artifact readback, contract/matrix classification, local verifier replay, and narrow scope review. It adds no packet evidence and does not promote syst offsets."
+  },
+  "systTemplateOffsetEvidencePacketIntakeTriageSummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-intake-triage",
+    "oracleStatus": "syst_template_offset_packet_triage_blocked_pending_real_packet",
+    "sourceBasis": [
+      "packet-contract-required",
+      "deterministic-verifier-replay-required",
+      "classic-specific-provenance-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetEvidencePacketReplayReadinessSummary",
+      "systTemplateOffsetEvidencePacketValidationMatrixSummary",
+      "systTemplateOffsetEvidencePacketContractSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "validationCaseIds": [
+      "accept-classic-template-field-offset-packet",
+      "accept-classic-source-struct-packet",
+      "accept-runtime-surrogate-for-priority-only",
+      "reject-ev-family-template-transfer-packet"
+    ],
+    "replayStepIds": [
+      "packet-artifact-readback",
+      "contract-and-matrix-classification",
+      "local-verifier-replay",
+      "narrow-promotion-scope-review"
+    ],
+    "triageDecisionCount": 4,
+    "triageDecisionIds": [
+      "triage-classic-template-or-resedit-packet",
+      "triage-classic-source-struct-packet",
+      "triage-runtime-surrogate-packet",
+      "triage-ev-family-or-adaptation-only-packet"
+    ],
+    "triageDecisions": [
+      {
+        "decisionId": "triage-classic-template-or-resedit-packet",
+        "acceptedEvidenceClassIds": [
+          "classic-syst-tmpl-or-resedit-template"
+        ],
+        "requiredReplaySteps": [
+          "packet-artifact-readback",
+          "contract-and-matrix-classification",
+          "local-verifier-replay"
+        ],
+        "triageOutcome": "candidate-for-narrow-covered-field-review"
+      },
+      {
+        "decisionId": "triage-classic-source-struct-packet",
+        "acceptedEvidenceClassIds": [
+          "classic-source-syst-struct"
+        ],
+        "requiredReplaySteps": [
+          "packet-artifact-readback",
+          "contract-and-matrix-classification",
+          "local-verifier-replay",
+          "narrow-promotion-scope-review"
+        ],
+        "triageOutcome": "candidate-for-classic-struct-offset-reconciliation"
+      },
+      {
+        "decisionId": "triage-runtime-surrogate-packet",
+        "acceptedEvidenceClassIds": [
+          "validated-runtime-offset-surrogate"
+        ],
+        "requiredReplaySteps": [
+          "packet-artifact-readback",
+          "contract-and-matrix-classification",
+          "local-verifier-replay"
+        ],
+        "triageOutcome": "probe-priority-only-no-byte-offset-promotion"
+      },
+      {
+        "decisionId": "triage-ev-family-or-adaptation-only-packet",
+        "acceptedEvidenceClassIds": [
+          "ev-family-template-or-adaptation-only"
+        ],
+        "requiredReplaySteps": [
+          "packet-artifact-readback",
+          "contract-and-matrix-classification"
+        ],
+        "triageOutcome": "reject-as-classic-syst-offset-evidence"
+      }
+    ],
+    "blockedPromotionClaims": [
+      "treating intake triage as evidence that a real Classic syst packet exists",
+      "promoting runtime surrogate or EV-family/adaptation-only packets into byte offsets",
+      "using accepted covered-field triage to lift unrelated syst words, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement"
+    ],
+    "promotionBlockers": [
+      "intake triage is a routing checklist, not a validated evidence packet",
+      "no real Classic-specific packet has passed artifact readback, matrix classification, verifier replay, and scope review",
+      "broad runtime universe replacement remains blocked until packet-level evidence also satisfies name, topology, display, and non-topology gates"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; packet intake triage only pending real Classic-specific packet",
+    "sourceNote": "This triage layer tells future workers how to route replayed syst template/offset packets after readback and matrix classification. It adds no new packet evidence and cannot promote byte offsets or gameplay semantics."
+  },
+  "systTemplateOffsetEvidencePacketFailureTaxonomySummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-failure-taxonomy",
+    "oracleStatus": "syst_template_offset_packet_failure_taxonomy_blocked_pending_real_packet",
+    "sourceBasis": [
+      "packet-contract-required",
+      "deterministic-verifier-replay-required",
+      "classic-specific-provenance-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetEvidencePacketIntakeTriageSummary",
+      "systTemplateOffsetEvidencePacketReplayReadinessSummary",
+      "systTemplateOffsetEvidencePacketValidationMatrixSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "triageDecisionIds": [
+      "triage-classic-template-or-resedit-packet",
+      "triage-classic-source-struct-packet",
+      "triage-runtime-surrogate-packet",
+      "triage-ev-family-or-adaptation-only-packet"
+    ],
+    "failureClassCount": 5,
+    "failureClassIds": [
+      "missing-replayable-artifact",
+      "classic-provenance-absent",
+      "verifier-replay-missing-or-failed",
+      "scope-overreach-beyond-covered-fields",
+      "ev-family-or-adaptation-only-transfer"
+    ],
+    "failureClasses": [
+      {
+        "failureClassId": "missing-replayable-artifact",
+        "blockedPromotionClaim": "packet claim has no repo-local or archived artifact path that can be read back",
+        "requiredRecoveryEvidence": "provide packet path plus packetId/evidenceClassId/sourceFidelityLabel/sourceBasis/classicSpecificProvenance fields",
+        "allowedDisposition": "reject-and-record-search-note-only"
+      },
+      {
+        "failureClassId": "classic-provenance-absent",
+        "blockedPromotionClaim": "packet does not name Classic-specific TMPL, ResEdit, source-struct, or validated runtime-surrogate provenance",
+        "requiredRecoveryEvidence": "attach Classic-specific source path/capture/packet provenance before any byte-offset or field-width review",
+        "allowedDisposition": "reject-as-non-classic-offset-evidence"
+      },
+      {
+        "failureClassId": "verifier-replay-missing-or-failed",
+        "blockedPromotionClaim": "packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks",
+        "requiredRecoveryEvidence": "rerun required verifier command locally and record actual output in the packet handoff",
+        "allowedDisposition": "block-promotion-until-replay-passes"
+      },
+      {
+        "failureClassId": "scope-overreach-beyond-covered-fields",
+        "blockedPromotionClaim": "packet proposes unrelated byte offsets, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement",
+        "requiredRecoveryEvidence": "narrow the packet to explicitly covered fields and leave unrelated gates blocked",
+        "allowedDisposition": "accept-only-narrow-covered-subclaim-or-reject"
+      },
+      {
+        "failureClassId": "ev-family-or-adaptation-only-transfer",
+        "blockedPromotionClaim": "EV-family template/source/adaptation packet is offered as EV Classic syst byte-offset proof",
+        "requiredRecoveryEvidence": "replace with Classic-specific template/source evidence or keep as hypothesis/search-priority input",
+        "allowedDisposition": "reject-as-classic-syst-offset-evidence"
+      }
+    ],
+    "blockedPromotionClaims": [
+      "packet claim has no repo-local or archived artifact path that can be read back",
+      "packet does not name Classic-specific TMPL, ResEdit, source-struct, or validated runtime-surrogate provenance",
+      "packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks",
+      "packet proposes unrelated byte offsets, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement",
+      "EV-family template/source/adaptation packet is offered as EV Classic syst byte-offset proof"
+    ],
+    "promotionBlockers": [
+      "failure taxonomy is a rejection/recovery map, not Classic byte-offset evidence",
+      "no real Classic-specific packet has been accepted by this taxonomy",
+      "failure recovery may update search priority or packet status only; it must not promote offsets without replayed evidence",
+      "broad runtime universe replacement remains blocked until all name, topology, display, non-topology, and template-offset gates close"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; packet failure taxonomy only pending real Classic-specific packet",
+    "sourceNote": "This taxonomy makes rejected or incomplete future syst template/offset packets auditable by naming stable failure classes and recovery evidence. It adds no packet evidence and cannot promote byte offsets, Con-slot placement, non-topology behavior, or broad runtime universe replacement."
+  },
+  "systTemplateOffsetEvidencePacketRecoveryPlanSummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-recovery-plan",
+    "oracleStatus": "syst_template_offset_packet_recovery_plan_blocked_pending_real_packet",
+    "sourceBasis": [
+      "packet-contract-required",
+      "deterministic-verifier-replay-required",
+      "classic-specific-provenance-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetEvidencePacketFailureTaxonomySummary",
+      "systTemplateOffsetEvidencePacketIntakeTriageSummary",
+      "systTemplateOffsetEvidencePacketReplayReadinessSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "failureClassIds": [
+      "missing-replayable-artifact",
+      "classic-provenance-absent",
+      "verifier-replay-missing-or-failed",
+      "scope-overreach-beyond-covered-fields",
+      "ev-family-or-adaptation-only-transfer"
+    ],
+    "recoveryActionCount": 5,
+    "recoveryActionIds": [
+      "recover-missing-replayable-artifact",
+      "recover-classic-provenance-absent",
+      "recover-verifier-replay-missing-or-failed",
+      "recover-scope-overreach-beyond-covered-fields",
+      "recover-ev-family-or-adaptation-only-transfer"
+    ],
+    "recoveryActions": [
+      {
+        "actionId": "recover-missing-replayable-artifact",
+        "failureClassId": "missing-replayable-artifact",
+        "requiredNextEvidence": "repo-local or archived packet artifact with packetId, evidenceClassId, sourceFidelityLabel, sourceBasis, classicSpecificProvenance, and verifierCommand fields",
+        "allowedStateChange": "record search-note or packet-needed state only"
+      },
+      {
+        "actionId": "recover-classic-provenance-absent",
+        "failureClassId": "classic-provenance-absent",
+        "requiredNextEvidence": "Classic-specific TMPL, ResEdit, source struct, or validated runtime-surrogate provenance tied to EV Classic rather than EV-family/adaptation data",
+        "allowedStateChange": "keep packet rejected until Classic-specific provenance is attached"
+      },
+      {
+        "actionId": "recover-verifier-replay-missing-or-failed",
+        "failureClassId": "verifier-replay-missing-or-failed",
+        "requiredNextEvidence": "successful local replay of extractor, focused model validation, and static_topology_source_readiness_scout with captured actual output",
+        "allowedStateChange": "block any promotion proposal until verifier replay passes"
+      },
+      {
+        "actionId": "recover-scope-overreach-beyond-covered-fields",
+        "failureClassId": "scope-overreach-beyond-covered-fields",
+        "requiredNextEvidence": "narrowed packet listing only covered field names, offsets, widths, and unresolved excluded syst words",
+        "allowedStateChange": "accept only narrow covered-field review or reject overbroad claims"
+      },
+      {
+        "actionId": "recover-ev-family-or-adaptation-only-transfer",
+        "failureClassId": "ev-family-or-adaptation-only-transfer",
+        "requiredNextEvidence": "replace EV-family/adaptation-only support with Classic-specific source/runtime evidence or demote to search-priority hypothesis",
+        "allowedStateChange": "search-priority note only; no Classic syst byte-offset promotion"
+      }
+    ],
+    "blockedPromotionClaims": [
+      "packet claim has no repo-local or archived artifact path that can be read back",
+      "packet does not name Classic-specific TMPL, ResEdit, source-struct, or validated runtime-surrogate provenance",
+      "packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks",
+      "packet proposes unrelated byte offsets, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement",
+      "EV-family template/source/adaptation packet is offered as EV Classic syst byte-offset proof",
+      "treating a recovery plan as evidence that a previously rejected packet has been fixed"
+    ],
+    "promotionBlockers": [
+      "recovery plan is a next-evidence checklist, not Classic byte-offset evidence",
+      "recovered packets must rerun the full contract, matrix, triage, verifier replay, and narrow-scope review path",
+      "recovery actions may update packet status/search priority only; they must not promote offsets or runtime behavior without accepted evidence",
+      "broad runtime universe replacement remains blocked until all name, topology, display, non-topology, and template-offset gates close"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; packet recovery plan only pending real Classic-specific packet",
+    "sourceNote": "This recovery plan maps each failure class to the exact next evidence required before a future syst template/offset packet can be replayed again. It deliberately adds no new Classic packet evidence and cannot promote offsets, Con-slot placement, non-topology behavior, or broad runtime universe replacement."
+  },
+  "systTemplateOffsetEvidencePacketReentryGuardrailSummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-reentry-guardrail",
+    "oracleStatus": "syst_template_offset_packet_reentry_blocked_pending_recovered_real_packet",
+    "sourceBasis": [
+      "packet-contract-required",
+      "deterministic-verifier-replay-required",
+      "classic-specific-provenance-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetEvidencePacketRecoveryPlanSummary",
+      "systTemplateOffsetEvidencePacketFailureTaxonomySummary",
+      "systTemplateOffsetEvidencePacketReplayReadinessSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "failureClassIds": [
+      "missing-replayable-artifact",
+      "classic-provenance-absent",
+      "verifier-replay-missing-or-failed",
+      "scope-overreach-beyond-covered-fields",
+      "ev-family-or-adaptation-only-transfer"
+    ],
+    "recoveryActionIds": [
+      "recover-missing-replayable-artifact",
+      "recover-classic-provenance-absent",
+      "recover-verifier-replay-missing-or-failed",
+      "recover-scope-overreach-beyond-covered-fields",
+      "recover-ev-family-or-adaptation-only-transfer"
+    ],
+    "reentryStepCount": 4,
+    "reentryStepIds": [
+      "recovered-packet-artifact-readback",
+      "recovered-packet-failure-class-closure",
+      "recovered-packet-contract-matrix-triage-rerun",
+      "recovered-packet-promotion-scope-quarantine"
+    ],
+    "reentrySteps": [
+      {
+        "stepId": "recovered-packet-artifact-readback",
+        "requiredEvidence": "read back the recovered packet artifact and verify packetId/evidenceClassId/sourceFidelityLabel/sourceBasis/classicSpecificProvenance before changing any manifest claim",
+        "blockedShortcut": "do not accept a prose recovery note or search result as a replayable packet artifact"
+      },
+      {
+        "stepId": "recovered-packet-failure-class-closure",
+        "requiredEvidence": "map each prior failureClassId to its completed recoveryActionId and requiredNextEvidence",
+        "blockedShortcut": "do not clear a failure class until its paired recovery action supplies the named next evidence"
+      },
+      {
+        "stepId": "recovered-packet-contract-matrix-triage-rerun",
+        "requiredEvidence": "rerun contract, validation-matrix, intake-triage, verifier-replay, and narrow-scope review on the recovered packet",
+        "blockedShortcut": "do not resume from the failure point or skip earlier acceptance gates because a packet was revised"
+      },
+      {
+        "stepId": "recovered-packet-promotion-scope-quarantine",
+        "requiredEvidence": "quarantine any promotion proposal to explicitly covered Classic fields and preserve unrelated name/topology/display/non-topology/runtime-universe blockers",
+        "blockedShortcut": "do not let a recovered packet lift unrelated Con6-Con16 placement, byte offsets, non-topology behavior, or broad runtime universe replacement claims"
+      }
+    ],
+    "blockedShortcuts": [
+      "do not accept a prose recovery note or search result as a replayable packet artifact",
+      "do not clear a failure class until its paired recovery action supplies the named next evidence",
+      "do not resume from the failure point or skip earlier acceptance gates because a packet was revised",
+      "do not let a recovered packet lift unrelated Con6-Con16 placement, byte offsets, non-topology behavior, or broad runtime universe replacement claims"
+    ],
+    "requiredVerifierBeforePromotion": [
+      "python3 tools/extract_ev_system_semantics.py",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty"
+    ],
+    "blockedPromotionClaims": [
+      "packet claim has no repo-local or archived artifact path that can be read back",
+      "packet does not name Classic-specific TMPL, ResEdit, source-struct, or validated runtime-surrogate provenance",
+      "packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks",
+      "packet proposes unrelated byte offsets, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement",
+      "EV-family template/source/adaptation packet is offered as EV Classic syst byte-offset proof",
+      "treating a recovery plan as evidence that a previously rejected packet has been fixed",
+      "treating a recovered packet as accepted before artifact readback, failure-class closure, full replay, and narrow-scope quarantine"
+    ],
+    "promotionBlockers": [
+      "reentry guardrail is a replay path, not Classic byte-offset evidence",
+      "recovered packets must start again at artifact readback and rerun every acceptance gate",
+      "clearing a failure class does not promote offsets, field widths, Con-slot placement, non-topology behavior, or broad runtime universe replacement",
+      "broad runtime universe replacement remains blocked until all name, topology, display, non-topology, and template-offset gates close"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; recovered packet reentry guardrail only pending real Classic-specific packet",
+    "sourceNote": "This guardrail prevents recovered or revised syst template/offset packets from bypassing the original contract/matrix/triage/replay path. It adds no packet evidence and cannot promote byte offsets or runtime behavior."
+  },
   "systWordDomainCoverageSummary": {
     "sourceLabel": "decoded-resource-backed-syst-word-domain-coverage-scout",
     "oracleStatus": "syst_field_order_mapping_pending_complete_oracle",
@@ -3840,6 +4843,15 @@
       "resource-bible-field"
     ],
     "decodedSystRecordCount": 67,
+    "evidenceInputSummaries": [
+      "topologyPromotionReadinessSummary",
+      "coordinateDisplayRuntimeCaptureReconciliationSummary",
+      "recordNameRuntimeJoinReconciliationSummary",
+      "runtimeRouteLabelCaptureReconciliationSummary",
+      "nonTopologySystRuntimeCaptureReconciliationSummary",
+      "systTemplateOffsetOracleGapSummary"
+    ],
+    "evidenceInputSummaryCount": 6,
     "currentRuntimeSubsetPolicy": "keep existing runtime universe subset until promotion gates are satisfied",
     "candidateReplacementScope": "67 decoded syst-like records with resource IDs 128-194",
     "readyInputs": [
@@ -3869,6 +4881,11 @@
         "gate": "non_topology_syst_field_semantics",
         "status": "blocked",
         "reason": "NavDef, population, government, message, hazard, visibility, and Con6-Con16 placement need a complete field-order oracle or runtime/source confirmation"
+      },
+      {
+        "gate": "syst_template_offset_oracle_gap",
+        "status": "blocked",
+        "reason": "Classic-specific syst TMPL/ResEdit/source offset evidence is absent, so Resource Bible field-family prose cannot assign unresolved byte offsets or split Con6-Con16 placement"
       }
     ],
     "exactMappedResourceIds": [
@@ -3881,10 +4898,19 @@
     ],
     "heuristicSystemNameSeedCount": 9,
     "replacementReadinessStatus": "not-ready; decoded static inputs are source-readiness evidence only and must not replace the runtime universe yet",
+    "gateClosureChecklist": [
+      "coordinate display units/projection/centering closed by validated Classic map pixel/click calibration or accepted source projection surrogate",
+      "record-name joins closed by complete source/name table or validated packet-level target evidence",
+      "named route topology closed by route-label capture packets tied to decoded resource IDs and Con slots",
+      "non-topology syst fields closed by complete offset/source oracle or validated runtime reconciliation packets",
+      "syst template/offset gap closed by Classic-specific TMPL/ResEdit/source evidence before assigning unresolved byte offsets or Con6-Con16 split placement",
+      "static_topology_source_readiness_scout and focused model tests pass before any runtime subset replacement"
+    ],
     "promotionBlockers": [
       "broad runtime universe replacement would turn source-readiness scouts into player-facing topology without name/display/field-order oracles",
       "runtime subset expansion must wait for named topology and display calibration evidence or an explicitly accepted scaffold boundary",
-      "do not infer Classic-faithful broad universe behavior from the decoded syst run alone"
+      "do not infer Classic-faithful broad universe behavior from the decoded syst run alone",
+      "do not convert Resource Bible syst prose into byte offsets or Con6-Con16 split placement without a Classic-specific template/source oracle"
     ],
     "nextEvidenceFamilies": [
       "complete source-level name/order oracle joining the decoded syst run to Classic names",
@@ -25382,5 +26408,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement"
+  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement"
 }
