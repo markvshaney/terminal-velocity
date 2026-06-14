@@ -666,6 +666,67 @@ def reconcile_ledger_projection(repo: Path, profile: Path, *, apply: bool) -> di
     return payload
 
 
+def _bullet_list(items: list[str], *, limit: int = 5) -> list[str]:
+    visible = [str(item) for item in items[:limit]]
+    if len(items) > limit:
+        visible.append(f"… plus {len(items) - limit} more")
+    return [f"- {item}" for item in visible]
+
+
+def build_post_push_report(payload: dict[str, Any]) -> str:
+    """Build a concise TV progress report for Loki GameTV after a verified push."""
+    head = str(payload.get("head") or payload.get("origin_main") or "")
+    short_head = head[:7] if head else "unknown"
+    commits = [str(item) for item in payload.get("commit_summaries") or []]
+    changed = [str(item) for item in payload.get("changed_files") or []]
+    checks = [str(item) for item in payload.get("passed_checks") or []]
+
+    lines = [
+        "TV progress published",
+        f"Commit: `{short_head}`",
+    ]
+    if commits:
+        lines.append("Bundle:")
+        lines.extend(_bullet_list(commits, limit=4))
+    if changed:
+        lines.append("Changed:")
+        lines.extend(_bullet_list(changed, limit=6))
+    if checks:
+        lines.append("Verified:")
+        lines.extend(_bullet_list(checks, limit=6))
+    return "\n".join(lines)
+
+
+def deliver_post_push_report(target: str, message: str, *, dry_run: bool = False) -> dict[str, Any]:
+    if dry_run:
+        return {"target": target, "status": "dry_run", "message": message}
+    hermes_agent = Path(os.environ.get("HERMES_AGENT_HOME", "/home/bh/.hermes/hermes-agent"))
+    code = (
+        "import sys; "
+        "from tools.send_message_tool import send_message_tool; "
+        "target=sys.argv[1]; message=sys.stdin.read(); "
+        "print(send_message_tool({'action':'send','target':target,'message':message}))"
+    )
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(hermes_agent) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+    result = subprocess.run(
+        [sys.executable or "python3", "-c", code, target],
+        input=message,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        env=env,
+        timeout=60,
+    )
+    return {
+        "target": target,
+        "status": "sent" if result.returncode == 0 and '\"error\"' not in result.stdout else "failed",
+        "returncode": result.returncode,
+        "output": result.stdout.strip(),
+        "message": message,
+    }
+
+
 def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dict[str, Any]:
     blockers: list[str] = []
     warnings: list[str] = []
@@ -754,6 +815,8 @@ def main() -> int:
     parser.add_argument("--apply-unsafe-dirty-recovery", action="store_true", help="With --recover-unsafe-dirty-state, close stale clean unsafe_dirty_state Kanban gates idempotently.")
     parser.add_argument("--reconcile-ledger", action="store_true", help="Attach deterministic task-ledger reconciliation dry-run payload.")
     parser.add_argument("--apply-ledger-reconcile", action="store_true", help="With --reconcile-ledger, write the normalized task-ledger projection.")
+    parser.add_argument("--post-push-report-target", help="After a verified push, post a concise TV progress report to this Hermes messaging target, e.g. 'telegram:Loki GameTV'.")
+    parser.add_argument("--post-push-report-dry-run", action="store_true", help="Build the post-push report payload without sending it.")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -827,6 +890,21 @@ def main() -> int:
                 if not payload["pushed"]:
                     payload["blockers"] = sorted(set(payload["blockers"] + ["post_push_head_mismatch"]))
                     payload["decision"] = "needs_human"
+
+    if args.post_push_report_target:
+        if payload.get("pushed") or args.post_push_report_dry_run:
+            report = build_post_push_report(payload)
+            payload["post_push_report"] = deliver_post_push_report(
+                args.post_push_report_target,
+                report,
+                dry_run=bool(args.post_push_report_dry_run),
+            )
+        else:
+            payload["post_push_report"] = {
+                "target": args.post_push_report_target,
+                "status": "skipped",
+                "reason": "push_not_verified",
+            }
 
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0 if payload["decision"] in {"publish", "hold"} and not payload["blockers"] else 2

@@ -1,3 +1,4 @@
+import importlib.util
 import json
 import os
 import shutil
@@ -10,6 +11,10 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 INTEGRATOR = REPO / "tools/tv_integration_lane.py"
+_SPEC = importlib.util.spec_from_file_location("tv_integration_lane", INTEGRATOR)
+assert _SPEC and _SPEC.loader
+tv_integration_lane = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(tv_integration_lane)
 
 
 class TvIntegrationLaneTests(unittest.TestCase):
@@ -59,6 +64,50 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(payload["ahead_count"], 1)
             self.assertIn("docs/checklists/ev-classic-fidelity-implementation-backlog.md", payload["changed_files"])
             self.assertIn("git_diff_check", payload["passed_checks"])
+
+    def test_post_push_report_message_summarizes_published_tv_bundle(self):
+        payload = {
+            "head": "abcdef1234567890",
+            "origin_main": "abcdef1234567890",
+            "commit_summaries": [
+                "fix(runner): make task ledger provenance-only",
+                "chore(ledger): refresh provenance",
+            ],
+            "changed_files": [
+                "tools/tv_integration_lane.py",
+                ".hermes/long-running/tv-spec-implementation/task-ledger.json",
+            ],
+            "passed_checks": ["git_diff_check", "committed_diff_secret_scan"],
+        }
+
+        report = tv_integration_lane.build_post_push_report(payload)
+
+        self.assertIn("TV progress published", report)
+        self.assertIn("abcdef1", report)
+        self.assertIn("fix(runner): make task ledger provenance-only", report)
+        self.assertIn("tools/tv_integration_lane.py", report)
+        self.assertIn("git_diff_check", report)
+
+    def test_post_push_report_dry_run_payload_uses_requested_target(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            target = repo / "docs/checklists/ev-classic-fidelity-implementation-backlog.md"
+            target.write_text(target.read_text() + "\n<!-- integration fixture -->\n")
+            subprocess.run(["git", "add", str(target.relative_to(repo))], cwd=repo, check=True)
+            subprocess.run(["git", "commit", "-q", "-m", "fixture safe checkpoint"], cwd=repo, check=True)
+
+            code, payload = self.run_integrator(
+                repo,
+                "--dry-run",
+                "--post-push-report-target",
+                "telegram:Loki GameTV",
+                "--post-push-report-dry-run",
+            )
+
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(payload["post_push_report"]["target"], "telegram:Loki GameTV")
+            self.assertEqual(payload["post_push_report"]["status"], "dry_run")
+            self.assertIn("TV progress published", payload["post_push_report"]["message"])
 
     def test_blocks_dirty_untracked_files_before_review(self):
         with tempfile.TemporaryDirectory() as tmp:
