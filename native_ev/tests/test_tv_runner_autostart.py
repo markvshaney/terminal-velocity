@@ -43,8 +43,47 @@ class TvRunnerAutostartTests(unittest.TestCase):
         self.assertIn("--dry-run", command)
         self.assertIn("--recover-push-ready-handoff", command)
         self.assertIn("--normalize-gates", command)
+        self.assertIn("--blocked-report-target", command)
+        self.assertIn(tv_runner_autostart.LOKI_GAMETV_TARGET, command)
         self.assertNotIn("--apply-push-ready-recovery", command)
         self.assertNotIn("--apply-gate-comments", command)
+
+    def test_integration_owner_publish_posts_bundle_report_only_from_push_path(self):
+        commands = []
+
+        def fake_run_checked(cmd, *, cwd=None, timeout=45):
+            commands.append(cmd)
+            return 0, '{"decision":"publish","blockers":[],"pushed":true}'
+
+        with patch.object(tv_runner_autostart, "run_checked", side_effect=fake_run_checked):
+            code, _ = tv_runner_autostart.integration_owner_publish(dry_run=False)
+
+        self.assertEqual(code, 0)
+        command = commands[0]
+        self.assertIn("--push", command)
+        self.assertIn("--llm-approved", command)
+        self.assertIn("--post-push-report-target", command)
+        self.assertIn(tv_runner_autostart.LOKI_GAMETV_TARGET, command)
+        self.assertIn("--blocked-report-target", command)
+        self.assertNotIn("--post-push-report-dry-run", command)
+
+    def test_integration_owner_publish_dry_run_renders_but_does_not_send_bundle_report(self):
+        commands = []
+
+        def fake_run_checked(cmd, *, cwd=None, timeout=45):
+            commands.append(cmd)
+            return 0, '{"decision":"publish","blockers":[]}'
+
+        with patch.object(tv_runner_autostart, "run_checked", side_effect=fake_run_checked):
+            code, _ = tv_runner_autostart.integration_owner_publish(dry_run=True)
+
+        self.assertEqual(code, 0)
+        command = commands[0]
+        self.assertIn("--dry-run", command)
+        self.assertIn("--post-push-report-target", command)
+        self.assertIn("--post-push-report-dry-run", command)
+        self.assertIn("--blocked-report-target", command)
+        self.assertNotIn("--push", command)
 
     def test_create_continuation_omits_unavailable_target_profile_skills(self):
         commands = []

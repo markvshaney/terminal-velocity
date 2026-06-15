@@ -25,6 +25,7 @@ BOARD = "terminal-velocity"
 ASSIGNEE = "terminal-velocity"
 PROFILE_ARGS = ["hermes", "-p", "loki-game"]
 STATE_PATH = Path("/home/bh/.hermes/profiles/loki-game/cron/tv_runner_autostart_state.json")
+LOKI_GAMETV_TARGET = "telegram:-5102471014"
 PROFILE_SKILLS_ROOT = Path("/home/bh/.hermes/profiles/loki-game/skills")
 REQUESTED_CONTINUATION_SKILLS = (
     "long-running-task-harness",
@@ -263,11 +264,14 @@ def integration_owner_publish(dry_run: bool) -> tuple[int, str]:
         "--profile",
         "/home/bh/.hermes/profiles/loki-game",
         "--allow-process-artifacts",
+        "--blocked-report-target",
+        LOKI_GAMETV_TARGET,
     ]
     if dry_run:
         cmd.append("--dry-run")
+        cmd.extend(["--post-push-report-target", LOKI_GAMETV_TARGET, "--post-push-report-dry-run"])
     else:
-        cmd.extend(["--push", "--llm-approved"])
+        cmd.extend(["--push", "--llm-approved", "--post-push-report-target", LOKI_GAMETV_TARGET])
     return run_checked(cmd, cwd=REPO, timeout=180)
 
 
@@ -280,6 +284,8 @@ def integration_owner_close_push_ready(dry_run: bool) -> tuple[int, str]:
         "--profile",
         "/home/bh/.hermes/profiles/loki-game",
         "--allow-process-artifacts",
+        "--blocked-report-target",
+        LOKI_GAMETV_TARGET,
         "--recover-push-ready-handoff",
         "--normalize-gates",
     ]
