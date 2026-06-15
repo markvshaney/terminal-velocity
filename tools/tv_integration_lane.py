@@ -50,6 +50,7 @@ GATE_NORMALIZATION_MARKER = "tv_gate_normalization"
 PUSH_READY_RECOVERY_MARKER = "tv_push_ready_recovery"
 UNSAFE_DIRTY_RECOVERY_MARKER = "tv_unsafe_dirty_recovery"
 ACTIONABLE_GATE_CLASSES = {"push_ready", "review_required_process_bug"}
+PUSH_READY_EQUIVALENT_GATE_CLASSES = {"push_ready", "review_required_process_bug"}
 REPORT_STATE_PATH = Path(".hermes/long-running/tv-spec-implementation/report-state.json")
 REPORTS_DIR = Path(".hermes/long-running/tv-spec-implementation/reports")
 BUNDLE_SOFT_FILE_LIMIT = 8
@@ -398,10 +399,19 @@ def insert_normalization_comment(conn: sqlite3.Connection, task: dict[str, Any],
 
 
 def push_ready_recovery_comment_body(task: dict[str, Any]) -> str:
+    source_class = canonical_gate_class(task)
+    if source_class == "review_required_process_bug":
+        resolution = (
+            "resolution=repo is clean and not ahead of origin/main; review-required is invalid for verified safe-local TV work, "
+            "so integration owner treats it as push_ready plus a worker closeout contract violation"
+        )
+    else:
+        resolution = "resolution=repo is clean and not ahead of origin/main; treating this push_ready handoff as already integrated/stale for start-resume gating"
     return (
         f"{PUSH_READY_RECOVERY_MARKER}: canonical_class=push_ready\n"
         f"source_task={task.get('id')} title={task.get('title')}\n"
-        "resolution=repo is clean and not ahead of origin/main; treating this push_ready handoff as already integrated/stale for start-resume gating"
+        f"source_canonical_class={source_class}\n"
+        f"{resolution}"
     )
 
 
@@ -505,14 +515,16 @@ def recover_push_ready_handoffs(
                     continue
                 task_id = str(task.get("id") or "")
                 klass = canonical_gate_class(task, task_comment_bodies(conn, task_id))
-                if klass != "push_ready":
+                if klass not in PUSH_READY_EQUIVALENT_GATE_CLASSES:
                     skipped[task_id] = klass
                     continue
                 action = {
                     "db_path": str(db_path),
                     "task_id": task_id,
                     "title": task.get("title"),
-                    "canonical_class": klass,
+                    "canonical_class": "push_ready",
+                    "source_canonical_class": klass,
+                    "contract_violation": klass == "review_required_process_bug",
                     "comment_marker": PUSH_READY_RECOVERY_MARKER,
                 }
                 planned.append(action)

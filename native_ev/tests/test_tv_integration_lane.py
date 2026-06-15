@@ -567,8 +567,11 @@ class TvIntegrationLaneTests(unittest.TestCase):
             recovery = payload["push_ready_recovery"]
             self.assertFalse(recovery["applied"])
             self.assertEqual(recovery["recommended_action"], "close_stale_push_ready_handoffs")
-            self.assertEqual([item["task_id"] for item in recovery["planned_closeouts"]], ["t_push"])
-            self.assertEqual(recovery["skipped"]["t_review"], "review_required_process_bug")
+            self.assertEqual([item["task_id"] for item in recovery["planned_closeouts"]], ["t_push", "t_review"])
+            by_task = {item["task_id"]: item for item in recovery["planned_closeouts"]}
+            self.assertFalse(by_task["t_push"]["contract_violation"])
+            self.assertTrue(by_task["t_review"]["contract_violation"])
+            self.assertEqual(by_task["t_review"]["source_canonical_class"], "review_required_process_bug")
             self.assertEqual(recovery["skipped"]["t_unsafe"], "unsafe_dirty_state")
 
     def test_recover_push_ready_handoff_apply_closes_stale_clean_handoff_idempotently(self):
@@ -581,19 +584,22 @@ class TvIntegrationLaneTests(unittest.TestCase):
 
             self.assertEqual(first_code, 0, first_payload)
             self.assertEqual(second_code, 0, second_payload)
-            self.assertEqual(first_payload["push_ready_recovery"]["closeouts_written"], 1)
+            self.assertEqual(first_payload["push_ready_recovery"]["closeouts_written"], 2)
             self.assertEqual(second_payload["push_ready_recovery"]["closeouts_written"], 0)
             conn = sqlite3.connect(db)
             try:
-                status = conn.execute("SELECT status FROM tasks WHERE id = 't_push'").fetchone()[0]
-                comments = conn.execute("SELECT task_id, body FROM task_comments WHERE task_id = 't_push' ORDER BY id").fetchall()
-                events = conn.execute("SELECT task_id, kind FROM task_events WHERE task_id = 't_push' ORDER BY id").fetchall()
+                statuses = dict(conn.execute("SELECT id, status FROM tasks WHERE id IN ('t_push', 't_review')").fetchall())
+                comments = conn.execute("SELECT task_id, body FROM task_comments WHERE task_id IN ('t_push', 't_review') ORDER BY id").fetchall()
+                events = conn.execute("SELECT task_id, kind FROM task_events WHERE task_id IN ('t_push', 't_review') ORDER BY id").fetchall()
             finally:
                 conn.close()
-            self.assertEqual(status, "done")
-            self.assertEqual(len(comments), 1)
-            self.assertIn("tv_push_ready_recovery", comments[0][1])
-            self.assertEqual([row[1] for row in events], ["tv_push_ready_recovered"])
+            self.assertEqual(statuses, {"t_push": "done", "t_review": "done"})
+            self.assertEqual(len(comments), 2)
+            self.assertTrue(all("tv_push_ready_recovery" in row[1] for row in comments))
+            review_comment = [row[1] for row in comments if row[0] == "t_review"][0]
+            self.assertIn("source_canonical_class=review_required_process_bug", review_comment)
+            self.assertIn("contract violation", review_comment)
+            self.assertEqual([row[1] for row in events], ["tv_push_ready_recovered", "tv_push_ready_recovered"])
 
     def test_recover_push_ready_can_normalize_only_the_resolved_gate_and_reconcile_ledger(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -638,9 +644,12 @@ class TvIntegrationLaneTests(unittest.TestCase):
             )
             self.assertEqual(first_code, 0, first_payload)
             self.assertTrue(first_payload["ledger_reconciliation"]["write_applied"])
-            self.assertEqual(first_payload["gate_normalization"]["comments_written"], 1)
-            self.assertEqual([item["task_id"] for item in first_payload["gate_normalization"]["planned_comments"]], ["t_push"])
-            self.assertNotIn("t_review", {item["task_id"] for item in first_payload["gate_normalization"]["planned_comments"]})
+            self.assertEqual(first_payload["gate_normalization"]["comments_written"], 2)
+            self.assertEqual([item["task_id"] for item in first_payload["gate_normalization"]["planned_comments"]], ["t_push", "t_review"])
+            self.assertEqual(
+                {item["canonical_class"] for item in first_payload["gate_normalization"]["planned_comments"]},
+                {"push_ready", "review_required_process_bug"},
+            )
             written = json.loads((task_dir / "task-ledger.json").read_text())
             self.assertNotIn("status", written)
             self.assertNotIn("declared_owner", written)
@@ -653,10 +662,15 @@ class TvIntegrationLaneTests(unittest.TestCase):
                 events = conn.execute("SELECT task_id, kind FROM task_events ORDER BY id").fetchall()
             finally:
                 conn.close()
-            self.assertEqual([row[0] for row in comments], ["t_push", "t_push"])
+            self.assertEqual([row[0] for row in comments], ["t_push", "t_review", "t_push", "t_review"])
             self.assertTrue(any("tv_gate_normalization" in row[1] for row in comments))
             self.assertTrue(any("tv_push_ready_recovery" in row[1] for row in comments))
-            self.assertEqual(sorted(row[1] for row in events), ["tv_gate_normalized", "tv_push_ready_recovered"])
+            self.assertEqual(sorted(row[1] for row in events), [
+                "tv_gate_normalized",
+                "tv_gate_normalized",
+                "tv_push_ready_recovered",
+                "tv_push_ready_recovered",
+            ])
 
     def test_recover_unsafe_dirty_state_dry_run_plans_stale_clean_closeout(self):
         with tempfile.TemporaryDirectory() as tmp:
