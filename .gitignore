@@ -19,6 +19,7 @@ native_ev/savegame.json
 .hermes/long-running/*/*.lock.json
 .hermes/long-running/*/continuous-runner/
 .hermes/long-running/*/report-state.json
+.hermes/long-running/*/progress-report-state.json
 
 # Original/proprietary local EV source files and intermediate extractions.
 # Keep these local; do not put original .rez/.nplay assets into git history.
