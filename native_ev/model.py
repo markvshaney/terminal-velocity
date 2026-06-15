@@ -1639,6 +1639,31 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('sourced EV services evidence packet intake triage missing blocked claims')
     if 'not-promoted' not in intake_triage.get('promotionStatus', ''):
         raise ValueError('sourced EV services evidence packet intake triage must remain non-promoted')
+    failure_taxonomy = data.get('serviceStoreEvidencePacketFailureTaxonomySummary', {})
+    if failure_taxonomy.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-failure-taxonomy':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet failure taxonomy source label')
+    if failure_taxonomy.get('oracleStatus') != 'service_store_evidence_packet_failure_taxonomy_blocked_pending_real_classic_packet':
+        raise ValueError('sourced EV services evidence packet failure taxonomy changed oracle boundary')
+    if failure_taxonomy.get('evidenceInputSummaryCount') != 4 or 'serviceStoreEvidencePacketIntakeTriageSummary' not in failure_taxonomy.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV services evidence packet failure taxonomy missing intake-triage input')
+    if failure_taxonomy.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV services evidence packet failure taxonomy changed contract schema version')
+    if failure_taxonomy.get('failureClassCount') != 5:
+        raise ValueError('sourced EV services evidence packet failure taxonomy has unexpected class count')
+    failure_class_ids = set(failure_taxonomy.get('failureClassIds', []))
+    for required in ['missing-classic-spob-offset-provenance', 'missing-record-to-name-join-coverage', 'missing-stock-tech-specialtech-join', 'verifier-replay-missing-or-failed', 'tv-scaffold-or-ev-family-only-support']:
+        if required not in failure_class_ids:
+            raise ValueError(f'sourced EV services evidence packet failure taxonomy missing {required}')
+    if 'quarantine-tv-scaffold-or-ev-family-only-packet' not in failure_taxonomy.get('triageRouteIds', []):
+        raise ValueError('sourced EV services evidence packet failure taxonomy missing scaffold quarantine route')
+    failure_blocked_claims = ' '.join(failure_taxonomy.get('blockedPromotionClaims', []))
+    if 'packet verifier output cannot be replayed locally' not in failure_blocked_claims or 'stock availability' not in failure_blocked_claims:
+        raise ValueError('sourced EV services evidence packet failure taxonomy missing blocked claims')
+    failure_blockers = ' '.join(failure_taxonomy.get('promotionBlockers', []))
+    if 'rejection/recovery map' not in failure_blockers or 'non-promoting support' not in failure_blockers:
+        raise ValueError('sourced EV services evidence packet failure taxonomy missing promotion blockers')
+    if 'not-promoted' not in failure_taxonomy.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet failure taxonomy must remain non-promoted')
     return data
 
 

@@ -488,6 +488,85 @@ def _service_store_evidence_packet_intake_triage_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_failure_taxonomy_summary() -> dict:
+    """Classify rejected or incomplete service/store evidence packets after intake triage."""
+    intake_triage = _service_store_evidence_packet_intake_triage_summary()
+    failure_classes = [
+        {
+            'failureClassId': 'missing-classic-spob-offset-provenance',
+            'appliesToRouteIds': ['route-classic-spob-offset-packet-to-replay'],
+            'rejectionTrigger': 'packet lacks Classic-specific spöb TMPL/ResEdit/source artifact path, artifact sha256, or covered field offsets',
+            'allowedDisposition': 'reject-for-recovery',
+            'requiredRecoveryEvidence': 'Classic-specific source artifact readback with sha256 plus covered spöb field offsets before replay',
+        },
+        {
+            'failureClassId': 'missing-record-to-name-join-coverage',
+            'appliesToRouteIds': ['route-record-name-join-packet-to-covered-row-review'],
+            'rejectionTrigger': 'packet does not cover decoded spöb resource IDs, landing names, and record-to-name join evidence for each proposed row',
+            'allowedDisposition': 'reject-for-coverage-repair',
+            'requiredRecoveryEvidence': 'covered spöb resource IDs and Classic landing/body name joins for every proposed service row',
+        },
+        {
+            'failureClassId': 'missing-stock-tech-specialtech-join',
+            'appliesToRouteIds': ['route-stock-tech-join-packet-to-stock-scope-review'],
+            'rejectionTrigger': 'packet proposes outfit, weapon, or ship stock without item/ship/outfit TechLevel or SpecialTech joins tied to covered ports',
+            'allowedDisposition': 'reject-stock-claims-only',
+            'requiredRecoveryEvidence': 'TechLevel/SpecialTech stock joins scoped to covered landing names and stock families',
+        },
+        {
+            'failureClassId': 'verifier-replay-missing-or-failed',
+            'appliesToRouteIds': ['route-classic-spob-offset-packet-to-replay', 'route-record-name-join-packet-to-covered-row-review', 'route-stock-tech-join-packet-to-stock-scope-review'],
+            'rejectionTrigger': 'packet verifier output is absent, stale, non-replayable, or fails current extractor/model/scenario checks',
+            'allowedDisposition': 'reject-until-local-replay-passes',
+            'requiredRecoveryEvidence': 'captured local replay of extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout',
+        },
+        {
+            'failureClassId': 'tv-scaffold-or-ev-family-only-support',
+            'appliesToRouteIds': ['quarantine-tv-scaffold-or-ev-family-only-packet'],
+            'rejectionTrigger': 'packet only contains Terminal Velocity scaffold rows, EV-family template transfer, Resource Bible prose, or search notes without Classic-specific packet provenance',
+            'allowedDisposition': 'quarantine-as-non-promoting-support',
+            'requiredRecoveryEvidence': 'Classic-specific service/store packet provenance before any promotion proposal',
+        },
+    ]
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-failure-taxonomy',
+        'oracleStatus': 'service_store_evidence_packet_failure_taxonomy_blocked_pending_real_classic_packet',
+        'sourceBasis': [
+            'serviceStoreEvidencePacketIntakeTriageSummary',
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+            'serviceStoreEvidencePacketValidationMatrixSummary',
+            'serviceStoreEvidencePacketContractSummary',
+        ],
+        'evidenceInputSummaries': [
+            'serviceStoreEvidencePacketIntakeTriageSummary',
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+            'serviceStoreEvidencePacketValidationMatrixSummary',
+            'serviceStoreEvidencePacketContractSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'contractSchemaVersion': 1,
+        'triageRouteIds': [route['routeId'] for route in intake_triage.get('triageRoutes', [])],
+        'failureClassCount': len(failure_classes),
+        'failureClassIds': [failure['failureClassId'] for failure in failure_classes],
+        'failureClasses': failure_classes,
+        'blockedPromotionClaims': [
+            'packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks',
+            'Classic-wide service/store rows without accepted spöb offsets and record-to-name joins for each covered row',
+            'stock availability without covered TechLevel/SpecialTech and item/ship/outfit joins',
+            'legal landing/service denial or runtime UI behavior from rejected or quarantined packets',
+            'Terminal Velocity scaffold or EV-family-only packets as Classic service/store evidence',
+        ],
+        'promotionBlockers': [
+            'failure taxonomy is a rejection/recovery map, not Classic service/store evidence',
+            'no rejected packet can promote service/store rows, stock, legal landing, or UI behavior until recovered and replayed',
+            'quarantined scaffold or EV-family-only packets remain non-promoting support notes',
+        ],
+        'promotionStatus': 'not-promoted; failure taxonomy only pending real Classic-specific spob offset/name/stock packet evidence and verifier replay',
+        'sourceNote': 'This taxonomy makes failed service/store packet intake auditable and recoverable. It adds no packet evidence and promotes no Classic service/store, stock, legal landing, or runtime UI behavior.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -542,6 +621,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceStoreEvidencePacketValidationMatrixSummary': _service_store_evidence_packet_validation_matrix_summary(),
         'serviceStoreEvidencePacketReplayReadinessSummary': _service_store_evidence_packet_replay_readiness_summary(),
         'serviceStoreEvidencePacketIntakeTriageSummary': _service_store_evidence_packet_intake_triage_summary(),
+        'serviceStoreEvidencePacketFailureTaxonomySummary': _service_store_evidence_packet_failure_taxonomy_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 

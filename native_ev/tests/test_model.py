@@ -4506,6 +4506,22 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('validation matrix', ' '.join(intake_triage['requiredPreReplayDecisions']))
         self.assertIn('Terminal Velocity scaffold service rows', ' '.join(intake_triage['blockedPromotionClaims']))
         self.assertIn('not-promoted', intake_triage['promotionStatus'])
+        failure_taxonomy = data['serviceStoreEvidencePacketFailureTaxonomySummary']
+        self.assertEqual(failure_taxonomy['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-failure-taxonomy')
+        self.assertEqual(failure_taxonomy['oracleStatus'], 'service_store_evidence_packet_failure_taxonomy_blocked_pending_real_classic_packet')
+        self.assertEqual(failure_taxonomy['evidenceInputSummaryCount'], 4)
+        self.assertIn('serviceStoreEvidencePacketIntakeTriageSummary', failure_taxonomy['evidenceInputSummaries'])
+        self.assertEqual(failure_taxonomy['contractSchemaVersion'], 1)
+        self.assertEqual(failure_taxonomy['failureClassCount'], 5)
+        self.assertIn('missing-classic-spob-offset-provenance', failure_taxonomy['failureClassIds'])
+        self.assertIn('missing-record-to-name-join-coverage', failure_taxonomy['failureClassIds'])
+        self.assertIn('missing-stock-tech-specialtech-join', failure_taxonomy['failureClassIds'])
+        self.assertIn('verifier-replay-missing-or-failed', failure_taxonomy['failureClassIds'])
+        self.assertIn('tv-scaffold-or-ev-family-only-support', failure_taxonomy['failureClassIds'])
+        self.assertIn('quarantine-tv-scaffold-or-ev-family-only-packet', failure_taxonomy['triageRouteIds'])
+        self.assertIn('packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks', failure_taxonomy['blockedPromotionClaims'])
+        self.assertIn('failure taxonomy is a rejection/recovery map, not Classic service/store evidence', failure_taxonomy['promotionBlockers'])
+        self.assertIn('not-promoted', failure_taxonomy['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()
