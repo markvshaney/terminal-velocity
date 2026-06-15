@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -3598,6 +3598,107 @@
     ],
     "promotionStatus": "not-promoted; rollback readiness only pending a failed or conflicting accepted-packet diff",
     "sourceNote": "This rollback layer preserves a deterministic recovery path for future quarantined syst template/offset packet diffs. It adds no Classic packet evidence and cannot partially promote failed or reverted claims."
+  },
+  "systTemplateOffsetEvidencePacketRollbackRehearsalSummary": {
+    "sourceLabel": "repo-reference-backed-syst-template-offset-evidence-packet-rollback-rehearsal",
+    "oracleStatus": "syst_template_offset_packet_rollback_rehearsal_blocked_pending_actual_reverted_packet_diff",
+    "sourceBasis": [
+      "rollback-dry-run-checklist",
+      "baseline-snapshot-required",
+      "post-revert-verifier-capture-required"
+    ],
+    "sourceReferences": {
+      "systResourceDefinition": "docs/references/ev-family/ev-classic-resource-bible.txt lines 924-993",
+      "mapPlacementFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 935-937",
+      "hyperspaceLinkFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 938-993",
+      "runtimeNpcAndEnvironmentFields": "docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987"
+    },
+    "recordCount": 67,
+    "recordSize": 88,
+    "evidenceInputSummaries": [
+      "systTemplateOffsetEvidencePacketRollbackReadinessSummary",
+      "systTemplateOffsetEvidencePacketPromotionQuarantineSummary",
+      "systTemplateOffsetEvidencePacketCustodyAuditSummary",
+      "runtimeUniverseReplacementGateSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "rollbackControlIds": [
+      "pre-diff-baseline-capture",
+      "failed-verifier-revert-path",
+      "post-revert-replay",
+      "rollback-event-handoff"
+    ],
+    "rehearsalStepCount": 4,
+    "rehearsalStepIds": [
+      "baseline-manifest-snapshot-readback",
+      "isolated-quarantine-diff-revert",
+      "post-revert-verifier-replay-capture",
+      "failed-packet-ledger-handoff"
+    ],
+    "rehearsalSteps": [
+      {
+        "stepId": "baseline-manifest-snapshot-readback",
+        "requiredEvidence": "capture and read back the current sourced_ev_systems.json hash plus the dirty file set before any accepted packet diff rehearsal",
+        "blockedShortcut": "do not claim rollback rehearsability without a concrete baseline manifest snapshot"
+      },
+      {
+        "stepId": "isolated-quarantine-diff-revert",
+        "requiredEvidence": "prove the rollback target is limited to the accepted packet diff fields and does not revert unrelated source-readiness guardrails",
+        "blockedShortcut": "do not use rollback rehearsal to remove unrelated blockers or current promoted static fields"
+      },
+      {
+        "stepId": "post-revert-verifier-replay-capture",
+        "requiredEvidence": "record the exact extractor, JSON parse, focused model validation, and static topology scenario output after reverting the rehearsal diff",
+        "blockedShortcut": "do not mark a rollback rehearsal ready from stale pre-revert verifier output"
+      },
+      {
+        "stepId": "failed-packet-ledger-handoff",
+        "requiredEvidence": "record the rejected packet id, reverted manifest keys, failed verifier, restored verifier, and next evidence family in the long-running ledger/event stream",
+        "blockedShortcut": "do not discard rejected packet context once the working tree has been restored"
+      }
+    ],
+    "blockedShortcuts": [
+      "do not claim rollback rehearsability without a concrete baseline manifest snapshot",
+      "do not use rollback rehearsal to remove unrelated blockers or current promoted static fields",
+      "do not mark a rollback rehearsal ready from stale pre-revert verifier output",
+      "do not discard rejected packet context once the working tree has been restored"
+    ],
+    "requiredVerifierAfterRehearsal": [
+      "python3 tools/extract_ev_system_semantics.py",
+      "python3 -m json.tool native_ev/data/sourced_ev_systems.json",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty"
+    ],
+    "blockedPromotionClaims": [
+      "packet claim has no repo-local or archived artifact path that can be read back",
+      "packet does not name Classic-specific TMPL, ResEdit, source-struct, or validated runtime-surrogate provenance",
+      "packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks",
+      "packet proposes unrelated byte offsets, Con6-Con16 placement, non-topology behavior, or broad runtime universe replacement",
+      "EV-family template/source/adaptation packet is offered as EV Classic syst byte-offset proof",
+      "treating a recovery plan as evidence that a previously rejected packet has been fixed",
+      "treating a recovered packet as accepted before artifact readback, failure-class closure, full replay, and narrow-scope quarantine",
+      "treating custody/audit cleanliness as proof of Classic byte offsets without narrow accepted field claims",
+      "promoting broad runtime universe replacement from a custody-clean template packet before name/topology/display/non-topology gates close",
+      "using a narrow accepted field packet to promote unrelated syst offsets, display calibration, record-name joins, route labels, non-topology behavior, or broad runtime universe replacement",
+      "routing newly identified offset fields into gameplay before a separate runtime/scaffold integration gate accepts that exact use",
+      "treating rollback as proof that a rejected or conflicting Classic packet was partially accepted",
+      "weakening unrelated source-readiness gates to make a failed packet diff pass",
+      "treating a dry-run rollback rehearsal as evidence that a Classic offset packet was accepted",
+      "using rollback rehearsal to broaden packet scope beyond explicitly reverted fields"
+    ],
+    "promotionBlockers": [
+      "rollback rehearsal is an operational safety checklist, not Classic byte-offset evidence",
+      "a rehearsal cannot promote or partially promote failed, reverted, or still-pending packet claims",
+      "actual acceptance still requires the full contract, validation matrix, custody audit, quarantine, and post-diff verifier replay path"
+    ],
+    "nextEvidenceFamilies": [
+      "Classic-specific syst TMPL/template or ResEdit field map",
+      "Classic source-level syst struct declaration",
+      "validated original-runtime packet tied to a candidate field family"
+    ],
+    "promotionStatus": "not-promoted; rollback rehearsal only pending an actual reverted packet diff",
+    "sourceNote": "This rehearsal layer preserves a dry-run recovery checklist for future quarantined syst template/offset packet diffs. It adds no Classic packet evidence and cannot promote failed, reverted, or hypothetical offset claims."
   },
   "systWordDomainCoverageSummary": {
     "sourceLabel": "decoded-resource-backed-syst-word-domain-coverage-scout",
