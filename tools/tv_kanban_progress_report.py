@@ -91,6 +91,10 @@ def normalize_task(task: dict[str, Any]) -> dict[str, Any]:
         "result": result,
         "completed_at": task.get("completed_at"),
         "started_at": task.get("started_at"),
+        "bundle_summary": task.get("bundle_summary"),
+        "changed_files": task.get("changed_files") or [],
+        "verification": task.get("verification") or {},
+        "closeout_packet": task.get("closeout_packet"),
     }
 
 
@@ -158,10 +162,27 @@ def fingerprint(transitions: list[dict[str, Any]]) -> str:
             "gate": (item.get("task") or {}).get("gate"),
             "completed_at": (item.get("task") or {}).get("completed_at"),
             "started_at": (item.get("task") or {}).get("started_at"),
+            "bundle_summary": (item.get("task") or {}).get("bundle_summary"),
+            "closeout_packet": (item.get("task") or {}).get("closeout_packet"),
         }
         for item in transitions
     ]
     return hashlib.sha256(json.dumps(stable, sort_keys=True).encode()).hexdigest()[:16]
+
+
+def clean_summary(summary: str) -> str:
+    text = " ".join(str(summary or "").split())
+    for prefix in ("push_ready:", "continue:", "blocked:"):
+        if text.lower().startswith(prefix):
+            return text[len(prefix):].strip()
+    return text
+
+
+def verification_brief(verification: Any) -> str:
+    if not isinstance(verification, dict) or not verification:
+        return ""
+    keys = list(verification)[:5]
+    return ", ".join(str(key) for key in keys)
 
 
 def build_message(transitions: list[dict[str, Any]]) -> str:
@@ -182,6 +203,20 @@ def build_message(transitions: list[dict[str, Any]]) -> str:
         if task.get("assignee"):
             suffix += f" assignee={task['assignee']}"
         lines.append(f"- {labels.get(item['kind'], item['kind'])}: `{task['id']}` — {title}{suffix}")
+        summary = clean_summary(task.get("bundle_summary") or "")
+        if summary:
+            lines.append(f"  bundle: {summary}")
+        changed_files = task.get("changed_files") or []
+        if changed_files:
+            preview = ", ".join(str(path) for path in changed_files[:4])
+            if len(changed_files) > 4:
+                preview += f", +{len(changed_files) - 4} more"
+            lines.append(f"  files: {preview}")
+        verification = verification_brief(task.get("verification"))
+        if verification:
+            lines.append(f"  verified: {verification}")
+        if task.get("closeout_packet"):
+            lines.append(f"  closeout: `{task['closeout_packet']}`")
     if len(transitions) > 8:
         lines.append(f"- plus {len(transitions) - 8} more material transition(s)")
     return "\n".join(lines)
@@ -192,6 +227,44 @@ def read_kanban_tasks(profile_name: str, board: str) -> list[dict[str, Any]]:
     if result.returncode != 0:
         raise RuntimeError(result.stdout)
     return extract_tasks(json.loads(result.stdout))
+
+
+def read_kanban_task_detail(profile_name: str, board: str, task_id: str) -> dict[str, Any]:
+    result = run(["hermes", "-p", profile_name, "kanban", "--board", board, "show", task_id, "--json"])
+    if result.returncode != 0:
+        return {}
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def latest_run_metadata(detail: dict[str, Any]) -> dict[str, Any]:
+    runs = detail.get("runs") if isinstance(detail, dict) else []
+    if not isinstance(runs, list):
+        return {}
+    for run in runs:
+        if isinstance(run, dict) and isinstance(run.get("metadata"), dict):
+            return dict(run["metadata"])
+    return {}
+
+
+def enrich_transition_bundles(profile_name: str, board: str, transitions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    enriched: list[dict[str, Any]] = []
+    for item in transitions:
+        task = dict(item.get("task") or {})
+        if item.get("kind") in {"worker_push_ready", "task_done", "worker_contract_violation", "explicit_gate"}:
+            task_id = str(task.get("id") or "")
+            if task_id:
+                detail = read_kanban_task_detail(profile_name, board, task_id)
+                metadata = latest_run_metadata(detail)
+                task["bundle_summary"] = detail.get("latest_summary") or metadata.get("summary") or task.get("result") or task.get("bundle_summary")
+                task["changed_files"] = metadata.get("changed_files") or task.get("changed_files") or []
+                task["verification"] = metadata.get("verification") or task.get("verification") or {}
+                task["closeout_packet"] = metadata.get("closeout_packet") or task.get("closeout_packet")
+        enriched.append({**item, "task": task})
+    return enriched
 
 
 def deliver(profile_name: str, target: str, message: str, *, dry_run: bool) -> dict[str, Any]:
@@ -220,6 +293,8 @@ def main() -> int:
     previous = state.get("last_snapshot") or {"tasks": {}}
     current = snapshot_from_tasks(read_kanban_tasks(args.profile_name, args.board))
     transitions = material_transitions(previous, current)
+    if transitions:
+        transitions = enrich_transition_bundles(args.profile_name, args.board, transitions)
     fp = fingerprint(transitions) if transitions else None
     reported = set(str(item) for item in state.get("reported_fingerprints") or [])
     should_report = bool(transitions) and (args.force or fp not in reported)
