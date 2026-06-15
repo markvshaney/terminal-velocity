@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -3638,6 +3638,80 @@ def _non_topology_syst_runtime_capture_gate_summary(run: dict) -> dict:
     }
 
 
+def _non_topology_syst_runtime_capture_validation_matrix_summary(run: dict) -> dict:
+    """Define acceptance checks for non-topology runtime capture packets before reconciliation."""
+    capture_gate = _non_topology_syst_runtime_capture_gate_summary(run)
+    required_packet_ids = [
+        packet.get('packetId')
+        for packet in capture_gate.get('capturePacketTemplates', [])
+    ]
+    validation_rows = [
+        {
+            'checkId': 'packet-schema-and-runtime-build-readback',
+            'requiredEvidence': 'each capture packet names the disposable pilot class, original runtime version/build, packet id, and observed system/field family',
+            'failureClass': 'missing-capture-provenance-or-schema-field',
+            'blockedShortcut': 'do not reconcile observations whose runtime build, pilot safety class, or packet id cannot be read back',
+        },
+        {
+            'checkId': 'positive-negative-control-pair-completeness',
+            'requiredEvidence': 'positive and negative control packets both exist for the first priority government/message/hazard/visibility probe family',
+            'failureClass': 'missing-positive-or-negative-control-pair',
+            'blockedShortcut': 'do not promote or refine field-order priority from a one-sided capture',
+        },
+        {
+            'checkId': 'topology-boundary-noninterference',
+            'requiredEvidence': 'capture notes confirm coordinate, route-label, record-name, and runtime subset gates remain unchanged by the non-topology probe',
+            'failureClass': 'topology-boundary-contamination',
+            'blockedShortcut': 'do not treat environment observations as evidence for coordinate scaling, route labels, name joins, or broad universe replacement',
+        },
+        {
+            'checkId': 'source-runtime-field-order-handoff',
+            'requiredEvidence': 'validated capture packets are handed off as priority refiners only until a Classic-specific field-order/source packet assigns offsets',
+            'failureClass': 'runtime-observation-used-as-offset-oracle',
+            'blockedShortcut': 'do not assign Govt/Message/Asteroids/Interference/VisBit offsets from runtime observation alone',
+        },
+    ]
+    return {
+        'sourceLabel': 'decoded-resource-backed-non-topology-syst-runtime-capture-validation-matrix',
+        'oracleStatus': 'non_topology_syst_capture_validation_blocked_pending_complete_control_packets',
+        'sourceBasis': ['decoded-record-family', 'resource-bible-field', 'original-runtime-capture-required'],
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': [
+            'nonTopologySystRuntimeCaptureGateSummary',
+            'nonTopologySystRuntimeProbePrioritySummary',
+            'nonTopologySystOracleGapSummary',
+            'runtimeUniverseReplacementGateSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'firstPriorityProbeFamily': capture_gate.get('firstPriorityProbeFamily'),
+        'firstPriorityCandidateWordIndices': capture_gate.get('firstPriorityCandidateWordIndices', []),
+        'requiredCapturePacketIds': required_packet_ids,
+        'requiredValidatedCapturePacketCount': len(required_packet_ids),
+        'validationRowCount': len(validation_rows),
+        'validationCheckIds': [row['checkId'] for row in validation_rows],
+        'validationRows': validation_rows,
+        'failureClassIds': [row['failureClass'] for row in validation_rows],
+        'blockedShortcuts': [row['blockedShortcut'] for row in validation_rows],
+        'requiredVerifierBeforeReconciliation': [
+            'python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty',
+            'focused sourced-system manifest tests',
+        ],
+        'promotionBlockers': [
+            'capture validation matrix is an acceptance checklist, not Classic byte-offset evidence',
+            'validated runtime observations cannot promote non-topology syst field offsets without source/template or field-order evidence',
+            'positive and negative control completeness does not close coordinate, route-label, record-name, or broad runtime-universe gates',
+        ],
+        'nextEvidenceFamilies': [
+            'validated disposable original-runtime positive and negative capture packets',
+            'post-capture reconciliation against word-domain, field-order conflict, and source/template evidence',
+            'Classic-specific source/template/struct evidence tying non-topology field families to syst offsets',
+        ],
+        'promotionStatus': 'not-promoted; validation matrix only pending real control packets',
+        'sourceNote': 'This packet adds the validation checklist for future non-topology runtime captures before they enter reconciliation. It keeps observations as gated evidence inputs and prevents capture packets from becoming byte-offset or gameplay promotion authority.',
+    }
+
+
 def _non_topology_syst_runtime_capture_reconciliation_summary(run: dict) -> dict:
     """Define post-capture reconciliation gates before any non-topology syst promotion."""
     priority = _non_topology_syst_runtime_probe_priority_summary(run)
@@ -3659,7 +3733,7 @@ def _non_topology_syst_runtime_capture_reconciliation_summary(run: dict) -> dict
             'nonTopologySystOracleGapSummary',
             'systWordDomainCoverageSummary',
         ],
-        'evidenceInputSummaryCount': 4,
+        'evidenceInputSummaryCount': 5,
         'firstPriorityProbeFamily': first_group.get('probeFamily'),
         'firstPriorityCandidateWordIndices': first_group.get('candidateWordIndices', []),
         'requiredCapturePacketIds': required_packet_ids,
@@ -3943,6 +4017,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'nonTopologySystOracleGapSummary': _non_topology_syst_oracle_gap_summary(run),
         'nonTopologySystRuntimeProbePrioritySummary': _non_topology_syst_runtime_probe_priority_summary(run),
         'nonTopologySystRuntimeCaptureGateSummary': _non_topology_syst_runtime_capture_gate_summary(run),
+        'nonTopologySystRuntimeCaptureValidationMatrixSummary': _non_topology_syst_runtime_capture_validation_matrix_summary(run),
         'nonTopologySystRuntimeCaptureReconciliationSummary': _non_topology_syst_runtime_capture_reconciliation_summary(run),
         'topologyPromotionReadinessSummary': _topology_promotion_readiness_summary(systems, names),
         'runtimeUniverseReplacementGateSummary': _runtime_universe_replacement_gate_summary(systems, names),

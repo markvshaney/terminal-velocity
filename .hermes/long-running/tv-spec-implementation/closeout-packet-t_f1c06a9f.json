@@ -1,0 +1,70 @@
+{
+  "backlog_update": "none; verifier-backed source-readiness/capture-validation guardrail only, no backlog dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "non-topology-syst-runtime-capture-validation-matrix-20260615T022626Z",
+  "fidelity_boundary": "The new matrix records validation checks, failure classes, blocked shortcuts, and verifier requirements for future non-topology syst runtime capture packets only. It does not promote Classic byte offsets, field widths, governments, hazards, messages, visibility, coordinate/display calibration, route labels, record-name joins, gameplay/runtime integration, or broad runtime-universe replacement.",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Integration owner should inspect the dirty handoff bundle, including concurrently observed integration-owner bundle-size policy files that were not part of this non-topology capture-validation slice, checkpoint/push or split/batch as appropriate, then seed the next continuation from live repo state.",
+  "observed_unowned_dirty_paths": [
+    "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+    "docs/research/tv-spec.md",
+    "tools/tv_integration_lane.py",
+    "native_ev/tests/test_tv_integration_lane.py"
+  ],
+  "promotion_status": "not-promoted; capture validation matrix is an acceptance checklist only pending complete original-runtime positive/negative control packets",
+  "schema_version": 1,
+  "source_basis": [
+    "nonTopologySystRuntimeCaptureGateSummary",
+    "nonTopologySystRuntimeProbePrioritySummary",
+    "nonTopologySystOracleGapSummary",
+    "runtimeUniverseReplacementGateSummary",
+    "docs/research/tv-spec.md source/fidelity boundary"
+  ],
+  "source_fidelity_label": "decoded-resource-backed-non-topology-syst-runtime-capture-validation-matrix",
+  "successor_task": null,
+  "summary": "Added nonTopologySystRuntimeCaptureValidationMatrixSummary as a non-promoting acceptance checklist between the existing non-topology runtime capture gate and reconciliation plan, then wired it through sourced manifest validation, scenario projection/checks, and model/scenario tests.",
+  "task_id": "t_f1c06a9f",
+  "timestamp": "2026-06-15T02:26:26Z",
+  "verification": {
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with nonTopologySystRuntimeCaptureValidationMatrixSummary and updated method label"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "integration_lane_unittest_observed_external_dirty": {
+      "command": "python3 -m unittest native_ev.tests.test_tv_integration_lane",
+      "result": "passed; 24 tests OK for concurrently observed integration-lane dirty files not owned by this slice"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/tv_sourced_ev_systems_json_check.txt",
+      "result": "passed; JSON valid"
+    },
+    "npm_test": {
+      "command": "npm test -- --runInBand",
+      "result": "not applicable/blocked; repository root has no package.json and Windows npm returned ENOENT before any JS test execution"
+    },
+    "runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; success True, 76/76 checks passed including recorded_non_topology_syst_runtime_capture_validation_matrix"
+    },
+    "targeted_native_ev_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
+      "result": "passed; 274 tests OK"
+    }
+  }
+}
