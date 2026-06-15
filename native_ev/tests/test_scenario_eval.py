@@ -2033,6 +2033,9 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_non_topology_syst_oracle_gap',
             'recorded_non_topology_syst_runtime_probe_priority_summary',
             'recorded_non_topology_syst_runtime_capture_gate',
+            'recorded_non_topology_syst_runtime_capture_validation_matrix',
+            'recorded_non_topology_syst_runtime_capture_rejection_taxonomy',
+            'recorded_non_topology_syst_runtime_capture_reentry_guardrail',
             'recorded_non_topology_syst_runtime_capture_reconciliation_summary',
             'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',
@@ -2342,6 +2345,23 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertIn('capture validation matrix is an acceptance checklist, not Classic byte-offset evidence', readiness['nonTopologySystRuntimeCaptureValidationMatrixPromotionBlockers'])
         self.assertIn('not-promoted', readiness['nonTopologySystRuntimeCaptureValidationMatrixPromotionStatus'])
         self.assertEqual(result['state']['sourceReadiness']['staticTopology']['nonTopologySystRuntimeCaptureValidationMatrixFirstProbeFamily'], 'government-message-hazard-visibility-disambiguation')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureRejectionTaxonomySourceLabel'], 'decoded-resource-backed-non-topology-syst-runtime-capture-rejection-taxonomy')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureRejectionTaxonomyOracleStatus'], 'non_topology_syst_capture_rejection_taxonomy_blocked_pending_real_control_packets')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureRejectionTaxonomyInputSummaryCount'], 4)
+        self.assertIn('topology-boundary-contamination', readiness['nonTopologySystRuntimeCaptureRejectionTaxonomyRejectionClassIds'])
+        self.assertIn('block-promotion-and-preserve-as-priority-refinement-only', readiness['nonTopologySystRuntimeCaptureRejectionTaxonomyRejectionDispositions'])
+        self.assertIn('rejection taxonomy is a failure-routing checklist, not Classic byte-offset evidence', readiness['nonTopologySystRuntimeCaptureRejectionTaxonomyPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['nonTopologySystRuntimeCaptureRejectionTaxonomyPromotionStatus'])
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReentryGuardrailSourceLabel'], 'decoded-resource-backed-non-topology-syst-runtime-capture-reentry-guardrail')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReentryGuardrailOracleStatus'], 'non_topology_syst_capture_reentry_blocked_pending_corrected_control_packets')
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReentryGuardrailInputSummaryCount'], 4)
+        self.assertEqual(readiness['nonTopologySystRuntimeCaptureReentryGuardrailStepCount'], 4)
+        self.assertIn('topology-boundary-redaction', readiness['nonTopologySystRuntimeCaptureReentryGuardrailStepIds'])
+        self.assertIn('runtime-observation-used-as-offset-oracle', readiness['nonTopologySystRuntimeCaptureReentryGuardrailRejectionClassIds'])
+        self.assertIn('python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty', readiness['nonTopologySystRuntimeCaptureReentryGuardrailRequiredVerifiers'])
+        self.assertIn('allowing rejected non-topology capture packets back into reconciliation without corrected provenance and control-pair evidence', readiness['nonTopologySystRuntimeCaptureReentryGuardrailBlockedClaims'])
+        self.assertIn('reentry guardrail is a replay-path checklist, not Classic byte-offset evidence', readiness['nonTopologySystRuntimeCaptureReentryGuardrailPromotionBlockers'])
+        self.assertIn('not-promoted', readiness['nonTopologySystRuntimeCaptureReentryGuardrailPromotionStatus'])
         self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationSourceLabel'], 'decoded-resource-backed-non-topology-syst-runtime-capture-reconciliation-plan')
         self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationOracleStatus'], 'non_topology_syst_capture_reconciliation_blocked_pending_validated_runtime_packets')
         self.assertEqual(readiness['nonTopologySystRuntimeCaptureReconciliationInputSummaryCount'], 5)
