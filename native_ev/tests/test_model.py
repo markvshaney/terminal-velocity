@@ -4411,7 +4411,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
-        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v2')
+        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v3')
         self.assertEqual(data['spobRecordRun']['candidateType'], 'spob-like')
         self.assertEqual(data['spobRecordRun']['recordSize'], 400)
         self.assertEqual(data['spobRecordRun']['count'], 219)
@@ -4449,6 +4449,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('record-to-name join', blocker_matrix['blockingQuestions'][1]['requiredEvidence'])
         self.assertIn('TechLevel', blocker_matrix['blockingQuestions'][2]['question'])
         self.assertIn('Basilisk spot checks', ' '.join(blocker_matrix['allowedUsesBeforePromotion']))
+        contract = data['serviceStoreEvidencePacketContractSummary']
+        self.assertEqual(contract['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-contract')
+        self.assertEqual(contract['oracleStatus'], 'service_store_evidence_packet_blocked_pending_classic_spob_offset_name_stock_packet')
+        self.assertEqual(contract['inputSummaryCount'], 4)
+        self.assertIn('serviceStorePromotionBlockerMatrixSummary', contract['inputSummaries'])
+        self.assertIn('classic_source_artifact_path', contract['requiredPacketFields'])
+        self.assertIn('covered_field_offsets', contract['requiredPacketFields'])
+        self.assertIn('record_to_name_join_evidence', contract['requiredPacketFields'])
+        self.assertIn('stock_join_claims', contract['requiredPacketFields'])
+        self.assertIn('sha256', ' '.join(contract['acceptanceChecks']))
+        self.assertIn('system_service_provisioning_scout', ' '.join(contract['acceptanceChecks']))
+        self.assertIn('Classic-wide service/store rows', ' '.join(contract['blockedClaims']))
+        self.assertIn('not-promoted', contract['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

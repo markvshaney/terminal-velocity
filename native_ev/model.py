@@ -1496,7 +1496,7 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV services manifest has unexpected schema version')
-    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v2':
+    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v3':
         raise ValueError('sourced EV services manifest has unexpected extraction method')
     run = data.get('spobRecordRun', {})
     if run.get('candidateType') != 'spob-like' or run.get('recordSize') != 400 or run.get('count') != 219:
@@ -1552,6 +1552,25 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
     allowed_uses = ' '.join(blocker_matrix.get('allowedUsesBeforePromotion', []))
     if 'scaffold' not in allowed_uses or 'Basilisk spot checks' not in allowed_uses:
         raise ValueError('sourced EV services promotion blocker matrix missing allowed pre-promotion uses')
+    contract = data.get('serviceStoreEvidencePacketContractSummary', {})
+    if contract.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-contract':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet contract source label')
+    if contract.get('oracleStatus') != 'service_store_evidence_packet_blocked_pending_classic_spob_offset_name_stock_packet':
+        raise ValueError('sourced EV services evidence packet contract changed oracle boundary')
+    if contract.get('inputSummaryCount') != 4 or 'serviceStorePromotionBlockerMatrixSummary' not in contract.get('inputSummaries', []):
+        raise ValueError('sourced EV services evidence packet contract missing blocker-matrix input')
+    required_fields = set(contract.get('requiredPacketFields', []))
+    for required in ['classic_source_artifact_path', 'artifact_sha256', 'covered_field_offsets', 'record_to_name_join_evidence', 'stock_join_claims', 'verifier_commands']:
+        if required not in required_fields:
+            raise ValueError(f'sourced EV services evidence packet contract missing {required}')
+    acceptance = ' '.join(contract.get('acceptanceChecks', []))
+    if 'sha256' not in acceptance or 'system_service_provisioning_scout' not in acceptance:
+        raise ValueError('sourced EV services evidence packet contract missing acceptance checks')
+    contract_blocked_claims = ' '.join(contract.get('blockedClaims', []))
+    if 'Classic-wide service/store rows' not in contract_blocked_claims or 'stock availability' not in contract_blocked_claims:
+        raise ValueError('sourced EV services evidence packet contract missing blocked claims')
+    if 'not-promoted' not in contract.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet contract must remain non-promoted')
     return data
 
 

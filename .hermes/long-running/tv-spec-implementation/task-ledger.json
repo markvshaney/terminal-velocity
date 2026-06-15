@@ -135,6 +135,39 @@
     ],
     "event_parse_errors": []
   },
+  "lastUpdated": "2026-06-15T17:48:23Z",
+  "lastWorkerCloseout": {
+    "changed_files": [
+      "tools/extract_ev_service_semantics.py",
+      "native_ev/data/sourced_ev_services.json",
+      "native_ev/model.py",
+      "native_ev/scenario_eval.py",
+      "native_ev/tests/test_model.py",
+      "native_ev/tests/test_scenario_eval.py",
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
+      "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
+      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_a8b458a6.json"
+    ],
+    "closeout_class": "push_ready",
+    "next_action": "Integration owner should inspect and checkpoint/push this verified Lane B service/store contract slice, then seed the successor from live repo state. Next evidence work remains exact Classic sp\u00f6b field offsets, decoded record-to-name joins, and item/ship/outfit TechLevel/SpecialTech stock joins before Classic-wide service/store promotion.",
+    "packet_path": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_a8b458a6.json",
+    "summary": "Added serviceStoreEvidencePacketContractSummary as a non-promoting acceptance schema for future Classic-specific service/store packets, layered after the existing service/store readiness and blocker-matrix summaries.",
+    "task_id": "t_a8b458a6",
+    "timestamp": "2026-06-15T17:48:23Z",
+    "verification_commands": [
+      "runner_preflight",
+      "git_fetch_status_head",
+      "extract_ev_service_semantics",
+      "service_manifest_json_validation",
+      "focused_model_test",
+      "focused_scenario_test",
+      "scenario_system_service_provisioning_scout",
+      "backlog_dispatch_build",
+      "backlog_dispatch_check",
+      "backlog_dispatch_unit_tests",
+      "git_diff_check"
+    ]
+  },
   "latest_worker_handoff": {
     "changed_files": [
       "tools/extract_ev_system_semantics.py",

@@ -16,7 +16,7 @@ DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_UNIVERSE = Path('native_ev/data/universe.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_services.json')
-METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v2'
+METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v3'
 SOURCE_BASIS = 'Terminal Velocity runtime universe service matrix plus Levo original-runtime observation, sourced landing-name seeds, EV Classic Resource Bible spöb service/store fields, and local primitive spob-like structure decode'
 PROMOTION_BOUNDARY = 'Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Resource Bible spöb service/store flags are recorded as readiness inputs, but Classic-wide decoded service fields remain pending.'
 
@@ -186,6 +186,66 @@ def _service_store_promotion_blocker_matrix_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_contract_summary() -> dict:
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-contract',
+        'oracleStatus': 'service_store_evidence_packet_blocked_pending_classic_spob_offset_name_stock_packet',
+        'sourceBasis': [
+            'decoded-record-family',
+            'decoded-original-variable',
+            'resource-bible-field',
+            'original-runtime-observed',
+            'tv-scaffold',
+        ],
+        'inputSummaries': [
+            'serviceStoreProvisioningReadinessSummary',
+            'serviceStorePromotionBlockerMatrixSummary',
+            'spobRecordRun',
+            'landingNameSeeds',
+        ],
+        'inputSummaryCount': 4,
+        'requiredPacketFields': [
+            'packet_id',
+            'classic_source_artifact_path',
+            'artifact_sha256',
+            'covered_spob_resource_ids',
+            'covered_landing_names',
+            'covered_field_offsets',
+            'record_to_name_join_evidence',
+            'service_flag_claims',
+            'stock_join_claims',
+            'legal_landing_claims',
+            'promotion_scope',
+            'verifier_commands',
+            'uncertainty',
+        ],
+        'acceptanceChecks': [
+            'read back the cited Classic-specific artifact and sha256 before deriving offsets',
+            'prove every promoted service flag has a covered spob resource ID and landing/body name join',
+            'keep stock claims blocked unless outfit/weapon/ship TechLevel or SpecialTech joins are in the same packet or cited accepted packets',
+            'keep legal landing/service denial blocked unless Govt and MinCoolness offsets plus government joins are covered',
+            'rerun extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout after applying packet data',
+        ],
+        'blockedClaims': [
+            'treating Resource Bible service prose as decoded field offsets without a Classic-specific offset packet',
+            'promoting Classic-wide service/store rows from landing-name proximity or current Terminal Velocity scaffold rows',
+            'promoting outfitter/shipyard/weapon stock availability without item/ship/outfit joins',
+            'promoting legal landing or service denial behavior without Govt and MinCoolness joins',
+        ],
+        'promotionBlockers': [
+            'evidence packet contract is an acceptance schema only, not decoded spob offset evidence',
+            'no new Classic-wide service/store row, stock, or legal access claim is promoted by this packet contract',
+        ],
+        'requiredVerifiersBeforePromotion': [
+            'python3 tools/extract_ev_service_semantics.py',
+            'python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_services_manifest_records_current_service_matrix_scaffold -v',
+            'python3 tools/run_gameplay_scenarios.py system_service_provisioning_scout --pretty',
+        ],
+        'promotionStatus': 'not-promoted; evidence packet contract only pending real Classic-specific spob offset/name/stock evidence',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -236,6 +296,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceMatrix': matrix,
         'serviceStoreProvisioningReadinessSummary': _service_store_readiness_summary(run, names, matrix),
         'serviceStorePromotionBlockerMatrixSummary': _service_store_promotion_blocker_matrix_summary(),
+        'serviceStoreEvidencePacketContractSummary': _service_store_evidence_packet_contract_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 
