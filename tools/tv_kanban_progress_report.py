@@ -65,11 +65,15 @@ def extract_tasks(payload: Any) -> list[dict[str, Any]]:
 
 
 def normalize_task(task: dict[str, Any]) -> dict[str, Any]:
-    body = str(task.get("body") or task.get("summary") or task.get("result") or "")
-    result = str(task.get("result") or "")
+    result = str(task.get("result") or task.get("latest_summary") or "")
     status = str(task.get("status") or "")
     gate = None
-    text = f"{body}\n{result}".lower()
+    # Task bodies contain standing closeout instructions (for example "emit
+    # push_ready"), so using body text here falsely marks newly claimed work as
+    # already push_ready. Gate inference is limited to result/summary fields and
+    # explicit blocked status; bundle detail enrichment supplies richer closeout
+    # metadata for completed tasks.
+    text = result.lower()
     if "push_ready" in text or "push ready" in text:
         gate = "push_ready"
     elif "review-required" in text or "review_required" in text or "review required" in text:

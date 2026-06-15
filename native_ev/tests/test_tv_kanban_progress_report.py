@@ -112,6 +112,19 @@ class TvKanbanProgressReportTests(unittest.TestCase):
         self.assertEqual([item["task"]["id"] for item in transitions], ["t_gate", "t_recent", "t_run"])
         self.assertEqual([item["kind"] for item in transitions], ["worker_push_ready", "worker_push_ready", "worker_claimed"])
 
+    def test_normalize_task_does_not_treat_closeout_instructions_as_gate(self):
+        task = reporter.normalize_task(
+            {
+                "id": "t_new",
+                "title": "new work",
+                "status": "running",
+                "body": "On success leave a closeout packet with push_ready.",
+                "result": None,
+            }
+        )
+
+        self.assertIsNone(task["gate"])
+
     def test_snapshot_state_dedupes_by_fingerprint_without_scheduling_or_dispatching(self):
         transitions = [{"kind": "worker_claimed", "task": {"id": "t1", "status": "running", "gate": None, "started_at": 1}}]
         fp = reporter.fingerprint(transitions)
