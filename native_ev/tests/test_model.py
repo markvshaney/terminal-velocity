@@ -4411,7 +4411,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
-        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v3')
+        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4')
         self.assertEqual(data['spobRecordRun']['candidateType'], 'spob-like')
         self.assertEqual(data['spobRecordRun']['recordSize'], 400)
         self.assertEqual(data['spobRecordRun']['count'], 219)
@@ -4476,6 +4476,20 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Classic spöb offset packets', ' '.join(validation_matrix['requiredVerifierOutcomes']))
         self.assertIn('Terminal Velocity scaffold-only packets', ' '.join(validation_matrix['requiredVerifierOutcomes']))
         self.assertIn('not-promoted', validation_matrix['promotionStatus'])
+        replay_readiness = data['serviceStoreEvidencePacketReplayReadinessSummary']
+        self.assertEqual(replay_readiness['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-replay-readiness')
+        self.assertEqual(replay_readiness['oracleStatus'], 'service_store_evidence_packet_replay_blocked_pending_real_classic_packet')
+        self.assertEqual(replay_readiness['evidenceInputSummaryCount'], 4)
+        self.assertIn('serviceStoreEvidencePacketValidationMatrixSummary', replay_readiness['evidenceInputSummaries'])
+        self.assertEqual(replay_readiness['contractSchemaVersion'], 1)
+        self.assertEqual(replay_readiness['replayStepCount'], 4)
+        self.assertEqual(replay_readiness['firstReplayStepId'], 'packet-artifact-readback')
+        replay_step_ids = [step['stepId'] for step in replay_readiness['replaySteps']]
+        self.assertIn('local-verifier-replay', replay_step_ids)
+        self.assertIn('narrow-promotion-scope-review', replay_step_ids)
+        self.assertIn('system_service_provisioning_scout', ' '.join(replay_readiness['requiredVerifierBeforePromotion']))
+        self.assertIn('Classic-wide service/store rows', ' '.join(replay_readiness['blockedPromotionClaims']))
+        self.assertIn('not-promoted', replay_readiness['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

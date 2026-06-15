@@ -7,7 +7,7 @@
     "names": "native_ev/data/sourced_ev_names.json",
     "runtimeUniverse": "native_ev/data/universe.json"
   },
-  "method": "terminal-velocity-service-matrix-scaffold-plus-source-seeds-v3",
+  "method": "terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4",
   "sourceBasis": "Terminal Velocity runtime universe service matrix plus Levo original-runtime observation, sourced landing-name seeds, EV Classic Resource Bible spöb service/store fields, and local primitive spob-like structure decode",
   "spobRecordRun": {
     "candidateType": "spob-like",
@@ -1455,6 +1455,87 @@
       "Resource Bible prose remains blocked from decoded offset use until a Classic-specific offset packet is accepted"
     ],
     "promotionStatus": "not-promoted; validation matrix only pending real Classic-specific spob offset/name/stock packet evidence"
+  },
+  "serviceStoreEvidencePacketReplayReadinessSummary": {
+    "schemaVersion": 1,
+    "sourceLabel": "resource-bible-backed-service-store-evidence-packet-replay-readiness",
+    "oracleStatus": "service_store_evidence_packet_replay_blocked_pending_real_classic_packet",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field",
+      "deterministic-verifier-replay-required",
+      "classic-specific-provenance-required"
+    ],
+    "evidenceInputSummaries": [
+      "serviceStoreEvidencePacketValidationMatrixSummary",
+      "serviceStoreEvidencePacketContractSummary",
+      "serviceStorePromotionBlockerMatrixSummary",
+      "serviceStoreProvisioningReadinessSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "contractSchemaVersion": 1,
+    "validationCaseIds": [
+      "accept-classic-spob-template-offset-packet",
+      "accept-record-to-name-join-packet",
+      "accept-stock-join-packet",
+      "reject-tv-scaffold-service-matrix-only-packet"
+    ],
+    "replayStepCount": 4,
+    "firstReplayStepId": "packet-artifact-readback",
+    "replaySteps": [
+      {
+        "stepId": "packet-artifact-readback",
+        "requiredEvidence": [
+          "packet JSON or capture artifact path exists in a repo-local or archived evidence surface",
+          "packet names packetId, evidenceClassId, sourceFidelityLabel, sourceBasis, and Classic-specific provenance",
+          "artifact sha256 is recorded and rechecked before any covered service/store claim is used"
+        ],
+        "failureState": "reject packet as missing replayable service/store artifact provenance"
+      },
+      {
+        "stepId": "contract-and-matrix-classification",
+        "requiredEvidence": [
+          "evidenceClassId maps to a validation matrix caseId before any promotion proposal",
+          "packet classifies weaker TV-scaffold-only or EV-family-only inputs as non-promoting support"
+        ],
+        "failureState": "preserve service/store promotion blockers and record only scaffold or search-note changes"
+      },
+      {
+        "stepId": "local-verifier-replay",
+        "requiredEvidence": [
+          "verifier commands are rerun locally and actual verifier results are captured in the packet handoff",
+          "extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout all pass for the covered packet"
+        ],
+        "failureState": "reject promotion proposal until service/store verifier output is replayable"
+      },
+      {
+        "stepId": "narrow-promotion-scope-review",
+        "requiredEvidence": [
+          "accepted packets enumerate exactly covered spöb fields, record/name joins, service rows, and stock/legal claims",
+          "uncovered ports, stock families, legal landing behavior, and UI-sensitive service behavior remain blocked"
+        ],
+        "failureState": "keep Classic-wide service/store rows, stock, and legal/service behavior out of promoted gameplay data"
+      }
+    ],
+    "requiredVerifierBeforePromotion": [
+      "python3 tools/extract_ev_service_semantics.py",
+      "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_services_manifest_records_current_service_matrix_scaffold -v",
+      "python3 tools/run_gameplay_scenarios.py system_service_provisioning_scout --pretty"
+    ],
+    "blockedPromotionClaims": [
+      "promoting packet claims whose artifact path, sha256, or verifier output cannot be replayed locally",
+      "promoting Classic-wide service/store rows without accepted spöb offsets and record-to-name joins for each covered row",
+      "promoting outfit, weapon, or ship stock without covered TechLevel/SpecialTech and item/ship/outfit joins",
+      "promoting legal landing/service denial or runtime UI behavior from static service/store packets alone"
+    ],
+    "promotionBlockers": [
+      "replay readiness is a handoff checklist, not a validated Classic service/store evidence packet",
+      "no real Classic-specific packet has been read back, classified, and replayed against this checklist",
+      "accepted packets still require narrow covered-scope review before any manifest promotion proposal"
+    ],
+    "promotionStatus": "not-promoted; packet replay readiness checklist only pending real Classic-specific spob offset/name/stock packet evidence",
+    "sourceNote": "This checklist makes future service/store packet acceptance auditable by requiring artifact readback, contract/matrix classification, local verifier replay, and narrow scope review. It adds no packet evidence and promotes no service/store rows."
   },
   "promotionBoundary": "Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Resource Bible spöb service/store flags are recorded as readiness inputs, but Classic-wide decoded service fields remain pending."
 }

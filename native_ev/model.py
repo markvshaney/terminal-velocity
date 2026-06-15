@@ -1496,7 +1496,7 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV services manifest has unexpected schema version')
-    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v3':
+    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4':
         raise ValueError('sourced EV services manifest has unexpected extraction method')
     run = data.get('spobRecordRun', {})
     if run.get('candidateType') != 'spob-like' or run.get('recordSize') != 400 or run.get('count') != 219:
@@ -1591,6 +1591,29 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('sourced EV services evidence packet validation matrix missing verifier outcomes')
     if 'not-promoted' not in validation_matrix.get('promotionStatus', ''):
         raise ValueError('sourced EV services evidence packet validation matrix must remain non-promoted')
+    replay_readiness = data.get('serviceStoreEvidencePacketReplayReadinessSummary', {})
+    if replay_readiness.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-replay-readiness':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet replay readiness source label')
+    if replay_readiness.get('oracleStatus') != 'service_store_evidence_packet_replay_blocked_pending_real_classic_packet':
+        raise ValueError('sourced EV services evidence packet replay readiness changed oracle boundary')
+    if replay_readiness.get('evidenceInputSummaryCount') != 4 or 'serviceStoreEvidencePacketValidationMatrixSummary' not in replay_readiness.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV services evidence packet replay readiness missing validation-matrix input')
+    if replay_readiness.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV services evidence packet replay readiness missing contract schema version')
+    if replay_readiness.get('replayStepCount') != 4 or replay_readiness.get('firstReplayStepId') != 'packet-artifact-readback':
+        raise ValueError('sourced EV services evidence packet replay readiness missing replay steps')
+    replay_step_ids = [step.get('stepId') for step in replay_readiness.get('replaySteps', [])]
+    for required in ['packet-artifact-readback', 'contract-and-matrix-classification', 'local-verifier-replay', 'narrow-promotion-scope-review']:
+        if required not in replay_step_ids:
+            raise ValueError(f'sourced EV services evidence packet replay readiness missing {required}')
+    required_verifiers = ' '.join(replay_readiness.get('requiredVerifierBeforePromotion', []))
+    if 'extract_ev_service_semantics.py' not in required_verifiers or 'system_service_provisioning_scout' not in required_verifiers:
+        raise ValueError('sourced EV services evidence packet replay readiness missing verifier replay commands')
+    replay_blocked_claims = ' '.join(replay_readiness.get('blockedPromotionClaims', []))
+    if 'Classic-wide service/store rows' not in replay_blocked_claims or 'stock' not in replay_blocked_claims:
+        raise ValueError('sourced EV services evidence packet replay readiness missing blocked claims')
+    if 'not-promoted' not in replay_readiness.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet replay readiness must remain non-promoted')
     return data
 
 

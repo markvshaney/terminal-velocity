@@ -16,7 +16,7 @@ DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_UNIVERSE = Path('native_ev/data/universe.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_services.json')
-METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v3'
+METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4'
 SOURCE_BASIS = 'Terminal Velocity runtime universe service matrix plus Levo original-runtime observation, sourced landing-name seeds, EV Classic Resource Bible spöb service/store fields, and local primitive spob-like structure decode'
 PROMOTION_BOUNDARY = 'Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Resource Bible spöb service/store flags are recorded as readiness inputs, but Classic-wide decoded service fields remain pending.'
 
@@ -329,6 +329,88 @@ def _service_store_evidence_packet_validation_matrix_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_replay_readiness_summary() -> dict:
+    """Define the replay handoff required before accepting future service/store packets."""
+    validation_matrix = _service_store_evidence_packet_validation_matrix_summary()
+    replay_steps = [
+        {
+            'stepId': 'packet-artifact-readback',
+            'requiredEvidence': [
+                'packet JSON or capture artifact path exists in a repo-local or archived evidence surface',
+                'packet names packetId, evidenceClassId, sourceFidelityLabel, sourceBasis, and Classic-specific provenance',
+                'artifact sha256 is recorded and rechecked before any covered service/store claim is used',
+            ],
+            'failureState': 'reject packet as missing replayable service/store artifact provenance',
+        },
+        {
+            'stepId': 'contract-and-matrix-classification',
+            'requiredEvidence': [
+                'evidenceClassId maps to a validation matrix caseId before any promotion proposal',
+                'packet classifies weaker TV-scaffold-only or EV-family-only inputs as non-promoting support',
+            ],
+            'failureState': 'preserve service/store promotion blockers and record only scaffold or search-note changes',
+        },
+        {
+            'stepId': 'local-verifier-replay',
+            'requiredEvidence': [
+                'verifier commands are rerun locally and actual verifier results are captured in the packet handoff',
+                'extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout all pass for the covered packet',
+            ],
+            'failureState': 'reject promotion proposal until service/store verifier output is replayable',
+        },
+        {
+            'stepId': 'narrow-promotion-scope-review',
+            'requiredEvidence': [
+                'accepted packets enumerate exactly covered spöb fields, record/name joins, service rows, and stock/legal claims',
+                'uncovered ports, stock families, legal landing behavior, and UI-sensitive service behavior remain blocked',
+            ],
+            'failureState': 'keep Classic-wide service/store rows, stock, and legal/service behavior out of promoted gameplay data',
+        },
+    ]
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-replay-readiness',
+        'oracleStatus': 'service_store_evidence_packet_replay_blocked_pending_real_classic_packet',
+        'sourceBasis': [
+            'decoded-record-family',
+            'decoded-original-variable',
+            'resource-bible-field',
+            'deterministic-verifier-replay-required',
+            'classic-specific-provenance-required',
+        ],
+        'evidenceInputSummaries': [
+            'serviceStoreEvidencePacketValidationMatrixSummary',
+            'serviceStoreEvidencePacketContractSummary',
+            'serviceStorePromotionBlockerMatrixSummary',
+            'serviceStoreProvisioningReadinessSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'contractSchemaVersion': validation_matrix.get('schemaVersion'),
+        'validationCaseIds': [case['caseId'] for case in validation_matrix.get('validationCases', [])],
+        'replayStepCount': len(replay_steps),
+        'firstReplayStepId': replay_steps[0]['stepId'],
+        'replaySteps': replay_steps,
+        'requiredVerifierBeforePromotion': [
+            'python3 tools/extract_ev_service_semantics.py',
+            'python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_services_manifest_records_current_service_matrix_scaffold -v',
+            'python3 tools/run_gameplay_scenarios.py system_service_provisioning_scout --pretty',
+        ],
+        'blockedPromotionClaims': [
+            'promoting packet claims whose artifact path, sha256, or verifier output cannot be replayed locally',
+            'promoting Classic-wide service/store rows without accepted spöb offsets and record-to-name joins for each covered row',
+            'promoting outfit, weapon, or ship stock without covered TechLevel/SpecialTech and item/ship/outfit joins',
+            'promoting legal landing/service denial or runtime UI behavior from static service/store packets alone',
+        ],
+        'promotionBlockers': [
+            'replay readiness is a handoff checklist, not a validated Classic service/store evidence packet',
+            'no real Classic-specific packet has been read back, classified, and replayed against this checklist',
+            'accepted packets still require narrow covered-scope review before any manifest promotion proposal',
+        ],
+        'promotionStatus': 'not-promoted; packet replay readiness checklist only pending real Classic-specific spob offset/name/stock packet evidence',
+        'sourceNote': 'This checklist makes future service/store packet acceptance auditable by requiring artifact readback, contract/matrix classification, local verifier replay, and narrow scope review. It adds no packet evidence and promotes no service/store rows.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -381,6 +463,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceStorePromotionBlockerMatrixSummary': _service_store_promotion_blocker_matrix_summary(),
         'serviceStoreEvidencePacketContractSummary': _service_store_evidence_packet_contract_summary(),
         'serviceStoreEvidencePacketValidationMatrixSummary': _service_store_evidence_packet_validation_matrix_summary(),
+        'serviceStoreEvidencePacketReplayReadinessSummary': _service_store_evidence_packet_replay_readiness_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 
