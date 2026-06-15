@@ -130,30 +130,86 @@ def pre_dispatch_preflight(dry_run: bool) -> str:
         raise RuntimeError(f"runner-preflight failed with exit {code}: {raw.strip()}")
     return raw.strip()
 
-
-def recovery_preflight(tasks: list[dict]) -> tuple[int, str]:
+def _run_recovery_preflight(tasks: list[dict], *, checkpoint: bool = False) -> tuple[int, str]:
     """Run the deterministic idle-dirty recovery classifier with current Kanban state."""
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as handle:
         json.dump(tasks, handle)
         tasks_path = Path(handle.name)
     try:
-        return run_checked(
-            [
-                "python3",
-                "tools/tv_runner_recovery_preflight.py",
-                "--repo",
-                str(REPO),
-                "--tasks-json",
-                str(tasks_path),
-            ],
-            cwd=REPO,
-            timeout=60,
-        )
+        cmd = [
+            "python3",
+            "tools/tv_runner_recovery_preflight.py",
+            "--repo",
+            str(REPO),
+            "--tasks-json",
+            str(tasks_path),
+        ]
+        if checkpoint:
+            cmd.append("--checkpoint")
+        return run_checked(cmd, cwd=REPO, timeout=90 if checkpoint else 60)
     finally:
         try:
             tasks_path.unlink()
         except FileNotFoundError:
             pass
+
+
+def recovery_preflight(tasks: list[dict]) -> tuple[int, str]:
+    return _run_recovery_preflight(tasks, checkpoint=False)
+
+
+def checkpoint_handoff(tasks: list[dict], dry_run: bool) -> tuple[int, str]:
+    if dry_run:
+        return 0, json.dumps({
+            "recommended_action": "push_ready",
+            "explicit_gate": None,
+            "checkpoint": {"created": True, "dry_run": True},
+        })
+    return _run_recovery_preflight(tasks, checkpoint=True)
+
+
+def integration_owner_publish(dry_run: bool) -> tuple[int, str]:
+    cmd = [
+        "python3",
+        "tools/tv_integration_lane.py",
+        "--repo",
+        str(REPO),
+        "--profile",
+        "/home/bh/.hermes/profiles/loki-game",
+        "--allow-process-artifacts",
+    ]
+    if dry_run:
+        cmd.append("--dry-run")
+    else:
+        cmd.extend(["--push", "--llm-approved"])
+    return run_checked(cmd, cwd=REPO, timeout=180)
+
+
+def integration_owner_close_push_ready(dry_run: bool) -> tuple[int, str]:
+    cmd = [
+        "python3",
+        "tools/tv_integration_lane.py",
+        "--repo",
+        str(REPO),
+        "--profile",
+        "/home/bh/.hermes/profiles/loki-game",
+        "--allow-process-artifacts",
+        "--recover-push-ready-handoff",
+        "--normalize-gates",
+    ]
+    if dry_run:
+        cmd.append("--dry-run")
+    else:
+        cmd.extend(["--apply-push-ready-recovery", "--apply-gate-comments"])
+    return run_checked(cmd, cwd=REPO, timeout=180)
+
+
+def parse_json_packet(raw: str) -> dict:
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return {"parse_error": "non_json_output", "raw": raw.strip()}
+    return data if isinstance(data, dict) else {"parse_error": "unexpected_json_shape", "raw": raw.strip()}
 
 
 def start_resume_preflight() -> tuple[int, dict]:
@@ -293,6 +349,75 @@ def create_continuation(dry_run: bool) -> str:
     return str(created.get("id") or "").strip()
 
 
+def _print_recovery_gate(stage: str, packet: dict, code: int, now: str) -> None:
+    explicit_gate = packet.get("explicit_gate") or packet.get("blockers") or packet.get("parse_error") or f"{stage}_failed"
+    save_state(last_problem="integration_owner_recovery_blocked", last_problem_at=now, last_active="", last_recovery_stage=stage)
+    print(f"TV runner autostart explicit_gate: integration-owner recovery stopped at {stage}.")
+    print(json.dumps({
+        "stage": stage,
+        "exit_code": code,
+        "explicit_gate": explicit_gate,
+        "packet": packet,
+    }, indent=2, sort_keys=True))
+    print("repo: " + git_status_summary())
+
+
+def recover_checkpoint_push_ready_and_seed(tasks: list[dict], dry_run: bool, now: str) -> bool:
+    """Checkpoint a safe dirty handoff, publish it, close stale gate, then seed one successor."""
+    checkpoint_code, checkpoint_raw = checkpoint_handoff(tasks, dry_run)
+    checkpoint_packet = parse_json_packet(checkpoint_raw)
+    if (
+        checkpoint_code != 0
+        or checkpoint_packet.get("recommended_action") != "push_ready"
+        or checkpoint_packet.get("explicit_gate") is not None
+        or not (checkpoint_packet.get("checkpoint") or {}).get("created")
+    ):
+        _print_recovery_gate("checkpoint", checkpoint_packet, checkpoint_code, now)
+        return True
+
+    publish_code, publish_raw = integration_owner_publish(dry_run)
+    publish_packet = parse_json_packet(publish_raw)
+    if (
+        publish_code != 0
+        or publish_packet.get("blockers")
+        or publish_packet.get("decision") not in {"publish", "hold"}
+        or (not dry_run and not publish_packet.get("pushed"))
+    ):
+        _print_recovery_gate("publish", publish_packet, publish_code, now)
+        return True
+
+    close_code, close_raw = integration_owner_close_push_ready(dry_run)
+    close_packet = parse_json_packet(close_raw)
+    if close_code != 0 or close_packet.get("blockers"):
+        _print_recovery_gate("push_ready_closeout", close_packet, close_code, now)
+        return True
+
+    if not require_start_resume_safe(now):
+        return True
+    try:
+        pre_dispatch_preflight(dry_run)
+    except Exception as exc:
+        save_state(last_problem="runner_preflight_failed", last_problem_at=now, last_active="")
+        print(f"TV runner autostart blocked: runner-preflight failed after integration-owner recovery: {exc}")
+        print("repo: " + git_status_summary())
+        return True
+
+    created = create_continuation(dry_run)
+    out = dispatch(dry_run)
+    save_state(
+        last_action="integration_recovery_seed_and_dispatch",
+        last_action_at=now,
+        last_seeded_task=created,
+        last_recovered_checkpoint=(checkpoint_packet.get("checkpoint") or {}).get("commit"),
+        last_active="",
+    )
+    print(f"TV runner autostart: integration-owner recovered push_ready handoff and seeded and dispatched continuation {created}")
+    if out:
+        print(out.splitlines()[-1])
+    print("repo: " + git_status_summary())
+    return True
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
@@ -345,6 +470,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if git_dirty():
         code, recovery = recovery_preflight(tasks)
+        recovery_packet = parse_json_packet(recovery)
+        if (
+            code == 0
+            and recovery_packet.get("recommended_action") == "checkpoint_and_push_ready"
+            and recovery_packet.get("explicit_gate") is None
+        ):
+            recover_checkpoint_push_ready_and_seed(tasks, args.dry_run, now)
+            return 0
         save_state(last_problem="idle_dirty_repo", last_problem_at=now, last_active="", last_recovery_preflight_exit=code)
         print("TV runner autostart blocked: idle lane but repo has uncommitted work; recovery preflight classified the state before seeding new work.")
         print(recovery.strip())

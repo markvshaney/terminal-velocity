@@ -27,6 +27,25 @@ class TvRunnerAutostartTests(unittest.TestCase):
         self.assertIn("Do not create a successor continuation task from the worker when the worktree has unintegrated dirty handoff files", body)
         self.assertNotIn("Implement one or more adjacent", body)
 
+    def test_integration_owner_close_push_ready_dry_run_does_not_apply(self):
+        commands = []
+
+        def fake_run_checked(cmd, *, cwd=None, timeout=45):
+            commands.append(cmd)
+            return 0, '{"decision":"hold","blockers":[]}'
+
+        with patch.object(tv_runner_autostart, "run_checked", side_effect=fake_run_checked):
+            code, _ = tv_runner_autostart.integration_owner_close_push_ready(dry_run=True)
+
+        self.assertEqual(code, 0)
+        self.assertEqual(len(commands), 1)
+        command = commands[0]
+        self.assertIn("--dry-run", command)
+        self.assertIn("--recover-push-ready-handoff", command)
+        self.assertIn("--normalize-gates", command)
+        self.assertNotIn("--apply-push-ready-recovery", command)
+        self.assertNotIn("--apply-gate-comments", command)
+
     def test_create_continuation_omits_unavailable_target_profile_skills(self):
         commands = []
 
@@ -108,6 +127,74 @@ class TvRunnerAutostartTests(unittest.TestCase):
         lines = [call.args[0] for call in printed.call_args_list]
         self.assertTrue(any("recovery preflight" in line for line in lines))
         self.assertIn(output.strip(), lines)
+
+    def test_idle_dirty_checkpoint_ready_runs_integration_owner_then_seeds_once(self):
+        tasks = [{"id": "t_blocked", "assignee": "terminal-velocity", "status": "blocked"}]
+        recovery = {"recommended_action": "checkpoint_and_push_ready", "explicit_gate": None}
+        checkpoint = {
+            "recommended_action": "push_ready",
+            "explicit_gate": None,
+            "checkpoint": {"created": True, "commit": "abc123"},
+        }
+        publish = {"decision": "publish", "blockers": [], "pushed": True, "head": "abc123", "origin_main": "abc123"}
+        closeout = {"decision": "hold", "blockers": [], "push_ready_recovery": {"closeouts_written": 1}}
+
+        with patch.object(tv_runner_autostart, "board_tasks", return_value=tasks), \
+             patch.object(tv_runner_autostart, "assignee_tasks", side_effect=lambda all_tasks, status: [t for t in all_tasks if t["status"] == status]), \
+             patch.object(tv_runner_autostart, "git_dirty", return_value=True), \
+             patch.object(tv_runner_autostart, "git_status_summary", return_value="## main...origin/main"), \
+             patch.object(tv_runner_autostart, "recovery_preflight", return_value=(0, json.dumps(recovery))), \
+             patch.object(tv_runner_autostart, "checkpoint_handoff", return_value=(0, json.dumps(checkpoint))) as checkpoint_handoff, \
+             patch.object(tv_runner_autostart, "integration_owner_publish", return_value=(0, json.dumps(publish))) as publish_owner, \
+             patch.object(tv_runner_autostart, "integration_owner_close_push_ready", return_value=(0, json.dumps(closeout))) as close_push_ready, \
+             patch.object(tv_runner_autostart, "require_start_resume_safe", return_value=True), \
+             patch.object(tv_runner_autostart, "pre_dispatch_preflight", return_value="ok"), \
+             patch.object(tv_runner_autostart, "create_continuation", return_value="t_created") as create_continuation, \
+             patch.object(tv_runner_autostart, "dispatch", return_value="dispatched t_created") as dispatch, \
+             patch.object(tv_runner_autostart, "save_state") as save_state, \
+             patch("builtins.print") as printed:
+            code = tv_runner_autostart.main([])
+
+        self.assertEqual(code, 0)
+        checkpoint_handoff.assert_called_once_with(tasks, False)
+        publish_owner.assert_called_once_with(False)
+        close_push_ready.assert_called_once_with(False)
+        create_continuation.assert_called_once_with(False)
+        dispatch.assert_called_once_with(False)
+        save_state.assert_called()
+        lines = [call.args[0] for call in printed.call_args_list]
+        self.assertTrue(any("integration-owner recovered push_ready handoff" in line for line in lines))
+        self.assertTrue(any("seeded and dispatched continuation t_created" in line for line in lines))
+
+    def test_idle_dirty_checkpoint_ready_reports_explicit_gate_when_publish_blocked(self):
+        tasks = [{"id": "t_blocked", "assignee": "terminal-velocity", "status": "blocked"}]
+        recovery = {"recommended_action": "checkpoint_and_push_ready", "explicit_gate": None}
+        checkpoint = {
+            "recommended_action": "push_ready",
+            "explicit_gate": None,
+            "checkpoint": {"created": True, "commit": "abc123"},
+        }
+        publish = {"decision": "needs_human", "blockers": ["branch_behind_origin"], "pushed": False}
+
+        with patch.object(tv_runner_autostart, "board_tasks", return_value=tasks), \
+             patch.object(tv_runner_autostart, "assignee_tasks", side_effect=lambda all_tasks, status: [t for t in all_tasks if t["status"] == status]), \
+             patch.object(tv_runner_autostart, "git_dirty", return_value=True), \
+             patch.object(tv_runner_autostart, "git_status_summary", return_value="## main...origin/main"), \
+             patch.object(tv_runner_autostart, "recovery_preflight", return_value=(0, json.dumps(recovery))), \
+             patch.object(tv_runner_autostart, "checkpoint_handoff", return_value=(0, json.dumps(checkpoint))), \
+             patch.object(tv_runner_autostart, "integration_owner_publish", return_value=(2, json.dumps(publish))), \
+             patch.object(tv_runner_autostart, "create_continuation") as create_continuation, \
+             patch.object(tv_runner_autostart, "dispatch") as dispatch, \
+             patch.object(tv_runner_autostart, "save_state"), \
+             patch("builtins.print") as printed:
+            code = tv_runner_autostart.main([])
+
+        self.assertEqual(code, 0)
+        create_continuation.assert_not_called()
+        dispatch.assert_not_called()
+        lines = [call.args[0] for call in printed.call_args_list]
+        self.assertTrue(any("explicit_gate" in line for line in lines))
+        self.assertTrue(any("branch_behind_origin" in line for line in lines))
 
 
 if __name__ == "__main__":
