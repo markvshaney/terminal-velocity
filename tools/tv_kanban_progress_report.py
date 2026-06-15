@@ -112,15 +112,20 @@ def material_transitions(previous: dict[str, Any], current: dict[str, Any]) -> l
     prev_tasks = previous.get("tasks") or {}
     curr_tasks = current.get("tasks") or {}
     baseline_empty = not bool(prev_tasks)
+    now = int(time.time())
+    recent_window_seconds = int(os.environ.get("TV_PROGRESS_RECENT_WINDOW_SECONDS", "7200"))
     transitions: list[dict[str, Any]] = []
     for task_id, task in sorted(curr_tasks.items()):
         prev = prev_tasks.get(task_id) or {}
         status = task.get("status")
         gate = task.get("gate")
-        if baseline_empty and status == "done":
+        completed_at = task.get("completed_at") or 0
+        recently_completed = bool(completed_at and now - int(completed_at) <= recent_window_seconds)
+        if baseline_empty and status == "done" and not recently_completed:
             # First reporter invocation establishes a baseline; do not replay the
-            # whole historical board as progress. Active/current gates still
-            # surface below.
+            # whole historical board as progress. Current/recent closeouts and
+            # active gates still surface so a late-started reporter does not miss
+            # the material handoff that triggered it.
             continue
         if not prev and status == "running":
             kind = "worker_claimed"

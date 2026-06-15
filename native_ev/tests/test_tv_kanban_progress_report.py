@@ -42,10 +42,12 @@ class TvKanbanProgressReportTests(unittest.TestCase):
         self.assertIn("worker push_ready", message)
         self.assertIn("worker closeout contract violation", message)
 
-    def test_first_snapshot_does_not_replay_historical_done_tasks(self):
+    def test_first_snapshot_does_not_replay_historical_done_tasks_but_keeps_recent_closeout(self):
+        now = int(reporter.time.time())
         current = {
             "tasks": {
-                "t_old": {"id": "t_old", "title": "old", "status": "done", "gate": "push_ready"},
+                "t_old": {"id": "t_old", "title": "old", "status": "done", "gate": "push_ready", "completed_at": now - 99_999},
+                "t_recent": {"id": "t_recent", "title": "recent handoff", "status": "done", "gate": "push_ready", "completed_at": now - 60},
                 "t_run": {"id": "t_run", "title": "current", "status": "running", "gate": None},
                 "t_gate": {"id": "t_gate", "title": "ready handoff", "status": "ready", "gate": "push_ready"},
             }
@@ -53,8 +55,8 @@ class TvKanbanProgressReportTests(unittest.TestCase):
 
         transitions = reporter.material_transitions({"tasks": {}}, current)
 
-        self.assertEqual([item["task"]["id"] for item in transitions], ["t_gate", "t_run"])
-        self.assertEqual([item["kind"] for item in transitions], ["worker_push_ready", "worker_claimed"])
+        self.assertEqual([item["task"]["id"] for item in transitions], ["t_gate", "t_recent", "t_run"])
+        self.assertEqual([item["kind"] for item in transitions], ["worker_push_ready", "worker_push_ready", "worker_claimed"])
 
     def test_snapshot_state_dedupes_by_fingerprint_without_scheduling_or_dispatching(self):
         transitions = [{"kind": "worker_claimed", "task": {"id": "t1", "status": "running", "gate": None, "started_at": 1}}]
