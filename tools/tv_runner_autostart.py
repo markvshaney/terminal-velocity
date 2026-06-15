@@ -163,23 +163,144 @@ def is_queueable_handoff(task: dict) -> bool:
     return any(token in evidence for token in QUEUEABLE_HANDOFF_TOKENS)
 
 
+def _task_id(task: dict) -> str:
+    return str(task.get("id") or "")
+
+
+def _task_title(task: dict) -> str:
+    return str(task.get("title") or "")
+
+
+def _task_changed_paths(task: dict) -> list[str]:
+    """Return deterministic changed-path evidence embedded in a handoff task."""
+    paths: set[str] = set()
+    changed_files = task.get("changed_files") or task.get("changed_paths")
+    if isinstance(changed_files, list):
+        paths.update(str(path) for path in changed_files if path)
+    runs = task.get("runs")
+    if isinstance(runs, list):
+        for run in runs:
+            if not isinstance(run, dict):
+                continue
+            metadata = run.get("metadata")
+            if not isinstance(metadata, dict):
+                continue
+            run_changed = metadata.get("changed_files") or metadata.get("changed_paths")
+            if isinstance(run_changed, list):
+                paths.update(str(path) for path in run_changed if path)
+    return sorted(paths)
+
+
+def _conflict_domain(path: str) -> str:
+    parts = [part for part in path.split("/") if part]
+    if not parts:
+        return path
+    if parts[0] == ".hermes":
+        return ".hermes/long-running"
+    if len(parts) == 1:
+        return parts[0]
+    if parts[0] == "docs":
+        return "/".join(parts[:2])
+    if parts[0] == "native_ev" and len(parts) >= 3 and parts[1] in {"data", "tests"}:
+        return "/".join(parts[:3])
+    return "/".join(parts[:2])
+
+
+def _task_conflict_domains(task: dict) -> list[str]:
+    explicit = task.get("conflict_domains")
+    if isinstance(explicit, list) and explicit:
+        return sorted(str(item) for item in explicit if item)
+    return sorted({_conflict_domain(path) for path in _task_changed_paths(task)})
+
+
+def _task_summary(task: dict) -> dict:
+    return {
+        "id": _task_id(task),
+        "title": _task_title(task),
+        "status": task.get("status"),
+        "assignee": task.get("assignee"),
+    }
+
+
+def _handoff_summary(task: dict) -> dict:
+    summary = _task_summary(task)
+    summary.update({
+        "flow_state": "integration_queued",
+        "changed_paths": _task_changed_paths(task),
+        "conflict_domains": _task_conflict_domains(task),
+        "risk_class": task.get("risk_class") or task.get("source_fidelity_risk") or "safe_local_verified_or_unclassified",
+    })
+    return summary
+
+
+def _blocked_summary(task: dict) -> dict:
+    summary = _task_summary(task)
+    summary.update({
+        "flow_state": "blocked",
+        "blocker": task.get("blocked_reason") or task.get("block_reason") or task.get("reason") or "blocked:unclassified",
+    })
+    return summary
+
+
+def _plan_integration_batches(queued: list[dict]) -> tuple[list[dict], list[dict], dict | None]:
+    """Greedily group non-conflicting handoffs into a deterministic first batch."""
+    batch: list[dict] = []
+    batch_domains: set[str] = set()
+    held: list[dict] = []
+    for task in sorted(queued, key=lambda item: (_task_id(item), _task_title(item))):
+        domains = set(_task_conflict_domains(task))
+        overlap = sorted(batch_domains & domains)
+        if batch and overlap:
+            item = _handoff_summary(task)
+            item["held_reason"] = "conflict_domain_overlap"
+            item["conflicts_with_domains"] = overlap
+            held.append(item)
+            continue
+        batch.append(task)
+        batch_domains.update(domains)
+    candidates: list[dict] = []
+    recommended = None
+    if batch:
+        recommended = {
+            "handoff_ids": [_task_id(task) for task in batch if _task_id(task)],
+            "conflict_domains": sorted(batch_domains),
+            "changed_paths": sorted({path for task in batch for path in _task_changed_paths(task)}),
+        }
+        candidates.append(recommended)
+    return candidates, held, recommended
+
+
 def handoff_queue_plan(tasks: list[dict], *, target_active_workers: int = TARGET_ACTIVE_WORKERS) -> dict:
-    active_like = [
+    active_workers = [
         task for task in tasks
-        if task.get("assignee") == ASSIGNEE and task.get("status") in {"running", "ready", "scheduled"}
+        if task.get("assignee") == ASSIGNEE and task.get("status") in {"running", "scheduled"}
     ]
+    ready_backlog = [
+        task for task in tasks
+        if task.get("status") == "ready" and task.get("assignee") in {ASSIGNEE, None, ""}
+    ]
+    active_like = active_workers + [task for task in ready_backlog if task.get("assignee") == ASSIGNEE]
     blocked = [task for task in tasks if task.get("assignee") == ASSIGNEE and task.get("status") == "blocked"]
     queued = [task for task in blocked if is_queueable_handoff(task)]
     global_blockers = [task for task in blocked if task not in queued]
-    recommended_spawns = 0 if global_blockers else max(0, target_active_workers - len(active_like))
+    spawn_gap = 0 if global_blockers else max(0, target_active_workers - len(active_like))
+    recommended_spawn_tasks = [_task_summary(task) for task in sorted(ready_backlog, key=lambda item: (_task_id(item), _task_title(item)))[:spawn_gap]]
     flow_state_by_task = {str(task.get("id")): "integration_queued" for task in queued if task.get("id")}
     flow_state_by_task.update({str(task.get("id")): "blocked" for task in global_blockers if task.get("id")})
+    batch_candidates, held_handoffs, recommended_batch = _plan_integration_batches(queued)
     return {
         "target_active_workers": target_active_workers,
         "active_like_count": len(active_like),
+        "active_workers": [_task_summary(task) for task in sorted(active_workers, key=lambda item: (_task_id(item), _task_title(item)))],
+        "queued_handoffs": [_handoff_summary(task) for task in sorted(queued, key=lambda item: (_task_id(item), _task_title(item)))],
         "queued_handoff_ids": [str(task.get("id")) for task in queued if task.get("id")],
+        "global_blockers": [_blocked_summary(task) for task in sorted(global_blockers, key=lambda item: (_task_id(item), _task_title(item)))],
         "global_blocker_ids": [str(task.get("id")) for task in global_blockers if task.get("id")],
-        "recommended_spawns": recommended_spawns,
+        "compatible_batch_candidates": batch_candidates,
+        "held_handoffs": held_handoffs,
+        "recommended_integration_batch": recommended_batch,
+        "recommended_spawns": spawn_gap,
+        "recommended_spawn_tasks": recommended_spawn_tasks,
         "flow_state_by_task": flow_state_by_task,
     }
 

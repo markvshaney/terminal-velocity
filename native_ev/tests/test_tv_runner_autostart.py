@@ -248,6 +248,54 @@ class TvRunnerAutostartTests(unittest.TestCase):
         self.assertEqual(plan["recommended_spawns"], 0)
         self.assertEqual(plan["flow_state_by_task"]["t_handoff"], "integration_queued")
 
+    def test_handoff_queue_plan_returns_recommended_non_conflicting_batch_and_holds_overlap(self):
+        tasks = [
+            {
+                "id": "t_docs",
+                "assignee": "terminal-velocity",
+                "status": "blocked",
+                "blocked_reason": "push_ready: verified slice awaiting integration",
+                "changed_files": ["docs/research/tv-spec.md"],
+            },
+            {
+                "id": "t_model",
+                "assignee": "terminal-velocity",
+                "status": "blocked",
+                "blocked_reason": "push_ready: verified slice awaiting integration",
+                "runs": [{"metadata": {"changed_files": ["native_ev/model.py"]}}],
+            },
+            {
+                "id": "t_docs_overlap",
+                "assignee": "terminal-velocity",
+                "status": "blocked",
+                "blocked_reason": "push_ready: verified slice awaiting integration",
+                "changed_files": ["docs/research/ev-classic-quirk-review-ledger.md"],
+            },
+        ]
+
+        plan = tv_runner_autostart.handoff_queue_plan(tasks, target_active_workers=4)
+
+        self.assertEqual(plan["queued_handoff_ids"], ["t_docs", "t_model", "t_docs_overlap"])
+        self.assertEqual(plan["recommended_integration_batch"]["handoff_ids"], ["t_docs", "t_model"])
+        self.assertEqual(plan["recommended_integration_batch"]["conflict_domains"], ["docs/research", "native_ev/model.py"])
+        self.assertEqual([item["id"] for item in plan["held_handoffs"]], ["t_docs_overlap"])
+        self.assertEqual(plan["held_handoffs"][0]["conflicts_with_domains"], ["docs/research"])
+        self.assertEqual(plan["queued_handoffs"][0]["flow_state"], "integration_queued")
+
+    def test_handoff_queue_plan_recommends_spawn_tasks_from_unassigned_ready_backlog(self):
+        tasks = [
+            {"id": "t_running", "assignee": "terminal-velocity", "status": "running"},
+            {"id": "t_ready_a", "assignee": None, "status": "ready", "title": "Ready A"},
+            {"id": "t_ready_b", "assignee": "", "status": "ready", "title": "Ready B"},
+            {"id": "t_other", "assignee": "other-profile", "status": "ready", "title": "Other"},
+        ]
+
+        plan = tv_runner_autostart.handoff_queue_plan(tasks, target_active_workers=3)
+
+        self.assertEqual(plan["recommended_spawns"], 2)
+        self.assertEqual([item["id"] for item in plan["recommended_spawn_tasks"]], ["t_ready_a", "t_ready_b"])
+        self.assertEqual(plan["active_like_count"], 1)
+
     def test_clean_lane_with_only_queued_push_ready_handoff_seeds_unrelated_worker(self):
         tasks = [{"id": "t_handoff", "assignee": "terminal-velocity", "status": "blocked", "blocked_reason": "push_ready: verified slice awaiting integration"}]
         preflight_packet = {
