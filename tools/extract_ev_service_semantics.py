@@ -143,6 +143,49 @@ def _service_store_readiness_summary(run: dict, names: dict, matrix: list[dict])
     }
 
 
+def _service_store_promotion_blocker_matrix_summary() -> dict:
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-promotion-blocker-matrix',
+        'oracleStatus': 'service_store_promotion_blocked_pending_spob_offset_name_and_stock_joins',
+        'sourceBasis': [
+            'decoded-record-family',
+            'decoded-original-variable',
+            'resource-bible-field',
+            'tv-scaffold',
+        ],
+        'inputSummaries': [
+            'serviceStoreProvisioningReadinessSummary',
+            'spobRecordRun',
+            'landingNameSeeds',
+            'serviceMatrix',
+        ],
+        'blockingQuestions': [
+            {
+                'question': 'Which exact Classic spöb field offsets carry service flags, TechLevel, SpecialTech, Govt, and MinCoolness?',
+                'requiredEvidence': 'Classic-specific TMPL/ResEdit/source-struct packet or validated surrogate tying Resource Bible fields to decoded 400-byte record offsets',
+                'blockedClaims': ['decoded service flags', 'decoded stock availability', 'legal landing/service gates'],
+            },
+            {
+                'question': 'Which decoded spöb records join to each Classic landing/body name?',
+                'requiredEvidence': 'complete record-to-name join or packet-level original-runtime evidence for named target records',
+                'blockedClaims': ['Classic-wide per-port service rows', 'per-port stock matrix rows'],
+            },
+            {
+                'question': 'Which outfit, weapon, and ship records join to TechLevel/SpecialTech store availability at each promoted port?',
+                'requiredEvidence': 'item/ship/outfit resource joins plus focused service/store verifier output',
+                'blockedClaims': ['outfitter stock availability', 'shipyard stock availability', 'weapon store availability'],
+            },
+        ],
+        'allowedUsesBeforePromotion': [
+            'Keep current Terminal Velocity service rows labeled as scaffold except narrow original-runtime-observed Levo service absence.',
+            'Use Resource Bible spöb service fields as a routing worklist for future evidence packets.',
+            'Run Basilisk spot checks only after static joins narrow the target port/service ambiguity.',
+        ],
+        'promotionStatus': 'not-promoted; blocker matrix only pending Classic-specific spöb offset, record-name, and stock join evidence',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -192,6 +235,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'landingNameSeeds': names.get('landingNames', []),
         'serviceMatrix': matrix,
         'serviceStoreProvisioningReadinessSummary': _service_store_readiness_summary(run, names, matrix),
+        'serviceStorePromotionBlockerMatrixSummary': _service_store_promotion_blocker_matrix_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 

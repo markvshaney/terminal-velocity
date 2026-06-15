@@ -1536,6 +1536,22 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
     claims = ' '.join(summary.get('blockedPromotionClaims', []))
     if 'Classic-wide service/store matrix' not in claims or 'TechLevel' not in claims:
         raise ValueError('sourced EV services readiness summary missing blocked claims')
+    blocker_matrix = data.get('serviceStorePromotionBlockerMatrixSummary', {})
+    if blocker_matrix.get('sourceLabel') != 'resource-bible-backed-service-store-promotion-blocker-matrix':
+        raise ValueError('sourced EV services manifest missing service/store promotion blocker matrix source label')
+    if blocker_matrix.get('oracleStatus') != 'service_store_promotion_blocked_pending_spob_offset_name_and_stock_joins':
+        raise ValueError('sourced EV services manifest service/store promotion blocker matrix changed oracle boundary')
+    if 'not-promoted' not in blocker_matrix.get('promotionStatus', ''):
+        raise ValueError('sourced EV services promotion blocker matrix must remain non-promoted')
+    questions = blocker_matrix.get('blockingQuestions', [])
+    if len(questions) != 3:
+        raise ValueError('sourced EV services promotion blocker matrix must record three blocking questions')
+    question_text = ' '.join(question.get('question', '') for question in questions)
+    if 'field offsets' not in question_text or 'record' not in question_text or 'TechLevel' not in question_text:
+        raise ValueError('sourced EV services promotion blocker matrix missing offset/name/stock joins')
+    allowed_uses = ' '.join(blocker_matrix.get('allowedUsesBeforePromotion', []))
+    if 'scaffold' not in allowed_uses or 'Basilisk spot checks' not in allowed_uses:
+        raise ValueError('sourced EV services promotion blocker matrix missing allowed pre-promotion uses')
     return data
 
 

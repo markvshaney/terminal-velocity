@@ -4439,6 +4439,16 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('TechLevel and SpecialTech (x3)', field_names)
         self.assertIn('record-to-name join', ' '.join(summary['promotionBlockers']))
         self.assertIn('Classic-wide service/store matrix rows', ' '.join(summary['blockedPromotionClaims']))
+        blocker_matrix = data['serviceStorePromotionBlockerMatrixSummary']
+        self.assertEqual(blocker_matrix['sourceLabel'], 'resource-bible-backed-service-store-promotion-blocker-matrix')
+        self.assertEqual(blocker_matrix['oracleStatus'], 'service_store_promotion_blocked_pending_spob_offset_name_and_stock_joins')
+        self.assertIn('not-promoted', blocker_matrix['promotionStatus'])
+        self.assertEqual(blocker_matrix['inputSummaries'][0], 'serviceStoreProvisioningReadinessSummary')
+        self.assertEqual(len(blocker_matrix['blockingQuestions']), 3)
+        self.assertIn('field offsets', blocker_matrix['blockingQuestions'][0]['question'])
+        self.assertIn('record-to-name join', blocker_matrix['blockingQuestions'][1]['requiredEvidence'])
+        self.assertIn('TechLevel', blocker_matrix['blockingQuestions'][2]['question'])
+        self.assertIn('Basilisk spot checks', ' '.join(blocker_matrix['allowedUsesBeforePromotion']))
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

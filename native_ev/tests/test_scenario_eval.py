@@ -2756,6 +2756,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['scouted_earth_full_service_scaffold'], 'passed')
         self.assertEqual(result['checks']['scouted_station_without_shipyard'], 'passed')
         self.assertEqual(result['checks']['recorded_service_matrix_source_boundary'], 'passed')
+        self.assertEqual(result['checks']['recorded_service_store_promotion_blocker_matrix'], 'passed')
         scans = {(event['system'], event['body']): event for event in result['trace'] if event['type'] == 'scan_station_services'}
         self.assertFalse(scans[('Levo', 'Levo Spaceport')]['hasOutfitter'])
         self.assertFalse(scans[('Levo', 'Levo Spaceport')]['hasShipyard'])
