@@ -1571,6 +1571,26 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('sourced EV services evidence packet contract missing blocked claims')
     if 'not-promoted' not in contract.get('promotionStatus', ''):
         raise ValueError('sourced EV services evidence packet contract must remain non-promoted')
+    validation_matrix = data.get('serviceStoreEvidencePacketValidationMatrixSummary', {})
+    if validation_matrix.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-validation-matrix':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet validation matrix source label')
+    if validation_matrix.get('oracleStatus') != 'service_store_evidence_packet_validation_blocked_pending_real_classic_packet':
+        raise ValueError('sourced EV services evidence packet validation matrix changed oracle boundary')
+    if validation_matrix.get('inputSummaryCount') != 4 or 'serviceStoreEvidencePacketContractSummary' not in validation_matrix.get('inputSummaries', []):
+        raise ValueError('sourced EV services evidence packet validation matrix missing contract input')
+    if validation_matrix.get('validationCaseCount') != 4:
+        raise ValueError('sourced EV services evidence packet validation matrix has unexpected case count')
+    case_ids = {case.get('caseId') for case in validation_matrix.get('validationCases', [])}
+    for required in ['accept-classic-spob-template-offset-packet', 'accept-record-to-name-join-packet', 'accept-stock-join-packet', 'reject-tv-scaffold-service-matrix-only-packet']:
+        if required not in case_ids:
+            raise ValueError(f'sourced EV services evidence packet validation matrix missing {required}')
+    if 'reject-tv-scaffold-service-matrix-only-packet' not in validation_matrix.get('rejectionCaseIds', []):
+        raise ValueError('sourced EV services evidence packet validation matrix missing scaffold rejection case')
+    outcomes = ' '.join(validation_matrix.get('requiredVerifierOutcomes', []))
+    if 'Classic spöb offset packets' not in outcomes or 'Terminal Velocity scaffold-only packets' not in outcomes:
+        raise ValueError('sourced EV services evidence packet validation matrix missing verifier outcomes')
+    if 'not-promoted' not in validation_matrix.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet validation matrix must remain non-promoted')
     return data
 
 

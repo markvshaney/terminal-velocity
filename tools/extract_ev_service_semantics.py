@@ -246,6 +246,89 @@ def _service_store_evidence_packet_contract_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_validation_matrix_summary() -> dict:
+    contract = _service_store_evidence_packet_contract_summary()
+    validation_cases = [
+        {
+            'caseId': 'accept-classic-spob-template-offset-packet',
+            'evidenceClassId': 'classic-spob-tmpl-or-resedit-template',
+            'requiredDecision': 'accepted-classic-spob-offset-packet',
+            'requiredAssertions': [
+                'packet names Classic-specific spöb provenance and artifact sha256',
+                'packet covers field offsets for service flags, TechLevel/SpecialTech, Govt, or MinCoolness before derived claims use them',
+                'focused verifier output replays locally before any covered service/store promotion proposal',
+            ],
+            'allowedPromotionUse': 'exact covered spöb fields may be proposed for narrow promotion after verifier replay; uncovered service/store claims remain blocked',
+        },
+        {
+            'caseId': 'accept-record-to-name-join-packet',
+            'evidenceClassId': 'classic-spob-record-name-join',
+            'requiredDecision': 'accepted-record-name-join-packet',
+            'requiredAssertions': [
+                'packet maps covered decoded spöb resource IDs to landing/body names with Classic-specific evidence',
+                'packet identifies remaining unjoined records and names before any Classic-wide matrix claim',
+            ],
+            'allowedPromotionUse': 'may promote only named covered port rows whose service fields are also covered by accepted offset evidence',
+        },
+        {
+            'caseId': 'accept-stock-join-packet',
+            'evidenceClassId': 'classic-store-stock-tech-join',
+            'requiredDecision': 'accepted-stock-join-packet',
+            'requiredAssertions': [
+                'packet joins outfit, weapon, or ship records to TechLevel/SpecialTech availability for covered ports',
+                'packet preserves stock claims as blocked when item/ship/outfit joins or port joins are absent',
+            ],
+            'allowedPromotionUse': 'may promote only explicitly covered outfitter, shipyard, or weapon stock rows after service and port joins are accepted',
+        },
+        {
+            'caseId': 'reject-tv-scaffold-service-matrix-only-packet',
+            'evidenceClassId': 'terminal-velocity-service-matrix-only',
+            'requiredDecision': 'rejected-or-scaffold-only',
+            'requiredAssertions': [
+                'packet lacks Classic-specific spöb offset/name/stock provenance',
+                'current TV service rows remain scaffold except the narrow Levo original-runtime service boundary',
+            ],
+            'allowedPromotionUse': 'no Classic-wide service/store row, stock, or legal landing/service promotion',
+        },
+    ]
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-validation-matrix',
+        'oracleStatus': 'service_store_evidence_packet_validation_blocked_pending_real_classic_packet',
+        'sourceBasis': [
+            'decoded-record-family',
+            'decoded-original-variable',
+            'resource-bible-field',
+            'original-runtime-observed',
+            'tv-scaffold',
+        ],
+        'inputSummaries': [
+            'serviceStoreEvidencePacketContractSummary',
+            'serviceStorePromotionBlockerMatrixSummary',
+            'serviceStoreProvisioningReadinessSummary',
+            'spobRecordRun',
+        ],
+        'inputSummaryCount': 4,
+        'contractRequiredPacketFields': contract.get('requiredPacketFields', []),
+        'validationCases': validation_cases,
+        'validationCaseCount': len(validation_cases),
+        'firstValidationCaseId': validation_cases[0]['caseId'],
+        'rejectionCaseIds': [case['caseId'] for case in validation_cases if case['requiredDecision'] == 'rejected-or-scaffold-only'],
+        'requiredVerifierOutcomes': [
+            'accepted Classic spöb offset packets may only propose promotion for explicitly covered fields after verifier replay',
+            'accepted record/name packets may only promote named rows that also have covered service flag evidence',
+            'accepted stock packets may only promote explicitly joined outfit, weapon, or ship availability rows',
+            'Terminal Velocity scaffold-only packets must be rejected as Classic service/store evidence',
+        ],
+        'promotionBlockers': [
+            'validation matrix is a verifier fixture, not a real Classic-specific service/store packet',
+            'no Classic-wide service/store row, stock availability, legal landing, or service denial behavior is promoted by this matrix',
+            'Resource Bible prose remains blocked from decoded offset use until a Classic-specific offset packet is accepted',
+        ],
+        'promotionStatus': 'not-promoted; validation matrix only pending real Classic-specific spob offset/name/stock packet evidence',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -297,6 +380,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceStoreProvisioningReadinessSummary': _service_store_readiness_summary(run, names, matrix),
         'serviceStorePromotionBlockerMatrixSummary': _service_store_promotion_blocker_matrix_summary(),
         'serviceStoreEvidencePacketContractSummary': _service_store_evidence_packet_contract_summary(),
+        'serviceStoreEvidencePacketValidationMatrixSummary': _service_store_evidence_packet_validation_matrix_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 

@@ -4462,6 +4462,20 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('system_service_provisioning_scout', ' '.join(contract['acceptanceChecks']))
         self.assertIn('Classic-wide service/store rows', ' '.join(contract['blockedClaims']))
         self.assertIn('not-promoted', contract['promotionStatus'])
+        validation_matrix = data['serviceStoreEvidencePacketValidationMatrixSummary']
+        self.assertEqual(validation_matrix['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-validation-matrix')
+        self.assertEqual(validation_matrix['oracleStatus'], 'service_store_evidence_packet_validation_blocked_pending_real_classic_packet')
+        self.assertEqual(validation_matrix['inputSummaryCount'], 4)
+        self.assertIn('serviceStoreEvidencePacketContractSummary', validation_matrix['inputSummaries'])
+        self.assertEqual(validation_matrix['validationCaseCount'], 4)
+        case_ids = {case['caseId'] for case in validation_matrix['validationCases']}
+        self.assertIn('accept-classic-spob-template-offset-packet', case_ids)
+        self.assertIn('accept-record-to-name-join-packet', case_ids)
+        self.assertIn('accept-stock-join-packet', case_ids)
+        self.assertIn('reject-tv-scaffold-service-matrix-only-packet', validation_matrix['rejectionCaseIds'])
+        self.assertIn('Classic spöb offset packets', ' '.join(validation_matrix['requiredVerifierOutcomes']))
+        self.assertIn('Terminal Velocity scaffold-only packets', ' '.join(validation_matrix['requiredVerifierOutcomes']))
+        self.assertIn('not-promoted', validation_matrix['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()
