@@ -1,0 +1,60 @@
+{
+  "backlog_update": "none; verifier-backed source-readiness/capture-rejection guardrail only, no backlog dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "non-topology-syst-runtime-capture-rejection-taxonomy-20260615T024614Z",
+  "fidelity_boundary": "The new taxonomy classifies rejected future non-topology syst runtime capture packets and routes failure classes before reconciliation. It does not promote Classic byte offsets, field widths, governments, hazards, messages, visibility, coordinate/display calibration, route labels, record-name joins, gameplay/runtime integration, or broad runtime-universe replacement.",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Integration owner should inspect the dirty handoff bundle, confirm the non-topology capture rejection taxonomy aligns with the adjacent validation/reconciliation packets, then checkpoint/push or seed the next continuation from live repo state.",
+  "observed_unowned_dirty_paths": [],
+  "promotion_status": "not-promoted; rejection taxonomy is a failure-routing checklist only pending real validated original-runtime control packets",
+  "schema_version": 1,
+  "source_basis": [
+    "nonTopologySystRuntimeCaptureValidationMatrixSummary",
+    "nonTopologySystRuntimeCaptureGateSummary",
+    "nonTopologySystRuntimeProbePrioritySummary",
+    "runtimeUniverseReplacementGateSummary",
+    "docs/research/tv-spec.md source/fidelity boundary"
+  ],
+  "source_fidelity_label": "decoded-resource-backed-non-topology-syst-runtime-capture-rejection-taxonomy",
+  "successor_task": null,
+  "summary": "Added nonTopologySystRuntimeCaptureRejectionTaxonomySummary as a non-promoting failure-routing checklist between the validation matrix and reconciliation plan, then wired it through manifest validation, scenario projection/checks, generated data, and focused model/scenario tests.",
+  "task_id": "t_01ed0c61",
+  "timestamp": "2026-06-15T02:46:14Z",
+  "verification": {
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with nonTopologySystRuntimeCaptureRejectionTaxonomySummary and updated method label"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/tv_sourced_ev_systems_json_check_t_01ed0c61.txt",
+      "result": "passed; JSON valid"
+    },
+    "npm_test": {
+      "command": "npm test -- --runInBand",
+      "result": "not applicable/blocked; repository root has no package.json and Windows npm returned ENOENT before any JS test execution"
+    },
+    "runner_preflight": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; success True, 77/77 checks passed including recorded_non_topology_syst_runtime_capture_rejection_taxonomy"
+    },
+    "targeted_native_ev_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
+      "result": "passed; 274 tests OK"
+    }
+  }
+}
