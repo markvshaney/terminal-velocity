@@ -196,6 +196,47 @@ class TvRunnerAutostartTests(unittest.TestCase):
         self.assertTrue(any("explicit_gate" in line for line in lines))
         self.assertTrue(any("branch_behind_origin" in line for line in lines))
 
+    def test_handoff_queue_plan_classifies_push_ready_as_queue_not_global_block(self):
+        tasks = [
+            {"id": "t_handoff", "assignee": "terminal-velocity", "status": "blocked", "blocked_reason": "push_ready: verified slice awaiting integration"},
+            {"id": "t_other", "assignee": "terminal-velocity", "status": "blocked", "blocked_reason": "blocked:source_uncertainty"},
+        ]
+
+        plan = tv_runner_autostart.handoff_queue_plan(tasks, target_active_workers=3)
+
+        self.assertEqual(plan["queued_handoff_ids"], ["t_handoff"])
+        self.assertEqual(plan["global_blocker_ids"], ["t_other"])
+        self.assertEqual(plan["recommended_spawns"], 0)
+        self.assertEqual(plan["flow_state_by_task"]["t_handoff"], "integration_queued")
+
+    def test_clean_lane_with_only_queued_push_ready_handoff_seeds_unrelated_worker(self):
+        tasks = [{"id": "t_handoff", "assignee": "terminal-velocity", "status": "blocked", "blocked_reason": "push_ready: verified slice awaiting integration"}]
+        preflight_packet = {
+            "recommended_action": "recover_push_ready_handoff",
+            "explicit_gate": "push_ready_integration_required",
+            "safe_to_start": False,
+            "machine_result": {"blocked_handoffs": {"push_ready": 1}},
+        }
+
+        with patch.object(tv_runner_autostart, "board_tasks", return_value=tasks), \
+             patch.object(tv_runner_autostart, "assignee_tasks", side_effect=lambda all_tasks, status: [t for t in all_tasks if t["status"] == status]), \
+             patch.object(tv_runner_autostart, "git_dirty", return_value=False), \
+             patch.object(tv_runner_autostart, "start_resume_preflight", return_value=(1, preflight_packet)), \
+             patch.object(tv_runner_autostart, "pre_dispatch_preflight", return_value="ok"), \
+             patch.object(tv_runner_autostart, "create_continuation", return_value="t_created") as create_continuation, \
+             patch.object(tv_runner_autostart, "dispatch", return_value="dispatched t_created") as dispatch, \
+             patch.object(tv_runner_autostart, "git_status_summary", return_value="## main...origin/main"), \
+             patch.object(tv_runner_autostart, "save_state") as save_state, \
+             patch("builtins.print") as printed:
+            code = tv_runner_autostart.main([])
+
+        self.assertEqual(code, 0)
+        create_continuation.assert_called_once_with(False)
+        dispatch.assert_called_once_with(False)
+        save_state.assert_called()
+        lines = [call.args[0] for call in printed.call_args_list]
+        self.assertTrue(any("queued_handoffs=1" in line for line in lines))
+
 
 if __name__ == "__main__":
     unittest.main()

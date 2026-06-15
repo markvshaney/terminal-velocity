@@ -31,6 +31,22 @@ REQUESTED_CONTINUATION_SKILLS = (
     "source-and-fidelity",
     "artifact-governance",
 )
+TARGET_ACTIVE_WORKERS = 3
+QUEUEABLE_HANDOFF_TOKENS = (
+    "push_ready",
+    "handoff_ready",
+    "integration_queued",
+    "review_required_process_bug",
+)
+GLOBAL_BLOCK_TOKENS = (
+    "unsafe_dirty_state",
+    "unsafe_gate",
+    "source_uncertainty",
+    "verifier_failure",
+    "merge_conflict",
+    "tooling_global",
+    "explicit_human_gate",
+)
 
 
 def run(cmd: list[str], *, cwd: Path | None = None, timeout: int = 45) -> str:
@@ -111,6 +127,76 @@ def board_tasks() -> list[dict]:
 
 def assignee_tasks(tasks: list[dict], status: str) -> list[dict]:
     return [t for t in tasks if t.get("assignee") == ASSIGNEE and t.get("status") == status]
+
+
+def _task_evidence_text(task: dict) -> str:
+    fields = [
+        "blocked_reason",
+        "block_reason",
+        "reason",
+        "latest_summary",
+        "summary",
+        "title",
+        "body",
+        "description",
+        "status_class",
+        "blocked_class",
+    ]
+    chunks: list[str] = []
+    for field in fields:
+        value = task.get(field)
+        if isinstance(value, str):
+            chunks.append(value)
+    comments = task.get("comments")
+    if isinstance(comments, list):
+        chunks.extend(str(comment) for comment in comments[-3:])
+    return "\n".join(chunks).lower()
+
+
+def is_queueable_handoff(task: dict) -> bool:
+    if task.get("status") != "blocked" or task.get("assignee") != ASSIGNEE:
+        return False
+    evidence = _task_evidence_text(task)
+    if any(token in evidence for token in GLOBAL_BLOCK_TOKENS):
+        return False
+    return any(token in evidence for token in QUEUEABLE_HANDOFF_TOKENS)
+
+
+def handoff_queue_plan(tasks: list[dict], *, target_active_workers: int = TARGET_ACTIVE_WORKERS) -> dict:
+    active_like = [
+        task for task in tasks
+        if task.get("assignee") == ASSIGNEE and task.get("status") in {"running", "ready", "scheduled"}
+    ]
+    blocked = [task for task in tasks if task.get("assignee") == ASSIGNEE and task.get("status") == "blocked"]
+    queued = [task for task in blocked if is_queueable_handoff(task)]
+    global_blockers = [task for task in blocked if task not in queued]
+    recommended_spawns = 0 if global_blockers else max(0, target_active_workers - len(active_like))
+    flow_state_by_task = {str(task.get("id")): "integration_queued" for task in queued if task.get("id")}
+    flow_state_by_task.update({str(task.get("id")): "blocked" for task in global_blockers if task.get("id")})
+    return {
+        "target_active_workers": target_active_workers,
+        "active_like_count": len(active_like),
+        "queued_handoff_ids": [str(task.get("id")) for task in queued if task.get("id")],
+        "global_blocker_ids": [str(task.get("id")) for task in global_blockers if task.get("id")],
+        "recommended_spawns": recommended_spawns,
+        "flow_state_by_task": flow_state_by_task,
+    }
+
+
+def preflight_block_is_only_queued_handoff(payload: dict, queue_plan: dict | None) -> bool:
+    if not queue_plan or queue_plan.get("global_blocker_ids"):
+        return False
+    if not queue_plan.get("queued_handoff_ids"):
+        return False
+    if queue_plan.get("recommended_spawns", 0) <= 0:
+        return False
+    gate = str(payload.get("explicit_gate") or payload.get("recommended_action") or "")
+    if "push_ready" in gate or "handoff" in gate or "integration" in gate:
+        return True
+    blocked = (payload.get("machine_result") or {}).get("blocked_handoffs") or {}
+    if blocked and set(blocked).issubset({"push_ready", "review_required_process_bug", "handoff_ready", "integration_queued"}):
+        return True
+    return False
 
 
 def dispatch(dry_run: bool) -> str:
@@ -245,7 +331,7 @@ def compact_preflight_result(payload: dict) -> dict:
     }
 
 
-def require_start_resume_safe(now: str) -> bool:
+def require_start_resume_safe(now: str, queue_plan: dict | None = None) -> bool:
     try:
         code, payload = start_resume_preflight()
     except Exception as exc:
@@ -254,6 +340,18 @@ def require_start_resume_safe(now: str) -> bool:
         print("repo: " + git_status_summary())
         return False
     if code != 0 or payload.get("explicit_gate") is not None or not payload.get("safe_to_start"):
+        if preflight_block_is_only_queued_handoff(payload, queue_plan):
+            save_state(
+                last_action="queued_handoff_spawn_bypass",
+                last_action_at=now,
+                last_active="",
+                last_queued_handoffs=queue_plan.get("queued_handoff_ids"),
+            )
+            print(
+                "TV runner autostart: queued integration handoff does not block unrelated worker spawn; "
+                f"queued_handoffs={len(queue_plan.get('queued_handoff_ids', []))}"
+            )
+            return True
         save_state(
             last_problem="start_resume_preflight_blocked",
             last_problem_at=now,
@@ -434,6 +532,7 @@ def main(argv: list[str] | None = None) -> int:
     ready = assignee_tasks(tasks, "ready")
     blocked = assignee_tasks(tasks, "blocked")
     scheduled = assignee_tasks(tasks, "scheduled")
+    queue_plan = handoff_queue_plan(tasks)
 
     if running:
         active = f"{running[0].get('id')} {running[0].get('title')}"
@@ -447,7 +546,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if ready:
-        if not require_start_resume_safe(now):
+        if not require_start_resume_safe(now, queue_plan):
             return 0
         try:
             pre_dispatch_preflight(args.dry_run)
@@ -486,7 +585,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     try:
-        if not require_start_resume_safe(now):
+        if not require_start_resume_safe(now, queue_plan):
             return 0
         pre_dispatch_preflight(args.dry_run)
     except Exception as exc:
