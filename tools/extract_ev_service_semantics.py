@@ -411,6 +411,83 @@ def _service_store_evidence_packet_replay_readiness_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_intake_triage_summary() -> dict:
+    """Route future service/store evidence packets before verifier replay or promotion."""
+    replay_readiness = _service_store_evidence_packet_replay_readiness_summary()
+    triage_routes = [
+        {
+            'routeId': 'route-classic-spob-offset-packet-to-replay',
+            'acceptedEvidenceClassIds': ['classic-spob-tmpl-or-resedit-template'],
+            'requiredPacketFields': ['classic_source_artifact_path', 'artifact_sha256', 'covered_field_offsets'],
+            'nextVerifierGate': 'packet-artifact-readback then local-verifier-replay',
+            'blockedIfMissing': 'Classic-specific spöb template/offset artifact path, hash, or covered field offsets',
+        },
+        {
+            'routeId': 'route-record-name-join-packet-to-covered-row-review',
+            'acceptedEvidenceClassIds': ['classic-spob-record-name-join'],
+            'requiredPacketFields': ['covered_spob_resource_ids', 'covered_landing_names', 'record_to_name_join_evidence'],
+            'nextVerifierGate': 'record/name packet replay plus narrow covered-scope review',
+            'blockedIfMissing': 'covered decoded spöb resource IDs or Classic-specific landing/body name joins',
+        },
+        {
+            'routeId': 'route-stock-tech-join-packet-to-stock-scope-review',
+            'acceptedEvidenceClassIds': ['classic-store-stock-tech-join'],
+            'requiredPacketFields': ['covered_landing_names', 'stock_join_claims', 'verifier_commands'],
+            'nextVerifierGate': 'stock join replay plus service/port join cross-check',
+            'blockedIfMissing': 'item/ship/outfit TechLevel or SpecialTech joins tied to covered ports',
+        },
+        {
+            'routeId': 'quarantine-tv-scaffold-or-ev-family-only-packet',
+            'acceptedEvidenceClassIds': ['terminal-velocity-service-matrix-only', 'ev-family-template-only'],
+            'requiredPacketFields': ['sourceFidelityLabel', 'uncertaintyNotes'],
+            'nextVerifierGate': 'record as non-promoting support or search note only',
+            'blockedIfMissing': 'Classic-specific provenance sufficient for any service/store promotion proposal',
+        },
+    ]
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-intake-triage',
+        'oracleStatus': 'service_store_evidence_packet_intake_blocked_pending_real_classic_packet',
+        'sourceBasis': [
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+            'serviceStoreEvidencePacketValidationMatrixSummary',
+            'serviceStoreEvidencePacketContractSummary',
+            'serviceStorePromotionBlockerMatrixSummary',
+        ],
+        'evidenceInputSummaries': [
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+            'serviceStoreEvidencePacketValidationMatrixSummary',
+            'serviceStoreEvidencePacketContractSummary',
+            'serviceStorePromotionBlockerMatrixSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'replayReadinessSourceLabel': replay_readiness.get('sourceLabel'),
+        'triageRouteCount': len(triage_routes),
+        'firstTriageRouteId': triage_routes[0]['routeId'],
+        'triageRoutes': triage_routes,
+        'quarantineRouteIds': [route['routeId'] for route in triage_routes if route['routeId'].startswith('quarantine-')],
+        'requiredPreReplayDecisions': [
+            'classify evidenceClassId against the validation matrix before running promotion verifiers',
+            'reject or quarantine packets that lack Classic-specific source artifact path/hash readback',
+            'route accepted packets to exactly one offset, record-name, or stock-join review path before narrow promotion review',
+            'preserve all Classic-wide service/store, stock, legal landing, and runtime UI claims as blocked until packet replay succeeds',
+        ],
+        'blockedPromotionClaims': [
+            'using Terminal Velocity scaffold service rows as Classic spöb service evidence',
+            'using EV-family templates or Resource Bible prose without Classic-specific packet provenance',
+            'promoting Classic-wide service/store rows before offset and record-name packets cover each row',
+            'promoting stock availability or legal landing/service denial behavior from an intake triage decision alone',
+        ],
+        'promotionBlockers': [
+            'intake triage routes packet classes only; it is not a packet replay or verifier result',
+            'no real Classic-specific service/store packet has passed artifact readback, classification, and local replay',
+            'triaged packets still require the replay-readiness checklist and narrow covered-scope review before promotion',
+        ],
+        'promotionStatus': 'not-promoted; intake triage only pending real Classic-specific spob offset/name/stock packet evidence and verifier replay',
+        'sourceNote': 'This triage layer makes future service/store packet routing deterministic before replay. It adds no packet evidence and promotes no Classic service/store, stock, legal landing, or runtime UI behavior.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -464,6 +541,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceStoreEvidencePacketContractSummary': _service_store_evidence_packet_contract_summary(),
         'serviceStoreEvidencePacketValidationMatrixSummary': _service_store_evidence_packet_validation_matrix_summary(),
         'serviceStoreEvidencePacketReplayReadinessSummary': _service_store_evidence_packet_replay_readiness_summary(),
+        'serviceStoreEvidencePacketIntakeTriageSummary': _service_store_evidence_packet_intake_triage_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 

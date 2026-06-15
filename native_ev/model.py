@@ -1614,6 +1614,31 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('sourced EV services evidence packet replay readiness missing blocked claims')
     if 'not-promoted' not in replay_readiness.get('promotionStatus', ''):
         raise ValueError('sourced EV services evidence packet replay readiness must remain non-promoted')
+    intake_triage = data.get('serviceStoreEvidencePacketIntakeTriageSummary', {})
+    if intake_triage.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-intake-triage':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet intake triage source label')
+    if intake_triage.get('oracleStatus') != 'service_store_evidence_packet_intake_blocked_pending_real_classic_packet':
+        raise ValueError('sourced EV services evidence packet intake triage changed oracle boundary')
+    if intake_triage.get('evidenceInputSummaryCount') != 4 or 'serviceStoreEvidencePacketReplayReadinessSummary' not in intake_triage.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV services evidence packet intake triage missing replay-readiness input')
+    if intake_triage.get('replayReadinessSourceLabel') != 'resource-bible-backed-service-store-evidence-packet-replay-readiness':
+        raise ValueError('sourced EV services evidence packet intake triage missing replay-readiness source label')
+    if intake_triage.get('triageRouteCount') != 4 or intake_triage.get('firstTriageRouteId') != 'route-classic-spob-offset-packet-to-replay':
+        raise ValueError('sourced EV services evidence packet intake triage missing deterministic route set')
+    triage_route_ids = {route.get('routeId') for route in intake_triage.get('triageRoutes', [])}
+    for required in ['route-classic-spob-offset-packet-to-replay', 'route-record-name-join-packet-to-covered-row-review', 'route-stock-tech-join-packet-to-stock-scope-review', 'quarantine-tv-scaffold-or-ev-family-only-packet']:
+        if required not in triage_route_ids:
+            raise ValueError(f'sourced EV services evidence packet intake triage missing {required}')
+    if 'quarantine-tv-scaffold-or-ev-family-only-packet' not in intake_triage.get('quarantineRouteIds', []):
+        raise ValueError('sourced EV services evidence packet intake triage missing scaffold quarantine route')
+    triage_decisions = ' '.join(intake_triage.get('requiredPreReplayDecisions', []))
+    if 'validation matrix' not in triage_decisions or 'source artifact path/hash' not in triage_decisions:
+        raise ValueError('sourced EV services evidence packet intake triage missing pre-replay decisions')
+    triage_blocked_claims = ' '.join(intake_triage.get('blockedPromotionClaims', []))
+    if 'Terminal Velocity scaffold service rows' not in triage_blocked_claims or 'legal landing' not in triage_blocked_claims:
+        raise ValueError('sourced EV services evidence packet intake triage missing blocked claims')
+    if 'not-promoted' not in intake_triage.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet intake triage must remain non-promoted')
     return data
 
 

@@ -4490,6 +4490,22 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('system_service_provisioning_scout', ' '.join(replay_readiness['requiredVerifierBeforePromotion']))
         self.assertIn('Classic-wide service/store rows', ' '.join(replay_readiness['blockedPromotionClaims']))
         self.assertIn('not-promoted', replay_readiness['promotionStatus'])
+        intake_triage = data['serviceStoreEvidencePacketIntakeTriageSummary']
+        self.assertEqual(intake_triage['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-intake-triage')
+        self.assertEqual(intake_triage['oracleStatus'], 'service_store_evidence_packet_intake_blocked_pending_real_classic_packet')
+        self.assertEqual(intake_triage['evidenceInputSummaryCount'], 4)
+        self.assertIn('serviceStoreEvidencePacketReplayReadinessSummary', intake_triage['evidenceInputSummaries'])
+        self.assertEqual(intake_triage['replayReadinessSourceLabel'], 'resource-bible-backed-service-store-evidence-packet-replay-readiness')
+        self.assertEqual(intake_triage['triageRouteCount'], 4)
+        self.assertEqual(intake_triage['firstTriageRouteId'], 'route-classic-spob-offset-packet-to-replay')
+        triage_route_ids = {route['routeId'] for route in intake_triage['triageRoutes']}
+        self.assertIn('route-classic-spob-offset-packet-to-replay', triage_route_ids)
+        self.assertIn('route-record-name-join-packet-to-covered-row-review', triage_route_ids)
+        self.assertIn('route-stock-tech-join-packet-to-stock-scope-review', triage_route_ids)
+        self.assertIn('quarantine-tv-scaffold-or-ev-family-only-packet', intake_triage['quarantineRouteIds'])
+        self.assertIn('validation matrix', ' '.join(intake_triage['requiredPreReplayDecisions']))
+        self.assertIn('Terminal Velocity scaffold service rows', ' '.join(intake_triage['blockedPromotionClaims']))
+        self.assertIn('not-promoted', intake_triage['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

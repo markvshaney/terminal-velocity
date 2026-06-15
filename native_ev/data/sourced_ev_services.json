@@ -1537,5 +1537,102 @@
     "promotionStatus": "not-promoted; packet replay readiness checklist only pending real Classic-specific spob offset/name/stock packet evidence",
     "sourceNote": "This checklist makes future service/store packet acceptance auditable by requiring artifact readback, contract/matrix classification, local verifier replay, and narrow scope review. It adds no packet evidence and promotes no service/store rows."
   },
+  "serviceStoreEvidencePacketIntakeTriageSummary": {
+    "schemaVersion": 1,
+    "sourceLabel": "resource-bible-backed-service-store-evidence-packet-intake-triage",
+    "oracleStatus": "service_store_evidence_packet_intake_blocked_pending_real_classic_packet",
+    "sourceBasis": [
+      "serviceStoreEvidencePacketReplayReadinessSummary",
+      "serviceStoreEvidencePacketValidationMatrixSummary",
+      "serviceStoreEvidencePacketContractSummary",
+      "serviceStorePromotionBlockerMatrixSummary"
+    ],
+    "evidenceInputSummaries": [
+      "serviceStoreEvidencePacketReplayReadinessSummary",
+      "serviceStoreEvidencePacketValidationMatrixSummary",
+      "serviceStoreEvidencePacketContractSummary",
+      "serviceStorePromotionBlockerMatrixSummary"
+    ],
+    "evidenceInputSummaryCount": 4,
+    "replayReadinessSourceLabel": "resource-bible-backed-service-store-evidence-packet-replay-readiness",
+    "triageRouteCount": 4,
+    "firstTriageRouteId": "route-classic-spob-offset-packet-to-replay",
+    "triageRoutes": [
+      {
+        "routeId": "route-classic-spob-offset-packet-to-replay",
+        "acceptedEvidenceClassIds": [
+          "classic-spob-tmpl-or-resedit-template"
+        ],
+        "requiredPacketFields": [
+          "classic_source_artifact_path",
+          "artifact_sha256",
+          "covered_field_offsets"
+        ],
+        "nextVerifierGate": "packet-artifact-readback then local-verifier-replay",
+        "blockedIfMissing": "Classic-specific spöb template/offset artifact path, hash, or covered field offsets"
+      },
+      {
+        "routeId": "route-record-name-join-packet-to-covered-row-review",
+        "acceptedEvidenceClassIds": [
+          "classic-spob-record-name-join"
+        ],
+        "requiredPacketFields": [
+          "covered_spob_resource_ids",
+          "covered_landing_names",
+          "record_to_name_join_evidence"
+        ],
+        "nextVerifierGate": "record/name packet replay plus narrow covered-scope review",
+        "blockedIfMissing": "covered decoded spöb resource IDs or Classic-specific landing/body name joins"
+      },
+      {
+        "routeId": "route-stock-tech-join-packet-to-stock-scope-review",
+        "acceptedEvidenceClassIds": [
+          "classic-store-stock-tech-join"
+        ],
+        "requiredPacketFields": [
+          "covered_landing_names",
+          "stock_join_claims",
+          "verifier_commands"
+        ],
+        "nextVerifierGate": "stock join replay plus service/port join cross-check",
+        "blockedIfMissing": "item/ship/outfit TechLevel or SpecialTech joins tied to covered ports"
+      },
+      {
+        "routeId": "quarantine-tv-scaffold-or-ev-family-only-packet",
+        "acceptedEvidenceClassIds": [
+          "terminal-velocity-service-matrix-only",
+          "ev-family-template-only"
+        ],
+        "requiredPacketFields": [
+          "sourceFidelityLabel",
+          "uncertaintyNotes"
+        ],
+        "nextVerifierGate": "record as non-promoting support or search note only",
+        "blockedIfMissing": "Classic-specific provenance sufficient for any service/store promotion proposal"
+      }
+    ],
+    "quarantineRouteIds": [
+      "quarantine-tv-scaffold-or-ev-family-only-packet"
+    ],
+    "requiredPreReplayDecisions": [
+      "classify evidenceClassId against the validation matrix before running promotion verifiers",
+      "reject or quarantine packets that lack Classic-specific source artifact path/hash readback",
+      "route accepted packets to exactly one offset, record-name, or stock-join review path before narrow promotion review",
+      "preserve all Classic-wide service/store, stock, legal landing, and runtime UI claims as blocked until packet replay succeeds"
+    ],
+    "blockedPromotionClaims": [
+      "using Terminal Velocity scaffold service rows as Classic spöb service evidence",
+      "using EV-family templates or Resource Bible prose without Classic-specific packet provenance",
+      "promoting Classic-wide service/store rows before offset and record-name packets cover each row",
+      "promoting stock availability or legal landing/service denial behavior from an intake triage decision alone"
+    ],
+    "promotionBlockers": [
+      "intake triage routes packet classes only; it is not a packet replay or verifier result",
+      "no real Classic-specific service/store packet has passed artifact readback, classification, and local replay",
+      "triaged packets still require the replay-readiness checklist and narrow covered-scope review before promotion"
+    ],
+    "promotionStatus": "not-promoted; intake triage only pending real Classic-specific spob offset/name/stock packet evidence and verifier replay",
+    "sourceNote": "This triage layer makes future service/store packet routing deterministic before replay. It adds no packet evidence and promotes no Classic service/store, stock, legal landing, or runtime UI behavior."
+  },
   "promotionBoundary": "Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Resource Bible spöb service/store flags are recorded as readiness inputs, but Classic-wide decoded service fields remain pending."
 }
