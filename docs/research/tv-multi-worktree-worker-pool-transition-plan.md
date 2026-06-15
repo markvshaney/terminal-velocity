@@ -1,6 +1,6 @@
 # TV Multi-Worktree Worker Pool Transition Plan
 
-Status: active transition artifact; Phase 1 MVP implemented in `tools/tv_runner_autostart.py` with tests in `native_ev/tests/test_tv_runner_autostart.py`
+Status: active transition artifact; Phase 2 planner implemented; Phase 3 isolated-worktree allocation planning implemented in `tools/tv_runner_autostart.py` with tests in `native_ev/tests/test_tv_runner_autostart.py`
 Created: 2026-06-15
 Last updated: 2026-06-15
 Scope: Terminal Velocity long-running development process, worker dispatch, integration batching, and Kanban flow

@@ -33,6 +33,8 @@ REQUESTED_CONTINUATION_SKILLS = (
     "artifact-governance",
 )
 TARGET_ACTIVE_WORKERS = 3
+WORKTREE_ROOT = REPO.parent / "terminal-velocity-worktrees"
+WORKTREE_CLEANUP_CONTRACT = "remove worktree only after worker terminal/published/superseded and branch merged or explicitly abandoned"
 QUEUEABLE_HANDOFF_TOKENS = (
     "push_ready",
     "handoff_ready",
@@ -90,6 +92,11 @@ def git_dirty() -> bool:
 
 def git_head() -> str:
     return run(["git", "rev-parse", "--short", "HEAD"], cwd=REPO, timeout=10).strip()
+
+
+def git_origin_main() -> str:
+    code, raw = run_checked(["git", "rev-parse", "--short", "origin/main"], cwd=REPO, timeout=10)
+    return raw.strip() if code == 0 and raw.strip() else "unknown"
 
 
 def git_status_summary() -> str:
@@ -213,6 +220,40 @@ def _task_conflict_domains(task: dict) -> list[str]:
     return sorted({_conflict_domain(path) for path in _task_changed_paths(task)})
 
 
+def _sanitize_task_id_for_ref(task_id: str) -> str:
+    safe = "".join(char if char.isalnum() or char in {"_", "-"} else "-" for char in task_id.strip())
+    return safe or "unassigned"
+
+
+def worktree_allocation_plan(task: dict, *, repo_dirty: bool, origin_main: str = "unknown") -> dict:
+    """Return a deterministic Phase 3 isolated-worktree allocation plan for one task.
+
+    This is intentionally a planning primitive first: it makes branch/path/base/surface
+    decisions explicit without mutating git worktrees from the watchdog path.
+    """
+    task_id = _sanitize_task_id_for_ref(_task_id(task))
+    if repo_dirty:
+        return {
+            "task_id": task_id,
+            "recommended_action": "blocked:dirty_main_worktree",
+            "blockers": ["clean main worktree", "dirty main worktree would make worker provenance ambiguous"],
+            "base_ref": "origin/main",
+            "base_commit": origin_main,
+        }
+    return {
+        "task_id": task_id,
+        "title": _task_title(task),
+        "recommended_action": "allocate_isolated_worktree",
+        "branch": f"tv-worker/{task_id}",
+        "worktree_path": str(WORKTREE_ROOT / task_id),
+        "base_ref": "origin/main",
+        "base_commit": origin_main,
+        "allowed_writable_surfaces": _task_conflict_domains(task),
+        "cleanup_contract": WORKTREE_CLEANUP_CONTRACT,
+        "worker_contract": "one writer per allocated worktree and declared file/resource surface",
+    }
+
+
 def _task_summary(task: dict) -> dict:
     return {
         "id": _task_id(task),
@@ -270,7 +311,13 @@ def _plan_integration_batches(queued: list[dict]) -> tuple[list[dict], list[dict
     return candidates, held, recommended
 
 
-def handoff_queue_plan(tasks: list[dict], *, target_active_workers: int = TARGET_ACTIVE_WORKERS) -> dict:
+def handoff_queue_plan(
+    tasks: list[dict],
+    *,
+    target_active_workers: int = TARGET_ACTIVE_WORKERS,
+    repo_dirty: bool = False,
+    origin_main: str = "unknown",
+) -> dict:
     active_workers = [
         task for task in tasks
         if task.get("assignee") == ASSIGNEE and task.get("status") in {"running", "scheduled"}
@@ -284,7 +331,12 @@ def handoff_queue_plan(tasks: list[dict], *, target_active_workers: int = TARGET
     queued = [task for task in blocked if is_queueable_handoff(task)]
     global_blockers = [task for task in blocked if task not in queued]
     spawn_gap = 0 if global_blockers else max(0, target_active_workers - len(active_like))
-    recommended_spawn_tasks = [_task_summary(task) for task in sorted(ready_backlog, key=lambda item: (_task_id(item), _task_title(item)))[:spawn_gap]]
+    spawn_candidates = sorted(ready_backlog, key=lambda item: (_task_id(item), _task_title(item)))[:spawn_gap]
+    recommended_spawn_tasks = [_task_summary(task) for task in spawn_candidates]
+    recommended_worktree_allocations = [
+        worktree_allocation_plan(task, repo_dirty=repo_dirty, origin_main=origin_main)
+        for task in spawn_candidates
+    ]
     flow_state_by_task = {str(task.get("id")): "integration_queued" for task in queued if task.get("id")}
     flow_state_by_task.update({str(task.get("id")): "blocked" for task in global_blockers if task.get("id")})
     batch_candidates, held_handoffs, recommended_batch = _plan_integration_batches(queued)
@@ -301,6 +353,13 @@ def handoff_queue_plan(tasks: list[dict], *, target_active_workers: int = TARGET
         "recommended_integration_batch": recommended_batch,
         "recommended_spawns": spawn_gap,
         "recommended_spawn_tasks": recommended_spawn_tasks,
+        "recommended_worktree_allocations": recommended_worktree_allocations,
+        "worktree_allocator": {
+            "phase": 3,
+            "mode": "dry_run_plan",
+            "root": str(WORKTREE_ROOT),
+            "cleanup_contract": WORKTREE_CLEANUP_CONTRACT,
+        },
         "flow_state_by_task": flow_state_by_task,
     }
 
@@ -659,7 +718,7 @@ def main(argv: list[str] | None = None) -> int:
     ready = assignee_tasks(tasks, "ready")
     blocked = assignee_tasks(tasks, "blocked")
     scheduled = assignee_tasks(tasks, "scheduled")
-    queue_plan = handoff_queue_plan(tasks)
+    queue_plan = handoff_queue_plan(tasks, repo_dirty=git_dirty(), origin_main=git_origin_main())
 
     if running:
         active = f"{running[0].get('id')} {running[0].get('title')}"

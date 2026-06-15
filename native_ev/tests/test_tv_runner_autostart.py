@@ -324,6 +324,50 @@ class TvRunnerAutostartTests(unittest.TestCase):
         lines = [call.args[0] for call in printed.call_args_list]
         self.assertTrue(any("queued_handoffs=1" in line for line in lines))
 
+    def test_worktree_allocation_plan_assigns_deterministic_branch_path_and_surfaces(self):
+        task = {
+            "id": "t_ready_alpha",
+            "assignee": None,
+            "status": "ready",
+            "title": "Ready alpha",
+            "changed_files": ["native_ev/model.py", "docs/research/tv-spec.md"],
+        }
+
+        allocation = tv_runner_autostart.worktree_allocation_plan(task, repo_dirty=False, origin_main="abc123")
+
+        self.assertEqual(allocation["recommended_action"], "allocate_isolated_worktree")
+        self.assertEqual(allocation["task_id"], "t_ready_alpha")
+        self.assertEqual(allocation["branch"], "tv-worker/t_ready_alpha")
+        self.assertTrue(allocation["worktree_path"].endswith("terminal-velocity-worktrees/t_ready_alpha"))
+        self.assertEqual(allocation["base_ref"], "origin/main")
+        self.assertEqual(allocation["base_commit"], "abc123")
+        self.assertEqual(allocation["allowed_writable_surfaces"], ["docs/research", "native_ev/model.py"])
+        self.assertEqual(allocation["cleanup_contract"], "remove worktree only after worker terminal/published/superseded and branch merged or explicitly abandoned")
+
+    def test_worktree_allocation_plan_refuses_dirty_main_when_provenance_ambiguous(self):
+        allocation = tv_runner_autostart.worktree_allocation_plan(
+            {"id": "t_ready_dirty", "assignee": None, "status": "ready"},
+            repo_dirty=True,
+            origin_main="abc123",
+        )
+
+        self.assertEqual(allocation["recommended_action"], "blocked:dirty_main_worktree")
+        self.assertIn("clean main worktree", allocation["blockers"])
+
+    def test_handoff_queue_plan_includes_phase3_worktree_allocation_recommendations(self):
+        tasks = [
+            {"id": "t_running", "assignee": "terminal-velocity", "status": "running"},
+            {"id": "t_ready_a", "assignee": None, "status": "ready", "changed_files": ["native_ev/scenario_eval.py"]},
+            {"id": "t_ready_b", "assignee": "", "status": "ready", "changed_files": ["docs/checklists/ev-classic-fidelity-implementation-backlog.md"]},
+        ]
+
+        plan = tv_runner_autostart.handoff_queue_plan(tasks, target_active_workers=3, repo_dirty=False, origin_main="def456")
+
+        self.assertEqual(plan["recommended_spawns"], 2)
+        self.assertEqual([item["task_id"] for item in plan["recommended_worktree_allocations"]], ["t_ready_a", "t_ready_b"])
+        self.assertEqual([item["branch"] for item in plan["recommended_worktree_allocations"]], ["tv-worker/t_ready_a", "tv-worker/t_ready_b"])
+        self.assertTrue(all(item["base_commit"] == "def456" for item in plan["recommended_worktree_allocations"]))
+
 
 if __name__ == "__main__":
     unittest.main()
