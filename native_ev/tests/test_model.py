@@ -4411,7 +4411,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
-        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v1')
+        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v2')
         self.assertEqual(data['spobRecordRun']['candidateType'], 'spob-like')
         self.assertEqual(data['spobRecordRun']['recordSize'], 400)
         self.assertEqual(data['spobRecordRun']['count'], 219)
@@ -4423,7 +4423,22 @@ class NativeEvModelTests(unittest.TestCase):
         earth = by_key[('Sol', 'Earth')]
         self.assertIn('outfitter', earth['services'])
         self.assertIn('shipyard', earth['services'])
-        self.assertEqual(data['promotionBoundary'], 'Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Classic-wide decoded service fields remain pending.')
+        self.assertEqual(data['promotionBoundary'], 'Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Resource Bible spöb service/store flags are recorded as readiness inputs, but Classic-wide decoded service fields remain pending.')
+        summary = data['serviceStoreProvisioningReadinessSummary']
+        self.assertEqual(summary['sourceLabel'], 'resource-bible-backed-service-store-provisioning-readiness')
+        self.assertEqual(summary['oracleStatus'], 'service_store_matrix_blocked_pending_spob_field_offset_oracle')
+        self.assertEqual(summary['spobRecordCount'], 219)
+        self.assertEqual(summary['spobRecordSizeBytes'], 400)
+        self.assertEqual(summary['landingNameSeedCount'], len(data['landingNameSeeds']))
+        self.assertEqual(summary['runtimeServiceMatrixRowCount'], len(data['serviceMatrix']))
+        field_names = {field['field'] for field in summary['resourceBibleSpobServiceFields']}
+        self.assertIn('Flags bit 0x00000002', field_names)
+        self.assertIn('Flags bit 0x00000004', field_names)
+        self.assertIn('Flags bit 0x00000008', field_names)
+        self.assertIn('Flags bit 0x00000040', field_names)
+        self.assertIn('TechLevel and SpecialTech (x3)', field_names)
+        self.assertIn('record-to-name join', ' '.join(summary['promotionBlockers']))
+        self.assertIn('Classic-wide service/store matrix rows', ' '.join(summary['blockedPromotionClaims']))
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

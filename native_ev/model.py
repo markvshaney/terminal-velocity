@@ -1496,7 +1496,7 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV services manifest has unexpected schema version')
-    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v1':
+    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v2':
         raise ValueError('sourced EV services manifest has unexpected extraction method')
     run = data.get('spobRecordRun', {})
     if run.get('candidateType') != 'spob-like' or run.get('recordSize') != 400 or run.get('count') != 219:
@@ -1518,6 +1518,24 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('Earth service scaffold row missing expected current TV services')
     if 'Classic-wide decoded service fields remain pending' not in data.get('promotionBoundary', ''):
         raise ValueError('sourced EV services manifest missing promotion boundary')
+    summary = data.get('serviceStoreProvisioningReadinessSummary', {})
+    if summary.get('sourceLabel') != 'resource-bible-backed-service-store-provisioning-readiness':
+        raise ValueError('sourced EV services manifest missing service/store readiness source label')
+    if summary.get('oracleStatus') != 'service_store_matrix_blocked_pending_spob_field_offset_oracle':
+        raise ValueError('sourced EV services manifest missing service/store readiness oracle boundary')
+    if summary.get('spobRecordCount') != 219 or summary.get('spobRecordSizeBytes') != 400:
+        raise ValueError('sourced EV services readiness summary has unexpected spob counts')
+    fields = summary.get('resourceBibleSpobServiceFields', [])
+    field_names = {field.get('field') for field in fields}
+    for expected in ['Flags bit 0x00000002', 'Flags bit 0x00000004', 'Flags bit 0x00000008', 'Flags bit 0x00000040', 'TechLevel and SpecialTech (x3)']:
+        if expected not in field_names:
+            raise ValueError(f'sourced EV services readiness summary missing {expected}')
+    blockers = ' '.join(summary.get('promotionBlockers', []))
+    if 'field offsets are not promoted' not in blockers or 'record-to-name join' not in blockers:
+        raise ValueError('sourced EV services readiness summary missing promotion blockers')
+    claims = ' '.join(summary.get('blockedPromotionClaims', []))
+    if 'Classic-wide service/store matrix' not in claims or 'TechLevel' not in claims:
+        raise ValueError('sourced EV services readiness summary missing blocked claims')
     return data
 
 
