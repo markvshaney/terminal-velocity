@@ -16,7 +16,7 @@ DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_UNIVERSE = Path('native_ev/data/universe.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_services.json')
-METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4'
+METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v5'
 SOURCE_BASIS = 'Terminal Velocity runtime universe service matrix plus Levo original-runtime observation, sourced landing-name seeds, EV Classic Resource Bible spöb service/store fields, and local primitive spob-like structure decode'
 PROMOTION_BOUNDARY = 'Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Resource Bible spöb service/store flags are recorded as readiness inputs, but Classic-wide decoded service fields remain pending.'
 
@@ -640,6 +640,83 @@ def _service_store_evidence_packet_recovery_plan_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_custody_guardrail_summary() -> dict:
+    """Record custody guardrails before recovered service/store packets reenter replay."""
+    recovery_plan = _service_store_evidence_packet_recovery_plan_summary()
+    custody_guardrails = [
+        {
+            'custodyGuardrailId': 'require-artifact-sha256-readback-before-reentry',
+            'appliesToRecoveryActionIds': recovery_plan.get('recoveryActionIds', []),
+            'requiredCustodyEvidence': 'Classic-specific source artifact path/hash readback must match the recovered packet before any reentry replay starts',
+            'blockedIfMissing': 'reject recovered packet as unstable custody; request a new packet id with artifact path and sha256',
+        },
+        {
+            'custodyGuardrailId': 'preserve-original-failure-classification',
+            'appliesToRecoveryActionIds': recovery_plan.get('recoveryActionIds', []),
+            'requiredCustodyEvidence': 'original failureClassId, rejected packet id, and recoveryActionId stay attached to the recovered handoff',
+            'blockedIfMissing': 'rerun intake/failure taxonomy before replay so recovery provenance is not lost',
+        },
+        {
+            'custodyGuardrailId': 'rerun-current-verifiers-after-custody-readback',
+            'appliesToRecoveryActionIds': ['recover-verifier-replay-missing-or-failed'],
+            'requiredCustodyEvidence': 'current extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout output are captured after artifact readback',
+            'blockedIfMissing': 'keep verifier-failed packet rejected until current local replay output exists',
+        },
+        {
+            'custodyGuardrailId': 'scope-recovered-claims-to-covered-rows-only',
+            'appliesToRecoveryActionIds': [
+                'recover-missing-classic-spob-offset-provenance',
+                'recover-missing-record-to-name-join-coverage',
+                'recover-missing-stock-tech-specialtech-join',
+            ],
+            'requiredCustodyEvidence': 'covered spöb resource IDs, landing names, service flags, stock joins, and unresolved rows are enumerated before any narrow promotion review',
+            'blockedIfMissing': 'block Classic-wide service/store rows, stock, and legal-service claims outside the recovered covered scope',
+        },
+        {
+            'custodyGuardrailId': 'quarantine-scaffold-support-notes-from-promotion-scope',
+            'appliesToRecoveryActionIds': ['recover-tv-scaffold-or-ev-family-only-support'],
+            'requiredCustodyEvidence': 'Terminal Velocity scaffold or EV-family support notes are explicitly marked non-promoting and separated from Classic-specific packet evidence',
+            'blockedIfMissing': 'do not merge scaffold/support notes into Classic service/store promotion packets',
+        },
+    ]
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-custody-guardrail',
+        'oracleStatus': 'service_store_evidence_packet_custody_guardrail_blocked_pending_real_classic_packet',
+        'sourceBasis': [
+            'serviceStoreEvidencePacketRecoveryPlanSummary',
+            'serviceStoreEvidencePacketFailureTaxonomySummary',
+            'serviceStoreEvidencePacketIntakeTriageSummary',
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+        ],
+        'evidenceInputSummaries': [
+            'serviceStoreEvidencePacketRecoveryPlanSummary',
+            'serviceStoreEvidencePacketFailureTaxonomySummary',
+            'serviceStoreEvidencePacketIntakeTriageSummary',
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'recoveryActionIds': recovery_plan.get('recoveryActionIds', []),
+        'custodyGuardrailCount': len(custody_guardrails),
+        'custodyGuardrailIds': [guardrail['custodyGuardrailId'] for guardrail in custody_guardrails],
+        'custodyGuardrails': custody_guardrails,
+        'blockedShortcuts': [
+            'do not accept recovered packets whose artifact path or sha256 changed without a new packet id',
+            'do not drop the original failureClassId or recoveryActionId during reentry',
+            'do not rerun promotion review before current verifier replay succeeds after custody readback',
+            'do not widen recovered packet scope beyond covered rows, stock joins, and legal/service claims named by the packet',
+            'do not merge scaffold or EV-family support notes into Classic-specific promotion evidence',
+        ],
+        'promotionBlockers': [
+            'custody guardrails are packet-handling controls, not Classic service/store evidence',
+            'a recovered packet must still pass artifact readback, intake classification, verifier replay, and narrow covered-scope review',
+            'no Classic-wide service/store rows, stock availability, legal landing/service denial, or runtime UI behavior can promote from custody controls alone',
+        ],
+        'promotionStatus': 'not-promoted; custody guardrails only pending real Classic-specific spob offset/name/stock packet evidence and verifier replay',
+        'sourceNote': 'This guardrail layer prevents recovered service/store packets from losing artifact custody, failure classification, or covered-scope boundaries during reentry. It adds no packet evidence and promotes no Classic service/store, stock, legal landing, or runtime UI behavior.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -696,6 +773,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceStoreEvidencePacketIntakeTriageSummary': _service_store_evidence_packet_intake_triage_summary(),
         'serviceStoreEvidencePacketFailureTaxonomySummary': _service_store_evidence_packet_failure_taxonomy_summary(),
         'serviceStoreEvidencePacketRecoveryPlanSummary': _service_store_evidence_packet_recovery_plan_summary(),
+        'serviceStoreEvidencePacketCustodyGuardrailSummary': _service_store_evidence_packet_custody_guardrail_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 

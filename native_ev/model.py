@@ -1496,7 +1496,7 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV services manifest has unexpected schema version')
-    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4':
+    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v5':
         raise ValueError('sourced EV services manifest has unexpected extraction method')
     run = data.get('spobRecordRun', {})
     if run.get('candidateType') != 'spob-like' or run.get('recordSize') != 400 or run.get('count') != 219:
@@ -1684,6 +1684,31 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('sourced EV services evidence packet recovery plan missing non-evidence blocker')
     if 'not-promoted' not in recovery_plan.get('promotionStatus', ''):
         raise ValueError('sourced EV services evidence packet recovery plan must remain non-promoted')
+
+    custody_guardrails = data.get('serviceStoreEvidencePacketCustodyGuardrailSummary', {})
+    if custody_guardrails.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-custody-guardrail':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet custody guardrail source label')
+    if custody_guardrails.get('oracleStatus') != 'service_store_evidence_packet_custody_guardrail_blocked_pending_real_classic_packet':
+        raise ValueError('sourced EV services evidence packet custody guardrail changed oracle boundary')
+    if custody_guardrails.get('evidenceInputSummaryCount') != 4 or 'serviceStoreEvidencePacketRecoveryPlanSummary' not in custody_guardrails.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV services evidence packet custody guardrail missing recovery-plan input')
+    if custody_guardrails.get('recoveryActionIds') != recovery_plan.get('recoveryActionIds'):
+        raise ValueError('sourced EV services evidence packet custody guardrail no longer covers all recovery actions')
+    if custody_guardrails.get('custodyGuardrailCount') != 5:
+        raise ValueError('sourced EV services evidence packet custody guardrail has unexpected guardrail count')
+    custody_guardrail_ids = set(custody_guardrails.get('custodyGuardrailIds', []))
+    for required in ['require-artifact-sha256-readback-before-reentry', 'preserve-original-failure-classification', 'rerun-current-verifiers-after-custody-readback', 'scope-recovered-claims-to-covered-rows-only', 'quarantine-scaffold-support-notes-from-promotion-scope']:
+        if required not in custody_guardrail_ids:
+            raise ValueError(f'sourced EV services evidence packet custody guardrail missing {required}')
+    custody_evidence = ' '.join(guardrail.get('requiredCustodyEvidence', '') for guardrail in custody_guardrails.get('custodyGuardrails', []))
+    if 'Classic-specific source artifact path/hash' not in custody_evidence or 'current extract_ev_service_semantics' not in custody_evidence:
+        raise ValueError('sourced EV services evidence packet custody guardrail missing custody evidence requirements')
+    if 'do not accept recovered packets whose artifact path or sha256 changed without a new packet id' not in custody_guardrails.get('blockedShortcuts', []):
+        raise ValueError('sourced EV services evidence packet custody guardrail missing changed-artifact shortcut blocker')
+    if 'custody guardrails are packet-handling controls, not Classic service/store evidence' not in custody_guardrails.get('promotionBlockers', []):
+        raise ValueError('sourced EV services evidence packet custody guardrail missing non-evidence blocker')
+    if 'not-promoted' not in custody_guardrails.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet custody guardrail must remain non-promoted')
     return data
 
 

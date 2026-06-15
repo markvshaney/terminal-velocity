@@ -135,13 +135,13 @@
     ],
     "event_parse_errors": []
   },
-  "lastUpdated": "2026-06-15T21:19:59Z",
+  "lastUpdated": "2026-06-15T21:56:09Z",
   "lastWorkerCloseout": {
-    "timestamp": "2026-06-15T21:19:59Z",
-    "task_id": "t_8d9c831e",
+    "timestamp": "2026-06-15T21:56:09Z",
+    "task_id": "t_97133548",
     "closeout_class": "push_ready",
-    "summary": "Added serviceStoreEvidencePacketRecoveryPlanSummary as a non-promoting next-evidence checklist for rejected or incomplete Classic-specific service/store evidence packets.",
-    "packet_path": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_8d9c831e.json",
+    "summary": "Added serviceStoreEvidencePacketCustodyGuardrailSummary as a non-promoting packet-custody control layer for recovered Classic-specific service/store evidence packets.",
+    "packet_path": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_97133548.json",
     "changed_files": [
       "tools/extract_ev_service_semantics.py",
       "native_ev/data/sourced_ev_services.json",
@@ -151,29 +151,32 @@
       "native_ev/tests/test_scenario_eval.py",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_8d9c831e.json"
+      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_97133548.json",
+      ".hermes/long-running/tv-spec-implementation/events.jsonl",
+      ".hermes/long-running/tv-spec-implementation/task-ledger.json"
     ],
     "verification_commands": [
-      "preflight_git_status",
+      "runner_preflight",
       "red_focused_tests",
       "extract_ev_service_semantics",
       "backlog_dispatch_build",
+      "service_manifest_json_validation",
       "focused_model_and_scenario_tests",
       "scenario_system_service_provisioning_scout",
-      "focused_native_ev_unittest",
-      "service_manifest_json_validation",
       "backlog_dispatch_check",
       "backlog_dispatch_unit_tests",
-      "runner_preflight_and_diff_check"
+      "focused_native_ev_unittest",
+      "diff_check",
+      "remaining_v4_reference_search"
     ],
-    "next_action": "Integration owner should inspect and checkpoint/push this verified Lane B service/store recovery-plan slice, then seed the successor from live repo state. Next evidence work remains service/store packet reentry/custody guardrails or exact Classic spöb field offsets, decoded record-to-name joins, and item/ship/outfit TechLevel/SpecialTech stock joins before Classic-wide service/store promotion."
+    "next_action": "Integration owner should inspect and checkpoint/push this verified Lane B service/store custody-guardrail slice, then seed the successor from live repo state. Next evidence work remains exact Classic spöb field offsets, decoded record-to-name joins, item/ship/outfit TechLevel/SpecialTech stock joins, or a real Classic-specific service/store evidence packet replay before Classic-wide service/store promotion."
   },
   "latest_worker_handoff": {
-    "timestamp": "2026-06-15T21:19:59Z",
-    "task_id": "t_8d9c831e",
-    "event_id": "service-store-evidence-packet-recovery-plan-20260615T211959Z",
-    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_8d9c831e.json",
-    "summary": "Added serviceStoreEvidencePacketRecoveryPlanSummary as a non-promoting next-evidence checklist for rejected or incomplete Classic-specific service/store evidence packets.",
+    "timestamp": "2026-06-15T21:56:09Z",
+    "task_id": "t_97133548",
+    "event_id": "service-store-evidence-packet-custody-guardrail-20260615T215609Z",
+    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_97133548.json",
+    "summary": "Added serviceStoreEvidencePacketCustodyGuardrailSummary as a non-promoting packet-custody control layer for recovered Classic-specific service/store evidence packets.",
     "changed_files": [
       "tools/extract_ev_service_semantics.py",
       "native_ev/data/sourced_ev_services.json",
@@ -183,7 +186,9 @@
       "native_ev/tests/test_scenario_eval.py",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_8d9c831e.json"
+      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_97133548.json",
+      ".hermes/long-running/tv-spec-implementation/events.jsonl",
+      ".hermes/long-running/tv-spec-implementation/task-ledger.json"
     ],
     "matched_dirty_paths": [
       "tools/extract_ev_service_semantics.py",
@@ -195,25 +200,29 @@
       "docs/checklists/ev-classic-fidelity-implementation-backlog.md",
       "docs/checklists/ev-classic-fidelity-implementation-backlog.index.json"
     ],
-    "promotion_status": "not-promoted; recovery plan only pending real Classic-specific spob offset/name/stock packet evidence and verifier replay",
-    "source_fidelity_label": "resource-bible-backed-service-store-evidence-packet-recovery-plan",
-    "next_action": "Integration owner should inspect and checkpoint/push this verified Lane B service/store recovery-plan slice, then seed the successor from live repo state. Next evidence work remains service/store packet reentry/custody guardrails or exact Classic spöb field offsets, decoded record-to-name joins, and item/ship/outfit TechLevel/SpecialTech stock joins before Classic-wide service/store promotion.",
+    "promotion_status": "not-promoted; custody guardrails only pending real Classic-specific spob offset/name/stock packet evidence and verifier replay",
+    "source_fidelity_label": "resource-bible-backed-service-store-evidence-packet-custody-guardrail",
+    "next_action": "Integration owner should inspect and checkpoint/push this verified Lane B service/store custody-guardrail slice, then seed the successor from live repo state. Next evidence work remains exact Classic spöb field offsets, decoded record-to-name joins, item/ship/outfit TechLevel/SpecialTech stock joins, or a real Classic-specific service/store evidence packet replay before Classic-wide service/store promotion.",
     "verification": {
-      "preflight_git_status": {
-        "command": "git status --short --branch",
-        "result": "passed; pre-edit repo clean/synced on main (## main...origin/main)"
+      "runner_preflight": {
+        "command": "git fetch origin && python3 tools/backlog_dispatch_index.py runner-preflight && git status --short --branch && git rev-parse HEAD && git rev-parse origin/main",
+        "result": "passed; BACKLOG DISPATCH INDEX OK; main synced with origin/main at 55a62f45bd759e944861005f737a22a04f7a4845 before/while stabilizing this slice"
       },
       "red_focused_tests": {
         "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_services_manifest_records_current_service_matrix_scaffold native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_system_service_provisioning_scout_records_service_matrix_boundaries -v",
-        "result": "passed as RED verification; tests failed for missing serviceStoreEvidencePacketRecoveryPlanSummary / recorded_service_store_evidence_packet_recovery_plan before implementation"
+        "result": "passed as RED verification; tests failed before implementation for missing serviceStoreEvidencePacketCustodyGuardrailSummary / recorded_service_store_evidence_packet_custody_guardrail"
       },
       "extract_ev_service_semantics": {
         "command": "python3 tools/extract_ev_service_semantics.py",
-        "result": "passed; regenerated native_ev/data/sourced_ev_services.json serviceMatrix=20 method=terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4"
+        "result": "passed; regenerated native_ev/data/sourced_ev_services.json serviceMatrix=20 method=terminal-velocity-service-matrix-scaffold-plus-source-seeds-v5"
       },
       "backlog_dispatch_build": {
         "command": "python3 tools/backlog_dispatch_index.py build",
         "result": "passed; regenerated checked-in backlog index; BACKLOG DISPATCH INDEX OK"
+      },
+      "service_manifest_json_validation": {
+        "command": "python3 -m json.tool native_ev/data/sourced_ev_services.json >/tmp/sourced_ev_services_t_97133548.json.check",
+        "result": "passed; JSON valid"
       },
       "focused_model_and_scenario_tests": {
         "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_services_manifest_records_current_service_matrix_scaffold native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_system_service_provisioning_scout_records_service_matrix_boundaries -v",
@@ -221,15 +230,7 @@
       },
       "scenario_system_service_provisioning_scout": {
         "command": "python3 tools/run_gameplay_scenarios.py system_service_provisioning_scout --pretty",
-        "result": "passed; success true; recorded_service_store_evidence_packet_recovery_plan passed"
-      },
-      "focused_native_ev_unittest": {
-        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
-        "result": "passed; 274 tests OK"
-      },
-      "service_manifest_json_validation": {
-        "command": "python3 -m json.tool native_ev/data/sourced_ev_services.json >/tmp/sourced_ev_services_t_8d9c831e.json.check",
-        "result": "passed; JSON valid"
+        "result": "passed; success true; recorded_service_store_evidence_packet_custody_guardrail passed"
       },
       "backlog_dispatch_check": {
         "command": "python3 tools/backlog_dispatch_index.py check",
@@ -239,9 +240,17 @@
         "command": "python3 -m unittest native_ev.tests.test_backlog_dispatch_index -v",
         "result": "passed; 18 tests OK"
       },
-      "runner_preflight_and_diff_check": {
-        "command": "python3 tools/backlog_dispatch_index.py runner-preflight; git diff --check",
-        "result": "passed; BACKLOG DISPATCH INDEX OK; git diff --check exit 0"
+      "focused_native_ev_unittest": {
+        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
+        "result": "passed; 274 tests OK"
+      },
+      "diff_check": {
+        "command": "git diff --check",
+        "result": "passed; exit 0"
+      },
+      "remaining_v4_reference_search": {
+        "command": "search repository for terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4",
+        "result": "passed; 0 matches"
       }
     }
   },
@@ -255,11 +264,11 @@
   },
   "resume_hint": {
     "not_authoritative": true,
-    "text": "Integration owner should inspect and checkpoint/push this verified Lane B service/store recovery-plan slice, then seed the successor from live repo state. Next evidence work remains service/store packet reentry/custody guardrails or exact Classic spöb field offsets, decoded record-to-name joins, and item/ship/outfit TechLevel/SpecialTech stock joins before Classic-wide service/store promotion."
+    "text": "Integration owner should inspect and checkpoint/push this verified Lane B service/store custody-guardrail slice, then seed the successor from live repo state. Next evidence work remains exact Classic spöb field offsets, decoded record-to-name joins, item/ship/outfit TechLevel/SpecialTech stock joins, or a real Classic-specific service/store evidence packet replay before Classic-wide service/store promotion."
   },
   "runtime_truth_rule": "Live runner state is derived from Kanban/topology/git/processes, not this ledger.",
   "schema_version": 3,
   "scope": "Terminal Velocity long-running implementation provenance. This ledger is not a live runner status source.",
   "task_id": "tv-spec-implementation",
-  "updated_at": "2026-06-15T21:19:59Z"
+  "updated_at": "2026-06-15T21:56:09Z"
 }

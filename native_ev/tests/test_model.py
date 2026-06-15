@@ -4411,7 +4411,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
-        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v4')
+        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v5')
         self.assertEqual(data['spobRecordRun']['candidateType'], 'spob-like')
         self.assertEqual(data['spobRecordRun']['recordSize'], 400)
         self.assertEqual(data['spobRecordRun']['count'], 219)
@@ -4534,6 +4534,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('successful local replay of extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout with captured actual output', ' '.join(action['requiredNextEvidence'] for action in recovery_plan['recoveryActions']))
         self.assertIn('recovery plan is a next-evidence checklist, not Classic service/store evidence', recovery_plan['promotionBlockers'])
         self.assertIn('not-promoted', recovery_plan['promotionStatus'])
+        custody_guardrails = data['serviceStoreEvidencePacketCustodyGuardrailSummary']
+        self.assertEqual(custody_guardrails['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-custody-guardrail')
+        self.assertEqual(custody_guardrails['oracleStatus'], 'service_store_evidence_packet_custody_guardrail_blocked_pending_real_classic_packet')
+        self.assertEqual(custody_guardrails['evidenceInputSummaryCount'], 4)
+        self.assertIn('serviceStoreEvidencePacketRecoveryPlanSummary', custody_guardrails['evidenceInputSummaries'])
+        self.assertEqual(custody_guardrails['custodyGuardrailCount'], 5)
+        self.assertIn('require-artifact-sha256-readback-before-reentry', custody_guardrails['custodyGuardrailIds'])
+        self.assertIn('quarantine-scaffold-support-notes-from-promotion-scope', custody_guardrails['custodyGuardrailIds'])
+        self.assertIn('Classic-specific source artifact path/hash', ' '.join(guardrail['requiredCustodyEvidence'] for guardrail in custody_guardrails['custodyGuardrails']))
+        self.assertIn('do not accept recovered packets whose artifact path or sha256 changed without a new packet id', custody_guardrails['blockedShortcuts'])
+        self.assertIn('custody guardrails are packet-handling controls, not Classic service/store evidence', custody_guardrails['promotionBlockers'])
+        self.assertIn('not-promoted', custody_guardrails['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()
