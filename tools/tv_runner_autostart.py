@@ -169,6 +169,26 @@ def start_resume_preflight() -> tuple[int, dict]:
     return code, payload
 
 
+def compact_preflight_result(payload: dict) -> dict:
+    """Return the bounded start-protocol packet suitable for watchdog stdout."""
+    if isinstance(payload.get("machine_result"), dict):
+        return payload["machine_result"]
+    topology = payload.get("topology") or {}
+    blocked = payload.get("blocked_cards") or {}
+    return {
+        "safe_to_start": payload.get("safe_to_start"),
+        "recommended_action": payload.get("recommended_action"),
+        "explicit_gate": payload.get("explicit_gate"),
+        "live_owner": topology.get("live_implementation_owner"),
+        "repo_state": payload.get("repo_state"),
+        "dirty_paths": payload.get("dirty_paths") or [],
+        "blocked_handoffs": blocked.get("counts_by_class") or {},
+        "heartbeat_or_task_id": None,
+        "preflight_tier": payload.get("preflight_tier"),
+        "escalations_run": payload.get("escalations_run") or [],
+    }
+
+
 def require_start_resume_safe(now: str) -> bool:
     try:
         code, payload = start_resume_preflight()
@@ -185,7 +205,7 @@ def require_start_resume_safe(now: str) -> bool:
             last_start_resume_action=payload.get("recommended_action"),
         )
         print("TV runner autostart blocked: start/resume preflight blocked dispatch/seeding.")
-        print(json.dumps(payload, indent=2, sort_keys=True))
+        print(json.dumps(compact_preflight_result(payload), indent=2, sort_keys=True))
         print("repo: " + git_status_summary())
         return False
     return True

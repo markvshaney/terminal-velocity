@@ -288,6 +288,20 @@ class TvRunnerStartResumePreflightTests(unittest.TestCase):
         self.assertEqual(payload["recommended_action"], "start_gateway_kanban_dispatcher")
         self.assertTrue(payload["safe_to_start"])
         self.assertIsNone(payload["explicit_gate"])
+        self.assertEqual(payload["preflight_tier"], "fast_path")
+        self.assertEqual(payload["handoff_candidates"]["status"], "skipped_fast_path")
+        self.assertEqual(payload["machine_result"], {
+            "safe_to_start": True,
+            "recommended_action": "start_gateway_kanban_dispatcher",
+            "explicit_gate": None,
+            "live_owner": "none_active",
+            "repo_state": "clean",
+            "dirty_paths": [],
+            "blocked_handoffs": {},
+            "heartbeat_or_task_id": None,
+            "preflight_tier": "fast_path",
+            "escalations_run": [],
+        })
 
     def test_dirty_repo_routes_to_recovery_before_start(self):
         _, repo, profile = self.make_fixture()

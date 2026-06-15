@@ -69,7 +69,8 @@ class TvRunnerAutostartTests(unittest.TestCase):
         save_state.assert_called()
         lines = [call.args[0] for call in printed.call_args_list]
         self.assertTrue(any("start/resume preflight blocked" in line for line in lines))
-        self.assertIn(json.dumps(packet, indent=2, sort_keys=True), lines)
+        self.assertIn(json.dumps(tv_runner_autostart.compact_preflight_result(packet), indent=2, sort_keys=True), lines)
+        self.assertNotIn(json.dumps(packet, indent=2, sort_keys=True), lines)
 
     def test_idle_clean_autostart_consumes_start_resume_preflight_before_seeding(self):
         packet = {"recommended_action": "start_gateway_kanban_dispatcher", "explicit_gate": None, "safe_to_start": True}

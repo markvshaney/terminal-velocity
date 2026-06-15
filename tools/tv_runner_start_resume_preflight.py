@@ -144,6 +144,28 @@ def capability_check(repo: Path) -> dict[str, Any]:
     return {"status": "ok" if not missing else "missing", "missing": missing, "resolved": resolved}
 
 
+def target_worker_capability_check(profile: Path, required_skills: list[str] | None = None) -> dict[str, Any]:
+    """Check only the target-worker capabilities needed before start.
+
+    Startup should not re-audit the whole profile. It only needs the small set
+    of skills the autostart task would force. Missing optional skills are
+    omitted by ``tv_runner_autostart.py``; this packet becomes blocking only if
+    callers pass hard requirements later.
+    """
+    requested = required_skills or []
+    skills_root = profile / "skills"
+    available: set[str] = set()
+    if skills_root.exists():
+        available = {path.parent.name for path in skills_root.glob("**/SKILL.md")}
+    missing = [skill for skill in requested if skill not in available]
+    return {
+        "status": "ok" if not missing else "missing",
+        "required_skills": requested,
+        "missing_required_skills": missing,
+        "available_required_skills": [skill for skill in requested if skill in available],
+    }
+
+
 def canonical_block_class(task: dict[str, Any], evidence_texts: list[str] | None = None) -> str:
     base_keys = ("title", "body", "status", "latest_summary", "result", "reason", "summary")
     values = [str(task.get(key) or "") for key in base_keys]
@@ -377,6 +399,24 @@ def compact_handoff_candidates(handoffs: dict[str, Any]) -> dict[str, Any]:
     return compact
 
 
+def fast_machine_result(payload: dict[str, Any]) -> dict[str, Any]:
+    """Return the compact result that callers should print/consume first."""
+    topology = payload.get("topology") or {}
+    blocked = payload.get("blocked_cards") or {}
+    return {
+        "safe_to_start": payload.get("safe_to_start"),
+        "recommended_action": payload.get("recommended_action"),
+        "explicit_gate": payload.get("explicit_gate"),
+        "live_owner": topology.get("live_implementation_owner"),
+        "repo_state": payload.get("repo_state"),
+        "dirty_paths": payload.get("dirty_paths") or [],
+        "blocked_handoffs": blocked.get("counts_by_class") or {},
+        "heartbeat_or_task_id": None,
+        "preflight_tier": payload.get("preflight_tier"),
+        "escalations_run": payload.get("escalations_run") or [],
+    }
+
+
 def blocked_card_start_gate(blocked: dict[str, Any]) -> tuple[str, str] | None:
     """Return the unresolved handoff/gate that must be resolved before idle start.
 
@@ -404,10 +444,20 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
     topology_code, topology = run_topology(repo, profile, startup_owner)
     stop_lock = stop_lock_state(repo, profile)
     capability = capability_check(repo)
+    worker_capability = target_worker_capability_check(profile)
     live_owner = topology.get("live_implementation_owner")
 
     blocked = blocked_cards(topology)
-    handoffs = handoff_candidates(topology)
+    handoffs: dict[str, Any] = {
+        "status": "skipped_fast_path",
+        "source": "kanban_db",
+        "kanban_db_candidates": (topology.get("paths") or {}).get("kanban_db_candidates", []),
+        "inspected_paths": [],
+        "errors": [],
+        "tasks": [],
+        "counts_by_status": {},
+    }
+    escalations_run: list[str] = []
     payload: dict[str, Any] = {
         "repo": str(repo),
         "profile": str(profile),
@@ -422,27 +472,44 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
         "stop_lock_state": stop_lock,
         "watchdog_reporter_state": watchdog_reporter_state(repo, profile),
         "capability_check": capability,
+        "target_worker_capability_check": worker_capability,
         "dirty_handoff_recovery": None,
         "safe_to_start": False,
         "recommended_action": "blocked:unknown",
         "explicit_gate": "unknown",
+        "preflight_tier": "fast_path",
+        "escalations_run": escalations_run,
+        "stable_checks": {
+            "status": "not_needed_for_start" if repo_state == "clean" else "dirty_state_escalation_required",
+            "policy": "stable ledger/verifier/source-label semantics are not re-derived at startup; escalate only when dirty, blocked, conflicting, locked, or capability-missing",
+        },
     }
 
     if git_error:
         payload["recommended_action"] = "blocked:git_state_unreadable"
         payload["explicit_gate"] = "git_state_unreadable"
     elif repo_state == "dirty":
+        payload["preflight_tier"] = "escalation"
+        escalations_run.append("dirty_handoff_classifier")
+        handoffs = handoff_candidates(topology)
+        payload["handoff_candidates"] = compact_handoff_candidates(handoffs)
         recovery = recovery_preflight.classify(repo, handoffs.get("tasks") or blocked.get("cards") or [])
         payload["dirty_handoff_recovery"] = recovery
         payload["recommended_action"] = recovery.get("recommended_action") or "recover_dirty_handoff"
         payload["explicit_gate"] = recovery.get("explicit_gate")
     elif topology.get("topology_conflict") or topology_code != 0:
+        payload["preflight_tier"] = "escalation"
+        escalations_run.append("full_topology_conflict_inventory")
         payload["recommended_action"] = "blocked:topology_conflict"
         payload["explicit_gate"] = "topology_conflict"
     elif stop_lock["status"] != "clear":
+        payload["preflight_tier"] = "escalation"
+        escalations_run.append("stop_lock_inspection")
         payload["recommended_action"] = "blocked:stop_lock_present"
         payload["explicit_gate"] = "stop_lock_present"
     elif capability["status"] != "ok":
+        payload["preflight_tier"] = "escalation"
+        escalations_run.append("tool_capability_check")
         payload["recommended_action"] = "blocked:missing_capability"
         payload["explicit_gate"] = "missing_capability"
     elif live_owner == startup_owner:
@@ -452,6 +519,8 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
     elif live_owner == "none_active":
         blocked_gate = blocked_card_start_gate(blocked)
         if blocked_gate is not None:
+            payload["preflight_tier"] = "escalation"
+            escalations_run.append("blocked_handoff_inspection")
             action, gate = blocked_gate
             payload["recommended_action"] = action
             payload["explicit_gate"] = gate
@@ -461,9 +530,12 @@ def classify(repo: Path, profile: Path, startup_owner: str) -> dict[str, Any]:
             payload["safe_to_start"] = True
             payload["explicit_gate"] = None
     else:
+        payload["preflight_tier"] = "escalation"
+        escalations_run.append("unexpected_live_owner_inventory")
         payload["recommended_action"] = "blocked:topology_conflict"
         payload["explicit_gate"] = "topology_conflict"
 
+    payload["machine_result"] = fast_machine_result(payload)
     return payload
 
 
