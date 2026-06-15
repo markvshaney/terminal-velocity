@@ -28,10 +28,11 @@ Primary implementation surfaces:
 Run Terminal Velocity development as a continuous, source-aligned, zero-polling-gap loop:
 
 1. invoke Hermes on the `tv-spec` implementation prompt;
-2. complete one or more adjacent safe increments in the same lane/subsystem;
-3. record compact local state and/or material Telegram progress;
-4. inspect the ledger stop conditions;
-5. immediately launch the next invocation when no real stop condition exists.
+2. complete one smallest coherent safe increment from a shared worktree and hand it off;
+3. let the integration owner decide adjacent batching, checkpoint bundling, normal push, and successor seeding;
+4. record compact local state and/or material Telegram progress;
+5. inspect the ledger stop conditions;
+6. immediately launch the next invocation only after the integration owner has integrated or explicitly gated any dirty handoff.
 
 A completed safe increment is a checkpoint, not task completion.
 
@@ -106,9 +107,10 @@ Default context policy:
 
 Throughput policy:
 
-- Batch adjacent safe increments inside one invocation when they share lane/subsystem, source-basis family, verifier surface, and understandable dirty working set.
-- Stop an invocation at a real gate, failed verifier, subsystem switch, risky/destructive/original-runtime step, checkpoint-policy trigger, cap/handoff boundary, unsafe dirty state, or no-safe-local-slice condition.
-- Do not stop just because one safe increment completed.
+- Shared-worktree worker invocations complete one smallest coherent safe increment, emit an `increment_handoff` / `push_ready` packet with verifier evidence and next action, and stop before expanding the dirty working set into adjacent increments.
+- Adjacent-increment batching belongs to the integration owner or an explicitly named direct-runner/integrator surface. It may batch handoffs only after inspecting live dirty state, handoff packets, verifier evidence, source/fidelity labels, and lane ownership.
+- Stop an invocation at the verified-increment handoff boundary, real gate, failed verifier, subsystem switch, risky/destructive/original-runtime step, checkpoint-policy trigger, cap/handoff boundary, unsafe dirty state, or no-safe-local-slice condition.
+- Do not let a worker-created handoff become task completion; integration owner owns checkpointing, publication, and successor seeding.
 - Do not inspect or wait on the wrapper process from inside a runner invocation.
 - Treat `continuous-runner.lock` as known wrapper state, not development dirty work.
 - A tool/time/context cap is a checkpoint boundary, not task completion.
@@ -139,7 +141,7 @@ Telegram/GameTV reporting:
   - explicit user request;
   - periodic material batch summary.
 - Do not send routine wrapper iteration starts.
-- Do not send every small verified increment if those increments are part of a coherent local batch.
+- Do not send every small verified increment if those increments are part of a coherent integration-owner batch.
 - Use `delivery_status` in the summary sidecar rather than a channel-specific field name.
 
 Process-manager reporting:

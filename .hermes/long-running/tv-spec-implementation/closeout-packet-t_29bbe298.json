@@ -1,0 +1,63 @@
+{
+  "backlog_update": "none; verifier-backed promotion-quarantine guardrail only, no dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "syst-template-offset-evidence-packet-promotion-quarantine-20260615T001109Z",
+  "fidelity_boundary": "systTemplateOffsetEvidencePacketPromotionQuarantineSummary is a diff-boundary guardrail only; it adds no real Classic packet evidence and cannot promote byte offsets, field widths, Con-slot placement, display calibration, record-name joins, route labels, non-topology behavior, gameplay/runtime integration, or broad runtime universe replacement.",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Continue from live repo state and current backlog/priority/verifier maps; likely next work remains exact Classic syst TMPL/ResEdit/source struct evidence, validated runtime offset surrogate packets, or related name/topology/display/runtime reconciliation oracles.",
+  "promotion_status": "not-promoted; promotion quarantine only pending an accepted Classic-specific packet diff",
+  "schema_version": 1,
+  "source_basis": [
+    "systTemplateOffsetEvidencePacketCustodyAuditSummary",
+    "systTemplateOffsetEvidencePacketReentryGuardrailSummary",
+    "systTemplateOffsetEvidencePacketContractSummary",
+    "runtimeUniverseReplacementGateSummary"
+  ],
+  "source_fidelity_label": "repo-reference-backed-syst-template-offset-evidence-packet-promotion-quarantine",
+  "successor_task": "t_be965864",
+  "summary": "Added systTemplateOffsetEvidencePacketPromotionQuarantineSummary as a non-promoting diff-boundary guardrail for future accepted Classic syst template/offset packet claims.",
+  "task_id": "t_29bbe298",
+  "timestamp": "2026-06-15T00:11:09Z",
+  "verification": {
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketPromotionQuarantineSummary"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.json.checked",
+      "result": "passed; JSON valid"
+    },
+    "closeout_guard": {
+      "command": "python3 tools/tv_closeout_guard.py --packet .hermes/long-running/tv-spec-implementation/closeout-packet-t_29bbe298.json",
+      "result": "passed; decision valid"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; recorded_syst_template_offset_evidence_packet_promotion_quarantine present and all checks passed"
+    },
+    "targeted_native_ev_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py",
+      "result": "passed; 274 tests passed"
+    },
+    "targeted_native_ev_unittest_model": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "result": "passed; 1 test ok"
+    },
+    "targeted_native_ev_unittest_scenario": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; 1 test ok"
+    }
+  }
+}

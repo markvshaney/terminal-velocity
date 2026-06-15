@@ -223,11 +223,11 @@ Required preflight:
 
 Continuation contract:
 - This is a long-running autonomous loop. Do not stop for human review on verified safe-local TV code/data/docs changes.
-- Implement one or more adjacent source-aligned safe local Terminal Velocity increments when file set/source basis/verifier surface remain coherent.
+- Implement one smallest coherent source-aligned safe local Terminal Velocity increment, then hand it off. In a shared worktree, do not batch adjacent increments or expand the dirty working set; adjacent-increment batching, checkpoint bundling, and successor seeding belong to the integration owner after handoff inspection.
 - Each increment must include source/fidelity labels, deterministic verifier(s), and durable event/checkpoint updates when future behavior/state changes.
 - Terminal Velocity/Godot logs are implementation evidence, not Classic truth; label scaffolds/pending Classic confirmations explicitly.
-- A verified slice is a checkpoint, not a stop. Before completing this Kanban task, if no real gate/blocker/complete condition exists, create exactly one successor continuation task assigned to {ASSIGNEE} with this same continuation contract, then complete this task with successor id and verification summary.
-- If checkpoint publication is needed from a non-integrator worker, record push_ready; the autonomous integration owner should resolve it. Human review is not a gate unless the task crosses an explicit risky/destructive/external/publication/credential/config boundary.
+- A verified slice is an integration handoff boundary for shared-worktree workers. Do not create a successor continuation task from the worker when the worktree has unintegrated dirty handoff files; record the next action and let the autonomous integration owner checkpoint/bundle/push as appropriate, then seed the successor.
+- If checkpoint publication is needed from a non-integrator worker, record push_ready with intended files, verifier output, and next action; the autonomous integration owner should resolve it. Human review is not a gate unless the task crosses an explicit risky/destructive/external/publication/credential/config boundary.
 - Before blocking or completing as review-related, validate the closeout packet with python3 tools/tv_closeout_guard.py. Valid closeout classes are continue, push_ready, or blocked:*; generic review-required is invalid for verified safe-local TV code/data/docs work.
 - If unable to create a successor, block with a self-contained handoff instead of silently finishing.
 

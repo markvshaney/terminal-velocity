@@ -1,0 +1,37 @@
+{
+  "closeout_class": "continue",
+  "kanban_task": "t_42b1731b",
+  "safe_local": true,
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "native_ev/data/sourced_ev_systems.json"
+  ],
+  "verification": {
+    "focused_model": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "result": "passed"
+    },
+    "focused_scenario_eval": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed"
+    },
+    "scenario_cli": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed"
+    },
+    "native_ev_suite": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval -v",
+      "result": "passed; 274 tests"
+    },
+    "extractor_json_backlog": {
+      "command": "python3 tools/extract_ev_system_semantics.py && python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.json.checked && python3 tools/backlog_dispatch_index.py check",
+      "result": "passed"
+    }
+  },
+  "focused_verifiers_passed": true,
+  "next_action": "Successor continuation task t_29bbe298 should resume the tv-spec autonomous loop from this verified custody audit checkpoint."
+}

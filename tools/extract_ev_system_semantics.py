@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v62'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -3118,6 +3118,201 @@ def _syst_template_offset_evidence_packet_reentry_guardrail_summary(run: dict) -
     }
 
 
+def _syst_template_offset_evidence_packet_custody_audit_summary(run: dict) -> dict:
+    """Require custody/audit evidence before replaying recovered syst offset packets."""
+    reentry_guardrail = _syst_template_offset_evidence_packet_reentry_guardrail_summary(run)
+    custody_checkpoints = [
+        {
+            'checkpointId': 'packet-origin-and-hash-readback',
+            'requiredEvidence': 'record packet path, packetId, source artifact hash, source owner, and local readback hash before replay',
+            'blockedShortcut': 'do not replay a recovered packet when its artifact hash or origin trail is missing',
+        },
+        {
+            'checkpointId': 'classic-specific-provenance-chain',
+            'requiredEvidence': 'tie every asserted field offset to Classic-specific TMPL/ResEdit/source/runtime packet evidence, not EV-family transfer alone',
+            'blockedShortcut': 'do not let EV-family, adaptation, or inferred templates stand in for Classic-specific custody',
+        },
+        {
+            'checkpointId': 'verifier-output-archive',
+            'requiredEvidence': 'archive actual extractor, focused model validation, JSON parse, and static_topology_source_readiness_scout output for the accepted packet',
+            'blockedShortcut': 'do not cite a verifier command without retained current-run output or replayable logs',
+        },
+        {
+            'checkpointId': 'narrow-claim-diff-review',
+            'requiredEvidence': 'review the manifest diff and list exactly which byte offsets/field widths are allowed to change before promotion',
+            'blockedShortcut': 'do not allow a custody-clean packet to lift unrelated display, topology, name, non-topology, or runtime-universe blockers',
+        },
+    ]
+    return {
+        'sourceLabel': 'repo-reference-backed-syst-template-offset-evidence-packet-custody-audit',
+        'oracleStatus': 'syst_template_offset_packet_custody_blocked_pending_replayable_audit_trail',
+        'sourceBasis': ['packet-contract-required', 'classic-specific-provenance-required', 'deterministic-verifier-output-required', 'narrow-claim-diff-review-required'],
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': [
+            'systTemplateOffsetEvidencePacketReentryGuardrailSummary',
+            'systTemplateOffsetEvidencePacketRecoveryPlanSummary',
+            'systTemplateOffsetEvidencePacketContractSummary',
+            'runtimeUniverseReplacementGateSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'contractSchemaVersion': reentry_guardrail.get('contractSchemaVersion'),
+        'failureClassIds': reentry_guardrail.get('failureClassIds', []),
+        'reentryStepIds': reentry_guardrail.get('reentryStepIds', []),
+        'custodyCheckpointCount': len(custody_checkpoints),
+        'custodyCheckpointIds': [checkpoint['checkpointId'] for checkpoint in custody_checkpoints],
+        'custodyCheckpoints': custody_checkpoints,
+        'blockedShortcuts': [checkpoint['blockedShortcut'] for checkpoint in custody_checkpoints],
+        'requiredVerifierBeforePromotion': reentry_guardrail.get('requiredVerifierBeforePromotion', []) + [
+            'python3 -m json.tool native_ev/data/sourced_ev_systems.json',
+        ],
+        'blockedPromotionClaims': reentry_guardrail.get('blockedPromotionClaims', []) + [
+            'treating custody/audit cleanliness as proof of Classic byte offsets without narrow accepted field claims',
+            'promoting broad runtime universe replacement from a custody-clean template packet before name/topology/display/non-topology gates close',
+        ],
+        'promotionBlockers': [
+            'custody audit is a replay/audit trail, not Classic byte-offset evidence',
+            'Classic-specific provenance, artifact hashes, verifier output archives, and narrow diff review are all required before any future packet promotion',
+            'custody-clean packets still cannot promote unrelated Con-slot placement, non-topology behavior, display calibration, record-name joins, or broad runtime universe replacement',
+            'broad runtime universe replacement remains blocked until all name, topology, display, non-topology, and template-offset gates close',
+        ],
+        'nextEvidenceFamilies': reentry_guardrail.get('nextEvidenceFamilies', []),
+        'promotionStatus': 'not-promoted; custody audit trail only pending real replayable Classic-specific packet evidence',
+        'sourceNote': 'This custody audit layer records the artifact provenance, verifier-output archive, and narrow diff review required before a recovered syst template/offset packet can be considered for promotion. It adds no packet evidence and cannot promote byte offsets or runtime behavior.',
+    }
+
+
+def _syst_template_offset_evidence_packet_promotion_quarantine_summary(run: dict) -> dict:
+    """Quarantine future accepted syst offset packet claims to their covered fields."""
+    custody_audit = _syst_template_offset_evidence_packet_custody_audit_summary(run)
+    quarantine_controls = [
+        {
+            'controlId': 'covered-field-only-diff-boundary',
+            'requiredEvidence': 'list exact accepted Classic field names, byte offsets, widths, and manifest paths before any promotion diff is proposed',
+            'blockedShortcut': 'do not promote neighboring unresolved words or inferred Con-slot placement from a covered-field packet',
+        },
+        {
+            'controlId': 'unrelated-gate-preservation',
+            'requiredEvidence': 'copy forward name, topology, display, non-topology, and runtime-universe blockers that the packet does not explicitly satisfy',
+            'blockedShortcut': 'do not treat a template/source packet as closing record-name joins, display scaling, route-label, or broad universe replacement gates',
+        },
+        {
+            'controlId': 'post-promotion-verifier-replay',
+            'requiredEvidence': 'rerun extractor, JSON parse, focused model validation, and static_topology_source_readiness_scout after the quarantined diff is staged',
+            'blockedShortcut': 'do not rely on pre-diff verifier output after changing sourced_ev_systems manifest fields',
+        },
+        {
+            'controlId': 'runtime-scaffold-boundary-review',
+            'requiredEvidence': 'state whether covered fields are promoted as source-backed data only or intentionally excluded from gameplay/runtime scaffolds',
+            'blockedShortcut': 'do not route AI, hazards, visibility, governments, ports, or navigation defaults into gameplay from a narrow offset packet without a separate runtime integration gate',
+        },
+    ]
+    return {
+        'sourceLabel': 'repo-reference-backed-syst-template-offset-evidence-packet-promotion-quarantine',
+        'oracleStatus': 'syst_template_offset_packet_promotion_quarantine_blocked_pending_accepted_packet_diff',
+        'sourceBasis': ['narrow-claim-diff-review-required', 'deterministic-verifier-output-required', 'runtime-integration-gates-preserved'],
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': [
+            'systTemplateOffsetEvidencePacketCustodyAuditSummary',
+            'systTemplateOffsetEvidencePacketReentryGuardrailSummary',
+            'systTemplateOffsetEvidencePacketContractSummary',
+            'runtimeUniverseReplacementGateSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'contractSchemaVersion': custody_audit.get('contractSchemaVersion'),
+        'custodyCheckpointIds': custody_audit.get('custodyCheckpointIds', []),
+        'quarantineControlCount': len(quarantine_controls),
+        'quarantineControlIds': [control['controlId'] for control in quarantine_controls],
+        'quarantineControls': quarantine_controls,
+        'blockedShortcuts': [control['blockedShortcut'] for control in quarantine_controls],
+        'requiredVerifierBeforePromotion': custody_audit.get('requiredVerifierBeforePromotion', []) + [
+            'python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty',
+        ],
+        'blockedPromotionClaims': custody_audit.get('blockedPromotionClaims', []) + [
+            'using a narrow accepted field packet to promote unrelated syst offsets, display calibration, record-name joins, route labels, non-topology behavior, or broad runtime universe replacement',
+            'routing newly identified offset fields into gameplay before a separate runtime/scaffold integration gate accepts that exact use',
+        ],
+        'promotionBlockers': [
+            'promotion quarantine is a diff boundary, not Classic byte-offset evidence',
+            'accepted packet claims must be scoped to explicitly covered Classic fields and replayed after any manifest diff',
+            'unrelated name, topology, display, non-topology, and runtime-universe blockers remain active unless separately satisfied',
+            'gameplay/runtime scaffolds may not consume newly covered fields without an explicit integration gate',
+        ],
+        'nextEvidenceFamilies': custody_audit.get('nextEvidenceFamilies', []),
+        'promotionStatus': 'not-promoted; promotion quarantine only pending an accepted Classic-specific packet diff',
+        'sourceNote': 'This quarantine layer defines how future accepted syst template/offset packets may change only explicitly covered manifest fields while preserving unrelated fidelity gates. It adds no packet evidence and cannot route unresolved or newly identified fields into gameplay.',
+    }
+
+
+def _syst_template_offset_evidence_packet_rollback_readiness_summary(run: dict) -> dict:
+    """Define rollback readiness for future quarantined syst offset packet diffs."""
+    promotion_quarantine = _syst_template_offset_evidence_packet_promotion_quarantine_summary(run)
+    rollback_controls = [
+        {
+            'controlId': 'pre-diff-baseline-capture',
+            'requiredEvidence': 'record the pre-promotion manifest hash, focused verifier output, and exact dirty file set before applying an accepted packet diff',
+            'blockedShortcut': 'do not stage a packet diff when the previous sourced systems baseline cannot be reconstructed',
+        },
+        {
+            'controlId': 'failed-verifier-revert-path',
+            'requiredEvidence': 'if extractor, JSON validation, model checks, or static topology scenario fail after the diff, revert only the packet diff and preserve the rejected packet artifact for taxonomy/recovery',
+            'blockedShortcut': 'do not patch around a failed verifier by broadening unrelated blockers or weakening model/scenario assertions',
+        },
+        {
+            'controlId': 'post-revert-replay',
+            'requiredEvidence': 'rerun extractor, JSON validation, focused model validation, and static_topology_source_readiness_scout after rollback to prove the baseline gates are restored',
+            'blockedShortcut': 'do not continue with new offset work after rollback until the restored baseline verifier replay passes',
+        },
+        {
+            'controlId': 'rollback-event-handoff',
+            'requiredEvidence': 'write a compact event/packet naming rejected claims, reverted paths, verifier failure, restored verifier result, and next evidence family',
+            'blockedShortcut': 'do not drop failed packet context from the ledger/event stream just because the manifest was reverted',
+        },
+    ]
+    return {
+        'sourceLabel': 'repo-reference-backed-syst-template-offset-evidence-packet-rollback-readiness',
+        'oracleStatus': 'syst_template_offset_packet_rollback_readiness_blocked_pending_failed_or_conflicting_packet_diff',
+        'sourceBasis': ['rollback-baseline-required', 'deterministic-verifier-replay-required', 'failed-packet-context-preserved'],
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'evidenceInputSummaries': [
+            'systTemplateOffsetEvidencePacketPromotionQuarantineSummary',
+            'systTemplateOffsetEvidencePacketCustodyAuditSummary',
+            'systTemplateOffsetEvidencePacketFailureTaxonomySummary',
+            'runtimeUniverseReplacementGateSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'contractSchemaVersion': promotion_quarantine.get('contractSchemaVersion'),
+        'quarantineControlIds': promotion_quarantine.get('quarantineControlIds', []),
+        'rollbackControlCount': len(rollback_controls),
+        'rollbackControlIds': [control['controlId'] for control in rollback_controls],
+        'rollbackControls': rollback_controls,
+        'blockedShortcuts': [control['blockedShortcut'] for control in rollback_controls],
+        'requiredVerifierAfterRollback': [
+            'python3 tools/extract_ev_system_semantics.py',
+            'python3 -m json.tool native_ev/data/sourced_ev_systems.json',
+            'python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v',
+            'python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty',
+        ],
+        'blockedPromotionClaims': promotion_quarantine.get('blockedPromotionClaims', []) + [
+            'treating rollback as proof that a rejected or conflicting Classic packet was partially accepted',
+            'weakening unrelated source-readiness gates to make a failed packet diff pass',
+        ],
+        'promotionBlockers': [
+            'rollback readiness is a recovery guardrail, not Classic byte-offset evidence',
+            'failed or conflicting packet diffs must restore the previous manifest baseline before new offset work continues',
+            'reverted packet claims remain rejected/pending evidence until the full acceptance path is replayed',
+        ],
+        'nextEvidenceFamilies': promotion_quarantine.get('nextEvidenceFamilies', []),
+        'promotionStatus': 'not-promoted; rollback readiness only pending a failed or conflicting accepted-packet diff',
+        'sourceNote': 'This rollback layer preserves a deterministic recovery path for future quarantined syst template/offset packet diffs. It adds no Classic packet evidence and cannot partially promote failed or reverted claims.',
+    }
+
+
 def _syst_word_domain_coverage_summary(run: dict) -> dict:
     """Preserve a complete word-domain coverage matrix for future syst offset oracles."""
     word_domains = []
@@ -3679,6 +3874,9 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systTemplateOffsetEvidencePacketFailureTaxonomySummary': _syst_template_offset_evidence_packet_failure_taxonomy_summary(run),
         'systTemplateOffsetEvidencePacketRecoveryPlanSummary': _syst_template_offset_evidence_packet_recovery_plan_summary(run),
         'systTemplateOffsetEvidencePacketReentryGuardrailSummary': _syst_template_offset_evidence_packet_reentry_guardrail_summary(run),
+        'systTemplateOffsetEvidencePacketCustodyAuditSummary': _syst_template_offset_evidence_packet_custody_audit_summary(run),
+        'systTemplateOffsetEvidencePacketPromotionQuarantineSummary': _syst_template_offset_evidence_packet_promotion_quarantine_summary(run),
+        'systTemplateOffsetEvidencePacketRollbackReadinessSummary': _syst_template_offset_evidence_packet_rollback_readiness_summary(run),
         'systWordDomainCoverageSummary': _syst_word_domain_coverage_summary(run),
         'nonTopologySystOracleGapSummary': _non_topology_syst_oracle_gap_summary(run),
         'nonTopologySystRuntimeProbePrioritySummary': _non_topology_syst_runtime_probe_priority_summary(run),

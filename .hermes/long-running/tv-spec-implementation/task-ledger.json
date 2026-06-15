@@ -7,7 +7,12 @@
         "native_ev/model.py",
         "native_ev/scenario_eval.py",
         "native_ev/tests/test_model.py",
-        "native_ev/tests/test_scenario_eval.py"
+        "native_ev/tests/test_scenario_eval.py",
+        "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+        "docs/research/long-running-task-wrapper-spec.md",
+        "docs/research/tv-spec.md",
+        "tools/tv_runner_autostart.py",
+        "native_ev/tests/test_tv_runner_autostart.py"
       ],
       "type": "dirty_handoff_pending"
     },
@@ -104,15 +109,15 @@
         "repo_state": "dirty",
         "status_error": null
       },
-      "latest_event_id": "syst-template-offset-evidence-packet-reentry-guardrail-20260614T200143Z",
-      "matching_closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_50a674ba.json",
+      "latest_event_id": "syst-template-offset-evidence-packet-rollback-readiness-20260615T002444Z",
+      "matching_closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_29bbe298.json",
       "topology": {
         "conflict_types": [],
         "live_implementation_owner": "gateway_kanban_dispatcher",
         "warning_types": []
       }
     },
-    "live_state_class_at_reconcile_time": "push_ready_reentry_guardrail"
+    "live_state_class_at_reconcile_time": "push_ready_rollback_readiness_and_worker_handoff_policy"
   },
   "evidence_pointers": {
     "basilisk_speed_qualification": "docs/research/basilisk-speed-qualification.json",
@@ -137,42 +142,48 @@
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_model.py",
-      "native_ev/tests/test_scenario_eval.py"
+      "native_ev/tests/test_scenario_eval.py",
+      "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+      "docs/research/long-running-task-wrapper-spec.md",
+      "docs/research/tv-spec.md",
+      "tools/tv_runner_autostart.py",
+      "native_ev/tests/test_tv_runner_autostart.py"
     ],
-    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_50a674ba.json",
-    "event_id": "syst-template-offset-evidence-packet-reentry-guardrail-20260614T200143Z",
+    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_be965864.json",
+    "event_id": "syst-template-offset-evidence-packet-rollback-readiness-20260615T002444Z",
     "matched_dirty_paths": [
       "tools/extract_ev_system_semantics.py",
       "native_ev/data/sourced_ev_systems.json",
       "native_ev/model.py",
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_model.py",
-      "native_ev/tests/test_scenario_eval.py"
+      "native_ev/tests/test_scenario_eval.py",
+      "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+      "docs/research/long-running-task-wrapper-spec.md",
+      "docs/research/tv-spec.md",
+      "tools/tv_runner_autostart.py",
+      "native_ev/tests/test_tv_runner_autostart.py"
     ],
-    "successor_task": null,
-    "summary": "Added systTemplateOffsetEvidencePacketReentryGuardrailSummary as a non-promoting replay-path guardrail for recovered or revised syst template/offset packets.",
-    "task_id": "t_50a674ba",
-    "timestamp": "2026-06-14T20:01:43Z",
+    "successor_task": "t_0ceeb5b6",
+    "summary": "Added systTemplateOffsetEvidencePacketRollbackReadinessSummary as a non-promoting rollback/revert guardrail alongside promotion quarantine, and tightened shared-worktree worker handoff policy so integration-owner surfaces own adjacent batching and successor seeding.",
+    "task_id": "t_be965864",
+    "timestamp": "2026-06-15T00:24:44Z",
     "verification": {
-      "backlog_dispatch_index_runner_preflight": {
-        "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
-        "result": "passed; BACKLOG DISPATCH INDEX OK"
-      },
       "extract_ev_system_semantics": {
         "command": "python3 tools/extract_ev_system_semantics.py",
-        "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketReentryGuardrailSummary"
+        "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketRollbackReadinessSummary and updated method label"
       },
       "git_diff_check": {
         "command": "git diff --check",
         "result": "passed; exit 0"
       },
       "json_validation": {
-        "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json",
+        "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems_t_be965864.json.checked",
         "result": "passed; JSON valid"
       },
       "scenario_static_topology_source_readiness_scout": {
         "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
-        "result": "passed; recorded_syst_template_offset_evidence_packet_reentry_guardrail present and all checks passed"
+        "result": "passed; sourced readiness includes systTemplateOffsetEvidencePacketRollbackReadinessSummary and all checks passed"
       },
       "targeted_native_ev_pytest": {
         "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py",
@@ -185,6 +196,10 @@
       "targeted_native_ev_unittest_scenario": {
         "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
         "result": "passed; 1 test ok"
+      },
+      "tv_runner_autostart_unittest": {
+        "command": "python3 -m unittest native_ev.tests.test_tv_runner_autostart.TvRunnerAutostartTests -v",
+        "result": "passed; 8 tests ok"
       }
     }
   },
@@ -198,11 +213,11 @@
   },
   "resume_hint": {
     "not_authoritative": true,
-    "text": null
+    "text": "Integration owner should inspect dirty handoff bundle, then checkpoint/push/batch or seed next worker from live repo state."
   },
   "runtime_truth_rule": "Live runner state is derived from Kanban/topology/git/processes, not this ledger.",
   "schema_version": 3,
   "scope": "Terminal Velocity long-running implementation provenance. This ledger is not a live runner status source.",
   "task_id": "tv-spec-implementation",
-  "updated_at": "2026-06-14T20:01:43Z"
+  "updated_at": "2026-06-15T00:24:44Z"
 }

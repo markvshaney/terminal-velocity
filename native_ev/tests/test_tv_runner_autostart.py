@@ -19,6 +19,14 @@ class TvRunnerAutostartTests(unittest.TestCase):
         self.assertIn("continue, push_ready, or blocked:*", body)
         self.assertIn("generic review-required", body)
 
+    def test_continuation_body_leaves_adjacent_batching_to_integrator(self):
+        body = tv_runner_autostart.continuation_body("abc1234")
+
+        self.assertIn("Implement one smallest coherent", body)
+        self.assertIn("adjacent-increment batching, checkpoint bundling, and successor seeding belong to the integration owner", body)
+        self.assertIn("Do not create a successor continuation task from the worker when the worktree has unintegrated dirty handoff files", body)
+        self.assertNotIn("Implement one or more adjacent", body)
+
     def test_create_continuation_omits_unavailable_target_profile_skills(self):
         commands = []
 

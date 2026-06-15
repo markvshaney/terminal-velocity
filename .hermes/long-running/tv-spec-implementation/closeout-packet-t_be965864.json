@@ -1,0 +1,69 @@
+{
+  "backlog_update": "none; verifier-backed rollback-readiness guardrail and worker handoff policy update only, no dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py",
+    "docs/prompts/tv-spec-implementation-long-task-prompt.md",
+    "docs/research/long-running-task-wrapper-spec.md",
+    "docs/research/tv-spec.md",
+    "tools/tv_runner_autostart.py",
+    "native_ev/tests/test_tv_runner_autostart.py"
+  ],
+  "closeout_class": "push_ready",
+  "event_id": "syst-template-offset-evidence-packet-rollback-readiness-20260615T002444Z",
+  "fidelity_boundary": "systTemplateOffsetEvidencePacketRollbackReadinessSummary is a rollback/revert guardrail only; it adds no real Classic packet evidence and cannot promote byte offsets, field widths, Con-slot placement, display calibration, record-name joins, route labels, non-topology behavior, gameplay/runtime integration, or broad runtime universe replacement.",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Integration owner should inspect the dirty handoff bundle, decide checkpoint/push/batching, then continue from live repo state and current backlog/priority/verifier maps toward exact Classic syst TMPL/ResEdit/source struct evidence, validated runtime offset surrogate packets, or adjacent name/topology/display/runtime reconciliation oracles.",
+  "promotion_status": "not-promoted; rollback readiness only pending a failed or conflicting accepted-packet diff",
+  "schema_version": 1,
+  "source_basis": [
+    "systTemplateOffsetEvidencePacketPromotionQuarantineSummary",
+    "systTemplateOffsetEvidencePacketCustodyAuditSummary",
+    "systTemplateOffsetEvidencePacketFailureTaxonomySummary",
+    "runtimeUniverseReplacementGateSummary",
+    "Terminal Velocity long-running worker/integration-owner policy docs"
+  ],
+  "source_fidelity_label": "repo-reference-backed-syst-template-offset-evidence-packet-rollback-readiness",
+  "successor_task": "t_0ceeb5b6",
+  "summary": "Added systTemplateOffsetEvidencePacketRollbackReadinessSummary as a non-promoting rollback/revert guardrail alongside promotion quarantine, and tightened shared-worktree worker handoff policy so integration-owner surfaces own adjacent batching and successor seeding.",
+  "task_id": "t_be965864",
+  "timestamp": "2026-06-15T00:24:44Z",
+  "verification": {
+    "extract_ev_system_semantics": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; regenerated native_ev/data/sourced_ev_systems.json with systTemplateOffsetEvidencePacketRollbackReadinessSummary and updated method label"
+    },
+    "git_diff_check": {
+      "command": "git diff --check",
+      "result": "passed; exit 0"
+    },
+    "json_validation": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems_t_be965864.json.checked",
+      "result": "passed; JSON valid"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; sourced readiness includes systTemplateOffsetEvidencePacketRollbackReadinessSummary and all checks passed"
+    },
+    "targeted_native_ev_pytest": {
+      "command": "python3 -m pytest native_ev/tests/test_model.py native_ev/tests/test_scenario_eval.py",
+      "result": "passed; 274 tests passed"
+    },
+    "targeted_native_ev_unittest_model": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds -v",
+      "result": "passed; 1 test ok"
+    },
+    "targeted_native_ev_unittest_scenario": {
+      "command": "python3 -m unittest native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; 1 test ok"
+    },
+    "tv_runner_autostart_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_tv_runner_autostart.TvRunnerAutostartTests -v",
+      "result": "passed; 8 tests ok"
+    }
+  }
+}

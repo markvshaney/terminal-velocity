@@ -213,7 +213,7 @@ Every completed increment must include:
 - backlog/provenance update or explicit `none` with reason;
 - promotion status: `scaffold`, `needs evidence`, `fidelity-promoted`, `blocked`, or `user-gated`.
 
-A verified increment is a local work checkpoint, not a required commit/push boundary and not necessarily a stop. A single long-running invocation may complete multiple adjacent verified increments when they share the same lane, source-basis family, verifier surface, and understandable dirty working set.
+A verified increment is a local work checkpoint and, for shared-worktree workers, a handoff boundary. Shared-worktree workers must not claim adjacent-increment batching authority or keep expanding a dirty working set after a verified increment; they emit a handoff packet with next-action context. The integration owner decides whether adjacent handoffs/increments are batched into one checkpoint/push bundle, whether a successor should be seeded, or whether the lane should stop at a concrete gate. Only an explicitly named integrator/direct-runner surface may complete multiple adjacent verified increments in one working set.
 
 ## Scenario/evaluator contract
 
@@ -339,7 +339,7 @@ Commit/push is a durability or coordination action, not the unit of development.
 
 Checkpoint policy decides when remote publication has coordination or durability value; role policy decides who may publish. A normal coherent non-force push is not human-gated under existing repo policy, but only the integration owner performs the push. The integration owner is automated as a two-layer lane: deterministic guard script first, then LLM-assisted bundle review.
 
-Workers/continuous runners may checkpoint locally when this policy triggers, but they do not push. A worker does not stop merely because local `main` is ahead of `origin/main`. When remote publication is actually needed, a worker records `push_ready` with commit SHA, intended files, verification commands/results, why remote state is needed, and remaining next action, then continues safe local work when possible. A worker stops only at a real gate, cap/handoff boundary, unsafe dirty state, failed verifier, or no-safe-local-slice boundary. Missing GitHub credentials in a worker are not a TV development gate.
+Workers/continuous runners may checkpoint locally only when their task explicitly grants local checkpoint authority, but they do not push and they do not decide the final publication bundle. A worker does not stop merely because local `main` is ahead of `origin/main`. When remote publication or adjacent batching is needed, a worker records `push_ready` / `increment_handoff` with intended files, verification commands/results, why integration is needed, and remaining next action, then stops at that handoff boundary in a shared worktree. The integration owner owns adjacent handoff batching, local checkpoint commit selection, normal push, fetch verification, and successor seeding. Missing GitHub credentials in a worker are not a TV development gate.
 
 ### Worker closeout and stale review-gate policy
 
@@ -376,7 +376,7 @@ Otherwise, keep the slice verified locally and continue. Fidelity discipline com
 
 Optimize the continuous workflow for accumulated development time without weakening source/fidelity claims:
 
-- **Batch adjacent increments in one invocation.** Continue inside the same invocation while work remains in the same lane/subsystem, uses the same source-basis family and verifier surface, has no real gate or failed verifier, stays below context/tool cap pressure, and the dirty working set remains understandable. Stop at gates, failures, subsystem switches, risky original-runtime steps, checkpoint-policy triggers, or cap/handoff boundaries.
+- **Batch adjacent increments only at the integration-owner/direct-runner surface.** Shared-worktree workers complete one smallest coherent verified increment, emit an `increment_handoff`/`push_ready` packet, and stop before enlarging the dirty working set. The integration owner may batch adjacent handoffs/increments when they share lane/subsystem, source-basis family, verifier surface, and safe ownership; it also owns checkpoint commit selection, normal push, and successor seeding. Stop at gates, failures, subsystem switches, risky original-runtime steps, checkpoint-policy triggers, or cap/handoff boundaries.
 - **Report externally only at material boundaries.** Send Telegram/progress reports for gates, failures, checkpoint commits/pushes, fidelity promotions/demotions, explicit user requests, or periodic batch summaries. Routine verified increments can be recorded locally in the ledger/events log and summarized together.
 - **Update backlog/provenance only when future execution changes.** Use migration-on-touch. Patch the live backlog/provenance when next action, verifier, blocker/gate, source basis, promotion status, or future dispatch would otherwise be stale; otherwise record `none` with reason in the increment packet/event.
 - **Match verifier breadth to risk.** Each increment needs the narrowest verifier that proves the changed claim. Broad repo hygiene, JSON/JSONL parse sweeps, secret scans, remote checks, full scenario suites, and Godot self-tests run at checkpoint/handoff/risk boundaries or when their surface was touched, not automatically after every local increment.
@@ -390,9 +390,9 @@ Use this loop:
 1. Classify item: build scaffold / fidelity promotion / static semantic / runtime UI / timing-feel / quirk.
 2. Pick oracle: decoded resource / manual / Godot-Python evaluator / Basilisk / user decision.
 3. Pick lane: A, B, C, D, E, or Basilisk runtime lane.
-4. Execute the smallest vertical increment, then continue through adjacent increments under the long-running efficiency policy when safe.
+4. Execute the smallest vertical increment. Shared-worktree workers stop at the verified handoff boundary; the integration owner/direct-runner applies the long-running efficiency policy to any adjacent batching.
 5. Emit or locally record increment packets with files, command output, `oracle_class`, `source_basis`, evidence label, promotion status, uncertainty, and gates; batch routine external reports.
-6. Integrate: one owner verifies, updates backlog/provenance only when future execution state changes, performs any local checkpoint commit when the Git checkpoint policy is triggered, and pushes only when acting as the integration owner.
+6. Integrate: one owner verifies, batches adjacent handoffs when safe, updates backlog/provenance only when future execution state changes, performs any local checkpoint commit when the Git checkpoint policy is triggered, pushes only when acting as the integration owner, and seeds the next worker only after the previous dirty handoff is integrated or explicitly gated.
 7. Continue unless a real gate, cap/handoff boundary, failed verifier, unsafe dirty state, or no-safe-local-slice condition is reached.
 
 ## Autoresearch boundary
