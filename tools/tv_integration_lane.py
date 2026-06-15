@@ -52,6 +52,10 @@ UNSAFE_DIRTY_RECOVERY_MARKER = "tv_unsafe_dirty_recovery"
 ACTIONABLE_GATE_CLASSES = {"push_ready", "review_required_process_bug"}
 REPORT_STATE_PATH = Path(".hermes/long-running/tv-spec-implementation/report-state.json")
 REPORTS_DIR = Path(".hermes/long-running/tv-spec-implementation/reports")
+BUNDLE_SOFT_FILE_LIMIT = 8
+BUNDLE_HARD_FILE_LIMIT = 15
+BUNDLE_SOFT_LINE_LIMIT = 600
+BUNDLE_HARD_LINE_LIMIT = 1000
 
 
 def run(cmd: list[str], repo: Path, *, check: bool = False) -> subprocess.CompletedProcess[str]:
@@ -126,6 +130,108 @@ def changed_files(repo: Path) -> list[str]:
     if result.returncode != 0:
         return []
     return sorted(line for line in result.stdout.splitlines() if line.strip())
+
+
+def dirty_paths_from_status(status: list[str]) -> list[str]:
+    paths: list[str] = []
+    for raw in status:
+        if not raw:
+            continue
+        path = raw[3:] if len(raw) > 3 else raw
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1]
+        paths.append(path.strip())
+    return sorted(set(path for path in paths if path))
+
+
+def diff_numstat(repo: Path, *args: str) -> dict[str, Any]:
+    result = run(["git", "diff", "--numstat", *args], repo)
+    stats = {"files": 0, "insertions": 0, "deletions": 0, "lines": 0, "binary_files": 0}
+    if result.returncode != 0:
+        stats["unavailable"] = True
+        return stats
+    files = 0
+    insertions = 0
+    deletions = 0
+    binary_files = 0
+    for raw in result.stdout.splitlines():
+        parts = raw.split("\t")
+        if len(parts) < 3:
+            continue
+        files += 1
+        if parts[0] == "-" or parts[1] == "-":
+            binary_files += 1
+            continue
+        try:
+            insertions += int(parts[0])
+            deletions += int(parts[1])
+        except ValueError:
+            binary_files += 1
+    stats.update({
+        "files": files,
+        "insertions": insertions,
+        "deletions": deletions,
+        "lines": insertions + deletions,
+        "binary_files": binary_files,
+    })
+    return stats
+
+
+def process_policy_paths(paths: list[str]) -> list[str]:
+    prefixes = (
+        "docs/prompts/",
+        "docs/research/tv-spec.md",
+        "docs/research/long-running-task-wrapper-spec.md",
+        "tools/tv_runner_autostart.py",
+        "tools/tv_integration_lane.py",
+        "native_ev/tests/test_tv_runner_autostart.py",
+        "native_ev/tests/test_tv_integration_lane.py",
+    )
+    return sorted(path for path in paths if path.startswith(prefixes))
+
+
+def non_process_policy_paths(paths: list[str]) -> list[str]:
+    policy = set(process_policy_paths(paths))
+    return sorted(path for path in paths if path not in policy)
+
+
+def assess_bundle_size(paths: list[str], numstat: dict[str, Any]) -> dict[str, Any]:
+    file_count = len(set(paths)) or int(numstat.get("files") or 0)
+    line_count = int(numstat.get("lines") or 0)
+    policy_paths = process_policy_paths(paths)
+    non_policy_paths = non_process_policy_paths(paths)
+    triggers: list[str] = []
+    hard_reasons: list[str] = []
+    if file_count > BUNDLE_SOFT_FILE_LIMIT:
+        triggers.append("soft_file_limit")
+    if line_count > BUNDLE_SOFT_LINE_LIMIT:
+        triggers.append("soft_line_limit")
+    if policy_paths and non_policy_paths:
+        triggers.append("mixed_process_policy_and_game_changes")
+    if file_count > BUNDLE_HARD_FILE_LIMIT:
+        hard_reasons.append("hard_file_limit")
+    if line_count > BUNDLE_HARD_LINE_LIMIT:
+        hard_reasons.append("hard_line_limit")
+    return {
+        "file_count": file_count,
+        "insertions": int(numstat.get("insertions") or 0),
+        "deletions": int(numstat.get("deletions") or 0),
+        "line_count": line_count,
+        "binary_files": int(numstat.get("binary_files") or 0),
+        "soft_file_limit": BUNDLE_SOFT_FILE_LIMIT,
+        "hard_file_limit": BUNDLE_HARD_FILE_LIMIT,
+        "soft_line_limit": BUNDLE_SOFT_LINE_LIMIT,
+        "hard_line_limit": BUNDLE_HARD_LINE_LIMIT,
+        "soft_triggered": bool(triggers),
+        "hard_triggered": bool(hard_reasons),
+        "triggers": triggers,
+        "hard_reasons": hard_reasons,
+        "process_policy_paths": policy_paths,
+        "non_process_policy_paths": non_policy_paths,
+        "recommended_action": "split_or_justify_bundle_before_publish" if hard_reasons else (
+            "checkpoint_or_publish_before_successor" if triggers else "bundle_size_ok"
+        ),
+    }
 
 
 def commit_summaries(repo: Path) -> list[str]:
@@ -905,6 +1011,8 @@ def build_blocked_runner_report(payload: dict[str, Any]) -> str:
     changed_files = [str(item) for item in payload.get("changed_files") or []]
     commit_summaries = [str(item) for item in payload.get("commit_summaries") or []]
     recovery = payload.get("dirty_state_recovery") or {}
+    bundle_size = payload.get("bundle_size") or {}
+    dirty_bundle_size = payload.get("dirty_bundle_size") or {}
 
     lines = [
         "TV runner blocked by integration owner",
@@ -942,6 +1050,16 @@ def build_blocked_runner_report(payload: dict[str, Any]) -> str:
     if changed_files:
         lines.append("changed areas:")
         lines.extend(_bullet_list(deterministic_changed_areas(changed_files), limit=6))
+    size_packet = dirty_bundle_size or bundle_size
+    if size_packet and size_packet.get("recommended_action") != "bundle_size_ok":
+        lines.append("bundle-size trigger:")
+        lines.append(
+            f"- {size_packet.get('file_count', 0)} files / {size_packet.get('line_count', 0)} diff lines; "
+            f"action={size_packet.get('recommended_action')}"
+        )
+        triggers = [str(item) for item in size_packet.get("triggers") or []]
+        if triggers:
+            lines.extend(_bullet_list(triggers, limit=4))
     next_action = recovery.get("recommended_action") or payload.get("recommended_action")
     if next_action:
         lines.append("next safe action:")
@@ -988,6 +1106,8 @@ def blocked_runner_report_fingerprint(payload: dict[str, Any]) -> str:
             for item in (payload.get("unsafe_dirty_recovery") or {}).get("planned_closeouts", [])
             if item.get("task_id")
         ),
+        "bundle_size_recommended_action": (payload.get("bundle_size") or {}).get("recommended_action"),
+        "dirty_bundle_size_recommended_action": (payload.get("dirty_bundle_size") or {}).get("recommended_action"),
     }
     encoded = json.dumps(material, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
@@ -1045,6 +1165,8 @@ def build_blocked_report_packet(
         "active_worker_claims": [str(item) for item in payload.get("active_worker_claims") or []],
         "status_porcelain": [str(item) for item in payload.get("status_porcelain") or []],
         "dirty_state_recovery": payload.get("dirty_state_recovery"),
+        "bundle_size": payload.get("bundle_size"),
+        "dirty_bundle_size": payload.get("dirty_bundle_size"),
         "non_actions": [str(item) for item in payload.get("non_actions") or []],
     }
 
@@ -1162,9 +1284,13 @@ def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dic
         blockers.append("not_git_repo")
 
     status = dirty_status(repo) if not blockers else []
+    dirty_paths = dirty_paths_from_status(status)
+    dirty_bundle_size = assess_bundle_size(dirty_paths, diff_numstat(repo)) if status else None
     dirty_recovery = recovery_preflight(repo) if status else None
     if status:
         blockers.append("dirty_worktree")
+        if dirty_bundle_size and dirty_bundle_size.get("soft_triggered"):
+            warnings.append("dirty_bundle_size_trigger")
         if dirty_recovery and dirty_recovery.get("explicit_gate") == "control_plane_dirty_state":
             blockers.append("control_plane_dirty_state")
 
@@ -1180,6 +1306,11 @@ def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dic
         warnings.append("nothing_to_publish")
 
     files = changed_files(repo) if ahead > 0 else []
+    bundle_size = assess_bundle_size(files, diff_numstat(repo, "origin/main..HEAD")) if ahead > 0 else None
+    if bundle_size and bundle_size.get("soft_triggered"):
+        warnings.append("bundle_size_trigger")
+    if bundle_size and bundle_size.get("hard_triggered"):
+        blockers.append("bundle_size_hard_limit")
     unsafe_files = [path for path in files if not path_allowed(path)]
     if allow_process_artifacts:
         unsafe_files = [path for path in unsafe_files if not path.startswith(".hermes/long-running/")]
@@ -1214,6 +1345,8 @@ def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dic
         "ahead_count": ahead,
         "behind_count": behind,
         "changed_files": files,
+        "bundle_size": bundle_size,
+        "dirty_bundle_size": dirty_bundle_size,
         "unsafe_files": unsafe_files,
         "active_worker_claims": active_claims,
         "commit_summaries": commit_summaries(repo) if ahead > 0 else [],
@@ -1222,6 +1355,7 @@ def classify(repo: Path, profile: Path, *, allow_process_artifacts: bool) -> dic
             "required_before_push": True,
             "instructions": [
                 "Confirm changed files match the blocked Kanban handoff or coherent TV bundle.",
+                "Apply bundle-size policy: >8 files or >600 diff lines triggers checkpoint/publish-before-successor; >15 files or >1000 diff lines requires split or explicit integrator justification.",
                 "Confirm source/fidelity labels do not promote Classic truth without evidence.",
                 "Return publish, hold, or needs_human before --push is used.",
             ],

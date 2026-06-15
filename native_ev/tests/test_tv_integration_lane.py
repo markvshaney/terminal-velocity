@@ -90,6 +90,42 @@ class TvIntegrationLaneTests(unittest.TestCase):
             self.assertEqual(payload["ahead_count"], 1)
             self.assertIn("docs/checklists/ev-classic-fidelity-implementation-backlog.md", payload["changed_files"])
             self.assertIn("git_diff_check", payload["passed_checks"])
+            self.assertEqual(payload["bundle_size"]["recommended_action"], "bundle_size_ok")
+
+    def test_soft_bundle_size_trigger_warns_but_allows_integrator_publish(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            for index in range(tv_integration_lane.BUNDLE_SOFT_FILE_LIMIT + 1):
+                target = repo / "docs/research" / f"integration-soft-{index}.md"
+                target.write_text(f"# soft fixture {index}\n")
+            subprocess.run(["git", "add", "docs/research"], cwd=repo, check=True)
+            subprocess.run(["git", "commit", "-q", "-m", "fixture soft bundle trigger"], cwd=repo, check=True)
+
+            code, payload = self.run_integrator(repo, "--dry-run")
+
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(payload["decision"], "publish")
+            self.assertIn("bundle_size_trigger", payload["warnings"])
+            self.assertTrue(payload["bundle_size"]["soft_triggered"])
+            self.assertFalse(payload["bundle_size"]["hard_triggered"])
+            self.assertEqual(payload["bundle_size"]["recommended_action"], "checkpoint_or_publish_before_successor")
+
+    def test_hard_bundle_size_trigger_blocks_until_split_or_integrator_justifies(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self.make_repo(Path(tmp))
+            for index in range(tv_integration_lane.BUNDLE_HARD_FILE_LIMIT + 1):
+                target = repo / "docs/research" / f"integration-hard-{index}.md"
+                target.write_text(f"# hard fixture {index}\n")
+            subprocess.run(["git", "add", "docs/research"], cwd=repo, check=True)
+            subprocess.run(["git", "commit", "-q", "-m", "fixture hard bundle trigger"], cwd=repo, check=True)
+
+            code, payload = self.run_integrator(repo, "--dry-run")
+
+            self.assertEqual(code, 2, payload)
+            self.assertEqual(payload["decision"], "needs_human")
+            self.assertIn("bundle_size_hard_limit", payload["blockers"])
+            self.assertTrue(payload["bundle_size"]["hard_triggered"])
+            self.assertEqual(payload["bundle_size"]["recommended_action"], "split_or_justify_bundle_before_publish")
 
     def test_post_push_report_message_summarizes_published_tv_bundle(self):
         payload = {

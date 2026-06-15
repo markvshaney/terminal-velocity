@@ -108,7 +108,7 @@ Default context policy:
 Throughput policy:
 
 - Shared-worktree worker invocations complete one smallest coherent safe increment, emit an `increment_handoff` / `push_ready` packet with verifier evidence and next action, and stop before expanding the dirty working set into adjacent increments.
-- Adjacent-increment batching belongs to the integration owner or an explicitly named direct-runner/integrator surface. It may batch handoffs only after inspecting live dirty state, handoff packets, verifier evidence, source/fidelity labels, and lane ownership.
+- Adjacent-increment batching belongs to the integration owner or an explicitly named direct-runner/integrator surface. It may batch handoffs only after inspecting live dirty state, handoff packets, verifier evidence, source/fidelity labels, lane ownership, and bundle size. Soft trigger: more than 8 touched files, more than 600 inserted+deleted diff lines, or mixed process-policy and game/model/data changes means checkpoint/publish or split before successor seeding. Hard trigger: more than 15 touched files or more than 1000 diff lines requires split or explicit integrator justification.
 - Stop an invocation at the verified-increment handoff boundary, real gate, failed verifier, subsystem switch, risky/destructive/original-runtime step, checkpoint-policy trigger, cap/handoff boundary, unsafe dirty state, or no-safe-local-slice condition.
 - Do not let a worker-created handoff become task completion; integration owner owns checkpointing, publication, and successor seeding.
 - Do not inspect or wait on the wrapper process from inside a runner invocation.
