@@ -4522,6 +4522,18 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('packet verifier output cannot be replayed locally or fails current extractor/model/scenario checks', failure_taxonomy['blockedPromotionClaims'])
         self.assertIn('failure taxonomy is a rejection/recovery map, not Classic service/store evidence', failure_taxonomy['promotionBlockers'])
         self.assertIn('not-promoted', failure_taxonomy['promotionStatus'])
+        recovery_plan = data['serviceStoreEvidencePacketRecoveryPlanSummary']
+        self.assertEqual(recovery_plan['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-recovery-plan')
+        self.assertEqual(recovery_plan['oracleStatus'], 'service_store_evidence_packet_recovery_plan_blocked_pending_real_classic_packet')
+        self.assertEqual(recovery_plan['evidenceInputSummaryCount'], 4)
+        self.assertIn('serviceStoreEvidencePacketFailureTaxonomySummary', recovery_plan['evidenceInputSummaries'])
+        self.assertEqual(recovery_plan['contractSchemaVersion'], 1)
+        self.assertEqual(recovery_plan['recoveryActionCount'], 5)
+        self.assertEqual(recovery_plan['failureClassIds'], failure_taxonomy['failureClassIds'])
+        self.assertIn('recover-verifier-replay-missing-or-failed', recovery_plan['recoveryActionIds'])
+        self.assertIn('successful local replay of extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout with captured actual output', ' '.join(action['requiredNextEvidence'] for action in recovery_plan['recoveryActions']))
+        self.assertIn('recovery plan is a next-evidence checklist, not Classic service/store evidence', recovery_plan['promotionBlockers'])
+        self.assertIn('not-promoted', recovery_plan['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

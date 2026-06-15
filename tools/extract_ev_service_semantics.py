@@ -567,6 +567,79 @@ def _service_store_evidence_packet_failure_taxonomy_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_recovery_plan_summary() -> dict:
+    """Record recovery actions for rejected service/store evidence packets."""
+    failure_taxonomy = _service_store_evidence_packet_failure_taxonomy_summary()
+    recovery_actions = [
+        {
+            'recoveryActionId': 'recover-missing-classic-spob-offset-provenance',
+            'failureClassId': 'missing-classic-spob-offset-provenance',
+            'requiredNextEvidence': 'Classic-specific spöb TMPL/ResEdit/source artifact path plus sha256 readback and covered byte/word offsets for every claimed service/store field',
+            'reentryGate': 'rerun contract, validation matrix, intake triage, and replay readiness before any row promotion review',
+        },
+        {
+            'recoveryActionId': 'recover-missing-record-to-name-join-coverage',
+            'failureClassId': 'missing-record-to-name-join-coverage',
+            'requiredNextEvidence': 'decoded spöb resource IDs joined to Classic landing/body names for each proposed service row, with unresolved rows kept out of promotion scope',
+            'reentryGate': 'rerun covered-row review and require explicit unresolved-name quarantine before promotion review',
+        },
+        {
+            'recoveryActionId': 'recover-missing-stock-tech-specialtech-join',
+            'failureClassId': 'missing-stock-tech-specialtech-join',
+            'requiredNextEvidence': 'TechLevel/SpecialTech item, ship, outfit, and weapon stock joins scoped to covered landing names and stock families',
+            'reentryGate': 'rerun stock-scope review and cross-check against accepted service/port joins before stock claims promote',
+        },
+        {
+            'recoveryActionId': 'recover-verifier-replay-missing-or-failed',
+            'failureClassId': 'verifier-replay-missing-or-failed',
+            'requiredNextEvidence': 'successful local replay of extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout with captured actual output',
+            'reentryGate': 'rerun local-verifier-replay after artifact/hash readback and keep packet rejected until current checks pass',
+        },
+        {
+            'recoveryActionId': 'recover-tv-scaffold-or-ev-family-only-support',
+            'failureClassId': 'tv-scaffold-or-ev-family-only-support',
+            'requiredNextEvidence': 'replace scaffold or EV-family-only support notes with Classic-specific service/store packet provenance before creating a promotion proposal',
+            'reentryGate': 'quarantine support notes as non-promoting until Classic-specific packet fields pass intake triage',
+        },
+    ]
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-recovery-plan',
+        'oracleStatus': 'service_store_evidence_packet_recovery_plan_blocked_pending_real_classic_packet',
+        'sourceBasis': [
+            'serviceStoreEvidencePacketFailureTaxonomySummary',
+            'serviceStoreEvidencePacketIntakeTriageSummary',
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+            'serviceStoreEvidencePacketValidationMatrixSummary',
+        ],
+        'evidenceInputSummaries': [
+            'serviceStoreEvidencePacketFailureTaxonomySummary',
+            'serviceStoreEvidencePacketIntakeTriageSummary',
+            'serviceStoreEvidencePacketReplayReadinessSummary',
+            'serviceStoreEvidencePacketValidationMatrixSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'contractSchemaVersion': 1,
+        'failureClassIds': failure_taxonomy.get('failureClassIds', []),
+        'recoveryActionCount': len(recovery_actions),
+        'recoveryActionIds': [action['recoveryActionId'] for action in recovery_actions],
+        'recoveryActions': recovery_actions,
+        'blockedShortcuts': [
+            'do not resume replay from the failure point without rerunning contract, validation, intake triage, and replay readiness',
+            'do not promote partially recovered service/store rows while unresolved names, offsets, or stock joins remain in scope',
+            'do not treat a passing focused verifier as provenance if artifact path/hash readback is still absent',
+            'do not turn scaffold or EV-family-only support notes into Classic service/store claims without Classic-specific packet evidence',
+        ],
+        'promotionBlockers': [
+            'recovery plan is a next-evidence checklist, not Classic service/store evidence',
+            'recovered packets must reenter through the acceptance contract, validation matrix, intake triage, replay readiness, and narrow covered-scope review',
+            'no Classic-wide service/store rows, stock availability, legal landing/service denial, or runtime UI behavior can promote from this checklist alone',
+        ],
+        'promotionStatus': 'not-promoted; recovery plan only pending real Classic-specific spob offset/name/stock packet evidence and verifier replay',
+        'sourceNote': 'This plan turns rejected service/store packet classes into auditable next-evidence actions. It adds no packet evidence and promotes no Classic service/store, stock, legal landing, or runtime UI behavior.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -622,6 +695,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceStoreEvidencePacketReplayReadinessSummary': _service_store_evidence_packet_replay_readiness_summary(),
         'serviceStoreEvidencePacketIntakeTriageSummary': _service_store_evidence_packet_intake_triage_summary(),
         'serviceStoreEvidencePacketFailureTaxonomySummary': _service_store_evidence_packet_failure_taxonomy_summary(),
+        'serviceStoreEvidencePacketRecoveryPlanSummary': _service_store_evidence_packet_recovery_plan_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 

@@ -2762,6 +2762,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(result['checks']['recorded_service_store_evidence_packet_replay_readiness'], 'passed')
         self.assertEqual(result['checks']['recorded_service_store_evidence_packet_intake_triage'], 'passed')
         self.assertEqual(result['checks']['recorded_service_store_evidence_packet_failure_taxonomy'], 'passed')
+        self.assertEqual(result['checks']['recorded_service_store_evidence_packet_recovery_plan'], 'passed')
         scans = {(event['system'], event['body']): event for event in result['trace'] if event['type'] == 'scan_station_services'}
         self.assertFalse(scans[('Levo', 'Levo Spaceport')]['hasOutfitter'])
         self.assertFalse(scans[('Levo', 'Levo Spaceport')]['hasShipyard'])

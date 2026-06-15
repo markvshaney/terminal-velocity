@@ -1664,6 +1664,26 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('sourced EV services evidence packet failure taxonomy missing promotion blockers')
     if 'not-promoted' not in failure_taxonomy.get('promotionStatus', ''):
         raise ValueError('sourced EV services evidence packet failure taxonomy must remain non-promoted')
+    recovery_plan = data.get('serviceStoreEvidencePacketRecoveryPlanSummary', {})
+    if recovery_plan.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-recovery-plan':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet recovery plan source label')
+    if recovery_plan.get('oracleStatus') != 'service_store_evidence_packet_recovery_plan_blocked_pending_real_classic_packet':
+        raise ValueError('sourced EV services evidence packet recovery plan changed oracle boundary')
+    if recovery_plan.get('evidenceInputSummaryCount') != 4 or 'serviceStoreEvidencePacketFailureTaxonomySummary' not in recovery_plan.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV services evidence packet recovery plan missing failure-taxonomy input')
+    if recovery_plan.get('contractSchemaVersion') != 1:
+        raise ValueError('sourced EV services evidence packet recovery plan changed contract schema version')
+    if recovery_plan.get('recoveryActionCount') != 5 or 'recover-verifier-replay-missing-or-failed' not in recovery_plan.get('recoveryActionIds', []):
+        raise ValueError('sourced EV services evidence packet recovery plan changed recovery actions')
+    if recovery_plan.get('failureClassIds') != failure_taxonomy.get('failureClassIds'):
+        raise ValueError('sourced EV services evidence packet recovery plan no longer covers all failure classes')
+    recovery_evidence = ' '.join(action.get('requiredNextEvidence', '') for action in recovery_plan.get('recoveryActions', []))
+    if 'successful local replay of extract_ev_service_semantics, focused model validation, and system_service_provisioning_scout with captured actual output' not in recovery_evidence:
+        raise ValueError('sourced EV services evidence packet recovery plan missing verifier recovery evidence')
+    if 'recovery plan is a next-evidence checklist, not Classic service/store evidence' not in recovery_plan.get('promotionBlockers', []):
+        raise ValueError('sourced EV services evidence packet recovery plan missing non-evidence blocker')
+    if 'not-promoted' not in recovery_plan.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet recovery plan must remain non-promoted')
     return data
 
 
