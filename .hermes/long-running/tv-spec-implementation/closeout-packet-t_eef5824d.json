@@ -1,0 +1,72 @@
+{
+  "backlog_update": "none; safe-local sourced-system semantic manifest/schema increment only, no backlog dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event": "push_ready",
+  "event_id": "coordinate-display-runtime-capture-validation-matrix-20260616T015537Z",
+  "fidelityBoundary": "Validation-matrix-only packet; no Classic map pixel scale, projection, origin, centering, y-axis orientation, named route topology, record-name join, display unit, or broad runtime universe replacement is promoted.",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_eef5824d",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Integration owner should inspect and checkpoint/push this verified coordinate-display runtime-capture validation-matrix slice, then seed the successor from live repo state. Next evidence work remains real Classic map calibration packets, exact record-to-name joins, route-label captures, or source-level map projection/display constants before any display/topology/runtime promotion.",
+  "oracleStatus": "coordinate_display_capture_validation_blocked_pending_real_map_packets",
+  "promotion_status": "not-promoted; validation matrix only pending real Classic map calibration packets",
+  "schemaVersion": 1,
+  "selectedIncrement": "EV Classic coordinate-display runtime capture validation matrix for future map calibration packets",
+  "sourceLabels": [
+    "original-runtime-coordinate-display-capture-validation-matrix",
+    "original-runtime-coordinate-map-calibration-capture-gate",
+    "decoded-resource-backed-coordinate-display-runtime-capture-reconciliation-plan"
+  ],
+  "source_basis": [
+    "coordinateDisplayRuntimeCaptureGateSummary",
+    "coordinateDisplayRuntimeCaptureReconciliationSummary",
+    "coordinateDisplayUnitMapScalingReadinessSummary",
+    "startNeighborhoodRuntimeCalibrationPrioritySummary"
+  ],
+  "source_fidelity_label": "original-runtime-coordinate-display-capture-validation-matrix",
+  "summary": "Added coordinateDisplayRuntimeCaptureValidationMatrixSummary as a non-promoting acceptance/rejection matrix for future Classic coordinate-display map calibration capture packets, wired through extractor/generated manifest/model validation/scenario readiness/checks/tests.",
+  "task_id": "t_eef5824d",
+  "timestamp": "2026-06-16T01:55:37Z",
+  "verification": {
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    "focused_model_and_scenario_tests": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; 2 focused tests OK"
+    },
+    "focused_native_ev_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
+      "result": "passed; 274 tests OK"
+    },
+    "json_validity": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
+      "result": "passed; generated sourced EV systems manifest is valid JSON"
+    },
+    "regenerated_sourced_systems_manifest": {
+      "command": "python3 tools/extract_ev_system_semantics.py --out native_ev/data/sourced_ev_systems.json",
+      "result": "passed; systems=67; method includes coordinate-display-runtime-capture-validation-matrix"
+    },
+    "runner_preflight_closeout": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "runner_preflight_initial": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight && git fetch origin && git status --short --branch && git rev-parse HEAD && git rev-parse origin/main",
+      "result": "passed before edits; BACKLOG DISPATCH INDEX OK; main tracked origin/main at 0f236d131540d5ddfaea916792aaa0fde9a02a36"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 /tmp/tv_static_scenario_summary.py",
+      "result": "passed; failed_checks=[]; recorded_coordinate_display_runtime_capture_validation_matrix_summary=passed; check_count=79"
+    }
+  }
+}
