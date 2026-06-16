@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-v63",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-v63",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -1781,6 +1781,702 @@
     ],
     "promotionStatus": "not-promoted; landing-name candidate reference only, pending exact Classic syst name/order oracle",
     "sourceNote": "The 72 landing-name seeds are decoded from EV Data.rez text chunks and ordered here by chunkIndex. They provide a candidate system-name list for future record-to-name investigation but are not promoted as Classic system names until exact record-to-name joins or runtime map-label evidence confirms them."
+  },
+  "systRecordNameCandidateCrossReferenceSummary": {
+    "sourceLabel": "decoded-resource-backed-syst-record-name-candidate-cross-reference",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "recordCount": 67,
+    "landingNameCandidateCount": 72,
+    "exactMatchCount": 1,
+    "heuristicCandidateMatchCount": 45,
+    "missingCandidateCount": 21,
+    "alignmentBasis": {
+      "anchorChunkIndex": 11,
+      "anchorResourceId": 128,
+      "anchorSystemName": "Levo",
+      "hypothesis": "landing-name chunkIndex ordering corresponds to EV Data.rez system resource ID ordering"
+    },
+    "crossReference": [
+      {
+        "resourceId": 128,
+        "recordIndex": 0,
+        "targetChunkIndex": 11,
+        "candidateSystemName": "Levo",
+        "matchType": "exact",
+        "confidence": "fidelity-promoted"
+      },
+      {
+        "resourceId": 129,
+        "recordIndex": 1,
+        "targetChunkIndex": 12,
+        "candidateSystemName": "New Britain",
+        "candidateChunkIndex": 12,
+        "candidateByteOffset": 24094,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 130,
+        "recordIndex": 2,
+        "targetChunkIndex": 13,
+        "candidateSystemName": "Capella",
+        "candidateChunkIndex": 13,
+        "candidateByteOffset": 24338,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 131,
+        "recordIndex": 3,
+        "targetChunkIndex": 14,
+        "candidateSystemName": "Dune",
+        "candidateChunkIndex": 14,
+        "candidateByteOffset": 24502,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 132,
+        "recordIndex": 4,
+        "targetChunkIndex": 15,
+        "candidateSystemName": "Spica",
+        "candidateChunkIndex": 15,
+        "candidateByteOffset": 24642,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 133,
+        "recordIndex": 5,
+        "targetChunkIndex": 16,
+        "candidateSystemName": "Maxwell’s Purchase",
+        "candidateChunkIndex": 16,
+        "candidateByteOffset": 24910,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 134,
+        "recordIndex": 6,
+        "targetChunkIndex": 17,
+        "candidateSystemName": "Hodgson’s World",
+        "candidateChunkIndex": 17,
+        "candidateByteOffset": 25117,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 135,
+        "recordIndex": 7,
+        "targetChunkIndex": 18,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 136,
+        "recordIndex": 8,
+        "targetChunkIndex": 19,
+        "candidateSystemName": "Master’s Planet",
+        "candidateChunkIndex": 19,
+        "candidateByteOffset": 25472,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 137,
+        "recordIndex": 9,
+        "targetChunkIndex": 20,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 138,
+        "recordIndex": 10,
+        "targetChunkIndex": 21,
+        "candidateSystemName": "Sirius III",
+        "candidateChunkIndex": 21,
+        "candidateByteOffset": 26130,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 139,
+        "recordIndex": 11,
+        "targetChunkIndex": 22,
+        "candidateSystemName": "Sirius Station",
+        "candidateChunkIndex": 22,
+        "candidateByteOffset": 26192,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 140,
+        "recordIndex": 12,
+        "targetChunkIndex": 23,
+        "candidateSystemName": "Tau Ceti IV",
+        "candidateChunkIndex": 23,
+        "candidateByteOffset": 26345,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 141,
+        "recordIndex": 13,
+        "targetChunkIndex": 24,
+        "candidateSystemName": "Merlin",
+        "candidateChunkIndex": 24,
+        "candidateByteOffset": 26440,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 142,
+        "recordIndex": 14,
+        "targetChunkIndex": 25,
+        "candidateSystemName": "Tabletop",
+        "candidateChunkIndex": 25,
+        "candidateByteOffset": 26724,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 143,
+        "recordIndex": 15,
+        "targetChunkIndex": 26,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 144,
+        "recordIndex": 16,
+        "targetChunkIndex": 27,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 145,
+        "recordIndex": 17,
+        "targetChunkIndex": 28,
+        "candidateSystemName": "New Sahara",
+        "candidateChunkIndex": 28,
+        "candidateByteOffset": 27382,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 146,
+        "recordIndex": 18,
+        "targetChunkIndex": 29,
+        "candidateSystemName": "Samson’s Planet",
+        "candidateChunkIndex": 29,
+        "candidateByteOffset": 27592,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 147,
+        "recordIndex": 19,
+        "targetChunkIndex": 30,
+        "candidateSystemName": "Plateau",
+        "candidateChunkIndex": 30,
+        "candidateByteOffset": 27766,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 148,
+        "recordIndex": 20,
+        "targetChunkIndex": 31,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 149,
+        "recordIndex": 21,
+        "targetChunkIndex": 32,
+        "candidateSystemName": "New Providence",
+        "candidateChunkIndex": 32,
+        "candidateByteOffset": 28257,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 150,
+        "recordIndex": 22,
+        "targetChunkIndex": 33,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 151,
+        "recordIndex": 23,
+        "targetChunkIndex": 34,
+        "candidateSystemName": "New Istanbul",
+        "candidateChunkIndex": 34,
+        "candidateByteOffset": 28876,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 152,
+        "recordIndex": 24,
+        "targetChunkIndex": 35,
+        "candidateSystemName": "George’s World",
+        "candidateChunkIndex": 35,
+        "candidateByteOffset": 29050,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 153,
+        "recordIndex": 25,
+        "targetChunkIndex": 36,
+        "candidateSystemName": "P-8457",
+        "candidateChunkIndex": 36,
+        "candidateByteOffset": 29363,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 154,
+        "recordIndex": 26,
+        "targetChunkIndex": 37,
+        "candidateSystemName": "Beeblebrox",
+        "candidateChunkIndex": 37,
+        "candidateByteOffset": 29497,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 155,
+        "recordIndex": 27,
+        "targetChunkIndex": 38,
+        "candidateSystemName": "Turin V",
+        "candidateChunkIndex": 38,
+        "candidateByteOffset": 29746,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 156,
+        "recordIndex": 28,
+        "targetChunkIndex": 39,
+        "candidateSystemName": "Palshife",
+        "candidateChunkIndex": 39,
+        "candidateByteOffset": 30062,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 157,
+        "recordIndex": 29,
+        "targetChunkIndex": 40,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 158,
+        "recordIndex": 30,
+        "targetChunkIndex": 41,
+        "candidateSystemName": "Alkaidion",
+        "candidateChunkIndex": 41,
+        "candidateByteOffset": 30389,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 159,
+        "recordIndex": 31,
+        "targetChunkIndex": 42,
+        "candidateSystemName": "Regulus II",
+        "candidateChunkIndex": 42,
+        "candidateByteOffset": 30850,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 160,
+        "recordIndex": 32,
+        "targetChunkIndex": 43,
+        "candidateSystemName": "Zaxted Starport",
+        "candidateChunkIndex": 43,
+        "candidateByteOffset": 31065,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 161,
+        "recordIndex": 33,
+        "targetChunkIndex": 44,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 162,
+        "recordIndex": 34,
+        "targetChunkIndex": 45,
+        "candidateSystemName": "Clotho Prime",
+        "candidateChunkIndex": 45,
+        "candidateByteOffset": 31204,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 163,
+        "recordIndex": 35,
+        "targetChunkIndex": 46,
+        "candidateSystemName": "Clotho II",
+        "candidateChunkIndex": 46,
+        "candidateByteOffset": 31375,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 164,
+        "recordIndex": 36,
+        "targetChunkIndex": 47,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 165,
+        "recordIndex": 37,
+        "targetChunkIndex": 48,
+        "candidateSystemName": "Hunter",
+        "candidateChunkIndex": 48,
+        "candidateByteOffset": 31640,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 166,
+        "recordIndex": 38,
+        "targetChunkIndex": 49,
+        "candidateSystemName": "Atropos",
+        "candidateChunkIndex": 49,
+        "candidateByteOffset": 31726,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 167,
+        "recordIndex": 39,
+        "targetChunkIndex": 50,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 168,
+        "recordIndex": 40,
+        "targetChunkIndex": 51,
+        "candidateSystemName": "New Scotland’s motto",
+        "candidateChunkIndex": 51,
+        "candidateByteOffset": 31915,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 169,
+        "recordIndex": 41,
+        "targetChunkIndex": 52,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 170,
+        "recordIndex": 42,
+        "targetChunkIndex": 53,
+        "candidateSystemName": "New France",
+        "candidateChunkIndex": 53,
+        "candidateByteOffset": 32244,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 171,
+        "recordIndex": 43,
+        "targetChunkIndex": 54,
+        "candidateSystemName": "Diphidia II",
+        "candidateChunkIndex": 54,
+        "candidateByteOffset": 32478,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 172,
+        "recordIndex": 44,
+        "targetChunkIndex": 55,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 173,
+        "recordIndex": 45,
+        "targetChunkIndex": 56,
+        "candidateSystemName": "Quake",
+        "candidateChunkIndex": 56,
+        "candidateByteOffset": 32925,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 174,
+        "recordIndex": 46,
+        "targetChunkIndex": 57,
+        "candidateSystemName": "Armstrong",
+        "candidateChunkIndex": 57,
+        "candidateByteOffset": 33222,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 175,
+        "recordIndex": 47,
+        "targetChunkIndex": 58,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 176,
+        "recordIndex": 48,
+        "targetChunkIndex": 59,
+        "candidateSystemName": "Rupert",
+        "candidateChunkIndex": 59,
+        "candidateByteOffset": 33455,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 177,
+        "recordIndex": 49,
+        "targetChunkIndex": 60,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 178,
+        "recordIndex": 50,
+        "targetChunkIndex": 61,
+        "candidateSystemName": "Blackthorne",
+        "candidateChunkIndex": 61,
+        "candidateByteOffset": 33644,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 179,
+        "recordIndex": 51,
+        "targetChunkIndex": 62,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 180,
+        "recordIndex": 52,
+        "targetChunkIndex": 63,
+        "candidateSystemName": "New Japan",
+        "candidateChunkIndex": 63,
+        "candidateByteOffset": 33999,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 181,
+        "recordIndex": 53,
+        "targetChunkIndex": 64,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 182,
+        "recordIndex": 54,
+        "targetChunkIndex": 65,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 183,
+        "recordIndex": 55,
+        "targetChunkIndex": 66,
+        "candidateSystemName": "Ursa Minor Beta",
+        "candidateChunkIndex": 66,
+        "candidateByteOffset": 34390,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 184,
+        "recordIndex": 56,
+        "targetChunkIndex": 67,
+        "candidateSystemName": "Perseus II",
+        "candidateChunkIndex": 67,
+        "candidateByteOffset": 34593,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 185,
+        "recordIndex": 57,
+        "targetChunkIndex": 68,
+        "candidateSystemName": "Pegasus",
+        "candidateChunkIndex": 68,
+        "candidateByteOffset": 34749,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 186,
+        "recordIndex": 58,
+        "targetChunkIndex": 69,
+        "candidateSystemName": "Sauron",
+        "candidateChunkIndex": 69,
+        "candidateByteOffset": 34862,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 187,
+        "recordIndex": 59,
+        "targetChunkIndex": 70,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 188,
+        "recordIndex": 60,
+        "targetChunkIndex": 71,
+        "candidateSystemName": "New Bavaria",
+        "candidateChunkIndex": 71,
+        "candidateByteOffset": 35428,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 189,
+        "recordIndex": 61,
+        "targetChunkIndex": 72,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 190,
+        "recordIndex": 62,
+        "targetChunkIndex": 73,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 191,
+        "recordIndex": 63,
+        "targetChunkIndex": 74,
+        "candidateSystemName": "Port Oread",
+        "candidateChunkIndex": 74,
+        "candidateByteOffset": 35970,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 192,
+        "recordIndex": 64,
+        "targetChunkIndex": 75,
+        "candidateSystemName": null,
+        "matchType": "no-candidate",
+        "confidence": "none"
+      },
+      {
+        "resourceId": 193,
+        "recordIndex": 65,
+        "targetChunkIndex": 76,
+        "candidateSystemName": "Lauralee",
+        "candidateChunkIndex": 76,
+        "candidateByteOffset": 36290,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      },
+      {
+        "resourceId": 194,
+        "recordIndex": 66,
+        "targetChunkIndex": 77,
+        "candidateSystemName": "Murphy's World",
+        "candidateChunkIndex": 77,
+        "candidateByteOffset": 36435,
+        "candidateConfidence": "high",
+        "matchType": "heuristic-chunkIndex-alignment",
+        "confidence": "heuristic"
+      }
+    ],
+    "promotionBlockers": [
+      "only resource 128 to Levo has exact Classic and runtime evidence; all other records use heuristic chunkIndex alignment",
+      "landing-name chunkIndex ordering may not correspond perfectly to syst resource ID ordering",
+      "runtime map-label evidence has not been observed for any record beyond Levo",
+      "landing-name resourceId field uses a separate EV Data.rez namespace, not syst record resource IDs 128-194"
+    ],
+    "promotionStatus": "not-promoted; heuristic chunkIndex cross-reference only, pending exact Classic record-to-name evidence",
+    "sourceNote": "This cross-reference aligns the 67 syst records (resource IDs 128-194) to the 72 landing-name candidates via chunkIndex ordering, anchored on the exact Levo mapping at chunkIndex 11. Every candidate name assignment beyond Levo is heuristic and must not be treated as a Classic system name until validated by exact record-to-name joins or runtime map-label evidence."
   },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",

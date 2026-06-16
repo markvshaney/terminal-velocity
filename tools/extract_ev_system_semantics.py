@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-v63'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-v63'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -1677,6 +1677,90 @@ def _landing_name_candidate_reference_summary(names: dict) -> dict:
         ],
         'promotionStatus': 'not-promoted; landing-name candidate reference only, pending exact Classic syst name/order oracle',
         'sourceNote': 'The 72 landing-name seeds are decoded from EV Data.rez text chunks and ordered here by chunkIndex. They provide a candidate system-name list for future record-to-name investigation but are not promoted as Classic system names until exact record-to-name joins or runtime map-label evidence confirms them.',
+    }
+
+
+def _syst_record_name_candidate_cross_reference_summary(names: dict, resource_ids: set[int]) -> dict:
+    """Align the 67 syst records to the 72 landing-name candidates using chunkIndex ordering.
+
+    The hypothesis is that landing-name chunkIndex ordering corresponds to EV Data.rez
+    system resource ID ordering. Levo (chunkIndex 11) is the only exact match (resource 128),
+    so record index i maps to the landing-name candidate at chunkIndex (11 + i).
+    """
+    landing_seeds = sorted(names.get('landingNames', []), key=lambda entry: entry.get('chunkIndex', 0))
+    exact_system_names = {mapping['systemName'] for mapping in EXACT_SYSTEM_NAME_MAPPINGS.values()}
+    exact_mapped_resource_ids = sorted(EXACT_SYSTEM_NAME_MAPPINGS)
+    unjoined_resource_ids = sorted(resource_ids - set(exact_mapped_resource_ids))
+    levo_chunk_index = 11  # Confirmed by landingNameCandidateReferenceSummary
+    levo_resource_id = 128
+    record_count = len(resource_ids)
+    candidate_count = len(landing_seeds)
+
+    # Build candidate name lookup by chunkIndex
+    name_by_chunk = {}
+    for seed in landing_seeds:
+        ci = seed.get('chunkIndex')
+        if ci is not None:
+            name_by_chunk[ci] = seed
+
+    # Build cross-reference table: each syst record gets a candidate landing name
+    cross_reference: list[dict] = []
+    exact_match_count = 0
+    candidate_match_count = 0
+    missing_candidate_count = 0
+    for resource_id in sorted(resource_ids):
+        offset_from_levo = resource_id - levo_resource_id
+        target_chunk = levo_chunk_index + offset_from_levo
+        candidate = name_by_chunk.get(target_chunk)
+        entry: dict = {
+            'resourceId': resource_id,
+            'recordIndex': resource_id - min(resource_ids) if resource_ids else -1,
+            'targetChunkIndex': target_chunk,
+        }
+        if resource_id in exact_mapped_resource_ids:
+            entry['candidateSystemName'] = str(EXACT_SYSTEM_NAME_MAPPINGS[resource_id]['systemName'])
+            entry['matchType'] = 'exact'
+            entry['confidence'] = 'fidelity-promoted'
+            exact_match_count += 1
+        elif candidate is not None:
+            entry['candidateSystemName'] = str(candidate.get('name', ''))
+            entry['candidateChunkIndex'] = int(candidate.get('chunkIndex', -1))
+            entry['candidateByteOffset'] = int(candidate.get('byteOffset', -1))
+            entry['candidateConfidence'] = str(candidate.get('confidence', ''))
+            entry['matchType'] = 'heuristic-chunkIndex-alignment'
+            entry['confidence'] = 'heuristic'
+            candidate_match_count += 1
+        else:
+            entry['candidateSystemName'] = None
+            entry['matchType'] = 'no-candidate'
+            entry['confidence'] = 'none'
+            missing_candidate_count += 1
+
+        cross_reference.append(entry)
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-record-name-candidate-cross-reference',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'recordCount': record_count,
+        'landingNameCandidateCount': candidate_count,
+        'exactMatchCount': exact_match_count,
+        'heuristicCandidateMatchCount': candidate_match_count,
+        'missingCandidateCount': missing_candidate_count,
+        'alignmentBasis': {
+            'anchorChunkIndex': levo_chunk_index,
+            'anchorResourceId': levo_resource_id,
+            'anchorSystemName': 'Levo',
+            'hypothesis': 'landing-name chunkIndex ordering corresponds to EV Data.rez system resource ID ordering',
+        },
+        'crossReference': cross_reference,
+        'promotionBlockers': [
+            'only resource 128 to Levo has exact Classic and runtime evidence; all other records use heuristic chunkIndex alignment',
+            'landing-name chunkIndex ordering may not correspond perfectly to syst resource ID ordering',
+            'runtime map-label evidence has not been observed for any record beyond Levo',
+            'landing-name resourceId field uses a separate EV Data.rez namespace, not syst record resource IDs 128-194',
+        ],
+        'promotionStatus': 'not-promoted; heuristic chunkIndex cross-reference only, pending exact Classic record-to-name evidence',
+        'sourceNote': 'This cross-reference aligns the 67 syst records (resource IDs 128-194) to the 72 landing-name candidates via chunkIndex ordering, anchored on the exact Levo mapping at chunkIndex 11. Every candidate name assignment beyond Levo is heuristic and must not be treated as a Classic system name until validated by exact record-to-name joins or runtime map-label evidence.',
     }
 
 
@@ -4376,6 +4460,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'recordToNamePromotionReadinessSummary': _record_to_name_promotion_readiness_summary(names, resource_ids),
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'landingNameCandidateReferenceSummary': _landing_name_candidate_reference_summary(names),
+        'systRecordNameCandidateCrossReferenceSummary': _syst_record_name_candidate_cross_reference_summary(names, resource_ids),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
