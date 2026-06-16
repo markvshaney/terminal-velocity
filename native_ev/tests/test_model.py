@@ -4411,7 +4411,7 @@ class NativeEvModelTests(unittest.TestCase):
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
-        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v5')
+        self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6')
         self.assertEqual(data['spobRecordRun']['candidateType'], 'spob-like')
         self.assertEqual(data['spobRecordRun']['recordSize'], 400)
         self.assertEqual(data['spobRecordRun']['count'], 219)
@@ -4546,6 +4546,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('do not accept recovered packets whose artifact path or sha256 changed without a new packet id', custody_guardrails['blockedShortcuts'])
         self.assertIn('custody guardrails are packet-handling controls, not Classic service/store evidence', custody_guardrails['promotionBlockers'])
         self.assertIn('not-promoted', custody_guardrails['promotionStatus'])
+        promotion_quarantine = data['serviceStoreEvidencePacketPromotionQuarantineSummary']
+        self.assertEqual(promotion_quarantine['sourceLabel'], 'resource-bible-backed-service-store-evidence-packet-promotion-quarantine')
+        self.assertEqual(promotion_quarantine['oracleStatus'], 'service_store_evidence_packet_promotion_quarantine_blocked_pending_accepted_packet_diff')
+        self.assertEqual(promotion_quarantine['evidenceInputSummaryCount'], 4)
+        self.assertIn('serviceStoreEvidencePacketCustodyGuardrailSummary', promotion_quarantine['evidenceInputSummaries'])
+        self.assertEqual(promotion_quarantine['custodyGuardrailIds'], custody_guardrails['custodyGuardrailIds'])
+        self.assertEqual(promotion_quarantine['quarantineControlCount'], 4)
+        self.assertIn('covered-service-row-only-diff-boundary', promotion_quarantine['quarantineControlIds'])
+        self.assertIn('stock-and-legal-claims-remain-separate', promotion_quarantine['quarantineControlIds'])
+        self.assertIn('system_service_provisioning_scout', ' '.join(promotion_quarantine['requiredVerifierBeforePromotion']))
+        self.assertIn('legal landing/service denial', ' '.join(promotion_quarantine['blockedPromotionClaims']))
+        self.assertIn('promotion quarantine is a diff boundary, not Classic service/store evidence', promotion_quarantine['promotionBlockers'])
+        self.assertIn('not-promoted', promotion_quarantine['promotionStatus'])
 
     def test_sourced_ev_weapons_manifest_maps_stock_outfits_to_weapon_records(self):
         data = sourced_ev_weapons_manifest()

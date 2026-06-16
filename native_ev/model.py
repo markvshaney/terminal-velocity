@@ -1496,7 +1496,7 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
     data = json.loads(path.read_text())
     if data.get('schemaVersion') != 1:
         raise ValueError('sourced EV services manifest has unexpected schema version')
-    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v5':
+    if data.get('method') != 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6':
         raise ValueError('sourced EV services manifest has unexpected extraction method')
     run = data.get('spobRecordRun', {})
     if run.get('candidateType') != 'spob-like' or run.get('recordSize') != 400 or run.get('count') != 219:
@@ -1709,6 +1709,32 @@ def sourced_ev_services_manifest(path=SOURCED_EV_SERVICES_PATH):
         raise ValueError('sourced EV services evidence packet custody guardrail missing non-evidence blocker')
     if 'not-promoted' not in custody_guardrails.get('promotionStatus', ''):
         raise ValueError('sourced EV services evidence packet custody guardrail must remain non-promoted')
+
+    promotion_quarantine = data.get('serviceStoreEvidencePacketPromotionQuarantineSummary', {})
+    if promotion_quarantine.get('sourceLabel') != 'resource-bible-backed-service-store-evidence-packet-promotion-quarantine':
+        raise ValueError('sourced EV services manifest missing service/store evidence packet promotion quarantine source label')
+    if promotion_quarantine.get('oracleStatus') != 'service_store_evidence_packet_promotion_quarantine_blocked_pending_accepted_packet_diff':
+        raise ValueError('sourced EV services evidence packet promotion quarantine changed oracle boundary')
+    if promotion_quarantine.get('evidenceInputSummaryCount') != 4 or 'serviceStoreEvidencePacketCustodyGuardrailSummary' not in promotion_quarantine.get('evidenceInputSummaries', []):
+        raise ValueError('sourced EV services evidence packet promotion quarantine missing custody-guardrail input')
+    if promotion_quarantine.get('custodyGuardrailIds') != custody_guardrails.get('custodyGuardrailIds'):
+        raise ValueError('sourced EV services evidence packet promotion quarantine no longer preserves custody guardrails')
+    if promotion_quarantine.get('quarantineControlCount') != 4:
+        raise ValueError('sourced EV services evidence packet promotion quarantine has unexpected control count')
+    quarantine_control_ids = set(promotion_quarantine.get('quarantineControlIds', []))
+    for required in ['covered-service-row-only-diff-boundary', 'record-name-and-offset-cross-check', 'stock-and-legal-claims-remain-separate', 'post-diff-service-verifier-replay']:
+        if required not in quarantine_control_ids:
+            raise ValueError(f'sourced EV services evidence packet promotion quarantine missing {required}')
+    required_verifiers = ' '.join(promotion_quarantine.get('requiredVerifierBeforePromotion', []))
+    if 'extract_ev_service_semantics' not in required_verifiers or 'system_service_provisioning_scout' not in required_verifiers:
+        raise ValueError('sourced EV services evidence packet promotion quarantine missing verifier replay requirements')
+    blocked_claims = ' '.join(promotion_quarantine.get('blockedPromotionClaims', []))
+    if 'legal landing/service denial' not in blocked_claims or 'Terminal Velocity scaffold service rows' not in blocked_claims:
+        raise ValueError('sourced EV services evidence packet promotion quarantine missing blocked claims')
+    if 'promotion quarantine is a diff boundary, not Classic service/store evidence' not in promotion_quarantine.get('promotionBlockers', []):
+        raise ValueError('sourced EV services evidence packet promotion quarantine missing non-evidence blocker')
+    if 'not-promoted' not in promotion_quarantine.get('promotionStatus', ''):
+        raise ValueError('sourced EV services evidence packet promotion quarantine must remain non-promoted')
     return data
 
 

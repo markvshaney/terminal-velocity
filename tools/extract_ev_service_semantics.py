@@ -16,7 +16,7 @@ DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_UNIVERSE = Path('native_ev/data/universe.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_services.json')
-METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v5'
+METHOD = 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6'
 SOURCE_BASIS = 'Terminal Velocity runtime universe service matrix plus Levo original-runtime observation, sourced landing-name seeds, EV Classic Resource Bible spöb service/store fields, and local primitive spob-like structure decode'
 PROMOTION_BOUNDARY = 'Current service matrix is Terminal Velocity runtime/scaffold plus Levo original-runtime observation and landing-name/source seeds; Resource Bible spöb service/store flags are recorded as readiness inputs, but Classic-wide decoded service fields remain pending.'
 
@@ -717,6 +717,74 @@ def _service_store_evidence_packet_custody_guardrail_summary() -> dict:
     }
 
 
+def _service_store_evidence_packet_promotion_quarantine_summary() -> dict:
+    """Quarantine future accepted service/store packet diffs to covered claims."""
+    custody_guardrails = _service_store_evidence_packet_custody_guardrail_summary()
+    quarantine_controls = [
+        {
+            'controlId': 'covered-service-row-only-diff-boundary',
+            'requiredEvidence': 'list exact accepted Classic landing/body names, spöb resource IDs, service flags, field offsets, and manifest paths before any service-row diff is proposed',
+            'blockedShortcut': 'do not widen a covered service-row packet into Classic-wide service/store matrix promotion',
+        },
+        {
+            'controlId': 'record-name-and-offset-cross-check',
+            'requiredEvidence': 'prove every promoted row has both accepted field-offset evidence and record-to-name join evidence, or keep that row out of scope',
+            'blockedShortcut': 'do not promote service rows from offsets without names, names without offsets, or current Terminal Velocity scaffold rows',
+        },
+        {
+            'controlId': 'stock-and-legal-claims-remain-separate',
+            'requiredEvidence': 'state whether stock availability, TechLevel/SpecialTech joins, Govt/MinCoolness, and legal landing/service denial are explicitly covered by the accepted packet',
+            'blockedShortcut': 'do not route stock availability or legal landing/service denial into gameplay from a service-flag-only packet',
+        },
+        {
+            'controlId': 'post-diff-service-verifier-replay',
+            'requiredEvidence': 'rerun extract_ev_service_semantics, JSON validation, focused model validation, and system_service_provisioning_scout after the quarantined diff is staged',
+            'blockedShortcut': 'do not rely on pre-diff verifier output after changing sourced_ev_services manifest fields',
+        },
+    ]
+    return {
+        'schemaVersion': 1,
+        'sourceLabel': 'resource-bible-backed-service-store-evidence-packet-promotion-quarantine',
+        'oracleStatus': 'service_store_evidence_packet_promotion_quarantine_blocked_pending_accepted_packet_diff',
+        'sourceBasis': [
+            'narrow-claim-diff-review-required',
+            'deterministic-verifier-output-required',
+            'stock-and-legal-gates-preserved',
+        ],
+        'evidenceInputSummaries': [
+            'serviceStoreEvidencePacketCustodyGuardrailSummary',
+            'serviceStoreEvidencePacketRecoveryPlanSummary',
+            'serviceStoreEvidencePacketFailureTaxonomySummary',
+            'serviceStoreProvisioningReadinessSummary',
+        ],
+        'evidenceInputSummaryCount': 4,
+        'custodyGuardrailIds': custody_guardrails.get('custodyGuardrailIds', []),
+        'quarantineControlCount': len(quarantine_controls),
+        'quarantineControlIds': [control['controlId'] for control in quarantine_controls],
+        'quarantineControls': quarantine_controls,
+        'blockedShortcuts': [control['blockedShortcut'] for control in quarantine_controls],
+        'requiredVerifierBeforePromotion': [
+            'python3 tools/extract_ev_service_semantics.py',
+            'python3 -m json.tool native_ev/data/sourced_ev_services.json',
+            'python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_services_manifest_records_current_service_matrix_scaffold -v',
+            'python3 tools/run_gameplay_scenarios.py system_service_provisioning_scout --pretty',
+        ],
+        'blockedPromotionClaims': custody_guardrails.get('blockedPromotionClaims', []) + [
+            'using a narrow accepted service packet to promote unrelated landing/body names, service rows, stock availability, legal landing/service denial, or runtime UI behavior',
+            'routing newly covered service flags into gameplay before a separate runtime/scaffold integration gate accepts that exact use',
+            'treating Terminal Velocity scaffold service rows or EV-family support notes as covered Classic rows inside an accepted packet diff',
+        ],
+        'promotionBlockers': [
+            'promotion quarantine is a diff boundary, not Classic service/store evidence',
+            'accepted service/store packet claims must be scoped to explicitly covered rows, offsets, names, stock joins, and legal fields',
+            'unrelated stock availability, legal landing/service denial, runtime UI, and Classic-wide matrix blockers remain active unless separately satisfied',
+            'gameplay/runtime scaffolds may not consume newly covered service fields without an explicit integration gate',
+        ],
+        'promotionStatus': 'not-promoted; promotion quarantine only pending an accepted Classic-specific service/store packet diff',
+        'sourceNote': 'This quarantine layer defines how future accepted service/store packets may change only explicitly covered manifest fields while preserving unrelated stock, legal, UI, and Classic-wide matrix gates. It adds no packet evidence and promotes no Classic service/store behavior.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -774,6 +842,7 @@ def derive(structures_path: Path, names_path: Path, universe_path: Path) -> dict
         'serviceStoreEvidencePacketFailureTaxonomySummary': _service_store_evidence_packet_failure_taxonomy_summary(),
         'serviceStoreEvidencePacketRecoveryPlanSummary': _service_store_evidence_packet_recovery_plan_summary(),
         'serviceStoreEvidencePacketCustodyGuardrailSummary': _service_store_evidence_packet_custody_guardrail_summary(),
+        'serviceStoreEvidencePacketPromotionQuarantineSummary': _service_store_evidence_packet_promotion_quarantine_summary(),
         'promotionBoundary': PROMOTION_BOUNDARY,
     }
 
