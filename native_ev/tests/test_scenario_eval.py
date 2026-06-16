@@ -121,6 +121,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'pirate_avoidance_mission_trade_escape_loop',
                 'disposable_combat_placeholder',
                 'runtime_topology_connectivity_check',
+                'runtime_coordinate_sanity_check',
             ],
         )
 

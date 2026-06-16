@@ -106,7 +106,8 @@
     "pirate_avoidance_escape_route",
     "pirate_avoidance_mission_trade_escape_loop",
     "disposable_combat_placeholder",
-    "runtime_topology_connectivity_check"
+    "runtime_topology_connectivity_check",
+    "runtime_coordinate_sanity_check"
   ],
   "scenarios": {
     "levo_merchant_first_hop": {
@@ -520,6 +521,10 @@
     "manual_route_low_fuel_recovery_landing_loop": {
       "purpose": "Terminal Velocity scaffold scenario: manual_route_low_fuel_recovery_landing_loop.",
       "surface": "terminal-velocity-scaffold"
+    },
+    "runtime_coordinate_sanity_check": {
+      "purpose": "Runtime coordinate sanity check: verify no duplicate system positions in the 10-system bridge, record Levo-neighbor coordinate deltas and map bounds for later Classic map calibration comparison.",
+      "surface": "runtime bridge universe coordinate sanity scaffold"
     }
   }
 }

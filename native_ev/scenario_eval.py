@@ -144,6 +144,7 @@ SCENARIO_CURRICULUM = [
     'pirate_avoidance_mission_trade_escape_loop',
     'disposable_combat_placeholder',
     'runtime_topology_connectivity_check',
+    'runtime_coordinate_sanity_check',
 ]
 
 
@@ -2910,6 +2911,50 @@ def _topology_connectivity_check(state: dict[str, Any], _action: dict[str, Any],
     return True
 
 
+def _coordinate_sanity_check(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    """Verify runtime bridge universe coordinates are sane: no duplicates, record Levo-neighbor deltas."""
+    universe = load_universe()
+    systems = universe.get('systems', [])
+    positions = []
+    duplicates = []
+    for s in systems:
+        pos = (s.get('x', 0), s.get('y', 0))
+        if pos in positions:
+            duplicates.append(s['name'])
+        positions.append(pos)
+
+    # Compute Levo-neighbor coordinate deltas
+    levo = next((s for s in systems if s['name'] == 'Levo'), None)
+    deltas = []
+    if levo:
+        lx, ly = levo.get('x', 0), levo.get('y', 0)
+        for s in systems:
+            if s['name'] != 'Levo':
+                deltas.append({
+                    'system': s['name'],
+                    'deltaX': s.get('x', 0) - lx,
+                    'deltaY': s.get('y', 0) - ly,
+                    'manhattanDistance': abs(s.get('x', 0) - lx) + abs(s.get('y', 0) - ly),
+                })
+        deltas.sort(key=lambda d: d['manhattanDistance'])
+
+    all_x = [s.get('x', 0) for s in systems]
+    all_y = [s.get('y', 0) for s in systems]
+
+    trace.append({
+        'type': 'coordinate_sanity',
+        'systemCount': len(systems),
+        'noDuplicatePositions': len(duplicates) == 0,
+        'duplicateSystems': duplicates,
+        'levoNeighborDeltas': deltas,
+        'xRange': [min(all_x), max(all_x)],
+        'yRange': [min(all_y), max(all_y)],
+        'sourceLabel': 'terminal-velocity-runtime-topology-scaffold',
+        'oracleStatus': 'runtime_coordinate_sanity_pending_classic_confirmation',
+    })
+    return True
+
+
 def _current_government_name(state: dict[str, Any]) -> str:
     governments = government_manifest()
     mapping = governments.get('systems', {}).get(state['currentSystem'], {})
@@ -4850,6 +4895,10 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
         return [
             {'type': 'topology_connectivity_check'},
         ]
+    if name == 'runtime_coordinate_sanity_check':
+        return [
+            {'type': 'coordinate_sanity_check'},
+        ]
     raise ValueError(f'unknown scenario {name}')
 
 
@@ -5955,6 +6004,17 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'each_system_has_at_least_one_link': 'passed' if all(count > 0 for count in link_counts.values()) else 'failed',
             'recorded_runtime_topology_source_boundary': 'passed' if connectivity.get('sourceLabel') == 'terminal-velocity-runtime-topology-scaffold' and connectivity.get('oracleStatus') == 'runtime_topology_connectivity_pending_classic_confirmation' else 'failed',
         })
+    elif name == 'runtime_coordinate_sanity_check':
+        coords = next((event for event in trace if event.get('type') == 'coordinate_sanity'), {})
+        deltas = coords.get('levoNeighborDeltas', [])
+        checks.update({
+            'no_duplicate_system_positions': 'passed' if coords.get('noDuplicatePositions') is True else 'failed',
+            'ten_systems_recorded': 'passed' if coords.get('systemCount') == 10 else 'failed',
+            'sensible_x_range': 'passed' if coords.get('xRange', [0, 0])[0] >= -600 and coords.get('xRange', [0, 0])[1] <= 700 else 'failed',
+            'sensible_y_range': 'passed' if coords.get('yRange', [0, 0])[0] >= -250 and coords.get('yRange', [0, 0])[1] <= 450 else 'failed',
+            'levo_neighbor_deltas_recorded': 'passed' if len(deltas) == 9 and all(d.get('manhattanDistance', 0) > 0 for d in deltas) else 'failed',
+            'recorded_coordinate_sanity_source_boundary': 'passed' if coords.get('sourceLabel') == 'terminal-velocity-runtime-topology-scaffold' and coords.get('oracleStatus') == 'runtime_coordinate_sanity_pending_classic_confirmation' else 'failed',
+        })
     return checks
 
 
@@ -6000,6 +6060,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'abort_active_mission': _abort_active_mission,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
         'topology_connectivity_check': _topology_connectivity_check,
+        'coordinate_sanity_check': _coordinate_sanity_check,
         'apply_contraband_scan': _apply_contraband_scan,
         'apply_mission_cargo_scan': _apply_mission_cargo_scan,
         'pay_legal_clemency': _pay_legal_clemency,
