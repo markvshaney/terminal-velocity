@@ -2039,6 +2039,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_non_topology_syst_runtime_capture_validation_matrix',
             'recorded_non_topology_syst_runtime_capture_rejection_taxonomy',
             'recorded_non_topology_syst_runtime_capture_reentry_guardrail',
+            'recorded_non_topology_syst_field_family_reference',
             'recorded_non_topology_syst_runtime_capture_reconciliation_summary',
             'recorded_topology_promotion_readiness_summary',
             'recorded_system_name_seed_summary',

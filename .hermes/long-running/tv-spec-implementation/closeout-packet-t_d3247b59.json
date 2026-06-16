@@ -1,0 +1,70 @@
+{
+  "backlog_update": "none; safe-local sourced-system semantic manifest/schema increment only, no backlog dispatch metadata change required",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py",
+    "native_ev/scenario_eval.py",
+    "native_ev/tests/test_model.py",
+    "native_ev/tests/test_scenario_eval.py"
+  ],
+  "closeout_class": "push_ready",
+  "event": "push_ready",
+  "event_id": "non-topology-syst-field-family-reference-20260616T020000Z",
+  "fidelityBoundary": "Field-family-reference-only packet; no Classic syst byte offsets, word-index assignments, NavDef runtime defaults, AI population composition, government ownership, message buoys, asteroid/interference hazard placement, visibility bits, Con6-Con16 split link placement, or broad runtime universe replacement is promoted.",
+  "focused_verifiers_passed": true,
+  "kanban_task": "t_d3247b59",
+  "long_running_task_id": "tv-spec-implementation",
+  "next_action": "Integration owner should inspect and checkpoint/push this verified non-topology field-family reference slice, then seed the successor from live repo state. Next evidence work remains exact Classic syst TMPL/ResEdit/source template-offset evidence, validated runtime offset surrogate packets, or adjacent name/topology/display/runtime reconciliation oracles before gameplay integration of any non-topology field.",
+  "oracleStatus": "non_topology_syst_field_families_blocked_pending_syst_template_offset_oracle",
+  "promotion_status": "not-promoted; field family reference only, pending Classic-specific template/offset evidence for every field",
+  "schemaVersion": 1,
+  "selectedIncrement": "Resource-Bible-backed non-topology syst field-family reference summary for Lane A static topology source readiness",
+  "sourceLabels": [
+    "resource-bible-backed-non-topology-syst-field-family-reference"
+  ],
+  "source_basis": [
+    "nonTopologySystOracleGapSummary",
+    "nonTopologySystRuntimeProbePrioritySummary",
+    "systWordDomainCoverageSummary",
+    "systTemplateOffsetOracleGapSummary"
+  ],
+  "source_fidelity_label": "resource-bible-backed-non-topology-syst-field-family-reference",
+  "summary": "Added nonTopologySystFieldFamilyReferenceSummary as a non-promoting Resource-Bible-backed per-field-family reference for the 8 non-topology/non-coordinate/non-link syst field families (NavDef, DudeTypes/Prob/AvgShips, Govt, Message, Asteroids, Interference, VisBit, Con6-Con16) with 29 individual fields, wired through extractor/generated manifest/model validation/scenario readiness/checks/tests.",
+  "task_id": "t_d3247b59",
+  "timestamp": "2026-06-16T02:10:00Z",
+  "verification": {
+    "diff_check": {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    "focused_model_and_scenario_tests": {
+      "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_classic_profile_descriptor_validates_runtime_and_source_manifests native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
+      "result": "passed; 3 focused tests OK"
+    },
+    "focused_native_ev_unittest": {
+      "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
+      "result": "passed; 274 tests OK"
+    },
+    "json_validity": {
+      "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json",
+      "result": "passed; generated sourced EV systems manifest is valid JSON"
+    },
+    "regenerated_sourced_systems_manifest": {
+      "command": "python3 tools/extract_ev_system_semantics.py",
+      "result": "passed; systems=67; method includes non-topology-syst-field-family-reference"
+    },
+    "runner_preflight_closeout": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
+      "result": "passed; BACKLOG DISPATCH INDEX OK"
+    },
+    "runner_preflight_initial": {
+      "command": "python3 tools/backlog_dispatch_index.py runner-preflight && git fetch origin && git status --short --branch && git rev-parse HEAD && git rev-parse origin/main",
+      "result": "passed before edits; HEAD == origin/main == e76a083; clean repo"
+    },
+    "scenario_static_topology_source_readiness_scout": {
+      "command": "python3 tools/run_gameplay_scenarios.py static_topology_source_readiness_scout --pretty",
+      "result": "passed; success=true; recorded_non_topology_syst_field_family_reference=passed"
+    }
+  }
+}

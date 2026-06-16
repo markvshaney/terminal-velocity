@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -3570,6 +3570,135 @@ def _non_topology_syst_oracle_gap_summary(run: dict) -> dict:
     }
 
 
+def _syst_non_topology_field_family_reference_summary(run: dict) -> dict:
+    """Resource-Bible-backed per-field-family reference for non-topology syst fields."""
+    field_families = [
+        {
+            'familyId': 'navDef',
+            'familyName': 'NavDef F1-F4 Navigation Defaults',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 942-945',
+            'fieldCount': 4,
+            'individualFields': ['NavDef F1', 'NavDef F2', 'NavDef F3', 'NavDef F4'],
+            'valueDomain': '-1 for no default; 128-1627 for stellar object resource IDs used as keyboard navigation targets',
+            'candidateWordIndices': [9, 10, 11, 12],
+            'wordIndexNote': 'sequential Resource Bible projection; may conflict with current contiguous link-scout window at words 4-19',
+            'gameplaySurface': 'Radar target locking, AI stellar-object tracking, status-display object selection, keyboard nav defaults',
+            'promotionStatus': 'not-promoted; offset oracle gap blocks assignment of decoded words to NavDef fields',
+        },
+        {
+            'familyId': 'dudeTypesAndProbability',
+            'familyName': 'DudeTypes / %Prob / AvgShips AI Population Controls',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 947-959',
+            'fieldCount': 9,
+            'individualFields': ['DudeType 1', 'DudeType 2', 'DudeType 3', 'DudeType 4', '%Prob 1', '%Prob 2', '%Prob 3', '%Prob 4', 'AvgShips'],
+            'valueDomain': 'DudeTypes: 128-255 dude type resource IDs (or negative fleet IDs); %Prob: 1-99 percent; AvgShips: 0+ (±50%)',
+            'candidateWordIndices': list(range(13, 22)),
+            'wordIndexNote': 'sequential Resource Bible projection; may conflict with current contiguous link-scout window at words 4-19',
+            'gameplaySurface': 'NPC ship spawn composition, encounter generation, fleet presence, empty-system detection',
+            'promotionStatus': 'not-promoted; offset oracle gap blocks assignment of decoded words to population fields',
+        },
+        {
+            'familyId': 'govt',
+            'familyName': 'Govt Controlling Government',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 962-964',
+            'fieldCount': 1,
+            'individualFields': ['Govt'],
+            'valueDomain': '-1 for independent/ignored; 128-255 for controlling government resource ID',
+            'candidateWordIndices': [22],
+            'wordIndexNote': 'sequential Resource Bible projection; candidate index 22 is beyond the contiguous link-scout window',
+            'gameplaySurface': 'Legal jurisdiction, crime tolerance, scan behavior, bounty/permit availability, sovereign space',
+            'promotionStatus': 'not-promoted; offset oracle gap blocks assignment of decoded words to Govt field',
+        },
+        {
+            'familyId': 'messageBuoy',
+            'familyName': 'Message Buoy String',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 966-970',
+            'fieldCount': 1,
+            'individualFields': ['Message'],
+            'valueDomain': '-1 for no message; 1+ for STR# resource 1000 entry index used as message-buoy text',
+            'candidateWordIndices': [23],
+            'wordIndexNote': 'sequential Resource Bible projection; candidate index 23 is beyond the contiguous link-scout window',
+            'gameplaySurface': 'System-entry message display, story/event text on arrival, buoy message trigger',
+            'promotionStatus': 'not-promoted; offset oracle gap blocks assignment of decoded words to Message field',
+        },
+        {
+            'familyId': 'asteroids',
+            'familyName': 'Asteroids Navigation Hazard',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 972-973',
+            'fieldCount': 1,
+            'individualFields': ['Asteroids'],
+            'valueDomain': '0-10 asteroid count placed in system',
+            'candidateWordIndices': [24],
+            'wordIndexNote': 'sequential Resource Bible projection; candidate index 24 is beyond the contiguous link-scout window',
+            'gameplaySurface': 'Asteroid field density, mining potential, collision hazard, navigation obstacle',
+            'promotionStatus': 'not-promoted; offset oracle gap blocks assignment of decoded words to Asteroids field',
+        },
+        {
+            'familyId': 'interference',
+            'familyName': 'Interference Sensor Static',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 973-974',
+            'fieldCount': 1,
+            'individualFields': ['Interference'],
+            'valueDomain': '0 (no static) to 100 (complete sensor blackout)',
+            'candidateWordIndices': [25],
+            'wordIndexNote': 'sequential Resource Bible projection; candidate index 25 is beyond the contiguous link-scout window',
+            'gameplaySurface': 'Radar/sensor degradation, visual static effect, target-acquisition difficulty',
+            'promotionStatus': 'not-promoted; offset oracle gap blocks assignment of decoded words to Interference field',
+        },
+        {
+            'familyId': 'visBit',
+            'familyName': 'VisBit System Visibility Control',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 976-984',
+            'fieldCount': 1,
+            'individualFields': ['VisBit'],
+            'valueDomain': '-1 for always visible; 0-255 for visible when mission bit is set; 1000-1255 for visible when mission bit is cleared',
+            'candidateWordIndices': [26],
+            'wordIndexNote': 'sequential Resource Bible projection; candidate index 26 is beyond the contiguous link-scout window',
+            'gameplaySurface': 'Conditional system visibility, mission-gated system reveals, system-hiding/replacement tricks',
+            'promotionStatus': 'not-promoted; offset oracle gap blocks assignment of decoded words to VisBit field',
+        },
+        {
+            'familyId': 'con6ToCon16',
+            'familyName': 'Con6-Con16 Additional Hyperspace Links',
+            'resourceBibleLineRef': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 987-989',
+            'fieldCount': 11,
+            'individualFields': [f'Con{idx}' for idx in range(6, 17)],
+            'valueDomain': '-1 for no link; 128-1127 for linked system resource IDs',
+            'candidateWordIndices': list(range(27, 38)),
+            'wordIndexNote': 'sequential Resource Bible projection; candidate indices 27-37 are beyond the contiguous link-scout window and must not be confused with the current words 4-19 link scout',
+            'gameplaySurface': 'Extended hyperspace connectivity beyond the initial five Con1-Con5 links; map topology and route planning',
+            'promotionStatus': 'not-promoted; offset oracle gap and Con6-Con16 split placement require Classic TMPL/ResEdit/source template-offset evidence',
+        },
+    ]
+    field_family_count = sum(f['fieldCount'] for f in field_families)
+    return {
+        'sourceLabel': 'resource-bible-backed-non-topology-syst-field-family-reference',
+        'oracleStatus': 'non_topology_syst_field_families_blocked_pending_syst_template_offset_oracle',
+        'sourceReferences': SYST_FIELD_LAYOUT_SOURCE_REFERENCES,
+        'recordCount': len(run['records']),
+        'recordSize': run.get('recordSize'),
+        'fieldFamilyCount': len(field_families),
+        'individualFieldCount': field_family_count,
+        'fieldFamilies': field_families,
+        'familyIds': [f['familyId'] for f in field_families],
+        'blockedGameplaySurfaces': sorted({f['gameplaySurface'] for f in field_families}),
+        'promotionBlockers': [
+            'Classic-specific syst TMPL/ResEdit/source template-offset evidence is absent',
+            'Resource Bible sequential 16-bit projection conflicts with current decoded word-domain scout data',
+            'current contiguous Con1-Con16 link scout at words 4-19 may overlap projected NavDef/DudeType/Prob word indices 9-21',
+            'exact Con6-Con16 split placement at words 27-37 vs a contiguous Con1-Con16 layout remains unresolved',
+            'each field family requires validated Classic-specific field-offset evidence before decoded-word assignment or gameplay integration',
+        ],
+        'nextEvidenceFamilies': [
+            'syst TMPL or ResEdit template with per-field byte offsets and widths',
+            'original-runtime probes confirming NavDef, government, hazard, and visibility behavior in known systems',
+            'Classic source struct declarations for the syst resource layout',
+        ],
+        'promotionStatus': 'not-promoted; field family reference only, pending Classic-specific template/offset evidence for every field',
+        'sourceNote': 'This reference preserves every Resource Bible syst field family name, value domain, and gameplay surface without assigning exact word indices or promoting gameplay integration. It is a dispatch/AI-readable index for future workers who need to know what non-topology field families exist before offset oracles unlock integration.',
+    }
+
+
 def _non_topology_syst_runtime_probe_priority_summary(run: dict) -> dict:
     """Prioritize future non-topology syst probes without assigning unresolved offsets."""
     word_domain = _syst_word_domain_coverage_summary(run)
@@ -4227,6 +4356,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'nonTopologySystRuntimeCaptureValidationMatrixSummary': _non_topology_syst_runtime_capture_validation_matrix_summary(run),
         'nonTopologySystRuntimeCaptureRejectionTaxonomySummary': _non_topology_syst_runtime_capture_rejection_taxonomy_summary(run),
         'nonTopologySystRuntimeCaptureReentryGuardrailSummary': _non_topology_syst_runtime_capture_reentry_guardrail_summary(run),
+        'nonTopologySystFieldFamilyReferenceSummary': _syst_non_topology_field_family_reference_summary(run),
         'nonTopologySystRuntimeCaptureReconciliationSummary': _non_topology_syst_runtime_capture_reconciliation_summary(run),
         'topologyPromotionReadinessSummary': _topology_promotion_readiness_summary(systems, names),
         'runtimeUniverseReplacementGateSummary': _runtime_universe_replacement_gate_summary(systems, names),
