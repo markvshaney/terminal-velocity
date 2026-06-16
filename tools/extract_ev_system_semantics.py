@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-named-candidate-route-v68'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-named-candidate-route-named-candidate-route-calibration-priority-v69'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping, non-promoted coordinate-gap-identity-resolution'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -2749,6 +2749,132 @@ def _named_candidate_route_summary(systems: list[dict], names: dict) -> dict:
     }
 
 
+def _named_candidate_route_calibration_priority_summary(systems: list[dict], names: dict) -> dict:
+    """Rank named candidate routes by diagnostic value for future Classic route-label calibration.
+
+    Uses the existing namedCandidateRouteSummary (route paths, betweenness, key routes)
+    and systRecordNameGapReconciliationSummary (canonical names) to identify which
+    candidate routes would be most informative to verify against Classic observations.
+    All names and routes remain heuristic candidates — no Classic route topology or
+    record-to-name join is promoted.
+    """
+    route_summary = _named_candidate_route_summary(systems, names)
+    reconciliation = _syst_record_name_gap_reconciliation_summary(systems, names)
+
+    # Build canonical name lookup
+    canonical_name_of: dict[str, str] = {}
+    for entry in reconciliation.get('canonicalDistinctEntries', []):
+        canonical_name_of[str(entry['canonicalResourceId'])] = entry.get('candidateSystemName', '?')
+
+    betweenness = route_summary.get('systemBetweennessRanking', [])
+    key_routes = route_summary.get('keyRoutes', [])
+    per_system = route_summary.get('perSystemNamedRouteMetadata', [])
+    total_systems = route_summary.get('totalNamedSystems', 0)
+
+    # Build name-to-betweenness-rank map
+    name_rank: dict[str, int] = {}
+    for rank, entry in enumerate(betweenness):
+        name_rank[entry['candidateSystemName']] = rank + 1
+
+    # Build name-to-degree map from per-system metadata
+    name_degree: dict[str, int] = {}
+    for sys_entry in per_system:
+        name = sys_entry['candidateSystemName']
+        name_degree[name] = sys_entry['reachableNamedSystemCount']
+
+    # Compute diagnostic scores for each route pair
+    scored: list[dict] = []
+    for route in key_routes:
+        src = route['sourceSystemName']
+        tgt = route['targetSystemName']
+        hops = route['hopDistance']
+        path = route['routePath']
+
+        # Diagnostic components:
+        # - Betweenness: sum of ranks (lower rank = higher betweenness = more informative)
+        src_rank = name_rank.get(src, total_systems + 1)
+        tgt_rank = name_rank.get(tgt, total_systems + 1)
+        betweenness_score = (total_systems + 1 - src_rank) + (total_systems + 1 - tgt_rank)
+
+        # - Levo anchor bonus: routes involving Levo (the only exact system) are gold
+        levo_anchor = 1 if src == 'Levo' or tgt == 'Levo' else 0
+        is_levo_anchored = levo_anchor == 1
+
+        # - Hop count: longer routes span more of the graph
+        hop_score = hops
+
+        # - Degree: routes through well-connected systems span more topology
+        src_deg = name_degree.get(src, 0)
+        tgt_deg = name_degree.get(tgt, 0)
+        degree_score = src_deg + tgt_deg
+
+        # Combined diagnostic score (higher = more informative for calibration)
+        diagnostic_score = betweenness_score + (levo_anchor * 10) + hop_score + (degree_score // 2)
+
+        scored.append({
+            'sourceSystemName': src,
+            'targetSystemName': tgt,
+            'hopDistance': hops,
+            'routePath': path,
+            'levoAnchored': is_levo_anchored,
+            'sourceBetweennessRank': src_rank,
+            'targetBetweennessRank': tgt_rank,
+            'sourceDegree': src_deg,
+            'targetDegree': tgt_deg,
+            'diagnosticScore': diagnostic_score,
+        })
+
+    # Sort by diagnostic score descending
+    scored.sort(key=lambda e: (-e['diagnosticScore'], e['sourceSystemName'], e['targetSystemName']))
+
+    # Top calibration priorities (top 20 or all if fewer)
+    top_n = min(20, len(scored))
+    top_priorities = scored[:top_n]
+    levo_anchored = [e for e in scored if e['levoAnchored']][:5]
+    diameter_routes = [e for e in scored if e['hopDistance'] == route_summary.get('namedGraphDiameterCandidate', 0)][:5]
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-named-candidate-route-calibration-priority-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': [
+            'namedCandidateRouteSummary',
+            'systRecordNameGapReconciliationSummary',
+        ],
+        'totalNamedSystems': total_systems,
+        'totalScoredRoutes': len(scored),
+        'topCalibrationPriorityCount': top_n,
+        'topCalibrationPriorities': top_priorities,
+        'levoAnchoredCalibrationTargets': levo_anchored,
+        'diameterCalibrationTargets': diameter_routes,
+        'topBetweennessSystemName': betweenness[0]['candidateSystemName'] if betweenness else None,
+        'topBetweennessRouteIntermediaryCount': betweenness[0]['routeIntermediaryCount'] if betweenness else 0,
+        'priorityRegions': {
+            'region1TopBetweennessHubs': {
+                'description': 'Routes anchored at top-betweenness hub systems — verifying these constrains the most route paths',
+                'targetSystemNames': [e['candidateSystemName'] for e in betweenness[:3]],
+            },
+            'region2LevoAnchored': {
+                'description': 'Routes anchored at Levo — the only exact system name mapping (resource 128)',
+                'anchorSystemName': 'Levo',
+                'targetCount': len(levo_anchored),
+            },
+            'region3DiameterSpanning': {
+                'description': f'Routes spanning the named graph diameter ({route_summary.get("namedGraphDiameterCandidate")} hops) — verify longest-path topology',
+                'diameterHopCount': route_summary.get('namedGraphDiameterCandidate'),
+                'targetCount': len(diameter_routes),
+            },
+        },
+        'promotionBlockers': [
+            'all system names are heuristic text-chunk candidates, not verified Classic mappings',
+            'calibration priorities are diagnostic helpers for ranking future Classic label captures',
+            'no Classic route label, record-to-name join, or runtime topology is promoted',
+        ],
+        'promotionStatus': 'not-promoted; calibration priorities are diagnostic scouts for future Classic route-label capture, not verified Classic truth',
+        'sourceNote': 'This summary ranks named candidate routes by how informative they would be to verify against Classic observations. Top-betweenness hub routes, Levo-anchored routes, and diameter-spanning routes are prioritized because verifying them constrains the largest number of potential record-to-name joins.',
+    }
+
+
 def _system_name_byte_order_oracle_gap_summary(names: dict) -> dict:
     """Record why current name byte-order evidence is not a record-to-name oracle."""
     system_seeds = sorted(names.get('systemNames', []), key=lambda entry: entry.get('byteOffset', 0))
@@ -5459,6 +5585,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'namedCandidateLinkTopologySummary': _named_candidate_link_topology_summary(systems, names),
         'namedCandidateTravelDistanceSummary': _named_candidate_travel_distance_summary(systems, names),
         'namedCandidateRouteSummary': _named_candidate_route_summary(systems, names),
+        'namedCandidateRouteCalibrationPrioritySummary': _named_candidate_route_calibration_priority_summary(systems, names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
