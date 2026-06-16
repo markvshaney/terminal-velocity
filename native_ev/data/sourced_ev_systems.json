@@ -5272,6 +5272,524 @@
     "promotionStatus": "not-promoted; deduplication is spatial proximity scouting only, pending exact Classic record-to-name or runtime label evidence",
     "sourceNote": "This summary maps each co-located gap resource ID to a canonical named neighbor for deduplication. 16 co-located gaps (signed-long distance <= 1.0) are treated as duplicate resource IDs, reducing the estimated distinct system count from 67 to 51. No record-to-name join, display unit, or runtime topology claim is promoted."
   },
+  "systRecordNameGapReconciliationSummary": {
+    "sourceLabel": "decoded-resource-backed-syst-record-name-gap-reconciliation-scout",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field"
+    ],
+    "inputSummaries": [
+      "coordinateGapResourceDeduplicationSummary",
+      "systRecordNameCandidateCrossReferenceSummary",
+      "coordinateGapIdentityResolutionSummary"
+    ],
+    "totalResourceIds": 67,
+    "distinctSystemCountEstimate": 51,
+    "coLocatedGapDuplicatesResolved": 16,
+    "nearOrSeparatedUnresolved": 5,
+    "namedRecordCount": 46,
+    "gapRecordCount": 21,
+    "canonicalDistinctEntries": [
+      {
+        "canonicalResourceId": 129,
+        "candidateSystemName": "New Britain",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          143
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 133,
+        "candidateSystemName": "Maxwell’s Purchase",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          144
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 134,
+        "candidateSystemName": "Hodgson’s World",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          161,
+          164
+        ],
+        "duplicateGapCount": 2,
+        "totalResourceIds": 3,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 136,
+        "candidateSystemName": "Master’s Planet",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          135
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 138,
+        "candidateSystemName": "Sirius III",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          137,
+          148,
+          157
+        ],
+        "duplicateGapCount": 3,
+        "totalResourceIds": 4,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 151,
+        "candidateSystemName": "New Istanbul",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          150
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 166,
+        "candidateSystemName": "Atropos",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          167
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 170,
+        "candidateSystemName": "New France",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          172
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 174,
+        "candidateSystemName": "Armstrong",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          175
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 176,
+        "candidateSystemName": "Rupert",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          187
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 178,
+        "candidateSystemName": "Blackthorne",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          177
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 180,
+        "candidateSystemName": "New Japan",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          179
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 183,
+        "candidateSystemName": "Ursa Minor Beta",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [
+          169
+        ],
+        "duplicateGapCount": 1,
+        "totalResourceIds": 2,
+        "nameConfidence": "deduplication-augmented-scout"
+      },
+      {
+        "canonicalResourceId": 128,
+        "candidateSystemName": "Levo",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 130,
+        "candidateSystemName": "Capella",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 131,
+        "candidateSystemName": "Dune",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 132,
+        "candidateSystemName": "Spica",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 139,
+        "candidateSystemName": "Sirius Station",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 140,
+        "candidateSystemName": "Tau Ceti IV",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 141,
+        "candidateSystemName": "Merlin",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 142,
+        "candidateSystemName": "Tabletop",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 145,
+        "candidateSystemName": "New Sahara",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 146,
+        "candidateSystemName": "Samson’s Planet",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 147,
+        "candidateSystemName": "Plateau",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 149,
+        "candidateSystemName": "New Providence",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 152,
+        "candidateSystemName": "George’s World",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 153,
+        "candidateSystemName": "P-8457",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 154,
+        "candidateSystemName": "Beeblebrox",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 155,
+        "candidateSystemName": "Turin V",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 156,
+        "candidateSystemName": "Palshife",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 158,
+        "candidateSystemName": "Alkaidion",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 159,
+        "candidateSystemName": "Regulus II",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 160,
+        "candidateSystemName": "Zaxted Starport",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 162,
+        "candidateSystemName": "Clotho Prime",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 163,
+        "candidateSystemName": "Clotho II",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 165,
+        "candidateSystemName": "Hunter",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 168,
+        "candidateSystemName": "New Scotland’s motto",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 171,
+        "candidateSystemName": "Diphidia II",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 173,
+        "candidateSystemName": "Quake",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 184,
+        "candidateSystemName": "Perseus II",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 185,
+        "candidateSystemName": "Pegasus",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 186,
+        "candidateSystemName": "Sauron",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 188,
+        "candidateSystemName": "New Bavaria",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 191,
+        "candidateSystemName": "Port Oread",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 193,
+        "candidateSystemName": "Lauralee",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 194,
+        "candidateSystemName": "Murphy's World",
+        "nameSource": "heuristic-name-candidate-cross-reference",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "named-record-no-known-duplicates"
+      },
+      {
+        "canonicalResourceId": 181,
+        "candidateSystemName": "?",
+        "nameSource": "unresolved-gap",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "unresolved-near-or-separated-gap"
+      },
+      {
+        "canonicalResourceId": 182,
+        "candidateSystemName": "?",
+        "nameSource": "unresolved-gap",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "unresolved-near-or-separated-gap"
+      },
+      {
+        "canonicalResourceId": 189,
+        "candidateSystemName": "?",
+        "nameSource": "unresolved-gap",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "unresolved-near-or-separated-gap"
+      },
+      {
+        "canonicalResourceId": 190,
+        "candidateSystemName": "?",
+        "nameSource": "unresolved-gap",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "unresolved-near-or-separated-gap"
+      },
+      {
+        "canonicalResourceId": 192,
+        "candidateSystemName": "?",
+        "nameSource": "unresolved-gap",
+        "duplicateGapResourceIds": [],
+        "duplicateGapCount": 0,
+        "totalResourceIds": 1,
+        "nameConfidence": "unresolved-near-or-separated-gap"
+      }
+    ],
+    "promotionBlockers": [
+      "reconciliation is dedup-augmented scouting only; no record-to-name join is promoted",
+      "candidate names are heuristic text-chunk proximity matches, not verified Classic mappings",
+      "co-located gap assignments are spatial proximity hypotheses, not confirmed Classic duplicates",
+      "near/separated gaps remain unnamed until source name table or runtime route-label evidence is available"
+    ],
+    "promotionStatus": "not-promoted; name gap reconciliation is analysis input only, pending exact Classic source or runtime route-label evidence",
+    "sourceNote": "This summary produces a reconciled distinct-system roster by collapsing 16 co-located gap resource IDs into their canonical named neighbors and preserving near/separated gaps as unresolved. Candidate names are heuristic cross-reference matches only. No record-to-name join or runtime topology claim is promoted."
+  },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",
     "oracleStatus": "coordinate_display_units_map_scaling_pending",

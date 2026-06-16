@@ -2225,6 +2225,128 @@ def _coordinate_gap_resource_deduplication_summary(systems: list[dict], names: d
     }
 
 
+def _syst_record_name_gap_reconciliation_summary(systems: list[dict], names: dict) -> dict:
+    """Reconcile deduplication results with name candidates into a ~51 distinct-system map.
+
+    Combines the deduplication summary (which maps 16 co-located gaps to canonical
+    named neighbors) with the name candidate cross-reference to produce a single
+    reconciled distinct-system roster. Co-located gap resource IDs inherit their
+    canonical neighbor's candidate name; near/separated gaps remain unresolved.
+    No record-to-name join is promoted — this is analysis input only.
+    """
+    dedup = _coordinate_gap_resource_deduplication_summary(systems, names)
+    identity = _coordinate_gap_identity_resolution_summary(systems, names)
+    cross_ref = _syst_record_name_candidate_cross_reference_summary(names, set(range(128, 128+len(systems))))
+
+    # Build the reconciled roster
+    dedup_map: dict[int, list[int]] = {}  # canonical resource ID -> [duplicate resource IDs]
+    for entry in dedup.get('deduplication', []):
+        canonical = entry['canonicalResourceId']
+        duplicate = entry['duplicateResourceId']
+        if canonical not in dedup_map:
+            dedup_map[canonical] = []
+        dedup_map[canonical].append(duplicate)
+
+    # Build the cross-reference lookup: resource ID -> candidate name
+    name_map: dict[int, str] = {}
+    cross_ref_entries = cross_ref.get('crossReference', [])
+    for cr in cross_ref_entries:
+        name_map[cr['resourceId']] = cr.get('candidateSystemName', '?')
+
+    all_resource_ids = set(range(128, 128 + len(systems)))
+    co_located_duplicate_ids = set(dedup.get('coLocatedDuplicateResourceIds', []))
+    canonical_ids = set(dedup.get('canonicalNamedResourceIds', []))
+    gap_resource_ids = set(identity.get('gapResourceIds', []))
+    non_gap_ids = all_resource_ids - gap_resource_ids  # named records (46)
+
+    # Build distinct system entries
+    distinct_entries: list[dict] = []
+    resolved_resource_ids: set[int] = set()
+
+    # Process canonical named records first (these are distinct systems with dedup info)
+    for rid in sorted(canonical_ids):
+        candidate_name = name_map.get(rid, '?')
+        duplicates = sorted(dedup_map.get(rid, []))
+        distinct_entries.append({
+            'canonicalResourceId': rid,
+            'candidateSystemName': candidate_name,
+            'nameSource': 'heuristic-name-candidate-cross-reference',
+            'duplicateGapResourceIds': duplicates,
+            'duplicateGapCount': len(duplicates),
+            'totalResourceIds': 1 + len(duplicates),
+            'nameConfidence': 'deduplication-augmented-scout',
+        })
+        resolved_resource_ids.add(rid)
+        resolved_resource_ids.update(duplicates)
+
+    # Non-gap named records that are NOT canonical dedup targets
+    for rid in sorted(non_gap_ids - canonical_ids):
+        candidate_name = name_map.get(rid, '?')
+        distinct_entries.append({
+            'canonicalResourceId': rid,
+            'candidateSystemName': candidate_name,
+            'nameSource': 'heuristic-name-candidate-cross-reference',
+            'duplicateGapResourceIds': [],
+            'duplicateGapCount': 0,
+            'totalResourceIds': 1,
+            'nameConfidence': 'named-record-no-known-duplicates',
+        })
+        resolved_resource_ids.add(rid)
+
+    # Near/separated gaps that are unresolved (not co-located duplicates)
+    unresolved_ids = sorted(gap_resource_ids - co_located_duplicate_ids - resolved_resource_ids)
+    for rid in unresolved_ids:
+        distinct_entries.append({
+            'canonicalResourceId': rid,
+            'candidateSystemName': '?',
+            'nameSource': 'unresolved-gap',
+            'duplicateGapResourceIds': [],
+            'duplicateGapCount': 0,
+            'totalResourceIds': 1,
+            'nameConfidence': 'unresolved-near-or-separated-gap',
+        })
+        resolved_resource_ids.add(rid)
+
+    # Any remaining resource IDs (fallback)
+    for rid in sorted(all_resource_ids - resolved_resource_ids):
+        candidate_name = name_map.get(rid, '?')
+        distinct_entries.append({
+            'canonicalResourceId': rid,
+            'candidateSystemName': candidate_name,
+            'nameSource': 'unaccounted-fallback',
+            'duplicateGapResourceIds': [],
+            'duplicateGapCount': 0,
+            'totalResourceIds': 1,
+            'nameConfidence': 'unaccounted-fallback',
+        })
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-record-name-gap-reconciliation-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': [
+            'coordinateGapResourceDeduplicationSummary',
+            'systRecordNameCandidateCrossReferenceSummary',
+            'coordinateGapIdentityResolutionSummary',
+        ],
+        'totalResourceIds': len(systems),
+        'distinctSystemCountEstimate': len(distinct_entries),
+        'coLocatedGapDuplicatesResolved': len(dedup.get('deduplication', [])),
+        'nearOrSeparatedUnresolved': len(unresolved_ids),
+        'namedRecordCount': len(non_gap_ids),
+        'gapRecordCount': len(gap_resource_ids),
+        'canonicalDistinctEntries': distinct_entries,
+        'promotionBlockers': [
+            'reconciliation is dedup-augmented scouting only; no record-to-name join is promoted',
+            'candidate names are heuristic text-chunk proximity matches, not verified Classic mappings',
+            'co-located gap assignments are spatial proximity hypotheses, not confirmed Classic duplicates',
+            'near/separated gaps remain unnamed until source name table or runtime route-label evidence is available',
+        ],
+        'promotionStatus': 'not-promoted; name gap reconciliation is analysis input only, pending exact Classic source or runtime route-label evidence',
+        'sourceNote': 'This summary produces a reconciled distinct-system roster by collapsing 16 co-located gap resource IDs into their canonical named neighbors and preserving near/separated gaps as unresolved. Candidate names are heuristic cross-reference matches only. No record-to-name join or runtime topology claim is promoted.',
+    }
+
+
 def _system_name_byte_order_oracle_gap_summary(names: dict) -> dict:
     """Record why current name byte-order evidence is not a record-to-name oracle."""
     system_seeds = sorted(names.get('systemNames', []), key=lambda entry: entry.get('byteOffset', 0))
@@ -4931,6 +5053,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateGapSpatialMappingSummary': _coordinate_gap_spatial_mapping_summary(systems, names),
         'coordinateGapIdentityResolutionSummary': _coordinate_gap_identity_resolution_summary(systems, names),
         'coordinateGapResourceDeduplicationSummary': _coordinate_gap_resource_deduplication_summary(systems, names),
+        'systRecordNameGapReconciliationSummary': _syst_record_name_gap_reconciliation_summary(systems, names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
