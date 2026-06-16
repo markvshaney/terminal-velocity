@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-v63",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-v63",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -1107,6 +1107,680 @@
       }
     ],
     "sourceNote": "This compares heuristic text seed byte offsets only. It is useful for later record-to-name/topology investigation, but it does not assign any syst resource ID to these names or promote EV Classic runtime topology. Resource 128 to Levo remains the only exact system-name mapping."
+  },
+  "landingNameCandidateReferenceSummary": {
+    "sourceLabel": "decoded-resource-backed-landing-name-candidate-reference",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "recordCount": 72,
+    "chunkIndexRange": [
+      6,
+      112
+    ],
+    "chunkIndexCount": 72,
+    "systemNameSeedMatchCount": 0,
+    "systemNameSeedMatches": [],
+    "exactSystemNameMappingMatchCount": 1,
+    "exactSystemNameMappingMatches": [
+      "Levo"
+    ],
+    "candidateNames": [
+      {
+        "name": "Earth",
+        "chunkIndex": 6,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 23037,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Stardock Alpha",
+        "chunkIndex": 7,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 23186,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Mars",
+        "chunkIndex": 8,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 23311,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Landfall",
+        "chunkIndex": 9,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 23505,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Luna",
+        "chunkIndex": 10,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 23658,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Levo",
+        "chunkIndex": 11,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 23867,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": true
+      },
+      {
+        "name": "New Britain",
+        "chunkIndex": 12,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 24094,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Capella",
+        "chunkIndex": 13,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 24338,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Dune",
+        "chunkIndex": 14,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 24502,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Spica",
+        "chunkIndex": 15,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 24642,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Maxwell’s Purchase",
+        "chunkIndex": 16,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 24910,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Hodgson’s World",
+        "chunkIndex": 17,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 25117,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Master’s Planet",
+        "chunkIndex": 19,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 25472,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Sirius III",
+        "chunkIndex": 21,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 26130,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Sirius Station",
+        "chunkIndex": 22,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 26192,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Tau Ceti IV",
+        "chunkIndex": 23,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 26345,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Merlin",
+        "chunkIndex": 24,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 26440,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Tabletop",
+        "chunkIndex": 25,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 26724,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Sahara",
+        "chunkIndex": 28,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 27382,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Samson’s Planet",
+        "chunkIndex": 29,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 27592,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Plateau",
+        "chunkIndex": 30,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 27766,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Providence",
+        "chunkIndex": 32,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 28257,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Istanbul",
+        "chunkIndex": 34,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 28876,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "George’s World",
+        "chunkIndex": 35,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 29050,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "P-8457",
+        "chunkIndex": 36,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 29363,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Beeblebrox",
+        "chunkIndex": 37,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 29497,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Turin V",
+        "chunkIndex": 38,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 29746,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Palshife",
+        "chunkIndex": 39,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 30062,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Alkaidion",
+        "chunkIndex": 41,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 30389,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Regulus II",
+        "chunkIndex": 42,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 30850,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Zaxted Starport",
+        "chunkIndex": 43,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 31065,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Clotho Prime",
+        "chunkIndex": 45,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 31204,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Clotho II",
+        "chunkIndex": 46,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 31375,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Hunter",
+        "chunkIndex": 48,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 31640,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Atropos",
+        "chunkIndex": 49,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 31726,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Scotland’s motto",
+        "chunkIndex": 51,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 31915,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New France",
+        "chunkIndex": 53,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 32244,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Diphidia II",
+        "chunkIndex": 54,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 32478,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Quake",
+        "chunkIndex": 56,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 32925,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Armstrong",
+        "chunkIndex": 57,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 33222,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Rupert",
+        "chunkIndex": 59,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 33455,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Blackthorne",
+        "chunkIndex": 61,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 33644,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Japan",
+        "chunkIndex": 63,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 33999,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Ursa Minor Beta",
+        "chunkIndex": 66,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 34390,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Perseus II",
+        "chunkIndex": 67,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 34593,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Pegasus",
+        "chunkIndex": 68,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 34749,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Sauron",
+        "chunkIndex": 69,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 34862,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Bavaria",
+        "chunkIndex": 71,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 35428,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Port Oread",
+        "chunkIndex": 74,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 35970,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Lauralee",
+        "chunkIndex": 76,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 36290,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Murphy's World",
+        "chunkIndex": 77,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 36435,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Sentinel Station",
+        "chunkIndex": 79,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 37048,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Zeus",
+        "chunkIndex": 80,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 37310,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Endor",
+        "chunkIndex": 83,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 37847,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Virgo",
+        "chunkIndex": 86,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 38499,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Sirgil",
+        "chunkIndex": 87,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 38743,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Sirgil Starport",
+        "chunkIndex": 88,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 38874,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Scorpio",
+        "chunkIndex": 89,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 39031,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Deneb III",
+        "chunkIndex": 90,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 39135,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Cydonia",
+        "chunkIndex": 91,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 39263,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Opal",
+        "chunkIndex": 93,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 39740,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Nexus Outpost",
+        "chunkIndex": 94,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 39847,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Pirate’s Cove",
+        "chunkIndex": 96,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 40055,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Astrodyne Outpost",
+        "chunkIndex": 97,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 40193,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "P-6564",
+        "chunkIndex": 98,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 40540,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Ruby",
+        "chunkIndex": 99,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 40682,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Listening Post 94",
+        "chunkIndex": 100,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 40859,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Listening Post 95",
+        "chunkIndex": 101,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 40993,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Evildrome",
+        "chunkIndex": 107,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 41607,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "A grim, snowy world",
+        "chunkIndex": 108,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 41826,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "New Antigua",
+        "chunkIndex": 111,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 42066,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      },
+      {
+        "name": "Liberty Station",
+        "chunkIndex": 112,
+        "resourceIdInNamesFile": 0,
+        "byteOffset": 42272,
+        "confidence": "high",
+        "isSystemNameSeed": false,
+        "isExactSystemNameMapping": false
+      }
+    ],
+    "candidateHypothesis": "landing-name chunkIndex ordering may correspond to EV Data.rez system resource ordering; not promoted or verified",
+    "promotionBlockers": [
+      "landing-name chunk ordering is a heuristic signal, not a validated system resource ordering oracle",
+      "landing-name resourceId field uses a separate EV Data.rez namespace, not syst record resource IDs 128-194",
+      "only resource 128 to Levo has exact Classic and runtime evidence; landing-name evidence cannot bridge the record-to-name gap without additional Classic source confirmation"
+    ],
+    "promotionStatus": "not-promoted; landing-name candidate reference only, pending exact Classic syst name/order oracle",
+    "sourceNote": "The 72 landing-name seeds are decoded from EV Data.rez text chunks and ordered here by chunkIndex. They provide a candidate system-name list for future record-to-name investigation but are not promoted as Classic system names until exact record-to-name joins or runtime map-label evidence confirms them."
   },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",
