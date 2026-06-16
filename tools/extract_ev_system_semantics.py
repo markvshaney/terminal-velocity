@@ -2347,6 +2347,104 @@ def _syst_record_name_gap_reconciliation_summary(systems: list[dict], names: dic
     }
 
 
+def _named_candidate_link_topology_summary(systems: list[dict], names: dict) -> dict:
+    """Build a named candidate link topology from the reconciliation roster + Con1-Con16 links.
+
+    Uses the reconciliation summary's canonical entries to map resource IDs to candidate
+    names, then maps the decoded Con1-Con16 link slots through those names to produce
+    named candidate edges and per-system named link information. No record-to-name join
+    is promoted — all names are heuristic candidates.
+    """
+    reconciliation = _syst_record_name_gap_reconciliation_summary(systems, names)
+
+    # Build resource ID → canonical resource ID map (for dedup resolution)
+    canonical_of: dict[int, int] = {}
+    # Build canonical resource ID → candidate name map
+    name_of: dict[int, str] = {}
+    for entry in reconciliation.get('canonicalDistinctEntries', []):
+        rid = entry['canonicalResourceId']
+        name_of[rid] = entry.get('candidateSystemName', '?')
+        canonical_of[rid] = rid
+        for dup_rid in entry.get('duplicateGapResourceIds', []):
+            canonical_of[dup_rid] = rid
+
+    # Build named edges and per-system named link info
+    named_edges: set[tuple[str, str]] = set()
+    named_edges_with_ids: list[dict] = []
+    per_system_named_links: list[dict] = []
+
+    for system in systems:
+        rid = system['resourceId']
+        canonical_rid = canonical_of.get(rid, rid)
+        src_name = name_of.get(canonical_rid, f'ID:{canonical_rid}')
+
+        slots = system['semanticFields']['candidateHyperspaceLinks']['linkSlots']
+        linked_slots = [s for s in slots if s.get('status') == 'linked-system']
+
+        named_slots = []
+        for slot in linked_slots:
+            target_rid = slot['targetResourceId']
+            canonical_target = canonical_of.get(target_rid, target_rid)
+            target_name = name_of.get(canonical_target, f'ID:{canonical_target}')
+
+            if src_name != target_name:  # skip self-links for named edges
+                named_edges.add((src_name, target_name))
+
+            named_slots.append({
+                'slotName': slot['slotName'],
+                'targetResourceId': target_rid,
+                'canonicalTargetResourceId': canonical_target,
+                'candidateTargetSystemName': target_name,
+                'nameConfidence': 'heuristic-candidate-cross-reference',
+                'isSelfLink': target_rid == rid,
+            })
+
+        per_system_named_links.append({
+            'resourceId': rid,
+            'canonicalResourceId': canonical_rid,
+            'candidateSystemName': src_name,
+            'linkedNamedSlots': named_slots,
+            'namedLinkedCount': len([s for s in named_slots if not s['isSelfLink']]),
+        })
+
+    named_edge_list = sorted([
+        {'sourceSystemName': src, 'targetSystemName': tgt}
+        for src, tgt in named_edges
+    ], key=lambda e: (e['sourceSystemName'], e['targetSystemName']))
+
+    # Compute simple graph statistics
+    all_named_systems = sorted(set(
+        name_of.get(canonical_of.get(rid, rid), f'ID:{rid}')
+        for rid in range(128, 128 + len(systems))
+    ))
+    named_systems_with_links = sorted(set(
+        src for src, _ in named_edges
+    ) | set(tgt for _, tgt in named_edges))
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-named-candidate-link-topology-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': [
+            'systRecordNameGapReconciliationSummary',
+            'candidateLinkGraphSummary',
+        ],
+        'distinctSystemCountEstimate': len(all_named_systems),
+        'namedSystemsWithOutgoingLinks': len(named_systems_with_links),
+        'namedCandidateEdgeCount': len(named_edges),
+        'namedCandidateEdges': named_edge_list,
+        'perSystemNamedLinks': per_system_named_links,
+        'promotionBlockers': [
+            'all system names are heuristic text-chunk candidates, not verified Classic mappings',
+            'co-located gap assignments are spatial proximity hypotheses',
+            'link topology is decoded Con1-Con16 candidate slots, not verified Classic route edges',
+            'near/separated gap systems remain unnamed',
+        ],
+        'promotionStatus': 'not-promoted; named candidate topology is analysis input only, pending exact Classic source or runtime route-label evidence',
+        'sourceNote': 'This summary maps the reconciliation roster candidate names onto the decoded Con1-Con16 link graph to produce a named candidate topology. All names are heuristic candidates from landing-name text-chunk proximity matching. No record-to-name join, named Classic route topology, or broad runtime universe replacement is promoted.',
+    }
+
+
 def _system_name_byte_order_oracle_gap_summary(names: dict) -> dict:
     """Record why current name byte-order evidence is not a record-to-name oracle."""
     system_seeds = sorted(names.get('systemNames', []), key=lambda entry: entry.get('byteOffset', 0))
@@ -5054,6 +5152,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateGapIdentityResolutionSummary': _coordinate_gap_identity_resolution_summary(systems, names),
         'coordinateGapResourceDeduplicationSummary': _coordinate_gap_resource_deduplication_summary(systems, names),
         'systRecordNameGapReconciliationSummary': _syst_record_name_gap_reconciliation_summary(systems, names),
+        'namedCandidateLinkTopologySummary': _named_candidate_link_topology_summary(systems, names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

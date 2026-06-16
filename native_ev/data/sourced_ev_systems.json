@@ -5790,6 +5790,3090 @@
     "promotionStatus": "not-promoted; name gap reconciliation is analysis input only, pending exact Classic source or runtime route-label evidence",
     "sourceNote": "This summary produces a reconciled distinct-system roster by collapsing 16 co-located gap resource IDs into their canonical named neighbors and preserving near/separated gaps as unresolved. Candidate names are heuristic cross-reference matches only. No record-to-name join or runtime topology claim is promoted."
   },
+  "namedCandidateLinkTopologySummary": {
+    "sourceLabel": "decoded-resource-backed-named-candidate-link-topology-scout",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field"
+    ],
+    "inputSummaries": [
+      "systRecordNameGapReconciliationSummary",
+      "candidateLinkGraphSummary"
+    ],
+    "distinctSystemCountEstimate": 47,
+    "namedSystemsWithOutgoingLinks": 47,
+    "namedCandidateEdgeCount": 94,
+    "namedCandidateEdges": [
+      {
+        "sourceSystemName": "?",
+        "targetSystemName": "Dune"
+      },
+      {
+        "sourceSystemName": "?",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "?",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "?",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "?",
+        "targetSystemName": "Samson’s Planet"
+      },
+      {
+        "sourceSystemName": "Alkaidion",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "Armstrong",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "Armstrong",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "Armstrong",
+        "targetSystemName": "Tabletop"
+      },
+      {
+        "sourceSystemName": "Atropos",
+        "targetSystemName": "Dune"
+      },
+      {
+        "sourceSystemName": "Beeblebrox",
+        "targetSystemName": "Capella"
+      },
+      {
+        "sourceSystemName": "Blackthorne",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "Blackthorne",
+        "targetSystemName": "Tabletop"
+      },
+      {
+        "sourceSystemName": "Capella",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "Capella",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "Capella",
+        "targetSystemName": "Tabletop"
+      },
+      {
+        "sourceSystemName": "Clotho II",
+        "targetSystemName": "Sirius Station"
+      },
+      {
+        "sourceSystemName": "Clotho Prime",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "Clotho Prime",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Diphidia II",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "Dune",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "Dune",
+        "targetSystemName": "New Sahara"
+      },
+      {
+        "sourceSystemName": "Dune",
+        "targetSystemName": "Spica"
+      },
+      {
+        "sourceSystemName": "George’s World",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "George’s World",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Hodgson’s World",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "Hodgson’s World",
+        "targetSystemName": "New Istanbul"
+      },
+      {
+        "sourceSystemName": "Hodgson’s World",
+        "targetSystemName": "Samson’s Planet"
+      },
+      {
+        "sourceSystemName": "Hodgson’s World",
+        "targetSystemName": "Spica"
+      },
+      {
+        "sourceSystemName": "Hunter",
+        "targetSystemName": "New Sahara"
+      },
+      {
+        "sourceSystemName": "Hunter",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Lauralee",
+        "targetSystemName": "P-8457"
+      },
+      {
+        "sourceSystemName": "Levo",
+        "targetSystemName": "Capella"
+      },
+      {
+        "sourceSystemName": "Levo",
+        "targetSystemName": "Dune"
+      },
+      {
+        "sourceSystemName": "Levo",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "Master’s Planet",
+        "targetSystemName": "Samson’s Planet"
+      },
+      {
+        "sourceSystemName": "Master’s Planet",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Master’s Planet",
+        "targetSystemName": "Spica"
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Dune"
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "New Istanbul"
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "New Sahara"
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Spica"
+      },
+      {
+        "sourceSystemName": "Merlin",
+        "targetSystemName": "Sirius Station"
+      },
+      {
+        "sourceSystemName": "Murphy's World",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "New Bavaria",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "New Bavaria",
+        "targetSystemName": "Tabletop"
+      },
+      {
+        "sourceSystemName": "New Britain",
+        "targetSystemName": "Hodgson’s World"
+      },
+      {
+        "sourceSystemName": "New Britain",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "New Britain",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "New Britain",
+        "targetSystemName": "Plateau"
+      },
+      {
+        "sourceSystemName": "New France",
+        "targetSystemName": "New Istanbul"
+      },
+      {
+        "sourceSystemName": "New France",
+        "targetSystemName": "New Providence"
+      },
+      {
+        "sourceSystemName": "New Istanbul",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "New Istanbul",
+        "targetSystemName": "Samson’s Planet"
+      },
+      {
+        "sourceSystemName": "New Istanbul",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "New Istanbul",
+        "targetSystemName": "Spica"
+      },
+      {
+        "sourceSystemName": "New Japan",
+        "targetSystemName": "Hodgson’s World"
+      },
+      {
+        "sourceSystemName": "New Japan",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "New Japan",
+        "targetSystemName": "Plateau"
+      },
+      {
+        "sourceSystemName": "New Providence",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "New Sahara",
+        "targetSystemName": "Capella"
+      },
+      {
+        "sourceSystemName": "New Scotland’s motto",
+        "targetSystemName": "Dune"
+      },
+      {
+        "sourceSystemName": "New Scotland’s motto",
+        "targetSystemName": "New Sahara"
+      },
+      {
+        "sourceSystemName": "New Scotland’s motto",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "P-8457",
+        "targetSystemName": "Tabletop"
+      },
+      {
+        "sourceSystemName": "Palshife",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "Pegasus",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "Pegasus",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "Perseus II",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "Plateau",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "Port Oread",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "Quake",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Regulus II",
+        "targetSystemName": "Samson’s Planet"
+      },
+      {
+        "sourceSystemName": "Rupert",
+        "targetSystemName": "Hodgson’s World"
+      },
+      {
+        "sourceSystemName": "Rupert",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "Samson’s Planet",
+        "targetSystemName": "Capella"
+      },
+      {
+        "sourceSystemName": "Sauron",
+        "targetSystemName": "Dune"
+      },
+      {
+        "sourceSystemName": "Sauron",
+        "targetSystemName": "New Sahara"
+      },
+      {
+        "sourceSystemName": "Sauron",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "Master’s Planet"
+      },
+      {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "Maxwell’s Purchase"
+      },
+      {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "Merlin"
+      },
+      {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "Plateau"
+      },
+      {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "Tabletop"
+      },
+      {
+        "sourceSystemName": "Sirius Station",
+        "targetSystemName": "Tau Ceti IV"
+      },
+      {
+        "sourceSystemName": "Spica",
+        "targetSystemName": "Samson’s Planet"
+      },
+      {
+        "sourceSystemName": "Spica",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Tabletop",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "Tau Ceti IV",
+        "targetSystemName": "Sirius Station"
+      },
+      {
+        "sourceSystemName": "Turin V",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Ursa Minor Beta",
+        "targetSystemName": "New Britain"
+      },
+      {
+        "sourceSystemName": "Ursa Minor Beta",
+        "targetSystemName": "Samson’s Planet"
+      },
+      {
+        "sourceSystemName": "Ursa Minor Beta",
+        "targetSystemName": "Sirius III"
+      },
+      {
+        "sourceSystemName": "Zaxted Starport",
+        "targetSystemName": "New Britain"
+      }
+    ],
+    "perSystemNamedLinks": [
+      {
+        "resourceId": 128,
+        "canonicalResourceId": 128,
+        "candidateSystemName": "Levo",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 128,
+            "canonicalTargetResourceId": 128,
+            "candidateTargetSystemName": "Levo",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": true
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 3
+      },
+      {
+        "resourceId": 129,
+        "canonicalResourceId": 129,
+        "candidateSystemName": "New Britain",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 147,
+            "canonicalTargetResourceId": 147,
+            "candidateTargetSystemName": "Plateau",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 134,
+            "canonicalTargetResourceId": 134,
+            "candidateTargetSystemName": "Hodgson’s World",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 130,
+        "canonicalResourceId": 130,
+        "candidateSystemName": "Capella",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 131,
+        "canonicalResourceId": 131,
+        "candidateSystemName": "Dune",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 145,
+            "canonicalTargetResourceId": 145,
+            "candidateTargetSystemName": "New Sahara",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 132,
+        "canonicalResourceId": 132,
+        "candidateSystemName": "Spica",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 133,
+        "canonicalResourceId": 133,
+        "candidateSystemName": "Maxwell’s Purchase",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 151,
+            "canonicalTargetResourceId": 151,
+            "candidateTargetSystemName": "New Istanbul",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 145,
+            "canonicalTargetResourceId": 145,
+            "candidateTargetSystemName": "New Sahara",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 134,
+        "canonicalResourceId": 134,
+        "candidateSystemName": "Hodgson’s World",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 151,
+            "canonicalTargetResourceId": 151,
+            "candidateTargetSystemName": "New Istanbul",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 135,
+        "canonicalResourceId": 136,
+        "candidateSystemName": "Master’s Planet",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 136,
+        "canonicalResourceId": 136,
+        "candidateSystemName": "Master’s Planet",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": true
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 3
+      },
+      {
+        "resourceId": 137,
+        "canonicalResourceId": 138,
+        "candidateSystemName": "Sirius III",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 147,
+            "canonicalTargetResourceId": 147,
+            "candidateTargetSystemName": "Plateau",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 147,
+            "canonicalTargetResourceId": 147,
+            "candidateTargetSystemName": "Plateau",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 138,
+        "canonicalResourceId": 138,
+        "candidateSystemName": "Sirius III",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 139,
+        "canonicalResourceId": 139,
+        "candidateSystemName": "Sirius Station",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": true
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": true
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 140,
+            "canonicalTargetResourceId": 140,
+            "candidateTargetSystemName": "Tau Ceti IV",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 140,
+            "canonicalTargetResourceId": 140,
+            "candidateTargetSystemName": "Tau Ceti IV",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 2
+      },
+      {
+        "resourceId": 140,
+        "canonicalResourceId": 140,
+        "candidateSystemName": "Tau Ceti IV",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 140,
+            "canonicalTargetResourceId": 140,
+            "candidateTargetSystemName": "Tau Ceti IV",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": true
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 140,
+            "canonicalTargetResourceId": 140,
+            "candidateTargetSystemName": "Tau Ceti IV",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": true
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 140,
+            "canonicalTargetResourceId": 140,
+            "candidateTargetSystemName": "Tau Ceti IV",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": true
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 1
+      },
+      {
+        "resourceId": 141,
+        "canonicalResourceId": 141,
+        "candidateSystemName": "Merlin",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 142,
+        "canonicalResourceId": 142,
+        "candidateSystemName": "Tabletop",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 143,
+        "canonicalResourceId": 129,
+        "candidateSystemName": "New Britain",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 144,
+        "canonicalResourceId": 133,
+        "candidateSystemName": "Maxwell’s Purchase",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 145,
+        "canonicalResourceId": 145,
+        "candidateSystemName": "New Sahara",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 146,
+        "canonicalResourceId": 146,
+        "candidateSystemName": "Samson’s Planet",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 147,
+        "canonicalResourceId": 147,
+        "candidateSystemName": "Plateau",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 148,
+        "canonicalResourceId": 138,
+        "candidateSystemName": "Sirius III",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 149,
+        "canonicalResourceId": 149,
+        "candidateSystemName": "New Providence",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 150,
+        "canonicalResourceId": 151,
+        "candidateSystemName": "New Istanbul",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 151,
+        "canonicalResourceId": 151,
+        "candidateSystemName": "New Istanbul",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 152,
+        "canonicalResourceId": 152,
+        "candidateSystemName": "George’s World",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 153,
+        "canonicalResourceId": 153,
+        "candidateSystemName": "P-8457",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 154,
+        "canonicalResourceId": 154,
+        "candidateSystemName": "Beeblebrox",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 130,
+            "canonicalTargetResourceId": 130,
+            "candidateTargetSystemName": "Capella",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 155,
+        "canonicalResourceId": 155,
+        "candidateSystemName": "Turin V",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 156,
+        "canonicalResourceId": 156,
+        "candidateSystemName": "Palshife",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 157,
+        "canonicalResourceId": 138,
+        "candidateSystemName": "Sirius III",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 158,
+        "canonicalResourceId": 158,
+        "candidateSystemName": "Alkaidion",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 159,
+        "canonicalResourceId": 159,
+        "candidateSystemName": "Regulus II",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 160,
+        "canonicalResourceId": 160,
+        "candidateSystemName": "Zaxted Starport",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 161,
+        "canonicalResourceId": 134,
+        "candidateSystemName": "Hodgson’s World",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 162,
+        "canonicalResourceId": 162,
+        "candidateSystemName": "Clotho Prime",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 163,
+        "canonicalResourceId": 163,
+        "candidateSystemName": "Clotho II",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 139,
+            "canonicalTargetResourceId": 139,
+            "candidateTargetSystemName": "Sirius Station",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 164,
+        "canonicalResourceId": 134,
+        "candidateSystemName": "Hodgson’s World",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 132,
+            "canonicalTargetResourceId": 132,
+            "candidateTargetSystemName": "Spica",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 165,
+        "canonicalResourceId": 165,
+        "candidateSystemName": "Hunter",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 145,
+            "canonicalTargetResourceId": 145,
+            "candidateTargetSystemName": "New Sahara",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 166,
+        "canonicalResourceId": 166,
+        "candidateSystemName": "Atropos",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 167,
+        "canonicalResourceId": 166,
+        "candidateSystemName": "Atropos",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 168,
+        "canonicalResourceId": 168,
+        "candidateSystemName": "New Scotland’s motto",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 145,
+            "canonicalTargetResourceId": 145,
+            "candidateTargetSystemName": "New Sahara",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 169,
+        "canonicalResourceId": 183,
+        "candidateSystemName": "Ursa Minor Beta",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 170,
+        "canonicalResourceId": 170,
+        "candidateSystemName": "New France",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 149,
+            "canonicalTargetResourceId": 149,
+            "candidateTargetSystemName": "New Providence",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 149,
+            "canonicalTargetResourceId": 149,
+            "candidateTargetSystemName": "New Providence",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 149,
+            "canonicalTargetResourceId": 149,
+            "candidateTargetSystemName": "New Providence",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 149,
+            "canonicalTargetResourceId": 149,
+            "candidateTargetSystemName": "New Providence",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 171,
+        "canonicalResourceId": 171,
+        "candidateSystemName": "Diphidia II",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 172,
+        "canonicalResourceId": 170,
+        "candidateSystemName": "New France",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 150,
+            "canonicalTargetResourceId": 151,
+            "candidateTargetSystemName": "New Istanbul",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 150,
+            "canonicalTargetResourceId": 151,
+            "candidateTargetSystemName": "New Istanbul",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 150,
+            "canonicalTargetResourceId": 151,
+            "candidateTargetSystemName": "New Istanbul",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 150,
+            "canonicalTargetResourceId": 151,
+            "candidateTargetSystemName": "New Istanbul",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 173,
+        "canonicalResourceId": 173,
+        "candidateSystemName": "Quake",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 137,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 174,
+        "canonicalResourceId": 174,
+        "candidateSystemName": "Armstrong",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 175,
+        "canonicalResourceId": 174,
+        "candidateSystemName": "Armstrong",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 176,
+        "canonicalResourceId": 176,
+        "candidateSystemName": "Rupert",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 177,
+        "canonicalResourceId": 178,
+        "candidateSystemName": "Blackthorne",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 178,
+        "canonicalResourceId": 178,
+        "candidateSystemName": "Blackthorne",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 179,
+        "canonicalResourceId": 180,
+        "candidateSystemName": "New Japan",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 147,
+            "canonicalTargetResourceId": 147,
+            "candidateTargetSystemName": "Plateau",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 147,
+            "canonicalTargetResourceId": 147,
+            "candidateTargetSystemName": "Plateau",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 180,
+        "canonicalResourceId": 180,
+        "candidateSystemName": "New Japan",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 134,
+            "canonicalTargetResourceId": 134,
+            "candidateTargetSystemName": "Hodgson’s World",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 134,
+            "canonicalTargetResourceId": 134,
+            "candidateTargetSystemName": "Hodgson’s World",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 134,
+            "canonicalTargetResourceId": 134,
+            "candidateTargetSystemName": "Hodgson’s World",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 134,
+            "canonicalTargetResourceId": 134,
+            "candidateTargetSystemName": "Hodgson’s World",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 181,
+        "canonicalResourceId": 181,
+        "candidateSystemName": "?",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 182,
+        "canonicalResourceId": 182,
+        "candidateSystemName": "?",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 183,
+        "canonicalResourceId": 183,
+        "candidateSystemName": "Ursa Minor Beta",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 143,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 146,
+            "canonicalTargetResourceId": 146,
+            "candidateTargetSystemName": "Samson’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 184,
+        "canonicalResourceId": 184,
+        "candidateSystemName": "Perseus II",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 185,
+        "canonicalResourceId": 185,
+        "candidateSystemName": "Pegasus",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 144,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 186,
+        "canonicalResourceId": 186,
+        "candidateSystemName": "Sauron",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 131,
+            "canonicalTargetResourceId": 131,
+            "candidateTargetSystemName": "Dune",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 138,
+            "canonicalTargetResourceId": 138,
+            "candidateTargetSystemName": "Sirius III",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 145,
+            "canonicalTargetResourceId": 145,
+            "candidateTargetSystemName": "New Sahara",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 187,
+        "canonicalResourceId": 176,
+        "candidateSystemName": "Rupert",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 134,
+            "canonicalTargetResourceId": 134,
+            "candidateTargetSystemName": "Hodgson’s World",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 134,
+            "canonicalTargetResourceId": 134,
+            "candidateTargetSystemName": "Hodgson’s World",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 188,
+        "canonicalResourceId": 188,
+        "candidateSystemName": "New Bavaria",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 141,
+            "canonicalTargetResourceId": 141,
+            "candidateTargetSystemName": "Merlin",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 142,
+            "canonicalTargetResourceId": 142,
+            "candidateTargetSystemName": "Tabletop",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 189,
+        "canonicalResourceId": 189,
+        "candidateSystemName": "?",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 135,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 190,
+        "canonicalResourceId": 190,
+        "candidateSystemName": "?",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 133,
+            "canonicalTargetResourceId": 133,
+            "candidateTargetSystemName": "Maxwell’s Purchase",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 191,
+        "canonicalResourceId": 191,
+        "candidateSystemName": "Port Oread",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 192,
+        "canonicalResourceId": 192,
+        "candidateSystemName": "?",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 136,
+            "canonicalTargetResourceId": 136,
+            "candidateTargetSystemName": "Master’s Planet",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 193,
+        "canonicalResourceId": 193,
+        "candidateSystemName": "Lauralee",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 153,
+            "canonicalTargetResourceId": 153,
+            "candidateTargetSystemName": "P-8457",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 153,
+            "canonicalTargetResourceId": 153,
+            "candidateTargetSystemName": "P-8457",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 153,
+            "canonicalTargetResourceId": 153,
+            "candidateTargetSystemName": "P-8457",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 153,
+            "canonicalTargetResourceId": 153,
+            "candidateTargetSystemName": "P-8457",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      },
+      {
+        "resourceId": 194,
+        "canonicalResourceId": 194,
+        "candidateSystemName": "Murphy's World",
+        "linkedNamedSlots": [
+          {
+            "slotName": "Con1",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con2",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con3",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          },
+          {
+            "slotName": "Con4",
+            "targetResourceId": 129,
+            "canonicalTargetResourceId": 129,
+            "candidateTargetSystemName": "New Britain",
+            "nameConfidence": "heuristic-candidate-cross-reference",
+            "isSelfLink": false
+          }
+        ],
+        "namedLinkedCount": 4
+      }
+    ],
+    "promotionBlockers": [
+      "all system names are heuristic text-chunk candidates, not verified Classic mappings",
+      "co-located gap assignments are spatial proximity hypotheses",
+      "link topology is decoded Con1-Con16 candidate slots, not verified Classic route edges",
+      "near/separated gap systems remain unnamed"
+    ],
+    "promotionStatus": "not-promoted; named candidate topology is analysis input only, pending exact Classic source or runtime route-label evidence",
+    "sourceNote": "This summary maps the reconciliation roster candidate names onto the decoded Con1-Con16 link graph to produce a named candidate topology. All names are heuristic candidates from landing-name text-chunk proximity matching. No record-to-name join, named Classic route topology, or broad runtime universe replacement is promoted."
+  },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",
     "oracleStatus": "coordinate_display_units_map_scaling_pending",
