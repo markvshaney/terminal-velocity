@@ -2899,6 +2899,1232 @@
     "promotionStatus": "not-promoted; gap analysis only pending exact Classic record-to-name or runtime label evidence",
     "sourceNote": "This analysis records for each of the 21 missing-candidate syst records the nearest landing-name candidates (before and after) with chunk distances and classifies gap types. It also identifies any of the 9 heuristic system-name seeds that appear near gaps. No record-to-name join is promoted from this analysis alone."
   },
+  "coordinateGapSpatialMappingSummary": {
+    "sourceLabel": "decoded-resource-backed-coordinate-gap-spatial-mapping-scout",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field"
+    ],
+    "recordCount": 67,
+    "gapCount": 21,
+    "gapResourceIds": [
+      135,
+      137,
+      143,
+      144,
+      148,
+      150,
+      157,
+      161,
+      164,
+      167,
+      169,
+      172,
+      175,
+      177,
+      179,
+      181,
+      182,
+      187,
+      189,
+      190,
+      192
+    ],
+    "namedNeighborResourceIds": [
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      136,
+      138,
+      139,
+      140,
+      141,
+      142,
+      145,
+      146,
+      147,
+      149,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      158,
+      159,
+      160,
+      162,
+      163,
+      165,
+      166,
+      168,
+      170,
+      171,
+      173,
+      174,
+      176,
+      178,
+      180,
+      183,
+      184,
+      185,
+      186,
+      188,
+      191,
+      193,
+      194
+    ],
+    "namedNeighborCount": 46,
+    "gapEntries": [
+      {
+        "resourceId": 135,
+        "recordIndex": 7,
+        "targetChunkIndex": 18,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196739,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 131,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.001999,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131075,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 136,
+        "closestNamedNeighborSystemName": "Master’s Planet",
+        "closestNamedNeighborDistance": 1.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 136,
+            "candidateSystemName": "Master’s Planet",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 130,
+            "candidateSystemName": "Capella",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 153,
+            "candidateSystemName": "P-8457",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 171,
+            "candidateSystemName": "Diphidia II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 129,
+            "candidateSystemName": "New Britain",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 3.0
+          }
+        ]
+      },
+      {
+        "resourceId": 137,
+        "recordIndex": 9,
+        "targetChunkIndex": 20,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262272,
+        "signedLongY": 32768,
+        "rawHighWordX": 4,
+        "rawHighWordY": 0,
+        "rawLowWordX": 128,
+        "rawLowWordY": -32768,
+        "fixedPointX": 4.001953,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 196608,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 138,
+        "closestNamedNeighborSystemName": "Sirius III",
+        "closestNamedNeighborDistance": 1.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 138,
+            "candidateSystemName": "Sirius III",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 158,
+            "candidateSystemName": "Alkaidion",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 151,
+            "candidateSystemName": "New Istanbul",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4.0
+          },
+          {
+            "targetResourceId": 132,
+            "candidateSystemName": "Spica",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 5.0
+          },
+          {
+            "targetResourceId": 147,
+            "candidateSystemName": "Plateau",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 7.0
+          }
+        ]
+      },
+      {
+        "resourceId": 143,
+        "recordIndex": 15,
+        "targetChunkIndex": 26,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196736,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 128,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.001953,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131072,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 129,
+        "closestNamedNeighborSystemName": "New Britain",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 129,
+            "candidateSystemName": "New Britain",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 149,
+            "candidateSystemName": "New Providence",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 130,
+            "candidateSystemName": "Capella",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 153,
+            "candidateSystemName": "P-8457",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 171,
+            "candidateSystemName": "Diphidia II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 144,
+        "recordIndex": 16,
+        "targetChunkIndex": 27,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196607,
+        "signedLongY": 8351744,
+        "rawHighWordX": 2,
+        "rawHighWordY": 127,
+        "rawLowWordX": -1,
+        "rawLowWordY": 28672,
+        "fixedPointX": 2.999985,
+        "fixedPointY": 127.4375,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 130943,
+        "deltaFromLevoY": 24576,
+        "quadrantFromLevo": "north-east",
+        "closestNamedNeighborResourceId": 133,
+        "closestNamedNeighborSystemName": "Maxwell’s Purchase",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 133,
+            "candidateSystemName": "Maxwell’s Purchase",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 134,
+            "candidateSystemName": "Hodgson’s World",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4098.094313
+          },
+          {
+            "targetResourceId": 159,
+            "candidateSystemName": "Regulus II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4098.094313
+          },
+          {
+            "targetResourceId": 162,
+            "candidateSystemName": "Clotho Prime",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4098.094313
+          },
+          {
+            "targetResourceId": 165,
+            "candidateSystemName": "Hunter",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4098.094313
+          }
+        ]
+      },
+      {
+        "resourceId": 148,
+        "recordIndex": 20,
+        "targetChunkIndex": 31,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262273,
+        "signedLongY": 32768,
+        "rawHighWordX": 4,
+        "rawHighWordY": 0,
+        "rawLowWordX": 129,
+        "rawLowWordY": -32768,
+        "fixedPointX": 4.001968,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 196609,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 138,
+        "closestNamedNeighborSystemName": "Sirius III",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 138,
+            "candidateSystemName": "Sirius III",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 158,
+            "candidateSystemName": "Alkaidion",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 151,
+            "candidateSystemName": "New Istanbul",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 3.0
+          },
+          {
+            "targetResourceId": 132,
+            "candidateSystemName": "Spica",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4.0
+          },
+          {
+            "targetResourceId": 147,
+            "candidateSystemName": "Plateau",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 6.0
+          }
+        ]
+      },
+      {
+        "resourceId": 150,
+        "recordIndex": 22,
+        "targetChunkIndex": 33,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262275,
+        "signedLongY": 32768,
+        "rawHighWordX": 4,
+        "rawHighWordY": 0,
+        "rawLowWordX": 131,
+        "rawLowWordY": -32768,
+        "fixedPointX": 4.001999,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 196611,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 151,
+        "closestNamedNeighborSystemName": "New Istanbul",
+        "closestNamedNeighborDistance": 1.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 151,
+            "candidateSystemName": "New Istanbul",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 132,
+            "candidateSystemName": "Spica",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 138,
+            "candidateSystemName": "Sirius III",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 158,
+            "candidateSystemName": "Alkaidion",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 147,
+            "candidateSystemName": "Plateau",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4.0
+          }
+        ]
+      },
+      {
+        "resourceId": 157,
+        "recordIndex": 29,
+        "targetChunkIndex": 40,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262272,
+        "signedLongY": 32768,
+        "rawHighWordX": 4,
+        "rawHighWordY": 0,
+        "rawLowWordX": 128,
+        "rawLowWordY": -32768,
+        "fixedPointX": 4.001953,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 196608,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 138,
+        "closestNamedNeighborSystemName": "Sirius III",
+        "closestNamedNeighborDistance": 1.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 138,
+            "candidateSystemName": "Sirius III",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 158,
+            "candidateSystemName": "Alkaidion",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 151,
+            "candidateSystemName": "New Istanbul",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 4.0
+          },
+          {
+            "targetResourceId": 132,
+            "candidateSystemName": "Spica",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 5.0
+          },
+          {
+            "targetResourceId": 147,
+            "candidateSystemName": "Plateau",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 7.0
+          }
+        ]
+      },
+      {
+        "resourceId": 161,
+        "recordIndex": 33,
+        "targetChunkIndex": 44,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196738,
+        "signedLongY": 8355840,
+        "rawHighWordX": 3,
+        "rawHighWordY": 127,
+        "rawLowWordX": 130,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.001984,
+        "fixedPointY": 127.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131074,
+        "deltaFromLevoY": 28672,
+        "quadrantFromLevo": "north-east",
+        "closestNamedNeighborResourceId": 134,
+        "closestNamedNeighborSystemName": "Hodgson’s World",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 134,
+            "candidateSystemName": "Hodgson’s World",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 159,
+            "candidateSystemName": "Regulus II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 162,
+            "candidateSystemName": "Clotho Prime",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 165,
+            "candidateSystemName": "Hunter",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 173,
+            "candidateSystemName": "Quake",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          }
+        ]
+      },
+      {
+        "resourceId": 164,
+        "recordIndex": 36,
+        "targetChunkIndex": 47,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196738,
+        "signedLongY": 8355840,
+        "rawHighWordX": 3,
+        "rawHighWordY": 127,
+        "rawLowWordX": 130,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.001984,
+        "fixedPointY": 127.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131074,
+        "deltaFromLevoY": 28672,
+        "quadrantFromLevo": "north-east",
+        "closestNamedNeighborResourceId": 134,
+        "closestNamedNeighborSystemName": "Hodgson’s World",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 134,
+            "candidateSystemName": "Hodgson’s World",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 159,
+            "candidateSystemName": "Regulus II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 162,
+            "candidateSystemName": "Clotho Prime",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 165,
+            "candidateSystemName": "Hunter",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 173,
+            "candidateSystemName": "Quake",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          }
+        ]
+      },
+      {
+        "resourceId": 167,
+        "recordIndex": 39,
+        "targetChunkIndex": 50,
+        "gapType": "mid-range-gap",
+        "signedLongX": 131211,
+        "signedLongY": 8323073,
+        "rawHighWordX": 2,
+        "rawHighWordY": 127,
+        "rawLowWordX": 139,
+        "rawLowWordY": 1,
+        "fixedPointX": 2.002121,
+        "fixedPointY": 127.000015,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 65547,
+        "deltaFromLevoY": -4095,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 166,
+        "closestNamedNeighborSystemName": "Atropos",
+        "closestNamedNeighborDistance": 1.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 166,
+            "candidateSystemName": "Atropos",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 131,
+            "candidateSystemName": "Dune",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 8191.007386
+          },
+          {
+            "targetResourceId": 128,
+            "candidateSystemName": "Levo",
+            "matchType": "exact",
+            "signedLongDistance": 65674.791465
+          },
+          {
+            "targetResourceId": 133,
+            "candidateSystemName": "Maxwell’s Purchase",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 71404.923199
+          },
+          {
+            "targetResourceId": 134,
+            "candidateSystemName": "Hodgson’s World",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 73262.978495
+          }
+        ]
+      },
+      {
+        "resourceId": 169,
+        "recordIndex": 41,
+        "targetChunkIndex": 52,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262283,
+        "signedLongY": 1,
+        "rawHighWordX": 4,
+        "rawHighWordY": 0,
+        "rawLowWordX": 139,
+        "rawLowWordY": 1,
+        "fixedPointX": 4.002121,
+        "fixedPointY": 1.5e-05,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 196619,
+        "deltaFromLevoY": -8327167,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 183,
+        "closestNamedNeighborSystemName": "Ursa Minor Beta",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 183,
+            "candidateSystemName": "Ursa Minor Beta",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 170,
+            "candidateSystemName": "New France",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 147,
+            "candidateSystemName": "Plateau",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 32767.000244
+          },
+          {
+            "targetResourceId": 132,
+            "candidateSystemName": "Spica",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 32767.000549
+          },
+          {
+            "targetResourceId": 151,
+            "candidateSystemName": "New Istanbul",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 32767.000748
+          }
+        ]
+      },
+      {
+        "resourceId": 172,
+        "recordIndex": 44,
+        "targetChunkIndex": 55,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262284,
+        "signedLongY": 1,
+        "rawHighWordX": 4,
+        "rawHighWordY": 0,
+        "rawLowWordX": 140,
+        "rawLowWordY": 1,
+        "fixedPointX": 4.002136,
+        "fixedPointY": 1.5e-05,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 196620,
+        "deltaFromLevoY": -8327167,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 170,
+        "closestNamedNeighborSystemName": "New France",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 170,
+            "candidateSystemName": "New France",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 183,
+            "candidateSystemName": "Ursa Minor Beta",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 147,
+            "candidateSystemName": "Plateau",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 32767.000381
+          },
+          {
+            "targetResourceId": 132,
+            "candidateSystemName": "Spica",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 32767.000748
+          },
+          {
+            "targetResourceId": 151,
+            "candidateSystemName": "New Istanbul",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 32767.000977
+          }
+        ]
+      },
+      {
+        "resourceId": 175,
+        "recordIndex": 47,
+        "targetChunkIndex": 58,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196754,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 146,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.002228,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131090,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 174,
+        "closestNamedNeighborSystemName": "Armstrong",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 185,
+            "candidateSystemName": "Pegasus",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 188,
+            "candidateSystemName": "New Bavaria",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 193,
+            "candidateSystemName": "Lauralee",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 177,
+        "recordIndex": 49,
+        "targetChunkIndex": 60,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196752,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 144,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.002197,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131088,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 178,
+        "closestNamedNeighborSystemName": "Blackthorne",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 178,
+            "candidateSystemName": "Blackthorne",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 184,
+            "candidateSystemName": "Perseus II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 176,
+            "candidateSystemName": "Rupert",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          }
+        ]
+      },
+      {
+        "resourceId": 179,
+        "recordIndex": 51,
+        "targetChunkIndex": 62,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196753,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 145,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.002213,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131089,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 180,
+        "closestNamedNeighborSystemName": "New Japan",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 178,
+            "candidateSystemName": "Blackthorne",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 184,
+            "candidateSystemName": "Perseus II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 185,
+            "candidateSystemName": "Pegasus",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 181,
+        "recordIndex": 53,
+        "targetChunkIndex": 64,
+        "gapType": "mid-range-gap",
+        "signedLongX": 131208,
+        "signedLongY": 32768,
+        "rawHighWordX": 2,
+        "rawHighWordY": 0,
+        "rawLowWordX": 136,
+        "rawLowWordY": -32768,
+        "fixedPointX": 2.002075,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 65544,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 129,
+        "closestNamedNeighborSystemName": "New Britain",
+        "closestNamedNeighborDistance": 65528.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 129,
+            "candidateSystemName": "New Britain",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65528.0
+          },
+          {
+            "targetResourceId": 149,
+            "candidateSystemName": "New Providence",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65528.0
+          },
+          {
+            "targetResourceId": 130,
+            "candidateSystemName": "Capella",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65529.0
+          },
+          {
+            "targetResourceId": 153,
+            "candidateSystemName": "P-8457",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65529.0
+          },
+          {
+            "targetResourceId": 171,
+            "candidateSystemName": "Diphidia II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65529.0
+          }
+        ]
+      },
+      {
+        "resourceId": 182,
+        "recordIndex": 54,
+        "targetChunkIndex": 65,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262286,
+        "signedLongY": 8720384,
+        "rawHighWordX": 4,
+        "rawHighWordY": 133,
+        "rawLowWordX": 142,
+        "rawLowWordY": 4096,
+        "fixedPointX": 4.002167,
+        "fixedPointY": 133.0625,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 196622,
+        "deltaFromLevoY": 393216,
+        "quadrantFromLevo": "north-east",
+        "closestNamedNeighborResourceId": 134,
+        "closestNamedNeighborSystemName": "Hodgson’s World",
+        "closestNamedNeighborDistance": 370390.156781,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 134,
+            "candidateSystemName": "Hodgson’s World",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 370390.156781
+          },
+          {
+            "targetResourceId": 159,
+            "candidateSystemName": "Regulus II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 370390.156781
+          },
+          {
+            "targetResourceId": 162,
+            "candidateSystemName": "Clotho Prime",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 370390.156781
+          },
+          {
+            "targetResourceId": 165,
+            "candidateSystemName": "Hunter",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 370390.156781
+          },
+          {
+            "targetResourceId": 173,
+            "candidateSystemName": "Quake",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 370390.156781
+          }
+        ]
+      },
+      {
+        "resourceId": 187,
+        "recordIndex": 59,
+        "targetChunkIndex": 70,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196751,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 143,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.002182,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131087,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 176,
+        "closestNamedNeighborSystemName": "Rupert",
+        "closestNamedNeighborDistance": 0.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 176,
+            "candidateSystemName": "Rupert",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 178,
+            "candidateSystemName": "Blackthorne",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 184,
+            "candidateSystemName": "Perseus II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 3.0
+          }
+        ]
+      },
+      {
+        "resourceId": 189,
+        "recordIndex": 61,
+        "targetChunkIndex": 72,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196756,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 148,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.002258,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131092,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 174,
+        "closestNamedNeighborSystemName": "Armstrong",
+        "closestNamedNeighborDistance": 2.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 185,
+            "candidateSystemName": "Pegasus",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 188,
+            "candidateSystemName": "New Bavaria",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 193,
+            "candidateSystemName": "Lauralee",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 2.0
+          },
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 3.0
+          }
+        ]
+      },
+      {
+        "resourceId": 190,
+        "recordIndex": 62,
+        "targetChunkIndex": 73,
+        "gapType": "mid-range-gap",
+        "signedLongX": 131221,
+        "signedLongY": 32768,
+        "rawHighWordX": 2,
+        "rawHighWordY": 0,
+        "rawLowWordX": 149,
+        "rawLowWordY": -32768,
+        "fixedPointX": 2.002274,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 65557,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 129,
+        "closestNamedNeighborSystemName": "New Britain",
+        "closestNamedNeighborDistance": 65515.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 129,
+            "candidateSystemName": "New Britain",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65515.0
+          },
+          {
+            "targetResourceId": 149,
+            "candidateSystemName": "New Providence",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65515.0
+          },
+          {
+            "targetResourceId": 130,
+            "candidateSystemName": "Capella",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65516.0
+          },
+          {
+            "targetResourceId": 153,
+            "candidateSystemName": "P-8457",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65516.0
+          },
+          {
+            "targetResourceId": 171,
+            "candidateSystemName": "Diphidia II",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 65516.0
+          }
+        ]
+      },
+      {
+        "resourceId": 192,
+        "recordIndex": 64,
+        "targetChunkIndex": 75,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196760,
+        "signedLongY": 32768,
+        "rawHighWordX": 3,
+        "rawHighWordY": 0,
+        "rawLowWordX": 152,
+        "rawLowWordY": -32768,
+        "fixedPointX": 3.002319,
+        "fixedPointY": 0.5,
+        "normalizedX": null,
+        "normalizedY": null,
+        "deltaFromLevoX": 131096,
+        "deltaFromLevoY": -8294400,
+        "quadrantFromLevo": "south-east",
+        "closestNamedNeighborResourceId": 174,
+        "closestNamedNeighborSystemName": "Armstrong",
+        "closestNamedNeighborDistance": 6.0,
+        "nearestNamedNeighbors": [
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 6.0
+          },
+          {
+            "targetResourceId": 185,
+            "candidateSystemName": "Pegasus",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 6.0
+          },
+          {
+            "targetResourceId": 188,
+            "candidateSystemName": "New Bavaria",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 6.0
+          },
+          {
+            "targetResourceId": 193,
+            "candidateSystemName": "Lauralee",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 6.0
+          },
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "matchType": "heuristic-chunkIndex-alignment",
+            "signedLongDistance": 7.0
+          }
+        ]
+      }
+    ],
+    "promotionBlockers": [
+      "coordinate display units/map scaling remain unpromoted, so spatial positions are decoded-candidate-only and cannot be validated against Classic map pixels",
+      "gap record names remain unjoined; nearby candidate-named systems are proximity hints, not record-to-name joins",
+      "Classic map pixel/click evidence is required before confirming coordinate interpretation or system positions"
+    ],
+    "promotionStatus": "not-promoted; spatial mapping uses non-promoted coordinate candidates and heuristic name candidates, pending exact Classic map calibration and record-to-name evidence",
+    "sourceNote": "This summary maps each of the 21 gap records (no landing-name candidate) into decoded signed-long, fixed-point, and normalized coordinate space, and records the nearest candidate-named neighbors by Euclidean distance. It bridges the gap analysis with the coordinate display scouts to prioritise which gaps sit closest to named systems for future map calibration targeting. No coordinate display or record-to-name claim is promoted."
+  },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",
     "oracleStatus": "coordinate_display_units_map_scaling_pending",
@@ -29202,5 +30428,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis"
+  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping"
 }

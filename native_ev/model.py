@@ -934,6 +934,62 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
     second_entry = xref_list[1]
     if second_entry.get('resourceId') != 129 or second_entry.get('matchType') != 'heuristic-chunkIndex-alignment' or second_entry.get('candidateSystemName') != 'New Britain':
         raise ValueError('sourced EV systems manifest syst record name candidate cross-reference second entry must be heuristic New Britain')
+    gap_analysis = data.get('systRecordNameGapAnalysisSummary', {})
+    if gap_analysis.get('sourceLabel') != 'decoded-resource-backed-syst-record-name-gap-analysis':
+        raise ValueError('sourced EV systems manifest missing syst record name gap analysis source label')
+    if gap_analysis.get('oracleStatus') != 'record_name_gaps_blocked_pending_classic_name_or_runtime_evidence':
+        raise ValueError('sourced EV systems manifest syst record name gap analysis must keep gaps blocked')
+    if gap_analysis.get('totalRecordCount') != 67:
+        raise ValueError('sourced EV systems manifest syst record name gap analysis has unexpected record count')
+    if gap_analysis.get('gapCount') != 21:
+        raise ValueError('sourced EV systems manifest syst record name gap analysis must have 21 gaps')
+    gap_types = gap_analysis.get('gapTypes', {})
+    if gap_types.get('mid-range-gap', 0) + gap_types.get('before-first-candidate', 0) + gap_types.get('after-last-candidate', 0) != 21:
+        raise ValueError('sourced EV systems manifest syst record name gap analysis gap type distribution changed')
+    gaps = gap_analysis.get('gaps', [])
+    if len(gaps) != 21:
+        raise ValueError('sourced EV systems manifest syst record name gap analysis gap entry count changed')
+    first_gap_resources = {gap['resourceId'] for gap in gaps[:1]}
+    if not (135 in first_gap_resources):
+        raise ValueError('sourced EV systems manifest syst record name gap analysis first gap changed')
+    last_gap_resources = {gap['resourceId'] for gap in gaps[-1:]}
+    if not (192 in last_gap_resources):
+        raise ValueError('sourced EV systems manifest syst record name gap analysis last gap changed')
+    if gap_analysis.get('systemNameSeedGapOverlapCount') != 0:
+        raise ValueError('sourced EV systems manifest syst record name gap analysis changed system-name seed overlap')
+    if 'nearby landing-name candidates are proximity hints only' not in str(gap_analysis.get('promotionBlockers', [])):
+        raise ValueError('sourced EV systems manifest syst record name gap analysis missing proximity-hint blocker')
+    if 'not-promoted' not in gap_analysis.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest syst record name gap analysis must not be promoted')
+    coordinate_gap_mapping = data.get('coordinateGapSpatialMappingSummary', {})
+    if coordinate_gap_mapping.get('sourceLabel') != 'decoded-resource-backed-coordinate-gap-spatial-mapping-scout':
+        raise ValueError('sourced EV systems manifest missing coordinate gap spatial mapping source label')
+    if coordinate_gap_mapping.get('oracleStatus') != 'coordinate_display_units_map_scaling_pending':
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping must keep display units pending')
+    if coordinate_gap_mapping.get('recordCount') != 67:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping has unexpected record count')
+    if coordinate_gap_mapping.get('gapCount') != 21:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping must have 21 gap entries')
+    if coordinate_gap_mapping.get('namedNeighborCount') not in [46, 47]:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping has unexpected named neighbor count')
+    gap_entries = coordinate_gap_mapping.get('gapEntries', [])
+    if len(gap_entries) != 21:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping entry count changed')
+    first_gap_entry = gap_entries[0]
+    if first_gap_entry.get('resourceId') != 135:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping first entry resourceId changed')
+    if 'signedLongX' not in first_gap_entry or 'signedLongY' not in first_gap_entry:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping missing signed-long fields')
+    if 'fixedPointX' not in first_gap_entry or 'fixedPointY' not in first_gap_entry:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping missing fixed-point fields')
+    if 'quadrantFromLevo' not in first_gap_entry:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping missing quadrant field')
+    if 'nearestNamedNeighbors' not in first_gap_entry or len(first_gap_entry.get('nearestNamedNeighbors', [])) != 5:
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping must have 5 nearest named neighbors')
+    if 'coordinate display units/map scaling remain unpromoted' not in str(coordinate_gap_mapping.get('promotionBlockers', [])):
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping missing display-units blocker')
+    if 'not-promoted' not in coordinate_gap_mapping.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest coordinate gap spatial mapping must not be promoted')
     named_route_gap = data.get('namedRouteTopologyOracleGapSummary', {})
     if named_route_gap.get('sourceLabel') != 'decoded-resource-backed-named-route-topology-oracle-gap':
         raise ValueError('sourced EV systems manifest missing named route topology oracle gap')
@@ -1537,6 +1593,8 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         or 'start-neighborhood slot-angular-order analysis' not in boundary
         or 'start-neighborhood runtime-calibration priority analysis' not in boundary
         or 'integer-band/fractional residual candidates' not in boundary
+        or 'syst-record-name-gap-analysis' not in boundary
+        or 'coordinate-gap-spatial-mapping' not in boundary
     ):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
     return data

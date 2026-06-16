@@ -1,0 +1,22 @@
+{
+  "event_id": "coordinate-gap-spatial-mapping-20260616T211953Z",
+  "task_id": "t_76a6d7ae",
+  "closeout_class": "push_ready",
+  "summary": "Completed coordinateGapSpatialMappingSummary \u2014 maps 21 gap records into decoded signed-long, fixed-point, and normalized coordinate space with nearest candidate-named neighbors and quadrant positions.",
+  "changed_files": [
+    "tools/extract_ev_system_semantics.py",
+    "native_ev/data/sourced_ev_systems.json",
+    "native_ev/model.py"
+  ],
+  "source_fidelity_label": "decoded-resource-backed-coordinate-gap-spatial-mapping-scout",
+  "promotion_status": "not-promoted; spatial mapping uses non-promoted coordinate candidates and heuristic name candidates",
+  "fidelityBoundary": "Spatial mapping is a scouting input only; coordinate display units/map scaling remain unpromoted; gap record names remain unjoined.",
+  "next_action": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence.",
+  "verification": {
+    "extractor": "passed v64 systems=67",
+    "native_ev_tests": "295 OK",
+    "scenario_scout": "passed (all_actions_valid: passed)",
+    "backlog_check": "BACKLOG DISPATCH INDEX OK",
+    "git_diff_check": "passed"
+  }
+}

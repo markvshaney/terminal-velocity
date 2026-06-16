@@ -19,7 +19,7 @@ DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
 METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-v64'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -1877,6 +1877,140 @@ def _syst_record_name_gap_analysis_summary(names: dict, resource_ids: set[int]) 
         ],
         'promotionStatus': 'not-promoted; gap analysis only pending exact Classic record-to-name or runtime label evidence',
         'sourceNote': 'This analysis records for each of the 21 missing-candidate syst records the nearest landing-name candidates (before and after) with chunk distances and classifies gap types. It also identifies any of the 9 heuristic system-name seeds that appear near gaps. No record-to-name join is promoted from this analysis alone.',
+    }
+
+
+def _coordinate_gap_spatial_mapping_summary(systems: list[dict], names: dict) -> dict:
+    """Map each gap record into decoded coordinate space with nearest candidate-named neighbors.
+
+    For each of the 21 gap records (no landing-name candidate at its target chunkIndex),
+    record its position in signed-long, fixed-point, and normalized coordinate interpretations,
+    plus the nearest candidate-named systems by Euclidean distance.
+    """
+    gap_analysis = _syst_record_name_gap_analysis_summary(names, {system['resourceId'] for system in systems})
+    gaps = gap_analysis.get('gaps', [])
+    system_by_resource_id = {system['resourceId']: system for system in systems}
+
+    # Build set of resource IDs that have candidate names (including Levo as exact)
+    cross_ref = _syst_record_name_candidate_cross_reference_summary(names, {system['resourceId'] for system in systems})
+    named_resource_ids: set[int] = set()
+    for entry in cross_ref.get('crossReference', []):
+        if entry.get('candidateSystemName') and entry.get('matchType') != 'no-candidate':
+            named_resource_ids.add(entry['resourceId'])
+
+    # Build lookup: resourceId -> candidate system name
+    name_by_resource_id: dict[int, str] = {}
+    for entry in cross_ref.get('crossReference', []):
+        name = entry.get('candidateSystemName')
+        if name:
+            name_by_resource_id[entry['resourceId']] = str(name)
+
+    def _coordinate_distance(system_a: dict, system_b: dict) -> float:
+        ax = system_a['semanticFields']['mapCoordinates']['xPos']['signedLongCandidate']
+        ay = system_a['semanticFields']['mapCoordinates']['yPos']['signedLongCandidate']
+        bx = system_b['semanticFields']['mapCoordinates']['xPos']['signedLongCandidate']
+        by = system_b['semanticFields']['mapCoordinates']['yPos']['signedLongCandidate']
+        return ((ax - bx) ** 2 + (ay - by) ** 2) ** 0.5
+
+    gap_entries: list[dict] = []
+    for gap in gaps:
+        resource_id = gap['resourceId']
+        system = system_by_resource_id.get(resource_id)
+        if system is None:
+            continue
+        coords = system['semanticFields']['mapCoordinates']
+        x_signed = coords['xPos']['signedLongCandidate']
+        y_signed = coords['yPos']['signedLongCandidate']
+        x_high = coords['xPos']['rawWords'][0]
+        y_high = coords['yPos']['rawWords'][0]
+        x_low = coords['xPos']['rawWords'][1]
+        y_low = coords['yPos']['rawWords'][1]
+
+        # Fixed-point interpretation (16.16)
+        fixed_point_divisor = 65536
+        x_fixed = x_signed / fixed_point_divisor
+        y_fixed = y_signed / fixed_point_divisor
+
+        # Normalized interpretation
+        normalized = _coordinate_display_normalized_summary(systems)
+        x_normalized = None
+        y_normalized = None
+        for entry in normalized.get('normalizedSystems', []):
+            if entry.get('resourceId') == resource_id:
+                x_normalized = entry['xPos']['minNormalizedSignedLongCandidate']
+                y_normalized = entry['yPos']['minNormalizedSignedLongCandidate']
+                break
+
+        # Find nearest N candidate-named systems by Euclidean distance
+        distances_to_named: list[dict] = []
+        for named_id in sorted(named_resource_ids):
+            named_system = system_by_resource_id.get(named_id)
+            if named_system is None:
+                continue
+            dist = _coordinate_distance(system, named_system)
+            distances_to_named.append({
+                'targetResourceId': named_id,
+                'candidateSystemName': name_by_resource_id.get(named_id, ''),
+                'matchType': 'exact' if named_id == 128 else 'heuristic-chunkIndex-alignment',
+                'signedLongDistance': round(dist, 6),
+            })
+        distances_to_named.sort(key=lambda entry: entry['signedLongDistance'])
+        nearest_named = distances_to_named[:5]
+
+        # Quadrant relative to Levo (origin 0,0)
+        levo_system = system_by_resource_id.get(128)
+        if levo_system:
+            levo_x = levo_system['semanticFields']['mapCoordinates']['xPos']['signedLongCandidate']
+            levo_y = levo_system['semanticFields']['mapCoordinates']['yPos']['signedLongCandidate']
+            dx = x_signed - levo_x
+            dy = y_signed - levo_y
+            quadrant = _display_quadrant(dx, dy)
+        else:
+            dx = dy = None
+            quadrant = 'unknown'
+
+        gap_entry: dict = {
+            'resourceId': resource_id,
+            'recordIndex': gap.get('recordIndex'),
+            'targetChunkIndex': gap.get('targetChunkIndex'),
+            'gapType': gap.get('gapType'),
+            'signedLongX': x_signed,
+            'signedLongY': y_signed,
+            'rawHighWordX': x_high,
+            'rawHighWordY': y_high,
+            'rawLowWordX': x_low,
+            'rawLowWordY': y_low,
+            'fixedPointX': round(x_fixed, 6),
+            'fixedPointY': round(y_fixed, 6),
+            'normalizedX': x_normalized,
+            'normalizedY': y_normalized,
+            'deltaFromLevoX': dx,
+            'deltaFromLevoY': dy,
+            'quadrantFromLevo': quadrant,
+            'closestNamedNeighborResourceId': nearest_named[0]['targetResourceId'] if nearest_named else None,
+            'closestNamedNeighborSystemName': nearest_named[0]['candidateSystemName'] if nearest_named else None,
+            'closestNamedNeighborDistance': nearest_named[0]['signedLongDistance'] if nearest_named else None,
+            'nearestNamedNeighbors': nearest_named,
+        }
+        gap_entries.append(gap_entry)
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-coordinate-gap-spatial-mapping-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'recordCount': len(systems),
+        'gapCount': len(gap_entries),
+        'gapResourceIds': [entry['resourceId'] for entry in gap_entries],
+        'namedNeighborResourceIds': sorted(named_resource_ids),
+        'namedNeighborCount': len(named_resource_ids),
+        'gapEntries': gap_entries,
+        'promotionBlockers': [
+            'coordinate display units/map scaling remain unpromoted, so spatial positions are decoded-candidate-only and cannot be validated against Classic map pixels',
+            'gap record names remain unjoined; nearby candidate-named systems are proximity hints, not record-to-name joins',
+            'Classic map pixel/click evidence is required before confirming coordinate interpretation or system positions',
+        ],
+        'promotionStatus': 'not-promoted; spatial mapping uses non-promoted coordinate candidates and heuristic name candidates, pending exact Classic map calibration and record-to-name evidence',
+        'sourceNote': 'This summary maps each of the 21 gap records (no landing-name candidate) into decoded signed-long, fixed-point, and normalized coordinate space, and records the nearest candidate-named neighbors by Euclidean distance. It bridges the gap analysis with the coordinate display scouts to prioritise which gaps sit closest to named systems for future map calibration targeting. No coordinate display or record-to-name claim is promoted.',
     }
 
 
@@ -4578,6 +4712,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'landingNameCandidateReferenceSummary': _landing_name_candidate_reference_summary(names),
         'systRecordNameCandidateCrossReferenceSummary': _syst_record_name_candidate_cross_reference_summary(names, resource_ids),
         'systRecordNameGapAnalysisSummary': _syst_record_name_gap_analysis_summary(names, resource_ids),
+        'coordinateGapSpatialMappingSummary': _coordinate_gap_spatial_mapping_summary(systems, names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

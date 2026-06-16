@@ -85,7 +85,7 @@
       }
     },
     "live_state_class_at_reconcile_time": "push_ready",
-    "latest_event_id": "integration-closeout-syst-record-name-candidate-cross-reference-2026-06-16T21:08:40Z"
+    "latest_event_id": "coordinate-gap-spatial-mapping-20260616T211953Z"
   },
   "evidence_pointers": {
     "basilisk_speed_qualification": "docs/research/basilisk-speed-qualification.json",
@@ -103,63 +103,50 @@
     ],
     "event_parse_errors": []
   },
-  "lastUpdated": "2026-06-16T21:08:40Z",
+  "lastUpdated": "2026-06-16T21:19:53Z",
   "lastWorkerCloseout": {
     "changed_files": [
       "tools/extract_ev_system_semantics.py",
       "native_ev/data/sourced_ev_systems.json",
-      "native_ev/model.py",
-      "native_ev/scenario_eval.py",
-      "native_ev/tests/test_model.py",
-      "native_ev/tests/test_scenario_eval.py",
-      ".hermes/long-running/tv-spec-implementation/events.jsonl",
-      ".hermes/long-running/tv-spec-implementation/task-ledger.json"
+      "native_ev/model.py"
     ],
     "closeout_class": "push_ready",
-    "next_action": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins for remaining 66 syst records, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence.",
-    "packet_path": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_3ca6685f.json",
-    "summary": "Integration closeout: confirmed pushed commit 627a9e7 (systRecordNameCandidateCrossReferenceSummary) as already on origin/main. Verified extractor v63 (systems=67), 274 native_ev tests OK, scenario scout passed, backlog preflight OK. HEAD==origin/main==627a9e7.",
-    "task_id": "t_3ca6685f",
-    "timestamp": "2026-06-16T21:08:40Z",
+    "next_action": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence.",
+    "packet_path": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_76a6d7ae.json",
+    "summary": "Completed coordinateGapSpatialMappingSummary \u2014 maps 21 gap records into decoded signed-long, fixed-point, and normalized coordinate space with nearest candidate-named neighbors and quadrant positions.",
+    "task_id": "t_76a6d7ae",
+    "timestamp": "2026-06-16T21:19:53Z",
     "verification_commands": [
       "extractor_regenerate",
       "native_ev_tests",
       "scenario_scout",
       "backlog_preflight",
       "json_validity",
-      "git_diff",
-      "head_vs_origin"
+      "git_diff"
     ]
   },
   "latest_worker_handoff": {
     "changed_files": [
       "tools/extract_ev_system_semantics.py",
       "native_ev/data/sourced_ev_systems.json",
-      "native_ev/model.py",
-      "native_ev/scenario_eval.py",
-      "native_ev/tests/test_model.py",
-      "native_ev/tests/test_scenario_eval.py",
-      ".hermes/long-running/tv-spec-implementation/events.jsonl",
-      ".hermes/long-running/tv-spec-implementation/task-ledger.json"
+      "native_ev/model.py"
     ],
-    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_3ca6685f.json",
-    "event_id": "integration-closeout-syst-record-name-candidate-cross-reference-2026-06-16T21:08:40Z",
+    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_76a6d7ae.json",
+    "event_id": "coordinate-gap-spatial-mapping-20260616T211953Z",
     "matched_dirty_paths": [],
-    "next_action": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins for remaining 66 syst records, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence.",
-    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
-    "promotion_status": "not-promoted; heuristic chunkIndex cross-reference only, pending exact Classic record-to-name evidence",
-    "source_fidelity_label": "decoded-resource-backed-syst-record-name-candidate-cross-reference",
-    "summary": "Integration closeout: confirmed pushed commit 627a9e7 (systRecordNameCandidateCrossReferenceSummary) as already on origin/main. Verified extractor v63 (systems=67), 274 native_ev tests OK, scenario scout passed, backlog preflight OK. HEAD==origin/main==627a9e7.",
-    "task_id": "t_3ca6685f",
-    "timestamp": "2026-06-16T21:08:40Z",
+    "next_action": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence.",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "promotion_status": "not-promoted; spatial mapping uses non-promoted coordinate candidates and heuristic name candidates",
+    "source_fidelity_label": "decoded-resource-backed-coordinate-gap-spatial-mapping-scout",
+    "summary": "Completed coordinateGapSpatialMappingSummary \u2014 maps 21 gap records into decoded signed-long, fixed-point, and normalized coordinate space with nearest candidate-named neighbors and quadrant positions.",
+    "task_id": "t_76a6d7ae",
+    "timestamp": "2026-06-16T21:19:53Z",
     "verification": {
-      "extractor": "passed v63, systems=67",
-      "native_ev_tests": "274 OK",
-      "scenario_scout": "passed",
-      "backlog_preflight": "BACKLOG DISPATCH INDEX OK",
-      "json_valid": "passed",
-      "git_diff": "clean working tree",
-      "head_vs_origin": "HEAD==origin/main==627a9e7"
+      "extractor": "passed v64 systems=67",
+      "native_ev_tests": "295 OK",
+      "scenario_scout": "passed (all_actions_valid: passed)",
+      "backlog_check": "BACKLOG DISPATCH INDEX OK",
+      "git_diff_check": "passed"
     }
   },
   "policy": {
