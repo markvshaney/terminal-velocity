@@ -17,9 +17,9 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-v63'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-v64'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
-PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement'
+PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
     'sourceLabel': 'resource-bible-backed-topology-constants',
     'oracleStatus': 'coordinate_display_units_map_scaling_pending',
@@ -1761,6 +1761,122 @@ def _syst_record_name_candidate_cross_reference_summary(names: dict, resource_id
         ],
         'promotionStatus': 'not-promoted; heuristic chunkIndex cross-reference only, pending exact Classic record-to-name evidence',
         'sourceNote': 'This cross-reference aligns the 67 syst records (resource IDs 128-194) to the 72 landing-name candidates via chunkIndex ordering, anchored on the exact Levo mapping at chunkIndex 11. Every candidate name assignment beyond Levo is heuristic and must not be treated as a Classic system name until validated by exact record-to-name joins or runtime map-label evidence.',
+    }
+
+
+def _syst_record_name_gap_analysis_summary(names: dict, resource_ids: set[int]) -> dict:
+    """Analyze the 21 missing-candidate gaps from the chunkIndex cross-reference.
+
+    For each syst record with no-candidate at its target chunkIndex, record the nearest
+    landing-name candidates before and after (with chunk distances) and classify gap types.
+    Also cross-reference the 9 system-name seeds for potential gap-filling candidates.
+    """
+    landing_seeds = sorted(names.get('landingNames', []), key=lambda entry: entry.get('chunkIndex', 0))
+    levo_chunk_index = 11
+    levo_resource_id = 128
+
+    name_by_chunk = {}
+    for seed in landing_seeds:
+        ci = seed.get('chunkIndex')
+        if ci is not None:
+            name_by_chunk[ci] = seed
+
+    all_chunks = sorted(name_by_chunk.keys())
+    system_seeds = names.get('systemNames', [])
+    system_seed_names = set(
+        str(s.get('name', ''))
+        for s in system_seeds
+        if s.get('name') and isinstance(s.get('name'), str)
+    )
+
+    gaps: list[dict] = []
+    gap_types: dict[str, int] = {}
+    for resource_id in sorted(resource_ids):
+        offset_from_levo = resource_id - levo_resource_id
+        target_chunk = levo_chunk_index + offset_from_levo
+        candidate = name_by_chunk.get(target_chunk)
+        if candidate is not None:
+            continue
+
+        # Find nearest landing-name candidates before and after
+        before_candidates: list[dict] = []
+        after_candidates: list[dict] = []
+        for ci in all_chunks:
+            seed = name_by_chunk[ci]
+            if ci < target_chunk:
+                before_candidates.append({
+                    'name': str(seed.get('name', '')),
+                    'chunkIndex': ci,
+                    'chunkDistance': target_chunk - ci,
+                    'byteOffset': int(seed.get('byteOffset', -1)),
+                })
+            elif ci > target_chunk:
+                after_candidates.append({
+                    'name': str(seed.get('name', '')),
+                    'chunkIndex': ci,
+                    'chunkDistance': ci - target_chunk,
+                    'byteOffset': int(seed.get('byteOffset', -1)),
+                })
+
+        # Closest before/after
+        closest_before = before_candidates[-1] if before_candidates else None
+        closest_after = after_candidates[0] if after_candidates else None
+
+        # Gap type classification
+        if closest_before is None and closest_after is not None:
+            gap_type = 'before-first-candidate'
+        elif closest_after is None and closest_before is not None:
+            gap_type = 'after-last-candidate'
+        elif closest_before is not None and closest_after is not None:
+            gap_type = 'mid-range-gap'
+        else:
+            gap_type = 'isolated-no-neighbors'
+
+        gap_types[gap_type] = gap_types.get(gap_type, 0) + 1
+
+        # Combined span for mid-range gaps
+        combined_span = None
+        if closest_before is not None and closest_after is not None:
+            combined_span = closest_before['chunkDistance'] + closest_after['chunkDistance']
+
+        gap_entry: dict = {
+            'resourceId': resource_id,
+            'recordIndex': resource_id - levo_resource_id,
+            'targetChunkIndex': target_chunk,
+            'gapType': gap_type,
+            'closestBeforeCandidate': closest_before,
+            'closestAfterCandidate': closest_after,
+            'combinedChunkSpan': combined_span,
+        }
+        gaps.append(gap_entry)
+
+    # Count how many system-name seeds overlap with nearby landing names
+    nearby_names: set[str] = set()
+    for gap in gaps:
+        if gap['closestBeforeCandidate']:
+            nearby_names.add(gap['closestBeforeCandidate']['name'])
+        if gap['closestAfterCandidate']:
+            nearby_names.add(gap['closestAfterCandidate']['name'])
+    seed_overlap = system_seed_names & nearby_names
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-record-name-gap-analysis',
+        'oracleStatus': 'record_name_gaps_blocked_pending_classic_name_or_runtime_evidence',
+        'totalRecordCount': len(resource_ids),
+        'gapCount': len(gaps),
+        'gapTypes': gap_types,
+        'gaps': gaps,
+        'systemNameSeedCount': len(system_seed_names),
+        'systemNameSeedsNearGaps': sorted(seed_overlap),
+        'systemNameSeedGapOverlapCount': len(seed_overlap),
+        'promotionBlockers': [
+            'all gap records have no landing-name candidate at their expected chunkIndex',
+            'nearby landing-name candidates are proximity hints only; they do not constitute record-to-name joins',
+            'system-name seeds near gaps may suggest candidate names but do not assign them to specific syst records',
+            'at least 65 records remain unjoined without exact Classic source-level confirmation',
+        ],
+        'promotionStatus': 'not-promoted; gap analysis only pending exact Classic record-to-name or runtime label evidence',
+        'sourceNote': 'This analysis records for each of the 21 missing-candidate syst records the nearest landing-name candidates (before and after) with chunk distances and classifies gap types. It also identifies any of the 9 heuristic system-name seeds that appear near gaps. No record-to-name join is promoted from this analysis alone.',
     }
 
 
@@ -4461,6 +4577,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systemNameLandingProximitySummary': _system_name_landing_proximity_summary(names),
         'landingNameCandidateReferenceSummary': _landing_name_candidate_reference_summary(names),
         'systRecordNameCandidateCrossReferenceSummary': _syst_record_name_candidate_cross_reference_summary(names, resource_ids),
+        'systRecordNameGapAnalysisSummary': _syst_record_name_gap_analysis_summary(names, resource_ids),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

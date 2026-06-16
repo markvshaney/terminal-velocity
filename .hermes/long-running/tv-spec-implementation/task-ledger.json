@@ -1,20 +1,8 @@
 {
   "diagnostics": {
     "active_gate_at_reconcile_time": {
-      "dirty_paths": [
-        "tools/extract_ev_system_semantics.py",
-        "native_ev/data/sourced_ev_systems.json",
-        "native_ev/model.py",
-        "native_ev/scenario_eval.py",
-        "native_ev/tests/test_model.py",
-        "native_ev/tests/test_scenario_eval.py",
-        "docs/prompts/tv-spec-implementation-long-task-prompt.md",
-        "docs/research/long-running-task-wrapper-spec.md",
-        "docs/research/tv-spec.md",
-        "tools/tv_runner_autostart.py",
-        "native_ev/tests/test_tv_runner_autostart.py"
-      ],
-      "type": "dirty_handoff_pending"
+      "dirty_paths": [],
+      "type": "none"
     },
     "generated_from": {
       "closeout_packets": [
@@ -66,33 +54,11 @@
       "events_jsonl": ".hermes/long-running/tv-spec-implementation/events.jsonl",
       "git": {
         "all_dirty_paths": [
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_5d4527f5.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_6d66ab8d.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_76f94cf2.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_7da45d64.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_945c8b13.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_afa446e3.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_b170a99a.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_e9c52627.json",
-          ".hermes/long-running/tv-spec-implementation/closeout-packet-t_f7afcf12.json",
           ".hermes/long-running/tv-spec-implementation/events.jsonl",
-          ".hermes/long-running/tv-spec-implementation/task-ledger.json",
-          "native_ev/data/sourced_ev_systems.json",
-          "native_ev/model.py",
-          "native_ev/scenario_eval.py",
-          "native_ev/tests/test_model.py",
-          "native_ev/tests/test_scenario_eval.py",
-          "tools/extract_ev_system_semantics.py"
+          ".hermes/long-running/tv-spec-implementation/task-ledger.json"
         ],
-        "dirty_paths": [
-          "tools/extract_ev_system_semantics.py",
-          "native_ev/data/sourced_ev_systems.json",
-          "native_ev/model.py",
-          "native_ev/scenario_eval.py",
-          "native_ev/tests/test_model.py",
-          "native_ev/tests/test_scenario_eval.py"
-        ],
-        "head": "d9114eab088093332c9c83e45013a8c37f17165b",
+        "dirty_paths": [],
+        "head": "627a9e7b53500d6744fc842d147cbac506fc66e1",
         "head_error": null,
         "ignored_control_projection_paths": [
           ".hermes/long-running/tv-spec-implementation/closeout-packet-t_5d4527f5.json",
@@ -107,7 +73,7 @@
           ".hermes/long-running/tv-spec-implementation/events.jsonl",
           ".hermes/long-running/tv-spec-implementation/task-ledger.json"
         ],
-        "repo_state": "dirty",
+        "repo_state": "clean",
         "status_error": null
       },
       "latest_event_id": "service-store-evidence-packet-promotion-quarantine-20260616T005202Z",
@@ -118,7 +84,8 @@
         "warning_types": []
       }
     },
-    "live_state_class_at_reconcile_time": "push_ready_rollback_readiness_and_worker_handoff_policy"
+    "live_state_class_at_reconcile_time": "push_ready",
+    "latest_event_id": "integration-closeout-syst-record-name-candidate-cross-reference-2026-06-16T21:08:40Z"
   },
   "evidence_pointers": {
     "basilisk_speed_qualification": "docs/research/basilisk-speed-qualification.json",
@@ -136,7 +103,7 @@
     ],
     "event_parse_errors": []
   },
-  "lastUpdated": "2026-06-16T01:55:37Z",
+  "lastUpdated": "2026-06-16T21:08:40Z",
   "lastWorkerCloseout": {
     "changed_files": [
       "tools/extract_ev_system_semantics.py",
@@ -145,25 +112,23 @@
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_model.py",
       "native_ev/tests/test_scenario_eval.py",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_eef5824d.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json"
     ],
     "closeout_class": "push_ready",
-    "next_action": "Integration owner should inspect and checkpoint/push this verified coordinate-display runtime-capture validation-matrix slice, then seed the successor from live repo state. Next evidence work remains real Classic map calibration packets, exact record-to-name joins, route-label captures, or source-level map projection/display constants before any display/topology/runtime promotion.",
-    "packet_path": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_eef5824d.json",
-    "summary": "Added coordinateDisplayRuntimeCaptureValidationMatrixSummary as a non-promoting acceptance/rejection matrix for future Classic coordinate-display map calibration capture packets, wired through extractor/generated manifest/model validation/scenario readiness/checks/tests.",
-    "task_id": "t_eef5824d",
-    "timestamp": "2026-06-16T01:55:37Z",
+    "next_action": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins for remaining 66 syst records, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence.",
+    "packet_path": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_3ca6685f.json",
+    "summary": "Integration closeout: confirmed pushed commit 627a9e7 (systRecordNameCandidateCrossReferenceSummary) as already on origin/main. Verified extractor v63 (systems=67), 274 native_ev tests OK, scenario scout passed, backlog preflight OK. HEAD==origin/main==627a9e7.",
+    "task_id": "t_3ca6685f",
+    "timestamp": "2026-06-16T21:08:40Z",
     "verification_commands": [
-      "runner_preflight_initial",
-      "regenerated_sourced_systems_manifest",
+      "extractor_regenerate",
+      "native_ev_tests",
+      "scenario_scout",
+      "backlog_preflight",
       "json_validity",
-      "focused_model_and_scenario_tests",
-      "scenario_static_topology_source_readiness_scout",
-      "focused_native_ev_unittest",
-      "runner_preflight_closeout",
-      "diff_check"
+      "git_diff",
+      "head_vs_origin"
     ]
   },
   "latest_worker_handoff": {
@@ -174,60 +139,27 @@
       "native_ev/scenario_eval.py",
       "native_ev/tests/test_model.py",
       "native_ev/tests/test_scenario_eval.py",
-      ".hermes/long-running/tv-spec-implementation/closeout-packet-t_eef5824d.json",
       ".hermes/long-running/tv-spec-implementation/events.jsonl",
       ".hermes/long-running/tv-spec-implementation/task-ledger.json"
     ],
-    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_eef5824d.json",
-    "event_id": "coordinate-display-runtime-capture-validation-matrix-20260616T015537Z",
-    "matched_dirty_paths": [
-      "tools/extract_ev_system_semantics.py",
-      "native_ev/data/sourced_ev_systems.json",
-      "native_ev/model.py",
-      "native_ev/scenario_eval.py",
-      "native_ev/tests/test_model.py",
-      "native_ev/tests/test_scenario_eval.py"
-    ],
-    "next_action": "Integration owner should inspect and checkpoint/push this verified coordinate-display runtime-capture validation-matrix slice, then seed the successor from live repo state. Next evidence work remains real Classic map calibration packets, exact record-to-name joins, route-label captures, or source-level map projection/display constants before any display/topology/runtime promotion.",
-    "oracleStatus": "coordinate_display_capture_validation_blocked_pending_real_map_packets",
-    "promotion_status": "not-promoted; validation matrix only pending real Classic map calibration packets",
-    "source_fidelity_label": "original-runtime-coordinate-display-capture-validation-matrix",
-    "summary": "Added coordinateDisplayRuntimeCaptureValidationMatrixSummary as a non-promoting acceptance/rejection matrix for future Classic coordinate-display map calibration capture packets, wired through extractor/generated manifest/model validation/scenario readiness/checks/tests.",
-    "task_id": "t_eef5824d",
-    "timestamp": "2026-06-16T01:55:37Z",
+    "closeout_packet": ".hermes/long-running/tv-spec-implementation/closeout-packet-t_3ca6685f.json",
+    "event_id": "integration-closeout-syst-record-name-candidate-cross-reference-2026-06-16T21:08:40Z",
+    "matched_dirty_paths": [],
+    "next_action": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins for remaining 66 syst records, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence.",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "promotion_status": "not-promoted; heuristic chunkIndex cross-reference only, pending exact Classic record-to-name evidence",
+    "source_fidelity_label": "decoded-resource-backed-syst-record-name-candidate-cross-reference",
+    "summary": "Integration closeout: confirmed pushed commit 627a9e7 (systRecordNameCandidateCrossReferenceSummary) as already on origin/main. Verified extractor v63 (systems=67), 274 native_ev tests OK, scenario scout passed, backlog preflight OK. HEAD==origin/main==627a9e7.",
+    "task_id": "t_3ca6685f",
+    "timestamp": "2026-06-16T21:08:40Z",
     "verification": {
-      "diff_check": {
-        "command": "git diff --check",
-        "result": "passed"
-      },
-      "focused_model_and_scenario_tests": {
-        "command": "python3 -m unittest native_ev.tests.test_model.NativeEvModelTests.test_sourced_ev_systems_manifest_promotes_static_system_ids_and_name_seeds native_ev.tests.test_scenario_eval.ScenarioEvalHarnessTests.test_static_topology_source_readiness_scout_records_lane_a_promotion_boundary -v",
-        "result": "passed; 2 focused tests OK"
-      },
-      "focused_native_ev_unittest": {
-        "command": "python3 -m unittest native_ev.tests.test_model native_ev.tests.test_scenario_eval",
-        "result": "passed; 274 tests OK"
-      },
-      "json_validity": {
-        "command": "python3 -m json.tool native_ev/data/sourced_ev_systems.json >/tmp/sourced_ev_systems.validated.json",
-        "result": "passed; generated sourced EV systems manifest is valid JSON"
-      },
-      "regenerated_sourced_systems_manifest": {
-        "command": "python3 tools/extract_ev_system_semantics.py --out native_ev/data/sourced_ev_systems.json",
-        "result": "passed; systems=67; method includes coordinate-display-runtime-capture-validation-matrix"
-      },
-      "runner_preflight_closeout": {
-        "command": "python3 tools/backlog_dispatch_index.py runner-preflight",
-        "result": "passed; BACKLOG DISPATCH INDEX OK"
-      },
-      "runner_preflight_initial": {
-        "command": "python3 tools/backlog_dispatch_index.py runner-preflight && git fetch origin && git status --short --branch && git rev-parse HEAD && git rev-parse origin/main",
-        "result": "passed before edits; BACKLOG DISPATCH INDEX OK; main tracked origin/main at 0f236d131540d5ddfaea916792aaa0fde9a02a36"
-      },
-      "scenario_static_topology_source_readiness_scout": {
-        "command": "python3 /tmp/tv_static_scenario_summary.py",
-        "result": "passed; failed_checks=[]; recorded_coordinate_display_runtime_capture_validation_matrix_summary=passed; check_count=79"
-      }
+      "extractor": "passed v63, systems=67",
+      "native_ev_tests": "274 OK",
+      "scenario_scout": "passed",
+      "backlog_preflight": "BACKLOG DISPATCH INDEX OK",
+      "json_valid": "passed",
+      "git_diff": "clean working tree",
+      "head_vs_origin": "HEAD==origin/main==627a9e7"
     }
   },
   "policy": {
@@ -240,11 +172,11 @@
   },
   "resume_hint": {
     "not_authoritative": true,
-    "text": "Integration owner should inspect and checkpoint/push this verified coordinate-display runtime-capture validation-matrix slice, then seed the successor from live repo state. Next evidence work remains real Classic map calibration packets, exact record-to-name joins, route-label captures, or source-level map projection/display constants before any display/topology/runtime promotion."
+    "text": "Continue from live repo state. Next evidence work remains exact Classic map calibration packets, exact record-to-name joins for remaining 66 syst records, route-label captures, source-level map projection/display constants, or exact Classic syst TMPL/ResEdit/source template-offset evidence."
   },
   "runtime_truth_rule": "Live runner state is derived from Kanban/topology/git/processes, not this ledger.",
   "schema_version": 3,
   "scope": "Terminal Velocity long-running implementation provenance. This ledger is not a live runner status source.",
   "task_id": "tv-spec-implementation",
-  "updated_at": "2026-06-16T01:55:37Z"
+  "updated_at": "2026-06-16T21:08:40Z"
 }
