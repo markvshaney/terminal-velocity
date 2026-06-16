@@ -122,6 +122,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
                 'disposable_combat_placeholder',
                 'runtime_topology_connectivity_check',
                 'runtime_coordinate_sanity_check',
+                'runtime_universe_body_matrix_check',
             ],
         )
 

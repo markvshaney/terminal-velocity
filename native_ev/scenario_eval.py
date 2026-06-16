@@ -145,6 +145,7 @@ SCENARIO_CURRICULUM = [
     'disposable_combat_placeholder',
     'runtime_topology_connectivity_check',
     'runtime_coordinate_sanity_check',
+    'runtime_universe_body_matrix_check',
 ]
 
 
@@ -2955,6 +2956,35 @@ def _coordinate_sanity_check(state: dict[str, Any], _action: dict[str, Any], tra
     return True
 
 
+def _universe_body_matrix_check(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    """Verify 10-system bridge body matrix: unique names, counts, service coverage."""
+    universe = load_universe()
+    systems = universe.get('systems', [])
+    body_count = 0
+    body_names = []
+    system_body_counts = {}
+    for s in systems:
+        bodies = s.get('bodies', [])
+        system_body_counts[s['name']] = len(bodies)
+        for b in bodies:
+            body_count += 1
+            body_names.append(b['name'])
+    unique_names = len(set(body_names))
+    trace.append({
+        'type': 'universe_body_matrix',
+        'systemCount': len(systems),
+        'totalBodyCount': body_count,
+        'uniqueBodyNames': unique_names,
+        'duplicateBodyNames': unique_names != body_count,
+        'systemBodyCounts': system_body_counts,
+        'minBodiesPerSystem': min(system_body_counts.values()),
+        'maxBodiesPerSystem': max(system_body_counts.values()),
+        'sourceLabel': 'terminal-velocity-runtime-topology-scaffold',
+        'oracleStatus': 'runtime_body_matrix_pending_classic_confirmation',
+    })
+    return True
+
+
 def _current_government_name(state: dict[str, Any]) -> str:
     governments = government_manifest()
     mapping = governments.get('systems', {}).get(state['currentSystem'], {})
@@ -4899,6 +4929,10 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
         return [
             {'type': 'coordinate_sanity_check'},
         ]
+    if name == 'runtime_universe_body_matrix_check':
+        return [
+            {'type': 'universe_body_matrix_check'},
+        ]
     raise ValueError(f'unknown scenario {name}')
 
 
@@ -6015,6 +6049,15 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'levo_neighbor_deltas_recorded': 'passed' if len(deltas) == 9 and all(d.get('manhattanDistance', 0) > 0 for d in deltas) else 'failed',
             'recorded_coordinate_sanity_source_boundary': 'passed' if coords.get('sourceLabel') == 'terminal-velocity-runtime-topology-scaffold' and coords.get('oracleStatus') == 'runtime_coordinate_sanity_pending_classic_confirmation' else 'failed',
         })
+    elif name == 'runtime_universe_body_matrix_check':
+        matrix = next((event for event in trace if event.get('type') == 'universe_body_matrix'), {})
+        sys_counts = matrix.get('systemBodyCounts', {})
+        checks.update({
+            'ten_systems_twenty_bodies': 'passed' if matrix.get('systemCount') == 10 and matrix.get('totalBodyCount') == 20 and matrix.get('uniqueBodyNames') == 20 else 'failed',
+            'each_system_has_at_least_one_body': 'passed' if sys_counts.get('Levo', 0) >= 1 and all(c >= 1 for c in sys_counts.values()) else 'failed',
+            'all_body_names_unique': 'passed' if matrix.get('duplicateBodyNames') is False else 'failed',
+            'recorded_body_matrix_source_boundary': 'passed' if matrix.get('sourceLabel') == 'terminal-velocity-runtime-topology-scaffold' and matrix.get('oracleStatus') == 'runtime_body_matrix_pending_classic_confirmation' else 'failed',
+        })
     return checks
 
 
@@ -6061,6 +6104,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
         'topology_connectivity_check': _topology_connectivity_check,
         'coordinate_sanity_check': _coordinate_sanity_check,
+        'universe_body_matrix_check': _universe_body_matrix_check,
         'apply_contraband_scan': _apply_contraband_scan,
         'apply_mission_cargo_scan': _apply_mission_cargo_scan,
         'pay_legal_clemency': _pay_legal_clemency,

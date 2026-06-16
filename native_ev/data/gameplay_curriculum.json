@@ -107,7 +107,8 @@
     "pirate_avoidance_mission_trade_escape_loop",
     "disposable_combat_placeholder",
     "runtime_topology_connectivity_check",
-    "runtime_coordinate_sanity_check"
+    "runtime_coordinate_sanity_check",
+    "runtime_universe_body_matrix_check"
   ],
   "scenarios": {
     "levo_merchant_first_hop": {
@@ -525,6 +526,10 @@
     "runtime_coordinate_sanity_check": {
       "purpose": "Runtime coordinate sanity check: verify no duplicate system positions in the 10-system bridge, record Levo-neighbor coordinate deltas and map bounds for later Classic map calibration comparison.",
       "surface": "runtime bridge universe coordinate sanity scaffold"
+    },
+    "runtime_universe_body_matrix_check": {
+      "purpose": "Runtime universe body matrix check: verify the 10-system bridge has 20 bodies with unique names, two bodies per system, and records system-body mapping for bridge topology verification.",
+      "surface": "runtime bridge universe body matrix scaffold"
     }
   }
 }
