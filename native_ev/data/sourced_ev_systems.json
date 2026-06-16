@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-v64",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-v65",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -4124,6 +4124,706 @@
     ],
     "promotionStatus": "not-promoted; spatial mapping uses non-promoted coordinate candidates and heuristic name candidates, pending exact Classic map calibration and record-to-name evidence",
     "sourceNote": "This summary maps each of the 21 gap records (no landing-name candidate) into decoded signed-long, fixed-point, and normalized coordinate space, and records the nearest candidate-named neighbors by Euclidean distance. It bridges the gap analysis with the coordinate display scouts to prioritise which gaps sit closest to named systems for future map calibration targeting. No coordinate display or record-to-name claim is promoted."
+  },
+  "coordinateGapIdentityResolutionSummary": {
+    "sourceLabel": "decoded-resource-backed-coordinate-gap-identity-resolution-scout",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field"
+    ],
+    "recordCount": 67,
+    "gapCount": 21,
+    "gapResourceIds": [
+      135,
+      137,
+      143,
+      144,
+      148,
+      150,
+      157,
+      161,
+      164,
+      167,
+      169,
+      172,
+      175,
+      177,
+      179,
+      181,
+      182,
+      187,
+      189,
+      190,
+      192
+    ],
+    "coordinateSpanX": 262015,
+    "coordinateSpanY": 8720383,
+    "coordinateSpanMax": 8720383,
+    "nearThreshold": 87203.8,
+    "coLocatedCount": 16,
+    "nearCount": 4,
+    "separatedCount": 1,
+    "coLocatedResourceIds": [
+      135,
+      137,
+      143,
+      144,
+      148,
+      150,
+      157,
+      161,
+      164,
+      167,
+      169,
+      172,
+      175,
+      177,
+      179,
+      187
+    ],
+    "nearResourceIds": [
+      181,
+      189,
+      190,
+      192
+    ],
+    "separatedResourceIds": [
+      182
+    ],
+    "gapResolutions": [
+      {
+        "resourceId": 135,
+        "recordIndex": 7,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196739,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 136,
+        "closestNamedNeighborSystemName": "Master’s Planet",
+        "closestNamedNeighborDistance": 1.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Master’s Planet (resource 136) at signed-long distance 1.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          136
+        ],
+        "coLocatedWithCount": 1,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 136,
+            "candidateSystemName": "Master’s Planet",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 137,
+        "recordIndex": 9,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262272,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 138,
+        "closestNamedNeighborSystemName": "Sirius III",
+        "closestNamedNeighborDistance": 1.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Sirius III (resource 138) at signed-long distance 1.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          138,
+          158
+        ],
+        "coLocatedWithCount": 2,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 138,
+            "candidateSystemName": "Sirius III",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 158,
+            "candidateSystemName": "Alkaidion",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 143,
+        "recordIndex": 15,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196736,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 129,
+        "closestNamedNeighborSystemName": "New Britain",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor New Britain (resource 129) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          129,
+          149,
+          130,
+          153,
+          171
+        ],
+        "coLocatedWithCount": 5,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 129,
+            "candidateSystemName": "New Britain",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 149,
+            "candidateSystemName": "New Providence",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 130,
+            "candidateSystemName": "Capella",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 153,
+            "candidateSystemName": "P-8457",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 171,
+            "candidateSystemName": "Diphidia II",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 144,
+        "recordIndex": 16,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196607,
+        "signedLongY": 8351744,
+        "closestNamedNeighborResourceId": 133,
+        "closestNamedNeighborSystemName": "Maxwell’s Purchase",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Maxwell’s Purchase (resource 133) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          133
+        ],
+        "coLocatedWithCount": 1,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 133,
+            "candidateSystemName": "Maxwell’s Purchase",
+            "signedLongDistance": 0.0
+          }
+        ]
+      },
+      {
+        "resourceId": 148,
+        "recordIndex": 20,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262273,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 138,
+        "closestNamedNeighborSystemName": "Sirius III",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Sirius III (resource 138) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          138,
+          158
+        ],
+        "coLocatedWithCount": 2,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 138,
+            "candidateSystemName": "Sirius III",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 158,
+            "candidateSystemName": "Alkaidion",
+            "signedLongDistance": 0.0
+          }
+        ]
+      },
+      {
+        "resourceId": 150,
+        "recordIndex": 22,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262275,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 151,
+        "closestNamedNeighborSystemName": "New Istanbul",
+        "closestNamedNeighborDistance": 1.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor New Istanbul (resource 151) at signed-long distance 1.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          151
+        ],
+        "coLocatedWithCount": 1,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 151,
+            "candidateSystemName": "New Istanbul",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 157,
+        "recordIndex": 29,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262272,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 138,
+        "closestNamedNeighborSystemName": "Sirius III",
+        "closestNamedNeighborDistance": 1.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Sirius III (resource 138) at signed-long distance 1.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          138,
+          158
+        ],
+        "coLocatedWithCount": 2,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 138,
+            "candidateSystemName": "Sirius III",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 158,
+            "candidateSystemName": "Alkaidion",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 161,
+        "recordIndex": 33,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196738,
+        "signedLongY": 8355840,
+        "closestNamedNeighborResourceId": 134,
+        "closestNamedNeighborSystemName": "Hodgson’s World",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Hodgson’s World (resource 134) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          134,
+          159,
+          162,
+          165,
+          173
+        ],
+        "coLocatedWithCount": 5,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 134,
+            "candidateSystemName": "Hodgson’s World",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 159,
+            "candidateSystemName": "Regulus II",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 162,
+            "candidateSystemName": "Clotho Prime",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 165,
+            "candidateSystemName": "Hunter",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 173,
+            "candidateSystemName": "Quake",
+            "signedLongDistance": 0.0
+          }
+        ]
+      },
+      {
+        "resourceId": 164,
+        "recordIndex": 36,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196738,
+        "signedLongY": 8355840,
+        "closestNamedNeighborResourceId": 134,
+        "closestNamedNeighborSystemName": "Hodgson’s World",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Hodgson’s World (resource 134) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          134,
+          159,
+          162,
+          165,
+          173
+        ],
+        "coLocatedWithCount": 5,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 134,
+            "candidateSystemName": "Hodgson’s World",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 159,
+            "candidateSystemName": "Regulus II",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 162,
+            "candidateSystemName": "Clotho Prime",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 165,
+            "candidateSystemName": "Hunter",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 173,
+            "candidateSystemName": "Quake",
+            "signedLongDistance": 0.0
+          }
+        ]
+      },
+      {
+        "resourceId": 167,
+        "recordIndex": 39,
+        "gapType": "mid-range-gap",
+        "signedLongX": 131211,
+        "signedLongY": 8323073,
+        "closestNamedNeighborResourceId": 166,
+        "closestNamedNeighborSystemName": "Atropos",
+        "closestNamedNeighborDistance": 1.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Atropos (resource 166) at signed-long distance 1.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          166
+        ],
+        "coLocatedWithCount": 1,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 166,
+            "candidateSystemName": "Atropos",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 169,
+        "recordIndex": 41,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262283,
+        "signedLongY": 1,
+        "closestNamedNeighborResourceId": 183,
+        "closestNamedNeighborSystemName": "Ursa Minor Beta",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Ursa Minor Beta (resource 183) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          183,
+          170
+        ],
+        "coLocatedWithCount": 2,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 183,
+            "candidateSystemName": "Ursa Minor Beta",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 170,
+            "candidateSystemName": "New France",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 172,
+        "recordIndex": 44,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262284,
+        "signedLongY": 1,
+        "closestNamedNeighborResourceId": 170,
+        "closestNamedNeighborSystemName": "New France",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor New France (resource 170) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          170,
+          183
+        ],
+        "coLocatedWithCount": 2,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 170,
+            "candidateSystemName": "New France",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 183,
+            "candidateSystemName": "Ursa Minor Beta",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 175,
+        "recordIndex": 47,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196754,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 174,
+        "closestNamedNeighborSystemName": "Armstrong",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Armstrong (resource 174) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          174,
+          185,
+          188,
+          193,
+          180
+        ],
+        "coLocatedWithCount": 5,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 185,
+            "candidateSystemName": "Pegasus",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 188,
+            "candidateSystemName": "New Bavaria",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 193,
+            "candidateSystemName": "Lauralee",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 177,
+        "recordIndex": 49,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196752,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 178,
+        "closestNamedNeighborSystemName": "Blackthorne",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Blackthorne (resource 178) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          178,
+          184,
+          176,
+          180
+        ],
+        "coLocatedWithCount": 4,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 178,
+            "candidateSystemName": "Blackthorne",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 184,
+            "candidateSystemName": "Perseus II",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 176,
+            "candidateSystemName": "Rupert",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 179,
+        "recordIndex": 51,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196753,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 180,
+        "closestNamedNeighborSystemName": "New Japan",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor New Japan (resource 180) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          180,
+          174,
+          178,
+          184,
+          185
+        ],
+        "coLocatedWithCount": 5,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 180,
+            "candidateSystemName": "New Japan",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 174,
+            "candidateSystemName": "Armstrong",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 178,
+            "candidateSystemName": "Blackthorne",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 184,
+            "candidateSystemName": "Perseus II",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 185,
+            "candidateSystemName": "Pegasus",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 181,
+        "recordIndex": 53,
+        "gapType": "mid-range-gap",
+        "signedLongX": 131208,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 129,
+        "closestNamedNeighborSystemName": "New Britain",
+        "closestNamedNeighborDistance": 65528.0,
+        "classification": "near",
+        "classificationHypothesis": "Gap record is spatially near named neighbor New Britain (resource 129) at signed-long distance 65528.0 (threshold=87204). May be a distinct nearby system or an offset duplicate.",
+        "coLocatedWithResourceIds": [],
+        "coLocatedWithCount": 0,
+        "coLocatedWith": []
+      },
+      {
+        "resourceId": 182,
+        "recordIndex": 54,
+        "gapType": "mid-range-gap",
+        "signedLongX": 262286,
+        "signedLongY": 8720384,
+        "closestNamedNeighborResourceId": 134,
+        "closestNamedNeighborSystemName": "Hodgson’s World",
+        "closestNamedNeighborDistance": 370390.156781,
+        "classification": "separated",
+        "classificationHypothesis": "Gap record is spatially separated from named neighbor Hodgson’s World (resource 134) at signed-long distance 370390.156781 (threshold=87204). Likely a genuinely distinct, unnamed system.",
+        "coLocatedWithResourceIds": [],
+        "coLocatedWithCount": 0,
+        "coLocatedWith": []
+      },
+      {
+        "resourceId": 187,
+        "recordIndex": 59,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196751,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 176,
+        "closestNamedNeighborSystemName": "Rupert",
+        "closestNamedNeighborDistance": 0.0,
+        "classification": "co-located",
+        "classificationHypothesis": "Gap record is spatially co-located with named neighbor Rupert (resource 176) at signed-long distance 0.0. This suggests the gap record may represent the same physical system at a different resource ID, or a nearly identical coordinate placement that would overlap in display space.",
+        "coLocatedWithResourceIds": [
+          176,
+          178,
+          184
+        ],
+        "coLocatedWithCount": 3,
+        "coLocatedWith": [
+          {
+            "targetResourceId": 176,
+            "candidateSystemName": "Rupert",
+            "signedLongDistance": 0.0
+          },
+          {
+            "targetResourceId": 178,
+            "candidateSystemName": "Blackthorne",
+            "signedLongDistance": 1.0
+          },
+          {
+            "targetResourceId": 184,
+            "candidateSystemName": "Perseus II",
+            "signedLongDistance": 1.0
+          }
+        ]
+      },
+      {
+        "resourceId": 189,
+        "recordIndex": 61,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196756,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 174,
+        "closestNamedNeighborSystemName": "Armstrong",
+        "closestNamedNeighborDistance": 2.0,
+        "classification": "near",
+        "classificationHypothesis": "Gap record is spatially near named neighbor Armstrong (resource 174) at signed-long distance 2.0 (threshold=87204). May be a distinct nearby system or an offset duplicate.",
+        "coLocatedWithResourceIds": [],
+        "coLocatedWithCount": 0,
+        "coLocatedWith": []
+      },
+      {
+        "resourceId": 190,
+        "recordIndex": 62,
+        "gapType": "mid-range-gap",
+        "signedLongX": 131221,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 129,
+        "closestNamedNeighborSystemName": "New Britain",
+        "closestNamedNeighborDistance": 65515.0,
+        "classification": "near",
+        "classificationHypothesis": "Gap record is spatially near named neighbor New Britain (resource 129) at signed-long distance 65515.0 (threshold=87204). May be a distinct nearby system or an offset duplicate.",
+        "coLocatedWithResourceIds": [],
+        "coLocatedWithCount": 0,
+        "coLocatedWith": []
+      },
+      {
+        "resourceId": 192,
+        "recordIndex": 64,
+        "gapType": "mid-range-gap",
+        "signedLongX": 196760,
+        "signedLongY": 32768,
+        "closestNamedNeighborResourceId": 174,
+        "closestNamedNeighborSystemName": "Armstrong",
+        "closestNamedNeighborDistance": 6.0,
+        "classification": "near",
+        "classificationHypothesis": "Gap record is spatially near named neighbor Armstrong (resource 174) at signed-long distance 6.0 (threshold=87204). May be a distinct nearby system or an offset duplicate.",
+        "coLocatedWithResourceIds": [],
+        "coLocatedWithCount": 0,
+        "coLocatedWith": []
+      }
+    ],
+    "promotionBlockers": [
+      "gap identity hypotheses are spatial proximity signals only; no record-to-name join is promoted",
+      "co-located gaps may share coordinates with named neighbors, but this does not confirm they are the same Classic system without source/name-table or runtime evidence",
+      "coordinate display units/map scaling remain unpromoted, so spatial proximity thresholds are decoded-candidate-scale only"
+    ],
+    "promotionStatus": "not-promoted; identity hypotheses are spatial proximity scouts only, pending exact Classic record-to-name or runtime label evidence",
+    "sourceNote": "This summary classifies each of the 21 gap records by spatial proximity to named neighbors. Co-located gaps (signed-long distance <= 1.0 in a span of millions) are likely the same system at a different resource ID; separated gaps are likely distinct unnamed systems. No record-to-name join, display-unit, or runtime topology claim is promoted."
   },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",
@@ -30428,5 +31128,5 @@
       }
     }
   ],
-  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping"
+  "promotionBoundary": "IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping, non-promoted coordinate-gap-identity-resolution"
 }
