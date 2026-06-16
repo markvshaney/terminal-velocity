@@ -520,8 +520,8 @@
       "surface": "runtime bridge universe topology connectivity scaffold"
     },
     "manual_route_low_fuel_recovery_landing_loop": {
-      "purpose": "Terminal Velocity scaffold scenario: manual_route_low_fuel_recovery_landing_loop.",
-      "surface": "terminal-velocity-scaffold"
+      "purpose": "Manual route low-fuel recovery landing loop: Shift-click a multi-stop green route, surface insufficient fuel for the full route, block an empty-fuel jump without consuming route state, land/refuel, reselect the route, and reach the final stop under pending-Classic route/fuel UI boundaries.",
+      "surface": "manual map route/fuel warning/recovery landing scaffold"
     },
     "runtime_coordinate_sanity_check": {
       "purpose": "Runtime coordinate sanity check: verify no duplicate system positions in the 10-system bridge, record Levo-neighbor coordinate deltas and map bounds for later Classic map calibration comparison.",
