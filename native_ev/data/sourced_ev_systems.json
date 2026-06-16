@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-v65",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-v66",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -4824,6 +4824,453 @@
     ],
     "promotionStatus": "not-promoted; identity hypotheses are spatial proximity scouts only, pending exact Classic record-to-name or runtime label evidence",
     "sourceNote": "This summary classifies each of the 21 gap records by spatial proximity to named neighbors. Co-located gaps (signed-long distance <= 1.0 in a span of millions) are likely the same system at a different resource ID; separated gaps are likely distinct unnamed systems. No record-to-name join, display-unit, or runtime topology claim is promoted."
+  },
+  "coordinateGapResourceDeduplicationSummary": {
+    "sourceLabel": "decoded-resource-backed-coordinate-gap-resource-deduplication-scout",
+    "oracleStatus": "coordinate_display_units_map_scaling_pending",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field"
+    ],
+    "totalResourceIds": 67,
+    "namedSystemCount": 46,
+    "gapCount": 21,
+    "coLocatedDuplicateCount": 16,
+    "nearOrSeparatedCount": 5,
+    "simplifiedDistinctSystemCountEstimate": 51,
+    "coLocatedDuplicateResourceIds": [
+      135,
+      137,
+      143,
+      144,
+      148,
+      150,
+      157,
+      161,
+      164,
+      167,
+      169,
+      172,
+      175,
+      177,
+      179,
+      187
+    ],
+    "canonicalNamedResourceIds": [
+      129,
+      133,
+      134,
+      136,
+      138,
+      151,
+      166,
+      170,
+      174,
+      176,
+      178,
+      180,
+      183
+    ],
+    "deduplication": [
+      {
+        "duplicateResourceId": 135,
+        "canonicalSystemName": "Master’s Planet",
+        "canonicalResourceId": 136,
+        "signedLongDistance": 1.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 136,
+            "systemName": "Master’s Planet",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 1,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 137,
+        "canonicalSystemName": "Sirius III",
+        "canonicalResourceId": 138,
+        "signedLongDistance": 1.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 138,
+            "systemName": "Sirius III",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 158,
+            "systemName": "Alkaidion",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 2,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 143,
+        "canonicalSystemName": "New Britain",
+        "canonicalResourceId": 129,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 129,
+            "systemName": "New Britain",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 149,
+            "systemName": "New Providence",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 130,
+            "systemName": "Capella",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 153,
+            "systemName": "P-8457",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 171,
+            "systemName": "Diphidia II",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 5,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 144,
+        "canonicalSystemName": "Maxwell’s Purchase",
+        "canonicalResourceId": 133,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 133,
+            "systemName": "Maxwell’s Purchase",
+            "signedLongDistance": 0.0
+          }
+        ],
+        "coLocatedCandidateCount": 1,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 148,
+        "canonicalSystemName": "Sirius III",
+        "canonicalResourceId": 138,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 138,
+            "systemName": "Sirius III",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 158,
+            "systemName": "Alkaidion",
+            "signedLongDistance": 0.0
+          }
+        ],
+        "coLocatedCandidateCount": 2,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 150,
+        "canonicalSystemName": "New Istanbul",
+        "canonicalResourceId": 151,
+        "signedLongDistance": 1.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 151,
+            "systemName": "New Istanbul",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 1,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 157,
+        "canonicalSystemName": "Sirius III",
+        "canonicalResourceId": 138,
+        "signedLongDistance": 1.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 138,
+            "systemName": "Sirius III",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 158,
+            "systemName": "Alkaidion",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 2,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 161,
+        "canonicalSystemName": "Hodgson’s World",
+        "canonicalResourceId": 134,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 134,
+            "systemName": "Hodgson’s World",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 159,
+            "systemName": "Regulus II",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 162,
+            "systemName": "Clotho Prime",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 165,
+            "systemName": "Hunter",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 173,
+            "systemName": "Quake",
+            "signedLongDistance": 0.0
+          }
+        ],
+        "coLocatedCandidateCount": 5,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 164,
+        "canonicalSystemName": "Hodgson’s World",
+        "canonicalResourceId": 134,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 134,
+            "systemName": "Hodgson’s World",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 159,
+            "systemName": "Regulus II",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 162,
+            "systemName": "Clotho Prime",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 165,
+            "systemName": "Hunter",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 173,
+            "systemName": "Quake",
+            "signedLongDistance": 0.0
+          }
+        ],
+        "coLocatedCandidateCount": 5,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 167,
+        "canonicalSystemName": "Atropos",
+        "canonicalResourceId": 166,
+        "signedLongDistance": 1.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 166,
+            "systemName": "Atropos",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 1,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 169,
+        "canonicalSystemName": "Ursa Minor Beta",
+        "canonicalResourceId": 183,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 183,
+            "systemName": "Ursa Minor Beta",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 170,
+            "systemName": "New France",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 2,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 172,
+        "canonicalSystemName": "New France",
+        "canonicalResourceId": 170,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 170,
+            "systemName": "New France",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 183,
+            "systemName": "Ursa Minor Beta",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 2,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 175,
+        "canonicalSystemName": "Armstrong",
+        "canonicalResourceId": 174,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 174,
+            "systemName": "Armstrong",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 185,
+            "systemName": "Pegasus",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 188,
+            "systemName": "New Bavaria",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 193,
+            "systemName": "Lauralee",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 180,
+            "systemName": "New Japan",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 5,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 177,
+        "canonicalSystemName": "Blackthorne",
+        "canonicalResourceId": 178,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 178,
+            "systemName": "Blackthorne",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 184,
+            "systemName": "Perseus II",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 176,
+            "systemName": "Rupert",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 180,
+            "systemName": "New Japan",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 4,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 179,
+        "canonicalSystemName": "New Japan",
+        "canonicalResourceId": 180,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 180,
+            "systemName": "New Japan",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 174,
+            "systemName": "Armstrong",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 178,
+            "systemName": "Blackthorne",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 184,
+            "systemName": "Perseus II",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 185,
+            "systemName": "Pegasus",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 5,
+        "confidence": "spatial-proximity-hypothesis"
+      },
+      {
+        "duplicateResourceId": 187,
+        "canonicalSystemName": "Rupert",
+        "canonicalResourceId": 176,
+        "signedLongDistance": 0.0,
+        "allCoLocatedNamedCandidates": [
+          {
+            "resourceId": 176,
+            "systemName": "Rupert",
+            "signedLongDistance": 0.0
+          },
+          {
+            "resourceId": 178,
+            "systemName": "Blackthorne",
+            "signedLongDistance": 1.0
+          },
+          {
+            "resourceId": 184,
+            "systemName": "Perseus II",
+            "signedLongDistance": 1.0
+          }
+        ],
+        "coLocatedCandidateCount": 3,
+        "confidence": "spatial-proximity-hypothesis"
+      }
+    ],
+    "promotionBlockers": [
+      "deduplication is spatial proximity scouting only; no record-to-name join, display unit, or runtime topology is promoted",
+      "co-located gap resource IDs may share a position with multiple named neighbors; canonical assignment is a heuristic proximity choice",
+      "coordinate display units/map scaling remain unpromoted, so spatial proximity deduplication is decoded-candidate-scale only"
+    ],
+    "promotionStatus": "not-promoted; deduplication is spatial proximity scouting only, pending exact Classic record-to-name or runtime label evidence",
+    "sourceNote": "This summary maps each co-located gap resource ID to a canonical named neighbor for deduplication. 16 co-located gaps (signed-long distance <= 1.0) are treated as duplicate resource IDs, reducing the estimated distinct system count from 67 to 51. No record-to-name join, display unit, or runtime topology claim is promoted."
   },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",
