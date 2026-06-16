@@ -1153,8 +1153,14 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         raise ValueError('sourced EV systems manifest topology promotion readiness changed exact mapping boundary')
     if 'complete decoded coordinate word pairs and link slots for all 67 records' not in topology_readiness.get('readyStaticInputFamilies', []):
         raise ValueError('sourced EV systems manifest topology promotion readiness missing ready static input family')
-    if 'remaining 66 exact record-to-name joins' not in topology_readiness.get('blockedPromotionClaims', []):
-        raise ValueError('sourced EV systems manifest topology promotion readiness must block remaining name joins')
+    if 'non-promoted coordinate gap deduplication scout' not in str(topology_readiness.get('readyStaticInputFamilies', [])):
+        raise ValueError('sourced EV systems manifest topology promotion readiness missing deduplication scout ready input')
+    if '~51 distinct record-to-name joins' not in str(topology_readiness.get('blockedPromotionClaims', [])):
+        raise ValueError('sourced EV systems manifest topology promotion readiness must block remaining name joins with deduplication-aware count')
+    if topology_readiness.get('deduplicationAdjustedDistinctSystemCountEstimate', 0) != 51:
+        raise ValueError('sourced EV systems manifest topology promotion readiness has unexpected deduplication-adjusted count')
+    if 'coordinateGapResourceDeduplicationSummary' not in topology_readiness.get('deduplicationAdjustedDistinctSystemCountSource', ''):
+        raise ValueError('sourced EV systems manifest topology promotion readiness missing deduplication-adjusted count source')
     if 'not-promoted' not in topology_readiness.get('coordinatePromotionStatus', '') or 'not-promoted' not in topology_readiness.get('recordNamePromotionStatus', ''):
         raise ValueError('sourced EV systems manifest topology promotion readiness must not promote coordinates or remaining names')
     if 'blocked' not in topology_readiness.get('runtimeUniverseReplacementStatus', ''):

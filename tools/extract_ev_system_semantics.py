@@ -4704,23 +4704,28 @@ def _topology_promotion_readiness_summary(systems: list[dict], names: dict) -> d
     exact_mapped_resource_ids = sorted(EXACT_SYSTEM_NAME_MAPPINGS)
     unjoined_resource_ids = sorted(resource_ids - set(exact_mapped_resource_ids))
     system_seed_names = [seed.get('name') for seed in names.get('systemNames', [])]
+    deduplication = _coordinate_gap_resource_deduplication_summary(systems, names)
+    estimated_distinct = deduplication.get('simplifiedDistinctSystemCountEstimate', len(unjoined_resource_ids) + len(exact_mapped_resource_ids))
     return {
         'sourceLabel': 'decoded-resource-backed-topology-promotion-readiness-matrix',
         'oracleStatus': 'topology_semantic_promotion_pending_field_family_mapping',
         'laneClass': 'Lane A: static galaxy topology semantics',
         'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
         'recordCount': len(systems),
+        'deduplicationAdjustedDistinctSystemCountEstimate': estimated_distinct,
+        'deduplicationAdjustedDistinctSystemCountSource': 'coordinateGapResourceDeduplicationSummary (spatial-proximity heuristic, not promoted)',
         'readyStaticInputFamilies': [
             'contiguous 67-record syst-like run with resource IDs 128-194',
             'Resource Bible xPos/yPos and Con1-Con16 field-family intent',
             'complete decoded coordinate word pairs and link slots for all 67 records',
             'exact resource ID 128 to Levo mapping',
             'non-promoted coordinate transform, quantization, and start-neighborhood analysis packets',
+            'non-promoted coordinate gap deduplication scout estimating ~51 distinct systems via spatial-proximity heuristic',
         ],
         'blockedPromotionClaims': [
             'coordinate display units/map scaling/projection/centering/axis orientation',
             'post-coordinate syst field layout for NavDef/population/government/message/hazard/visibility and split Con6-Con16 placement',
-            'remaining 66 exact record-to-name joins',
+            'remaining ~51 distinct record-to-name joins (66 resource IDs conservatively; 16 co-located gap records are likely same-system duplicates per deduplication scout)',
             'named runtime route topology and map-label ordering',
             'broad runtime universe replacement from the decoded syst run',
         ],
@@ -4731,15 +4736,15 @@ def _topology_promotion_readiness_summary(systems: list[dict], names: dict) -> d
         'heuristicSystemNameSeedCount': len(system_seed_names),
         'heuristicSystemNameSeedNames': system_seed_names,
         'coordinatePromotionStatus': 'not-promoted; static coordinate fields are ready inputs but display-unit/map-scaling/projection evidence is missing',
-        'recordNamePromotionStatus': 'not-promoted beyond resource 128 to Levo; remaining names require a complete name/order oracle or runtime map-label evidence',
+        'recordNamePromotionStatus': 'not-promoted beyond resource 128 to Levo; remaining names require a complete name/order oracle or runtime map-label evidence; deduplication scout estimates ~51 distinct unnamed systems',
         'runtimeUniverseReplacementStatus': 'blocked; keep the 10-system runtime subset until name/topology/display promotion evidence is stronger',
         'nextEvidenceFamilies': [
             'Classic map screenshot/click calibration tying named systems to pixel/display positions',
-            'decoded complete name/list resource or source-level ordering that joins all 67 syst records',
+            'decoded complete name/list resource or source-level ordering that joins all ~51 distinct syst records (66 resource IDs conservatively)',
             'original-runtime route/map label captures for linked systems beyond Levo',
             'Resource Bible/source variable evidence for hazards/governments/ports before broad universe replacement',
         ],
-        'sourceNote': 'This matrix is a dispatch/readiness guardrail: it makes the ready static inputs executable while explicitly blocking display-unit, record-name, named route-topology, and broad universe-replacement claims from being promoted by scaffold or adaptation data alone.',
+        'sourceNote': 'This matrix is a dispatch/readiness guardrail: it makes the ready static inputs executable while explicitly blocking display-unit, record-name, named route-topology, and broad universe-replacement claims from being promoted by scaffold or adaptation data alone. The deduplication-adjusted distinct system count estimate (~51) is a spatial-proximity heuristic from coordinateGapResourceDeduplicationSummary; conservative unjoinedRecordCount (66) remains the primary record-accounting value.',
     }
 
 

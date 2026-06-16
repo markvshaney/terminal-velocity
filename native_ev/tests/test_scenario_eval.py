@@ -2387,6 +2387,8 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
         self.assertEqual(readiness['topologyPromotionReadinessExactMappedRecordCount'], 1)
         self.assertEqual(readiness['topologyPromotionReadinessExactMappedResourceIds'], [128])
         self.assertEqual(readiness['topologyPromotionReadinessUnjoinedRecordCount'], 66)
+        self.assertEqual(readiness['topologyPromotionReadinessDeduplicationAdjustedDistinctSystemCountEstimate'], 51)
+        self.assertIn('non-promoted coordinate gap deduplication scout', str(readiness['topologyPromotionReadinessReadyStaticInputFamilies']))
         self.assertIn('not-promoted', readiness['topologyPromotionReadinessCoordinateStatus'])
         self.assertIn('not-promoted beyond resource 128 to Levo', readiness['topologyPromotionReadinessRecordNameStatus'])
         self.assertIn('blocked', readiness['topologyPromotionReadinessRuntimeUniverseStatus'])
