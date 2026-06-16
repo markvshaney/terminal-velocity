@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-v66'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-v67'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping, non-promoted coordinate-gap-identity-resolution'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -2442,6 +2442,158 @@ def _named_candidate_link_topology_summary(systems: list[dict], names: dict) -> 
         ],
         'promotionStatus': 'not-promoted; named candidate topology is analysis input only, pending exact Classic source or runtime route-label evidence',
         'sourceNote': 'This summary maps the reconciliation roster candidate names onto the decoded Con1-Con16 link graph to produce a named candidate topology. All names are heuristic candidates from landing-name text-chunk proximity matching. No record-to-name join, named Classic route topology, or broad runtime universe replacement is promoted.',
+    }
+
+
+def _named_candidate_travel_distance_summary(systems: list[dict], names: dict) -> dict:
+    """Compute shortest-path distances on the named candidate link graph.
+
+    Uses the reconciliation summary's canonical entries and the named candidate
+    edges to build an undirected graph, then BFS from every named system to compute
+    pairwise hop distances. All distances are heuristic candidates — no record-to-name
+    join or runtime topology claim is promoted.
+    """
+    reconciliation = _syst_record_name_gap_reconciliation_summary(systems, names)
+
+    # Build resource ID → canonical resource ID map (for dedup resolution)
+    canonical_of: dict[int, int] = {}
+    # Build canonical resource ID → candidate name map
+    name_of: dict[int, str] = {}
+    for entry in reconciliation.get('canonicalDistinctEntries', []):
+        rid = entry['canonicalResourceId']
+        name_of[rid] = entry.get('candidateSystemName', '?')
+        canonical_of[rid] = rid
+        for dup_rid in entry.get('duplicateGapResourceIds', []):
+            canonical_of[dup_rid] = rid
+
+    # Build undirected named adjacency set
+    adjacency: dict[str, set[str]] = {}
+    for system in systems:
+        rid = system['resourceId']
+        canonical_rid = canonical_of.get(rid, rid)
+        src_name = name_of.get(canonical_rid, f'ID:{canonical_rid}')
+
+        slots = system['semanticFields']['candidateHyperspaceLinks']['linkSlots']
+        linked_slots = [s for s in slots if s.get('status') == 'linked-system']
+
+        if src_name not in adjacency:
+            adjacency[src_name] = set()
+
+        for slot in linked_slots:
+            target_rid = slot['targetResourceId']
+            canonical_target = canonical_of.get(target_rid, target_rid)
+            target_name = name_of.get(canonical_target, f'ID:{canonical_target}')
+
+            if target_name not in adjacency:
+                adjacency[target_name] = set()
+
+            if src_name != target_name:
+                adjacency[src_name].add(target_name)
+                adjacency[target_name].add(src_name)
+
+    # BFS distances from each system
+    from collections import deque
+
+    all_named = sorted(adjacency.keys())
+    per_system_distances: list[dict] = []
+    pair_distances: list[dict] = []
+    max_distance = 0
+    total_unreachable_pairs = 0
+
+    for src in all_named:
+        dist: dict[str, int] = {src: 0}
+        q = deque([src])
+        while q:
+            cur = q.popleft()
+            for nxt in adjacency.get(cur, set()):
+                if nxt not in dist:
+                    dist[nxt] = dist[cur] + 1
+                    q.append(nxt)
+
+        reachable = {k: v for k, v in dist.items() if k != src}
+        reachable_names = sorted(reachable.keys())
+        unreachable = sorted(set(all_named) - set(dist.keys()))
+        max_dist = max(dist.values()) if len(dist) > 1 else 0
+        max_distance = max(max_distance, max_dist)
+
+        # Distance distribution
+        dist_distribution: dict[int, int] = {}
+        for d in dist.values():
+            dist_distribution[d] = dist_distribution.get(d, 0) + 1
+
+        total_unreachable_pairs += len(unreachable)
+
+        per_system_distances.append({
+            'candidateSystemName': src,
+            'reachableNamedSystemCount': len(reachable),
+            'unreachableNamedSystemCount': len(unreachable),
+            'maxHopDistance': max_dist,
+            'hopDistanceDistribution': dist_distribution,
+            'unreachableSystemNames': unreachable,
+        })
+
+        # Record key pair distances for systems reachable within 3 hops
+        for tgt_name in reachable_names:
+            d = reachable[tgt_name]
+            if d <= 6:
+                pair_distances.append({
+                    'sourceSystemName': src,
+                    'targetSystemName': tgt_name,
+                    'hopDistance': d,
+                    'nameConfidence': 'heuristic-candidate-cross-reference',
+                })
+            else:
+                pair_distances.append({
+                    'sourceSystemName': src,
+                    'targetSystemName': tgt_name,
+                    'hopDistance': d,
+                    'nameConfidence': 'heuristic-candidate-cross-reference',
+                })
+
+    # Sort pair distances
+    pair_distances.sort(key=lambda e: (e['sourceSystemName'], e['targetSystemName']))
+
+    # Compute connected component analysis
+    visited: set[str] = set()
+    components: list[list[str]] = []
+    for name in all_named:
+        if name not in visited:
+            comp: list[str] = []
+            q = deque([name])
+            visited.add(name)
+            while q:
+                cur = q.popleft()
+                comp.append(cur)
+                for nxt in adjacency.get(cur, set()):
+                    if nxt not in visited:
+                        visited.add(nxt)
+                        q.append(nxt)
+            components.append(sorted(comp))
+
+    component_sizes = sorted([len(c) for c in components], reverse=True)
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-named-candidate-travel-distance-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': [
+            'namedCandidateLinkTopologySummary',
+            'systRecordNameGapReconciliationSummary',
+        ],
+        'totalNamedSystems': len(all_named),
+        'namedSystemPairCount': len(pair_distances),
+        'namedGraphDiameterCandidate': max_distance,
+        'unreachablePairCount': total_unreachable_pairs,
+        'connectedComponentCount': len(components),
+        'connectedComponentSizes': component_sizes,
+        'perSystemNamedDistances': per_system_distances,
+        'promotionBlockers': [
+            'all system names are heuristic text-chunk candidates, not verified Classic mappings',
+            'link topology is decoded Con1-Con16 candidate slots, not verified Classic route edges',
+            'travel distances are hop counts on a heuristic graph, not verified Classic route distances',
+        ],
+        'promotionStatus': 'not-promoted; named candidate travel distances are analysis input only, pending exact Classic source or runtime route-label evidence',
+        'sourceNote': 'This summary computes shortest-path hop distances on the named candidate link graph. All names are heuristic candidates from landing-name text-chunk proximity matching. Distances are candidate hop counts, not verified Classic route, fuel, or range data. No record-to-name join or named Classic route topology is promoted.',
     }
 
 
@@ -5153,6 +5305,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'coordinateGapResourceDeduplicationSummary': _coordinate_gap_resource_deduplication_summary(systems, names),
         'systRecordNameGapReconciliationSummary': _syst_record_name_gap_reconciliation_summary(systems, names),
         'namedCandidateLinkTopologySummary': _named_candidate_link_topology_summary(systems, names),
+        'namedCandidateTravelDistanceSummary': _named_candidate_travel_distance_summary(systems, names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

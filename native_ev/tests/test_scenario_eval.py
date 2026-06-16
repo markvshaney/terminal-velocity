@@ -2064,6 +2064,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_candidate_link_graph_summary',
             'recorded_candidate_graph_connectivity_summary',
             'recorded_candidate_graph_distance_summary',
+            'recorded_named_candidate_travel_distance_summary',
             'recorded_start_system_candidate_topology_summary',
             'recorded_start_neighborhood_display_transform_summary',
             'recorded_start_neighborhood_display_distance_summary',

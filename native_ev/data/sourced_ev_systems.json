@@ -6,7 +6,7 @@
     "structures": "native_ev/data/sourced_ev_structures.json",
     "names": "native_ev/data/sourced_ev_names.json"
   },
-  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-v66",
+  "method": "ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-v67",
   "sourceBasis": "EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs",
   "resourceIdBase": 128,
   "resourceBibleTopologyConstantsSummary": {
@@ -8873,6 +8873,722 @@
     ],
     "promotionStatus": "not-promoted; named candidate topology is analysis input only, pending exact Classic source or runtime route-label evidence",
     "sourceNote": "This summary maps the reconciliation roster candidate names onto the decoded Con1-Con16 link graph to produce a named candidate topology. All names are heuristic candidates from landing-name text-chunk proximity matching. No record-to-name join, named Classic route topology, or broad runtime universe replacement is promoted."
+  },
+  "namedCandidateTravelDistanceSummary": {
+    "sourceLabel": "decoded-resource-backed-named-candidate-travel-distance-scout",
+    "oracleStatus": "exact_record_name_runtime_topology_mapping_pending",
+    "sourceBasis": [
+      "decoded-record-family",
+      "decoded-original-variable",
+      "resource-bible-field"
+    ],
+    "inputSummaries": [
+      "namedCandidateLinkTopologySummary",
+      "systRecordNameGapReconciliationSummary"
+    ],
+    "totalNamedSystems": 47,
+    "namedSystemPairCount": 2162,
+    "namedGraphDiameterCandidate": 6,
+    "unreachablePairCount": 0,
+    "connectedComponentCount": 1,
+    "connectedComponentSizes": [
+      47
+    ],
+    "perSystemNamedDistances": [
+      {
+        "candidateSystemName": "?",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 5,
+          "2": 26,
+          "3": 9,
+          "4": 4,
+          "5": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Alkaidion",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 8,
+          "3": 20,
+          "4": 12,
+          "5": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Armstrong",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 3,
+          "2": 17,
+          "3": 22,
+          "4": 4
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Atropos",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 6,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 8,
+          "3": 17,
+          "4": 14,
+          "5": 4,
+          "6": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Beeblebrox",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 6,
+          "3": 23,
+          "4": 16
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Blackthorne",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 10,
+          "3": 26,
+          "4": 8
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Capella",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 3,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 7,
+          "2": 23,
+          "3": 16
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Clotho II",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 6,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 2,
+          "3": 8,
+          "4": 18,
+          "5": 12,
+          "6": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Clotho Prime",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 19,
+          "3": 20,
+          "4": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Diphidia II",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 8,
+          "3": 20,
+          "4": 12,
+          "5": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Dune",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 9,
+          "2": 17,
+          "3": 14,
+          "4": 4,
+          "5": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "George’s World",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 19,
+          "3": 20,
+          "4": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Hodgson’s World",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 6,
+          "2": 15,
+          "3": 19,
+          "4": 4,
+          "5": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Hunter",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 16,
+          "3": 21,
+          "4": 7
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Lauralee",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 6,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 1,
+          "3": 6,
+          "4": 24,
+          "5": 12,
+          "6": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Levo",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 3,
+          "2": 18,
+          "3": 19,
+          "4": 6
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Master’s Planet",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 12,
+          "2": 18,
+          "3": 13,
+          "4": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Maxwell’s Purchase",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 12,
+          "2": 21,
+          "3": 10,
+          "4": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Merlin",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 9,
+          "2": 20,
+          "3": 12,
+          "4": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Murphy's World",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 6,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 11,
+          "3": 21,
+          "4": 8,
+          "5": 3,
+          "6": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New Bavaria",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 10,
+          "3": 26,
+          "4": 8
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New Britain",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 12,
+          "2": 21,
+          "3": 8,
+          "4": 3,
+          "5": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New France",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 6,
+          "3": 23,
+          "4": 12,
+          "5": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New Istanbul",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 7,
+          "2": 24,
+          "3": 12,
+          "4": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New Japan",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 3,
+          "2": 11,
+          "3": 17,
+          "4": 12,
+          "5": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New Providence",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 11,
+          "3": 17,
+          "4": 13,
+          "5": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New Sahara",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 6,
+          "2": 15,
+          "3": 19,
+          "4": 6
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "New Scotland’s motto",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 3,
+          "2": 19,
+          "3": 20,
+          "4": 4
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "P-8457",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 6,
+          "3": 24,
+          "4": 12,
+          "5": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Palshife",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 11,
+          "3": 18,
+          "4": 13,
+          "5": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Pegasus",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 16,
+          "3": 22,
+          "4": 5,
+          "5": 1
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Perseus II",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 11,
+          "3": 21,
+          "4": 10,
+          "5": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Plateau",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 4,
+          "2": 23,
+          "3": 15,
+          "4": 4
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Port Oread",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 6,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 11,
+          "3": 21,
+          "4": 8,
+          "5": 3,
+          "6": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Quake",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 14,
+          "3": 21,
+          "4": 10
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Regulus II",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 7,
+          "3": 17,
+          "4": 18,
+          "5": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Rupert",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 2,
+          "2": 13,
+          "3": 20,
+          "4": 8,
+          "5": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Samson’s Planet",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 8,
+          "2": 17,
+          "3": 18,
+          "4": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Sauron",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 3,
+          "2": 19,
+          "3": 20,
+          "4": 4
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Sirius III",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 3,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 15,
+          "2": 21,
+          "3": 10
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Sirius Station",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 5,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 3,
+          "2": 8,
+          "3": 18,
+          "4": 12,
+          "5": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Spica",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 7,
+          "2": 26,
+          "3": 10,
+          "4": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Tabletop",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 7,
+          "2": 25,
+          "3": 12,
+          "4": 2
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Tau Ceti IV",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 6,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 2,
+          "3": 8,
+          "4": 18,
+          "5": 12,
+          "6": 5
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Turin V",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 14,
+          "3": 21,
+          "4": 10
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Ursa Minor Beta",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 4,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 3,
+          "2": 23,
+          "3": 17,
+          "4": 3
+        },
+        "unreachableSystemNames": []
+      },
+      {
+        "candidateSystemName": "Zaxted Starport",
+        "reachableNamedSystemCount": 46,
+        "unreachableNamedSystemCount": 0,
+        "maxHopDistance": 6,
+        "hopDistanceDistribution": {
+          "0": 1,
+          "1": 1,
+          "2": 11,
+          "3": 21,
+          "4": 8,
+          "5": 3,
+          "6": 2
+        },
+        "unreachableSystemNames": []
+      }
+    ],
+    "promotionBlockers": [
+      "all system names are heuristic text-chunk candidates, not verified Classic mappings",
+      "link topology is decoded Con1-Con16 candidate slots, not verified Classic route edges",
+      "travel distances are hop counts on a heuristic graph, not verified Classic route distances"
+    ],
+    "promotionStatus": "not-promoted; named candidate travel distances are analysis input only, pending exact Classic source or runtime route-label evidence",
+    "sourceNote": "This summary computes shortest-path hop distances on the named candidate link graph. All names are heuristic candidates from landing-name text-chunk proximity matching. Distances are candidate hop counts, not verified Classic route, fuel, or range data. No record-to-name join or named Classic route topology is promoted."
   },
   "coordinateMapSourceReadinessSummary": {
     "sourceLabel": "resource-bible-backed-coordinate-map-source-readiness",
