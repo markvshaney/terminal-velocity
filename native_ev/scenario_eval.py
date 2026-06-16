@@ -143,6 +143,7 @@ SCENARIO_CURRICULUM = [
     'pirate_avoidance_escape_route',
     'pirate_avoidance_mission_trade_escape_loop',
     'disposable_combat_placeholder',
+    'runtime_topology_connectivity_check',
 ]
 
 
@@ -2855,6 +2856,60 @@ def _combat_placeholder_guardrail(state: dict[str, Any], _action: dict[str, Any]
     return True
 
 
+def _topology_connectivity_check(state: dict[str, Any], _action: dict[str, Any], trace: list[dict[str, Any]]) -> bool:
+    """Verify the 10-system runtime universe link graph is fully connected from Levo."""
+    universe = load_universe()
+    systems = universe.get('systems', [])
+    system_count = len(systems)
+
+    # Build adjacency list from links
+    name_to_idx = {s['name']: i for i, s in enumerate(systems)}
+    adj = {i: [] for i in range(system_count)}
+    for i, s in enumerate(systems):
+        for link_name in s.get('links', []):
+            j = name_to_idx.get(link_name)
+            if j is not None and j != i:
+                adj[i].append(j)
+
+    # BFS from Levo
+    start_idx = name_to_idx.get('Levo')
+    if start_idx is None:
+        trace.append({'type': 'topology_connectivity', 'reachableCount': 0, 'systemCount': system_count, 'connected': False, 'reason': 'Levo not found'})
+        return False
+
+    visited = set()
+    queue = [start_idx]
+    while queue:
+        i = queue.pop(0)
+        if i in visited:
+            continue
+        visited.add(i)
+        for j in adj[i]:
+            if j not in visited:
+                queue.append(j)
+
+    connected = len(visited) == system_count
+    unreachable = [systems[i]['name'] for i in range(system_count) if i not in visited]
+
+    # Record per-system link counts for topology quality
+    link_counts = {}
+    for i, s in enumerate(systems):
+        link_counts[s['name']] = len(adj[i])
+
+    trace.append({
+        'type': 'topology_connectivity',
+        'systemCount': system_count,
+        'startSystem': 'Levo',
+        'reachableCount': len(visited),
+        'connected': connected,
+        'unreachableSystems': unreachable,
+        'linkCounts': link_counts,
+        'sourceLabel': 'terminal-velocity-runtime-topology-scaffold',
+        'oracleStatus': 'runtime_topology_connectivity_pending_classic_confirmation',
+    })
+    return True
+
+
 def _current_government_name(state: dict[str, Any]) -> str:
     governments = government_manifest()
     mapping = governments.get('systems', {}).get(state['currentSystem'], {})
@@ -4791,6 +4846,10 @@ def default_actions_for_scenario(name: str) -> list[dict[str, Any]]:
         return [
             {'type': 'combat_placeholder_guardrail'},
         ]
+    if name == 'runtime_topology_connectivity_check':
+        return [
+            {'type': 'topology_connectivity_check'},
+        ]
     raise ValueError(f'unknown scenario {name}')
 
 
@@ -5886,6 +5945,16 @@ def _scenario_checks(name: str, state: dict[str, Any], trace: list[dict[str, Any
             'combat_not_executed': 'passed' if state.get('combatExecuted') is False else 'failed',
             'stop_conditions_recorded': 'passed' if {'Strict Play enabled', 'low shields or hull', 'unclear save state'}.issubset(set(stop_conditions)) else 'failed',
         })
+    elif name == 'runtime_topology_connectivity_check':
+        connectivity = next((event for event in trace if event.get('type') == 'topology_connectivity'), {})
+        link_counts = connectivity.get('linkCounts', {})
+        checks.update({
+            'full_graph_connected_from_levo': 'passed' if connectivity.get('connected') is True and connectivity.get('systemCount') == 10 and connectivity.get('reachableCount') == 10 else 'failed',
+            'levo_has_three_links': 'passed' if link_counts.get('Levo', 0) == 3 else 'failed',
+            'sol_has_four_links': 'passed' if link_counts.get('Sol', 0) == 4 else 'failed',
+            'each_system_has_at_least_one_link': 'passed' if all(count > 0 for count in link_counts.values()) else 'failed',
+            'recorded_runtime_topology_source_boundary': 'passed' if connectivity.get('sourceLabel') == 'terminal-velocity-runtime-topology-scaffold' and connectivity.get('oracleStatus') == 'runtime_topology_connectivity_pending_classic_confirmation' else 'failed',
+        })
     return checks
 
 
@@ -5930,6 +5999,7 @@ def run_scripted_scenario(name: str, actions: list[dict[str, Any]] | None = None
         'complete_cargo_jobs': _complete_cargo_jobs,
         'abort_active_mission': _abort_active_mission,
         'combat_placeholder_guardrail': _combat_placeholder_guardrail,
+        'topology_connectivity_check': _topology_connectivity_check,
         'apply_contraband_scan': _apply_contraband_scan,
         'apply_mission_cargo_scan': _apply_mission_cargo_scan,
         'pay_legal_clemency': _pay_legal_clemency,

@@ -105,7 +105,8 @@
     "legal_clemency_insufficient_credit_guardrail",
     "pirate_avoidance_escape_route",
     "pirate_avoidance_mission_trade_escape_loop",
-    "disposable_combat_placeholder"
+    "disposable_combat_placeholder",
+    "runtime_topology_connectivity_check"
   ],
   "scenarios": {
     "levo_merchant_first_hop": {
@@ -205,8 +206,8 @@
       "surface": "noncombat escape with mission/trade cargo preservation scaffold"
     },
     "disposable_combat_placeholder": {
-      "purpose": "Combat/piracy guardrail scaffold only; records stop conditions without executing destructive tests.",
-      "surface": "disposable non-strict combat planning"
+      "purpose": "Disposable combat placeholder: define the disposable non-Strict combat/piracy evidence gate and stop conditions without executing destructive tests.",
+      "surface": "disposable combat evidence gate scaffold"
     },
     "intro_courier_mission_delivery": {
       "purpose": "Intro courier mission loop: travel from Levo to Earth, accept the first courier mission, reserve mission cargo, travel to Luna, complete delivery, release cargo, receive reward, and apply story flags.",
@@ -512,9 +513,13 @@
       "purpose": "Cross-market exact-credit full-hold profit loop: at Sol, spend exactly the displayed two-lot Food budget to fill the starting hold and reach zero credits, block a third buy, return to Levo, and sell both lots to recover spendable credits under explicit pending-Classic economy boundaries.",
       "surface": "commodity exchange/exact-credit full-hold cross-market profit scaffold"
     },
+    "runtime_topology_connectivity_check": {
+      "purpose": "Runtime topology connectivity check: verify the 10-system bridge universe link graph is fully connected from Levo, each system has at least one link, and recorded link counts match expected bridge topology under pending-Classic source boundaries.",
+      "surface": "runtime bridge universe topology connectivity scaffold"
+    },
     "manual_route_low_fuel_recovery_landing_loop": {
-      "purpose": "Manual route low-fuel recovery landing loop: Shift-click a multi-stop green route, surface insufficient fuel for the full route, block an empty-fuel jump without consuming route state, land/refuel, reselect the route, and reach the final stop under pending-Classic route/fuel UI boundaries.",
-      "surface": "manual map route/fuel warning/recovery landing scaffold"
+      "purpose": "Terminal Velocity scaffold scenario: manual_route_low_fuel_recovery_landing_loop.",
+      "surface": "terminal-velocity-scaffold"
     }
   }
 }
