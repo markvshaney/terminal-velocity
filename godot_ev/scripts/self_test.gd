@@ -232,6 +232,9 @@ func _verify_gameplay_curriculum(curriculum: Dictionary) -> int:
 		"pirate_avoidance_escape_route",
 		"pirate_avoidance_mission_trade_escape_loop",
 		"disposable_combat_placeholder",
+		"runtime_topology_connectivity_check",
+		"runtime_coordinate_sanity_check",
+		"runtime_universe_body_matrix_check",
 	]
 	if scenario_order != required:
 		printerr("GODOT SELFTEST FAIL gameplay scenario order")
