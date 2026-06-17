@@ -17,7 +17,7 @@ from pathlib import Path
 DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-named-candidate-route-named-candidate-route-calibration-priority-named-candidate-route-calibration-diagnostic-plan-v69'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-named-candidate-route-named-candidate-route-calibration-priority-named-candidate-route-calibration-diagnostic-plan-v69-named-candidate-coordinate-scaffold-seed-scaffold-correspondence-scout-syst-govt-field-value-scout-route-label-scaffold-correspondence-scout'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping, non-promoted coordinate-gap-identity-resolution'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -48,6 +48,7 @@ SYST_FIELD_LAYOUT_SOURCE_REFERENCES = {
     'runtimeNpcAndEnvironmentFields': 'docs/references/ev-family/ev-classic-resource-bible.txt lines 948-987',
 }
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
+GOVT_FIELD_WORD_INDEX = 22
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
 EXACT_SYSTEM_NAME_MAPPINGS = {
@@ -154,6 +155,64 @@ def _axis_range(systems: list[dict], axis: str, key: str) -> list[int]:
 def _axis_word_range(systems: list[dict], axis: str, word_index: int) -> list[int]:
     values = [system['semanticFields']['mapCoordinates'][axis]['rawWords'][word_index] for system in systems]
     return [min(values), max(values)]
+
+
+def _syst_govt_field_value_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout recording the raw Govt field value for each syst record.
+
+    Reads word index 22 (Govt field) from each of the 67 decoded syst records
+    and records the value distribution. Per EV Classic Resource Bible:
+      -1  Independent/unowned system
+      128-255  Controlling government resource ID
+
+    This scout records raw values only; no government-name cross-reference
+    or runtime behavior claim is made.
+    """
+    govt_assignments = []
+    value_distribution: dict[str, int] = {}
+    for system in systems:
+        govt = system['semanticFields'].get('candidateGovtField', {})
+        resource_id = system['resourceId']
+        raw_value = govt.get('rawValue')
+        status = govt.get('status', 'unknown')
+        govt_id = govt.get('governmentResourceId')
+
+        govt_assignments.append({
+            'resourceId': resource_id,
+            'rawValue': raw_value,
+            'status': status,
+            'governmentResourceId': govt_id,
+        })
+
+        if status == 'governed':
+            bucket = f'governed_govt_{govt_id}'
+        elif status == 'independent':
+            bucket = 'independent'
+        else:
+            bucket = f'unknown_raw_{raw_value}'
+        value_distribution[bucket] = value_distribution.get(bucket, 0) + 1
+
+    governed_count = sum(1 for a in govt_assignments if a['status'] == 'governed')
+    independent_count = sum(1 for a in govt_assignments if a['status'] == 'independent')
+    unique_govt_ids = sorted(set(
+        a['governmentResourceId'] for a in govt_assignments
+        if a['governmentResourceId'] is not None
+    ))
+
+    return {
+        'sourceLabel': 'terminal-velocity-syst-govt-field-value-scout',
+        'oracleStatus': 'govt_field_semantics_pending_name_cross_reference',
+        'promotionStatus': 'not-promoted; raw Govt field values only, no cross-reference to government names or runtime behavior claim',
+        'fieldDefinition': 'EV Classic Resource Bible syst word 22: Govt controlling government. -1 independent, 128-255 government resource ID.',
+        'wordIndex': GOVT_FIELD_WORD_INDEX,
+        'recordCount': len(systems),
+        'governedCount': governed_count,
+        'independentCount': independent_count,
+        'uniqueGovernmentResourceIds': unique_govt_ids,
+        'valueDistribution': value_distribution,
+        'governmentAssignments': govt_assignments,
+        'sourceNote': 'Govt field raw values extracted from 67 syst records. No cross-reference to government names, legal/reputation semantics, or runtime behavior is promoted. A future increment should join with sourced_ev_governments.json or original-runtime evidence.',
+    }
 
 
 def _coordinate_map_source_readiness_summary(systems: list[dict]) -> dict:
@@ -3128,6 +3187,141 @@ def _named_candidate_coordinate_scaffold_summary(systems: list[dict], names: dic
     }
 
 
+def _named_candidate_link_pixel_distance_scout(systems: list[dict], names: dict) -> dict:
+    """Compute Euclidean pixel distances between linked named scaffold systems.
+
+    For each named candidate system in the coordinate scaffold, computes the
+    Euclidean pixel distance to every named linked neighbor. Reports distribution
+    statistics against the Resource Bible JumpDistance=1000px constant as a
+    diagnostic — no display-unit/map-scaling claim is promoted.
+
+    This is analysis input only. All system names are heuristic text-chunk
+    candidates. See coordinateDisplayCalibrationGateSummary for the block.
+    """
+    scaffold = _named_candidate_coordinate_scaffold_summary(systems, names)
+    named_systems = scaffold.get('namedSystems', [])
+    jump_distance = RESOURCE_BIBLE_TOPOLOGY_CONSTANTS['jumpDistancePixels']
+
+    # Build name -> coordinate lookup
+    coords_of: dict[str, dict] = {
+        s['systemName']: {'xPixels': s['xPixels'], 'yPixels': s['yPixels'],
+                          'signedLongX': s['signedLongX'], 'signedLongY': s['signedLongY']}
+        for s in named_systems
+    }
+
+    link_distances: list[dict] = []
+    total_pairs = 0
+    within_jump = 0
+    beyond_jump = 0
+    near_count = 0
+    expected_count = 0
+    far_count = 0
+    interstellar_count = 0
+    min_dist = float('inf')
+    max_dist = 0
+    sum_dist = 0
+    signed_long_pixel_ratios: list[float] = []
+    missing_target_names: set[str] = set()
+
+    for src in named_systems:
+        src_name = src['systemName']
+        for tgt_name in src.get('namedLinkedSystems', []):
+            total_pairs += 1
+            src_c = coords_of.get(src_name)
+            tgt_c = coords_of.get(tgt_name)
+            if not src_c or not tgt_c:
+                missing_target_names.add(tgt_name)
+                continue
+            dx = src_c['xPixels'] - tgt_c['xPixels']
+            dy = src_c['yPixels'] - tgt_c['yPixels']
+            pixel_dist = int(round((dx * dx + dy * dy) ** 0.5))
+            signed_dx = src_c['signedLongX'] - tgt_c['signedLongX']
+            signed_dy = src_c['signedLongY'] - tgt_c['signedLongY']
+            signed_long_dist = int(round((signed_dx * signed_dx + signed_dy * signed_dy) ** 0.5))
+            if signed_long_dist > 0:
+                signed_long_pixel_ratios.append(signed_long_dist / pixel_dist) if pixel_dist > 0 else None
+            min_dist = min(min_dist, pixel_dist)
+            max_dist = max(max_dist, pixel_dist)
+            sum_dist += pixel_dist
+
+            if pixel_dist < 300:
+                dist_class = 'near'
+                near_count += 1
+            elif pixel_dist <= 2000:
+                dist_class = 'expected'
+                expected_count += 1
+            elif pixel_dist <= 5000:
+                dist_class = 'far'
+                far_count += 1
+            else:
+                dist_class = 'interstellar'
+                interstellar_count += 1
+
+            if pixel_dist <= jump_distance:
+                within_jump += 1
+            else:
+                beyond_jump += 1
+
+            link_distances.append({
+                'sourceName': src_name,
+                'targetName': tgt_name,
+                'pixelDistance': pixel_dist,
+                'signedLongDistance': signed_long_dist,
+                'distanceClass': dist_class,
+                'withinJumpDistance': pixel_dist <= jump_distance,
+            })
+
+    avg_dist = round(sum_dist / len(link_distances), 1) if link_distances else 0
+    avg_ratio = round(sum(signed_long_pixel_ratios) / len(signed_long_pixel_ratios), 1) if signed_long_pixel_ratios else 0
+
+    # Sort by distance desc for diagnostic clarity
+    link_distances.sort(key=lambda e: e['pixelDistance'], reverse=True)
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-named-candidate-link-pixel-distance-scout',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': ['namedCandidateCoordinateScaffoldSummary'],
+        'jumpDistancePixels': jump_distance,
+        'totalNamedSystems': len(named_systems),
+        'totalLinkPairsChecked': total_pairs,
+        'resolvableLinkPairs': len(link_distances),
+        'missingTargetNames': sorted(missing_target_names),
+        'missingTargetCount': len(missing_target_names),
+        'distanceStatistics': {
+            'minPixels': int(min_dist) if min_dist != float('inf') else 0,
+            'maxPixels': int(max_dist),
+            'averagePixels': avg_dist,
+            'averageSignedLongToPixelRatio': avg_ratio,
+        },
+        'jumpDistanceClassification': {
+            'withinJumpDistance': within_jump,
+            'beyondJumpDistance': beyond_jump,
+        },
+        'distanceClassDistribution': {
+            'nearLt300px': near_count,
+            'expected300to2000px': expected_count,
+            'far2000to5000px': far_count,
+            'interstellarGt5000px': interstellar_count,
+        },
+        'linkDistances': link_distances,
+        'promotionStatus': 'not-promoted; link pixel distance is a diagnostic only — no Classic display-unit/map-scaling claim',
+        'promotionBlockers': [
+            'All system names are heuristic text-chunk candidates, not verified Classic mappings',
+            'Pixel coordinates use non-promoted unit-interval normalization and TV scaffold viewport parameters',
+            'Y-axis invert and margin padding are TV scaffold choices, not Classic display constants',
+            'Coordinate display calibration is blocked pending Classic map pixel/click/capture evidence (see coordinateDisplayCalibrationGateSummary)',
+        ],
+        'sourceNote': (
+            'This scout computes Euclidean pixel distances between linked named candidate systems '
+            f'and compares them against the Resource Bible JumpDistance={jump_distance}px constant. '
+            'All distances use non-promoted TV scaffold pixel coordinates. Links whose target names '
+            'are absent from the scaffold named system list are recorded as missing targets. '
+            'This is diagnostic analysis input only — no display-unit, map-scaling, or calibration claim is promoted.'
+        ),
+    }
+
+
 def _named_seed_scaffold_correspondence_scout(systems: list[dict], names: dict) -> dict:
     """Cross-reference the 9 heuristic system-name seeds against the 46 scaffold named systems.
 
@@ -3212,6 +3406,268 @@ def _named_seed_scaffold_correspondence_scout(systems: list[dict], names: dict) 
             'Results identify which system-name seeds have scaffold record candidates, which have partial prefix '
             'matches (e.g. "Sirius" → "Sirius Station", "Sirius III"), and which seeds are entirely absent from '
             'the scaffold. This is analysis input for future record-to-name join work, not a promotion packet.'
+        ),
+    }
+
+
+def _named_candidate_scaffold_integrity_summary(systems: list[dict], names: dict) -> dict:
+    """Validate internal consistency of the 46-system named candidate coordinate scaffold.
+
+    Checks:
+    - Every namedLinkedSystems reference points to an existing scaffold system name
+    - All system names are unique
+    - Pixel coordinates are within the TV scaffold viewport bounds
+    - Reports reciprocal link count, duplicate coordinate count, isolated system count
+    - Reports seed-system presence/absence from scaffold (using partial-match heuristic)
+    """
+    scaffold = _named_candidate_coordinate_scaffold_summary(systems, names)
+    syslist: list[dict] = scaffold.get('namedSystems', [])
+    all_names: set[str] = {s['systemName'] for s in syslist}
+
+    # Broken link detection — every namedLinkedSystems entry must reference an existing name
+    broken_links: list[dict] = []
+    for entry in syslist:
+        src = entry['systemName']
+        for tgt in entry.get('namedLinkedSystems', []):
+            if tgt not in all_names:
+                broken_links.append({'source': src, 'brokenTarget': tgt})
+
+    # Name uniqueness — all systemName values must be unique
+    name_duplicates: list[str] = []
+    seen: set[str] = set()
+    for s in syslist:
+        n = s['systemName']
+        if n in seen:
+            name_duplicates.append(n)
+        seen.add(n)
+
+    # Viewport bounds check
+    MARGIN = 80
+    VIEWPORT_W = 1920
+    VIEWPORT_H = 1080
+    out_of_bounds: list[dict] = []
+    for s in syslist:
+        x = s.get('xPixels', 0)
+        y = s.get('yPixels', 0)
+        if x < 0 or x > VIEWPORT_W or y < 0 or y > VIEWPORT_H:
+            out_of_bounds.append({
+                'systemName': s['systemName'],
+                'xPixels': x,
+                'yPixels': y,
+            })
+    # Also check margin: systems should be within MARGIN..VIEWPORT_W-MARGIN
+    margin_violations: list[dict] = []
+    for s in syslist:
+        x = s.get('xPixels', 0)
+        y = s.get('yPixels', 0)
+        if x < MARGIN - 1 or x > VIEWPORT_W - MARGIN + 1 or y < MARGIN - 1 or y > VIEWPORT_H - MARGIN + 1:
+            margin_violations.append({
+                'systemName': s['systemName'],
+                'xPixels': x,
+                'yPixels': y,
+                'violation': 'x' if (x < MARGIN - 1 or x > VIEWPORT_W - MARGIN + 1) else 'y',
+            })
+
+    # Reciprocal link count — bidirectional edges
+    reverse_lookup: dict[str, set[str]] = {n: set() for n in all_names}
+    for entry in syslist:
+        for tgt in entry.get('namedLinkedSystems', []):
+            reverse_lookup[tgt].add(entry['systemName'])
+    reciprocal_count = 0
+    reciprocal_pairs: list[list[str]] = []
+    seen_pair: set[tuple[str, str]] = set()
+    for entry in syslist:
+        src = entry['systemName']
+        for tgt in entry.get('namedLinkedSystems', []):
+            pair = (src, tgt) if src < tgt else (tgt, src)
+            if pair not in seen_pair and tgt in reverse_lookup.get(src, set()):
+                reciprocal_count += 1
+                reciprocal_pairs.append([pair[0], pair[1]])
+                seen_pair.add(pair)
+
+    # Duplicate coordinate slots — multiple systems sharing the same pixel position
+    from collections import Counter
+    coord_counts = Counter((s.get('xPixels'), s.get('yPixels')) for s in syslist)
+    duplicate_slots: list[dict] = [
+        {'xPixels': x, 'yPixels': y, 'count': c, 'sampleNames': [s['systemName'] for s in syslist if s.get('xPixels') == x and s.get('yPixels') == y][:3]}
+        for (x, y), c in coord_counts.items() if c > 1
+    ]
+    duplicate_slots.sort(key=lambda d: -d['count'])
+
+    # Isolated systems — those with zero linked neighbours (both incoming and outgoing)
+    all_with_links: set[str] = set()
+    for entry in syslist:
+        for tgt in entry.get('namedLinkedSystems', []):
+            all_with_links.add(entry['systemName'])
+            all_with_links.add(tgt)
+    isolated: list[str] = sorted(n for n in all_names if n not in all_with_links)
+
+    # Seed-system presence in scaffold (using partial-match heuristic like the correspondence scout)
+    system_seeds: list[dict] = names.get('systemNames', [])
+    system_seed_names: list[str] = [s['name'] for s in system_seeds]
+    seed_in_scaffold: list[dict] = []
+    seed_absent: list[str] = []
+    for seed_name in system_seed_names:
+        found = [n for n in all_names if seed_name.lower() in n.lower() or n.lower() in seed_name.lower()]
+        if found:
+            seed_in_scaffold.append({'seedName': seed_name, 'matchingScaffoldNames': sorted(found)})
+        else:
+            seed_absent.append(seed_name)
+    levo_in_scaffold = 'Levo' in all_names
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-named-candidate-scaffold-integrity-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': ['namedCandidateCoordinateScaffoldSummary', 'sourcedEvNames systemNames'],
+        'totalSystems': len(syslist),
+        'uniqueNameCount': len(all_names),
+        'brokenLinkCount': len(broken_links),
+        'brokenLinks': broken_links,
+        'nameDuplicateCount': len(name_duplicates),
+        'nameDuplicates': name_duplicates,
+        'outOfBoundsCount': len(out_of_bounds),
+        'outOfBoundsSystems': out_of_bounds,
+        'marginViolationCount': len(margin_violations),
+        'marginViolations': margin_violations,
+        'totalLinks': sum(len(s.get('namedLinkedSystems', [])) for s in syslist),
+        'reciprocalLinkCount': reciprocal_count,
+        'reciprocalLinkPairs': reciprocal_pairs,
+        'duplicateCoordinateSlotCount': len(duplicate_slots),
+        'duplicateCoordinateSlots': duplicate_slots,
+        'isolatedSystemCount': len(isolated),
+        'isolatedSystems': isolated,
+        'seedPresenceInScaffold': seed_in_scaffold,
+        'seedAbsentFromScaffold': seed_absent,
+        'levoPresent': levo_in_scaffold,
+        'promotionStatus': 'not-promoted; integrity scout only — validates internal scaffold consistency, not Classic record-to-name or display-unit promotion',
+        'promotionBlockers': [
+            'Integrity validation checks the non-promoted heuristic scaffold only',
+            'No Classic record-to-name join, route topology label, or display-unit promotion is implied',
+            'Duplicate coordinate slots reflect the 16.16 fixed-point grid resolution, not Classic map overlap',
+        ],
+        'sourceNote': (
+            'This scout validates the internal consistency of the named candidate coordinate scaffold. '
+            'Broken links, duplicate names, out-of-bounds coordinates, and isolated systems indicate '
+            'data integrity issues. Reciprocal link counts and duplicate coordinate slots reflect the '
+            'underlying decoded 16.16 fixed-point coordinate projection, not Classic map layout. '
+            'Seed presence in the scaffold records which heuristic system-name seeds have scaffold '
+            'candidates. This is a pure validation scout; no Classic promotion is implied.'
+        ),
+    }
+
+
+def _route_label_scaffold_correspondence_scout(systems: list[dict], names: dict) -> dict:
+    """Cross-reference observed Classic route labels against scaffold named systems and link topology.
+
+    The 4 observed runtime route labels (Rigel, Kathoon, Yemuro, Torgo) are real
+    Classic-visible system names from original EV observation. This scout checks
+    whether any appear in the heuristic scaffold, identifies disparities between
+    scaffold-named Levo links and observed labels, and documents which scaffold
+    systems are closest in link topology to where the observed labels should be.
+    """
+    scaffold = _named_candidate_coordinate_scaffold_summary(systems, names)
+    scaffold_systems: list[dict] = scaffold.get('namedSystems', [])
+    scaffold_names: set[str] = {s['systemName'] for s in scaffold_systems}
+
+    # Build scaffold name → named linked systems mapping
+    link_of: dict[str, list[str]] = {}
+    for entry in scaffold_systems:
+        link_of[entry['systemName']] = entry.get('namedLinkedSystems', [])
+
+    # Observed runtime route labels (from _runtime_route_label_observation_bridge_gap_summary)
+    observed_labels_defs = [
+        {'label': 'Rigel', 'observation': 'Backslash-selected from Levo in Hyperspace mode.'},
+        {'label': 'Kathoon', 'observation': 'Shift-click route screenshot showed Destination System: Kathoon around Rigel/Levo.'},
+        {'label': 'Yemuro', 'observation': 'Mission text named New Istanbul in the Yemuro system.'},
+        {'label': 'Torgo', 'observation': 'Mission text named Torgo Prime in the Torgo system.'},
+    ]
+    observed_labels = [d['label'] for d in observed_labels_defs]
+
+    # Levo scaffold info
+    levo_scaffold = next((s for s in scaffold_systems if s['systemName'] == 'Levo'), None)
+    levo_scaffold_links = list(link_of.get('Levo', []))
+
+    # Cross-reference each observed label vs scaffold
+    label_results: list[dict] = []
+    for label in observed_labels:
+        exact_match = label in scaffold_names
+        partial_matches = sorted(
+            n for n in scaffold_names
+            if label.lower() in n.lower() or n.lower() in label.lower()
+        )
+        # Check if label appears as a link from any scaffold system
+        linked_from = sorted(
+            src for src, targets in link_of.items()
+            if label in targets
+        )
+        is_levo_link = label in levo_scaffold_links
+
+        label_results.append({
+            'observedLabel': label,
+            'inScaffoldNames': exact_match,
+            'partialScaffoldNameCandidates': partial_matches,
+            'inScaffoldLevoLinks': is_levo_link,
+            'linkedFromScaffoldSystems': linked_from,
+            'scaffoldPresence': 'exact' if exact_match else ('partial' if partial_matches else 'absent'),
+        })
+
+    # Document Levo scaffold link names vs observed labels
+    levo_link_result: list[dict] = []
+    for link_name in levo_scaffold_links:
+        matching_labels = [
+            l for l in observed_labels
+            if l.lower() == link_name.lower()
+            or l.lower() in link_name.lower()
+            or link_name.lower() in l.lower()
+        ]
+        levo_link_result.append({
+            'scaffoldLevoLinkName': link_name,
+            'matchingObservedLabels': matching_labels,
+            'matchType': 'exact' if any(l == link_name for l in matching_labels)
+                         else ('partial' if matching_labels else 'none'),
+        })
+
+    # Which observed labels are NOT Levo scaffold links (the disparities)
+    levo_disparities = [
+        l for l in observed_labels
+        if l not in levo_scaffold_links
+        and not any(l.lower() in ll.lower() or ll.lower() in l.lower()
+                    for ll in levo_scaffold_links)
+    ]
+
+    return {
+        'sourceLabel': 'decoded-resource-and-runtime-backed-route-label-scaffold-correspondence-scout',
+        'oracleStatus': 'route_label_scaffold_presence_documented_no_calibration',
+        'sourceBasis': ['original-runtime-observed', 'decoded-record-family', 'decoded-original-variable'],
+        'inputSummaries': [
+            'runtimeRouteLabelObservationBridgeGapSummary',
+            'namedCandidateCoordinateScaffoldSummary',
+        ],
+        'observedLabelCount': len(observed_labels),
+        'observedLabels': [d['label'] for d in observed_labels_defs],
+        'scaffoldNamedSystemCount': len(scaffold_names),
+        'levoScaffoldLinkNames': levo_scaffold_links,
+        'labelResults': label_results,
+        'levoLinkResults': levo_link_result,
+        'labelsAbsentFromLevoLinks': levo_disparities,
+        'levoLinkCount': len(levo_scaffold_links),
+        'labelsInScaffoldExact': sum(1 for r in label_results if r['scaffoldPresence'] == 'exact'),
+        'labelsInScaffoldPartial': sum(1 for r in label_results if r['scaffoldPresence'] == 'partial'),
+        'labelsAbsentFromScaffold': sum(1 for r in label_results if r['scaffoldPresence'] == 'absent'),
+        'promotionStatus': 'not-promoted; correspondence scout only — no observed label is tied to a decoded resource ID or Con slot',
+        'promotionBlockers': [
+            'Observed route labels are visible Classic text but no capture ties each label to a decoded resource ID or Con slot',
+            'Scaffold names are heuristic landing-name text-chunk candidates, not verified Classic system names',
+            'Levo scaffold link names (Capella/Dune/New Britain) differ from observed Classic labels (Rigel/Kathoon) — this is a known disparity, not a resolved mapping',
+            'No Classic resource-ID-to-name join, route topology promotion, or display-unit calibration is implied',
+        ],
+        'sourceNote': (
+            'This scout documents the gap between observed Classic route labels and the heuristic scaffold named systems. '
+            'None of the 4 observed labels appear in the 46 scaffold names. '
+            f"The scaffold Levo links {levo_scaffold_links} do not match observed labels {observed_labels}. "
+            'This confirms the scaffold naming (from landing-name chunk indexes) does not yet align with Classic-visible route labels. '
+            'A Classic map capture/click probe recording visible labels and click positions is needed before any label-to-resource-ID join can be made.'
         ),
     }
 
@@ -5836,6 +6292,32 @@ def _exact_system_name_mapping(resource_id: int) -> dict | None:
     }
 
 
+def _govt_field(record: dict) -> dict:
+    """Extract the Govt field (word index 22) from a syst record.
+
+    EV Classic Resource Bible defines Govt at syst word 22:
+      -1  Independent/unowned system
+      128-255  Controlling government resource ID
+    """
+    raw_value = _word(record, GOVT_FIELD_WORD_INDEX)
+    status = None
+    if raw_value == -1:
+        status = 'independent'
+    elif 128 <= raw_value <= 255:
+        status = 'governed'
+    else:
+        status = 'out-of-domain'
+    return {
+        'wordIndex': GOVT_FIELD_WORD_INDEX,
+        'byteOffsetInRecord': record['fields'][GOVT_FIELD_WORD_INDEX]['byteOffsetInRecord'],
+        'rawValue': raw_value,
+        'status': status,
+        'governmentResourceId': raw_value if status == 'governed' else None,
+        'sourceConfidence': 'resource-bible-field-family-only',
+        'sourceNote': 'Govt field (word 22) per EV Classic Resource Bible. Raw value recorded as non-promoting scout; no government name cross-reference or runtime behavior claim is made.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -5849,10 +6331,11 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         semantic_fields = {
             'mapCoordinates': _map_coordinates(record),
             'candidateHyperspaceLinks': _candidate_links(record, resource_ids),
+            'candidateGovtField': _govt_field(record),
         }
         if exact_name is not None:
             semantic_fields['exactSystemName'] = exact_name
-        semantic_status = 'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending'
+        semantic_status = 'ids_promoted_names_seeded_coordinate_words_links_govt_candidate_fields_pending'
         if exact_name is not None:
             semantic_status = 'ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending'
         systems.append({
@@ -5930,6 +6413,9 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'namedCandidateRouteCalibrationDiagnosticPlan': _named_candidate_route_calibration_diagnostic_plan(systems, names),
         'namedCandidateCoordinateScaffoldSummary': _named_candidate_coordinate_scaffold_summary(systems, names),
         'namedSeedScaffoldCorrespondenceScout': _named_seed_scaffold_correspondence_scout(systems, names),
+        'namedCandidateScaffoldIntegritySummary': _named_candidate_scaffold_integrity_summary(systems, names),
+        'routeLabelScaffoldCorrespondenceScout': _route_label_scaffold_correspondence_scout(systems, names),
+        'systGovtFieldValueScout': _syst_govt_field_value_scout(systems),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

@@ -4480,6 +4480,19 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('Sirius', [p['systemNameSeed'] for p in seed_scaffold['partialMatches']])
         self.assertIn('not-promoted', seed_scaffold['promotionStatus'])
 
+        # Validate systGovtFieldValueScout
+        govt_scout = data['systGovtFieldValueScout']
+        self.assertEqual(govt_scout['sourceLabel'], 'terminal-velocity-syst-govt-field-value-scout')
+        self.assertEqual(govt_scout['oracleStatus'], 'govt_field_semantics_pending_name_cross_reference')
+        self.assertEqual(govt_scout['recordCount'], 67)
+        self.assertEqual(govt_scout['wordIndex'], 22)
+        self.assertIn('not-promoted', govt_scout['promotionStatus'])
+        self.assertEqual(govt_scout['governedCount'] + govt_scout['independentCount'] +
+                         sum(v for k, v in govt_scout['valueDistribution'].items()
+                             if k.startswith('unknown_')), 67,
+                         'All 67 systems must be classified in the govt scout')
+        self.assertGreater(govt_scout['valueDistribution']['unknown_raw_25'], 0)
+
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
         self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6')

@@ -286,6 +286,8 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         allowed_system_statuses = {
             'ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending',
             'ids_promoted_names_seeded_coordinate_words_links_candidate_fields_pending',
+            'ids_promoted_exact_name_coordinate_words_links_govt_candidate_fields_pending',
+            'ids_promoted_names_seeded_coordinate_words_links_govt_candidate_fields_pending',
         }
         if system['semanticStatus'] not in allowed_system_statuses:
             raise ValueError(f"sourced EV system {system['resourceId']} has unexpected semantic status")
