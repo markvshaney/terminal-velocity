@@ -4916,6 +4916,42 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('noSpatiallyWideMultiPointClusters', hypotheses)
         self.assertIn('levoInCentralNonDefaultRegion', hypotheses)
 
+    def test_syst_data_word_link_correlation_scout(self):
+        """Validate systDataWordLinkCorrelationScout correlates patterns with link topology."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordLinkCorrelationScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-link-correlation-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_link_correlation_documented')
+        self.assertIn('not-promoted', scout['promotionStatus'])
+        self.assertEqual(scout['recordCount'], 67)
+        self.assertGreater(scout['nonDefaultWithLinks'], 0)
+        self.assertGreater(scout['defaultWithLinks'], 0)
+        self.assertIsInstance(scout['defaultAvgActiveLinks'], (int, float))
+        self.assertIsInstance(scout['nonDefaultAvgActiveLinks'], (int, float))
+        # Verify per-cluster stats
+        clusters = scout['clusterLinkStats']
+        self.assertGreater(len(clusters), 0)
+        for c in clusters:
+            self.assertIsInstance(c['pattern'], list)
+            self.assertEqual(len(c['pattern']), 4)
+            self.assertGreater(c['memberCount'], 0)
+            self.assertGreater(len(c['memberRids']), 0)
+            self.assertIsInstance(c['avgActiveLinks'], (int, float))
+            self.assertIsInstance(c['minActiveLinks'], int)
+            self.assertIsInstance(c['maxActiveLinks'], int)
+            self.assertIsInstance(c['reachableFromLevoCount'], int)
+        # Verify linked-pair analysis
+        self.assertGreaterEqual(scout['samePatternEdgeRatio'], 0)
+        self.assertGreater(scout['totalEdgeCount'], 0)
+        self.assertGreaterEqual(scout['nonDefaultLinksToNonDefault'], 0)
+        self.assertGreaterEqual(scout['nonDefaultLinksToNonDefaultRatio'], 0)
+        # Verify hypotheses
+        hypotheses = scout.get('hypotheses', {})
+        self.assertIn('nonDefaultSystemsHaveDifferentLinkDegrees', hypotheses)
+        self.assertIn('nonDefaultSystemsCloserToLevo', hypotheses)
+        self.assertIn('linkedPairsSharePatternsMoreThanBackground', hypotheses)
+        self.assertIn('nonDefaultSystemsLinkToEachOther', hypotheses)
+
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
         self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6')

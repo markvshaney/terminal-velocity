@@ -1706,6 +1706,187 @@ def _syst_data_word_spatial_context_scout(systems: list[dict]) -> dict:
     }
 
 
+def _syst_data_word_link_correlation_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout correlating data word patterns with link topology.
+
+    Cross-references data word pattern clusters (w20-w23) with link connectivity
+    characteristics: active link count, hop distance from Levo, reciprocal link
+    status, and whether linked pairs share data word patterns.
+    """
+    from collections import defaultdict
+    import math
+
+    # Build resource-id-indexed topology data
+    by_rid: dict[int, dict] = {}
+    for s in systems:
+        sf = s.get('semanticFields', {})
+        cdf = sf.get('candidateDataWordFields', {})
+        coords = sf.get('mapCoordinates', {})
+        links = sf.get('candidateHyperspaceLinks', {})
+        rid = s.get('resourceId')
+        pat = tuple(cdf.get('pattern', []))
+        is_def = cdf.get('isDefault25', True)
+        xp = coords.get('xPos', {})
+        yp = coords.get('yPos', {})
+        x_raw = xp.get('signedLongCandidate')
+        y_raw = yp.get('signedLongCandidate')
+        direct_links = [
+            slot['targetResourceId'] for slot in links.get('linkSlots', [])
+            if slot.get('status') == 'linked-system' and slot.get('targetResourceId') != rid
+        ]
+        by_rid[rid] = {
+            'resourceId': rid,
+            'pattern': pat,
+            'isDefault25': is_def,
+            'xRaw': x_raw,
+            'yRaw': y_raw,
+            'activeLinks': direct_links,
+            'activeLinkCount': len(direct_links),
+            'hasSelfLink': any(
+                slot.get('targetResourceId') == rid
+                for slot in links.get('linkSlots', [])
+            ),
+        }
+
+    # Build adjacency and compute hop distances from Levo (RID 128)
+    adjacency: dict[int, set[int]] = {}
+    for rid, info in by_rid.items():
+        adjacency[rid] = set(info['activeLinks'])
+
+    def _hop_distances(start_rid: int) -> dict[int, int]:
+        dist = {start_rid: 0}
+        q = [start_rid]
+        while q:
+            cur = q.pop(0)
+            for nbr in adjacency.get(cur, set()):
+                if nbr not in dist:
+                    dist[nbr] = dist[cur] + 1
+                    q.append(nbr)
+        return dist
+
+    hop_dist = _hop_distances(128)
+
+    # Categorize systems
+    default_systems = [info for rid, info in by_rid.items() if info['isDefault25']]
+    non_default_systems = [info for rid, info in by_rid.items() if not info['isDefault25']]
+
+    # Link-degree distributions
+    def avg_link_count(infos: list[dict]) -> float:
+        return sum(info['activeLinkCount'] for info in infos) / len(infos) if infos else 0.0
+
+    default_avg_links = avg_link_count(default_systems)
+    non_default_avg_links = avg_link_count(non_default_systems)
+
+    # Hop distance from Levo: systems within reach
+    def reachable_from_128(infos: list[dict]) -> list[int]:
+        return [info['resourceId'] for info in infos if info['resourceId'] in hop_dist]
+
+    def avg_hop_distance(infos: list[dict]) -> float:
+        reachable = [hop_dist[info['resourceId']] for info in infos if info['resourceId'] in hop_dist]
+        return sum(reachable) / len(reachable) if reachable else 0.0
+
+    default_reachable = reachable_from_128(default_systems)
+    non_default_reachable = reachable_from_128(non_default_systems)
+    default_avg_hop = avg_hop_distance(default_systems)
+    non_default_avg_hop = avg_hop_distance(non_default_systems)
+
+    # Per-pattern-cluster link topology
+    cluster_link_stats = []
+    clusters: dict[str, list] = defaultdict(list)
+    for info in non_default_systems:
+        pat_key = str(list(info['pattern']))
+        clusters[pat_key].append(info)
+
+    for pat_key, members in sorted(clusters.items()):
+        avg_links = sum(m['activeLinkCount'] for m in members) / len(members)
+        avg_hop_for_cluster = avg_hop_distance(members)
+        reachable_count = sum(1 for m in members if m['resourceId'] in hop_dist)
+        rids = sorted(m['resourceId'] for m in members)
+        link_counts = [m['activeLinkCount'] for m in members]
+        cluster_link_stats.append({
+            'pattern': list(members[0]['pattern']),
+            'memberCount': len(members),
+            'memberRids': rids,
+            'avgActiveLinks': round(avg_links, 2),
+            'minActiveLinks': min(link_counts),
+            'maxActiveLinks': max(link_counts),
+            'reachableFromLevoCount': reachable_count,
+            'avgHopDistanceFromLevo': round(avg_hop_for_cluster, 2) if reachable_count > 0 else None,
+            'allReachableFromLevo': reachable_count == len(members),
+            'noneReachableFromLevo': reachable_count == 0,
+        })
+
+    # Linked-pair pattern homogeneity
+    same_pattern_edge_count = 0
+    total_edge_count = 0
+    for rid, info in by_rid.items():
+        for target_rid in info['activeLinks']:
+            if target_rid in by_rid:
+                total_edge_count += 1
+                if info['pattern'] == by_rid[target_rid]['pattern']:
+                    same_pattern_edge_count += 1
+
+    same_pattern_edge_ratio = round(same_pattern_edge_count / total_edge_count, 4) if total_edge_count > 0 else 0.0
+
+    # Non-default nodes linked to each other vs linked to default nodes
+    nd_links_to_nd = 0
+    nd_links_to_def = 0
+    nd_links_to_outside = 0
+    for info in non_default_systems:
+        for target_rid in info['activeLinks']:
+            if target_rid in by_rid:
+                if not by_rid[target_rid]['isDefault25']:
+                    nd_links_to_nd += 1
+                else:
+                    nd_links_to_def += 1
+            else:
+                nd_links_to_outside += 1
+    nd_other_links = nd_links_to_nd + nd_links_to_def + nd_links_to_outside
+    nd_link_to_nd_ratio = round(nd_links_to_nd / nd_other_links, 4) if nd_other_links > 0 else 0.0
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-link-correlation-scout',
+        'oracleStatus': 'syst_data_word_link_correlation_documented',
+        'promotionStatus': 'not-promoted; link correlation documents connectivity characteristics of data word pattern clusters only; no runtime route topology or navigation behavior is claimed',
+        'recordCount': len(systems),
+        'nonDefaultWithLinks': len(non_default_systems),
+        'defaultWithLinks': len(default_systems),
+        'defaultAvgActiveLinks': round(default_avg_links, 2),
+        'nonDefaultAvgActiveLinks': round(non_default_avg_links, 2),
+        'defaultLevoReachableCount': len(default_reachable),
+        'nonDefaultLevoReachableCount': len(non_default_reachable),
+        'defaultAvgHopDistanceFromLevo': round(default_avg_hop, 2),
+        'nonDefaultAvgHopDistanceFromLevo': round(non_default_avg_hop, 2),
+        'clusterLinkStats': cluster_link_stats,
+        'samePatternEdgeRatio': same_pattern_edge_ratio,
+        'samePatternEdgeCount': same_pattern_edge_count,
+        'totalEdgeCount': total_edge_count,
+        'nonDefaultLinksToNonDefault': nd_links_to_nd,
+        'nonDefaultLinksToDefault': nd_links_to_def,
+        'nonDefaultLinksToNonDefaultRatio': nd_link_to_nd_ratio,
+        'hypotheses': {
+            'nonDefaultSystemsHaveDifferentLinkDegrees': abs(default_avg_links - non_default_avg_links) > 0.1,
+            'nonDefaultSystemsCloserToLevo': non_default_avg_hop < default_avg_hop if default_reachable and non_default_reachable else False,
+            'linkedPairsSharePatternsMoreThanBackground': same_pattern_edge_ratio > 0.5,
+            'nonDefaultSystemsLinkToEachOther': nd_link_to_nd_ratio > 0.1,
+        },
+        'promotionBlockers': [
+            'Link correlation documents connectivity characteristics of data word pattern clusters only',
+            'No runtime route topology, navigation behavior, or Classic map layout is promoted',
+            'Link slots w4-w7 encode system IDs; w8-w19 are all -1 in every decoded record',
+            'Coordinate display units/map scaling remain pending, so spatial distances are in raw candidate space',
+        ],
+        'sourceNote': (
+            'Non-promoting scout correlating data word pattern clusters with link topology. '
+            f'Found {len(default_systems)} default-25 systems with avg {round(default_avg_links, 2)} active links '
+            f'and {len(non_default_systems)} non-default systems with avg {round(non_default_avg_links, 2)} active links. '
+            f'Same-pattern linked pair ratio = {same_pattern_edge_ratio} '
+            f'({same_pattern_edge_count}/{total_edge_count} edges connect same-pattern systems). '
+            f'{nd_link_to_nd_ratio:.1%} of non-default-system links target other non-default systems.',
+        ),
+    }
+
+
 def _coordinate_map_source_readiness_summary(systems: list[dict]) -> dict:
     """Record Resource Bible map-placement evidence and the exact promotion blockers."""
     coordinate_complete = [
@@ -7960,6 +8141,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systDataWordFieldObservationScout': _syst_data_word_field_observation_scout(systems),
         'systDataWordPatternClusterScout': _syst_data_word_pattern_cluster_scout(systems),
         'systDataWordSpatialContextScout': _syst_data_word_spatial_context_scout(systems),
+        'systDataWordLinkCorrelationScout': _syst_data_word_link_correlation_scout(systems),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
