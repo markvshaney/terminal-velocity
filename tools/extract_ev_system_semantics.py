@@ -1520,6 +1520,192 @@ def _syst_data_word_pattern_cluster_scout(systems: list[dict]) -> dict:
     }
 
 
+def _syst_data_word_spatial_context_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout correlating data word patterns with coordinate positions.
+
+    Checks whether non-default data word systems and their pattern clusters
+    show spatial coherence — i.e., whether systems sharing a pattern cluster
+    tend to be near each other on the map. Also documents the coordinate
+    distribution of default vs non-default systems and the spatial spread
+    of each cluster.
+    """
+    from collections import defaultdict
+    import math
+
+    # Collect non-default systems with coordinates
+    non_default_spatial = []
+    default_nearby = []
+    for s in systems:
+        sf = s.get('semanticFields', {})
+        cdf = sf.get('candidateDataWordFields', {})
+        coords = sf.get('mapCoordinates', {})
+        xp = coords.get('xPos', {})
+        yp = coords.get('yPos', {})
+        x_raw = xp.get('signedLongCandidate')
+        y_raw = yp.get('signedLongCandidate')
+        rid = s.get('resourceId')
+        name = sf.get('exactSystemName', {}).get('systemName') if sf.get('exactSystemName') else None
+        if x_raw is None or y_raw is None:
+            continue
+        pat = tuple(cdf.get('pattern', []))
+        is_def = cdf.get('isDefault25', True)
+        entry = {
+            'resourceId': rid,
+            'name': name,
+            'xRaw': x_raw,
+            'yRaw': y_raw,
+            'pattern': list(pat) if not is_def else None,
+            'isDefault25': is_def,
+        }
+        if is_def:
+            default_nearby.append(entry)
+        else:
+            non_default_spatial.append(entry)
+
+    # Group non-default by pattern cluster
+    clusters: dict[str, list] = defaultdict(list)
+    for e in non_default_spatial:
+        pat_key = str(e['pattern'])
+        clusters[pat_key].append(e)
+
+    # Compute per-cluster spatial metrics
+    cluster_spatial = []
+    for pat_key, members in sorted(clusters.items()):
+        xs = [m['xRaw'] for m in members]
+        ys = [m['yRaw'] for m in members]
+        cx = sum(xs) / len(xs)
+        cy = sum(ys) / len(ys)
+        # Intra-cluster distances (pairwise)
+        intra_dists = []
+        for i in range(len(members)):
+            for j in range(i + 1, len(members)):
+                dx = members[i]['xRaw'] - members[j]['xRaw']
+                dy = members[i]['yRaw'] - members[j]['yRaw']
+                dist = math.sqrt(dx * dx + dy * dy)
+                intra_dists.append(round(dist, 1))
+        rids = [m['resourceId'] for m in members]
+        names = [m['name'] for m in members if m['name']]
+        cluster_spatial.append({
+            'pattern': members[0]['pattern'],
+            'memberCount': len(members),
+            'memberRids': sorted(rids),
+            'memberNames': names,
+            'centroidX': round(cx, 1),
+            'centroidY': round(cy, 1),
+            'xMin': min(xs),
+            'xMax': max(xs),
+            'yMin': min(ys),
+            'yMax': max(ys),
+            'xSpan': max(xs) - min(xs),
+            'ySpan': max(ys) - min(ys),
+            'intraClusterDistances': sorted(intra_dists) if intra_dists else None,
+            'maxIntraClusterDistance': max(intra_dists) if intra_dists else 0,
+            'isSinglePoint': len(members) == 1,
+            'coordinates': [{'resourceId': m['resourceId'], 'x': m['xRaw'], 'y': m['yRaw']} for m in members],
+        })
+
+    # Default-system coordinate distribution
+    default_xs = [e['xRaw'] for e in default_nearby]
+    default_ys = [e['yRaw'] for e in default_nearby]
+    default_centroid_x = sum(default_xs) / len(default_xs) if default_xs else 0
+    default_centroid_y = sum(default_ys) / len(default_ys) if default_ys else 0
+
+    # Non-default system coordinate distribution
+    nd_xs = [e['xRaw'] for e in non_default_spatial]
+    nd_ys = [e['yRaw'] for e in non_default_spatial]
+    nd_centroid_x = sum(nd_xs) / len(nd_xs) if nd_xs else 0
+    nd_centroid_y = sum(nd_ys) / len(nd_ys) if nd_ys else 0
+
+    # Centroid distance between default and non-default populations
+    centroid_dx = default_centroid_x - nd_centroid_x
+    centroid_dy = default_centroid_y - nd_centroid_y
+    centroid_distance = round(math.sqrt(centroid_dx * centroid_dx + centroid_dy * centroid_dy), 1)
+
+    # Count clusters that are fully single-point (no spatial spread)
+    single_point_count = sum(1 for c in cluster_spatial if c['isSinglePoint'])
+    multi_point_clusters = [c for c in cluster_spatial if not c['isSinglePoint']]
+
+    # For multi-point clusters, check if members are near each other
+    # (max intra-cluster distance vs overall non-default span)
+    nd_xspan = max(nd_xs) - min(nd_xs) if nd_xs else 0
+    nd_yspan = max(nd_ys) - min(nd_ys) if nd_ys else 0
+    max_cluster_spread = max([c['maxIntraClusterDistance'] for c in multi_point_clusters]) if multi_point_clusters else 0
+
+    # Spatial overlap check: do any multi-point clusters have members
+    # at very different positions (span > some threshold)?
+    wide_clusters = [c for c in multi_point_clusters if c['maxIntraClusterDistance'] > max(10000, nd_xspan * 0.3)]
+    compact_clusters = [c for c in multi_point_clusters if c not in wide_clusters]
+
+    # Determine levo cluster position
+    levo_entry = next((e for e in non_default_spatial if e['resourceId'] == 128), None)
+    levo_cluster = next((c for c in cluster_spatial if 128 in c['memberRids']), None)
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-spatial-context-scout',
+        'oracleStatus': 'syst_data_word_spatial_context_documented',
+        'promotionStatus': 'not-promoted; spatial context correlation is a non-promoting structural scout only; no Resource Bible field semantics claimed for spatial-correlation patterns',
+        'recordCount': len(systems),
+        'nonDefaultWithCoordinates': len(non_default_spatial),
+        'defaultWithCoordinates': len(default_nearby),
+        'totalWithCoordinates': len(non_default_spatial) + len(default_nearby),
+        'clusterCount': len(cluster_spatial),
+        'singlePointClusterCount': single_point_count,
+        'multiPointClusterCount': len(multi_point_clusters),
+        'compactClusterCount': len(compact_clusters),
+        'wideClusterCount': len(wide_clusters),
+        'clusters': cluster_spatial,
+        'defaultCoordinateSummary': {
+            'count': len(default_nearby),
+            'xRange': [min(default_xs), max(default_xs)] if default_xs else None,
+            'yRange': [min(default_ys), max(default_ys)] if default_ys else None,
+            'centroidX': round(default_centroid_x, 1) if default_xs else None,
+            'centroidY': round(default_centroid_y, 1) if default_ys else None,
+        },
+        'nonDefaultCoordinateSummary': {
+            'count': len(non_default_spatial),
+            'xRange': [min(nd_xs), max(nd_xs)] if nd_xs else None,
+            'yRange': [min(nd_ys), max(nd_ys)] if nd_ys else None,
+            'centroidX': round(nd_centroid_x, 1) if nd_xs else None,
+            'centroidY': round(nd_centroid_y, 1) if nd_ys else None,
+        },
+        'centroidDistanceDefaultToNonDefault': centroid_distance,
+        'levoCluster': {
+            'pattern': levo_cluster['pattern'] if levo_cluster else None,
+            'position': {'x': levo_entry['xRaw'], 'y': levo_entry['yRaw']} if levo_entry else None,
+            'memberCount': levo_cluster['memberCount'] if levo_cluster else 0,
+        } if levo_entry else None,
+        'hypotheses': {
+            'nonDefaultSystemsDistributedAcrossFullMap': (
+                min(nd_xs) <= min(default_xs) and max(nd_xs) >= max(default_xs)
+            ) if nd_xs and default_xs else False,
+            'defaultCentroidNearNonDefaultCentroid': centroid_distance < 50000,
+            'multiPointClustersAreSpatiallyCompact': max_cluster_spread < 100000,
+            'noSpatiallyWideMultiPointClusters': len(wide_clusters) == 0,
+            'levoInCentralNonDefaultRegion': (
+                levo_cluster and
+                abs(levo_cluster['centroidX'] - nd_centroid_x) < nd_xspan * 0.3 and
+                abs(levo_cluster['centroidY'] - nd_centroid_y) < nd_yspan * 0.3
+            ) if levo_cluster and nd_xspan else False,
+        },
+        'promotionBlockers': [
+            'Spatial context correlation documents coordinate positions of data word pattern clusters only',
+            'No Resource Bible field-family semantics (system type, government, population, hazard) is claimed for any spatial pattern',
+            'Coordinate display units/map scaling remain pending, so all positions are in raw signed-long candidate space',
+            'Cannot distinguish raster/region encoding from semantic field encoding without additional evidence',
+        ],
+        'sourceNote': (
+            'Non-promoting spatial context scout correlating data word pattern clusters '
+            f'with system coordinate positions. Found {len(cluster_spatial)} pattern clusters '
+            f'among {len(non_default_spatial)} non-default systems with coordinates. '
+            f'{single_point_count} single-point clusters and {len(multi_point_clusters)} multi-point clusters. '
+            f'Default-25 systems centroid at ({round(default_centroid_x, 0)}, {round(default_centroid_y, 0)}); '
+            f'non-default systems centroid at ({round(nd_centroid_x, 0)}, {round(nd_centroid_y, 0)}); '
+            f'centroid distance = {centroid_distance}. '
+            f'Max intra-cluster spread among multi-point clusters = {max_cluster_spread}.',
+        ),
+    }
+
+
 def _coordinate_map_source_readiness_summary(systems: list[dict]) -> dict:
     """Record Resource Bible map-placement evidence and the exact promotion blockers."""
     coordinate_complete = [
@@ -7773,6 +7959,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systDataWordSemanticCorrelationScout': _syst_data_word_semantic_correlation_scout(systems),
         'systDataWordFieldObservationScout': _syst_data_word_field_observation_scout(systems),
         'systDataWordPatternClusterScout': _syst_data_word_pattern_cluster_scout(systems),
+        'systDataWordSpatialContextScout': _syst_data_word_spatial_context_scout(systems),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

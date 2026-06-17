@@ -4848,6 +4848,74 @@ class NativeEvModelTests(unittest.TestCase):
         single_rids = sorted([c['memberRids'][0] for c in single])
         self.assertEqual(single_rids, [128, 129, 131, 133, 134, 140, 185])
 
+    def test_syst_data_word_spatial_context_scout(self):
+        """Validate systDataWordSpatialContextScout correlates patterns with coordinates."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordSpatialContextScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-spatial-context-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_spatial_context_documented')
+        self.assertEqual(scout['recordCount'], 67)
+        self.assertIn('not-promoted', scout['promotionStatus'])
+        self.assertGreater(scout['nonDefaultWithCoordinates'], 0)
+        self.assertGreater(scout['defaultWithCoordinates'], 0)
+        self.assertEqual(scout['totalWithCoordinates'],
+                         scout['nonDefaultWithCoordinates'] + scout['defaultWithCoordinates'])
+        # Verify cluster structure
+        clusters = scout['clusters']
+        self.assertGreater(len(clusters), 0)
+        non_default_rids_seen = set()
+        for c in clusters:
+            self.assertIsInstance(c['pattern'], list)
+            self.assertEqual(len(c['pattern']), 4)
+            self.assertGreater(c['memberCount'], 0)
+            self.assertGreater(len(c['memberRids']), 0)
+            self.assertIsInstance(c['centroidX'], (int, float))
+            self.assertIsInstance(c['centroidY'], (int, float))
+            self.assertIsInstance(c['isSinglePoint'], bool)
+            self.assertEqual(len(c['coordinates']), c['memberCount'])
+            for rid in c['memberRids']:
+                non_default_rids_seen.add(rid)
+        # Verify all non-default RIDs are covered
+        scout_nd_rids = sorted(non_default_rids_seen)
+        self.assertGreater(len(scout_nd_rids), 0)
+        self.assertIn(128, scout_nd_rids, 'Levo (RID 128) should be in non-default set')
+        # Verify KPI structure
+        self.assertGreaterEqual(scout['singlePointClusterCount'], 0)
+        self.assertGreaterEqual(scout['multiPointClusterCount'], 0)
+        self.assertEqual(scout['clusterCount'],
+                         scout['singlePointClusterCount'] + scout['multiPointClusterCount'])
+        self.assertGreaterEqual(scout['compactClusterCount'], 0)
+        self.assertGreaterEqual(scout['wideClusterCount'], 0)
+        # Verify coordinate summaries
+        default_cs = scout['defaultCoordinateSummary']
+        self.assertGreater(default_cs['count'], 0)
+        self.assertIsInstance(default_cs['xRange'], list)
+        self.assertIsInstance(default_cs['yRange'], list)
+        self.assertIsNotNone(default_cs['centroidX'])
+        self.assertIsNotNone(default_cs['centroidY'])
+        nd_cs = scout['nonDefaultCoordinateSummary']
+        self.assertGreater(nd_cs['count'], 0)
+        self.assertIsInstance(nd_cs['xRange'], list)
+        self.assertIsInstance(nd_cs['yRange'], list)
+        self.assertIsNotNone(nd_cs['centroidX'])
+        self.assertIsNotNone(nd_cs['centroidY'])
+        self.assertGreater(scout['centroidDistanceDefaultToNonDefault'], 0)
+        # Verify Levo cluster
+        lc = scout['levoCluster']
+        self.assertIsNotNone(lc)
+        self.assertEqual(lc['pattern'], [30, 40, 15, 15])
+        self.assertIsNotNone(lc['position'])
+        self.assertIn('x', lc['position'])
+        self.assertIn('y', lc['position'])
+        self.assertGreater(lc['memberCount'], 0)
+        # Verify hypotheses exist
+        hypotheses = scout.get('hypotheses', {})
+        self.assertIn('nonDefaultSystemsDistributedAcrossFullMap', hypotheses)
+        self.assertIn('defaultCentroidNearNonDefaultCentroid', hypotheses)
+        self.assertIn('multiPointClustersAreSpatiallyCompact', hypotheses)
+        self.assertIn('noSpatiallyWideMultiPointClusters', hypotheses)
+        self.assertIn('levoInCentralNonDefaultRegion', hypotheses)
+
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
         self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6')
