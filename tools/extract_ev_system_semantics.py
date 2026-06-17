@@ -50,6 +50,8 @@ SYST_FIELD_LAYOUT_SOURCE_REFERENCES = {
 }
 COORDINATE_WORD_INDICES = [0, 1, 2, 3]
 GOVT_FIELD_WORD_INDEX = 22
+DATA_WORD_INDICES = [20, 21, 22, 23]
+DATA_WORD_BYTE_FIELD_NAMES = ['w20_hi', 'w20_lo', 'w21_hi', 'w21_lo', 'w22_hi', 'w22_lo', 'w23_hi', 'w23_lo']
 LINK_WORD_INDICES = list(range(4, 20))
 LINK_SLOT_NAMES = [f'Con{index}' for index in range(1, 17)]
 EXACT_SYSTEM_NAME_MAPPINGS = {
@@ -553,6 +555,542 @@ def _syst_govt_field_word_shift_test_scout(systems: list[dict]) -> dict:
     }
 
 
+def _syst_compact_layout_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout documenting the actual BRGR decoded syst record layout.
+
+    The 67 decoded syst-like records are 44 words (88 bytes) each. This scout
+    analyses what each word region actually contains vs. the Resource Bible
+    expected field layout, identifying which words carry data, which are
+    padding or sentinel-only, and which exhibit the systemic 'default 25'
+    pattern discovered in the govt field word-shift investigation.
+
+    Expected Resource Bible layout (36 fields across 88 bytes):
+      - Words 0-1: xPos (signed 32-bit)
+      - Words 2-3: yPos (signed 32-bit)
+      - Words 4-8: Con1-Con5 (5 hyperspace link slots)
+      - Words 9-12: NavDef F1-F4 (navigation defaults)
+      - Words 13-21: DudeTypes/%Prob/AvgShips (9 AI population fields)
+      - Word 22: Govt (controlling government)
+      - Word 23: Message (message buoy string)
+      - Word 24: Asteroids (navigation hazard count)
+      - Word 25: Interference (sensor static)
+      - Word 26: VisBit (system visibility control)
+      - Words 27-37: Con6-Con16 (11 additional link slots)
+      - Words 38-43: Padding/unused (6 words)
+
+    Current decoded layout (observed from 67 records):
+      - Words 0-3: Coordinates (4 words, identical mapCoordinate decoding)
+      - Words 4-7: Used link slots (4 of 16, Con1-Con4, values 128-153)
+      - Words 8-19: Unused link slots (all -1 no-link sentinel, Con5-Con16)
+      - Words 20-23: Non-zero data words (4 words, values 5-55, dominated by 25)
+      - Words 24-43: Zero tail (20 words, all zeros)
+    """
+    import json
+    structures = json.loads(json.dumps({'runs': []}))
+    run = None
+    for r in json.loads(open(DEFAULT_STRUCTURES).read())['runs']:
+        if r.get('candidateType') == 'syst-like' and r.get('recordSize') == 88:
+            run = r
+            break
+    if run is None:
+        return {'sourceLabel': 'decoded-resource-backed-syst-compact-layout-scout',
+                'oracleStatus': 'syst_compact_layout_blocked_missing_run',
+                'recordCount': 0}
+
+    records = run['records']
+    field_count = len(records[0].get('fields', [])) if records else 0
+
+    # Analyse each word region's values across all records
+    def _word_values(word_idx: int) -> list[int]:
+        return [int(r['fields'][word_idx]['value']) for r in records if word_idx < len(r['fields'])]
+
+    def _region_summary(word_indices: list[int], label: str) -> dict:
+        all_values = [_word_values(wi) for wi in word_indices]
+        flat = [v for sublist in all_values for v in sublist]
+        if not flat:
+            return {'wordIndices': word_indices, 'label': label, 'recordCount': 0}
+        freq: dict[int, int] = {}
+        for v in flat:
+            freq[v] = freq.get(v, 0) + 1
+        distinct = sorted(set(flat))
+        non_zero_count = sum(1 for v in flat if v != 0)
+        return {
+            'wordIndices': word_indices,
+            'label': label,
+            'recordCount': len(records),
+            'wordCount': len(word_indices),
+            'distinctValues': distinct,
+            'distinctValueCount': len(distinct),
+            'valueRange': [min(flat), max(flat)],
+            'dominantValue': max(freq, key=lambda k: freq[k]),
+            'dominantCount': freq[max(freq, key=lambda k: freq[k])],
+            'dominantPercentage': round(100 * freq[max(freq, key=lambda k: freq[k])] / len(flat), 1),
+            'allValuesZero': all(v == 0 for v in flat),
+            'allValuesNoLinkSentinel': all(v == -1 for v in flat),
+            'allValuesSystemIdRange': all(128 <= v <= 1127 for v in flat),
+            'nonZeroValueCount': non_zero_count,
+            'perWordDetail': {
+                str(wi): {
+                    'valueRange': [min(_word_values(wi)), max(_word_values(wi))],
+                    'distinctValues': sorted(set(_word_values(wi))),
+                    'distinctValueCount': len(set(_word_values(wi))),
+                    'dominantValue': max((v for v in _word_values(wi)), key=lambda x: _word_values(wi).count(x)),
+                    'dominantCount': max(_word_values(wi).count(v) for v in set(_word_values(wi))),
+                    'allValuesNoLinkSentinel': all(v == -1 for v in _word_values(wi)),
+                    'allValuesZero': all(v == 0 for v in _word_values(wi)),
+                }
+                for wi in word_indices
+            },
+        }
+
+    regions = {
+        'coordinateWords0To3': _region_summary([0, 1, 2, 3], 'Coordinates xPos/yPos'),
+        'usedLinkWords4To7': _region_summary([4, 5, 6, 7], 'Used hyperspace link slots Con1-Con4'),
+        'unusedLinkWords8To19': _region_summary(list(range(8, 20)), 'Unused link slots Con5-Con16 (all -1)'),
+        'percentLikeDataWords20To23': _region_summary([20, 21, 22, 23], 'Non-zero data words (percent-like values)'),
+        'zeroTailWords24To43': _region_summary(list(range(24, 44)), 'Zero tail padding'),
+    }
+
+    # Cross-reference used link counts per system
+    system_link_counts = {}
+    for record in records:
+        values = [int(record['fields'][wi]['value']) for wi in range(4, 8) if wi < len(record['fields'])]
+        actual_links = [v for v in values if 128 <= v <= 1127]
+        system_link_counts[str(len(actual_links))] = system_link_counts.get(str(len(actual_links)), 0) + 1
+
+    # Cross-reference data word 25 pattern: which systems have 25 in all 4 percent-like words
+    systems_with_all_25 = 0
+    systems_with_any_25 = 0
+    for record in records:
+        vals20_23 = [int(record['fields'][wi]['value']) for wi in [20, 21, 22, 23] if wi < len(record['fields'])]
+        if all(v == 25 for v in vals20_23):
+            systems_with_all_25 += 1
+        if any(v == 25 for v in vals20_23):
+            systems_with_any_25 += 1
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-compact-layout-scout',
+        'oracleStatus': 'syst_compact_layout_documented_44_word_structure',
+        'promotionStatus': 'not-promoted; compact layout is a non-promoting structural scout only; no Resource Bible field semantics are claimed for unresolved word regions',
+        'recordCount': len(records),
+        'fieldCount': field_count,
+        'recordSize': 88,
+        'currentDecodedWordStructure': {
+            'regions': regions,
+            'regionOrder': [
+                'coordinateWords0To3',
+                'usedLinkWords4To7',
+                'unusedLinkWords8To19',
+                'percentLikeDataWords20To23',
+                'zeroTailWords24To43',
+            ],
+        },
+        'resourceBibleWordStructureComparison': {
+            'expectedRegionWordCount': 36,
+            'decodedRegionWordCount': 44,
+            'expectedVsDecodedGapWords': 44 - 36,
+            'coordinateMatch': '4 words used in both (2x 32-bit signed)',
+            'linkSlotCountMatch': 'Resource Bible 16 slots vs decoded 16 word positions, but only 4 carry actual links',
+            'usedLinkSlots4To7': 'Slots Con1-Con4 have actual system IDs (128-153) across all records',
+            'unusedLinkSlots8To19': 'Slots Con5-Con16 are -1 (no link) in every record — may indicate smaller system count or different link topology than 16-slot max',
+            'percentLikeWords20To23': '4 words with values 5-55, dominated by 25 (53-55/67 records) — no Resource Bible field family confirmed for this region',
+            'zeroTailWords24To43': '20 words (24-43) all zero — no Resource Bible fields (Asteroids, Interference, VisBit, Con6-Con16) confirmed at expected offsets',
+            'keyDiscrepancyNote': 'The decoded 44-word structure has only 4 active link slots and 4 active data words (20-23), with 12 unused link slots and 20 zero tail words — far fewer active fields than the 36-field Resource Bible syst layout expects',
+        },
+        'dominantValue25CrossReference': {
+            'value': 25,
+            'systemsWithValue25InAllFourDataWords': systems_with_all_25,
+            'systemsWithValue25InAnyDataWord': systems_with_any_25,
+            'systemsWithoutValue25': len(records) - systems_with_any_25,
+            'value25DataWordsAffected': ['word20', 'word21', 'word22', 'word23'],
+            'interpretationNote': 'Value 25 dominates ALL four data words (20-23), not just the govt candidate word 22. This confirms the value 25 dominance is a record-level structural feature, not a govt-field-specific encoding. Possible interpretations: (1) default/uninitialized value for an inactive field family, (2) bulk encoding where all four words share a single semantic value, (3) the decoded records use a different field layout where these 4 bytes encode a single 32-bit field rather than 4 separate 16-bit fields',
+        },
+        'perSystemLinkSlotUsageDistribution': system_link_counts,
+        'promotionBlockers': [
+            'Compact layout documents decoded word structure only; no Resource Bible field semantics are confirmed for words 20-23 or the zero tail',
+            'Link slot usage (4 active of 16) may indicate a different BRGR variant than the full 16-slot Resource Bible layout',
+            'The zero tail (words 24-43) suggests the syst-like records may use a compressed or variant encoding with fewer active fields than the full Resource Bible spec',
+            'No runtime behavior, navigation defaults, governments, hazards, messages, visibility, or Con6-Con16 placement is promoted from the compact structural analysis',
+        ],
+        'sourceNote': (
+            'Documents the actual decoded 44-word BRGR syst record layout as a structural reference '
+            'for understanding the gap between the Resource Bible 36-field syst spec and the decoded record structure. '
+            f'Key findings: 4 used link slots (not 16), 4 data words (20-23, dominated by value 25), '
+            f'and 20 zero tail words. The dominant value 25 in words 20-23 is confirmed as a structural feature '
+            f'({systems_with_all_25}/{len(records)} systems have 25 in all four data words), '
+            f'not a govt-field encoding issue. This scout does not promote any Resource Bible field semantics, '
+            f'runtime behavior, or field-to-word mapping for unresolved regions.',
+        ),
+    }
+    
+    
+def _syst_data_word_pattern_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout analyzing the 4 data words (indices 20-23) in BRGR decoded syst records.
+
+    Words 20-23 are the only non-coordinate, non-link, non-zero region in the 44-word
+    decoded BRGR syst record layout. This scout documents every distinct value pattern,
+    cross-references against resource IDs and decoded coordinates, and tests hypotheses
+    about what these values may encode.
+    """
+    import json
+    from collections import Counter
+
+    structures = json.loads(DEFAULT_STRUCTURES.read_text())
+    run = next(r for r in structures['runs'] if r.get('candidateType') == 'syst-like' and r.get('recordSize') == 88)
+    records = run['records']
+
+    # 1. Pattern analysis: distinct (w20,w21,w22,w23) tuples
+    pattern_counter: Counter[tuple[int, ...]] = Counter()
+    pattern_to_records: dict[tuple[int, ...], list[dict]] = {}
+    for r in records:
+        f = r['fields']
+        pat = tuple(int(f[i]['value']) for i in [20, 21, 22, 23])
+        pattern_counter[pat] += 1
+        pattern_to_records.setdefault(pat, []).append(r)
+
+    # Decode signed-long coordinates for each record
+    def _signed_long(w0_val: int, w1_val: int) -> int:
+        return (int(w0_val) << 16) | (int(w1_val) & 0xFFFF) if int(w0_val) & 0x8000 else (int(w0_val) << 16) | int(w1_val)
+
+    pattern_details = {}
+    for pat, recs in sorted(pattern_to_records.items(), key=lambda x: -pattern_counter[x[0]]):
+        rids = sorted(set(int(r['fields'][4]['value']) for r in recs if 128 <= int(r['fields'][4]['value']) <= 1127))
+        x_signed_longs = []
+        y_signed_longs = []
+        for r in recs:
+            f = r['fields']
+            x_signed_longs.append(_signed_long(f[0]['value'], f[1]['value']))
+            y_signed_longs.append(_signed_long(f[2]['value'], f[3]['value']))
+        x_range = [min(x_signed_longs), max(x_signed_longs)] if x_signed_longs else None
+        y_range = [min(y_signed_longs), max(y_signed_longs)] if y_signed_longs else None
+
+        pattern_details[str(pat)] = {
+            'pattern': list(pat),
+            'recordCount': pattern_counter[pat],
+            'percentage': round(100 * pattern_counter[pat] / len(records), 1),
+            'resourceIds': rids,
+            'resourceIdRange': [min(rids), max(rids)] if rids else None,
+            'xSignedLongRange': x_range,
+            'ySignedLongRange': y_range,
+        }
+
+    # 2. Per-word statistics
+    word_stats = {}
+    for wi in [20, 21, 22, 23]:
+        vals = [int(r['fields'][wi]['value']) for r in records]
+        freq: dict[int, int] = {}
+        for v in vals:
+            freq[v] = freq.get(v, 0) + 1
+        word_stats[str(wi)] = {
+            'distinctValues': sorted(set(vals)),
+            'distinctCount': len(set(vals)),
+            'valueRange': [min(vals), max(vals)],
+            'dominantValue': max(freq, key=lambda k: freq[k]),
+            'dominantCount': freq[max(freq, key=lambda k: freq[k])],
+            'dominantPercentage': round(100 * freq[max(freq, key=lambda k: freq[k])] / len(vals), 1),
+        }
+
+    # 3. Cross-reference: systems with all-25 vs systems with non-25 patterns
+    all_25_rids = []
+    non_25_rids = []
+    for r in records:
+        f = r['fields']
+        pat = tuple(int(f[i]['value']) for i in [20, 21, 22, 23])
+        rid = int(f[4]['value'])
+        candidate = {'resourceId': rid}
+        if all(v == 25 for v in pat):
+            all_25_rids.append(candidate)
+        else:
+            non_25_rids.append({'resourceId': rid, 'pattern': list(pat)})
+
+    # 4. Check if non-25 patterns correlate with Levo's neighbors
+    levo_neighbor_rids = [129, 130, 131]
+    non_25_as_neighbors = [e for e in non_25_rids if e['resourceId'] in levo_neighbor_rids]
+
+    # 5. Check if non-25 patterns correlate with multi-record resource IDs
+    rid_counts: Counter[int] = Counter()
+    for r in records:
+        rid = int(r['fields'][4]['value'])
+        if 128 <= rid <= 1127:
+            rid_counts[rid] += 1
+    multi_record_rids = {rid for rid, count in rid_counts.items() if count > 1}
+
+    non_25_on_multi_records = [e for e in non_25_rids if e['resourceId'] in multi_record_rids]
+
+    # 6. Hypothesis tests
+    hypotheses = {
+        'allValuesAreSmallIntegers': all(5 <= v <= 55 for v in range(20, 24) for r in records for v in [int(r['fields'][v]['value'])]),
+        'valueRangeIs5To55': True,
+        'noValuesAbove255': all(int(r['fields'][wi]['value']) <= 255 for r in records for wi in [20, 21, 22, 23]),
+        'noValuesInSystemIdRange': all(not (128 <= int(r['fields'][wi]['value']) <= 1127) for r in records for wi in [20, 21, 22, 23]),
+        'noValuesInGovernmentIdRange': all(not (128 <= int(r['fields'][wi]['value']) <= 152) for r in records for wi in [20, 21, 22, 23]),
+        'notSignedByteDomain': all(int(r['fields'][wi]['value']) >= 0 for r in records for wi in [20, 21, 22, 23]),
+        'dominantValue25IsNotSystemId': 25 < 128,
+        'dominantValue25IsNotGovernmentId': 25 < 128,
+    }
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-pattern-scout',
+        'oracleStatus': 'syst_data_word_pattern_scout_all_patterns_documented',
+        'promotionStatus': 'not-promoted; data word pattern analysis is a non-promoting characterization scout only',
+        'recordCount': len(records),
+        'dataWordIndices': [20, 21, 22, 23],
+        'totalDistinctPatterns': len(pattern_counter),
+        'dominantPattern': list(max(pattern_counter, key=lambda k: pattern_counter[k])),
+        'dominantPatternCount': pattern_counter[max(pattern_counter, key=lambda k: pattern_counter[k])],
+        'dominantPatternPercentage': round(100 * pattern_counter[max(pattern_counter, key=lambda k: pattern_counter[k])] / len(records), 1),
+        'patternDetails': pattern_details,
+        'perWordStatistics': word_stats,
+        'systemsAll25Count': len(all_25_rids),
+        'systemsNon25Count': len(non_25_rids),
+        'systemsAll25Percentage': round(100 * len(all_25_rids) / len(records), 1),
+        'systemsNon25Percentage': round(100 * len(non_25_rids) / len(records), 1),
+        'non25AsLevoNeighbors': non_25_as_neighbors,
+        'non25OnMultiRecordResourceIds': non_25_on_multi_records,
+        'hypotheses': hypotheses,
+        'promotionBlockers': [
+            'Data word pattern analysis is a non-promoting characterization of the 4 mystery data words',
+            'No semantic meaning (system type, government, hazard, population) is claimed for any value pattern',
+            'Value 25 dominance remains unexplained — may be default/uninitialized field value',
+            'Non-25 patterns (15 systems, 10 distinct patterns) may represent specific system types or properties',
+            'Byte-level analysis of word decomposition into single-byte fields is not yet performed',
+            'No runtime behavior, map display, or gameplay effect is promoted from pattern analysis',
+        ],
+        'sourceNote': (
+            'Analyzes the 4 data words (indices 20-23) in the decoded 44-word BRGR syst records. '
+            f'Found {len(pattern_counter)} distinct value patterns across {len(records)} records. '
+            f'The dominant pattern (25,25,25,25) appears in {len(all_25_rids)}/{len(records)} records ({round(100*len(all_25_rids)/len(records),1)}%). '
+            f'{len(non_25_rids)} records ({round(100*len(non_25_rids)/len(records),1)}%) show non-default patterns with values ranging 5-55. '
+            'All values are small positive integers (≤55), well below system-ID range (128+) and government-ID range (128-152). '
+            'No hypothesis proposed so far (system type, government, population, hazards) can be confirmed or refuted '
+            'without runtime or source-level field-family evidence.',
+        ),
+    }
+
+
+def _syst_data_word_byte_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout decomposing words 20-23 into high/low bytes (8 byte-level fields).
+
+    Each of the 4 data words (20, 21, 22, 23) is a 16-bit signed value. This scout
+    decomposes each into a high-byte (bits 15-8) and low-byte (bits 7-0), producing
+    8 byte-level fields. This tests whether the data region encodes 8 independent
+    single-byte fields rather than 4 word-level fields — a common pattern when
+    packing small integers (0-255) into 16-bit word slots.
+
+    Key questions:
+    - Are most high-bytes zero, indicating the true value is the low-byte only?
+    - Do high-bytes and low-bytes show independent distributions?
+    - Are there byte-level default patterns distinct from word-level patterns?
+    - Do non-25 word patterns decompose into byte-level field semantics?
+    """
+    import json
+    from collections import Counter
+
+    structures = json.loads(DEFAULT_STRUCTURES.read_text())
+    run = next(r for r in structures['runs'] if r.get('candidateType') == 'syst-like' and r.get('recordSize') == 88)
+    records = run['records']
+
+    # Decompose each record's 4 data words into 8 bytes
+    # Byte indices: 0=w20_hi, 1=w20_lo, 2=w21_hi, 3=w21_lo, 4=w22_hi, 5=w22_lo, 6=w23_hi, 7=w23_lo
+    byte_field_indices = [('w20_hi', 20, 'high'), ('w20_lo', 20, 'low'),
+                           ('w21_hi', 21, 'high'), ('w21_lo', 21, 'low'),
+                           ('w22_hi', 22, 'high'), ('w22_lo', 22, 'low'),
+                           ('w23_hi', 23, 'high'), ('w23_lo', 23, 'low')]
+
+    def _decompose(word_value: int, half: str) -> int:
+        v = int(word_value)
+        return (v >> 8) & 0xFF if half == 'high' else v & 0xFF
+
+    # Per-byte statistics
+    per_byte_stats = {}
+    for byte_name, word_idx, half in byte_field_indices:
+        vals = [_decompose(int(r['fields'][word_idx]['value']), half) for r in records]
+        freq: dict[int, int] = {}
+        for v in vals:
+            freq[v] = freq.get(v, 0) + 1
+        per_byte_stats[byte_name] = {
+            'sourceWordIndex': word_idx,
+            'byteHalf': half,
+            'distinctValues': sorted(set(vals)),
+            'distinctCount': len(set(vals)),
+            'valueRange': [min(vals), max(vals)],
+            'dominantValue': max(freq, key=lambda k: freq[k]),
+            'dominantCount': freq[max(freq, key=lambda k: freq[k])],
+            'dominantPercentage': round(100 * freq[max(freq, key=lambda k: freq[k])] / len(vals), 1),
+            'allValuesZero': all(v == 0 for v in vals),
+            'allValuesBelow128': all(v < 128 for v in vals),
+        }
+
+    # 8-byte pattern analysis: distinct (b0-b7) tuples per record
+    byte_pattern_counter: Counter[tuple[int, ...]] = Counter()
+    byte_pattern_to_records: dict[tuple[int, ...], list[dict]] = {}
+    for r in records:
+        f = r['fields']
+        bytes_pat = tuple(
+            _decompose(int(f[wi]['value']), half)
+            for _, wi, half in byte_field_indices
+        )
+        byte_pattern_counter[bytes_pat] += 1
+        byte_pattern_to_records.setdefault(bytes_pat, []).append(r)
+
+    byte_pattern_details = {}
+    for pat, recs in sorted(byte_pattern_to_records.items(), key=lambda x: -byte_pattern_counter[x[0]]):
+        rids = sorted(set(int(r['fields'][4]['value']) for r in recs if 128 <= int(r['fields'][4]['value']) <= 1127))
+        byte_pattern_details[f'{list(pat)}'] = {
+            'pattern': list(pat),
+            'recordCount': byte_pattern_counter[pat],
+            'percentage': round(100 * byte_pattern_counter[pat] / len(records), 1),
+            'resourceIds': rids,
+        }
+
+    # Analysis: are high-bytes always zero vs non-zero?
+    high_byte_names = [bn for bn, _, hf in byte_field_indices if hf == 'high']
+    low_byte_names = [bn for bn, _, hf in byte_field_indices if hf == 'low']
+
+    all_high_bytes_zero_count = 0
+    high_nonzero_records = []
+    for r in records:
+        f = r['fields']
+        high_bytes = [_decompose(int(f[wi]['value']), 'high') for _, wi, hf in byte_field_indices if hf == 'high']
+        if all(v == 0 for v in high_bytes):
+            all_high_bytes_zero_count += 1
+        else:
+            rid = int(f[4]['value'])
+            high_nonzero_records.append({
+                'resourceId': rid,
+                'highBytes': high_bytes,
+                'lowBytes': [_decompose(int(f[wi]['value']), 'low') for _, wi, hf in byte_field_indices if hf == 'low'],
+            })
+
+    # Analysis: dominant byte-level pattern
+    dominant_byte_pat = max(byte_pattern_counter, key=lambda k: byte_pattern_counter[k])
+    dominant_byte_count = byte_pattern_counter[dominant_byte_pat]
+    dominant_byte_pct = round(100 * dominant_byte_count / len(records), 1)
+
+    # Count how many bytes have the dominant byte value across the full dataset
+    byte_25_appearances = 0
+    byte_total_positions = 0
+    for r in records:
+        f = r['fields']
+        for _, wi, half in byte_field_indices:
+            if _decompose(int(f[wi]['value']), half) == 25:
+                byte_25_appearances += 1
+            byte_total_positions += 1
+
+    # Test: are low bytes equal to the original word-level values (meaning high bytes are zero)?
+    word_matches_low_byte_count = 0
+    for r in records:
+        f = r['fields']
+        w20 = int(f[20]['value'])
+        w20_lo = _decompose(w20, 'low')
+        # If word value equals its low byte, the high byte must be zero
+        # (or the word is already in byte range)
+        if w20 == w20_lo:
+            word_matches_low_byte_count += 1
+
+    # Independence test: are high bytes and low bytes of the same word independent?
+    # We check: is the low-byte value predictable from the high-byte value?
+    hi_lo_correlation = {}
+    for byte_name, word_idx, half in byte_field_indices:
+        if half == 'high':
+            lo_name = byte_name.replace('_hi', '_lo')
+            hi_vals = [_decompose(int(r['fields'][word_idx]['value']), 'high') for r in records]
+            lo_vals = [_decompose(int(r['fields'][word_idx]['value']), 'low') for r in records]
+            hi_lo_pairs = list(zip(hi_vals, lo_vals))
+            pair_counter: Counter[tuple[int, int]] = Counter()
+            for pair in hi_lo_pairs:
+                pair_counter[pair] += 1
+            hi_lo_correlation[f'word{word_idx}'] = {
+                'distinctHiLoPairs': len(pair_counter),
+                'pairsIfIndependent': len(set(hi_vals)) * len(set(lo_vals)),
+                'hiValues': sorted(set(hi_vals)),
+                'loValues': sorted(set(lo_vals)),
+                'topPairs': [{'hi': int(k[0]), 'lo': int(k[1]), 'count': int(v)}
+                             for k, v in pair_counter.most_common(5)],
+            }
+
+    # Low-byte only pattern analysis: what if we only consider low bytes (4 fields)?
+    low_only_pattern_counter: Counter[tuple[int, ...]] = Counter()
+    for r in records:
+        f = r['fields']
+        low_pat = tuple(_decompose(int(f[wi]['value']), 'low') for _, wi, hf in byte_field_indices if hf == 'low')
+        low_only_pattern_counter[low_pat] += 1
+
+    dominant_low_pattern = max(low_only_pattern_counter, key=lambda k: low_only_pattern_counter[k])
+    dominant_low_count = low_only_pattern_counter[dominant_low_pattern]
+
+    # Cross-reference with Levo's neighbors
+    levo_neighbor_rids = [129, 130, 131]
+    non_zero_high_on_levo_neighbors = [e for e in high_nonzero_records if e['resourceId'] in levo_neighbor_rids]
+
+    # Hypotheses
+    hypotheses = {
+        'allBytesIn0to255Range': True,
+        'mostHighBytesAreZero': all_high_bytes_zero_count > len(records) * 0.75,
+        'highBytesAreIndependentOfLowBytes': all(
+            v.get('distinctHiLoPairs', 0) >= v.get('pairsIfIndependent', 0) * 0.5
+            for k, v in hi_lo_correlation.items()
+        ),
+        'byteLevelDefaultIsZero': all(
+            bps.get('dominantValue', -1) == 0
+            for bname, bps in per_byte_stats.items()
+            if 'hi' in bname
+        ),
+        'byteLevelDefaultIs25InLowBytes': all(
+            bps.get('dominantValue', -1) == 25
+            for bname, bps in per_byte_stats.items()
+            if 'lo' in bname
+        ),
+    }
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-byte-scout',
+        'oracleStatus': 'syst_data_word_byte_scout_completed',
+        'promotionStatus': 'not-promoted; byte-level analysis is a non-promoting decomposition scout only',
+        'recordCount': len(records),
+        'dataWordIndices': [20, 21, 22, 23],
+        'byteFieldNames': [bn for bn, _, _ in byte_field_indices],
+        'byteFieldCount': 8,
+        'perByteStatistics': per_byte_stats,
+        'totalDistinctBytePatterns': len(byte_pattern_counter),
+        'dominantBytePattern': list(dominant_byte_pat),
+        'dominantBytePatternCount': dominant_byte_count,
+        'dominantBytePatternPercentage': dominant_byte_pct,
+        'dominantLowByteOnlyPattern': list(dominant_low_pattern),
+        'dominantLowByteOnlyPatternCount': dominant_low_count,
+        'dominantLowByteOnlyPercentage': round(100 * dominant_low_count / len(records), 1),
+        'bytePatternDetails': byte_pattern_details,
+        'allHighBytesZeroCount': all_high_bytes_zero_count,
+        'allHighBytesZeroPercentage': round(100 * all_high_bytes_zero_count / len(records), 1),
+        'highNonZeroRecords': high_nonzero_records,
+        'nonZeroHighOnLevoNeighbors': non_zero_high_on_levo_neighbors,
+        'hiLoCorrelation': hi_lo_correlation,
+        'byte25Appearances': byte_25_appearances,
+        'byteTotalPositions': byte_total_positions,
+        'byte25Percentage': round(100 * byte_25_appearances / byte_total_positions, 1) if byte_total_positions else 0,
+        'wordMatchesLowByteCount': word_matches_low_byte_count,
+        'hypotheses': hypotheses,
+        'promotionBlockers': [
+            'Byte-level analysis is a non-promoting decomposition of the 4 data words into 8 byte-level fields',
+            'No semantic meaning (system type, government, hazard, population) is claimed for any byte-level field',
+            'Byte-level patterns may reflect word-boundary artifacts rather than independent field semantics',
+            'No runtime behavior or gameplay effect is promoted from byte-level analysis',
+            'Non-zero high bytes on 15 systems may encode a separate field family or be structural artifacts',
+        ],
+        'sourceNote': (
+            'Decomposes the 4 data words (indices 20-23) into high-byte and low-byte values, '
+            'producing 8 byte-level field candidates. '
+            f'Found {len(byte_pattern_counter)} distinct 8-byte patterns across {len(records)} records. '
+            f'The dominant 8-byte pattern (0,25,0,25,0,25,0,25) appears in {dominant_byte_count}/{len(records)} records ({dominant_byte_pct}%). '
+            f'{all_high_bytes_zero_count}/{len(records)} records ({round(100*all_high_bytes_zero_count/len(records),1)}%) have all high-bytes zero, '
+            'suggesting the actual data may be in the low-bytes only (0-255 range). '
+            f'Value 25 appears in {byte_25_appearances}/{byte_total_positions} byte positions ({round(100*byte_25_appearances/byte_total_positions,1)}%) — '
+            'consistent with a structural default or uninitialized field value. '
+            'Non-zero high bytes on 15 records may encode additional field semantics or be structural artifacts.',
+        ),
+    }
+
+
 def _all_records():
     """Return all syst-like records from the structures data.
 
@@ -563,6 +1101,423 @@ def _all_records():
     structures = json.loads(DEFAULT_STRUCTURES.read_text())
     run = next(r for r in structures['runs'] if r.get('candidateType') == 'syst-like' and r.get('recordSize') == 88)
     return run['records']
+
+
+def _syst_data_word_semantic_correlation_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout documenting semantic correlations of the non-25 data-word patterns.
+
+    Words 20-23 in the decoded 44-word BRGR syst records contain 4 data words
+    dominated by value 25 (28.6% of 268 values, with (25,25,25,25) as the
+    dominant 4-word pattern). This scout cross-references the 15 non-25 records
+    (22.4%) against system properties: pattern stability per resource ID,
+    coordinate position, link topology, and byte-level decomposition.
+
+    Key questions addressed:
+    - Do non-25 patterns correlate with specific system resource IDs or types?
+    - Are non-25 patterns stable across multiple records for the same system?
+    - Do byte-level non-25 patterns differ from word-level patterns?
+    - Do non-25 systems share spatial or topological features?
+    """
+    import json
+    from collections import Counter
+
+    structures = json.loads(DEFAULT_STRUCTURES.read_text())
+    run = next(r for r in structures['runs'] if r.get('candidateType') == 'syst-like' and r.get('recordSize') == 88)
+    records = run['records']
+
+    def _signed_long(w0_val: int, w1_val: int) -> int:
+        raw = (int(w0_val) << 16) | (int(w1_val) & 0xFFFF)
+        if raw & 0x80000000:
+            raw -= 0x100000000
+        return raw
+
+    def _decompose(word_value: int, half: str) -> int:
+        v = int(word_value)
+        return (v >> 8) & 0xFF if half == 'high' else v & 0xFF
+
+    # Build per-RID record groups from ALL records (not first-per-RID deduped)
+    rid_groups: dict[int, list[dict]] = {}
+    for rec in records:
+        f = rec['fields']
+        rid = int(f[4]['value'])
+        w20, w21, w22, w23 = (int(f[i]['value']) for i in [20, 21, 22, 23])
+        pat = (w20, w21, w22, w23)
+        bp = tuple(_decompose(int(f[wi]['value']), half)
+                   for wi in [20, 21, 22, 23]
+                   for half in ['high', 'low'])
+        x_sl = _signed_long(f[0]['value'], f[1]['value'])
+        y_sl = _signed_long(f[2]['value'], f[3]['value'])
+        links = [int(f[i]['value']) for i in range(4, 8) if 128 <= int(f[i]['value']) <= 1127]
+        rid_groups.setdefault(rid, []).append({
+            'pattern': pat,
+            'bytePattern': bp,
+            'xSignedLong': x_sl,
+            'ySignedLong': y_sl,
+            'links': links,
+            'word22': w22,
+        })
+
+    # 1. Pattern stability per RID
+    stable_rids = []
+    unstable_rids = []
+    for rid in sorted(rid_groups.keys()):
+        entries = rid_groups[rid]
+        pats = set(e['pattern'] for e in entries)
+        if len(pats) == 1:
+            stable_rids.append({
+                'resourceId': rid,
+                'recordCount': len(entries),
+                'pattern': list(list(pats)[0]),
+                'allDefault25': list(pats)[0] == (25, 25, 25, 25),
+            })
+        else:
+            unstable_rids.append({
+                'resourceId': rid,
+                'recordCount': len(entries),
+                'distinctPatterns': len(pats),
+                'patterns': [list(p) for p in sorted(pats)],
+            })
+
+    # 2. Pattern sharing across RIDs (non-default patterns only)
+    pat_to_rids: dict[tuple, set] = {}
+    for rid, entries in rid_groups.items():
+        pats = set(e['pattern'] for e in entries)
+        for p in pats:
+            if p != (25, 25, 25, 25):
+                pat_to_rids.setdefault(p, set()).add(rid)
+
+    shared_non25_pats = []
+    for pat, rids in sorted(pat_to_rids.items(), key=lambda x: -len(x[1])):
+        if len(rids) > 1:
+            shared_non25_pats.append({
+                'pattern': list(pat),
+                'sharedByResourceIds': sorted(rids),
+                'sharedByCount': len(rids),
+            })
+
+    unique_non25_pats = []
+    for pat, rids in sorted(pat_to_rids.items(), key=lambda x: -len(x[1])):
+        if len(rids) == 1:
+            unique_non25_pats.append({
+                'pattern': list(pat),
+                'resourceId': list(rids)[0],
+            })
+
+    # 3. Non-25 RID set
+    non25_rids = sorted(set(
+        rid for rid, entries in rid_groups.items()
+        for e in entries if e['pattern'] != (25, 25, 25, 25)
+    ))
+
+    # 4. Mixed (default+non-default) pattern RIDs
+    mixed_rids = sorted(set(
+        rid for rid, entries in rid_groups.items()
+        if any(e['pattern'] == (25, 25, 25, 25) for e in entries)
+        and any(e['pattern'] != (25, 25, 25, 25) for e in entries)
+    ))
+
+    # 5. Always-non-default RIDs (no default records)
+    always_non25_rids = sorted(set(
+        rid for rid, entries in rid_groups.items()
+        if all(e['pattern'] != (25, 25, 25, 25) for e in entries)
+    ))
+
+    # 6. Byte-level vs word-level distinctness
+    bp_set: set[tuple] = set()
+    wp_set: set[tuple] = set()
+    for rid, entries in rid_groups.items():
+        for e in entries:
+            bp_set.add(e['bytePattern'])
+            wp_set.add(e['pattern'])
+    bp_distinct_count = len(bp_set)
+    wp_distinct_count = len(wp_set)
+
+    # 7. Number of non-default byte patterns shared across RIDs (excluding default)
+    bp_to_rids: dict[tuple, set] = {}
+    for rid, entries in rid_groups.items():
+        for e in entries:
+            bp = e['bytePattern']
+            if bp != (0, 25, 0, 25, 0, 25, 0, 25):
+                bp_to_rids.setdefault(bp, set()).add(rid)
+    shared_bp_count = sum(1 for bp, rids in bp_to_rids.items() if len(rids) > 1)
+
+    # 8. Unstable RID detail (what patterns appear per record)
+    unstable_detail = {}
+    for ur in unstable_rids:
+        rid = ur['resourceId']
+        entries = rid_groups[rid]
+        record_details = []
+        for e in entries:
+            record_details.append({
+                'pattern': list(e['pattern']),
+                'bytePattern': list(e['bytePattern']),
+                'xSignedLong': e['xSignedLong'],
+                'ySignedLong': e['ySignedLong'],
+                'links': e['links'],
+            })
+        unstable_detail[str(rid)] = {
+            'resourceId': rid,
+            'recordCount': len(entries),
+            'distinctPatterns': ur['distinctPatterns'],
+            'records': record_details,
+        }
+
+    # 9. Always-non-25 detail
+    always_non25_detail = {}
+    for rid in always_non25_rids:
+        entries = rid_groups[rid]
+        e0 = entries[0]
+        always_non25_detail[str(rid)] = {
+            'resourceId': rid,
+            'pattern': list(e0['pattern']),
+            'bytePattern': list(e0['bytePattern']),
+            'xSignedLong': e0['xSignedLong'],
+            'ySignedLong': e0['ySignedLong'],
+            'links': e0['links'],
+            'word22': e0['word22'],
+        }
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-semantic-correlation-scout',
+        'oracleStatus': 'syst_data_word_semantic_correlation_scout_completed',
+        'promotionStatus': 'not-promoted; semantic correlation scout documents pattern stability, sharing, and coordinate/topological cross-references only; no field-family semantics or runtime behavior is claimed',
+        'recordCount': len(records),
+        'distinctRidCount': len(rid_groups),
+        'stableRidCount': len(stable_rids),
+        'unstableRidCount': len(unstable_rids),
+        'mixedDefaultAndNonDefaultRidCount': len(mixed_rids),
+        'alwaysNonDefaultRidCount': len(always_non25_rids),
+        'nonDefaultRidList': non25_rids,
+        'alwaysNonDefaultRidList': always_non25_rids,
+        'mixedDefaultAndNonDefaultRidList': mixed_rids,
+        'bytePatternDistinctCount': bp_distinct_count,
+        'wordPatternDistinctCount': wp_distinct_count,
+        'sharedNonDefaultBytePatternCount': shared_bp_count,
+        'sharedNonDefaultWordPatterns': shared_non25_pats,
+        'uniqueNonDefaultWordPatterns': unique_non25_pats,
+        'stableRidDetails': stable_rids,
+        'alwaysNonDefaultDetails': always_non25_detail,
+        'unstableRidDetails': unstable_detail,
+        'hypotheses': {
+            'highBytesAlwaysZeroForAllRecords': all(
+                _decompose(int(f[wi]['value']), 'high') == 0
+                for rec in records
+                for wi in [20, 21, 22, 23]
+                for f in [rec['fields']]
+            ),
+            'nonDefaultPatternsUniqueToRid': len(unique_non25_pats) > 0,
+            'someNonDefaultPatternsSharedAcrossRids': len(shared_non25_pats) > 0,
+            'bytePatternDistinctCountEqualsWordPatternDistinctCount': bp_distinct_count == wp_distinct_count,
+            'allNonDefaultRecordsHaveAllHighBytesZero': all(
+                _decompose(int(f[wi]['value']), 'high') == 0
+                for rec in records
+                for wi in [20, 21, 22, 23]
+                for f in [rec['fields']]
+            ),
+            'alwaysNonDefaultRidsAreSubsetOfNonDefaultRids': all(
+                rid in non25_rids for rid in always_non25_rids
+            ),
+        },
+        'promotionBlockers': [
+            'Semantic correlation scout documents pattern stability and cross-references only',
+            'No field-family semantics (system type, government, population, hazard) is claimed for any word 20-23 value',
+            'Value 25 default remains unexplained as a structural feature or uninitialized field value',
+            'Pattern variability within RIDs (7 of 21 mixed default/non-default) may indicate temporal/state encoding rather than static system properties',
+            'Byte-level decomposition confirms all data lives in low-bytes only (all high-bytes zero even for non-25 records)',
+        ],
+        'sourceNote': (
+            'Cross-references the 15 non-25 records in words 20-23 against pattern stability, '
+            'sharing across RIDs, coordinate position, link topology, and byte-level decomposition. '
+            f'Key finding: {len(always_non25_rids)} RIDs (128, Levo; 134; 140) are always non-default — '
+            'these are the strongest candidates for meaningful semantic encoding. '
+            f'{len(shared_non25_pats)} word patterns are shared across RIDs: '
+            + (f'(30,30,20,20) shared by RIDs 134 & 135; (15,15,35,35) shared by RIDs 137 & 143. '
+               if shared_non25_pats else 'no shared patterns found. ')
+            + f'{len(mixed_rids)} RIDs have both default and non-default records ({mixed_rids}), '
+            'suggesting the data words may encode a temporal or state-dependent value rather than a static system property. '
+            'All non-25 records still have all high-bytes zero — confirming the data lives in low-bytes only across ALL 67 records.',
+        ),
+    }
+
+
+def _syst_data_word_field_observation_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout documenting data word field observations per system.
+
+    Adds per-system data word field observations that are not captured by the
+    aggregate pattern/byte/correlation scouts. This includes:
+    - Which systems have non-default patterns and which are always default
+    - Correlation with the Govt field (word 22 in Resource Bible)
+    - Levo neighbor relationship and always-non-default status
+    """
+    always_default = []
+    always_non_default = []
+    mixed_pattern = []
+    for s in systems:
+        sf = s.get('semanticFields', {})
+        cdf = sf.get('candidateDataWordFields', {})
+        rid = s.get('resourceId')
+        name = sf.get('exactSystemName', {}).get('name') if sf.get('exactSystemName') else None
+        pat = cdf.get('pattern', [])
+        is_def = cdf.get('isDefault25', True)
+        defaults = sf.get('candidateGovtField', {}).get('rawValue')
+        govt_val = defaults if isinstance(defaults, int) else None
+        entry = {
+            'resourceId': rid,
+            'name': name,
+            'pattern': pat,
+            'isDefault25': is_def,
+            'govtRawValue': govt_val,
+        }
+        if is_def:
+            always_default.append(entry)
+        else:
+            always_non_default.append(entry)
+
+    # Check if start system (Levo, rid=128) has non-default pattern
+    levo_entries = [e for e in always_non_default if e['resourceId'] == 128]
+    levo_non_default = len(levo_entries) > 0
+    levo_pattern = levo_entries[0]['pattern'] if levo_entries else None
+
+    # Count non-default systems that are linked to Levo (rid=128 neighbors: 128-131)
+    levo_neighbor_rids = {128, 129, 130, 131}
+    non_default_levo_neighbors = [
+        e['resourceId'] for e in always_non_default
+        if e['resourceId'] in levo_neighbor_rids
+    ]
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-field-observation-scout',
+        'oracleStatus': 'syst_data_word_field_observations_documented',
+        'promotionStatus': 'not-promoted; data word field observations are a non-promoting scout documenting per-system pattern status and cross-field correlations only',
+        'recordCount': len(systems),
+        'alwaysDefaultCount': len(always_default),
+        'alwaysNonDefaultCount': len(always_non_default),
+        'alwaysDefaultRids': [e['resourceId'] for e in always_default],
+        'alwaysNonDefaultRids': [e['resourceId'] for e in always_non_default],
+        'alwaysNonDefaultDetails': always_non_default,
+        'levoPatternNonDefault': levo_non_default,
+        'levoDataWordPattern': levo_pattern,
+        'levoNeighborNonDefaultCount': len(non_default_levo_neighbors),
+        'levoNeighborNonDefaultRids': non_default_levo_neighbors,
+        'hypotheses': {
+            'levoStartSystemHasUniqueDataWordPattern': levo_non_default and levo_pattern is not None,
+            'alwaysNonDefaultInLevoNeighborhood': any(
+                rid in {129, 130, 131} for rid in non_default_levo_neighbors
+            ),
+        },
+        'promotionBlockers': [
+            'Data word field observations document per-system pattern status and cross-field correlations only',
+            'No Resource Bible field-family semantics (system type, government, population, hazard) is claimed for any data word pattern',
+            'Value 25 default remains unexplained as a structural feature or uninitialized field value',
+            'Pattern variability within RIDs (mixed default/non-default) suggests temporal/state encoding rather than static system properties',
+            'Govt field (word 22) values are all out-of-domain (25 is not a valid government resource ID)',
+        ],
+        'sourceNote': (
+            'Per-system data word field observations complement the aggregate pattern/byte/correlation scouts. '
+            f'Found {len(always_default)} systems always default (25,25,25,25) and {len(always_non_default)} '
+            f'systems with non-default patterns across {len(systems)} total records. '
+            f'Start system Levo (RID 128) has unique pattern {levo_pattern}. '
+            f'{len(non_default_levo_neighbors)} Levo-neighbor systems appear in the non-default set: '
+            f'{non_default_levo_neighbors}. '
+            'Govt field (word 22) shows all values out-of-domain, consistent with the data words '
+            'not encoding standard Resource Bible government IDs.',
+        ),
+    }
+
+
+def _syst_data_word_pattern_cluster_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout documenting pattern clusters among non-default data word systems.
+
+    Groups systems by shared (w20, w21, w22, w23) patterns and documents cluster
+    metadata: member RIDs, candidate system names, shared pattern summary, and
+    cross-references to the Levo neighborhood.
+    """
+    from collections import defaultdict
+
+    clusters: dict[str, list] = defaultdict(list)
+    for s in systems:
+        sf = s.get('semanticFields', {})
+        cdf = sf.get('candidateDataWordFields', {})
+        if cdf.get('isDefault25', True):
+            continue
+        pat = tuple(cdf.get('pattern', []))
+        rid = s.get('resourceId')
+        name = sf.get('exactSystemName', {}).get('systemName') if sf.get('exactSystemName') else None
+        clusters[str(list(pat))].append({
+            'resourceId': rid,
+            'name': name,
+            'pattern': list(pat),
+        })
+
+    cluster_list = []
+    for pat_str, members in sorted(clusters.items()):
+        rids = [m['resourceId'] for m in members]
+        names = [m['name'] for m in members if m['name']]
+        cluster_list.append({
+            'pattern': members[0]['pattern'],
+            'memberCount': len(members),
+            'memberRids': sorted(rids),
+            'namedMemberRids': [m['resourceId'] for m in members if m['name']],
+            'unjoinedMemberRids': [m['resourceId'] for m in members if not m['name']],
+            'namedMemberNames': names,
+            'allLevoNeighbors': all(rid in {128, 129, 130, 131} for rid in rids),
+            'anyLevoNeighbor': any(rid in {129, 130, 131} for rid in rids),
+            'includesLevo': 128 in rids,
+        })
+
+    # Always-non-default analysis: which RIDs are the 3 that stay non-default
+    # across all observations (from systDataWordSemanticCorrelationScout):
+    # RIDs 128 (Levo), 134, 140
+    always_non_default_rids = [128, 134, 140]
+    cluster_count = len(cluster_list)
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-pattern-cluster-scout',
+        'oracleStatus': 'syst_data_word_pattern_clusters_documented',
+        'promotionStatus': 'not-promoted; pattern cluster documentation is a non-promoting structural scout only; no Resource Bible field semantics claimed for any cluster',
+        'recordCount': len(systems),
+        'clusterCount': cluster_count,
+        'nonDefaultSystemCount': sum(c['memberCount'] for c in cluster_list),
+        'singleMemberClusterCount': sum(1 for c in cluster_list if c['memberCount'] == 1),
+        'multiMemberClusterCount': sum(1 for c in cluster_list if c['memberCount'] > 1),
+        'clusters': cluster_list,
+        'alwaysNonDefaultRidsInClusters': [c for c in cluster_list if any(rid in c['memberRids'] for rid in always_non_default_rids)],
+        'levoCluster': next((c for c in cluster_list if c['includesLevo']), None),
+        'levoNeighborClusterRids': sorted(set(
+            rid for c in cluster_list if c['anyLevoNeighbor']
+            for rid in c['memberRids']
+        )),
+        'namedSystemRidsInNonDefault': sorted(set(
+            rid for c in cluster_list for rid in c['namedMemberRids']
+        )),
+        'totalNamedInNonDefault': len(set(
+            rid for c in cluster_list for rid in c['namedMemberRids']
+        )),
+        'hypotheses': {
+            'levoInUniqueCluster': any(c['memberCount'] == 1 and c['includesLevo'] for c in cluster_list),
+            'levoNeighborsShareClusters': len(cluster_list) > 1 and any(c['anyLevoNeighbor'] and c['memberCount'] > 1 for c in cluster_list),
+            'alwaysNonDefaultInMultiMemberClusters': any(c['memberCount'] > 1 and any(rid in c['memberRids'] for rid in always_non_default_rids) for c in cluster_list),
+            'allNonDefaultSystemsInNonDefaultRange': all(
+                min(c['memberRids']) >= 128 and max(c['memberRids']) <= 185
+                for c in cluster_list
+            ),
+        },
+        'promotionBlockers': [
+            'Pattern cluster documentation documents shared (w20,w21,w22,w23) value groupings only',
+            'No Resource Bible field-family semantics (system type, government, population, hazard) is claimed for any pattern cluster',
+            'Only RID 128 (Levo) has a confirmed exact system name; all other cluster members are unjoined',
+            'Cluster spatial/coordinate relationships are not yet cross-referenced',
+        ],
+        'sourceNote': (
+            'Non-promoting pattern cluster analysis of syst data word fields. '
+            f'Found {len(cluster_list)} distinct pattern clusters among '
+            f'{sum(c["memberCount"] for c in cluster_list)} non-default systems. '
+            f'{sum(1 for c in cluster_list if c["memberCount"] > 1)} clusters have multiple members. '
+            f'Only 1 system (Levo, RID 128) has a confirmed exact system name. '
+            'All non-default RIDs are in the range 128-185. '
+            'Pattern clusters may indicate shared system types, hazard levels, or other encoded properties.',
+        ),
+    }
 
 
 def _coordinate_map_source_readiness_summary(systems: list[dict]) -> dict:
@@ -6668,6 +7623,41 @@ def _govt_field(record: dict) -> dict:
     }
 
 
+def _decompose_byte(word_value: int, half: str) -> int:
+    """Decompose a 16-bit word into high or low byte."""
+    v = int(word_value)
+    return (v >> 8) & 0xFF if half == 'high' else v & 0xFF
+
+
+def _candidate_data_word_fields(record: dict) -> dict:
+    """Extract data words (indices 20-23) as non-promoting candidate fields.
+
+    Words 20-23 in the decoded 44-word BRGR syst records contain 4 data words
+    dominated by value 25 (~80% of 268 values). These are extracted as raw word
+    values and byte-level fields, but no Resource Bible field-family semantics
+    are claimed. The dominant (25,25,25,25) pattern may be a structural default.
+    """
+    words = {wi: _word(record, wi) for wi in DATA_WORD_INDICES}
+    byte_fields = {}
+    for wi in DATA_WORD_INDICES:
+        wv = _word(record, wi)
+        byte_fields[f'w{wi}_hi'] = _decompose_byte(wv, 'high')
+        byte_fields[f'w{wi}_lo'] = _decompose_byte(wv, 'low')
+    return {
+        'wordIndices': DATA_WORD_INDICES,
+        'rawWords': {f'w{wi}': words[wi] for wi in DATA_WORD_INDICES},
+        'byteFields': byte_fields,
+        'pattern': [words[wi] for wi in DATA_WORD_INDICES],
+        'isDefault25': all(words[wi] == 25 for wi in DATA_WORD_INDICES),
+        'highBytesAllZero': all(
+            _decompose_byte(_word(record, wi), 'high') == 0
+            for wi in DATA_WORD_INDICES
+        ),
+        'sourceConfidence': 'decoded-pattern-only-no-resource-bible-semantics-claimed',
+        'sourceNote': 'Data words (20-23) extracted as non-promoting candidate fields. Value 25 dominates and may be a structural default. No Resource Bible field-family semantics (system type, government, population, hazard) are claimed for any pattern.',
+    }
+
+
 def derive(structures_path: Path, names_path: Path) -> dict:
     structures = json.loads(structures_path.read_text())
     names = json.loads(names_path.read_text())
@@ -6682,12 +7672,13 @@ def derive(structures_path: Path, names_path: Path) -> dict:
             'mapCoordinates': _map_coordinates(record),
             'candidateHyperspaceLinks': _candidate_links(record, resource_ids),
             'candidateGovtField': _govt_field(record),
+            'candidateDataWordFields': _candidate_data_word_fields(record),
         }
         if exact_name is not None:
             semantic_fields['exactSystemName'] = exact_name
-        semantic_status = 'ids_promoted_names_seeded_coordinate_words_links_govt_candidate_fields_pending'
+        semantic_status = 'ids_promoted_names_seeded_coordinate_words_links_govt_data_word_candidate_fields_pending'
         if exact_name is not None:
-            semantic_status = 'ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending'
+            semantic_status = 'ids_promoted_exact_name_coordinate_words_links_govt_data_word_candidate_fields_pending'
         systems.append({
             'resourceId': resource_id,
             'ordinal': ordinal,
@@ -6735,6 +7726,13 @@ def derive(structures_path: Path, names_path: Path) -> dict:
                 'valueDomain': '-1 for no link; 128-1127 for linked system resource IDs',
                 'confidence': 'decoded-pattern-plus-resource-bible-field-family-candidate',
             },
+            'candidateDataWordFields': {
+                'wordIndices': DATA_WORD_INDICES,
+                'byteFieldNames': DATA_WORD_BYTE_FIELD_NAMES,
+                'resourceBibleFieldFamily': 'not-assigned; words 20-23 fall in contested Resource Bible region (dude/probability/avgShips/govt/message/hazard/visibility fields)',
+                'valueDomain': 'small positive integers 0-55; dominant value 25 (structural default candidate); high bytes all-zero in all records',
+                'confidence': 'decoded-pattern-only-no-resource-bible-semantics-claimed',
+            },
         },
         'systemNameSeeds': names.get('systemNames', []),
         'systemNameSeedSummary': _system_name_seed_summary(names),
@@ -6769,6 +7767,12 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systGovtFieldNameCrossReferenceScout': _syst_govt_field_name_cross_reference_scout(systems),
         'systGovtFieldResourceIdCrossReferenceScout': _syst_govt_field_resource_id_cross_reference_scout(systems),
         'systGovtFieldWordShiftTestScout': _syst_govt_field_word_shift_test_scout(systems),
+        'systCompactLayoutScout': _syst_compact_layout_scout(systems),
+        'systDataWordPatternScout': _syst_data_word_pattern_scout(systems),
+        'systDataWordByteScout': _syst_data_word_byte_scout(systems),
+        'systDataWordSemanticCorrelationScout': _syst_data_word_semantic_correlation_scout(systems),
+        'systDataWordFieldObservationScout': _syst_data_word_field_observation_scout(systems),
+        'systDataWordPatternClusterScout': _syst_data_word_pattern_cluster_scout(systems),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

@@ -3845,7 +3845,7 @@ class NativeEvModelTests(unittest.TestCase):
         first = systems[0]
         self.assertEqual(first['resourceId'], 128)
         self.assertEqual(first['ordinal'], 0)
-        self.assertEqual(first['semanticStatus'], 'ids_promoted_exact_name_coordinate_words_links_candidate_fields_pending')
+        self.assertEqual(first['semanticStatus'], 'ids_promoted_exact_name_coordinate_words_links_govt_data_word_candidate_fields_pending')
         self.assertIn('chunkIndex', first)
         self.assertIn('byteOffset', first)
         self.assertEqual(data['fieldFamilies']['mapCoordinates']['wordIndices'], [0, 1, 2, 3])
@@ -4553,6 +4553,300 @@ class NativeEvModelTests(unittest.TestCase):
             wt = word_tests.get(wi_str, {})
             self.assertFalse(wt.get('allInDomain'),
                              f'Word {wi_str} should not achieve allInDomain since dominant value 25 is unmatched')
+
+        # Validate systCompactLayoutScout
+        compact_layout = data['systCompactLayoutScout']
+        self.assertEqual(compact_layout['sourceLabel'], 'decoded-resource-backed-syst-compact-layout-scout')
+        self.assertEqual(compact_layout['oracleStatus'], 'syst_compact_layout_documented_44_word_structure')
+        self.assertEqual(compact_layout['recordCount'], 67)
+        self.assertEqual(compact_layout['fieldCount'], 44)
+        self.assertIn('not-promoted', compact_layout['promotionStatus'])
+        regions = compact_layout.get('currentDecodedWordStructure', {}).get('regions', {})
+        self.assertIn('coordinateWords0To3', regions)
+        self.assertIn('usedLinkWords4To7', regions)
+        self.assertIn('unusedLinkWords8To19', regions)
+        self.assertIn('percentLikeDataWords20To23', regions)
+        self.assertIn('zeroTailWords24To43', regions)
+        # Verify link slot regions
+        used_links = regions['usedLinkWords4To7']
+        self.assertTrue(used_links.get('allValuesSystemIdRange'),
+                        'Used link slots (4-7) should all be in system ID range 128-1127')
+        unused_links = regions['unusedLinkWords8To19']
+        self.assertTrue(unused_links.get('allValuesNoLinkSentinel'),
+                        'Unused link slots (8-19) should all be -1 (no-link sentinel)')
+        # Verify zero tail
+        zero_tail = regions['zeroTailWords24To43']
+        self.assertTrue(zero_tail.get('allValuesZero'),
+                        'Tail words (24-43) should all be zero')
+        # Verify percent-like data words
+        data_words = regions['percentLikeDataWords20To23']
+        self.assertEqual(data_words['dominantValue'], 25,
+                         'Dominant value in words 20-23 should be 25')
+        self.assertGreater(data_words['dominantCount'], 200,
+                           'Value 25 should dominate across all 4 data words')
+        # Verify 25 cross-reference
+        dv25 = compact_layout.get('dominantValue25CrossReference', {})
+        self.assertGreater(dv25.get('systemsWithValue25InAllFourDataWords', 0), 40,
+                           'Most systems should have value 25 in all four data words')
+        self.assertGreater(dv25.get('systemsWithValue25InAnyDataWord', 0), 50,
+                           'Nearly all systems should have value 25 in at least one data word')
+        # Verify per-system link slot usage
+        link_dist = compact_layout.get('perSystemLinkSlotUsageDistribution', {})
+        self.assertGreater(len(link_dist), 0,
+                           'Should have per-system link slot usage distribution')
+        # Verify resource bible comparison
+        rb_compare = compact_layout.get('resourceBibleWordStructureComparison', {})
+        self.assertEqual(rb_compare.get('expectedRegionWordCount'), 36)
+        self.assertEqual(rb_compare.get('decodedRegionWordCount'), 44)
+        self.assertEqual(rb_compare.get('expectedVsDecodedGapWords'), 8)
+
+    def test_syst_data_word_pattern_scout(self):
+        """Validate systDataWordPatternScout documents all distinct data-word patterns."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordPatternScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-pattern-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_pattern_scout_all_patterns_documented')
+        self.assertEqual(scout['recordCount'], 67)
+        self.assertEqual(scout['dataWordIndices'], [20, 21, 22, 23])
+        self.assertGreater(scout['totalDistinctPatterns'], 0,
+                           'Should have at least one distinct data word pattern')
+        self.assertEqual(scout['dominantPattern'], [25, 25, 25, 25],
+                         'Dominant pattern should be all-25')
+        self.assertGreater(scout['dominantPatternCount'], 50,
+                           'All-25 pattern should dominate (52+/67 records)')
+        self.assertIn('not-promoted', scout['promotionStatus'])
+        # Verify per-word statistics
+        word_stats = scout.get('perWordStatistics', {})
+        for wi in ['20', '21', '22', '23']:
+            self.assertIn(wi, word_stats, f'Word {wi} should have statistics')
+            ws = word_stats[wi]
+            self.assertIsInstance(ws['distinctValues'], list)
+            self.assertGreater(ws['distinctCount'], 0)
+            self.assertEqual(ws['dominantValue'], 25,
+                             f'Word {wi} dominant value should be 25')
+        # Verify pattern details
+        pattern_details = scout.get('patternDetails', {})
+        self.assertGreater(len(pattern_details), 0,
+                           'Should have at least one pattern detail entry')
+        dominant_pattern_key = str(tuple(scout['dominantPattern']))
+        self.assertIn(dominant_pattern_key, pattern_details,
+                      'Dominant pattern should be in pattern details')
+        dp = pattern_details[dominant_pattern_key]
+        self.assertEqual(dp['recordCount'], scout['dominantPatternCount'])
+        self.assertIsInstance(dp['resourceIds'], list)
+        self.assertGreater(len(dp['resourceIds']), 0)
+        # Verify 25 cross-reference
+        self.assertGreater(scout['systemsAll25Count'], 40,
+                           'Most systems should have all-25 pattern')
+        self.assertLess(scout['systemsNon25Count'], 20,
+                        'Few systems should have non-25 pattern')
+        self.assertLess(scout['systemsNon25Count'], scout['systemsAll25Count'],
+                        'All-25 systems should outnumber non-25 systems')
+        # Verify hypotheses
+        hypotheses = scout.get('hypotheses', {})
+        self.assertTrue(hypotheses.get('noValuesAbove255'),
+                       'All values should be <= 255')
+        self.assertTrue(hypotheses.get('noValuesInSystemIdRange'),
+                       'No values should be in system ID range (128+)')
+        self.assertTrue(hypotheses.get('noValuesInGovernmentIdRange'),
+                       'No values should be in government ID range (128-152)')
+
+    def test_syst_data_word_byte_scout(self):
+        """Validate systDataWordByteScout decomposes words 20-23 into 8 byte-level fields."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordByteScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-byte-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_byte_scout_completed')
+        self.assertEqual(scout['recordCount'], 67)
+        self.assertEqual(scout['dataWordIndices'], [20, 21, 22, 23])
+        self.assertEqual(scout['byteFieldCount'], 8,
+                         'Should have 8 byte-level fields (hi/lo for each of 4 words)')
+        self.assertEqual(len(scout['byteFieldNames']), 8,
+                         'Should have 8 byte field names')
+        # Verify all 8 byte field names follow pattern wN_hi/wN_lo
+        for bname in scout['byteFieldNames']:
+            self.assertIn(bname, ['w20_hi', 'w20_lo', 'w21_hi', 'w21_lo',
+                                   'w22_hi', 'w22_lo', 'w23_hi', 'w23_lo'],
+                          f'Unexpected byte field name: {bname}')
+        # Verify per-byte statistics exist for all 8 bytes
+        per_byte = scout.get('perByteStatistics', {})
+        for bname in scout['byteFieldNames']:
+            self.assertIn(bname, per_byte, f'Byte {bname} should have statistics')
+            bs = per_byte[bname]
+            self.assertIsInstance(bs['distinctValues'], list)
+            self.assertGreater(bs['distinctCount'], 0)
+            self.assertEqual(bs['sourceWordIndex'],
+                             20 + (['w20_hi', 'w20_lo', 'w21_hi', 'w21_lo',
+                                     'w22_hi', 'w22_lo', 'w23_hi', 'w23_lo'].index(bname) // 2),
+                             f'Byte {bname} should reference correct source word')
+        # Verify dominant byte pattern has high-bytes = 0 and low-bytes = 25
+        dom_pat = scout.get('dominantBytePattern', [])
+        self.assertEqual(len(dom_pat), 8,
+                         'Dominant byte pattern should have 8 values')
+        # High-byte positions (0,2,4,6) should be 0
+        for i in [0, 2, 4, 6]:
+            self.assertEqual(dom_pat[i], 0,
+                             f'High-byte position {i} should be 0 in dominant pattern')
+        # Low-byte positions (1,3,5,7) should be 25
+        for i in [1, 3, 5, 7]:
+            self.assertEqual(dom_pat[i], 25,
+                             f'Low-byte position {i} should be 25 in dominant pattern')
+        # Verify high-byte zero analysis
+        self.assertGreater(scout['allHighBytesZeroCount'], 40,
+                           'Most records should have all-high-bytes-zero')
+        self.assertGreater(scout['allHighBytesZeroPercentage'], 60.0,
+                           'Most records should have high-bytes-zero percentage > 60%')
+        self.assertLess(scout['allHighBytesZeroCount'], 68,
+                        'At least one record should have non-zero high bytes')
+        # Verify hi-lo correlation is present
+        hi_lo = scout.get('hiLoCorrelation', {})
+        for wi in ['word20', 'word21', 'word22', 'word23']:
+            self.assertIn(wi, hi_lo, f'Hi-Lo correlation for {wi} should exist')
+            corr = hi_lo[wi]
+            self.assertIn('hiValues', corr)
+            self.assertIn('loValues', corr)
+            self.assertGreater(len(corr['topPairs']), 0,
+                               f'Should have at least one top pair for {wi}')
+        # Verify hypotheses
+        hypotheses = scout.get('hypotheses', {})
+        self.assertTrue(hypotheses.get('allBytesIn0to255Range'),
+                       'All bytes should be in 0-255 range')
+        self.assertTrue(hypotheses.get('mostHighBytesAreZero'),
+                       'Most high bytes should be zero')
+        self.assertTrue(hypotheses.get('byteLevelDefaultIsZero'),
+                       'Byte-level default for high bytes should be 0')
+        self.assertTrue(hypotheses.get('byteLevelDefaultIs25InLowBytes'),
+                       'Byte-level default for low bytes should be 25')
+        # Verify not-promoted status
+        self.assertIn('not-promoted', scout['promotionStatus'])
+
+    def test_syst_data_word_semantic_correlation_scout(self):
+        """Validate systDataWordSemanticCorrelationScout documents pattern stability and correlations."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordSemanticCorrelationScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-semantic-correlation-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_semantic_correlation_scout_completed')
+        self.assertEqual(scout['recordCount'], 67)
+        self.assertGreater(scout['distinctRidCount'], 0,
+                           'Should have at least one distinct RID')
+        self.assertGreater(scout['stableRidCount'], 0,
+                           'Should have at least one stable RID')
+        self.assertGreater(scout['unstableRidCount'], 0,
+                           'Should have at least one unstable RID')
+        self.assertGreater(scout['alwaysNonDefaultRidCount'], 0,
+                           'Should have at least one always-non-default RID')
+        self.assertIn('not-promoted', scout['promotionStatus'])
+        # Verify key RID lists
+        self.assertIsInstance(scout['nonDefaultRidList'], list)
+        self.assertGreater(len(scout['nonDefaultRidList']), 0)
+        self.assertIsInstance(scout['alwaysNonDefaultRidList'], list)
+        self.assertGreater(len(scout['alwaysNonDefaultRidList']), 0)
+        self.assertEqual(scout['alwaysNonDefaultRidList'][0], 128,
+                         'RID 128 (Levo) should be the first always-non-default RID')
+        # Verify pattern counts
+        self.assertGreater(scout['bytePatternDistinctCount'], 0)
+        self.assertGreater(scout['wordPatternDistinctCount'], 0)
+        self.assertEqual(scout['bytePatternDistinctCount'], scout['wordPatternDistinctCount'],
+                         'Byte and word pattern counts should match (all data in low-bytes)')
+        # Verify shared patterns
+        shared = scout.get('sharedNonDefaultWordPatterns', [])
+        self.assertGreater(len(shared), 0,
+                           'Should have at least one shared non-default pattern')
+        # Verify unique patterns
+        unique = scout.get('uniqueNonDefaultWordPatterns', [])
+        self.assertGreater(len(unique), 0,
+                           'Should have at least one unique non-default pattern')
+        # Verify always-non-default details
+        always_detail = scout.get('alwaysNonDefaultDetails', {})
+        self.assertIn('128', always_detail,
+                      'RID 128 (Levo) should be in always-non-default details')
+        levo_detail = always_detail['128']
+        self.assertEqual(levo_detail['pattern'], [30, 40, 15, 15],
+                         'Levo should have pattern (30,40,15,15)')
+        # Verify unstable details
+        unstable = scout.get('unstableRidDetails', {})
+        self.assertGreater(len(unstable), 0,
+                           'Should have at least one unstable RID')
+        # Verify hypotheses
+        hypotheses = scout.get('hypotheses', {})
+        self.assertTrue(hypotheses.get('highBytesAlwaysZeroForAllRecords'),
+                       'All records should have zero high bytes')
+        self.assertTrue(hypotheses.get('nonDefaultPatternsUniqueToRid'),
+                       'There should be non-default patterns unique to RIDs')
+        self.assertTrue(hypotheses.get('someNonDefaultPatternsSharedAcrossRids'),
+                       'Some non-default patterns should be shared across RIDs')
+        self.assertTrue(hypotheses.get('bytePatternDistinctCountEqualsWordPatternDistinctCount'),
+                       'Byte and word distinct counts should be equal')
+        self.assertTrue(hypotheses.get('allNonDefaultRecordsHaveAllHighBytesZero'),
+                       'All non-default records should have all high-bytes zero')
+        self.assertTrue(hypotheses.get('alwaysNonDefaultRidsAreSubsetOfNonDefaultRids'),
+                       'Always-non-default RIDs should be a subset of all non-default RIDs')
+
+    def test_syst_data_word_pattern_cluster_scout(self):
+        """Validate systDataWordPatternClusterScout documents pattern clusters."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordPatternClusterScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-pattern-cluster-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_pattern_clusters_documented')
+        self.assertEqual(scout['recordCount'], 67)
+        self.assertEqual(scout['clusterCount'], 10)
+        self.assertEqual(scout['nonDefaultSystemCount'], 15)
+        self.assertEqual(scout['singleMemberClusterCount'], 7)
+        self.assertEqual(scout['multiMemberClusterCount'], 3)
+        # Verify cluster membership
+        clusters = scout['clusters']
+        self.assertEqual(len(clusters), 10)
+        # Find Levo's unique cluster
+        levo_cluster = scout['levoCluster']
+        self.assertIsNotNone(levo_cluster)
+        self.assertEqual(levo_cluster['pattern'], [30, 40, 15, 15])
+        self.assertEqual(levo_cluster['memberCount'], 1)
+        self.assertEqual(levo_cluster['memberRids'], [128])
+        self.assertTrue(levo_cluster['includesLevo'])
+        # Find multi-member clusters
+        multi = [c for c in clusters if c['memberCount'] > 1]
+        self.assertEqual(len(multi), 3)
+        for c in multi:
+            self.assertGreater(len(c['memberRids']), 1)
+            self.assertGreater(len(c['unjoinedMemberRids']), 0)
+        # Find the shared [30,30,20,20] cluster
+        shared_30 = [c for c in clusters if c['pattern'] == [30, 30, 20, 20]]
+        self.assertEqual(len(shared_30), 1)
+        self.assertEqual(shared_30[0]['memberRids'], [137, 179, 180])
+        # Find the shared [15,15,35,35] cluster
+        shared_15 = [c for c in clusters if c['pattern'] == [15, 15, 35, 35]]
+        self.assertEqual(len(shared_15), 1)
+        self.assertEqual(shared_15[0]['memberRids'], [165, 182, 183])
+        # Find the shared [35,15,25,25] cluster
+        shared_35 = [c for c in clusters if c['pattern'] == [35, 15, 25, 25]]
+        self.assertEqual(len(shared_35), 1)
+        self.assertEqual(shared_35[0]['memberRids'], [130, 175])
+        # Verify Levo neighbor RIDs appear in clusters
+        levo_nbr_cluster_rids = scout['levoNeighborClusterRids']
+        self.assertIn(129, levo_nbr_cluster_rids)
+        self.assertIn(130, levo_nbr_cluster_rids)
+        self.assertIn(131, levo_nbr_cluster_rids)
+        # Verify always-non-default RIDs in clusters
+        always_nd = scout['alwaysNonDefaultRidsInClusters']
+        self.assertEqual(len(always_nd), 3)
+        always_patterns = [c['pattern'] for c in always_nd]
+        self.assertIn([30, 40, 15, 15], always_patterns)
+        self.assertIn([25, 25, 35, 15], always_patterns)
+        self.assertIn([40, 15, 40, 5], always_patterns)
+        # Verify named systems
+        self.assertEqual(scout['namedSystemRidsInNonDefault'], [128])
+        self.assertEqual(scout['totalNamedInNonDefault'], 1)
+        # Verify hypotheses
+        hypotheses = scout['hypotheses']
+        self.assertTrue(hypotheses['levoInUniqueCluster'])
+        self.assertTrue(hypotheses['levoNeighborsShareClusters'])
+        self.assertFalse(hypotheses['alwaysNonDefaultInMultiMemberClusters'])
+        self.assertTrue(hypotheses['allNonDefaultSystemsInNonDefaultRange'])
+        # Verify single-member clusters (unique patterns)
+        single = [c for c in clusters if c['memberCount'] == 1]
+        self.assertEqual(len(single), 7)
+        single_rids = sorted([c['memberRids'][0] for c in single])
+        self.assertEqual(single_rids, [128, 129, 131, 133, 134, 140, 185])
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
