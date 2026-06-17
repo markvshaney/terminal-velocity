@@ -10172,7 +10172,7 @@
         "hopDistance": 2,
         "routePath": [
           "?",
-          "New Britain",
+          "Master’s Planet",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10283,7 +10283,7 @@
         "routePath": [
           "?",
           "Maxwell’s Purchase",
-          "Pegasus",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -10297,7 +10297,7 @@
         "routePath": [
           "?",
           "Maxwell’s Purchase",
-          "Pegasus",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -10409,7 +10409,7 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Pegasus",
+          "Armstrong",
           "Maxwell’s Purchase",
           "Dune",
           "Atropos"
@@ -10423,7 +10423,7 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Sirius III",
+          "Armstrong",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -10437,8 +10437,8 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Murphy's World"
         ],
@@ -10451,8 +10451,8 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Port Oread"
         ],
@@ -10465,8 +10465,8 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Zaxted Starport"
         ],
@@ -10795,7 +10795,7 @@
           "Atropos",
           "Dune",
           "Maxwell’s Purchase",
-          "Pegasus",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -10810,7 +10810,7 @@
           "Atropos",
           "Dune",
           "Maxwell’s Purchase",
-          "Pegasus",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -11121,7 +11121,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11209,7 +11209,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11308,7 +11308,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11386,7 +11386,7 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
+          "Armstrong",
           "Maxwell’s Purchase",
           "Dune",
           "Atropos"
@@ -11401,7 +11401,7 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Sirius III",
+          "Armstrong",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -11416,8 +11416,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Murphy's World"
         ],
@@ -11431,8 +11431,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Port Oread"
         ],
@@ -11446,8 +11446,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Zaxted Starport"
         ],
@@ -11490,7 +11490,7 @@
         "hopDistance": 2,
         "routePath": [
           "Clotho Prime",
-          "Master’s Planet",
+          "Sirius III",
           "George’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11545,7 +11545,7 @@
         "hopDistance": 2,
         "routePath": [
           "Clotho Prime",
-          "Master’s Planet",
+          "Sirius III",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11600,7 +11600,7 @@
         "hopDistance": 2,
         "routePath": [
           "Clotho Prime",
-          "Master’s Planet",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11644,7 +11644,7 @@
         "hopDistance": 2,
         "routePath": [
           "Clotho Prime",
-          "Master’s Planet",
+          "Sirius III",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11898,7 +11898,7 @@
         "hopDistance": 2,
         "routePath": [
           "Dune",
-          "New Britain",
+          "Spica",
           "Hodgson’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11920,7 +11920,7 @@
         "hopDistance": 2,
         "routePath": [
           "Dune",
-          "New Britain",
+          "?",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12008,7 +12008,7 @@
         "hopDistance": 2,
         "routePath": [
           "Dune",
-          "Spica",
+          "?",
           "Samson’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12094,7 +12094,7 @@
         "hopDistance": 2,
         "routePath": [
           "George’s World",
-          "Master’s Planet",
+          "Sirius III",
           "Clotho Prime"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12149,7 +12149,7 @@
         "hopDistance": 2,
         "routePath": [
           "George’s World",
-          "Master’s Planet",
+          "Sirius III",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12204,7 +12204,7 @@
         "hopDistance": 2,
         "routePath": [
           "George’s World",
-          "Master’s Planet",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12248,7 +12248,7 @@
         "hopDistance": 2,
         "routePath": [
           "George’s World",
-          "Master’s Planet",
+          "Sirius III",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12374,7 +12374,7 @@
         "hopDistance": 2,
         "routePath": [
           "Hodgson’s World",
-          "New Britain",
+          "Spica",
           "Dune"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12396,7 +12396,7 @@
         "hopDistance": 2,
         "routePath": [
           "Hodgson’s World",
-          "Samson’s Planet",
+          "New Istanbul",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12736,7 +12736,7 @@
           "Lauralee",
           "P-8457",
           "Tabletop",
-          "Sirius III",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -12751,7 +12751,7 @@
           "Lauralee",
           "P-8457",
           "Tabletop",
-          "Sirius III",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -12794,7 +12794,7 @@
         "hopDistance": 2,
         "routePath": [
           "Levo",
-          "New Britain",
+          "Dune",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12849,7 +12849,7 @@
         "hopDistance": 2,
         "routePath": [
           "Levo",
-          "New Britain",
+          "Dune",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13123,7 +13123,7 @@
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "New Britain",
+          "?",
           "Dune"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13134,7 +13134,7 @@
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "Samson’s Planet",
+          "New Istanbul",
           "Hodgson’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13266,7 +13266,7 @@
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "New Britain",
+          "Sirius III",
           "Tabletop"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13485,7 +13485,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "New Sahara",
+          "Sirius III",
           "Hunter"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13496,7 +13496,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Dune",
+          "Capella",
           "Levo"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13518,7 +13518,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Pegasus",
+          "Armstrong",
           "Merlin"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13551,7 +13551,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Dune",
+          "Sirius III",
           "New Scotland’s motto"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13562,7 +13562,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "New Britain",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13606,7 +13606,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Dune",
+          "Sirius III",
           "Sauron"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13617,7 +13617,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "New Britain",
+          "Armstrong",
           "Tabletop"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13639,7 +13639,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "New Britain",
+          "Sirius III",
           "Ursa Minor Beta"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13828,7 +13828,7 @@
         "hopDistance": 2,
         "routePath": [
           "Merlin",
-          "Pegasus",
+          "Armstrong",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13927,7 +13927,7 @@
         "hopDistance": 2,
         "routePath": [
           "Merlin",
-          "Sirius III",
+          "Armstrong",
           "Tabletop"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14103,8 +14103,8 @@
         "routePath": [
           "Murphy's World",
           "New Britain",
-          "Tabletop",
-          "Sirius III",
+          "Maxwell’s Purchase",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -14118,8 +14118,8 @@
         "routePath": [
           "Murphy's World",
           "New Britain",
-          "Tabletop",
-          "Sirius III",
+          "Maxwell’s Purchase",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -14382,7 +14382,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14415,7 +14415,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14569,7 +14569,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Master’s Planet",
+          "?",
           "Samson’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14591,7 +14591,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15096,7 +15096,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Hodgson’s World",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15107,7 +15107,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Hodgson’s World",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15151,7 +15151,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Hodgson’s World",
           "Samson’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15162,7 +15162,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Plateau",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15173,7 +15173,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Hodgson’s World",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15248,7 +15248,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Providence",
-          "Master’s Planet",
+          "New France",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15429,7 +15429,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Sahara",
-          "Dune",
+          "Capella",
           "Levo"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16373,7 +16373,7 @@
         "hopDistance": 2,
         "routePath": [
           "Plateau",
-          "Master’s Planet",
+          "New Britain",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16384,7 +16384,7 @@
         "hopDistance": 2,
         "routePath": [
           "Plateau",
-          "Master’s Planet",
+          "Sirius III",
           "Clotho Prime"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16406,7 +16406,7 @@
         "hopDistance": 2,
         "routePath": [
           "Plateau",
-          "Master’s Planet",
+          "Sirius III",
           "George’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16417,7 +16417,7 @@
         "hopDistance": 2,
         "routePath": [
           "Plateau",
-          "New Britain",
+          "New Japan",
           "Hodgson’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16483,7 +16483,7 @@
         "hopDistance": 2,
         "routePath": [
           "Plateau",
-          "Master’s Planet",
+          "Sirius III",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16571,7 +16571,7 @@
         "hopDistance": 2,
         "routePath": [
           "Plateau",
-          "Master’s Planet",
+          "Sirius III",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16758,8 +16758,8 @@
         "routePath": [
           "Port Oread",
           "New Britain",
-          "Tabletop",
-          "Sirius III",
+          "Maxwell’s Purchase",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -16773,8 +16773,8 @@
         "routePath": [
           "Port Oread",
           "New Britain",
-          "Tabletop",
-          "Sirius III",
+          "Maxwell’s Purchase",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -17303,7 +17303,7 @@
         "hopDistance": 2,
         "routePath": [
           "Samson’s Planet",
-          "Spica",
+          "?",
           "Dune"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17358,7 +17358,7 @@
         "hopDistance": 2,
         "routePath": [
           "Samson’s Planet",
-          "Ursa Minor Beta",
+          "?",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17446,7 +17446,7 @@
         "hopDistance": 2,
         "routePath": [
           "Samson’s Planet",
-          "Ursa Minor Beta",
+          "New Istanbul",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17879,7 +17879,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17901,7 +17901,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17956,7 +17956,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18430,7 +18430,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Dune",
+          "Sirius III",
           "New Scotland’s motto"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18518,7 +18518,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Dune",
+          "Sirius III",
           "Sauron"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18720,7 +18720,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Capella",
           "Levo"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18731,7 +18731,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Sirius III",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18742,7 +18742,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Armstrong",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18753,7 +18753,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "Sirius III",
+          "Armstrong",
           "Merlin"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18808,7 +18808,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18885,7 +18885,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Sirius III",
           "Ursa Minor Beta"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18941,7 +18941,7 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
+          "Armstrong",
           "Maxwell’s Purchase",
           "Dune",
           "Atropos"
@@ -18956,7 +18956,7 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Sirius III",
+          "Armstrong",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -18971,8 +18971,8 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Murphy's World"
         ],
@@ -18986,8 +18986,8 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Port Oread"
         ],
@@ -19001,8 +19001,8 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Zaxted Starport"
         ],
@@ -19208,7 +19208,7 @@
         "hopDistance": 2,
         "routePath": [
           "Ursa Minor Beta",
-          "New Britain",
+          "Samson’s Planet",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -19263,7 +19263,7 @@
         "hopDistance": 2,
         "routePath": [
           "Ursa Minor Beta",
-          "New Britain",
+          "Samson’s Planet",
           "Hodgson’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -19296,7 +19296,7 @@
         "hopDistance": 2,
         "routePath": [
           "Ursa Minor Beta",
-          "New Britain",
+          "Samson’s Planet",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -19340,7 +19340,7 @@
         "hopDistance": 2,
         "routePath": [
           "Ursa Minor Beta",
-          "Sirius III",
+          "Samson’s Planet",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -19417,7 +19417,7 @@
         "hopDistance": 2,
         "routePath": [
           "Ursa Minor Beta",
-          "Sirius III",
+          "Samson’s Planet",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -19593,8 +19593,8 @@
         "routePath": [
           "Zaxted Starport",
           "New Britain",
-          "Tabletop",
-          "Sirius III",
+          "Maxwell’s Purchase",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -19608,8 +19608,8 @@
         "routePath": [
           "Zaxted Starport",
           "New Britain",
-          "Tabletop",
-          "Sirius III",
+          "Maxwell’s Purchase",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -19620,31 +19620,39 @@
     "systemBetweennessRanking": [
       {
         "candidateSystemName": "Sirius III",
-        "routeIntermediaryCount": 616
-      },
-      {
-        "candidateSystemName": "New Britain",
-        "routeIntermediaryCount": 520
-      },
-      {
-        "candidateSystemName": "Tabletop",
-        "routeIntermediaryCount": 448
+        "routeIntermediaryCount": 664
       },
       {
         "candidateSystemName": "Maxwell’s Purchase",
-        "routeIntermediaryCount": 444
+        "routeIntermediaryCount": 541
       },
       {
         "candidateSystemName": "Merlin",
         "routeIntermediaryCount": 428
       },
       {
+        "candidateSystemName": "New Britain",
+        "routeIntermediaryCount": 367
+      },
+      {
+        "candidateSystemName": "Tabletop",
+        "routeIntermediaryCount": 366
+      },
+      {
         "candidateSystemName": "Master’s Planet",
-        "routeIntermediaryCount": 333
+        "routeIntermediaryCount": 250
       },
       {
         "candidateSystemName": "Capella",
-        "routeIntermediaryCount": 195
+        "routeIntermediaryCount": 201
+      },
+      {
+        "candidateSystemName": "Armstrong",
+        "routeIntermediaryCount": 192
+      },
+      {
+        "candidateSystemName": "New Istanbul",
+        "routeIntermediaryCount": 189
       },
       {
         "candidateSystemName": "Sirius Station",
@@ -19652,19 +19660,11 @@
       },
       {
         "candidateSystemName": "Samson’s Planet",
-        "routeIntermediaryCount": 155
-      },
-      {
-        "candidateSystemName": "New Istanbul",
-        "routeIntermediaryCount": 149
+        "routeIntermediaryCount": 136
       },
       {
         "candidateSystemName": "Dune",
-        "routeIntermediaryCount": 140
-      },
-      {
-        "candidateSystemName": "Pegasus",
-        "routeIntermediaryCount": 96
+        "routeIntermediaryCount": 134
       },
       {
         "candidateSystemName": "P-8457",
@@ -19672,27 +19672,35 @@
       },
       {
         "candidateSystemName": "New Sahara",
-        "routeIntermediaryCount": 55
+        "routeIntermediaryCount": 50
       },
       {
-        "candidateSystemName": "Ursa Minor Beta",
-        "routeIntermediaryCount": 20
-      },
-      {
-        "candidateSystemName": "New Providence",
-        "routeIntermediaryCount": 18
+        "candidateSystemName": "?",
+        "routeIntermediaryCount": 38
       },
       {
         "candidateSystemName": "Hodgson’s World",
-        "routeIntermediaryCount": 9
+        "routeIntermediaryCount": 33
+      },
+      {
+        "candidateSystemName": "New France",
+        "routeIntermediaryCount": 15
+      },
+      {
+        "candidateSystemName": "New Providence",
+        "routeIntermediaryCount": 14
+      },
+      {
+        "candidateSystemName": "Plateau",
+        "routeIntermediaryCount": 12
       },
       {
         "candidateSystemName": "Spica",
         "routeIntermediaryCount": 8
       },
       {
-        "candidateSystemName": "New France",
-        "routeIntermediaryCount": 6
+        "candidateSystemName": "New Japan",
+        "routeIntermediaryCount": 2
       }
     ],
     "promotionBlockers": [
@@ -19720,68 +19728,6 @@
     "topCalibrationPriorityCount": 20,
     "topCalibrationPriorities": [
       {
-        "sourceSystemName": "New Britain",
-        "targetSystemName": "Sirius III",
-        "hopDistance": 2,
-        "routePath": [
-          "New Britain",
-          "Tabletop",
-          "Sirius III"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 2,
-        "targetBetweennessRank": 1,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 141
-      },
-      {
-        "sourceSystemName": "Sirius III",
-        "targetSystemName": "New Britain",
-        "hopDistance": 2,
-        "routePath": [
-          "Sirius III",
-          "Tabletop",
-          "New Britain"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 1,
-        "targetBetweennessRank": 2,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 141
-      },
-      {
-        "sourceSystemName": "Sirius III",
-        "targetSystemName": "Tabletop",
-        "hopDistance": 1,
-        "routePath": [
-          "Sirius III",
-          "Tabletop"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 1,
-        "targetBetweennessRank": 3,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 139
-      },
-      {
-        "sourceSystemName": "Tabletop",
-        "targetSystemName": "Sirius III",
-        "hopDistance": 1,
-        "routePath": [
-          "Tabletop",
-          "Sirius III"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 3,
-        "targetBetweennessRank": 1,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 139
-      },
-      {
         "sourceSystemName": "Maxwell’s Purchase",
         "targetSystemName": "Sirius III",
         "hopDistance": 1,
@@ -19790,26 +19736,11 @@
           "Sirius III"
         ],
         "levoAnchored": false,
-        "sourceBetweennessRank": 4,
+        "sourceBetweennessRank": 2,
         "targetBetweennessRank": 1,
         "sourceDegree": 46,
         "targetDegree": 46,
-        "diagnosticScore": 138
-      },
-      {
-        "sourceSystemName": "New Britain",
-        "targetSystemName": "Tabletop",
-        "hopDistance": 1,
-        "routePath": [
-          "New Britain",
-          "Tabletop"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 2,
-        "targetBetweennessRank": 3,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 138
+        "diagnosticScore": 140
       },
       {
         "sourceSystemName": "Sirius III",
@@ -19821,56 +19752,42 @@
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 1,
-        "targetBetweennessRank": 4,
+        "targetBetweennessRank": 2,
         "sourceDegree": 46,
         "targetDegree": 46,
-        "diagnosticScore": 138
+        "diagnosticScore": 140
       },
       {
-        "sourceSystemName": "Tabletop",
-        "targetSystemName": "New Britain",
-        "hopDistance": 1,
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Merlin",
+        "hopDistance": 2,
         "routePath": [
-          "Tabletop",
-          "New Britain"
+          "Maxwell’s Purchase",
+          "Armstrong",
+          "Merlin"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 2,
+        "targetBetweennessRank": 3,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
+        "sourceSystemName": "Merlin",
+        "targetSystemName": "Maxwell’s Purchase",
+        "hopDistance": 2,
+        "routePath": [
+          "Merlin",
+          "Armstrong",
+          "Maxwell’s Purchase"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 3,
         "targetBetweennessRank": 2,
         "sourceDegree": 46,
         "targetDegree": 46,
-        "diagnosticScore": 138
-      },
-      {
-        "sourceSystemName": "Maxwell’s Purchase",
-        "targetSystemName": "New Britain",
-        "hopDistance": 1,
-        "routePath": [
-          "Maxwell’s Purchase",
-          "New Britain"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 4,
-        "targetBetweennessRank": 2,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 137
-      },
-      {
-        "sourceSystemName": "Maxwell’s Purchase",
-        "targetSystemName": "Tabletop",
-        "hopDistance": 2,
-        "routePath": [
-          "Maxwell’s Purchase",
-          "New Britain",
-          "Tabletop"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 4,
-        "targetBetweennessRank": 3,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 137
+        "diagnosticScore": 139
       },
       {
         "sourceSystemName": "Merlin",
@@ -19881,8 +19798,86 @@
           "Sirius III"
         ],
         "levoAnchored": false,
-        "sourceBetweennessRank": 5,
+        "sourceBetweennessRank": 3,
         "targetBetweennessRank": 1,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
+        "sourceSystemName": "New Britain",
+        "targetSystemName": "Sirius III",
+        "hopDistance": 2,
+        "routePath": [
+          "New Britain",
+          "Maxwell’s Purchase",
+          "Sirius III"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 4,
+        "targetBetweennessRank": 1,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "Merlin",
+        "hopDistance": 1,
+        "routePath": [
+          "Sirius III",
+          "Merlin"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 1,
+        "targetBetweennessRank": 3,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "New Britain",
+        "hopDistance": 2,
+        "routePath": [
+          "Sirius III",
+          "Maxwell’s Purchase",
+          "New Britain"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 1,
+        "targetBetweennessRank": 4,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "New Britain",
+        "hopDistance": 1,
+        "routePath": [
+          "Maxwell’s Purchase",
+          "New Britain"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 2,
+        "targetBetweennessRank": 4,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 137
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Tabletop",
+        "hopDistance": 2,
+        "routePath": [
+          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 2,
+        "targetBetweennessRank": 5,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 137
@@ -19896,19 +19891,19 @@
           "Maxwell’s Purchase"
         ],
         "levoAnchored": false,
-        "sourceBetweennessRank": 2,
-        "targetBetweennessRank": 4,
+        "sourceBetweennessRank": 4,
+        "targetBetweennessRank": 2,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 137
       },
       {
         "sourceSystemName": "Sirius III",
-        "targetSystemName": "Merlin",
+        "targetSystemName": "Tabletop",
         "hopDistance": 1,
         "routePath": [
           "Sirius III",
-          "Merlin"
+          "Tabletop"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 1,
@@ -19923,12 +19918,27 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Armstrong",
           "Maxwell’s Purchase"
         ],
         "levoAnchored": false,
-        "sourceBetweennessRank": 3,
-        "targetBetweennessRank": 4,
+        "sourceBetweennessRank": 5,
+        "targetBetweennessRank": 2,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 137
+      },
+      {
+        "sourceSystemName": "Tabletop",
+        "targetSystemName": "Sirius III",
+        "hopDistance": 1,
+        "routePath": [
+          "Tabletop",
+          "Sirius III"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 5,
+        "targetBetweennessRank": 1,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 137
@@ -19939,12 +19949,28 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Sirius III"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 7,
         "targetBetweennessRank": 1,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 136
+      },
+      {
+        "sourceSystemName": "Master’s Planet",
+        "targetSystemName": "Maxwell’s Purchase",
+        "hopDistance": 2,
+        "routePath": [
+          "Master’s Planet",
+          "New Istanbul",
+          "Maxwell’s Purchase"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 6,
+        "targetBetweennessRank": 2,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 136
@@ -19965,17 +19991,33 @@
         "diagnosticScore": 136
       },
       {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Master’s Planet",
+        "hopDistance": 2,
+        "routePath": [
+          "Maxwell’s Purchase",
+          "New Istanbul",
+          "Master’s Planet"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 2,
+        "targetBetweennessRank": 6,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 136
+      },
+      {
         "sourceSystemName": "Merlin",
         "targetSystemName": "Tabletop",
         "hopDistance": 2,
         "routePath": [
           "Merlin",
-          "Sirius III",
+          "Armstrong",
           "Tabletop"
         ],
         "levoAnchored": false,
-        "sourceBetweennessRank": 5,
-        "targetBetweennessRank": 3,
+        "sourceBetweennessRank": 3,
+        "targetBetweennessRank": 5,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 136
@@ -19986,7 +20028,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Capella"
         ],
         "levoAnchored": false,
@@ -19995,40 +20037,73 @@
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 136
-      },
-      {
-        "sourceSystemName": "Sirius III",
-        "targetSystemName": "Master’s Planet",
-        "hopDistance": 1,
-        "routePath": [
-          "Sirius III",
-          "Master’s Planet"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 1,
-        "targetBetweennessRank": 6,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 136
-      },
-      {
-        "sourceSystemName": "Tabletop",
-        "targetSystemName": "Merlin",
-        "hopDistance": 2,
-        "routePath": [
-          "Tabletop",
-          "Sirius III",
-          "Merlin"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 3,
-        "targetBetweennessRank": 5,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 136
       }
     ],
     "levoAnchoredCalibrationTargets": [
+      {
+        "sourceSystemName": "Levo",
+        "targetSystemName": "Maxwell’s Purchase",
+        "hopDistance": 2,
+        "routePath": [
+          "Levo",
+          "Dune",
+          "Maxwell’s Purchase"
+        ],
+        "levoAnchored": true,
+        "sourceBetweennessRank": 48,
+        "targetBetweennessRank": 2,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 104
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Levo",
+        "hopDistance": 2,
+        "routePath": [
+          "Maxwell’s Purchase",
+          "Capella",
+          "Levo"
+        ],
+        "levoAnchored": true,
+        "sourceBetweennessRank": 2,
+        "targetBetweennessRank": 48,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 104
+      },
+      {
+        "sourceSystemName": "Levo",
+        "targetSystemName": "Merlin",
+        "hopDistance": 2,
+        "routePath": [
+          "Levo",
+          "Capella",
+          "Merlin"
+        ],
+        "levoAnchored": true,
+        "sourceBetweennessRank": 48,
+        "targetBetweennessRank": 3,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 103
+      },
+      {
+        "sourceSystemName": "Merlin",
+        "targetSystemName": "Levo",
+        "hopDistance": 2,
+        "routePath": [
+          "Merlin",
+          "Capella",
+          "Levo"
+        ],
+        "levoAnchored": true,
+        "sourceBetweennessRank": 3,
+        "targetBetweennessRank": 48,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 103
+      },
       {
         "sourceSystemName": "Levo",
         "targetSystemName": "New Britain",
@@ -20039,73 +20114,10 @@
         ],
         "levoAnchored": true,
         "sourceBetweennessRank": 48,
-        "targetBetweennessRank": 2,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 103
-      },
-      {
-        "sourceSystemName": "Levo",
-        "targetSystemName": "Tabletop",
-        "hopDistance": 2,
-        "routePath": [
-          "Levo",
-          "New Britain",
-          "Tabletop"
-        ],
-        "levoAnchored": true,
-        "sourceBetweennessRank": 48,
-        "targetBetweennessRank": 3,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 103
-      },
-      {
-        "sourceSystemName": "New Britain",
-        "targetSystemName": "Levo",
-        "hopDistance": 1,
-        "routePath": [
-          "New Britain",
-          "Levo"
-        ],
-        "levoAnchored": true,
-        "sourceBetweennessRank": 2,
-        "targetBetweennessRank": 48,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 103
-      },
-      {
-        "sourceSystemName": "Tabletop",
-        "targetSystemName": "Levo",
-        "hopDistance": 2,
-        "routePath": [
-          "Tabletop",
-          "New Britain",
-          "Levo"
-        ],
-        "levoAnchored": true,
-        "sourceBetweennessRank": 3,
-        "targetBetweennessRank": 48,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 103
-      },
-      {
-        "sourceSystemName": "Levo",
-        "targetSystemName": "Maxwell’s Purchase",
-        "hopDistance": 2,
-        "routePath": [
-          "Levo",
-          "New Britain",
-          "Maxwell’s Purchase"
-        ],
-        "levoAnchored": true,
-        "sourceBetweennessRank": 48,
         "targetBetweennessRank": 4,
         "sourceDegree": 46,
         "targetDegree": 46,
-        "diagnosticScore": 102
+        "diagnosticScore": 101
       }
     ],
     "diameterCalibrationTargets": [
@@ -20117,7 +20129,7 @@
           "Atropos",
           "Dune",
           "Maxwell’s Purchase",
-          "Pegasus",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -20137,7 +20149,7 @@
           "Atropos",
           "Dune",
           "Maxwell’s Purchase",
-          "Pegasus",
+          "Armstrong",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -20157,7 +20169,7 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
+          "Armstrong",
           "Maxwell’s Purchase",
           "Dune",
           "Atropos"
@@ -20177,7 +20189,7 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Sirius III",
+          "Armstrong",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -20197,8 +20209,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Pegasus",
-          "Maxwell’s Purchase",
+          "Armstrong",
+          "Tabletop",
           "New Britain",
           "Murphy's World"
         ],
@@ -20211,14 +20223,14 @@
       }
     ],
     "topBetweennessSystemName": "Sirius III",
-    "topBetweennessRouteIntermediaryCount": 616,
+    "topBetweennessRouteIntermediaryCount": 664,
     "priorityRegions": {
       "region1TopBetweennessHubs": {
         "description": "Routes anchored at top-betweenness hub systems — verifying these constrains the most route paths",
         "targetSystemNames": [
           "Sirius III",
-          "New Britain",
-          "Tabletop"
+          "Maxwell’s Purchase",
+          "Merlin"
         ]
       },
       "region2LevoAnchored": {
@@ -20257,201 +20269,11 @@
     "diagnosticCases": [
       {
         "routePath": [
-          "New Britain",
-          "Tabletop",
-          "Sirius III"
-        ],
-        "hopDistance": 2,
-        "diagnosticScore": 141,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "deltaX": 65537,
-          "deltaY": 0,
-          "manhattanSignedLongDistance": 65537,
-          "displayQuadrant": "north-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from New Britain to Sirius III?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Sirius III",
-          "Tabletop",
-          "New Britain"
-        ],
-        "hopDistance": 2,
-        "diagnosticScore": 141,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          "deltaX": -65537,
-          "deltaY": 0,
-          "manhattanSignedLongDistance": 65537,
-          "displayQuadrant": "north-west"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Sirius III to New Britain?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Sirius III",
-          "Tabletop"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 139,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          "deltaX": -196609,
-          "deltaY": 8323072,
-          "manhattanSignedLongDistance": 8519681,
-          "displayQuadrant": "south-west"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Sirius III to Tabletop?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Tabletop",
-          "Sirius III"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 139,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          "targetCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "deltaX": 196609,
-          "deltaY": -8323072,
-          "manhattanSignedLongDistance": 8519681,
-          "displayQuadrant": "north-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Tabletop to Sirius III?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
           "Maxwell’s Purchase",
           "Sirius III"
         ],
         "hopDistance": 1,
-        "diagnosticScore": 138,
+        "diagnosticScore": 140,
         "levoAnchored": false,
         "priorityRegion": "betweenness-hub",
         "pathCoordinates": [
@@ -20491,55 +20313,11 @@
       },
       {
         "routePath": [
-          "New Britain",
-          "Tabletop"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 138,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          "deltaX": -131072,
-          "deltaY": 8323072,
-          "manhattanSignedLongDistance": 8454144,
-          "displayQuadrant": "south-west"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from New Britain to Tabletop?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
           "Sirius III",
           "Maxwell’s Purchase"
         ],
         "hopDistance": 1,
-        "diagnosticScore": 138,
+        "diagnosticScore": 140,
         "levoAnchored": false,
         "priorityRegion": "betweenness-hub",
         "pathCoordinates": [
@@ -20579,19 +20357,267 @@
       },
       {
         "routePath": [
-          "Tabletop",
-          "New Britain"
+          "Maxwell’s Purchase",
+          "Armstrong",
+          "Merlin"
         ],
-        "hopDistance": 1,
-        "diagnosticScore": 138,
+        "hopDistance": 2,
+        "diagnosticScore": 139,
         "levoAnchored": false,
         "priorityRegion": "betweenness-hub",
         "pathCoordinates": [
           {
-            "systemName": "Tabletop",
-            "resourceId": 142,
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          {
+            "systemName": "Armstrong",
+            "resourceId": 174,
+            "signedLongX": 196754,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Merlin",
+            "resourceId": 141,
             "signedLongX": 65664,
-            "signedLongY": 8355840
+            "signedLongY": 4751360
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          "targetCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          "deltaX": -130943,
+          "deltaY": -3600384,
+          "manhattanSignedLongDistance": 3731327,
+          "displayQuadrant": "north-west"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Maxwell’s Purchase to Merlin?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Merlin",
+          "Armstrong",
+          "Maxwell’s Purchase"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Merlin",
+            "resourceId": 141,
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          {
+            "systemName": "Armstrong",
+            "resourceId": 174,
+            "signedLongX": 196754,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          "targetCoordinates": {
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          "deltaX": 130943,
+          "deltaY": 3600384,
+          "manhattanSignedLongDistance": 3731327,
+          "displayQuadrant": "south-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Merlin to Maxwell’s Purchase?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Merlin",
+          "Sirius III"
+        ],
+        "hopDistance": 1,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Merlin",
+            "resourceId": 141,
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          "targetCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "deltaX": 196609,
+          "deltaY": -4718592,
+          "manhattanSignedLongDistance": 4915201,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Merlin to Sirius III?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "New Britain",
+          "Maxwell’s Purchase",
+          "Sirius III"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "New Britain",
+            "resourceId": 129,
+            "signedLongX": 196736,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 196736,
+            "signedLongY": 32768
+          },
+          "targetCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "deltaX": 65537,
+          "deltaY": 0,
+          "manhattanSignedLongDistance": 65537,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from New Britain to Sirius III?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Sirius III",
+          "Merlin"
+        ],
+        "hopDistance": 1,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Merlin",
+            "resourceId": 141,
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "targetCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          "deltaX": -196609,
+          "deltaY": 4718592,
+          "manhattanSignedLongDistance": 4915201,
+          "displayQuadrant": "south-west"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Sirius III to Merlin?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Sirius III",
+          "Maxwell’s Purchase",
+          "New Britain"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
           },
           {
             "systemName": "New Britain",
@@ -20602,21 +20628,21 @@
         ],
         "coordinateMetrics": {
           "sourceCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 8355840
+            "signedLongX": 262273,
+            "signedLongY": 32768
           },
           "targetCoordinates": {
             "signedLongX": 196736,
             "signedLongY": 32768
           },
-          "deltaX": 131072,
-          "deltaY": -8323072,
-          "manhattanSignedLongDistance": 8454144,
-          "displayQuadrant": "north-east"
+          "deltaX": -65537,
+          "deltaY": 0,
+          "manhattanSignedLongDistance": 65537,
+          "displayQuadrant": "north-west"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Tabletop to New Britain?",
+          "Does Classic map show a route from Sirius III to New Britain?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -20668,7 +20694,7 @@
       {
         "routePath": [
           "Maxwell’s Purchase",
-          "New Britain",
+          "Armstrong",
           "Tabletop"
         ],
         "hopDistance": 2,
@@ -20683,9 +20709,9 @@
             "signedLongY": 8351744
           },
           {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
+            "systemName": "Armstrong",
+            "resourceId": 174,
+            "signedLongX": 196754,
             "signedLongY": 32768
           },
           {
@@ -20712,50 +20738,6 @@
         "unresolvedNames": null,
         "diagnosticQuestions": [
           "Does Classic map show a route from Maxwell’s Purchase to Tabletop?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Merlin",
-          "Sirius III"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 137,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Merlin",
-            "resourceId": 141,
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          },
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          },
-          "targetCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "deltaX": 196609,
-          "deltaY": -4718592,
-          "manhattanSignedLongDistance": 4915201,
-          "displayQuadrant": "north-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Merlin to Sirius III?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -20807,7 +20789,7 @@
       {
         "routePath": [
           "Sirius III",
-          "Merlin"
+          "Tabletop"
         ],
         "hopDistance": 1,
         "diagnosticScore": 137,
@@ -20821,10 +20803,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Merlin",
-            "resourceId": 141,
+            "systemName": "Tabletop",
+            "resourceId": 142,
             "signedLongX": 65664,
-            "signedLongY": 4751360
+            "signedLongY": 8355840
           }
         ],
         "coordinateMetrics": {
@@ -20834,16 +20816,16 @@
           },
           "targetCoordinates": {
             "signedLongX": 65664,
-            "signedLongY": 4751360
+            "signedLongY": 8355840
           },
           "deltaX": -196609,
-          "deltaY": 4718592,
-          "manhattanSignedLongDistance": 4915201,
+          "deltaY": 8323072,
+          "manhattanSignedLongDistance": 8519681,
           "displayQuadrant": "south-west"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Sirius III to Merlin?",
+          "Does Classic map show a route from Sirius III to Tabletop?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -20851,7 +20833,7 @@
       {
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Armstrong",
           "Maxwell’s Purchase"
         ],
         "hopDistance": 2,
@@ -20866,9 +20848,9 @@
             "signedLongY": 8355840
           },
           {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
+            "systemName": "Armstrong",
+            "resourceId": 174,
+            "signedLongX": 196754,
             "signedLongY": 32768
           },
           {
@@ -20901,8 +20883,52 @@
       },
       {
         "routePath": [
-          "Capella",
           "Tabletop",
+          "Sirius III"
+        ],
+        "hopDistance": 1,
+        "diagnosticScore": 137,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          "targetCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "deltaX": 196609,
+          "deltaY": -8323072,
+          "manhattanSignedLongDistance": 8519681,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Tabletop to Sirius III?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Capella",
+          "Maxwell’s Purchase",
           "Sirius III"
         ],
         "hopDistance": 2,
@@ -20917,10 +20943,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
           },
           {
             "systemName": "Sirius III",
@@ -20946,6 +20972,57 @@
         "unresolvedNames": null,
         "diagnosticQuestions": [
           "Does Classic map show a route from Capella to Sirius III?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Master’s Planet",
+          "New Istanbul",
+          "Maxwell’s Purchase"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 136,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Master’s Planet",
+            "resourceId": 136,
+            "signedLongX": 196740,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "New Istanbul",
+            "resourceId": 151,
+            "signedLongX": 262276,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 196740,
+            "signedLongY": 32768
+          },
+          "targetCoordinates": {
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          "deltaX": -133,
+          "deltaY": 8318976,
+          "manhattanSignedLongDistance": 8319109,
+          "displayQuadrant": "south-west"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Master’s Planet to Maxwell’s Purchase?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -20996,8 +21073,59 @@
       },
       {
         "routePath": [
+          "Maxwell’s Purchase",
+          "New Istanbul",
+          "Master’s Planet"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 136,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          {
+            "systemName": "New Istanbul",
+            "resourceId": 151,
+            "signedLongX": 262276,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Master’s Planet",
+            "resourceId": 136,
+            "signedLongX": 196740,
+            "signedLongY": 32768
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          "targetCoordinates": {
+            "signedLongX": 196740,
+            "signedLongY": 32768
+          },
+          "deltaX": 133,
+          "deltaY": -8318976,
+          "manhattanSignedLongDistance": 8319109,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Maxwell’s Purchase to Master’s Planet?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
           "Merlin",
-          "Sirius III",
+          "Armstrong",
           "Tabletop"
         ],
         "hopDistance": 2,
@@ -21012,9 +21140,9 @@
             "signedLongY": 4751360
           },
           {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
+            "systemName": "Armstrong",
+            "resourceId": 174,
+            "signedLongX": 196754,
             "signedLongY": 32768
           },
           {
@@ -21048,7 +21176,7 @@
       {
         "routePath": [
           "Sirius III",
-          "Tabletop",
+          "Maxwell’s Purchase",
           "Capella"
         ],
         "hopDistance": 2,
@@ -21063,10 +21191,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
           },
           {
             "systemName": "Capella",
@@ -21095,101 +21223,6 @@
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
-      },
-      {
-        "routePath": [
-          "Sirius III",
-          "Master’s Planet"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 136,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Master’s Planet",
-            "resourceId": 136,
-            "signedLongX": 196740,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 196740,
-            "signedLongY": 32768
-          },
-          "deltaX": -65533,
-          "deltaY": 0,
-          "manhattanSignedLongDistance": 65533,
-          "displayQuadrant": "north-west"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Sirius III to Master’s Planet?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Tabletop",
-          "Sirius III",
-          "Merlin"
-        ],
-        "hopDistance": 2,
-        "diagnosticScore": 136,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Merlin",
-            "resourceId": 141,
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 8355840
-          },
-          "targetCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          },
-          "deltaX": 0,
-          "deltaY": -3604480,
-          "manhattanSignedLongDistance": 3604480,
-          "displayQuadrant": "north-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Tabletop to Merlin?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
       }
     ],
     "priorityRegions": {
@@ -21197,8 +21230,8 @@
         "description": "Routes anchored at top-betweenness hub systems — verifying these constrains the most route paths",
         "targetSystemNames": [
           "Sirius III",
-          "New Britain",
-          "Tabletop"
+          "Maxwell’s Purchase",
+          "Merlin"
         ]
       },
       "region2LevoAnchored": {
