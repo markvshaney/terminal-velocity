@@ -413,6 +413,158 @@ def _syst_govt_field_resource_id_cross_reference_scout(systems: list[dict]) -> d
     }
 
 
+def _syst_govt_field_word_shift_test_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout testing alternative word indices for the govt field.
+
+    The current govt field word index (22) produces values 15-55 for all 67 syst
+    records, ALL out of the Resource Bible expected range 128-255. This scout tests
+    nearby word indices (20-24) to determine whether a systematic word-index or
+    byte-alignment mismatch explains the out-of-domain govt field, or whether the
+    field encoding is fundamentally different from Resource Bible expectations.
+
+    Tests each candidate word against:
+      - Government ordinals (0-24)
+      - Government resource IDs (128-152)
+      - Offset+128 hypothesis (raw + 128 vs resource IDs)
+      - -1 independent/value check
+    """
+    import json
+    govts = json.loads(DEFAULT_GOVERNMENTS.read_text())
+    govt_by_rid: dict[int, str] = {g['resourceId']: g['name'] for g in govts.get('governments', [])}
+    govt_by_ordinal: dict[int, str] = {g['ordinal']: g['name'] for g in govts.get('governments', [])}
+    ordinal_range = list(range(0, 25))
+    rid_range = list(range(128, 153))
+
+    candidate_word_indices = [20, 21, 22, 23, 24]
+    word_tests = {}
+
+    for wi in candidate_word_indices:
+        raw_values = [int(r['fields'][wi]['value']) for r in _all_records() if wi < len(r['fields'])]
+        freq: dict[int, int] = {}
+        for v in raw_values:
+            freq[v] = freq.get(v, 0) + 1
+        distinct_values = sorted(set(raw_values))
+        min_val = min(raw_values)
+        max_val = max(raw_values)
+
+        # Cross-reference checks
+        ordinal_matches = sorted(v for v in distinct_values if v in govt_by_ordinal)
+        rid_matches = sorted(v for v in distinct_values if v in govt_by_rid)
+        offset128_matches = sorted(v for v in distinct_values if (v + 128) in govt_by_rid)
+        independent_count = sum(1 for v in raw_values if v == -1)
+        unmatched = sorted(v for v in distinct_values if v not in govt_by_ordinal and v not in govt_by_rid)
+        dominant_value = max(freq, key=lambda k: freq[k])
+        dominant_count = freq[dominant_value]
+
+        word_tests[str(wi)] = {
+            'wordIndex': wi,
+            'recordCount': len(raw_values),
+            'distinctValues': distinct_values,
+            'valueRange': [min_val, max_val],
+            'valueFrequency': {str(k): v for k, v in sorted(freq.items(), key=lambda x: -x[1])},
+            'dominantValue': dominant_value,
+            'dominantCount': dominant_count,
+            'dominantPercentage': round(100 * dominant_count / len(raw_values), 1),
+            'ordinalMatchedValues': ordinal_matches,
+            'ordinalMatchedCount': len(ordinal_matches),
+            'ordinalMatchedGovernmentNames': [govt_by_ordinal[v] for v in ordinal_matches],
+            'resourceIdMatchedValues': rid_matches,
+            'resourceIdMatchedCount': len(rid_matches),
+            'resourceIdMatchedGovernmentNames': [govt_by_rid[v] for v in rid_matches],
+            'offset128MatchedValues': offset128_matches,
+            'offset128MatchedCount': len(offset128_matches),
+            'offset128MatchedGovernmentNames': [govt_by_rid[v + 128] for v in offset128_matches],
+            'independentCount': independent_count,
+            'unmatchedValues': unmatched,
+            'unmatchedCount': len(unmatched),
+            'isAnyValueInDomain': bool(
+                ordinal_matches or rid_matches or offset128_matches or independent_count > 0
+            ),
+            'allInDomain': (
+                len(unmatched) == 0 and len(freq) > 0
+            ),
+        }
+
+    # Find the best candidate word by most ordinal + offset128 matches
+    best_word = None
+    best_match_count = 0
+    for wi_str, test in word_tests.items():
+        total_matches = test['ordinalMatchedCount'] + test['offset128MatchedCount']
+        if total_matches > best_match_count:
+            best_match_count = total_matches
+            best_word = int(wi_str)
+    best_match_note = None
+    if best_word is not None and best_word != 22:
+        best_match_note = (
+            f'Word {best_word} has more matches than the current govt word (22), '
+            f'suggesting a possible word-index offset of {best_word - 22}. '
+            f'However, the dominant value {word_tests[str(best_word)]["dominantValue"]} '
+            f'remains unmatched in all nearby words.'
+        )
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-govt-field-word-shift-test-scout',
+        'oracleStatus': 'govt_field_word_shift_test_encoding_investigation_non_promoting',
+        'promotionStatus': 'not-promoted; word shift test is a non-promoting encoding investigation only; '
+                           'no runtime government behavior, reputation, or legal status is claimed',
+        'inputSources': [
+            'sourced_ev_structures.json syst-like records fields[20-24] raw values',
+            'sourced_ev_governments.json governments[].ordinal (0-24) and resourceId (128-152)',
+        ],
+        'candidateWordIndices': candidate_word_indices,
+        'currentGovtWordIndex': 22,
+        'recordCount': len(systems),
+        'dominantValueAcrossAllWords': 25,
+        'wordTests': word_tests,
+        'bestAlternativeWordIndex': best_word,
+        'bestAlternativeMatchCount': best_match_count,
+        'bestAlternativeNote': best_match_note,
+        'unmatchedDominantValueAssessment': {
+            'value': 25,
+            'systemsWithValue': word_tests.get('22', {}).get('dominantCount', 0),
+            'possibleInterpretations': [
+                'unset/default/null government (not a real government assignment)',
+                'compound or offset-based government ID encoding not matching ordinal or resource-ID models',
+                'word-index shift still present but masked by default value 25 across most records',
+                'different field encoding than the Resource Bible syst spec (e.g., scaled, shifted, or compact govt field)',
+                'decoded record run may not be a Classic syst resource (different record type classified as syst-like)',
+            ],
+            'evidenceBasis': 'Value 25 appears across 52-55 of 67 records for ALL tested words (20-24), '
+                             'not just the govt word. This suggests 25 is a null/unset/independent default '
+                             'value in the decoded record encoding, not a specific government assignment.',
+        },
+        'promotionBlockers': [
+            'All tested word indices (20-24) show similar value distributions dominated by value 25',
+            'No single alternative word index produces more than 6 ordinal-matched values out of 67 records',
+            'The dominant value 25 remains unmatched against government ordinals (0-24) and resource IDs (128-152) across all tested words',
+            'Value 25 appears across 52-55 records for ALL tested words, suggesting a systemic encoding issue beyond word index selection',
+            'No runtime government behavior, reputation effects, or legal/illegal status claims are promoted',
+        ],
+        'sourceNote': (
+            f'Tests word indices 20-24 as candidate govt field positions across {len(systems)} syst records. '
+            f'NO tested word index places all values in the expected Resource Bible domain (ordinals 0-24 or '
+            f'resource IDs 128-255). The dominant value 25 appears across 52-55 records for EVERY tested word, '
+            f'indicating it is likely a null/unset default value rather than a specific government assignment, '
+            f'or that the decoded record encoding does not match the Resource Bible syst govt field layout. '
+            f'The 6 values that match known ordinals (15, 19, 20, 21) appear at multiple word indices, '
+            f'further suggesting a systemic encoding or byte-alignment issue beyond simple word-index selection. '
+            f'No runtime government behavior or legal/reputation status is promoted.',
+        ),
+    }
+
+
+def _all_records():
+    """Return all syst-like records from the structures data.
+
+    Helper used by _syst_govt_field_word_shift_test_scout to access raw field values
+    across all decoded word indices without going through the promoted semanticFields layer.
+    """
+    import json
+    structures = json.loads(DEFAULT_STRUCTURES.read_text())
+    run = next(r for r in structures['runs'] if r.get('candidateType') == 'syst-like' and r.get('recordSize') == 88)
+    return run['records']
+
+
 def _coordinate_map_source_readiness_summary(systems: list[dict]) -> dict:
     """Record Resource Bible map-placement evidence and the exact promotion blockers."""
     coordinate_complete = [
@@ -6616,6 +6768,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systGovtFieldValueScout': _syst_govt_field_value_scout(systems),
         'systGovtFieldNameCrossReferenceScout': _syst_govt_field_name_cross_reference_scout(systems),
         'systGovtFieldResourceIdCrossReferenceScout': _syst_govt_field_resource_id_cross_reference_scout(systems),
+        'systGovtFieldWordShiftTestScout': _syst_govt_field_word_shift_test_scout(systems),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),

@@ -4523,6 +4523,37 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertTrue(rid_ref['allSystemsOutOfDomain'],
                         'The out-of-domain status is the defining finding')
 
+        # Validate systGovtFieldWordShiftTestScout
+        word_shift = data['systGovtFieldWordShiftTestScout']
+        self.assertEqual(word_shift['sourceLabel'], 'decoded-resource-backed-syst-govt-field-word-shift-test-scout')
+        self.assertEqual(word_shift['oracleStatus'], 'govt_field_word_shift_test_encoding_investigation_non_promoting')
+        self.assertEqual(word_shift['recordCount'], 67)
+        self.assertEqual(word_shift['dominantValueAcrossAllWords'], 25)
+        self.assertEqual(word_shift['candidateWordIndices'], [20, 21, 22, 23, 24])
+        self.assertIn('not-promoted', word_shift['promotionStatus'])
+        word_tests = word_shift.get('wordTests', {})
+        self.assertEqual(len(word_tests), 5, 'Should test all 5 candidate word indices')
+        # Word 22 (current govt index) should report 54 unmatched records with value 25
+        w22_test = word_tests.get('22', {})
+        self.assertEqual(w22_test['dominantValue'], 25)
+        self.assertEqual(w22_test['dominantCount'], 54)
+        self.assertEqual(w22_test['ordinalMatchedValues'], [15, 19, 20, 21])
+        # Word 24 should be all zeros (tail field, not actual govt assignments)
+        w24_test = word_tests.get('24', {})
+        self.assertEqual(w24_test['dominantValue'], 0)
+        self.assertEqual(w24_test['dominantCount'], 67)
+        # Word 24 reports allInDomain because 0 matches ordinal 0 (Confederation),
+        # but ALL 67 records having 0 means it's a zero tail field, not govt assignments
+        self.assertTrue(w24_test.get('allInDomain'),
+                        'Word 24 should report allInDomain because all values=0 match ordinal 0')
+        self.assertEqual(w24_test['ordinalMatchedValues'], [0],
+                         'Word 24 ordinal match should only be value 0 (Confederation)')
+        # Verify that the non-zero words (20-23) are the more interesting candidates
+        for wi_str in ['20', '21', '22', '23']:
+            wt = word_tests.get(wi_str, {})
+            self.assertFalse(wt.get('allInDomain'),
+                             f'Word {wi_str} should not achieve allInDomain since dominant value 25 is unmatched')
+
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
         self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6')

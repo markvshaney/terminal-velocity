@@ -1661,6 +1661,20 @@ def sourced_ev_systems_manifest(path=SOURCED_EV_SYSTEMS_PATH):
         or 'coordinate-gap-spatial-mapping' not in boundary
     ):
         raise ValueError('sourced EV systems manifest missing promotion boundary')
+    # Validate systGovtFieldWordShiftTestScout
+    word_shift = data.get('systGovtFieldWordShiftTestScout', {})
+    if word_shift.get('sourceLabel') != 'decoded-resource-backed-syst-govt-field-word-shift-test-scout':
+        raise ValueError('sourced EV systems manifest missing govt field word shift test scout source label')
+    if word_shift.get('oracleStatus') != 'govt_field_word_shift_test_encoding_investigation_non_promoting':
+        raise ValueError('sourced EV systems manifest govt field word shift test scout changed oracle status')
+    if word_shift.get('recordCount') != 67:
+        raise ValueError('sourced EV systems manifest govt field word shift test scout has unexpected record count')
+    if word_shift.get('dominantValueAcrossAllWords') != 25:
+        raise ValueError('sourced EV systems manifest govt field word shift test scout has unexpected dominant value')
+    if 'not-promoted' not in word_shift.get('promotionStatus', ''):
+        raise ValueError('sourced EV systems manifest govt field word shift test scout must remain non-promoted')
+    if word_shift.get('candidateWordIndices') != [20, 21, 22, 23, 24]:
+        raise ValueError('sourced EV systems manifest govt field word shift test scout has unexpected candidate word indices')
     return data
 
 
