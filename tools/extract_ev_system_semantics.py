@@ -3025,6 +3025,109 @@ def _named_candidate_route_calibration_diagnostic_plan(systems: list[dict], name
     }
 
 
+def _named_candidate_coordinate_scaffold_summary(systems: list[dict], names: dict) -> dict:
+    """Build a TV scaffold coordinate mapping from named candidates to pixel positions.
+
+    Uses the reconciliation roster's canonical name-to-resource-ID mapping and the
+    decoded signed-long coordinates to produce heuristic pixel positions for the
+    TV galaxy map. All coordinates are terminal-velocity-scaffold — no Classic
+    display-unit/map-scaling promotion is implied.
+    """
+    reconciliation = _syst_record_name_gap_reconciliation_summary(systems, names)
+    link_topo = _named_candidate_link_topology_summary(systems, names)
+    normalized = _coordinate_display_normalized_summary(systems)
+
+    # Build canonical resource ID → candidate name map
+    name_of: dict[int, str] = {}
+    for entry in reconciliation.get('canonicalDistinctEntries', []):
+        rid = entry['canonicalResourceId']
+        name = entry.get('candidateSystemName')
+        if name:
+            name_of[rid] = name
+
+    # Build resource ID → normalized coordinate lookup
+    per_resource: dict[int, dict] = {
+        r['resourceId']: r for r in normalized.get('perResource', [])
+    }
+
+    # Build name → outgoing link names from named link topology (canonical already)
+    link_of: dict[str, list[str]] = {}
+    for entry in link_topo.get('perSystemNamedLinks', []):
+        src = entry.get('candidateSystemName', '?')
+        linked = sorted(set(
+            s['candidateTargetSystemName']
+            for s in entry.get('linkedNamedSlots', [])
+            if not s.get('isSelfLink')
+            and s.get('candidateTargetSystemName', '?') != '?'
+        ))
+        link_of.setdefault(src, [])
+        for target in linked:
+            if target not in link_of[src]:
+                link_of[src].append(target)
+
+    # TV scaffold viewport parameters
+    VIEWPORT_W = 1920
+    VIEWPORT_H = 1080
+    MARGIN = 80
+
+    named_systems: list[dict] = []
+    for rid in sorted(name_of.keys()):
+        name = name_of[rid]
+        if name == '?':
+            continue
+        res = per_resource.get(rid)
+        if not res:
+            continue
+
+        x_unit = res['xPos']['unitIntervalCandidate']
+        y_unit = res['yPos']['unitIntervalCandidate']
+
+        # Invert Y for display convention (screen Y grows downward)
+        px = int(MARGIN + x_unit * (VIEWPORT_W - 2 * MARGIN))
+        py = int(MARGIN + (1.0 - y_unit) * (VIEWPORT_H - 2 * MARGIN))
+
+        named_systems.append({
+            'systemName': name,
+            'canonicalResourceId': rid,
+            'xPixels': px,
+            'yPixels': py,
+            'signedLongX': res['xPos']['signedLongCandidate'],
+            'signedLongY': res['yPos']['signedLongCandidate'],
+            'unitIntervalX': x_unit,
+            'unitIntervalY': y_unit,
+            'namedLinkedSystems': link_of.get(name, []),
+        })
+
+    return {
+        'sourceLabel': 'terminal-velocity-named-candidate-coordinate-scaffold',
+        'oracleStatus': 'coordinate_display_units_map_scaling_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': [
+            'systRecordNameGapReconciliationSummary',
+            'namedCandidateLinkTopologySummary',
+            'coordinateDisplayNormalizedSummary',
+        ],
+        'totalNamedSystems': len(named_systems),
+        'viewportWidth': VIEWPORT_W,
+        'viewportHeight': VIEWPORT_H,
+        'viewportMargin': MARGIN,
+        'coordinateProjection': 'unit-interval-signed-long-scaled-to-viewport',
+        'namedSystems': named_systems,
+        'promotionStatus': 'not-promoted; TV scaffold coordinate projections only — no Classic display-unit/map-scaling claim',
+        'promotionBlockers': [
+            'All system names are heuristic text-chunk candidates, not verified Classic mappings',
+            'Viewport pixel projection uses non-promoted unit-interval normalization',
+            'Y-axis invert and margin padding are TV scaffold choices, not Classic display constants',
+            'No Classic display-unit, map scaling, projection, centering, or origin is promoted',
+        ],
+        'sourceNote': (
+            'This scaffold maps named candidate system coordinates to viewport pixel positions '
+            'using unit-interval normalized signed-long values. It is a TV development convenience '
+            'for building a playable galaxy map — not a Classic display-unit fidelity claim.'
+        ),
+    }
+
+
 def _system_name_byte_order_oracle_gap_summary(names: dict) -> dict:
     """Record why current name byte-order evidence is not a record-to-name oracle."""
     system_seeds = sorted(names.get('systemNames', []), key=lambda entry: entry.get('byteOffset', 0))
@@ -5737,6 +5840,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'namedCandidateRouteSummary': _named_candidate_route_summary(systems, names),
         'namedCandidateRouteCalibrationPrioritySummary': _named_candidate_route_calibration_priority_summary(systems, names),
         'namedCandidateRouteCalibrationDiagnosticPlan': _named_candidate_route_calibration_diagnostic_plan(systems, names),
+        'namedCandidateCoordinateScaffoldSummary': _named_candidate_coordinate_scaffold_summary(systems, names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
