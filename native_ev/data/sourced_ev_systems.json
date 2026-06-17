@@ -10039,7 +10039,7 @@
         "hopDistance": 2,
         "routePath": [
           "?",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10105,7 +10105,7 @@
         "hopDistance": 2,
         "routePath": [
           "?",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10138,7 +10138,7 @@
         "hopDistance": 2,
         "routePath": [
           "?",
-          "Maxwell’s Purchase",
+          "Dune",
           "New Sahara"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10248,7 +10248,7 @@
         "hopDistance": 2,
         "routePath": [
           "?",
-          "Maxwell’s Purchase",
+          "Master’s Planet",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10259,7 +10259,7 @@
         "hopDistance": 2,
         "routePath": [
           "?",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10303,8 +10303,8 @@
         "hopDistance": 5,
         "routePath": [
           "?",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Samson’s Planet",
+          "Capella",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -10317,8 +10317,8 @@
         "hopDistance": 5,
         "routePath": [
           "?",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Samson’s Planet",
+          "Capella",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -10430,8 +10430,8 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "New Scotland’s motto",
           "Dune",
           "Atropos"
         ],
@@ -10444,7 +10444,7 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Armstrong",
+          "Sirius III",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -10458,8 +10458,8 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Murphy's World"
         ],
@@ -10472,8 +10472,8 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Port Oread"
         ],
@@ -10486,8 +10486,8 @@
         "routePath": [
           "Alkaidion",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Zaxted Starport"
         ],
@@ -10551,7 +10551,7 @@
         "hopDistance": 2,
         "routePath": [
           "Armstrong",
-          "Merlin",
+          "Tabletop",
           "Blackthorne"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10562,7 +10562,7 @@
         "hopDistance": 2,
         "routePath": [
           "Armstrong",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10595,7 +10595,7 @@
         "hopDistance": 2,
         "routePath": [
           "Armstrong",
-          "Merlin",
+          "Tabletop",
           "New Bavaria"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10606,7 +10606,7 @@
         "hopDistance": 2,
         "routePath": [
           "Armstrong",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10683,7 +10683,7 @@
         "hopDistance": 2,
         "routePath": [
           "Armstrong",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10815,8 +10815,8 @@
         "routePath": [
           "Atropos",
           "Dune",
-          "Spica",
-          "Sirius III",
+          "New Sahara",
+          "Capella",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -10830,8 +10830,8 @@
         "routePath": [
           "Atropos",
           "Dune",
-          "Spica",
-          "Sirius III",
+          "New Sahara",
+          "Capella",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -10951,7 +10951,7 @@
         "hopDistance": 2,
         "routePath": [
           "Blackthorne",
-          "Merlin",
+          "Tabletop",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10962,7 +10962,7 @@
         "hopDistance": 2,
         "routePath": [
           "Blackthorne",
-          "Merlin",
+          "Tabletop",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -10984,7 +10984,7 @@
         "hopDistance": 2,
         "routePath": [
           "Blackthorne",
-          "Merlin",
+          "Tabletop",
           "New Bavaria"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11028,7 +11028,7 @@
         "hopDistance": 2,
         "routePath": [
           "Blackthorne",
-          "Merlin",
+          "Tabletop",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11120,7 +11120,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11142,7 +11142,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11175,7 +11175,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "New Sahara",
           "Dune"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11230,7 +11230,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11241,7 +11241,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11274,7 +11274,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Merlin",
           "Pegasus"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11329,7 +11329,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11351,7 +11351,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -11407,8 +11407,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "New Scotland’s motto",
           "Dune",
           "Atropos"
         ],
@@ -11422,7 +11422,7 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
+          "Sirius III",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -11437,8 +11437,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Murphy's World"
         ],
@@ -11452,8 +11452,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Port Oread"
         ],
@@ -11467,8 +11467,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Zaxted Starport"
         ],
@@ -11941,7 +11941,7 @@
         "hopDistance": 2,
         "routePath": [
           "Dune",
-          "Spica",
+          "?",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12029,7 +12029,7 @@
         "hopDistance": 2,
         "routePath": [
           "Dune",
-          "Spica",
+          "?",
           "Samson’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12757,7 +12757,7 @@
           "Lauralee",
           "P-8457",
           "Tabletop",
-          "Armstrong",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -12772,7 +12772,7 @@
           "Lauralee",
           "P-8457",
           "Tabletop",
-          "Armstrong",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -12815,7 +12815,7 @@
         "hopDistance": 2,
         "routePath": [
           "Levo",
-          "New Britain",
+          "Dune",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12870,7 +12870,7 @@
         "hopDistance": 2,
         "routePath": [
           "Levo",
-          "New Britain",
+          "Dune",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -12980,7 +12980,7 @@
         "hopDistance": 2,
         "routePath": [
           "Levo",
-          "New Britain",
+          "Capella",
           "Tabletop"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13144,7 +13144,7 @@
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "Spica",
+          "?",
           "Dune"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13188,7 +13188,7 @@
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "Spica",
+          "Sirius III",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13287,7 +13287,7 @@
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "New Britain",
+          "Sirius III",
           "Tabletop"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13309,7 +13309,7 @@
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "Samson’s Planet",
+          "Sirius III",
           "Ursa Minor Beta"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13495,7 +13495,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Rupert",
+          "Spica",
           "Hodgson’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13528,7 +13528,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Spica",
+          "Sirius III",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13539,7 +13539,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Armstrong",
+          "Sirius III",
           "Merlin"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13583,7 +13583,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "New Britain",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13616,7 +13616,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Spica",
+          "?",
           "Samson’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13638,7 +13638,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Armstrong",
+          "Sirius III",
           "Tabletop"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13660,7 +13660,7 @@
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "New Britain",
+          "Sirius III",
           "Ursa Minor Beta"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13849,7 +13849,7 @@
         "hopDistance": 2,
         "routePath": [
           "Merlin",
-          "Armstrong",
+          "Sirius III",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -13948,7 +13948,7 @@
         "hopDistance": 2,
         "routePath": [
           "Merlin",
-          "Armstrong",
+          "Sirius III",
           "Tabletop"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14124,8 +14124,8 @@
         "routePath": [
           "Murphy's World",
           "New Britain",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Plateau",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -14139,8 +14139,8 @@
         "routePath": [
           "Murphy's World",
           "New Britain",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Plateau",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -14184,7 +14184,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Bavaria",
-          "Merlin",
+          "Tabletop",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14195,7 +14195,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Bavaria",
-          "Merlin",
+          "Tabletop",
           "Blackthorne"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14206,7 +14206,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Bavaria",
-          "Merlin",
+          "Tabletop",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14261,7 +14261,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Bavaria",
-          "Merlin",
+          "Tabletop",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14403,7 +14403,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14436,7 +14436,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14480,7 +14480,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14491,7 +14491,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Master’s Planet",
+          "Plateau",
           "New Japan"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14513,7 +14513,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Dune",
           "New Sahara"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14579,7 +14579,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "Rupert"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14612,7 +14612,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Plateau",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14623,7 +14623,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14665,7 +14665,7 @@
         "hopDistance": 2,
         "routePath": [
           "New France",
-          "New Istanbul",
+          "New Providence",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14790,7 +14790,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14812,7 +14812,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14823,7 +14823,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Master’s Planet",
+          "Sirius III",
           "Clotho Prime"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14845,7 +14845,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Master’s Planet",
+          "Sirius III",
           "George’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14878,7 +14878,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14889,7 +14889,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Master’s Planet",
+          "Hodgson’s World",
           "New Japan"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14900,7 +14900,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "New France",
+          "Master’s Planet",
           "New Providence"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14966,7 +14966,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Master’s Planet",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -14999,7 +14999,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "Rupert"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15043,7 +15043,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Istanbul",
-          "Samson’s Planet",
+          "Sirius III",
           "Ursa Minor Beta"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15117,7 +15117,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Plateau",
+          "Hodgson’s World",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15128,7 +15128,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Hodgson’s World",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15172,7 +15172,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Hodgson’s World",
           "Samson’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15194,7 +15194,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Japan",
-          "Master’s Planet",
+          "Hodgson’s World",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15406,7 +15406,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Sahara",
-          "Maxwell’s Purchase",
+          "Dune",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15450,7 +15450,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Sahara",
-          "Capella",
+          "Dune",
           "Levo"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15472,7 +15472,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Sahara",
-          "Maxwell’s Purchase",
+          "Dune",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15538,7 +15538,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Sahara",
-          "Maxwell’s Purchase",
+          "Sauron",
           "Sirius III"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -15549,7 +15549,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Sahara",
-          "Maxwell’s Purchase",
+          "Dune",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16438,7 +16438,7 @@
         "hopDistance": 2,
         "routePath": [
           "Plateau",
-          "New Britain",
+          "New Japan",
           "Hodgson’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -16779,8 +16779,8 @@
         "routePath": [
           "Port Oread",
           "New Britain",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Plateau",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -16794,8 +16794,8 @@
         "routePath": [
           "Port Oread",
           "New Britain",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Plateau",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -17123,7 +17123,7 @@
         "hopDistance": 2,
         "routePath": [
           "Rupert",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17134,7 +17134,7 @@
         "hopDistance": 2,
         "routePath": [
           "Rupert",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "New Istanbul"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17211,7 +17211,7 @@
         "hopDistance": 2,
         "routePath": [
           "Rupert",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "Spica"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17324,7 +17324,7 @@
         "hopDistance": 2,
         "routePath": [
           "Samson’s Planet",
-          "Spica",
+          "?",
           "Dune"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17357,7 +17357,7 @@
         "hopDistance": 2,
         "routePath": [
           "Samson’s Planet",
-          "Spica",
+          "?",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17401,7 +17401,7 @@
         "hopDistance": 2,
         "routePath": [
           "Samson’s Planet",
-          "Master’s Planet",
+          "Hodgson’s World",
           "New Japan"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17878,7 +17878,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Master’s Planet",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17900,7 +17900,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Armstrong"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17922,7 +17922,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17944,7 +17944,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Spica",
+          "New Scotland’s motto",
           "Dune"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17977,7 +17977,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Plateau",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -17999,7 +17999,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Master’s Planet",
+          "Plateau",
           "New Japan"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18021,7 +18021,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "New Scotland’s motto",
           "New Sahara"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18054,7 +18054,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Merlin",
           "Pegasus"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18297,7 +18297,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "?"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18330,7 +18330,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Maxwell’s Purchase",
+          "Samson’s Planet",
           "Capella"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18341,7 +18341,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Master’s Planet",
+          "Sirius III",
           "Clotho Prime"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18352,7 +18352,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Master’s Planet",
+          "Sirius III",
           "George’s World"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18396,7 +18396,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "New Britain"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18418,7 +18418,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Master’s Planet",
+          "Hodgson’s World",
           "New Japan"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18440,7 +18440,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Maxwell’s Purchase",
+          "Dune",
           "New Sahara"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18495,7 +18495,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Master’s Planet",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18528,7 +18528,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Maxwell’s Purchase",
+          "Hodgson’s World",
           "Rupert"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18572,7 +18572,7 @@
         "hopDistance": 2,
         "routePath": [
           "Spica",
-          "Samson’s Planet",
+          "Sirius III",
           "Ursa Minor Beta"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18752,7 +18752,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Sirius III",
           "Master’s Planet"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18763,7 +18763,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "Armstrong",
+          "Sirius III",
           "Maxwell’s Purchase"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18774,7 +18774,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "Armstrong",
+          "Sirius III",
           "Merlin"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18829,7 +18829,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Sirius III",
           "Plateau"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18906,7 +18906,7 @@
         "hopDistance": 2,
         "routePath": [
           "Tabletop",
-          "New Britain",
+          "Sirius III",
           "Ursa Minor Beta"
         ],
         "nameConfidence": "heuristic-candidate-cross-reference"
@@ -18962,8 +18962,8 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "New Scotland’s motto",
           "Dune",
           "Atropos"
         ],
@@ -18977,7 +18977,7 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
+          "Sirius III",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -18992,8 +18992,8 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Murphy's World"
         ],
@@ -19007,8 +19007,8 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Port Oread"
         ],
@@ -19022,8 +19022,8 @@
           "Tau Ceti IV",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Zaxted Starport"
         ],
@@ -19614,8 +19614,8 @@
         "routePath": [
           "Zaxted Starport",
           "New Britain",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Plateau",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -19629,8 +19629,8 @@
         "routePath": [
           "Zaxted Starport",
           "New Britain",
-          "Maxwell’s Purchase",
-          "Armstrong",
+          "Plateau",
+          "Sirius III",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -19641,87 +19641,95 @@
     "systemBetweennessRanking": [
       {
         "candidateSystemName": "Sirius III",
-        "routeIntermediaryCount": 635
-      },
-      {
-        "candidateSystemName": "Maxwell’s Purchase",
-        "routeIntermediaryCount": 549
+        "routeIntermediaryCount": 875
       },
       {
         "candidateSystemName": "Merlin",
-        "routeIntermediaryCount": 492
-      },
-      {
-        "candidateSystemName": "New Britain",
-        "routeIntermediaryCount": 410
-      },
-      {
-        "candidateSystemName": "Master’s Planet",
-        "routeIntermediaryCount": 263
+        "routeIntermediaryCount": 442
       },
       {
         "candidateSystemName": "Tabletop",
-        "routeIntermediaryCount": 254
+        "routeIntermediaryCount": 391
+      },
+      {
+        "candidateSystemName": "New Britain",
+        "routeIntermediaryCount": 362
+      },
+      {
+        "candidateSystemName": "Master’s Planet",
+        "routeIntermediaryCount": 245
+      },
+      {
+        "candidateSystemName": "Maxwell’s Purchase",
+        "routeIntermediaryCount": 229
       },
       {
         "candidateSystemName": "Capella",
-        "routeIntermediaryCount": 192
-      },
-      {
-        "candidateSystemName": "Armstrong",
-        "routeIntermediaryCount": 180
+        "routeIntermediaryCount": 207
       },
       {
         "candidateSystemName": "Sirius Station",
         "routeIntermediaryCount": 178
       },
       {
-        "candidateSystemName": "Spica",
-        "routeIntermediaryCount": 162
+        "candidateSystemName": "Dune",
+        "routeIntermediaryCount": 154
       },
       {
         "candidateSystemName": "Samson’s Planet",
-        "routeIntermediaryCount": 130
+        "routeIntermediaryCount": 153
       },
       {
-        "candidateSystemName": "Dune",
-        "routeIntermediaryCount": 123
-      },
-      {
-        "candidateSystemName": "New Istanbul",
-        "routeIntermediaryCount": 92
+        "candidateSystemName": "Plateau",
+        "routeIntermediaryCount": 119
       },
       {
         "candidateSystemName": "P-8457",
         "routeIntermediaryCount": 90
       },
       {
-        "candidateSystemName": "New Sahara",
-        "routeIntermediaryCount": 74
+        "candidateSystemName": "Hodgson’s World",
+        "routeIntermediaryCount": 84
       },
       {
-        "candidateSystemName": "Plateau",
-        "routeIntermediaryCount": 30
+        "candidateSystemName": "New Sahara",
+        "routeIntermediaryCount": 82
+      },
+      {
+        "candidateSystemName": "New Istanbul",
+        "routeIntermediaryCount": 81
+      },
+      {
+        "candidateSystemName": "Spica",
+        "routeIntermediaryCount": 80
       },
       {
         "candidateSystemName": "?",
-        "routeIntermediaryCount": 16
+        "routeIntermediaryCount": 60
       },
       {
-        "candidateSystemName": "Rupert",
-        "routeIntermediaryCount": 15
-      },
-      {
-        "candidateSystemName": "Hodgson’s World",
-        "routeIntermediaryCount": 11
-      },
-      {
-        "candidateSystemName": "New France",
-        "routeIntermediaryCount": 9
+        "candidateSystemName": "New Scotland’s motto",
+        "routeIntermediaryCount": 31
       },
       {
         "candidateSystemName": "New Providence",
-        "routeIntermediaryCount": 3
+        "routeIntermediaryCount": 14
+      },
+      {
+        "candidateSystemName": "Sauron",
+        "routeIntermediaryCount": 11
+      },
+      {
+        "candidateSystemName": "Rupert",
+        "routeIntermediaryCount": 10
+      },
+      {
+        "candidateSystemName": "New France",
+        "routeIntermediaryCount": 8
+      },
+      {
+        "candidateSystemName": "New Japan",
+        "routeIntermediaryCount": 2
       }
     ],
     "promotionBlockers": [
@@ -19749,11 +19757,11 @@
     "topCalibrationPriorityCount": 20,
     "topCalibrationPriorities": [
       {
-        "sourceSystemName": "Maxwell’s Purchase",
+        "sourceSystemName": "Merlin",
         "targetSystemName": "Sirius III",
         "hopDistance": 1,
         "routePath": [
-          "Maxwell’s Purchase",
+          "Merlin",
           "Sirius III"
         ],
         "levoAnchored": false,
@@ -19765,11 +19773,11 @@
       },
       {
         "sourceSystemName": "Sirius III",
-        "targetSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Merlin",
         "hopDistance": 1,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase"
+          "Merlin"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 1,
@@ -19779,48 +19787,17 @@
         "diagnosticScore": 140
       },
       {
-        "sourceSystemName": "Maxwell’s Purchase",
-        "targetSystemName": "Merlin",
+        "sourceSystemName": "Merlin",
+        "targetSystemName": "Tabletop",
         "hopDistance": 2,
         "routePath": [
-          "Maxwell’s Purchase",
-          "Armstrong",
-          "Merlin"
+          "Merlin",
+          "Sirius III",
+          "Tabletop"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 2,
         "targetBetweennessRank": 3,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 139
-      },
-      {
-        "sourceSystemName": "Merlin",
-        "targetSystemName": "Maxwell’s Purchase",
-        "hopDistance": 2,
-        "routePath": [
-          "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 3,
-        "targetBetweennessRank": 2,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 139
-      },
-      {
-        "sourceSystemName": "Merlin",
-        "targetSystemName": "Sirius III",
-        "hopDistance": 1,
-        "routePath": [
-          "Merlin",
-          "Sirius III"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 3,
-        "targetBetweennessRank": 1,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 139
@@ -19831,7 +19808,7 @@
         "hopDistance": 2,
         "routePath": [
           "New Britain",
-          "Maxwell’s Purchase",
+          "Plateau",
           "Sirius III"
         ],
         "levoAnchored": false,
@@ -19843,26 +19820,11 @@
       },
       {
         "sourceSystemName": "Sirius III",
-        "targetSystemName": "Merlin",
-        "hopDistance": 1,
-        "routePath": [
-          "Sirius III",
-          "Merlin"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 1,
-        "targetBetweennessRank": 3,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 139
-      },
-      {
-        "sourceSystemName": "Sirius III",
         "targetSystemName": "New Britain",
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Plateau",
           "New Britain"
         ],
         "levoAnchored": false,
@@ -19873,13 +19835,59 @@
         "diagnosticScore": 139
       },
       {
+        "sourceSystemName": "Sirius III",
+        "targetSystemName": "Tabletop",
+        "hopDistance": 1,
+        "routePath": [
+          "Sirius III",
+          "Tabletop"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 1,
+        "targetBetweennessRank": 3,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
+        "sourceSystemName": "Tabletop",
+        "targetSystemName": "Merlin",
+        "hopDistance": 2,
+        "routePath": [
+          "Tabletop",
+          "Sirius III",
+          "Merlin"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 3,
+        "targetBetweennessRank": 2,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
+        "sourceSystemName": "Tabletop",
+        "targetSystemName": "Sirius III",
+        "hopDistance": 1,
+        "routePath": [
+          "Tabletop",
+          "Sirius III"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 3,
+        "targetBetweennessRank": 1,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 139
+      },
+      {
         "sourceSystemName": "Master’s Planet",
-        "targetSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Merlin",
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
-          "Spica",
-          "Maxwell’s Purchase"
+          "Sirius III",
+          "Merlin"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 5,
@@ -19904,47 +19912,17 @@
         "diagnosticScore": 137
       },
       {
-        "sourceSystemName": "Maxwell’s Purchase",
+        "sourceSystemName": "Merlin",
         "targetSystemName": "Master’s Planet",
         "hopDistance": 2,
         "routePath": [
-          "Maxwell’s Purchase",
-          "Spica",
+          "Merlin",
+          "Sirius III",
           "Master’s Planet"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 2,
         "targetBetweennessRank": 5,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 137
-      },
-      {
-        "sourceSystemName": "Maxwell’s Purchase",
-        "targetSystemName": "New Britain",
-        "hopDistance": 1,
-        "routePath": [
-          "Maxwell’s Purchase",
-          "New Britain"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 2,
-        "targetBetweennessRank": 4,
-        "sourceDegree": 46,
-        "targetDegree": 46,
-        "diagnosticScore": 137
-      },
-      {
-        "sourceSystemName": "New Britain",
-        "targetSystemName": "Maxwell’s Purchase",
-        "hopDistance": 1,
-        "routePath": [
-          "New Britain",
-          "Maxwell’s Purchase"
-        ],
-        "levoAnchored": false,
-        "sourceBetweennessRank": 4,
-        "targetBetweennessRank": 2,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 137
@@ -19970,7 +19948,7 @@
         "hopDistance": 2,
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Sirius III"
         ],
         "levoAnchored": false,
@@ -19982,12 +19960,12 @@
       },
       {
         "sourceSystemName": "Master’s Planet",
-        "targetSystemName": "Merlin",
+        "targetSystemName": "Tabletop",
         "hopDistance": 2,
         "routePath": [
           "Master’s Planet",
           "Sirius III",
-          "Merlin"
+          "Tabletop"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 5,
@@ -19998,12 +19976,43 @@
       },
       {
         "sourceSystemName": "Maxwell’s Purchase",
-        "targetSystemName": "Tabletop",
+        "targetSystemName": "Merlin",
         "hopDistance": 2,
         "routePath": [
           "Maxwell’s Purchase",
-          "Armstrong",
-          "Tabletop"
+          "Sirius III",
+          "Merlin"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 6,
+        "targetBetweennessRank": 2,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 136
+      },
+      {
+        "sourceSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Sirius III",
+        "hopDistance": 1,
+        "routePath": [
+          "Maxwell’s Purchase",
+          "Sirius III"
+        ],
+        "levoAnchored": false,
+        "sourceBetweennessRank": 6,
+        "targetBetweennessRank": 1,
+        "sourceDegree": 46,
+        "targetDegree": 46,
+        "diagnosticScore": 136
+      },
+      {
+        "sourceSystemName": "Merlin",
+        "targetSystemName": "Maxwell’s Purchase",
+        "hopDistance": 2,
+        "routePath": [
+          "Merlin",
+          "Sirius III",
+          "Maxwell’s Purchase"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 2,
@@ -20013,17 +20022,16 @@
         "diagnosticScore": 136
       },
       {
-        "sourceSystemName": "Merlin",
-        "targetSystemName": "Master’s Planet",
-        "hopDistance": 2,
+        "sourceSystemName": "New Britain",
+        "targetSystemName": "Tabletop",
+        "hopDistance": 1,
         "routePath": [
-          "Merlin",
-          "Sirius III",
-          "Master’s Planet"
+          "New Britain",
+          "Tabletop"
         ],
         "levoAnchored": false,
-        "sourceBetweennessRank": 3,
-        "targetBetweennessRank": 5,
+        "sourceBetweennessRank": 4,
+        "targetBetweennessRank": 3,
         "sourceDegree": 46,
         "targetDegree": 46,
         "diagnosticScore": 136
@@ -20034,7 +20042,7 @@
         "hopDistance": 2,
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Capella"
         ],
         "levoAnchored": false,
@@ -20046,11 +20054,11 @@
       },
       {
         "sourceSystemName": "Sirius III",
-        "targetSystemName": "Tabletop",
+        "targetSystemName": "Maxwell’s Purchase",
         "hopDistance": 1,
         "routePath": [
           "Sirius III",
-          "Tabletop"
+          "Maxwell’s Purchase"
         ],
         "levoAnchored": false,
         "sourceBetweennessRank": 1,
@@ -20063,12 +20071,12 @@
     "levoAnchoredCalibrationTargets": [
       {
         "sourceSystemName": "Levo",
-        "targetSystemName": "Maxwell’s Purchase",
+        "targetSystemName": "Merlin",
         "hopDistance": 2,
         "routePath": [
           "Levo",
-          "New Britain",
-          "Maxwell’s Purchase"
+          "Capella",
+          "Merlin"
         ],
         "levoAnchored": true,
         "sourceBetweennessRank": 48,
@@ -20078,12 +20086,12 @@
         "diagnosticScore": 104
       },
       {
-        "sourceSystemName": "Maxwell’s Purchase",
+        "sourceSystemName": "Merlin",
         "targetSystemName": "Levo",
         "hopDistance": 2,
         "routePath": [
-          "Maxwell’s Purchase",
-          "New Britain",
+          "Merlin",
+          "Capella",
           "Levo"
         ],
         "levoAnchored": true,
@@ -20095,12 +20103,12 @@
       },
       {
         "sourceSystemName": "Levo",
-        "targetSystemName": "Merlin",
+        "targetSystemName": "Tabletop",
         "hopDistance": 2,
         "routePath": [
           "Levo",
           "Capella",
-          "Merlin"
+          "Tabletop"
         ],
         "levoAnchored": true,
         "sourceBetweennessRank": 48,
@@ -20110,12 +20118,12 @@
         "diagnosticScore": 103
       },
       {
-        "sourceSystemName": "Merlin",
+        "sourceSystemName": "Tabletop",
         "targetSystemName": "Levo",
         "hopDistance": 2,
         "routePath": [
-          "Merlin",
-          "Capella",
+          "Tabletop",
+          "New Britain",
           "Levo"
         ],
         "levoAnchored": true,
@@ -20150,8 +20158,8 @@
         "routePath": [
           "Atropos",
           "Dune",
-          "Spica",
-          "Sirius III",
+          "New Sahara",
+          "Capella",
           "Merlin",
           "Sirius Station",
           "Clotho II"
@@ -20170,8 +20178,8 @@
         "routePath": [
           "Atropos",
           "Dune",
-          "Spica",
-          "Sirius III",
+          "New Sahara",
+          "Capella",
           "Merlin",
           "Sirius Station",
           "Tau Ceti IV"
@@ -20191,8 +20199,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "New Scotland’s motto",
           "Dune",
           "Atropos"
         ],
@@ -20211,7 +20219,7 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
+          "Sirius III",
           "Tabletop",
           "P-8457",
           "Lauralee"
@@ -20231,8 +20239,8 @@
           "Clotho II",
           "Sirius Station",
           "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase",
+          "Sirius III",
+          "Plateau",
           "New Britain",
           "Murphy's World"
         ],
@@ -20245,14 +20253,14 @@
       }
     ],
     "topBetweennessSystemName": "Sirius III",
-    "topBetweennessRouteIntermediaryCount": 635,
+    "topBetweennessRouteIntermediaryCount": 875,
     "priorityRegions": {
       "region1TopBetweennessHubs": {
         "description": "Routes anchored at top-betweenness hub systems — verifying these constrains the most route paths",
         "targetSystemNames": [
           "Sirius III",
-          "Maxwell’s Purchase",
-          "Merlin"
+          "Merlin",
+          "Tabletop"
         ]
       },
       "region2LevoAnchored": {
@@ -20291,201 +20299,11 @@
     "diagnosticCases": [
       {
         "routePath": [
-          "Maxwell’s Purchase",
-          "Sirius III"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 140,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          "targetCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "deltaX": 65666,
-          "deltaY": -8318976,
-          "manhattanSignedLongDistance": 8384642,
-          "displayQuadrant": "north-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Maxwell’s Purchase to Sirius III?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Sirius III",
-          "Maxwell’s Purchase"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 140,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          "deltaX": -65666,
-          "deltaY": 8318976,
-          "manhattanSignedLongDistance": 8384642,
-          "displayQuadrant": "south-west"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Sirius III to Maxwell’s Purchase?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Maxwell’s Purchase",
-          "Armstrong",
-          "Merlin"
-        ],
-        "hopDistance": 2,
-        "diagnosticScore": 139,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          {
-            "systemName": "Armstrong",
-            "resourceId": 174,
-            "signedLongX": 196754,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Merlin",
-            "resourceId": 141,
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          "targetCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          },
-          "deltaX": -130943,
-          "deltaY": -3600384,
-          "manhattanSignedLongDistance": 3731327,
-          "displayQuadrant": "north-west"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Maxwell’s Purchase to Merlin?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Merlin",
-          "Armstrong",
-          "Maxwell’s Purchase"
-        ],
-        "hopDistance": 2,
-        "diagnosticScore": 139,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Merlin",
-            "resourceId": 141,
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          },
-          {
-            "systemName": "Armstrong",
-            "resourceId": 174,
-            "signedLongX": 196754,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 4751360
-          },
-          "targetCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          "deltaX": 130943,
-          "deltaY": 3600384,
-          "manhattanSignedLongDistance": 3731327,
-          "displayQuadrant": "south-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Merlin to Maxwell’s Purchase?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
           "Merlin",
           "Sirius III"
         ],
         "hopDistance": 1,
-        "diagnosticScore": 139,
+        "diagnosticScore": 140,
         "levoAnchored": false,
         "priorityRegion": "betweenness-hub",
         "pathCoordinates": [
@@ -20525,62 +20343,11 @@
       },
       {
         "routePath": [
-          "New Britain",
-          "Maxwell’s Purchase",
-          "Sirius III"
-        ],
-        "hopDistance": 2,
-        "diagnosticScore": 139,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          {
-            "systemName": "Sirius III",
-            "resourceId": 138,
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 262273,
-            "signedLongY": 32768
-          },
-          "deltaX": 65537,
-          "deltaY": 0,
-          "manhattanSignedLongDistance": 65537,
-          "displayQuadrant": "north-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from New Britain to Sirius III?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
           "Sirius III",
           "Merlin"
         ],
         "hopDistance": 1,
-        "diagnosticScore": 139,
+        "diagnosticScore": 140,
         "levoAnchored": false,
         "priorityRegion": "betweenness-hub",
         "pathCoordinates": [
@@ -20620,8 +20387,110 @@
       },
       {
         "routePath": [
+          "Merlin",
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Tabletop"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Merlin",
+            "resourceId": 141,
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          "targetCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          "deltaX": 0,
+          "deltaY": 3604480,
+          "manhattanSignedLongDistance": 3604480,
+          "displayQuadrant": "south-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Merlin to Tabletop?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "New Britain",
+          "Plateau",
+          "Sirius III"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "New Britain",
+            "resourceId": 129,
+            "signedLongX": 196736,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Plateau",
+            "resourceId": 147,
+            "signedLongX": 262279,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 196736,
+            "signedLongY": 32768
+          },
+          "targetCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "deltaX": 65537,
+          "deltaY": 0,
+          "manhattanSignedLongDistance": 65537,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from New Britain to Sirius III?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Sirius III",
+          "Plateau",
           "New Britain"
         ],
         "hopDistance": 2,
@@ -20636,10 +20505,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
+            "systemName": "Plateau",
+            "resourceId": 147,
+            "signedLongX": 262279,
+            "signedLongY": 32768
           },
           {
             "systemName": "New Britain",
@@ -20671,9 +20540,148 @@
       },
       {
         "routePath": [
+          "Sirius III",
+          "Tabletop"
+        ],
+        "hopDistance": 1,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "targetCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          "deltaX": -196609,
+          "deltaY": 8323072,
+          "manhattanSignedLongDistance": 8519681,
+          "displayQuadrant": "south-west"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Sirius III to Tabletop?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Tabletop",
+          "Sirius III",
+          "Merlin"
+        ],
+        "hopDistance": 2,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Merlin",
+            "resourceId": 141,
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          "targetCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 4751360
+          },
+          "deltaX": 0,
+          "deltaY": -3604480,
+          "manhattanSignedLongDistance": 3604480,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Tabletop to Merlin?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Tabletop",
+          "Sirius III"
+        ],
+        "hopDistance": 1,
+        "diagnosticScore": 139,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          "targetCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "deltaX": 196609,
+          "deltaY": -8323072,
+          "manhattanSignedLongDistance": 8519681,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Tabletop to Sirius III?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
           "Master’s Planet",
-          "Spica",
-          "Maxwell’s Purchase"
+          "Sirius III",
+          "Merlin"
         ],
         "hopDistance": 2,
         "diagnosticScore": 137,
@@ -20687,16 +20695,16 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Spica",
-            "resourceId": 132,
-            "signedLongX": 262277,
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
             "signedLongY": 32768
           },
           {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
+            "systemName": "Merlin",
+            "resourceId": 141,
+            "signedLongX": 65664,
+            "signedLongY": 4751360
           }
         ],
         "coordinateMetrics": {
@@ -20705,17 +20713,17 @@
             "signedLongY": 32768
           },
           "targetCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
+            "signedLongX": 65664,
+            "signedLongY": 4751360
           },
-          "deltaX": -133,
-          "deltaY": 8318976,
-          "manhattanSignedLongDistance": 8319109,
+          "deltaX": -131076,
+          "deltaY": 4718592,
+          "manhattanSignedLongDistance": 4849668,
           "displayQuadrant": "south-west"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Master’s Planet to Maxwell’s Purchase?",
+          "Does Classic map show a route from Master’s Planet to Merlin?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -20766,8 +20774,8 @@
       },
       {
         "routePath": [
-          "Maxwell’s Purchase",
-          "Spica",
+          "Merlin",
+          "Sirius III",
           "Master’s Planet"
         ],
         "hopDistance": 2,
@@ -20776,15 +20784,15 @@
         "priorityRegion": "betweenness-hub",
         "pathCoordinates": [
           {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
+            "systemName": "Merlin",
+            "resourceId": 141,
+            "signedLongX": 65664,
+            "signedLongY": 4751360
           },
           {
-            "systemName": "Spica",
-            "resourceId": 132,
-            "signedLongX": 262277,
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
             "signedLongY": 32768
           },
           {
@@ -20796,109 +20804,21 @@
         ],
         "coordinateMetrics": {
           "sourceCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
+            "signedLongX": 65664,
+            "signedLongY": 4751360
           },
           "targetCoordinates": {
             "signedLongX": 196740,
             "signedLongY": 32768
           },
-          "deltaX": 133,
-          "deltaY": -8318976,
-          "manhattanSignedLongDistance": 8319109,
+          "deltaX": 131076,
+          "deltaY": -4718592,
+          "manhattanSignedLongDistance": 4849668,
           "displayQuadrant": "north-east"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Maxwell’s Purchase to Master’s Planet?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "Maxwell’s Purchase",
-          "New Britain"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 137,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          "targetCoordinates": {
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          "deltaX": 129,
-          "deltaY": -8318976,
-          "manhattanSignedLongDistance": 8319105,
-          "displayQuadrant": "north-east"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from Maxwell’s Purchase to New Britain?",
-          "What is the Classic route label (if any) for this path?",
-          "Do the Classic map coordinates match the heuristic signed-long projection?"
-        ]
-      },
-      {
-        "routePath": [
-          "New Britain",
-          "Maxwell’s Purchase"
-        ],
-        "hopDistance": 1,
-        "diagnosticScore": 137,
-        "levoAnchored": false,
-        "priorityRegion": "betweenness-hub",
-        "pathCoordinates": [
-          {
-            "systemName": "New Britain",
-            "resourceId": 129,
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          }
-        ],
-        "coordinateMetrics": {
-          "sourceCoordinates": {
-            "signedLongX": 196736,
-            "signedLongY": 32768
-          },
-          "targetCoordinates": {
-            "signedLongX": 196607,
-            "signedLongY": 8351744
-          },
-          "deltaX": -129,
-          "deltaY": 8318976,
-          "manhattanSignedLongDistance": 8319105,
-          "displayQuadrant": "south-west"
-        },
-        "unresolvedNames": null,
-        "diagnosticQuestions": [
-          "Does Classic map show a route from New Britain to Maxwell’s Purchase?",
+          "Does Classic map show a route from Merlin to Master’s Planet?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -20950,7 +20870,7 @@
       {
         "routePath": [
           "Capella",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Sirius III"
         ],
         "hopDistance": 2,
@@ -20965,10 +20885,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
           },
           {
             "systemName": "Sirius III",
@@ -21002,7 +20922,7 @@
         "routePath": [
           "Master’s Planet",
           "Sirius III",
-          "Merlin"
+          "Tabletop"
         ],
         "hopDistance": 2,
         "diagnosticScore": 136,
@@ -21022,10 +20942,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Merlin",
-            "resourceId": 141,
+            "systemName": "Tabletop",
+            "resourceId": 142,
             "signedLongX": 65664,
-            "signedLongY": 4751360
+            "signedLongY": 8355840
           }
         ],
         "coordinateMetrics": {
@@ -21035,16 +20955,16 @@
           },
           "targetCoordinates": {
             "signedLongX": 65664,
-            "signedLongY": 4751360
+            "signedLongY": 8355840
           },
           "deltaX": -131076,
-          "deltaY": 4718592,
-          "manhattanSignedLongDistance": 4849668,
+          "deltaY": 8323072,
+          "manhattanSignedLongDistance": 8454148,
           "displayQuadrant": "south-west"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Master’s Planet to Merlin?",
+          "Does Classic map show a route from Master’s Planet to Tabletop?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -21052,8 +20972,8 @@
       {
         "routePath": [
           "Maxwell’s Purchase",
-          "Armstrong",
-          "Tabletop"
+          "Sirius III",
+          "Merlin"
         ],
         "hopDistance": 2,
         "diagnosticScore": 136,
@@ -21067,16 +20987,16 @@
             "signedLongY": 8351744
           },
           {
-            "systemName": "Armstrong",
-            "resourceId": 174,
-            "signedLongX": 196754,
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
             "signedLongY": 32768
           },
           {
-            "systemName": "Tabletop",
-            "resourceId": 142,
+            "systemName": "Merlin",
+            "resourceId": 141,
             "signedLongX": 65664,
-            "signedLongY": 8355840
+            "signedLongY": 4751360
           }
         ],
         "coordinateMetrics": {
@@ -21086,16 +21006,60 @@
           },
           "targetCoordinates": {
             "signedLongX": 65664,
-            "signedLongY": 8355840
+            "signedLongY": 4751360
           },
           "deltaX": -130943,
-          "deltaY": 4096,
-          "manhattanSignedLongDistance": 135039,
-          "displayQuadrant": "south-west"
+          "deltaY": -3600384,
+          "manhattanSignedLongDistance": 3731327,
+          "displayQuadrant": "north-west"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Maxwell’s Purchase to Tabletop?",
+          "Does Classic map show a route from Maxwell’s Purchase to Merlin?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "Maxwell’s Purchase",
+          "Sirius III"
+        ],
+        "hopDistance": 1,
+        "diagnosticScore": 136,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          {
+            "systemName": "Sirius III",
+            "resourceId": 138,
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 196607,
+            "signedLongY": 8351744
+          },
+          "targetCoordinates": {
+            "signedLongX": 262273,
+            "signedLongY": 32768
+          },
+          "deltaX": 65666,
+          "deltaY": -8318976,
+          "manhattanSignedLongDistance": 8384642,
+          "displayQuadrant": "north-east"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from Maxwell’s Purchase to Sirius III?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -21104,7 +21068,7 @@
         "routePath": [
           "Merlin",
           "Sirius III",
-          "Master’s Planet"
+          "Maxwell’s Purchase"
         ],
         "hopDistance": 2,
         "diagnosticScore": 136,
@@ -21124,10 +21088,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Master’s Planet",
-            "resourceId": 136,
-            "signedLongX": 196740,
-            "signedLongY": 32768
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
           }
         ],
         "coordinateMetrics": {
@@ -21136,17 +21100,61 @@
             "signedLongY": 4751360
           },
           "targetCoordinates": {
-            "signedLongX": 196740,
-            "signedLongY": 32768
+            "signedLongX": 196607,
+            "signedLongY": 8351744
           },
-          "deltaX": 131076,
-          "deltaY": -4718592,
-          "manhattanSignedLongDistance": 4849668,
-          "displayQuadrant": "north-east"
+          "deltaX": 130943,
+          "deltaY": 3600384,
+          "manhattanSignedLongDistance": 3731327,
+          "displayQuadrant": "south-east"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Merlin to Master’s Planet?",
+          "Does Classic map show a route from Merlin to Maxwell’s Purchase?",
+          "What is the Classic route label (if any) for this path?",
+          "Do the Classic map coordinates match the heuristic signed-long projection?"
+        ]
+      },
+      {
+        "routePath": [
+          "New Britain",
+          "Tabletop"
+        ],
+        "hopDistance": 1,
+        "diagnosticScore": 136,
+        "levoAnchored": false,
+        "priorityRegion": "betweenness-hub",
+        "pathCoordinates": [
+          {
+            "systemName": "New Britain",
+            "resourceId": 129,
+            "signedLongX": 196736,
+            "signedLongY": 32768
+          },
+          {
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          }
+        ],
+        "coordinateMetrics": {
+          "sourceCoordinates": {
+            "signedLongX": 196736,
+            "signedLongY": 32768
+          },
+          "targetCoordinates": {
+            "signedLongX": 65664,
+            "signedLongY": 8355840
+          },
+          "deltaX": -131072,
+          "deltaY": 8323072,
+          "manhattanSignedLongDistance": 8454144,
+          "displayQuadrant": "south-west"
+        },
+        "unresolvedNames": null,
+        "diagnosticQuestions": [
+          "Does Classic map show a route from New Britain to Tabletop?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -21154,7 +21162,7 @@
       {
         "routePath": [
           "Sirius III",
-          "Maxwell’s Purchase",
+          "Tabletop",
           "Capella"
         ],
         "hopDistance": 2,
@@ -21169,10 +21177,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Maxwell’s Purchase",
-            "resourceId": 133,
-            "signedLongX": 196607,
-            "signedLongY": 8351744
+            "systemName": "Tabletop",
+            "resourceId": 142,
+            "signedLongX": 65664,
+            "signedLongY": 8355840
           },
           {
             "systemName": "Capella",
@@ -21205,7 +21213,7 @@
       {
         "routePath": [
           "Sirius III",
-          "Tabletop"
+          "Maxwell’s Purchase"
         ],
         "hopDistance": 1,
         "diagnosticScore": 136,
@@ -21219,10 +21227,10 @@
             "signedLongY": 32768
           },
           {
-            "systemName": "Tabletop",
-            "resourceId": 142,
-            "signedLongX": 65664,
-            "signedLongY": 8355840
+            "systemName": "Maxwell’s Purchase",
+            "resourceId": 133,
+            "signedLongX": 196607,
+            "signedLongY": 8351744
           }
         ],
         "coordinateMetrics": {
@@ -21231,17 +21239,17 @@
             "signedLongY": 32768
           },
           "targetCoordinates": {
-            "signedLongX": 65664,
-            "signedLongY": 8355840
+            "signedLongX": 196607,
+            "signedLongY": 8351744
           },
-          "deltaX": -196609,
-          "deltaY": 8323072,
-          "manhattanSignedLongDistance": 8519681,
+          "deltaX": -65666,
+          "deltaY": 8318976,
+          "manhattanSignedLongDistance": 8384642,
           "displayQuadrant": "south-west"
         },
         "unresolvedNames": null,
         "diagnosticQuestions": [
-          "Does Classic map show a route from Sirius III to Tabletop?",
+          "Does Classic map show a route from Sirius III to Maxwell’s Purchase?",
           "What is the Classic route label (if any) for this path?",
           "Do the Classic map coordinates match the heuristic signed-long projection?"
         ]
@@ -21252,8 +21260,8 @@
         "description": "Routes anchored at top-betweenness hub systems — verifying these constrains the most route paths",
         "targetSystemNames": [
           "Sirius III",
-          "Maxwell’s Purchase",
-          "Merlin"
+          "Merlin",
+          "Tabletop"
         ]
       },
       "region2LevoAnchored": {
@@ -28650,6 +28658,2995 @@
     ],
     "sourceNote": [
       "Non-promoting scout correlating data word pattern clusters with link topology. Found 52 default-25 systems with avg 3.94 active links and 15 non-default systems with avg 3.73 active links. Same-pattern linked pair ratio = 0.5134 (134/261 edges connect same-pattern systems). 25.0% of non-default-system links target other non-default systems."
+    ]
+  },
+  "systDataWordIsolatedLinkTargetScout": {
+    "sourceLabel": "decoded-resource-backed-syst-data-word-isolated-link-target-scout",
+    "oracleStatus": "syst_data_word_isolated_link_targets_documented",
+    "promotionStatus": "not-promoted; isolated link target scout documents disconnected subgraph topology only; no runtime navigation or Classic map behavior is claimed",
+    "recordCount": 67,
+    "totalIsolatedSystems": 46,
+    "disconnectedSubgraphCount": 43,
+    "isolatedSystemRids": [
+      148,
+      149,
+      150,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194
+    ],
+    "isolatedLinkTargets": [
+      {
+        "resourceId": 148,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 262273,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 149,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196736,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 150,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 262275,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 132,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 152,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196745,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 153,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196737,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 154,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 65665,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 130,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 130,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 130,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 130,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 155,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 327679,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 156,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 327679,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 157,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 262272,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 158,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 262273,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 159,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196738,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 160,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 65664,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 161,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196738,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 162,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196738,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 163,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 65664,
+        "yRaw": 4751360,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 139,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 139,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 139,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 139,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 164,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196738,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 132,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 132,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 132,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 132,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 165,
+        "name": null,
+        "pattern": [
+          15,
+          15,
+          35,
+          35
+        ],
+        "isDefault25": false,
+        "xRaw": 196738,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 145,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 166,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 131210,
+        "yRaw": 8323073,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 167,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 131211,
+        "yRaw": 8323073,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 168,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196747,
+        "yRaw": 1,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 145,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 169,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 262283,
+        "yRaw": 1,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 170,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 262284,
+        "yRaw": 1,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 149,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 149,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 149,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 149,
+            "targetStatus": "also-isolated"
+          }
+        ]
+      },
+      {
+        "resourceId": 171,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196737,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 172,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 262284,
+        "yRaw": 1,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 150,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 150,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 150,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 150,
+            "targetStatus": "also-isolated"
+          }
+        ]
+      },
+      {
+        "resourceId": 173,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196738,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 137,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 174,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196754,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 175,
+        "name": null,
+        "pattern": [
+          35,
+          15,
+          25,
+          25
+        ],
+        "isDefault25": false,
+        "xRaw": 196754,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 176,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196751,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 177,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196752,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 178,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196752,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 179,
+        "name": null,
+        "pattern": [
+          30,
+          30,
+          20,
+          20
+        ],
+        "isDefault25": false,
+        "xRaw": 196753,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 147,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 147,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 180,
+        "name": null,
+        "pattern": [
+          30,
+          30,
+          20,
+          20
+        ],
+        "isDefault25": false,
+        "xRaw": 196753,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 134,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 134,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 134,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 134,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 181,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 131208,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 182,
+        "name": null,
+        "pattern": [
+          15,
+          15,
+          35,
+          35
+        ],
+        "isDefault25": false,
+        "xRaw": 262286,
+        "yRaw": 8720384,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 183,
+        "name": null,
+        "pattern": [
+          15,
+          15,
+          35,
+          35
+        ],
+        "isDefault25": false,
+        "xRaw": 262283,
+        "yRaw": 1,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 143,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 146,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 184,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196752,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 185,
+        "name": null,
+        "pattern": [
+          21,
+          21,
+          21,
+          37
+        ],
+        "isDefault25": false,
+        "xRaw": 196754,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 144,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 186,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196747,
+        "yRaw": 1,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 131,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 138,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 145,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 187,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196751,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 134,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 134,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 188,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196754,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 141,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 142,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 189,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196756,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 135,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 190,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 131221,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 133,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 191,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 65672,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 192,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196760,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 136,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      },
+      {
+        "resourceId": 193,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 196754,
+        "yRaw": 32768,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 153,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 153,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 153,
+            "targetStatus": "also-isolated"
+          },
+          {
+            "targetResourceId": 153,
+            "targetStatus": "also-isolated"
+          }
+        ]
+      },
+      {
+        "resourceId": 194,
+        "name": null,
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "isDefault25": true,
+        "xRaw": 65665,
+        "yRaw": 8355840,
+        "activeLinkCount": 4,
+        "linkTargets": [
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          },
+          {
+            "targetResourceId": 129,
+            "targetStatus": "reachable-from-levo"
+          }
+        ]
+      }
+    ],
+    "disconnectedSubgraphs": [
+      {
+        "componentId": 1,
+        "memberCount": 1,
+        "memberRids": [
+          148
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 262273.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 148,
+            "x": 262273,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 2,
+        "memberCount": 2,
+        "memberRids": [
+          149,
+          170
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ],
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 229510.0,
+        "centroidY": 16384.5,
+        "internalEdgeCount": 4,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 149,
+            "x": 196736,
+            "y": 32768
+          },
+          {
+            "resourceId": 170,
+            "x": 262284,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "componentId": 3,
+        "memberCount": 2,
+        "memberRids": [
+          150,
+          172
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ],
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 262279.5,
+        "centroidY": 16384.5,
+        "internalEdgeCount": 4,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 150,
+            "x": 262275,
+            "y": 32768
+          },
+          {
+            "resourceId": 172,
+            "x": 262284,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "componentId": 4,
+        "memberCount": 1,
+        "memberRids": [
+          152
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196745.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 152,
+            "x": 196745,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 5,
+        "memberCount": 2,
+        "memberRids": [
+          153,
+          193
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ],
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196745.5,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 4,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 153,
+            "x": 196737,
+            "y": 32768
+          },
+          {
+            "resourceId": 193,
+            "x": 196754,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 6,
+        "memberCount": 1,
+        "memberRids": [
+          154
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 65665.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 154,
+            "x": 65665,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 7,
+        "memberCount": 1,
+        "memberRids": [
+          155
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 327679.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 155,
+            "x": 327679,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 8,
+        "memberCount": 1,
+        "memberRids": [
+          156
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 327679.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 156,
+            "x": 327679,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 9,
+        "memberCount": 1,
+        "memberRids": [
+          157
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 262272.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 157,
+            "x": 262272,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 10,
+        "memberCount": 1,
+        "memberRids": [
+          158
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 262273.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 158,
+            "x": 262273,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 11,
+        "memberCount": 1,
+        "memberRids": [
+          159
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196738.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 159,
+            "x": 196738,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 12,
+        "memberCount": 1,
+        "memberRids": [
+          160
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 65664.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 160,
+            "x": 65664,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 13,
+        "memberCount": 1,
+        "memberRids": [
+          161
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196738.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 161,
+            "x": 196738,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 14,
+        "memberCount": 1,
+        "memberRids": [
+          162
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196738.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 162,
+            "x": 196738,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 15,
+        "memberCount": 1,
+        "memberRids": [
+          163
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 65664.0,
+        "centroidY": 4751360.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 163,
+            "x": 65664,
+            "y": 4751360
+          }
+        ]
+      },
+      {
+        "componentId": 16,
+        "memberCount": 1,
+        "memberRids": [
+          164
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196738.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 164,
+            "x": 196738,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 17,
+        "memberCount": 1,
+        "memberRids": [
+          165
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            15,
+            15,
+            35,
+            35
+          ]
+        ],
+        "centroidX": 196738.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 165,
+            "x": 196738,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 18,
+        "memberCount": 1,
+        "memberRids": [
+          166
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 131210.0,
+        "centroidY": 8323073.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 166,
+            "x": 131210,
+            "y": 8323073
+          }
+        ]
+      },
+      {
+        "componentId": 19,
+        "memberCount": 1,
+        "memberRids": [
+          167
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 131211.0,
+        "centroidY": 8323073.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 167,
+            "x": 131211,
+            "y": 8323073
+          }
+        ]
+      },
+      {
+        "componentId": 20,
+        "memberCount": 1,
+        "memberRids": [
+          168
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196747.0,
+        "centroidY": 1.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 168,
+            "x": 196747,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "componentId": 21,
+        "memberCount": 1,
+        "memberRids": [
+          169
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 262283.0,
+        "centroidY": 1.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 169,
+            "x": 262283,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "componentId": 22,
+        "memberCount": 1,
+        "memberRids": [
+          171
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196737.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 171,
+            "x": 196737,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 23,
+        "memberCount": 1,
+        "memberRids": [
+          173
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196738.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 173,
+            "x": 196738,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 24,
+        "memberCount": 1,
+        "memberRids": [
+          174
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196754.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 174,
+            "x": 196754,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 25,
+        "memberCount": 1,
+        "memberRids": [
+          175
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            35,
+            15,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196754.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 175,
+            "x": 196754,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 26,
+        "memberCount": 1,
+        "memberRids": [
+          176
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196751.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 176,
+            "x": 196751,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 27,
+        "memberCount": 1,
+        "memberRids": [
+          177
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196752.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 177,
+            "x": 196752,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 28,
+        "memberCount": 1,
+        "memberRids": [
+          178
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196752.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 178,
+            "x": 196752,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 29,
+        "memberCount": 1,
+        "memberRids": [
+          179
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            30,
+            30,
+            20,
+            20
+          ]
+        ],
+        "centroidX": 196753.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 179,
+            "x": 196753,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 30,
+        "memberCount": 1,
+        "memberRids": [
+          180
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            30,
+            30,
+            20,
+            20
+          ]
+        ],
+        "centroidX": 196753.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 180,
+            "x": 196753,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 31,
+        "memberCount": 1,
+        "memberRids": [
+          181
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 131208.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 181,
+            "x": 131208,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 32,
+        "memberCount": 1,
+        "memberRids": [
+          182
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            15,
+            15,
+            35,
+            35
+          ]
+        ],
+        "centroidX": 262286.0,
+        "centroidY": 8720384.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 182,
+            "x": 262286,
+            "y": 8720384
+          }
+        ]
+      },
+      {
+        "componentId": 33,
+        "memberCount": 1,
+        "memberRids": [
+          183
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            15,
+            15,
+            35,
+            35
+          ]
+        ],
+        "centroidX": 262283.0,
+        "centroidY": 1.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 183,
+            "x": 262283,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "componentId": 34,
+        "memberCount": 1,
+        "memberRids": [
+          184
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196752.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 184,
+            "x": 196752,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 35,
+        "memberCount": 1,
+        "memberRids": [
+          185
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            21,
+            21,
+            21,
+            37
+          ]
+        ],
+        "centroidX": 196754.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 185,
+            "x": 196754,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 36,
+        "memberCount": 1,
+        "memberRids": [
+          186
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196747.0,
+        "centroidY": 1.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 186,
+            "x": 196747,
+            "y": 1
+          }
+        ]
+      },
+      {
+        "componentId": 37,
+        "memberCount": 1,
+        "memberRids": [
+          187
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196751.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 187,
+            "x": 196751,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 38,
+        "memberCount": 1,
+        "memberRids": [
+          188
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196754.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 188,
+            "x": 196754,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 39,
+        "memberCount": 1,
+        "memberRids": [
+          189
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196756.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 189,
+            "x": 196756,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 40,
+        "memberCount": 1,
+        "memberRids": [
+          190
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 131221.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 190,
+            "x": 131221,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 41,
+        "memberCount": 1,
+        "memberRids": [
+          191
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 65672.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 191,
+            "x": 65672,
+            "y": 8355840
+          }
+        ]
+      },
+      {
+        "componentId": 42,
+        "memberCount": 1,
+        "memberRids": [
+          192
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 196760.0,
+        "centroidY": 32768.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 192,
+            "x": 196760,
+            "y": 32768
+          }
+        ]
+      },
+      {
+        "componentId": 43,
+        "memberCount": 1,
+        "memberRids": [
+          194
+        ],
+        "memberNames": [],
+        "patterns": [
+          [
+            25,
+            25,
+            25,
+            25
+          ]
+        ],
+        "centroidX": 65665.0,
+        "centroidY": 8355840.0,
+        "internalEdgeCount": 0,
+        "externalToReachableEdgeCount": 4,
+        "coordinates": [
+          {
+            "resourceId": 194,
+            "x": 65665,
+            "y": 8355840
+          }
+        ]
+      }
+    ],
+    "isolatedToReachableOneWayEdges": 172,
+    "reachableToIsolatedOneWayEdges": 0,
+    "inwardPointingSystemCount": 43,
+    "trulyDisconnectedCount": 3,
+    "promotionBlockers": [
+      "Isolated link target scout documents disconnected subgraph topology only",
+      "No runtime route topology, navigation behavior, or Classic map layout is promoted",
+      "Isolated status is derived from decoded link slots only; runtime route availability may differ",
+      "Coordinate display units/map scaling remain pending, so subgraph centroid positions are in raw candidate space"
+    ],
+    "sourceNote": [
+      "Non-promoting scout examining link targets of systems not reachable from Levo. Found 46 isolated systems across 43 disconnected subgraphs. CRITICAL: All 46 isolated systems are \"inward-pointing\" — their 4 active decoded link slots point TO reachable systems (172 edges). Isolation is a directed-BFS artifact: reciprocal links would occupy Con5-Con16 (decoded as -1). 0 one-way edges from reachable to isolated systems."
+    ]
+  },
+  "systDataWordNonDefaultReachabilityScout": {
+    "sourceLabel": "decoded-resource-backed-syst-data-word-non-default-reachability-cross-reference-scout",
+    "oracleStatus": "syst_data_word_non_default_reachability_cross_reference_documented",
+    "promotionStatus": "not-promoted; non-default reachability cross-reference is a non-promoting observation scout only",
+    "recordCount": 67,
+    "totalNonDefault": 15,
+    "totalDefault": 52,
+    "totalReachable": 21,
+    "totalIsolated": 46,
+    "nonDefaultReachableCount": 8,
+    "nonDefaultIsolatedCount": 7,
+    "defaultReachableCount": 13,
+    "defaultIsolatedCount": 39,
+    "reachableNonDefaultRatio": 0.381,
+    "isolatedNonDefaultRatio": 0.1522,
+    "patternSummary": [
+      {
+        "pattern": [
+          15,
+          15,
+          35,
+          35
+        ],
+        "reachableCount": 0,
+        "isolatedCount": 3,
+        "reachableRids": [],
+        "isolatedRids": [
+          165,
+          182,
+          183
+        ]
+      },
+      {
+        "pattern": [
+          15,
+          20,
+          55,
+          10
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 0,
+        "reachableRids": [
+          133
+        ],
+        "isolatedRids": []
+      },
+      {
+        "pattern": [
+          21,
+          21,
+          21,
+          37
+        ],
+        "reachableCount": 0,
+        "isolatedCount": 1,
+        "reachableRids": [],
+        "isolatedRids": [
+          185
+        ]
+      },
+      {
+        "pattern": [
+          25,
+          25,
+          25,
+          25
+        ],
+        "reachableCount": 13,
+        "isolatedCount": 39,
+        "reachableRids": [
+          132,
+          135,
+          136,
+          138,
+          139,
+          141,
+          142,
+          143,
+          144,
+          145,
+          146,
+          147,
+          151
+        ],
+        "isolatedRids": [
+          148,
+          149,
+          150,
+          152,
+          153,
+          154,
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          161,
+          162,
+          163,
+          164,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          176,
+          177,
+          178,
+          181,
+          184,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ]
+      },
+      {
+        "pattern": [
+          25,
+          25,
+          35,
+          15
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 0,
+        "reachableRids": [
+          140
+        ],
+        "isolatedRids": []
+      },
+      {
+        "pattern": [
+          30,
+          30,
+          20,
+          20
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 2,
+        "reachableRids": [
+          137
+        ],
+        "isolatedRids": [
+          179,
+          180
+        ]
+      },
+      {
+        "pattern": [
+          30,
+          40,
+          15,
+          15
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 0,
+        "reachableRids": [
+          128
+        ],
+        "isolatedRids": []
+      },
+      {
+        "pattern": [
+          35,
+          15,
+          25,
+          25
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 1,
+        "reachableRids": [
+          130
+        ],
+        "isolatedRids": [
+          175
+        ]
+      },
+      {
+        "pattern": [
+          35,
+          25,
+          30,
+          10
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 0,
+        "reachableRids": [
+          129
+        ],
+        "isolatedRids": []
+      },
+      {
+        "pattern": [
+          37,
+          19,
+          19,
+          25
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 0,
+        "reachableRids": [
+          131
+        ],
+        "isolatedRids": []
+      },
+      {
+        "pattern": [
+          40,
+          15,
+          40,
+          5
+        ],
+        "reachableCount": 1,
+        "isolatedCount": 0,
+        "reachableRids": [
+          134
+        ],
+        "isolatedRids": []
+      }
+    ],
+    "hypotheses": {
+      "nonDefaultSystemsDistributedAcrossBothSets": true,
+      "defaultSystemsDistributedAcrossBothSets": true,
+      "reachableSetHasHigherNonDefaultRatio": true,
+      "isolatedSetHasHigherNonDefaultRatio": false,
+      "bothSetsHaveSimilarNonDefaultRatio": false,
+      "levoIsNonDefaultAndReachable": true
+    },
+    "promotionBlockers": [
+      "Non-default reachability cross-reference is a non-promoting observation scout only",
+      "Data word pattern semantics remain unpromoted; no Resource Bible field claim is made",
+      "Reachability is derived from decoded link slots; runtime route availability may differ"
+    ],
+    "sourceNote": [
+      "Non-promoting scout cross-referencing data word non-default status (15 non-default, 52 default) with directed-BFS reachability from Levo (21 reachable, 46 isolated). Non-default systems: 8 reachable, 7 isolated. Default systems: 13 reachable, 39 isolated. Reachable set non-default ratio: 0.3810. Isolated set non-default ratio: 0.1522. FINDING: Non-default data word patterns appear in BOTH reachable and isolated system sets, indicating data word values are NOT a reliable predictor of reachability from Levo."
     ]
   },
   "coordinateMapSourceReadinessSummary": {

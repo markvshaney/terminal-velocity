@@ -2033,6 +2033,7 @@ class ScenarioEvalHarnessTests(unittest.TestCase):
             'recorded_syst_ev_family_template_transfer_guardrail',
             'recorded_syst_ev_family_variant_divergence_guardrail',
             'recorded_syst_word_domain_coverage_summary',
+            'recorded_syst_data_word_isolated_link_target_scout',
             'recorded_non_topology_syst_oracle_gap',
             'recorded_non_topology_syst_runtime_probe_priority_summary',
             'recorded_non_topology_syst_runtime_capture_gate',

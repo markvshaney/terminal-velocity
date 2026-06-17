@@ -4952,6 +4952,42 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('linkedPairsSharePatternsMoreThanBackground', hypotheses)
         self.assertIn('nonDefaultSystemsLinkToEachOther', hypotheses)
 
+    def test_sourced_ev_systems_manifest_syst_data_word_isolated_link_target_scout(self):
+        """Validate systDataWordIsolatedLinkTargetScout examines isolated system link targets."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordIsolatedLinkTargetScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-isolated-link-target-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_isolated_link_targets_documented')
+        self.assertIn('not-promoted', scout['promotionStatus'])
+        self.assertEqual(scout['recordCount'], 67)
+        self.assertIsInstance(scout['totalIsolatedSystems'], int)
+        self.assertGreater(scout['totalIsolatedSystems'], 0)
+        self.assertIsInstance(scout['disconnectedSubgraphCount'], int)
+        self.assertIsInstance(scout['isolatedSystemRids'], list)
+        self.assertGreater(len(scout['isolatedSystemRids']), 0)
+        # Verify isolated link targets
+        for entry in scout['isolatedLinkTargets']:
+            self.assertIsInstance(entry['resourceId'], int)
+            self.assertIsInstance(entry['pattern'], list)
+            self.assertEqual(len(entry['pattern']), 4)
+            self.assertIsInstance(entry['activeLinkCount'], int)
+            self.assertGreater(entry['activeLinkCount'], 0)
+            for t in entry['linkTargets']:
+                self.assertIsInstance(t['targetResourceId'], int)
+                self.assertIn(t['targetStatus'], ['reachable-from-levo', 'also-isolated', 'known-but-not-in-hop-graph', 'unknown-rid'])
+        # Verify disconnected subgraphs
+        for sg in scout['disconnectedSubgraphs']:
+            self.assertIsInstance(sg['componentId'], int)
+            self.assertGreater(sg['memberCount'], 0)
+            self.assertIsInstance(sg['memberRids'], list)
+            self.assertGreater(len(sg['memberRids']), 0)
+        # Verify one-way edge counts
+        self.assertIsInstance(scout['isolatedToReachableOneWayEdges'], int)
+        self.assertIsInstance(scout['reachableToIsolatedOneWayEdges'], int)
+        # Verify classification
+        self.assertIsInstance(scout['inwardPointingSystemCount'], int)
+        self.assertIsInstance(scout['trulyDisconnectedCount'], int)
+
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
         self.assertEqual(data['method'], 'terminal-velocity-service-matrix-scaffold-plus-source-seeds-v6')
@@ -6384,6 +6420,47 @@ class NativeEvModelTests(unittest.TestCase):
             self.assertEqual(len(frames), 36)
             alpha_counts = [_png_alpha_pixel_count(frame) for frame in frames]
             self.assertTrue(all(count > 0 for count in alpha_counts), alpha_counts)
+
+    def test_sourced_ev_systems_manifest_syst_data_word_non_default_reachability_scout(self):
+        """Validate systDataWordNonDefaultReachabilityScout cross-references data word patterns with reachability."""
+        data = sourced_ev_systems_manifest()
+        scout = data['systDataWordNonDefaultReachabilityScout']
+        self.assertEqual(scout['sourceLabel'], 'decoded-resource-backed-syst-data-word-non-default-reachability-cross-reference-scout')
+        self.assertEqual(scout['oracleStatus'], 'syst_data_word_non_default_reachability_cross_reference_documented')
+        self.assertIn('not-promoted', scout['promotionStatus'])
+        self.assertEqual(scout['recordCount'], 67)
+        # Verify non-default distribution across both reachable and isolated sets
+        self.assertIsInstance(scout['nonDefaultReachableCount'], int)
+        self.assertGreater(scout['nonDefaultReachableCount'], 0)
+        self.assertIsInstance(scout['nonDefaultIsolatedCount'], int)
+        self.assertGreater(scout['nonDefaultIsolatedCount'], 0)
+        # Verify total counts
+        self.assertIsInstance(scout['totalNonDefault'], int)
+        self.assertEqual(scout['totalNonDefault'], 15)
+        self.assertIsInstance(scout['totalDefault'], int)
+        self.assertEqual(scout['totalDefault'], 52)
+        # Verify reachable/isolated totals
+        self.assertIsInstance(scout['totalReachable'], int)
+        self.assertGreater(scout['totalReachable'], 0)
+        self.assertIsInstance(scout['totalIsolated'], int)
+        self.assertGreater(scout['totalIsolated'], 0)
+        # Verify ratios
+        self.assertIsInstance(scout['reachableNonDefaultRatio'], (int, float))
+        self.assertIsInstance(scout['isolatedNonDefaultRatio'], (int, float))
+        # Verify pattern summary
+        self.assertIsInstance(scout['patternSummary'], list)
+        self.assertGreater(len(scout['patternSummary']), 0)
+        for ps in scout['patternSummary']:
+            self.assertIsInstance(ps['pattern'], list)
+            self.assertEqual(len(ps['pattern']), 4)
+            self.assertIsInstance(ps['reachableCount'], int)
+            self.assertIsInstance(ps['isolatedCount'], int)
+        # Verify hypotheses
+        self.assertIsInstance(scout['hypotheses'], dict)
+        self.assertIn('nonDefaultSystemsDistributedAcrossBothSets', scout['hypotheses'])
+        self.assertIn('defaultSystemsDistributedAcrossBothSets', scout['hypotheses'])
+        self.assertIsInstance(scout['hypotheses']['nonDefaultSystemsDistributedAcrossBothSets'], bool)
+        self.assertIsInstance(scout['hypotheses']['defaultSystemsDistributedAcrossBothSets'], bool)
 
 
 if __name__ == '__main__':

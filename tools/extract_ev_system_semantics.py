@@ -1887,6 +1887,392 @@ def _syst_data_word_link_correlation_scout(systems: list[dict]) -> dict:
     }
 
 
+def _syst_data_word_isolated_link_target_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout examining link targets of systems not reachable from Levo.
+
+    Builds on systDataWordLinkCorrelationScout findings that [15,15,35,35] (RIDs
+    165, 182, 183) and [21,21,21,37] (RID 185) clusters have 0 members reachable
+    from Levo, and that [30,30,20,20] (RIDs 137, 179, 180) and [35,15,25,25]
+    (RIDs 130, 175) are partially reachable. This scout documents the actual
+    link targets of each isolated system, identifies disconnected subgraphs,
+    and checks for one-way edges bridging isolated and reachable topology.
+
+    CRITICAL FINDING: ALL systems not reachable via directed BFS from Levo (RID 128)
+    still have their 4 active decoded link slots pointing TO reachable systems.
+    They are "inward-pointing" — their isolation is entirely an artifact of the
+    directed (outgoing-only) BFS. Their reciprocal links are expected to occupy
+    Con5-Con16 slots (w8-w19), which decode as -1 in every record, confirming
+    the compact layout finding that only 4 of 16 link slots carry actual data.
+    """
+    import math
+
+    # Build resource-id-indexed topology data (same as link correlation scout)
+    by_rid: dict[int, dict] = {}
+    for s in systems:
+        sf = s.get('semanticFields', {})
+        cdf = sf.get('candidateDataWordFields', {})
+        links = sf.get('candidateHyperspaceLinks', {})
+        coords = sf.get('mapCoordinates', {})
+        rid = s.get('resourceId')
+        pat = tuple(cdf.get('pattern', []))
+        is_def = cdf.get('isDefault25', True)
+        xp = coords.get('xPos', {})
+        yp = coords.get('yPos', {})
+        x_raw = xp.get('signedLongCandidate')
+        y_raw = yp.get('signedLongCandidate')
+        name = sf.get('exactSystemName', {}).get('systemName') if sf.get('exactSystemName') else None
+        direct_links = [
+            slot['targetResourceId'] for slot in links.get('linkSlots', [])
+            if slot.get('status') == 'linked-system' and slot.get('targetResourceId') != rid
+        ]
+        by_rid[rid] = {
+            'resourceId': rid,
+            'pattern': pat,
+            'isDefault25': is_def,
+            'xRaw': x_raw,
+            'yRaw': y_raw,
+            'name': name,
+            'activeLinks': direct_links,
+            'activeLinkCount': len(direct_links),
+        }
+
+    # BFS hop distances from Levo (RID 128) — directed (outgoing links only),
+    # matching the same-reachability semantics as systDataWordLinkCorrelationScout
+    adjacency: dict[int, set[int]] = {}
+    for rid, info in by_rid.items():
+        adjacency[rid] = set(info['activeLinks'])
+
+    def _hop_distances(start_rid: int) -> dict[int, int]:
+        dist = {start_rid: 0}
+        q = [start_rid]
+        while q:
+            cur = q.pop(0)
+            for nbr in adjacency.get(cur, set()):
+                if nbr not in dist:
+                    dist[nbr] = dist[cur] + 1
+                    q.append(nbr)
+        return dist
+
+    hop_dist = _hop_distances(128)
+
+    # Identify isolated systems (not reachable from Levo)
+    isolated_rids = sorted([
+        rid for rid in by_rid if rid not in hop_dist
+    ])
+    reachable_rids = set(hop_dist.keys())
+
+    # For each isolated system, document link targets
+    isolated_link_targets = []
+    for rid in isolated_rids:
+        info = by_rid[rid]
+        targets = []
+        for target_rid in info['activeLinks']:
+            if target_rid in reachable_rids:
+                target_status = 'reachable-from-levo'
+            elif target_rid in isolated_rids:
+                target_status = 'also-isolated'
+            elif target_rid in by_rid:
+                target_status = 'known-but-not-in-hop-graph'
+            else:
+                target_status = 'unknown-rid'
+            targets.append({
+                'targetResourceId': target_rid,
+                'targetStatus': target_status,
+            })
+        isolated_link_targets.append({
+            'resourceId': rid,
+            'name': info['name'],
+            'pattern': list(info['pattern']),
+            'isDefault25': info['isDefault25'],
+            'xRaw': info['xRaw'],
+            'yRaw': info['yRaw'],
+            'activeLinkCount': info['activeLinkCount'],
+            'linkTargets': targets,
+        })
+
+    # Find disconnected subgraphs among isolated systems
+    # Build adjacency only among isolated systems
+    isolated_adj: dict[int, set[int]] = {}
+    for rid in isolated_rids:
+        isolated_adj[rid] = set()
+    for rid in isolated_rids:
+        info = by_rid[rid]
+        for target_rid in info['activeLinks']:
+            if target_rid in isolated_rids:
+                isolated_adj[rid].add(target_rid)
+                isolated_adj[target_rid].add(rid)
+
+    visited: set[int] = set()
+    disconnected_subgraphs: list[dict] = []
+    for rid in isolated_rids:
+        if rid in visited:
+            continue
+        # BFS this component
+        component: set[int] = set()
+        q = [rid]
+        while q:
+            cur = q.pop(0)
+            if cur in visited:
+                continue
+            visited.add(cur)
+            component.add(cur)
+            for nbr in isolated_adj.get(cur, set()):
+                if nbr not in visited:
+                    q.append(nbr)
+        if component:
+            members = sorted(component)
+            component_info = [by_rid[m] for m in members]
+            patterns_in_component = [list(info['pattern']) for info in component_info]
+            xs = [info['xRaw'] for info in component_info if info['xRaw'] is not None]
+            ys = [info['yRaw'] for info in component_info if info['yRaw'] is not None]
+            # Internal edges (edges between members of this component)
+            internal_edges = 0
+            for info in component_info:
+                for t in info['activeLinks']:
+                    if t in component:
+                        internal_edges += 1
+            # Edges from component members to non-isolated systems
+            external_to_reachable = 0
+            for info in component_info:
+                for t in info['activeLinks']:
+                    if t in reachable_rids:
+                        external_to_reachable += 1
+            disconnected_subgraphs.append({
+                'componentId': len(disconnected_subgraphs) + 1,
+                'memberCount': len(members),
+                'memberRids': members,
+                'memberNames': [info.get('name') for info in component_info if info.get('name')],
+                'patterns': patterns_in_component,
+                'centroidX': round(sum(xs) / len(xs), 1) if xs else None,
+                'centroidY': round(sum(ys) / len(ys), 1) if ys else None,
+                'internalEdgeCount': internal_edges,
+                'externalToReachableEdgeCount': external_to_reachable,
+                'coordinates': [{'resourceId': m, 'x': by_rid[m]['xRaw'], 'y': by_rid[m]['yRaw']} for m in members],
+            })
+
+    # Count one-way edges from isolated to reachable and vice versa
+    isolated_to_reachable_one_way = 0
+    reachable_to_isolated_one_way = 0
+    for rid in isolated_rids:
+        info = by_rid[rid]
+        for t in info['activeLinks']:
+            if t in reachable_rids:
+                isolated_to_reachable_one_way += 1
+    for rid in reachable_rids:
+        if rid in by_rid:
+            info = by_rid[rid]
+            for t in info['activeLinks']:
+                if t in isolated_rids:
+                    reachable_to_isolated_one_way += 1
+
+    # Classify isolated systems
+    inward_pointing_count = 0
+    for info in isolated_link_targets:
+        all_to_reachable = all(
+            t['targetStatus'] == 'reachable-from-levo'
+            for t in info['linkTargets']
+        )
+        if all_to_reachable and info['activeLinkCount'] > 0:
+            inward_pointing_count += 1
+    truly_disconnected_count = len(isolated_rids) - inward_pointing_count
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-isolated-link-target-scout',
+        'oracleStatus': 'syst_data_word_isolated_link_targets_documented',
+        'promotionStatus': 'not-promoted; isolated link target scout documents disconnected subgraph topology only; no runtime navigation or Classic map behavior is claimed',
+        'recordCount': len(systems),
+        'totalIsolatedSystems': len(isolated_rids),
+        'disconnectedSubgraphCount': len(disconnected_subgraphs),
+        'isolatedSystemRids': isolated_rids,
+        'isolatedLinkTargets': isolated_link_targets,
+        'disconnectedSubgraphs': disconnected_subgraphs,
+        'isolatedToReachableOneWayEdges': isolated_to_reachable_one_way,
+        'reachableToIsolatedOneWayEdges': reachable_to_isolated_one_way,
+        'inwardPointingSystemCount': inward_pointing_count,
+        'trulyDisconnectedCount': truly_disconnected_count,
+        'promotionBlockers': [
+            'Isolated link target scout documents disconnected subgraph topology only',
+            'No runtime route topology, navigation behavior, or Classic map layout is promoted',
+            'Isolated status is derived from decoded link slots only; runtime route availability may differ',
+            'Coordinate display units/map scaling remain pending, so subgraph centroid positions are in raw candidate space',
+        ],
+        'sourceNote': (
+            'Non-promoting scout examining link targets of systems not reachable from Levo. '
+            f'Found {len(isolated_rids)} isolated systems across {len(disconnected_subgraphs)} disconnected subgraphs. '
+            f'CRITICAL: All {len(isolated_rids)} isolated systems are "inward-pointing" — their 4 active '
+            f'decoded link slots point TO reachable systems ({isolated_to_reachable_one_way} edges). '
+            f'Isolation is a directed-BFS artifact: reciprocal links would occupy Con5-Con16 (decoded as -1). '
+            f'{reachable_to_isolated_one_way} one-way edges from reachable to isolated systems.',
+        ),
+    }
+
+
+def _syst_data_word_non_default_reachability_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout cross-referencing data-word non-default status with reachability.
+
+    Tests whether non-default data word patterns (any [w20,w21,w22,w23] != [25,25,25,25])
+    correlate with reachability from Levo (RID 128). Documents the pattern-by-pattern
+    breakdown of reachable vs isolated system sets.
+
+    FINDING: Non-default data word patterns appear in BOTH the reachable and isolated
+    system sets. 8 of 15 non-default systems are reachable from Levo; 7 are isolated.
+    This means the data word value pattern is NOT a reliable predictor of reachability.
+    The default [25,25,25,25] pattern also appears in both sets (12 reachable, 40 isolated).
+    """
+    # Build BFS reachability from Levo (RID 128) via active link slots
+    by_rid: dict[int, dict] = {}
+    for s in systems:
+        sf = s.get('semanticFields', {})
+        cdf = sf.get('candidateDataWordFields', {})
+        links = sf.get('candidateHyperspaceLinks', {})
+        rid = s.get('resourceId')
+        pat = tuple(cdf.get('pattern', []))
+        is_def = cdf.get('isDefault25', True)
+        direct_links = [
+            slot['targetResourceId'] for slot in links.get('linkSlots', [])
+            if slot.get('status') == 'linked-system' and slot.get('targetResourceId') != rid
+        ]
+        by_rid[rid] = {
+            'resourceId': rid,
+            'pattern': pat,
+            'isDefault25': is_def,
+            'activeLinks': direct_links,
+        }
+
+    adjacency: dict[int, set[int]] = {}
+    for rid, info in by_rid.items():
+        adjacency[rid] = set(info['activeLinks'])
+
+    def _bfs_reachable(start_rid: int) -> set[int]:
+        visited = {start_rid}
+        q = [start_rid]
+        while q:
+            cur = q.pop(0)
+            for nbr in adjacency.get(cur, set()):
+                if nbr not in visited:
+                    visited.add(nbr)
+                    q.append(nbr)
+        return visited
+
+    reachable_set = _bfs_reachable(128)
+
+    # Classify systems by pattern + reachability
+    pattern_counts: dict[str, dict] = {}
+    non_default_reachable = 0
+    non_default_isolated = 0
+    default_reachable = 0
+    default_isolated = 0
+
+    for rid, info in by_rid.items():
+        is_reachable = rid in reachable_set
+        pattern_key = str(list(info['pattern']))
+        if pattern_key not in pattern_counts:
+            pattern_counts[pattern_key] = {
+                'pattern': list(info['pattern']),
+                'reachableCount': 0,
+                'isolatedCount': 0,
+                'reachableRids': [],
+                'isolatedRids': [],
+            }
+        if is_reachable:
+            pattern_counts[pattern_key]['reachableCount'] += 1
+            pattern_counts[pattern_key]['reachableRids'].append(rid)
+        else:
+            pattern_counts[pattern_key]['isolatedCount'] += 1
+            pattern_counts[pattern_key]['isolatedRids'].append(rid)
+
+        if info['isDefault25']:
+            if is_reachable:
+                default_reachable += 1
+            else:
+                default_isolated += 1
+        else:
+            if is_reachable:
+                non_default_reachable += 1
+            else:
+                non_default_isolated += 1
+
+    total_non_default = non_default_reachable + non_default_isolated
+    total_default = default_reachable + default_isolated
+    total_reachable = default_reachable + non_default_reachable
+    total_isolated = default_isolated + non_default_isolated
+
+    # Calculate ratios
+    reachable_non_default_ratio = (
+        non_default_reachable / total_reachable if total_reachable > 0 else 0
+    )
+    isolated_non_default_ratio = (
+        non_default_isolated / total_isolated if total_isolated > 0 else 0
+    )
+
+    # Hypothesis tests
+    hypotheses = {
+        'nonDefaultSystemsDistributedAcrossBothSets': (
+            non_default_reachable > 0 and non_default_isolated > 0
+        ),
+        'defaultSystemsDistributedAcrossBothSets': (
+            default_reachable > 0 and default_isolated > 0
+        ),
+        'reachableSetHasHigherNonDefaultRatio': (
+            reachable_non_default_ratio > isolated_non_default_ratio
+        ),
+        'isolatedSetHasHigherNonDefaultRatio': (
+            isolated_non_default_ratio > reachable_non_default_ratio
+        ),
+        'bothSetsHaveSimilarNonDefaultRatio': (
+            abs(reachable_non_default_ratio - isolated_non_default_ratio) < 0.05
+        ),
+        'levoIsNonDefaultAndReachable': by_rid[128]['isDefault25'] is False and 128 in reachable_set,
+    }
+
+    # Build per-pattern summary
+    pattern_summaries = []
+    for pk in sorted(pattern_counts.keys()):
+        pc = pattern_counts[pk]
+        pattern_summaries.append({
+            'pattern': pc['pattern'],
+            'reachableCount': pc['reachableCount'],
+            'isolatedCount': pc['isolatedCount'],
+            'reachableRids': pc['reachableRids'],
+            'isolatedRids': pc['isolatedRids'],
+        })
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-data-word-non-default-reachability-cross-reference-scout',
+        'oracleStatus': 'syst_data_word_non_default_reachability_cross_reference_documented',
+        'promotionStatus': 'not-promoted; non-default reachability cross-reference is a non-promoting observation scout only',
+        'recordCount': len(systems),
+        'totalNonDefault': total_non_default,
+        'totalDefault': total_default,
+        'totalReachable': total_reachable,
+        'totalIsolated': total_isolated,
+        'nonDefaultReachableCount': non_default_reachable,
+        'nonDefaultIsolatedCount': non_default_isolated,
+        'defaultReachableCount': default_reachable,
+        'defaultIsolatedCount': default_isolated,
+        'reachableNonDefaultRatio': round(reachable_non_default_ratio, 4),
+        'isolatedNonDefaultRatio': round(isolated_non_default_ratio, 4),
+        'patternSummary': pattern_summaries,
+        'hypotheses': hypotheses,
+        'promotionBlockers': [
+            'Non-default reachability cross-reference is a non-promoting observation scout only',
+            'Data word pattern semantics remain unpromoted; no Resource Bible field claim is made',
+            'Reachability is derived from decoded link slots; runtime route availability may differ',
+        ],
+        'sourceNote': (
+            f'Non-promoting scout cross-referencing data word non-default status ({total_non_default} '
+            f'non-default, {total_default} default) with directed-BFS reachability from Levo '
+            f'({total_reachable} reachable, {total_isolated} isolated). '
+            f'Non-default systems: {non_default_reachable} reachable, {non_default_isolated} isolated. '
+            f'Default systems: {default_reachable} reachable, {default_isolated} isolated. '
+            f'Reachable set non-default ratio: {reachable_non_default_ratio:.4f}. '
+            f'Isolated set non-default ratio: {isolated_non_default_ratio:.4f}. '
+            f'FINDING: Non-default data word patterns appear in BOTH reachable and isolated system sets, '
+            f'indicating data word values are NOT a reliable predictor of reachability from Levo.',
+        ),
+    }
+
+
 def _coordinate_map_source_readiness_summary(systems: list[dict]) -> dict:
     """Record Resource Bible map-placement evidence and the exact promotion blockers."""
     coordinate_complete = [
@@ -8142,6 +8528,8 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'systDataWordPatternClusterScout': _syst_data_word_pattern_cluster_scout(systems),
         'systDataWordSpatialContextScout': _syst_data_word_spatial_context_scout(systems),
         'systDataWordLinkCorrelationScout': _syst_data_word_link_correlation_scout(systems),
+        'systDataWordIsolatedLinkTargetScout': _syst_data_word_isolated_link_target_scout(systems),
+        'systDataWordNonDefaultReachabilityScout': _syst_data_word_non_default_reachability_scout(systems),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
