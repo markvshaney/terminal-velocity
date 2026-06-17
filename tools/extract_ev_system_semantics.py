@@ -18,7 +18,7 @@ DEFAULT_STRUCTURES = Path('native_ev/data/sourced_ev_structures.json')
 DEFAULT_NAMES = Path('native_ev/data/sourced_ev_names.json')
 DEFAULT_GOVERNMENTS = Path('native_ev/data/sourced_ev_governments.json')
 DEFAULT_OUT = Path('native_ev/data/sourced_ev_systems.json')
-METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-named-candidate-route-named-candidate-route-calibration-priority-named-candidate-route-calibration-diagnostic-plan-v69-named-candidate-coordinate-scaffold-seed-scaffold-correspondence-scout-syst-govt-field-value-scout-route-label-scaffold-correspondence-scout-named-candidate-scaffold-integrity-summary-syst-govt-field-name-cross-reference-scout'
+METHOD = 'ev-classic-static-system-id-name-seed-resource-bible-topology-constants-coordinate-map-source-readiness-system-name-byte-order-oracle-gap-non-topology-syst-oracle-gap-non-topology-syst-runtime-probe-priority-non-topology-syst-runtime-capture-gate-non-topology-syst-runtime-capture-validation-matrix-non-topology-syst-runtime-capture-rejection-taxonomy-non-topology-syst-runtime-capture-reentry-guardrail-non-topology-syst-field-family-reference-runtime-route-label-observation-bridge-gap-route-label-probe-targeting-capture-packet-templates-coordinate-display-unit-map-scaling-readiness-coordinate-display-runtime-capture-gate-coordinate-display-runtime-capture-reconciliation-coordinate-display-runtime-capture-validation-matrix-resource-bible-syst-field-width-offset-oracle-gap-resedit-template-source-availability-gap-syst-template-offset-oracle-gap-syst-template-offset-source-search-priority-syst-template-offset-evidence-packet-contract-syst-template-offset-evidence-packet-validation-matrix-syst-template-offset-evidence-packet-failure-taxonomy-syst-template-offset-evidence-packet-recovery-plan-syst-template-offset-evidence-packet-reentry-guardrail-syst-template-offset-evidence-packet-custody-audit-syst-template-offset-evidence-packet-promotion-quarantine-syst-template-offset-evidence-packet-rollback-readiness-syst-template-offset-evidence-packet-rollback-rehearsal-ev-family-template-transfer-guardrail-ev-family-syst-variant-divergence-guardrail-sequential-field-projection-field-count-byte-budget-named-route-topology-oracle-gap-record-name-oracle-evidence-matrix-record-name-runtime-join-reconciliation-record-name-promotion-readiness-landing-proximity-runtime-universe-template-offset-crosslink-replacement-gate-coordinate-display-calibration-gate-syst-word-domain-coverage-syst-field-order-conflict-syst-field-layout-source-readiness-coordinate-link-slot-coordinate-display-scale-interpretation-coordinate-display-quantization-coordinate-display-residual-magnitude-coordinate-display-residual-sign-coordinate-display-integer-band-coordinate-display-fixed-point-start-neighborhood-slot-angular-order-start-neighborhood-runtime-calibration-priority-route-label-probe-priority-route-label-capture-reconciliation-start-neighborhood-display-vector-start-neighborhood-display-distance-start-neighborhood-display-transform-normalized-extrema-link-graph-distance-name-seed-summary-levo-name-map-landing-name-candidate-reference-syst-record-name-candidate-cross-reference-syst-record-name-gap-analysis-coordinate-gap-identity-resolution-coordinate-gap-resource-deduplication-named-candidate-travel-distance-named-candidate-route-named-candidate-route-calibration-priority-named-candidate-route-calibration-diagnostic-plan-v69-named-candidate-coordinate-scaffold-seed-scaffold-correspondence-scout-syst-govt-field-value-scout-route-label-scaffold-correspondence-scout-named-candidate-scaffold-integrity-summary-syst-govt-field-name-cross-reference-scout-syst-govt-field-resource-id-cross-reference-scout'
 SOURCE_BASIS = 'EV Classic Resource Bible game constants, syst xPos/yPos and Con1-Con16 field-family definitions plus local primitive BRGR syst-like structure decode, heuristic EV Data.rez system/landing-name seed list, Resource Bible system ID #128 start-system rule, original-runtime-observed starting system Levo, and bounded original-runtime route/map label observations that are not yet tied to decoded resource IDs'
 PROMOTION_BOUNDARY = 'IDs/resource ordering, Resource Bible topology constants (MaxStellarObjects 1500, MaxSystems 1000, JumpDistance 1000 pixels) as static-source constants only, coordinate map source-readiness evidence requirements, topology promotion readiness matrix, runtime universe replacement gate matrix, coordinate display calibration gate matrix, bounded coordinate display-unit/map-scaling readiness matrix, coordinate display runtime capture gate matrix, coordinate display runtime capture reconciliation plan, coordinate display runtime capture validation matrix, non-topology syst runtime capture rejection taxonomy, non-topology syst runtime capture reentry guardrail, non-topology syst field-family reference, route-label probe priority matrix, route-label capture reconciliation plan, named route topology oracle gap matrix, runtime route-label observation bridge gap matrix, record-name oracle evidence matrix, record-name runtime join reconciliation plan, heuristic name seeds, exact resource ID 128 to Levo system-name mapping, non-promoted record-to-name promotion-readiness blockers, raw xPos/yPos coordinate word pairs, coordinate word-domain summary, non-promoted display interpretation candidates, non-promoted display bounds/extrema candidates, non-promoted signed-long min-normalized coordinate candidates, non-promoted axis-transform/aspect-ratio candidates, non-promoted 16.16 fixed-point display-scale candidates, non-promoted coordinate integer-band/fractional residual candidates, non-promoted coordinate residual-sign/fraction-distribution candidates, non-promoted coordinate residual-magnitude/fractional-absolute candidates, non-promoted coordinate residual quantization/grid-step candidates, non-promoted coordinate scale-interpretation blocker/comparison candidates, non-promoted Resource Bible/current-decoder syst field-order conflict matrix, non-promoted Resource Bible syst field-width/offset oracle-gap requirements, signed 32-bit big-endian raw-long coordinate candidates, Con1-Con16 link slot names, raw link values, in-run target resource/ordinal cross-links, candidate link-graph summary statistics, candidate link reciprocity/self-link statistics, candidate graph connectivity/reachability statistics, candidate graph distance/hop statistics, non-promoted resource 128 start-neighborhood topology analysis, non-promoted resource 128 start-neighborhood display-transform analysis, non-promoted start-neighborhood display-distance analysis, non-promoted start-neighborhood display-vector analysis, non-promoted start-neighborhood slot-vector-order analysis, non-promoted start-neighborhood slot-angular-order analysis, non-promoted start-neighborhood runtime-calibration priority analysis, non-promoted syst field-layout source-readiness matrix, non-promoted syst word-domain coverage matrix, non-topology syst oracle-gap blockers, non-promoted syst template/offset recovered-packet reentry guardrail, non-promoted syst template/offset custody audit trail, non-promoted syst template/offset promotion quarantine, non-promoted syst template/offset rollback readiness guardrail, non-promoted non-topology syst runtime-probe priority worklist, and non-promoted non-topology syst runtime-capture gate packet templates; does not promote display pixel units, map projection, runtime route labels, route-label resource/name joins, named topology, governments, hazards, services, ports, or broad 67-system runtime universe replacement, non-promoted syst record-name gap analysis, non-promoted coordinate gap spatial mapping scouts, non-promoted syst-record-name-gap-analysis, non-promoted coordinate-gap-spatial-mapping, non-promoted coordinate-gap-identity-resolution'
 RESOURCE_BIBLE_TOPOLOGY_CONSTANTS = {
@@ -290,6 +290,126 @@ def _syst_govt_field_name_cross_reference_scout(systems: list[dict]) -> dict:
                        'The 54 systems with rawValue=25 dominate the unmatched set — this value is not a recognized '
                        'government ordinal (0-24) and may indicate a different encoding (government resource ID offset, '
                        'compound ID, or source field discrepancy). No runtime or legal/reputation behavior is promoted.',
+    }
+
+
+def _syst_govt_field_resource_id_cross_reference_scout(systems: list[dict]) -> dict:
+    """Non-promoting scout cross-referencing raw govt field values against government RESOURCE IDs.
+
+    The Resource Bible defines the govt field (word 22) as containing a government
+    resource ID in the range 128-255. All 67 decoded syst records have raw values in
+    the range 15-55 (below 128), meaning ALL are classified as 'out-of-domain'.
+    """
+    import json
+    govts = json.loads(DEFAULT_GOVERNMENTS.read_text())
+    govt_by_rid: dict[int, str] = {g['resourceId']: g['name'] for g in govts.get('governments', [])}
+    govt_by_ordinal: dict[int, str] = {g['ordinal']: g['name'] for g in govts.get('governments', [])}
+
+    raw_value_distribution: dict[int, int] = {}
+    status_distribution: dict[str, int] = {}
+    rid_assignment_by_value: dict[int, list[dict]] = {}
+    for system in systems:
+        govt = system['semanticFields'].get('candidateGovtField', {})
+        raw = govt.get('rawValue')
+        status = govt.get('status', 'unknown')
+        rid = system['resourceId']
+        raw_value_distribution[raw] = raw_value_distribution.get(raw, 0) + 1
+        status_distribution[status] = status_distribution.get(status, 0) + 1
+        if raw not in rid_assignment_by_value:
+            rid_assignment_by_value[raw] = []
+        rid_assignment_by_value[raw].append({'systemResourceId': rid})
+
+    hypothesis_results = {}
+    for raw in sorted(raw_value_distribution.keys()):
+        system_count = raw_value_distribution[raw]
+        matched_rid_name = govt_by_rid.get(raw)
+        matched_ordinal_name = govt_by_ordinal.get(raw)
+        offset_128_name = govt_by_rid.get(raw + 128)
+        hypotheses = []
+        if matched_rid_name is not None:
+            hypotheses.append(f'direct-resource-id-match: {matched_rid_name}')
+        if matched_ordinal_name is not None:
+            hypotheses.append(f'direct-ordinal-match: {matched_ordinal_name}')
+        if offset_128_name is not None:
+            hypotheses.append(f'offset+128: {offset_128_name}')
+        if not hypotheses:
+            for offset in range(0, 256):
+                candidate = raw + offset
+                name = govt_by_rid.get(candidate)
+                if name is not None:
+                    hypotheses.append(f'offset+{offset}: {name}')
+                    break
+        hypothesis_results[str(raw)] = {
+            'rawValue': raw,
+            'systemCount': system_count,
+            'systemResourceIds': [entry['systemResourceId'] for entry in rid_assignment_by_value[raw]],
+            'exactResourceIdMatch': matched_rid_name,
+            'exactOrdinalMatch': matched_ordinal_name,
+            'offset128Match': offset_128_name,
+            'firstMaybeOffsetMatch': hypotheses[-1] if hypotheses else None,
+        }
+
+    all_raw_values = sorted(raw_value_distribution.keys())
+    resource_id_matched_values = sorted(set(
+        v for v in all_raw_values if govt_by_rid.get(v) is not None
+    ))
+    ordinal_matched_values = sorted(set(
+        v for v in all_raw_values if govt_by_ordinal.get(v) is not None
+    ))
+    offset128_matched_values = sorted(set(
+        v for v in all_raw_values if govt_by_rid.get(v + 128) is not None
+    ))
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-syst-govt-field-resource-id-cross-reference-scout',
+        'oracleStatus': 'govt_field_resource_id_cross_reference_all_systems_out_of_domain',
+        'promotionStatus': 'not-promoted; govt field resource-ID cross-reference is a non-promoting scout only; '
+                           'all 67 systems have out-of-domain raw values below the Resource Bible expected range 128-255',
+        'inputSources': [
+            'sourced_ev_systems.json candidateGovtField',
+            'sourced_ev_governments.json governments[].resourceId -> name (128-152)',
+            'sourced_ev_governments.json governments[].ordinal -> name (0-24)',
+        ],
+        'recordCount': len(systems),
+        'resourceBibleGovtFieldDefinition': 'syst word 22: Govt controlling government. -1 independent, 128-255 government resource ID.',
+        'statusDistribution': status_distribution,
+        'rawValueDistribution': raw_value_distribution,
+        'allSystemsOutOfDomain': status_distribution.get('out-of-domain', 0) == len(systems),
+        'rawValueRange': [min(all_raw_values), max(all_raw_values)] if all_raw_values else None,
+        'expectedValueRange': [128, 255],
+        'resourceIdMatchValues': resource_id_matched_values,
+        'ordinalMatchValues': ordinal_matched_values,
+        'offset128MatchValues': offset128_matched_values,
+        'unmatchedRawValues': sorted(set(
+            v for v in all_raw_values
+            if govt_by_rid.get(v) is None
+            and govt_by_rid.get(v + 128) is None
+        )),
+        'dominantUnmatchedRawValue': max(
+            (v for v in all_raw_values if govt_by_rid.get(v) is None and govt_by_rid.get(v + 128) is None),
+            key=lambda v: raw_value_distribution[v],
+            default=None,
+        ),
+        'hypothesisResults': hypothesis_results,
+        'promotionBlockers': [
+            f'All {len(systems)} syst records have govt field raw values below the expected Resource Bible range 128-255',
+            'Raw values (15-55) do not match any government resource ID (128-152) directly',
+            'The +128 offset hypothesis matches only rawValues 15-24 (Psycho/psycho-variant governments) but not 25+',
+            'No systems have rawValue=-1 (independent) anywhere in the decoded run',
+            'No runtime government behavior, reputation effects, or legal/illegal status claims are promoted',
+            'The out-of-domain gap may indicate incorrect word index, wrong byte alignment, or different encoding at word 22',
+        ],
+        'sourceNote': (
+            f'Cross-references syst govt field raw values against government resource IDs (128-152). '
+            f'ALL {len(systems)} records are out-of-domain (values {min(all_raw_values)}–{max(all_raw_values)} '
+            f'well below expected 128-255 range). '
+            f'The offset+128 hypothesis matches {len(offset128_matched_values)} raw values '
+            f'({offset128_matched_values}) to psycho/psycho-variant governments but '
+            f'fails for the dominant unmatched value 25 ({raw_value_distribution.get(25, 0)} systems). '
+            f'No direct resource-ID matches exist. This suggests either wrong word index, wrong byte alignment, '
+            f'compound encoding, or a different field layout than the Resource Bible spec allows for the decoded record structure. '
+            f'No runtime government behavior or legal/reputation status is promoted.',
+        ),
     }
 
 
@@ -6495,6 +6615,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'routeLabelScaffoldCorrespondenceScout': _route_label_scaffold_correspondence_scout(systems, names),
         'systGovtFieldValueScout': _syst_govt_field_value_scout(systems),
         'systGovtFieldNameCrossReferenceScout': _syst_govt_field_name_cross_reference_scout(systems),
+        'systGovtFieldResourceIdCrossReferenceScout': _syst_govt_field_resource_id_cross_reference_scout(systems),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
