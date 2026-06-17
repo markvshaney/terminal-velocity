@@ -3128,6 +3128,94 @@ def _named_candidate_coordinate_scaffold_summary(systems: list[dict], names: dic
     }
 
 
+def _named_seed_scaffold_correspondence_scout(systems: list[dict], names: dict) -> dict:
+    """Cross-reference the 9 heuristic system-name seeds against the 46 scaffold named systems.
+
+    Records:
+    - Exact name matches between system-name seeds and scaffold entries
+    - Partial/contained name matches (one name contains the other)
+    - Scaffold names with no seed match
+    - System-name seeds with no scaffold match (fully absent from scaffold)
+    - Levo anchor as the verification bridge
+    """
+    scaffold = _named_candidate_coordinate_scaffold_summary(systems, names)
+    scaffold_names: set[str] = {s['systemName'] for s in scaffold.get('namedSystems', [])}
+    system_seeds: list[dict] = names.get('systemNames', [])
+    system_seed_names: list[str] = [s['name'] for s in system_seeds]
+
+    exact_matches: list[dict] = []
+    partial_matches: list[dict] = []
+    absent_seeds: list[str] = []
+    unmatched_scaffold: list[str] = []
+
+    for seed_name in system_seed_names:
+        if seed_name in scaffold_names:
+            exact_matches.append({
+                'systemNameSeed': seed_name,
+                'matchType': 'exact',
+            })
+        else:
+            # Check for partial matches (seed is a prefix of scaffold name or vice versa)
+            container_matches: list[str] = [
+                n for n in scaffold_names
+                if seed_name.lower() in n.lower() or n.lower() in seed_name.lower()
+            ]
+            if container_matches:
+                partial_matches.append({
+                    'systemNameSeed': seed_name,
+                    'matchType': 'partial',
+                    'matchingScaffoldNames': sorted(container_matches),
+                })
+            else:
+                absent_seeds.append(seed_name)
+
+    for sc_name in sorted(scaffold_names):
+        seed_match = [
+            s for s in system_seed_names
+            if s.lower() == sc_name.lower()
+            or s.lower() in sc_name.lower()
+            or sc_name.lower() in s.lower()
+        ]
+        if not seed_match:
+            unmatched_scaffold.append(sc_name)
+
+    return {
+        'sourceLabel': 'decoded-resource-backed-named-seed-scaffold-correspondence-scout',
+        'oracleStatus': 'exact_record_name_runtime_topology_mapping_pending',
+        'sourceBasis': ['decoded-record-family', 'decoded-original-variable', 'resource-bible-field'],
+        'inputSummaries': [
+            'namedCandidateCoordinateScaffoldSummary',
+            'sourcedEvNames systemNames',
+        ],
+        'systemNameSeedCount': len(system_seed_names),
+        'scaffoldNamedSystemCount': len(scaffold_names),
+        'exactMatches': exact_matches,
+        'exactMatchCount': len(exact_matches),
+        'partialMatches': partial_matches,
+        'partialMatchCount': len(partial_matches),
+        'absentSeeds': absent_seeds,
+        'absentSeedCount': len(absent_seeds),
+        'unmatchedScaffoldNames': unmatched_scaffold,
+        'unmatchedScaffoldCount': len(unmatched_scaffold),
+        'levoInScaffold': 'Levo' in scaffold_names,
+        'levoInSystemSeeds': 'Levo' in system_seed_names,
+        'promotionStatus': 'not-promoted; correspondence scout only — no Classic record-to-name join is promoted',
+        'promotionBlockers': [
+            'All scaffold system names are heuristic landing-name text-chunk candidates, not verified Classic mappings',
+            'System-name seeds are heuristic text-chunk candidates, not a complete list of Classic system names',
+            'Partial matches are proximity/present candidates only — no resource ID mapping is implied',
+            'No Classic record-to-name join, route topology label, or display-unit promotion',
+        ],
+        'sourceNote': (
+            'This scout cross-references the 9 heuristic system-name seeds from EV Data.rez text chunks '
+            'against the 46 scaffold named systems (from landing-name chunk-index alignment). '
+            'Results identify which system-name seeds have scaffold record candidates, which have partial prefix '
+            'matches (e.g. "Sirius" → "Sirius Station", "Sirius III"), and which seeds are entirely absent from '
+            'the scaffold. This is analysis input for future record-to-name join work, not a promotion packet.'
+        ),
+    }
+
+
 def _system_name_byte_order_oracle_gap_summary(names: dict) -> dict:
     """Record why current name byte-order evidence is not a record-to-name oracle."""
     system_seeds = sorted(names.get('systemNames', []), key=lambda entry: entry.get('byteOffset', 0))
@@ -5841,6 +5929,7 @@ def derive(structures_path: Path, names_path: Path) -> dict:
         'namedCandidateRouteCalibrationPrioritySummary': _named_candidate_route_calibration_priority_summary(systems, names),
         'namedCandidateRouteCalibrationDiagnosticPlan': _named_candidate_route_calibration_diagnostic_plan(systems, names),
         'namedCandidateCoordinateScaffoldSummary': _named_candidate_coordinate_scaffold_summary(systems, names),
+        'namedSeedScaffoldCorrespondenceScout': _named_seed_scaffold_correspondence_scout(systems, names),
         'coordinateMapSourceReadinessSummary': _coordinate_map_source_readiness_summary(systems),
         'systFieldLayoutSourceReadinessSummary': _syst_field_layout_source_readiness_summary(run),
         'systFieldOrderConflictSummary': _syst_field_order_conflict_summary(run),
