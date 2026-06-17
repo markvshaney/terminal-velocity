@@ -4465,6 +4465,20 @@ class NativeEvModelTests(unittest.TestCase):
         self.assertIn('bounded coordinate display-unit/map-scaling readiness matrix', data['promotionBoundary'])
         self.assertIn('coordinate display runtime capture gate matrix', data['promotionBoundary'])
         self.assertIn('non-promoted non-topology syst runtime-probe priority worklist', data['promotionBoundary'])
+        seed_scaffold = data['namedSeedScaffoldCorrespondenceScout']
+        self.assertEqual(seed_scaffold['sourceLabel'], 'decoded-resource-backed-named-seed-scaffold-correspondence-scout')
+        self.assertEqual(seed_scaffold['oracleStatus'], 'exact_record_name_runtime_topology_mapping_pending')
+        self.assertEqual(seed_scaffold['systemNameSeedCount'], 9)
+        self.assertEqual(seed_scaffold['scaffoldNamedSystemCount'], 46)
+        self.assertEqual(seed_scaffold['exactMatchCount'], 0)
+        self.assertGreater(seed_scaffold['partialMatchCount'], 0)
+        self.assertGreater(seed_scaffold['absentSeedCount'], 0)
+        self.assertGreater(seed_scaffold['unmatchedScaffoldCount'], 0)
+        self.assertTrue(seed_scaffold['levoInScaffold'])
+        self.assertFalse(seed_scaffold['levoInSystemSeeds'])
+        self.assertIn('Sol', seed_scaffold['absentSeeds'])
+        self.assertIn('Sirius', [p['systemNameSeed'] for p in seed_scaffold['partialMatches']])
+        self.assertIn('not-promoted', seed_scaffold['promotionStatus'])
 
     def test_sourced_ev_services_manifest_records_current_service_matrix_scaffold(self):
         data = sourced_ev_services_manifest()
